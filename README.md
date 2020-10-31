@@ -10,7 +10,9 @@ This library will include best practices to support building services, such as:
 * The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 * The process layer contains use cases, that model your process.
 * The services layer has resource as the layer supertype, to model the API exposed.
-* Additionally, this library contains utility classes for standardizing e.g. uri's, and id's, queries, and errors.
+* Additionally, this library contains utility classes for standardizing e.g. uri's, and id's, constructors, lists, queries, and errors.
 * This library will contain a simple validation mechanism, using decorators.
 
 We keep this library simple on purpose, extending it using additional libraries and frameworks should be possible simply by embedding their API's.
+
+Likely we will use jest for unit testing, wrap axios for request handling, and a simple mongodb connector, and wrap tsyringe for dependency injection.
