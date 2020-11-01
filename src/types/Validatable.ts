@@ -1,7 +1,7 @@
-import {is} from "../utils/Is";
+import { isA } from "../utils/IsA";
 
 export interface Validatable {
-    isValid: boolean;
+  isValid: boolean;
 }
 
-export const isValidatable = (v?: unknown): v is Validatable => is(v).defined && is((v as Validatable).isValid).defined;
+export const isValidatable = (v?: unknown): v is Validatable => isA<Validatable>(v, "isValid");
