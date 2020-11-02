@@ -15,6 +15,10 @@ class ClassMeta {
     [...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))]
       .map(p => this.property(p));
 
+  keys = <T = any>(key: string): T[] =>
+    this.properties().map(p => p.get<T>(key)).filter(v => isDefined(v));
+
+
   property = (property: string): PropertyMeta => new PropertyMeta(this.subject, property);
 }
 

@@ -1,4 +1,4 @@
-import { toArray } from "../../src/utils";
+import { toArray, toReduceDefined } from "../../src/utils";
 import { Dev } from "../ref/Dev";
 
 describe("toArray", () => {
@@ -31,4 +31,12 @@ describe("toArray", () => {
     const spread = [Dev.Sander, Dev.Jeroen];
     expect(toArray(...spread)).toHaveLength(2);
   });
+});
+
+describe("toReduce", () => {
+  test("Reduces", () => {
+    const names = ["Sander", "Jeroen", "Wouter", "Naoufal", "Bas"];
+    const n2 = names.reduce((ns, n) => toReduceDefined(ns, n.includes("a"), n), []);
+    expect(n2.length).toBe(3);
+  })
 });

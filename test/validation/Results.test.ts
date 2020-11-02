@@ -1,4 +1,4 @@
-import { parse, Results, results } from "../../src/validation";
+import { Results, results } from "../../src/validation";
 import { result, Result, Text } from "../../src/types";
 
 describe("Results", () => {
@@ -8,11 +8,6 @@ describe("Results", () => {
   const res: Results = results(error, r);
 
   // Create
-
-  test("Parse empty results", () => {
-    const p = parse();
-    expect(p).toHaveLength(0);
-  });
 
   test("Create empty results", () => {
     const rs = results();
