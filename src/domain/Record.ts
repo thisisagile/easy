@@ -1,6 +1,6 @@
-import {Validatable} from "../types/Validatable";
+import {Validatable} from "../types";
 
-export class Record implements Validatable {
+export abstract class Record implements Validatable {
 
     get isValid(): boolean { return true };
 

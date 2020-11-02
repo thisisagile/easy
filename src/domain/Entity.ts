@@ -1,7 +1,7 @@
 import { Record } from "./Record";
 import { Id } from "../types";
 
-export class Entity extends Record {
+export abstract class Entity extends Record {
   readonly id: Id = this.state.id;
 }
 
