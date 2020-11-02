@@ -1,4 +1,4 @@
-import {Enum} from "../../src/types/Enum";
+import {Enum} from "../../src/types";
 
 export class Language extends Enum {
     static readonly Java = new Language("Java");

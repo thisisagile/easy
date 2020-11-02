@@ -1,9 +1,8 @@
 import { Record } from "./Record";
-import { Id } from "../types/Id";
-import { isAn } from "../utils/IsA";
+import { Id } from "../types";
 
 export class Entity extends Record {
   readonly id: Id = this.state.id;
 }
 
-export const isEntity = (e?: unknown): e is Entity => isAn<Entity>(e, "id", "isValid");
+export const isEntity = (e?: unknown): e is Entity => e instanceof Entity;

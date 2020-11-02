@@ -1,4 +1,4 @@
-import { isA } from "../utils/IsA";
+import { isA } from "./IsA";
 
 export interface Validatable {
   isValid: boolean;

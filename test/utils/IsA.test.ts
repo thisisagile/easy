@@ -1,4 +1,4 @@
-import { isA } from "../../src/utils/IsA";
+import { isA } from "../../src/types";
 import { Dev } from "../ref/Dev";
 
 describe("IsA", () => {

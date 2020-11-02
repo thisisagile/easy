@@ -1,5 +1,5 @@
-import { is } from "../utils/Is";
-import { meta } from "../utils/Meta";
+import { meta } from "../utils";
+import { isDefined, isIn, isString, isValidatable } from "../types";
 
 export type Constraint = (value: unknown) => boolean;
 
@@ -9,16 +9,19 @@ export const constraint = (constraint: Constraint, message: string): PropertyDec
   };
 
 export const defined = (message?: string): PropertyDecorator =>
-  constraint(v => is(v).defined, message ?? "$property must be defined.");
+  constraint(v => isDefined(v), message ?? "$property must be defined.");
 
 export const required = (message?: string): PropertyDecorator =>
-  constraint(v => is(v).defined, message ?? "$property is required.");
+  constraint(v => isDefined(v), message ?? "$property is required.");
 
 export const valid = (message?: string): PropertyDecorator =>
-  constraint(v => is(v).isValid, message ?? "$property must be valid.");
+  constraint(v => isValidatable(v) && v.isValid, message ?? "$property must be valid.");
 
-export const custom = (c: Constraint, message: string): PropertyDecorator =>
-  constraint(v => c(v), message);
+export const includes = (sub: string, message?: string): PropertyDecorator =>
+  constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `$value must include '${sub}'.`);
+
+export const inList = (values: unknown[], message?: string): PropertyDecorator =>
+  constraint(v => isDefined(v) && isIn(v, values), message ?? "$value must appear in list.");
 
 export const gt = (limit: number, message?: string): PropertyDecorator =>
   constraint(v => v > limit, message ?? "Value for $property must be larger than $actual.");

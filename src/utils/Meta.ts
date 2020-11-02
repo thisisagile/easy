@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { is } from "./Is";
+import { isDefined } from "../types";
 
 class ClassMeta {
   constructor(readonly subject: any, private readonly meta: any = (subject.prototype ?? subject).constructor) {}
@@ -21,7 +21,7 @@ class ClassMeta {
 class PropertyMeta {
   constructor(readonly subject: unknown, readonly property: string, private readonly meta = Reflect.getMetadata(property, subject)) {}
 
-  get = <T>(key: string): T => is(this.meta).defined && is(this.meta[key]).defined ? this.meta[key] as T : undefined;
+  get = <T>(key: string): T => isDefined(this.meta) && isDefined(this.meta[key]) ? this.meta[key] as T : undefined;
 
   set = <T>(key: string, value: T): T => {
     Reflect.defineMetadata(this.property, { ...this.meta, [key]: value }, this.subject);
@@ -29,4 +29,4 @@ class PropertyMeta {
   };
 }
 
-export const meta = (subject: unknown): ClassMeta => new ClassMeta(subject);
+export const meta = (subject: unknown): ClassMeta => new ClassMeta(subject ?? {});

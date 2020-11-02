@@ -1,4 +1,4 @@
-import {Enum} from "../../src/types/Enum";
+import {Enum} from "../../src/types";
 import {Language} from "../ref/Language";
 
 describe("Enum", () => {
