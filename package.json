@@ -8,7 +8,7 @@
   "types": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git@github.com:aahoogendoorn/easy.git"
+    "url": "git@github.com:thisisagile/easy.git"
   },
   "tags": [
     "typescript",
@@ -19,14 +19,15 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --coverage",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "semantic-release": "semantic-release"
   },
   "files": [
     "dist",
     "src"
   ],
   "publishConfig": {
-    "registry": "https://github.com/aahoogendoorn/easy.git"
+    "registry": "https://github.com/thisisagile/easy.git"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
@@ -34,6 +35,7 @@
     "jest-junit": "^12.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.1.2",
+    "semantic-release": "^17.2.2",
     "ts-jest": "^26.4.3",
     "typescript": "4.0.5"
   },

@@ -2,7 +2,7 @@ name: Easy pipeline
 on: [push, pull_request]
 
 jobs:
-  build-node:
+  build-test-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,3 +30,8 @@ jobs:
           CI: true
       - name: Test
         run: npm run test
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run semantic-release
