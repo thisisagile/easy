@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest --coverage --detectLeaks",
+    "test": "jest --coverage",
     "prepack": "npm run build"
   },
   "files": [
