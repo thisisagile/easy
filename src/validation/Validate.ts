@@ -22,6 +22,6 @@ export const validate = (subject?: unknown): Results => {
 };
 
 export const validateReject = <T>(subject: T): Promise<T> => {
-  const results = validate(subject);
-  return results.isValid ? Promise.resolve(subject) : Promise.reject(results);
+  const rs = validate(subject);
+  return rs.isValid ? Promise.resolve(subject) : Promise.reject(rs);
 };

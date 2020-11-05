@@ -8,7 +8,10 @@ export class Dev extends Entity {
 
     title = (): string => `${this.name} is fluent in ${this.language}.`;
 
+    static readonly Invalid = new Dev({level: 1});
+    static readonly Jeroen = new Dev({name: "Jeroen", level: 3});
+    static readonly Naoufal = new Dev({name: "Naoufal", level: 3});
     static readonly Sander = new Dev({name: "Sander", level: 3});
-    static readonly Jeroen = new Dev({name: "Jeroen", level: 4});
+    static readonly Wouter = new Dev({name: "Wouter", level: 3});
 }
 

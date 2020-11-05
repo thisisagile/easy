@@ -2,12 +2,12 @@ import "reflect-metadata";
 import { isDefined } from "../types";
 
 class ClassMeta {
-  constructor(readonly subject: any, private readonly meta: any = (subject.prototype ?? subject).constructor) {}
+  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
 
-  get = <T>(key: string): T => Reflect.getMetadata(key, this.meta) as T;
+  get = <T>(key: string): T => Reflect.getMetadata(key, this.data) as T;
 
   set = <T>(key: string, value: T): T => {
-    Reflect.defineMetadata(key, value, this.meta);
+    Reflect.defineMetadata(key, value, this.data);
     return value;
   };
 
@@ -23,12 +23,12 @@ class ClassMeta {
 }
 
 class PropertyMeta {
-  constructor(readonly subject: unknown, readonly property: string, private readonly meta = Reflect.getMetadata(property, subject)) {}
+  constructor(readonly subject: unknown, readonly property: string, private readonly data = Reflect.getMetadata(property, subject)) {}
 
-  get = <T>(key: string): T => isDefined(this.meta) && isDefined(this.meta[key]) ? this.meta[key] as T : undefined;
+  get = <T>(key: string): T => isDefined(this.data) && isDefined(this.data[key]) ? this.data[key] as T : undefined;
 
   set = <T>(key: string, value: T): T => {
-    Reflect.defineMetadata(this.property, { ...this.meta, [key]: value }, this.subject);
+    Reflect.defineMetadata(this.property, { ...this.data, [key]: value }, this.subject);
     return value;
   };
 }
