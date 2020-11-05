@@ -1,5 +1,5 @@
 {
-  "name": "easy",
+  "name": "@thisisagile/easy",
   "version": "0.1.0",
   "description": "Straightforward library for building domain-driven microservice architectures",
   "author": "Sander Hoogendoorn",
