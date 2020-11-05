@@ -1,7 +1,7 @@
 import { Dev } from "../ref/Dev";
-import { validate } from "../../src/validation";
+import { Results, validate, validateReject } from "../../src/validation";
 
-describe("Validate", () => {
+describe("validate", () => {
 
   test("Works on empty objects", () => {
     expect(validate()).toHaveLength(1);
@@ -17,4 +17,15 @@ describe("Validate", () => {
     const dev = Dev.Sander;
     expect(validate(dev)).toHaveLength(0);
   });
+});
+
+describe("validateReject", () => {
+
+  test("Resolves when ok", () => {
+    expect(validateReject(Dev.Sander)).resolves.toBe(Dev.Sander);
+  })
+
+  test("Rejects when fails", () => {
+    expect(validateReject(new Dev({level: 1}))).rejects.toBeInstanceOf(Results);
+  })
 });
