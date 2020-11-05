@@ -27,7 +27,7 @@
     "src"
   ],
   "publishConfig": {
-    "registry": "https://github.com/thisisagile/easy.git"
+    "access": "public"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
