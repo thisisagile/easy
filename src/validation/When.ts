@@ -34,10 +34,10 @@ class When<T> {
   is = (item: T): When<T> =>
     this.clone(this.result === (this.subject === item));
 
-  reject = (error?: Text | Error): Promise<T> =>
+  reject = (message?: Text | Error): Promise<T> =>
     !this.result
       ? Promise.resolve(this.subject)
-      : Promise.reject(isError(error) ? error : isDefined(this.results) ? this.results : res(error));
+      : Promise.reject(isError(message) ? message : isDefined(this.results) ? this.results : res(message));
 
   recover = (f: (item: T) => T | Promise<T>): Promise<T> =>
     Promise.resolve(!this.result ? this.subject : f(this.subject));

@@ -1,12 +1,12 @@
-import { isDefined, result, Result } from "../types";
+import { isDefined, result, Result, Text } from '../types';
 import { meta, toReduceDefined } from "../utils";
 import { Constraint } from "./Contraints";
 import { results, Results } from "./Results";
 
-export type Validator = { property: string, constraint: Constraint, message: string };
+export type Validator = { property: string, constraint: Constraint, message: Text };
 
 const parse = (subject: unknown, v: Validator): Result => {
-  const message = v.message
+  const message = v.message.toString()
     .replace("$property", `property '${v.property}'`)
     .replace("$subject", subject.constructor.name)
     .replace("$actual", `'${(subject as any)[v.property]}'`);

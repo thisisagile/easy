@@ -5,5 +5,5 @@ export abstract class Record implements Validatable {
 
     get isValid(): boolean { return validate(this).isValid; }
 
-    constructor(protected state: any) {}
+    constructor(protected readonly state: any) {}
 }
