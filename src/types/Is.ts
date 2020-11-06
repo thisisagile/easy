@@ -10,6 +10,8 @@ export const isString = (o?: unknown): o is string => o instanceof String || typ
 
 export const isObject = (o?: unknown): o is Object => asObject(o);
 
+export const isFunction = (o?: unknown): o is Function => isDefined(o) && o instanceof Function;
+
 export const isArray = <T = any>(o?: unknown): o is Array<T> => isDefined(o) && o instanceof Array;
 
 export const isInstance = <T>(o: unknown, ctor: Constructor<T>): o is T => asInstance(o, ctor);

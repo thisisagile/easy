@@ -2,6 +2,7 @@ import { isDefined, result, Result, Text } from '../types';
 import { meta, toReduceDefined } from "../utils";
 import { Constraint } from "./Contraints";
 import { results, Results } from "./Results";
+import { when } from './When';
 
 export type Validator = { property: string, constraint: Constraint, message: Text };
 
@@ -21,7 +22,5 @@ export const validate = (subject?: unknown): Results => {
       .reduce((rs, r) => rs.add(r), results());
 };
 
-export const validateReject = <T>(subject: T): Promise<T> => {
-  const rs = validate(subject);
-  return rs.isValid ? Promise.resolve(subject) : Promise.reject(rs);
-};
+export const validateReject = <T>(subject: T): Promise<T> =>
+  when(subject).not.isValid.reject();
