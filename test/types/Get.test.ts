@@ -3,7 +3,7 @@ import { Get, isFunction, ofGet } from '../../src/types';
 
 describe('Get', () => {
 
-  const name = (d: Get<Dev>): string => isFunction(d) ? d().name : d.name;
+  const name = (d: Get<string, Dev>): string => isFunction(d) ? d().name : d.name;
 
   test('Get works', () => {
     expect(name(Dev.Sander)).toBe(Dev.Sander.name);
