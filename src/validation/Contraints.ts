@@ -3,9 +3,9 @@ import { isDefined, isIn, isString, isValidatable, Text } from '../types';
 
 export type Constraint = (value: unknown) => boolean;
 
-export const constraint = <T>(constraint: Constraint, message: Text): PropertyDecorator =>
+export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator =>
   (subject: unknown, property: string): void => {
-    meta(subject).property(property).set('constraint', { property, constraint, message });
+    meta(subject).property(property).set('constraint', { property, constraint: c, message });
   };
 
 export const defined = (message?: Text): PropertyDecorator =>
