@@ -1,7 +1,8 @@
 import { isA } from "./IsA";
+import { Text } from './Text';
 
-export type Result = { message: string, domain?: string, location?: string };
+export type Result = { message: Text, domain?: string, location?: string };
 
-export const result = (message: string, domain?: string, location?: string) => ({ message, domain, location });
+export const result = (message: Text, domain?: string, location?: string) => ({ message, domain, location });
 
 export const isResult = (r?: unknown): r is Result => isA<Result>(r, "message");

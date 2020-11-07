@@ -20,4 +20,4 @@ export class Found<V, Out> extends Case<V, Out> {
   else(alt?: Get<V, Out>): Out { return this.outcome; }
 }
 
-export const choose = <V, O>(value: V): Case<V, O> => new Case(value);
+export const choose = <V, Out>(value: V): Case<V, Out> => new Case(value);

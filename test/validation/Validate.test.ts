@@ -22,6 +22,7 @@ describe("validate", () => {
 describe("validateReject", () => {
 
   test("Resolves when ok", () => {
+    expect(validate(Dev.Sander).isValid).toBeTruthy();
     expect(validateReject(Dev.Sander)).resolves.toBe(Dev.Sander);
   })
 
