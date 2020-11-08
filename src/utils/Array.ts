@@ -9,4 +9,5 @@ export class List<T> extends Array<T> {
 
 }
 
-export const list = <T>(...items: (T | T[])[]): List<T> => new List(...toArray(...items));
+export const array = <T>(...items: (T | T[])[]): List<T> => new Array<T>(...toArray(...items));
+export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
