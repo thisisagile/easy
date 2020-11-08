@@ -1,4 +1,4 @@
-import { toArray, toReduceDefined } from "../../src/utils";
+import { list, List, toArray, toReduceDefined } from '../../src/utils';
 import { Dev } from "../ref/Dev";
 
 describe("toArray", () => {
@@ -40,3 +40,20 @@ describe("toReduce", () => {
     expect(n2.length).toBe(3);
   })
 });
+
+describe("List", () => {
+
+  const ofSpread = (...devs: Dev[]): List<Dev> => list(...devs);
+  const ofArray = (devs: Dev[]): List<Dev> => list(...devs);
+
+  test("Construction from spread", () => {
+    expect(ofSpread(Dev.Sander, Dev.Jeroen)).toHaveLength(2);
+    expect(ofSpread(Dev.Sander, Dev.Jeroen)).toBeInstanceOf(List);
+  });
+
+  test("Construction from array", () => {
+    expect(ofArray([Dev.Sander, Dev.Jeroen])).toHaveLength(2);
+    expect(ofArray([Dev.Sander, Dev.Jeroen])).toBeInstanceOf(List);
+    expect(list([Dev.Sander, Dev.Jeroen])).toHaveLength(2);
+  });
+})
