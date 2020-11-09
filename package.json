@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git@github.com:thisisagile/easy.git"
   },
-  "tags": [
+  "keywords": [
     "typescript",
     "microservices",
     "domain-driven-design",
