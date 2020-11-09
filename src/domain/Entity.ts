@@ -1,5 +1,5 @@
-import { Record } from "./Record";
-import { Id } from "../types";
+import { Record } from './Record';
+import { Id } from '../types';
 
 export abstract class Entity extends Record {
   readonly id: Id = this.state.id;

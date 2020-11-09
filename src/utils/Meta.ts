@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { isDefined } from "../types";
+import { list, List } from './List';
 
 class ClassMeta {
   constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
@@ -11,11 +12,11 @@ class ClassMeta {
     return value;
   };
 
-  properties = (): PropertyMeta[] =>
-    [...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))]
+  properties = (): List<PropertyMeta> =>
+    list([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])
       .map(p => this.property(p));
 
-  keys = <T = any>(key: string): T[] =>
+  keys = <T = any>(key: string): List<T> =>
     this.properties().map(p => p.get<T>(key)).filter(v => isDefined(v));
 
 
