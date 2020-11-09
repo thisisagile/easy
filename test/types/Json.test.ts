@@ -32,4 +32,9 @@ describe('Json', () => {
     const json = jsonify(Dev.Wouter);
     expect(json).toMatchObject({name: "Wouter", language: "TypeScript", level: 3});
   })
+
+  test("jsonify removes undefined", () => {
+    const json = jsonify({name: "Wouter", language: "TypeScript", level: undefined});
+    expect(json?.level).toBeUndefined();
+  })
 });
