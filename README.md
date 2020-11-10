@@ -1,4 +1,5 @@
 # easy
+[![Easy pipeline](https://github.com/thisisagile/easy/workflows/Easy%20pipeline/badge.svg?branch=main)](https://github.com/thisisagile/easy/actions?query=workflow%3A%22Easy+pipeline%22)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=alert_status)](https://sonarcloud.io/dashboard?id=thisisagile_easy)
 [![npm package](https://img.shields.io/npm/v/@thisisagile/easy.svg)](https://www.npmjs.com/package/@thisisagile/easy)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
