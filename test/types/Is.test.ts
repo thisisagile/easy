@@ -1,4 +1,4 @@
-import { isArray, isDefined, isEmpty, isObject, isString } from "../../src/types";
+import { isArray, isDefined, isEmpty, isNotEmpty, isObject, isString } from '../../src/types';
 import { Dev } from "../ref/Dev";
 
 describe("isDefined", () => {
@@ -28,6 +28,21 @@ describe("isEmpty", () => {
     expect(isEmpty("")).toBeTruthy();
     expect(isEmpty(undefined)).toBeTruthy();
     expect(isEmpty(null)).toBeTruthy();
+  });
+});
+
+describe("isNotEmpty", () => {
+  test("Returns true", () => {
+    expect(isNotEmpty({})).toBeTruthy();
+    expect(isNotEmpty([])).toBeTruthy();
+    expect(isNotEmpty(Dev.Jeroen)).toBeTruthy();
+  });
+
+  test("Returns false", () => {
+    expect(isNotEmpty()).toBeFalsy();
+    expect(isNotEmpty("")).toBeFalsy();
+    expect(isNotEmpty(undefined)).toBeFalsy();
+    expect(isNotEmpty(null)).toBeFalsy();
   });
 });
 
