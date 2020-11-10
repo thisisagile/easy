@@ -6,6 +6,8 @@ export const isDefined = (o?: unknown): boolean => o !== undefined && o !== null
 
 export const isEmpty = (o?: unknown): boolean => o === "" || o === null || o === undefined;
 
+export const isNotEmpty = (o?: unknown): boolean => o !== "" && o !== null && o !== undefined;
+
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === "string";
 
 export const isObject = (o?: unknown): o is Object => asObject(o);
