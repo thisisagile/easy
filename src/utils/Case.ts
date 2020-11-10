@@ -1,9 +1,9 @@
 import { Get, ofGet, Predicate } from '../types';
 
-export class Case<V, Out> {
-  constructor(protected value: V, protected outcome?: Out) {}
+class Case<T, V = unknown> {
+  constructor(protected value: V, protected outcome?: T) {}
 
-  case(pred: Predicate<V>, out: Get<V, Out>): Case<V, Out> {
+  case(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
     try {
       return ofGet(pred, this.value) ? new Found(this.value, ofGet(out, this.value)) : this;
     } catch {
@@ -11,13 +11,13 @@ export class Case<V, Out> {
     }
   }
 
-  else(alt?: Get<V, Out>): Out { return ofGet(alt, this.value); }
+  else(alt?: Get<T, V>): T { return ofGet(alt, this.value); }
 }
 
-export class Found<V, Out> extends Case<V, Out> {
-  case(pred: Predicate<V>, out: Get<V, Out>): this { return this; }
+export class Found<T, V = unknown> extends Case<T, V> {
+  case(pred: Predicate<V>, out: Get<T, V>): this { return this; }
 
-  else(alt?: Get<V, Out>): Out { return this.outcome; }
+  else(alt?: Get<T, V>): T { return this.outcome; }
 }
 
-export const choose = <V, Out>(value: V): Case<V, Out> => new Case(value);
+export const choose = <T, V = unknown>(value: V): Case<T, V> => new Case(value);
