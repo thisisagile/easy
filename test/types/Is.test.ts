@@ -1,5 +1,6 @@
-import { isArray, isDefined, isEmpty, isNotEmpty, isObject, isString } from '../../src/types';
+import { isArray, isDefined, isEmpty, isInstance, isNotEmpty, isObject, isString } from '../../src/types';
 import { Dev } from "../ref/Dev";
+import { Entity } from '../../src/domain';
 
 describe("isDefined", () => {
   test("Returns false", () => {
@@ -90,3 +91,18 @@ describe("isArray", () => {
     expect(isArray([])).toBeTruthy();
   });
 });
+
+class Tester extends Entity {}
+class Ux extends Dev {}
+
+describe("isInstance", () => {
+  expect(isInstance(Dev)).toBeFalsy();
+  expect(isInstance(Dev, undefined)).toBeFalsy();
+  expect(isInstance(Dev,null)).toBeFalsy();
+  expect(isInstance(Dev,"")).toBeFalsy();
+  expect(isInstance(Dev,{})).toBeFalsy();
+  expect(isInstance(Dev, Dev.Jeroen)).toBeTruthy();
+  expect(isInstance(Tester, Dev.Jeroen)).toBeFalsy();
+  expect(isInstance(Dev, new Ux())).toBeTruthy();
+  expect(isInstance(Ux, Dev.Wouter)).toBeFalsy();
+})
