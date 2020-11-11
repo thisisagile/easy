@@ -1,0 +1,25 @@
+import { meta } from '../utils';
+import { HttpVerb } from './HttpVerb';
+import { HttpStatus } from './HttpStatus';
+
+export type Verb = {verb: HttpVerb, onOk: HttpStatus, onError: HttpStatus};
+
+export const verb = <T>(verb: Verb): PropertyDecorator =>
+  (subject: unknown, property: string): void => {
+    meta(subject).property(property).set('verb', verb);
+  };
+
+export const get = (onOk = HttpStatus.Ok, onError = HttpStatus.NotFound): PropertyDecorator =>
+  verb({ verb: HttpVerb.Get, onOk, onError });
+
+export const put = (onOk = HttpStatus.Ok, onError = HttpStatus.BadRequest): PropertyDecorator =>
+  verb({ verb: HttpVerb.Put, onOk, onError });
+
+export const patch = (onOk = HttpStatus.Ok, onError = HttpStatus.BadRequest): PropertyDecorator =>
+  verb({ verb: HttpVerb.Patch, onOk, onError });
+
+export const post = (onOk = HttpStatus.Created, onError = HttpStatus.BadRequest): PropertyDecorator =>
+  verb({ verb: HttpVerb.Post, onOk, onError });
+
+export const del = (onOk = HttpStatus.NoContent, onError = HttpStatus.BadRequest): PropertyDecorator =>
+  verb({ verb: HttpVerb.Delete, onOk, onError });
