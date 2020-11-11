@@ -4,14 +4,15 @@ import { isNotEmpty } from './Is';
 export type Segment = { key: string, segment?: string, query?: (value: unknown) => string };
 
 export const uri = {
-  part: (key: string): Segment => ({
-    key,
-    segment: `${key}`,
-  }),
 
   host: (key?: string): Segment => ({
     key,
     segment: key ?? '$host',
+  }),
+
+  segment: (key: string): Segment => ({
+    key,
+    segment: `${key}`,
   }),
 
   path: (key: string): Segment => ({
@@ -30,7 +31,7 @@ export class Uri {
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
   readonly host = uri.host();
-  readonly resource = uri.part('$resource');
+  readonly resource = uri.segment('$resource');
 
   constructor(readonly segments: Segment[], private props: List<{ segment: Segment, value: unknown }> = list()) {}
 

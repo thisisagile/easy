@@ -1,49 +1,39 @@
-import { uri, Uri } from '../../src/types';
+import { Uri } from '../../src/types';
+import { DevUri } from '../ref/DevUri';
 
 describe('Uri', () => {
 
-  class TestUri extends Uri {
-
-    static readonly first = uri.query('first');
-    static readonly tests = uri.part('tests');
-
-    static readonly Tests = new TestUri([TestUri.tests]);
-    static readonly Test = new TestUri([TestUri.tests, TestUri.id]);
-
-    first = (f: string): this => this.set(TestUri.first, f);
-  }
-
   test('Returns correct type', () => {
-    expect(TestUri.Tests).toBeInstanceOf(TestUri);
+    expect(DevUri.Developers).toBeInstanceOf(DevUri);
   });
 
   test('toString returns full route', () => {
-    expect(TestUri.Tests.toString()).toBe('$host/$resource/tests');
-    expect(TestUri.Test.toString()).toBe('$host/$resource/tests/:id');
+    expect(DevUri.Developers.toString()).toBe('$host/$resource/developers');
+    expect(DevUri.Developer.toString()).toBe('$host/$resource/developers/:id');
   });
 
   test('route returns just route', () => {
-    expect(TestUri.Tests.route).toBe('/tests');
-    expect(TestUri.Test.route).toBe('/tests/:id');
+    expect(DevUri.Developers.route).toBe('/developers');
+    expect(DevUri.Developer.route).toBe('/developers/:id');
   });
 
   test('complete returns just route', () => {
-    expect(TestUri.Tests.complete).toBe('$host/$resource/tests');
-    expect(TestUri.Test.complete).toBe('$host/$resource/tests/:id');
+    expect(DevUri.Developers.complete).toBe('$host/$resource/developers');
+    expect(DevUri.Developer.complete).toBe('$host/$resource/developers/:id');
   });
 
   test('toString returns full route plus id', () => {
-    expect(TestUri.Tests.id(42).toString()).toBe('$host/$resource/tests');
-    expect(TestUri.Test.id(42).toString()).toBe('$host/$resource/tests/42');
+    expect(DevUri.Developers.id(42).toString()).toBe('$host/$resource/developers');
+    expect(DevUri.Developer.id(42).toString()).toBe('$host/$resource/developers/42');
   });
 
   test('toString returns full route plus id and a query', () => {
-    expect(TestUri.Tests.query('yes').toString()).toBe('$host/$resource/tests?q=yes');
-    expect(TestUri.Test.id(42).query('yes').toString()).toBe('$host/$resource/tests/42?q=yes');
+    expect(DevUri.Developers.query('yes').toString()).toBe('$host/$resource/developers?q=yes');
+    expect(DevUri.Developer.id(42).query('yes').toString()).toBe('$host/$resource/developers/42?q=yes');
   });
 
   test('toString returns full route plus id and two queries', () => {
-    expect(TestUri.Tests.query('yes').first('Wouter').toString()).toBe('$host/$resource/tests?q=yes&first=Wouter');
-    expect(TestUri.Test.id(42).query('yes').first('Wouter').toString()).toBe('$host/$resource/tests/42?q=yes&first=Wouter');
+    expect(DevUri.Developers.query('yes').language('Java').toString()).toBe('$host/$resource/developers?q=yes&language=Java');
+    expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe('$host/$resource/developers/42?q=yes&language=C');
   });
 });

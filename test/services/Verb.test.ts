@@ -6,6 +6,7 @@ describe('Verb', () => {
   class Resource {
     @get() all = () => '';
     @get(HttpStatus.Ok, HttpStatus.NoContent) byId = () => '';
+
     @put() go(): string { return ''; }
   }
 
@@ -18,5 +19,10 @@ describe('Verb', () => {
   test('Verb works on a function', () => {
     const verb: Verb = meta(new Resource()).property('go').get('verb');
     expect(verb.verb).toBe(HttpVerb.Put);
+  });
+
+  test('Get all verb decorated properties', () => {
+    const verbs = meta(new Resource()).keys<Verb>('verb');
+    expect(verbs.length).toBe(3);
   });
 });
