@@ -7,4 +7,5 @@ export * from "./Json";
 export * from "./Result";
 export * from "./Results";
 export * from "./Text";
+export * from "./Uri";
 export * from "./Validatable";
