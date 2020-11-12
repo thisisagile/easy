@@ -17,3 +17,5 @@ export const isArray = <T = any>(o?: unknown): o is Array<T> => isDefined(o) && 
 export const isInstance = <T>(ctor: Constructor<T>, o?: unknown): o is T => isFunction(ctor) && o instanceof ctor;
 
 export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) && values.some(v => v === o);
+
+export const isPrimitive = (o?: unknown): boolean => (o !== null) && !isObject(o) && !isFunction(o) && !isArray(o);
