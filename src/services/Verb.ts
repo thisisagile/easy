@@ -4,10 +4,8 @@ import { HttpStatus } from './HttpStatus';
 
 export type Verb = {verb: HttpVerb, onOk: HttpStatus, onError: HttpStatus};
 
-const verb = <T>(verb: Verb): PropertyDecorator =>
-  (subject: unknown, property: string): void => {
-    meta(subject).property(property).set('verb', verb);
-  };
+const verb = <T>(v: Verb): PropertyDecorator =>
+  (subject: unknown, property: string): void => { meta(subject).property(property).set('verb', v); };
 
 export const get = (onOk = HttpStatus.Ok, onError = HttpStatus.NotFound): PropertyDecorator =>
   verb({ verb: HttpVerb.Get, onOk, onError });

@@ -1,5 +1,6 @@
 import { Dev } from "../ref/Dev";
-import { Results, validate, validateReject } from "../../src/validation";
+import { validate, validateReject } from "../../src/validation";
+import { Results } from '../../src/types';
 
 describe("validate", () => {
 

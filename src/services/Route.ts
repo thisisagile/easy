@@ -1,18 +1,21 @@
-import { meta } from '../utils';
+import { List, meta } from '../utils';
 import { Uri } from '../types';
+import { HttpVerb } from './HttpVerb';
+import { Verb } from './Verb';
 
-export const route = (route: Uri): ClassDecorator =>
-  (subject: Function): void => {
-    meta(subject).set('route', route);
-  };
+export const route = (uri: Uri): ClassDecorator =>
+  (subject: Function): void => { meta(subject).set('route', uri); };
 
-// <TFunction extends Function>(target: TFunction) => TFunction | void
-// // eslint-disable-next-line @typescript-eslint/ban-types
-// export function Route<T extends Verifiable>(uri: Uri): <TFunction extends Function>(target: TFunction) => void {
-//   // eslint-disable-next-line @typescript-eslint/ban-types
-//   return <TFunction extends Function>(target: TFunction): void => {
-//     reflect(target).uri = uri;
-//     reflect(target).route = uri.path;
-//     // reflect(target).set("target", t);
-//   };
-// }
+class Router {
+  constructor(readonly resource: unknown) {}
+
+  get route(): Uri { return meta(this.resource).get('route'); }
+
+  get verbs(): List<{ verb: HttpVerb, f: Function }> {
+    return meta(this.resource).properties()
+      .filter(p => p.get('verb'))
+      .map(p => ({ verb: p.get<Verb>('verb').verb, f: () => p.property }));
+  }
+}
+
+export const router = (resource: unknown) => new Router(resource);

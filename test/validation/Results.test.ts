@@ -1,5 +1,4 @@
-import { Results, results } from "../../src/validation";
-import { result, Result, Text } from "../../src/types";
+import { result, Result, results, Results, Text } from '../../src/types';
 
 describe("Results", () => {
 
