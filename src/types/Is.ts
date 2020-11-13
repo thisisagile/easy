@@ -10,6 +10,8 @@ export const isString = (o?: unknown): o is string => o instanceof String || typ
 
 export const isObject = (o?: unknown): o is Object => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
 
+export const isNotEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length > 0;
+
 export const isFunction = (o?: unknown): o is Function => isDefined(o) && o instanceof Function;
 
 export const isArray = <T = any>(o?: unknown): o is Array<T> => isDefined(o) && o instanceof Array;

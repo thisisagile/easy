@@ -1,4 +1,13 @@
-import { isArray, isDefined, isEmpty, isInstance, isNotEmpty, isObject, isPrimitive, isString } from '../../src/types';
+import {
+  isArray,
+  isDefined,
+  isEmpty,
+  isInstance,
+  isNotEmpty, isNotEmptyObject,
+  isObject,
+  isPrimitive,
+  isString,
+} from '../../src/types';
 import { Dev } from '../ref/Dev';
 import { Entity } from '../../src/domain';
 
@@ -74,6 +83,26 @@ describe('isObject', () => {
   test('Returns true', () => {
     expect(isObject({})).toBeTruthy();
     expect(isObject(Dev.Jeroen)).toBeTruthy();
+  });
+});
+
+describe('isNotEmptyObject', () => {
+
+  class Empty {}
+
+  test('Returns false', () => {
+    expect(isNotEmptyObject(undefined)).toBeFalsy();
+    expect(isNotEmptyObject(null)).toBeFalsy();
+    expect(isNotEmptyObject()).toBeFalsy();
+    expect(isNotEmptyObject('')).toBeFalsy();
+    expect(isNotEmptyObject([])).toBeFalsy();
+    expect(isNotEmptyObject(new Empty())).toBeFalsy();
+    expect(isNotEmptyObject({})).toBeFalsy();
+  });
+
+  test('Returns true', () => {
+    expect(isNotEmptyObject(Dev)).toBeTruthy();
+    expect(isNotEmptyObject(Dev.Jeroen)).toBeTruthy();
   });
 });
 
