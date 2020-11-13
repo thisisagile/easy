@@ -45,6 +45,11 @@ describe('Testing When', () => {
     expect(when(undefined).not.isDefined.invalid).toBeTruthy();
   });
 
+  test('Construct with undefined object and is', () => {
+    expect(when(Dev.Sander).is(Dev.Sander).invalid).toBeTruthy();
+    expect(when(Dev.Wouter).is(Dev.Jeroen).invalid).toBeFalsy();
+  });
+
   test('Construct with undefined object and isEmpty', () => {
     expect(when('no').isEmpty.invalid).toBeFalsy();
     expect(when('no').not.isEmpty.invalid).toBeTruthy();
