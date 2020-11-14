@@ -1,4 +1,4 @@
-import {Enum} from "../types/Enum";
+import {Enum} from '../types';
 
 export class HttpStatus extends Enum {
     static Ok = new HttpStatus("Ok", 200);

@@ -1,5 +1,6 @@
 import { defined, gt, gte, includes, inList, lt, lte, required, validate } from '../../src/validation';
 import { Record } from '../../src/domain';
+import "@thisisagile/easy-test";
 
 describe('Constraints', () => {
 
@@ -16,11 +17,11 @@ describe('Constraints', () => {
 
   test('All constraints succeed.', () => {
       const t = new Tester({ first: 'Sander', one: 6, two: 6 });
-      expect(validate(t).isValid).toBeTruthy();
+      expect(validate(t)).toBeValid();
     });
 
   test('All constraints fail.', () => {
       const t = new Tester({ one: 42, two: 0 });
-      expect(validate(t).isValid).toBeFalsy();
+    expect(validate(t)).not.toBeValid();
     });
 });

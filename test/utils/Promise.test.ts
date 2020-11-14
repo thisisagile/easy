@@ -1,6 +1,7 @@
 import { reject, resolve } from '../../src/utils';
 import { Dev } from '../ref/Dev';
-import { results, Results } from '../../src/types';
+import { results } from '../../src/types';
+import '@thisisagile/easy-test';
 
 describe('Promise', () => {
 
@@ -9,8 +10,8 @@ describe('Promise', () => {
   });
 
   test('reject', async () => {
-    await expect(reject('Wrong')).rejects.toBeInstanceOf(Results);
-    await expect(reject(results('Very wrong'))).rejects.toBeInstanceOf(Results);
+    await expect(reject('Wrong')).rejects.not.toBeValid();
+    await expect(reject(results('Very wrong'))).rejects.not.toBeValid();
     return expect(reject(new Error('Also wrong'))).rejects.toBeInstanceOf(Error);
   });
 });

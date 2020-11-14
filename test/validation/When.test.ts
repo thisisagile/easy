@@ -1,6 +1,6 @@
 import { Dev } from '../ref/Dev';
-import { Results } from '../../src/types';
 import { when } from '../../src/validation';
+import '@thisisagile/easy-test';
 
 describe('Testing When', () => {
 
@@ -28,8 +28,8 @@ describe('Testing When', () => {
 
   test('Construct, isDefined and reject', async () => {
     expect(when(undefined).not.isDefined.invalid).toBeTruthy();
-    await expect(when(Dev.Invalid).not.isValid.reject('Is wrong')).rejects.toBeInstanceOf(Results);
-    await expect(when(undefined).not.isDefined.reject('Is wrong')).rejects.toBeInstanceOf(Results);
+    await expect(when(Dev.Invalid).not.isValid.reject('Is wrong')).rejects.not.toBeValid();
+    await expect(when(undefined).not.isDefined.reject('Is wrong')).rejects.not.toBeValid();
     return expect(when(Dev.Sander).not.isDefined.reject('Is wrong')).resolves.toMatchObject(Dev.Sander);
   });
 

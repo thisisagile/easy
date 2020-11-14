@@ -1,5 +1,6 @@
 import { Uri } from '../../src/types';
 import { DevUri } from '../ref/DevUri';
+import "@thisisagile/easy-test";
 
 describe('Uri', () => {
 
@@ -8,8 +9,8 @@ describe('Uri', () => {
   });
 
   test('toString returns full route', () => {
-    expect(DevUri.Developers.toString()).toBe('$host/$resource/developers');
-    expect(DevUri.Developer.toString()).toBe('$host/$resource/developers/:id');
+    expect(DevUri.Developers).toMatchRoute('$host/$resource/developers');
+    expect(DevUri.Developer).toMatchRoute('$host/$resource/developers/:id');
   });
 
   test('route returns just route', () => {
@@ -23,17 +24,17 @@ describe('Uri', () => {
   });
 
   test('toString returns full route plus id', () => {
-    expect(DevUri.Developers.id(42).toString()).toBe('$host/$resource/developers');
-    expect(DevUri.Developer.id(42).toString()).toBe('$host/$resource/developers/42');
+    expect(DevUri.Developers.id(42)).toMatchRoute('$host/$resource/developers');
+    expect(DevUri.Developer.id(42)).toMatchRoute('$host/$resource/developers/42');
   });
 
   test('toString returns full route plus id and a query', () => {
-    expect(DevUri.Developers.query('yes').toString()).toBe('$host/$resource/developers?q=yes');
-    expect(DevUri.Developer.id(42).query('yes').toString()).toBe('$host/$resource/developers/42?q=yes');
+    expect(DevUri.Developers.query('yes')).toMatchRoute('$host/$resource/developers?q=yes');
+    expect(DevUri.Developer.id(42).query('yes')).toMatchRoute('$host/$resource/developers/42?q=yes');
   });
 
   test('toString returns full route plus id and two queries', () => {
-    expect(DevUri.Developers.query('yes').language('Java').toString()).toBe('$host/$resource/developers?q=yes&language=Java');
-    expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe('$host/$resource/developers/42?q=yes&language=C');
+    expect(DevUri.Developers.query('yes').language('Java')).toMatchRoute('$host/$resource/developers?q=yes&language=Java');
+    expect(DevUri.Developer.id(42).query('yes').language('C')).toMatchRoute('$host/$resource/developers/42?q=yes&language=C');
   });
 });

@@ -1,4 +1,5 @@
 import { result, Result, results, Results, Text } from '../../src/types';
+import "@thisisagile/easy-test";
 
 describe("Results", () => {
 
@@ -11,27 +12,27 @@ describe("Results", () => {
   test("Create empty results", () => {
     const rs = results();
     expect(rs.results).toHaveLength(0);
-    expect(rs.isValid).toBeTruthy();
+    expect(rs).toBeValid();
   });
 
   test("Create with a single string", () => {
     const rs = results(error);
     expect(rs).toHaveLength(1);
-    expect(rs.isValid).toBeFalsy();
+    expect(rs).not.toBeValid();
     expect(rs.results[0].message).toBe(error);
   });
 
   test("Create with a single result", () => {
     const rs = results(r);
     expect(rs).toHaveLength(1);
-    expect(rs.isValid).toBeFalsy();
+    expect(rs).not.toBeValid();
     expect(rs.results[0].message).toBe(r.message);
   });
 
   test("Create with a text and a result", () => {
     const rs = results(error, r);
     expect(rs).toHaveLength(2);
-    expect(rs.isValid).toBeFalsy();
+    expect(rs).not.toBeValid();
     expect(rs.results[1].message).toBe(r.message);
   });
 
@@ -40,7 +41,7 @@ describe("Results", () => {
   test("Add empty results", () => {
     const rs2 = res.add();
     expect(rs2).toHaveLength(2);
-    expect(rs2.isValid).toBeFalsy();
+    expect(rs2).not.toBeValid();
   });
 
   test("Add with a single string", () => {

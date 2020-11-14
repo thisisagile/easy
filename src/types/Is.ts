@@ -12,7 +12,9 @@ export const isObject = (o?: unknown): o is Object => o != null && (typeof o ===
 
 export const isNotEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length > 0;
 
-export const isFunction = (o?: unknown): o is Function => isDefined(o) && o instanceof Function;
+export const isFunction = (o?: unknown): o is (...params: unknown[]) => unknown => isDefined(o) && typeof o === 'function';
+
+// export const isFunction = (o?: unknown): o is Function => isDefined(o) && o instanceof Function;
 
 export const isArray = <T = any>(o?: unknown): o is Array<T> => isDefined(o) && o instanceof Array;
 
