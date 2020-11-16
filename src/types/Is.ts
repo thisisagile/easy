@@ -14,8 +14,6 @@ export const isNotEmptyObject = (o?: unknown): boolean => isObject(o) && Object.
 
 export const isFunction = (o?: unknown): o is (...params: unknown[]) => unknown => isDefined(o) && typeof o === 'function';
 
-// export const isFunction = (o?: unknown): o is Function => isDefined(o) && o instanceof Function;
-
 export const isArray = <T = any>(o?: unknown): o is Array<T> => isDefined(o) && o instanceof Array;
 
 export const isInstance = <T>(ctor: Constructor<T>, o?: unknown): o is T => isFunction(ctor) && o instanceof ctor;
