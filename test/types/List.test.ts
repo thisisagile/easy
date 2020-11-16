@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { list, List } from '../../src/utils';
+import { List, list } from '../../src/types/List';
 
 describe('List', () => {
 
@@ -43,6 +43,20 @@ describe('List', () => {
     const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]).filter(d => d.name.includes('a'));
     expect(devs).toBeInstanceOf(List);
     expect(devs).toHaveLength(2);
+  });
+
+  test('first', () => {
+    const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+    expect(devs.first()).toMatchObject(Dev.Sander);
+    expect(devs.first(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
+    expect(devs.first(d => d.name === "Rene")).toBeUndefined();
+  });
+
+  test('last', () => {
+    const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+    expect(devs.last()).toMatchObject(Dev.Naoufal);
+    expect(devs.last(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
+    expect(devs.last(d => d.name === "Rene")).toBeUndefined();
   });
 
   test('concat', () => {

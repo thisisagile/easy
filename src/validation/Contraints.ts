@@ -1,5 +1,4 @@
-import { meta } from '../utils';
-import { isDefined, isIn, isString, isValidatable, Text } from '../types';
+import { isDefined, isIn, isString, isValidatable, meta, Text } from '../types';
 
 export type Constraint = (value: unknown) => boolean;
 

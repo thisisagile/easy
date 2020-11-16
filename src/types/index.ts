@@ -4,6 +4,7 @@ export * from "./Id";
 export * from "./Is";
 export * from "./IsA";
 export * from "./Json";
+export * from "./Meta";
 export * from "./Result";
 export * from "./Results";
 export * from "./Text";

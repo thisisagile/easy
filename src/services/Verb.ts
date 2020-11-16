@@ -1,6 +1,6 @@
-import { meta } from '../utils';
 import { HttpVerb } from './HttpVerb';
 import { HttpStatus } from './HttpStatus';
+import { meta } from '../types';
 
 export type Verb = {verb: HttpVerb, onOk: HttpStatus, onError: HttpStatus};
 

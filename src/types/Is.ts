@@ -23,3 +23,4 @@ export const isInstance = <T>(ctor: Constructor<T>, o?: unknown): o is T => isFu
 export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) && values.some(v => v === o);
 
 export const isPrimitive = (o?: unknown): boolean => (o !== null) && !isObject(o) && !isFunction(o) && !isArray(o);
+

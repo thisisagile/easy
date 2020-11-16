@@ -1,7 +1,6 @@
 import { HttpVerb, route, router } from '../../src/services';
-import { meta } from '../../src/utils';
 import { DevUri } from '../ref/DevUri';
-import { Uri } from '../../src/types';
+import { meta, Uri } from '../../src/types';
 import { DevsResource } from '../ref/DevResource';
 
 describe('Route', () => {

@@ -1,5 +1,4 @@
-import { isDefined, result, Result, results, Results, Text } from '../types';
-import { meta } from '../utils';
+import { isDefined, meta, result, Result, results, Results, Text } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
 

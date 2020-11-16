@@ -1,6 +1,6 @@
 import { Id, Json, JsonValue } from "../types";
 import { Query } from "./Query";
-import { List } from '../utils';
+import { List } from '../types/List';
 
 export interface Gateway {
 

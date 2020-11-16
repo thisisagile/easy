@@ -1,4 +1,4 @@
-import { toArray } from '../../src/utils';
+import { toArray } from '../../src';
 import { Dev } from '../ref/Dev';
 
 describe('toArray', () => {

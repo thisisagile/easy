@@ -1,5 +1,5 @@
-import { list, List } from '../utils';
 import { isNotEmpty } from './Is';
+import { list } from './List';
 
 export type Segment = { key: string, segment?: string, query?: (value: unknown) => string };
 
@@ -26,6 +26,9 @@ export const uri = {
   }),
 };
 
+type Prop = { segment: Segment, value: unknown };
+
+const parse = (route: string, p: Prop): string => route.replace(p.segment.segment, p.value.toString());
 
 export class Uri {
   static readonly id = uri.path('id');
@@ -33,7 +36,7 @@ export class Uri {
   readonly host = uri.host();
   readonly resource = uri.segment('$resource');
 
-  constructor(readonly segments: Segment[], private props: List<{ segment: Segment, value: unknown }> = list()) {}
+  constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
   get route(): string { return ['', ...this.segments.map(s => s.segment)].join('/'); }
 
@@ -45,9 +48,9 @@ export class Uri {
   };
 
   toString(): string {
-    const route = this.props.reduce((r, p) => r.replace(p.segment.segment, p.value.toString()), this.complete);
+    const route = this.props.reduce((r: string, p: Prop) => parse(r, p), this.complete);
     const q = this.props.mapDefined(p => p.segment?.query ? p.segment?.query(p.value) : undefined)?.join('&');
-    this.props = list();
+    this.props = list<Prop>();
     return isNotEmpty(q) ? `${route}?${q}` : route;
   }
 
