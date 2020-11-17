@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "pretest": "jest --clearCache",
     "test": "jest --coverage",
     "prepack": "npm run build",
     "semantic-release": "semantic-release"

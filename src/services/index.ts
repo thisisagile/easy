@@ -1,3 +1,4 @@
+export * from "./ContentType";
 export * from "./EasyRequest";
 export * from "./EasyResponse";
 export * from "./HttpStatus";
