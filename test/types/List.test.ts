@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { List, list } from '../../src/types/List';
+import { isList, List, list, toList } from '../../src/types/List';
 
 describe('List', () => {
 
@@ -49,14 +49,14 @@ describe('List', () => {
     const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
     expect(devs.first()).toMatchObject(Dev.Sander);
     expect(devs.first(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
-    expect(devs.first(d => d.name === "Rene")).toBeUndefined();
+    expect(devs.first(d => d.name === 'Rene')).toBeUndefined();
   });
 
   test('last', () => {
     const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
     expect(devs.last()).toMatchObject(Dev.Naoufal);
     expect(devs.last(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
-    expect(devs.last(d => d.name === "Rene")).toBeUndefined();
+    expect(devs.last(d => d.name === 'Rene')).toBeUndefined();
   });
 
   test('concat', () => {
@@ -84,3 +84,71 @@ describe('List', () => {
     expect(JSON.stringify(json)).toBe(JSON.stringify((list(Dev.Sander.toJSON(), Dev.Wouter.toJSON()))));
   });
 });
+
+describe('isList', () => {
+
+  test('Is false', () => {
+    expect(isList()).toBeFalsy();
+    expect(isList({})).toBeFalsy();
+    expect(isList([])).toBeFalsy();
+    expect(isList<Dev>([Dev.Sander, Dev.Jeroen])).toBeFalsy();
+  });
+
+  test('Is true', () => {
+    expect(isList<Dev>(list(Dev.Sander, Dev.Jeroen))).toBeTruthy();
+  });
+});
+
+describe('toList', () => {
+
+  test('from nothing', () => {
+    const l = toList();
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(0);
+  });
+
+  test('from undefined', () => {
+    const l = toList(undefined);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(0);
+  });
+
+  test('from null', () => {
+    const l = toList(null);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(0);
+  });
+
+  test('from single item', () => {
+    const l = toList(Dev.Naoufal);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(1);
+  });
+
+  test('from two items', () => {
+    const l = toList(Dev.Sander, Dev.Jeroen);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(2);
+  });
+
+  test('from array of two items', () => {
+    const l = toList([Dev.Sander, Dev.Jeroen]);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(2);
+  });
+
+  test('from spread of two items', () => {
+    const spread = [Dev.Sander, Dev.Jeroen];
+    const l = toList(...spread);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(2);
+  });
+
+  test('from list of two items', () => {
+    const l = toList(list(Dev.Naoufal, Dev.Jeroen));
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(2);
+  });
+});
+
+
