@@ -10,9 +10,9 @@ export const uri = {
     segment: key ?? '$host',
   }),
 
-  segment: (key: string): Segment => ({
+  segment: (key?: string): Segment => ({
     key,
-    segment: `${key}`,
+    segment: key,
   }),
 
   path: (key: string): Segment => ({
@@ -38,9 +38,9 @@ export class Uri {
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
-  get route(): string { return ['', ...this.segments.map(s => s.segment)].join('/'); }
+  get route(): string { return list(uri.segment(""), ...this.segments).mapDefined(s => s.segment).join('/'); }
 
-  get complete(): string { return [this.host, this.resource, ...this.segments].map(s => s.segment).join('/'); }
+  get complete(): string { return list(this.host, this.resource, ...this.segments).mapDefined(s => s.segment).join('/'); }
 
   set = (segment: Segment, value: unknown): this => {
     this.props.push({ segment, value });

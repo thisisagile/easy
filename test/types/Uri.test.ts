@@ -1,6 +1,6 @@
 import { Uri } from '../../src/types';
 import { DevUri } from '../ref/DevUri';
-import "@thisisagile/easy-test";
+import '@thisisagile/easy-test';
 
 describe('Uri', () => {
 
@@ -12,8 +12,18 @@ describe('Uri', () => {
     expect(DevUri.Developers).toMatchRoute('$host/$resource/developers');
     expect(DevUri.Developer).toMatchRoute('$host/$resource/developers/:id');
   });
+  //
+  // const segment = (key?: string): Segment => ({
+  //   key,
+  //   segment: key,
+  // });
 
   test('route returns just route', () => {
+    // const key = '';
+    // const ss = segment().segment;
+    // const seg = segment('').segment;
+    // const sss = segment(key).segment;
+    // const s = [uri.segment(''), ...DevUri.Developers.segments].map(s => s.segment);
     expect(DevUri.Developers.route).toBe('/developers');
     expect(DevUri.Developer.route).toBe('/developers/:id');
   });
