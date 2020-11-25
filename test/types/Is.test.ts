@@ -3,7 +3,7 @@ import {
   isDefined,
   isEmpty,
   isInstance,
-  isNotEmpty, isNotEmptyObject,
+  isNotEmpty, isEmptyObject,
   isObject,
   isPrimitive,
   isString,
@@ -91,18 +91,18 @@ describe('isNotEmptyObject', () => {
   class Empty {}
 
   test('Returns false', () => {
-    expect(isNotEmptyObject(undefined)).toBeFalsy();
-    expect(isNotEmptyObject(null)).toBeFalsy();
-    expect(isNotEmptyObject()).toBeFalsy();
-    expect(isNotEmptyObject('')).toBeFalsy();
-    expect(isNotEmptyObject([])).toBeFalsy();
-    expect(isNotEmptyObject(new Empty())).toBeFalsy();
-    expect(isNotEmptyObject({})).toBeFalsy();
+    expect(isEmptyObject(undefined)).toBeFalsy();
+    expect(isEmptyObject(null)).toBeFalsy();
+    expect(isEmptyObject()).toBeFalsy();
+    expect(isEmptyObject('')).toBeFalsy();
+    expect(isEmptyObject([])).toBeFalsy();
+    expect(isEmptyObject(Dev)).toBeFalsy();
+    expect(isEmptyObject(Dev.Jeroen)).toBeFalsy();
   });
 
   test('Returns true', () => {
-    expect(isNotEmptyObject(Dev)).toBeTruthy();
-    expect(isNotEmptyObject(Dev.Jeroen)).toBeTruthy();
+    expect(isEmptyObject({})).toBeTruthy();
+    expect(isEmptyObject(new Empty())).toBeTruthy();
   });
 });
 
