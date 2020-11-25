@@ -1,6 +1,7 @@
 import { isRestResult, toRestResult } from '../../src/services';
 import { Dev } from '../ref/Dev';
 import { list } from '../../src/types/List';
+import { result } from '../../src/types';
 
 const data = { data: { items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()], itemCount: 3 } };
 const item = Dev.Wouter.toJSON();
@@ -54,6 +55,13 @@ describe('toRestResult', () => {
     const r = toRestResult(payload);
     expect(isRestResult(r)).toBeTruthy();
     expect(r.data.items.first()).toMatchObject(list(payload).first());
+  });
+
+  test('From result', () => {
+    const res = result("A good result");
+    const r = toRestResult(res);
+    expect(isRestResult(r)).toBeTruthy();
+    expect(r.error.errors.first()).toMatchObject(res);
   });
 
   test('From error', () => {
