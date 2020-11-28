@@ -1,5 +1,6 @@
-import { Id, Json, JsonValue } from '../types';
-import { List } from '../types/List';
+import { List } from './List';
+import { Json, JsonValue } from './Json';
+import { Id } from './Id';
 
 export interface Gateway {
   all: () => Promise<List<Json>>;

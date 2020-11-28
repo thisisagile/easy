@@ -1,5 +1,6 @@
 export * from "./Constructor";
 export * from "./Enum";
+export * from "./Gateway";
 export * from "./Id";
 export * from "./Is";
 export * from "./IsA";
