@@ -45,9 +45,7 @@
     "uuid": "^8.3.1"
   },
   "dependencies": {
-    "reflect-metadata": "^0.1.13",
-    "tsyringe": "^4.4.0",
-    "uuid": "^8.3.1"
+    "reflect-metadata": "^0.1.13"
   },
   "engines": {
     "node": ">=12.13.0",
