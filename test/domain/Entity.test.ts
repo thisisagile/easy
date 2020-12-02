@@ -1,6 +1,5 @@
-import { Entity } from '../../src/domain';
+import { Entity, required } from '../../src';
 import '@thisisagile/easy-test';
-import { required } from '../../src/validation';
 
 describe('Entity', () => {
 

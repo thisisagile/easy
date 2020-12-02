@@ -1,4 +1,4 @@
-import { Query, where } from '../../src/data/Query';
+import { Query, where } from '../../src';
 
 describe("Query", () => {
 

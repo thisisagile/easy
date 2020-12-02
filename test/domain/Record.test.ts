@@ -1,6 +1,5 @@
-import { Record } from '../../src/domain';
-import "@thisisagile/easy-test";
-import { required } from '../../src/validation';
+import { Record, required } from '../../src';
+import '@thisisagile/easy-test';
 
 describe('Record', () => {
 
@@ -10,7 +9,7 @@ describe('Record', () => {
   }
 
   test('isValid passes', () => {
-    expect(new Address({city: "Amsterdam"})).toBeValid();
+    expect(new Address({ city: 'Amsterdam' })).toBeValid();
   });
 
   test('isValid fails', () => {
