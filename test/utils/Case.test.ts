@@ -1,10 +1,9 @@
-import { isDefined } from '../../src/types';
+import { choose, isDefined } from '../../src';
 import { Dev } from '../ref/Dev';
-import { choose } from '../../src/utils';
 
 describe('Case', () => {
 
-  const wich = (name?: string) =>
+  const which = (name?: string) =>
     choose<Dev, string>(name)
       .case(n => !isDefined(n), Dev.Jeroen)
       .case(n => n.includes('an'), Dev.Naoufal)
@@ -54,9 +53,9 @@ describe('Case', () => {
   });
 
   test('Full choose case', () => {
-    expect(wich()).toMatchObject(Dev.Jeroen);
-    expect(wich('an')).toMatchObject(Dev.Naoufal);
-    expect(wich('San')).toMatchObject(Dev.Naoufal);
-    expect(wich('Kim')).toMatchObject(Dev.Wouter);
+    expect(which()).toMatchObject(Dev.Jeroen);
+    expect(which('an')).toMatchObject(Dev.Naoufal);
+    expect(which('San')).toMatchObject(Dev.Naoufal);
+    expect(which('Kim')).toMatchObject(Dev.Wouter);
   });
 });
