@@ -1,5 +1,5 @@
 import {Dev} from "../ref/Dev";
-import {isValidatable} from "../../src/types";
+import {isValidatable} from '../../src';
 
 describe("Validatable", () => {
 

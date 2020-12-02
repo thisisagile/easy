@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { Get, GetProperty, isFunction, ofGet, ofProperty } from '../../src/types';
+import { Get, GetProperty, isFunction, ofGet, ofProperty } from '../../src';
 
 describe('Get', () => {
 

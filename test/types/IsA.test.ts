@@ -1,4 +1,4 @@
-import { isA } from "../../src/types";
+import { isA } from '../../src';
 import { Dev } from "../ref/Dev";
 
 describe("IsA", () => {

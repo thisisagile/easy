@@ -1,3 +1,4 @@
+export * from "./Array";
 export * from "./Constructor";
 export * from "./Enum";
 export * from "./Gateway";
@@ -5,6 +6,7 @@ export * from "./Id";
 export * from "./Is";
 export * from "./IsA";
 export * from "./Json";
+export * from "./List";
 export * from "./Meta";
 export * from "./Result";
 export * from "./Results";

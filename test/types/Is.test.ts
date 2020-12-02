@@ -1,15 +1,16 @@
 import {
+  Entity,
   isArray,
   isDefined,
   isEmpty,
+  isEmptyObject,
   isInstance,
-  isNotEmpty, isEmptyObject,
+  isNotEmpty,
   isObject,
   isPrimitive,
   isString,
-} from '../../src/types';
+} from '../../src';
 import { Dev } from '../ref/Dev';
-import { Entity } from '../../src/domain';
 
 describe('isDefined', () => {
   test('Returns false', () => {
@@ -126,7 +127,7 @@ class Tester extends Entity {}
 class Ux extends Dev {}
 
 describe('isInstance', () => {
-  test("Check", () => {
+  test('Check', () => {
     expect(isInstance(Dev)).toBeFalsy();
     expect(isInstance(Dev, undefined)).toBeFalsy();
     expect(isInstance(Dev, null)).toBeFalsy();

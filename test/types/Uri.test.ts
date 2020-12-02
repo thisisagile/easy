@@ -1,4 +1,4 @@
-import { Uri } from '../../src/types';
+import { Uri } from '../../src';
 import { DevUri } from '../ref/DevUri';
 import '@thisisagile/easy-test';
 

@@ -1,4 +1,4 @@
-import { newId } from '../../src/types';
+import { newId } from '../../src';
 
 describe('newId', () => {
 

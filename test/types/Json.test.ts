@@ -1,4 +1,4 @@
-import { jsonify } from '../../src/types';
+import { jsonify } from '../../src';
 import { Dev } from '../ref/Dev';
 
 describe('Json', () => {

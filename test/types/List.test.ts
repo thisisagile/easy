@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { isList, List, list, toList } from '../../src/types/List';
+import { isList, List, list, toList } from '../../src';
 
 describe('List', () => {
 
