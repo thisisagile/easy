@@ -24,6 +24,12 @@ describe('AxiosProvider', () => {
     expect(r.data.items).toHaveLength(2);
   });
 
+  test('Get with transform', async () => {
+    axios.request = mock.resolve({ dev: { name: 'Sander' }});
+    const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
+    expect(r.data.items[0]).toMatchObject({name: "Sander"});
+  });
+
   test('Get with reject and response', async () => {
     axios.request = mock.reject({ response: { statusText: 'This is wrong' } });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
@@ -39,6 +45,12 @@ describe('AxiosProvider', () => {
   test('Get with reject and message', async () => {
     axios.request = mock.reject({ message: 'This is wrong' });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
+    expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
+  });
+
+  test('Get with reject and transform', async () => {
+    axios.request = mock.reject({ message: 'This is wrong' });
+    const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
     expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
   });
 });

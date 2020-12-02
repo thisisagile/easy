@@ -19,9 +19,9 @@ export class AxiosProvider implements RequestProvider {
       url: uri.toString(),
       method: verb.id as Method,
       headers: options.headers,
-      data: body,
-      transformResponse: transform,
+      data: body
     })
+      .then(r => transform(r))
       .catch(e => toResult(uri, verb, e))
       .then(r => toRestResult(r));
 }
