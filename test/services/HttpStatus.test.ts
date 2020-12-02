@@ -1,4 +1,4 @@
-import {HttpStatus} from "../../src/services";
+import {HttpStatus} from '../../src';
 
 describe("HttpStatus", () => {
 

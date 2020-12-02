@@ -9,4 +9,5 @@ export * from "./RequestOptions";
 export * from "./RequestProvider";
 export * from "./RestResult";
 export * from "./Route";
+export * from "./RouteGateway";
 export * from "./Verb";

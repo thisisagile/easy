@@ -1,6 +1,5 @@
-import { AxiosProvider } from '../../src/services/AxiosProvider';
+import { AxiosProvider, HttpVerb } from '../../src';
 import { DevUri } from '../ref/DevUri';
-import { HttpVerb } from '../../src/services';
 import axios from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
 

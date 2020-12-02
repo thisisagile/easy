@@ -1,4 +1,4 @@
-import { ContentType } from '../../src/services';
+import { ContentType } from '../../src';
 import { Dev } from '../ref/Dev';
 
 describe('ContentType', () => {

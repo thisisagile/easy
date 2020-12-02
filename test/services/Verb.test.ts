@@ -1,6 +1,5 @@
-import { HttpStatus, HttpVerb, Verb } from '../../src/services';
+import { HttpStatus, HttpVerb, meta, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref/DevResource';
-import { meta } from '../../src/types';
 
 describe('Verb', () => {
 

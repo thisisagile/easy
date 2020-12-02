@@ -1,5 +1,4 @@
-import { RequestOptions } from '../../src/services/RequestOptions';
-import { ContentType } from '../../src/services';
+import { ContentType, RequestOptions } from '../../src';
 
 describe('RequestOptions', () => {
 

@@ -1,13 +1,11 @@
-import { isRestResult, toRestResult } from '../../src/services';
+import { isRestResult, list, result, toRestResult } from '../../src';
 import { Dev } from '../ref/Dev';
-import { list } from '../../src/types/List';
-import { result } from '../../src/types';
 
 const data = { data: { items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()], itemCount: 3 } };
 const item = Dev.Wouter.toJSON();
 const items = list([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
 const payload = [{ 'message': 'This is wrong', 'domain': 'easy' }, { 'message': 'Very wrong', 'domain': 'easy' }];
-const error = { error: { errors: [{ 'message': 'This is wrong', 'domain': 'easy' }] }};
+const error = { error: { errors: [{ 'message': 'This is wrong', 'domain': 'easy' }] } };
 
 describe('toRestResult', () => {
 
@@ -58,7 +56,7 @@ describe('toRestResult', () => {
   });
 
   test('From result', () => {
-    const res = result("A good result");
+    const res = result('A good result');
     const r = toRestResult(res);
     expect(isRestResult(r)).toBeTruthy();
     expect(r.error.errors.first()).toMatchObject(res);
