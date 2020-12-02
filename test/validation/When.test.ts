@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { when } from '../../src/validation';
+import { when } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {

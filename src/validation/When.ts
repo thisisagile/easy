@@ -1,6 +1,6 @@
-import { Constructor, isDefined, isEmpty, isIn, ofGet, Predicate, Results, Text } from '../types';
+import { Constructor, isDefined, isEmpty, isIn, ofGet, Predicate, Results, Text, toArray } from '../types';
 import { validate } from './Validate';
-import { reject, resolve, toArray } from '../utils';
+import { reject, resolve } from '../utils';
 
 class When<T> {
 

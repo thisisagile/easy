@@ -1,4 +1,4 @@
-import { result, Result, results, Results, Text } from '../../src/types';
+import { result, Result, results, Results, Text } from '../../src';
 import "@thisisagile/easy-test";
 
 describe("Results", () => {

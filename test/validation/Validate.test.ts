@@ -1,5 +1,5 @@
 import { Dev } from '../ref/Dev';
-import { includes, validate, validateReject } from '../../src/validation';
+import { includes, validate, validateReject } from '../../src';
 import '@thisisagile/easy-test';
 
 class Top {
