@@ -10,7 +10,7 @@ import {
   isPrimitive,
   isString,
 } from '../../src';
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 
 describe('isDefined', () => {
   test('Returns false', () => {

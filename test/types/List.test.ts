@@ -1,4 +1,4 @@
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 import { isList, List, list, toList } from '../../src';
 
 describe('List', () => {

@@ -1,4 +1,4 @@
-import {Dev} from "../ref/Dev";
+import {Dev} from '../ref';
 import {isValidatable} from '../../src';
 
 describe("Validatable", () => {

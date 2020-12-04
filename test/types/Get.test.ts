@@ -1,4 +1,4 @@
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 import { Get, GetProperty, isFunction, ofGet, ofProperty } from '../../src';
 
 describe('Get', () => {

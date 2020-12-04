@@ -1,5 +1,5 @@
 import { Uri } from '../../src';
-import { DevUri } from '../ref/DevUri';
+import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('Uri', () => {

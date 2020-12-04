@@ -1,4 +1,4 @@
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 import { when } from '../../src';
 import '@thisisagile/easy-test';
 

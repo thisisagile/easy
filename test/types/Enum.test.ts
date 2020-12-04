@@ -1,5 +1,5 @@
 import { Enum } from '../../src';
-import { Language } from '../ref/Language';
+import { Language } from '../ref';
 
 describe('Enum', () => {
 

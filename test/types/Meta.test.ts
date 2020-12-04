@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Dev } from "../ref/Dev";
+import { Dev } from '../ref';
 import { meta } from '../../src';
 
 describe("Meta", () => {

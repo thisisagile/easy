@@ -1,5 +1,5 @@
 import { reject, resolve, results } from '../../src';
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('Promise', () => {
