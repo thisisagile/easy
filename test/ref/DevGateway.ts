@@ -1,6 +1,5 @@
-import { RouteGateway } from '../../src/services/RouteGateway';
+import { RestResult, RouteGateway } from '../../src';
 import { DevUri } from './DevUri';
-import { RestResult } from '../../src/services';
 
 export class DevGateway extends RouteGateway {
 
