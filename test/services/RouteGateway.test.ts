@@ -1,8 +1,6 @@
 import { Api, RouteGateway, toRestResult } from '../../src';
-import { DevUri } from '../ref/DevUri';
-import { Dev } from '../ref/Dev';
+import { Dev, DevGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { DevGateway } from '../ref/DevGateway';
 
 describe('RouteGateway', () => {
 

@@ -1,5 +1,5 @@
 import { toArray } from '../../src';
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 
 describe('toArray', () => {
 

@@ -1,5 +1,5 @@
 import { isRestResult, list, result, toRestResult } from '../../src';
-import { Dev } from '../ref/Dev';
+import { Dev } from '../ref';
 
 const data = { data: { items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()], itemCount: 3 } };
 const item = Dev.Wouter.toJSON();

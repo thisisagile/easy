@@ -1,7 +1,6 @@
 import { Api, HttpVerb, RequestProvider, toRestResult } from '../../src';
-import { Dev } from '../ref/Dev';
+import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { DevUri } from '../ref/DevUri';
 
 describe('Api', () => {
 
