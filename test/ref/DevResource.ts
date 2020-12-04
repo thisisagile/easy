@@ -1,8 +1,6 @@
-import { del, EasyRequest, get, HttpStatus, patch, post, put, route } from '../../src/services';
+import { del, EasyRequest, get, HttpStatus, isDefined, list, List, patch, post, put, route } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
-import { list, List } from '../../src/types/List';
-import { isDefined } from '../../src/types';
 
 export class Resource<T> {}
 

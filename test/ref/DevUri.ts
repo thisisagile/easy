@@ -1,4 +1,4 @@
-import { uri, Uri } from '../../src/types';
+import { uri, Uri } from '../../src';
 
 export class DevUri extends Uri {
 

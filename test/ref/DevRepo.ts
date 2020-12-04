@@ -1,5 +1,5 @@
 import { Dev } from './Dev';
-import { Repo } from '../../src/domain/Repo';
+import { Repo } from '../../src';
 import { DevGateway } from './DevGateway';
 
 export class DevRepo extends Repo<Dev> {
