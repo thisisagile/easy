@@ -1,5 +1,6 @@
 import { Dev, DevGateway, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
+import { results } from '../../src';
 
 describe('Repo', () => {
 
@@ -41,4 +42,27 @@ describe('Repo', () => {
     expect(r).toBeTruthy();
   });
 
+  test('add invalid object does not trigger gateway', async () => {
+    gateway.add = mock.resolve({});
+    await expect(repo.add(Dev.Invalid.toJSON())).rejects.not.toBeValid();
+    return expect(gateway.add).not.toHaveBeenCalled();
+  });
+
+  test('add valid object but fails in repo should not trigger gateway', async () => {
+    gateway.add = mock.resolve({});
+    await expect(repo.add(Dev.Naoufal.toJSON())).rejects.not.toBeValid();
+    return expect(gateway.add).not.toHaveBeenCalled();
+  });
+
+  test('add valid object but gateway fails trigger gateway', async () => {
+    gateway.add = mock.reject(results("Wrong"));
+    await expect(repo.add(Dev.Jeroen.toJSON())).rejects.not.toBeValid();
+    return expect(gateway.add).toHaveBeenCalled();
+  });
+
+  test('add valid object does trigger gateway', async () => {
+    gateway.add = mock.resolve(Dev.Jeroen.toJSON());
+    await expect(repo.add(Dev.Jeroen.toJSON())).resolves.toBeValid();
+    return expect(gateway.add).toHaveBeenCalled();
+  });
 });
