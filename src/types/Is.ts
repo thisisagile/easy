@@ -1,11 +1,5 @@
 import { Constructor } from './Constructor';
 
-export const isDate = (o?: unknown): o is Date => o instanceof Date && !isNaN(o.getTime());
-
-export const inPast = (o?: unknown): boolean => isDate(o) && o <= new Date();
-
-export const inFuture = (o?: unknown): boolean => isDate(o) && o > new Date();
-
 export const isDefined = (o?: unknown): boolean => o !== undefined && o !== null;
 
 export const isEmpty = (o?: unknown): boolean => o === '' || o === null || o === undefined;

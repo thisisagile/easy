@@ -38,5 +38,5 @@ export const past = (message?: Text): PropertyDecorator =>
   constraint(v => inPast(v), message ?? 'Value for $property must be in the past.');
 
 export const future = (message?: Text): PropertyDecorator =>
-  constraint(v => !inFuture(v), message ?? 'Value for $property must be in the future.');
+  constraint(v => inFuture(v), message ?? 'Value for $property must be in the future.');
 

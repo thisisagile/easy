@@ -1,6 +1,6 @@
 import {
-  Entity, inFuture, inPast,
-  isArray, isDate,
+  Entity,
+  isArray,
   isDefined,
   isEmpty,
   isEmptyObject,
@@ -154,33 +154,3 @@ describe('isPrimitive', () => {
     expect(isPrimitive([])).toBeFalsy();
   });
 });
-
-describe("isDate", () => {
-  expect(isDate()).toBeFalsy();
-  expect(isDate("")).toBeFalsy();
-  expect(isDate("1970-1-1")).toBeFalsy();
-  expect(isDate(new Date("1970-1-1"))).toBeTruthy();
-});
-
-const yesterday = (): Date => {
-  const today = new Date();
-  today.setDate(today.getDate() - 1);
-  return today;
-};
-
-const tomorrow = (): Date => {
-  const today = new Date();
-  today.setDate(today.getDate() + 1);
-  return today;
-};
-
-describe("inPast", () => {
-  expect(inPast(yesterday())).toBeTruthy();
-  expect(inPast(tomorrow())).toBeFalsy();
-});
-
-describe("inFuture", () => {
-  expect(inFuture(yesterday())).toBeFalsy();
-  expect(inFuture(tomorrow())).toBeTruthy();
-});
-

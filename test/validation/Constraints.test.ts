@@ -1,4 +1,18 @@
-import { defined, future, gt, gte, includes, inList, lt, lte, past, Record, required, validate } from '../../src';
+import {
+  days,
+  defined,
+  future,
+  gt,
+  gte,
+  includes,
+  inList,
+  lt,
+  lte,
+  past,
+  Record,
+  required,
+  validate,
+} from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Constraints', () => {
@@ -17,7 +31,7 @@ describe('Constraints', () => {
   }
 
   test('All constraints succeed.', () => {
-    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: new Date("1970-1-1"), future: new Date("2070-1-1") });
+    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: days.yesterday(), future: days.tomorrow() });
     expect(validate(t)).toBeValid();
   });
 
