@@ -1,4 +1,4 @@
-import { defined, gt, gte, includes, inList, lt, lte, Record, required, validate } from '../../src';
+import { defined, future, gt, gte, includes, inList, lt, lte, past, Record, required, validate } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Constraints', () => {
@@ -12,10 +12,12 @@ describe('Constraints', () => {
     @lte(10) readonly two = this.state.one;
     @gt(4) readonly three = this.state.two;
     @gte(4) readonly four = this.state.two;
+    @past() readonly past = this.state.past;
+    @future() readonly future = this.state.future;
   }
 
   test('All constraints succeed.', () => {
-    const t = new Tester({ first: 'Sander', one: 6, two: 6 });
+    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: new Date("1970-1-1"), future: new Date("2070-1-1") });
     expect(validate(t)).toBeValid();
   });
 

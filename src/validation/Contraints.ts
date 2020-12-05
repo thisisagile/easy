@@ -1,4 +1,4 @@
-import { isDefined, isIn, isString, isValidatable, meta, Text } from '../types';
+import { inFuture, inPast, isDefined, isIn, isString, isValidatable, meta, Text } from '../types';
 
 export type Constraint = (value: unknown) => boolean;
 
@@ -33,4 +33,10 @@ export const lt = (limit: number, message?: Text): PropertyDecorator =>
 
 export const lte = (limit: number, message?: Text): PropertyDecorator =>
   constraint(v => v <= limit, message ?? 'Value for $property must be smaller than or equal to $actual.');
+
+export const past = (message?: Text): PropertyDecorator =>
+  constraint(v => inPast(v), message ?? 'Value for $property must be in the past.');
+
+export const future = (message?: Text): PropertyDecorator =>
+  constraint(v => !inFuture(v), message ?? 'Value for $property must be in the future.');
 
