@@ -26,4 +26,19 @@ describe('Repo', () => {
     expect(d).toBeInstanceOf(Dev);
     expect(d).toMatchObject(devs[0]);
   });
+
+  test('search triggers gateway', async () => {
+    gateway.search = mock.resolve(devs);
+    const ds = await repo.search("Kim");
+    expect(gateway.search).toHaveBeenCalledWith("Kim");
+    expect(ds[0]).toBeInstanceOf(Dev);
+  });
+
+  test('exists triggers gateway', async () => {
+    gateway.exists = mock.resolve(true);
+    const r = await repo.exists(42);
+    expect(gateway.exists).toHaveBeenCalledWith(42);
+    expect(r).toBeTruthy();
+  });
+
 });
