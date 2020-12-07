@@ -16,4 +16,6 @@ export class HttpStatus extends Enum {
     get isError(): boolean {
         return this.id >= 400;
     }
+
+    get status(): number { return this.id as number };
 }
