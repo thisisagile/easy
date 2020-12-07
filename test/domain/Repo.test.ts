@@ -1,6 +1,7 @@
 import { Dev, DevGateway, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 import { results } from '../../src';
+import "@thisisagile/easy-test";
 
 describe('Repo', () => {
 
@@ -17,7 +18,7 @@ describe('Repo', () => {
     gateway.all = mock.resolve(devs);
     const ds = await repo.all();
     expect(gateway.all).toHaveBeenCalled();
-    expect(ds[0]).toBeInstanceOf(Dev);
+    expect(ds).toBeArrayOf(Dev);
   });
 
   test('byId triggers gateway', async () => {
@@ -32,7 +33,7 @@ describe('Repo', () => {
     gateway.search = mock.resolve(devs);
     const ds = await repo.search("Kim");
     expect(gateway.search).toHaveBeenCalledWith("Kim");
-    expect(ds[0]).toBeInstanceOf(Dev);
+    expect(ds).toBeArrayOf(Dev);
   });
 
   test('exists triggers gateway', async () => {
