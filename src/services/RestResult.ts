@@ -1,26 +1,27 @@
-import { isDefined, isResult, Json, Result } from '../types';
+import { isDefined, isResult, Json, list, List, Result, toList } from '../types';
 import { choose } from '../utils';
-import { list, List, toList } from '../types/List';
+import { HttpStatus } from './HttpStatus';
 
 export type RestResult = {
-  data?: { items: List<Json>; itemCount: number; },
+  data?: { code: number, items: List<Json>; itemCount: number; },
   error?: { code: number; message: string, errorCount: number, errors: List<Result>; }
 }
 
 const data = (items?: Json[]): RestResult => ({
   data: {
+    code: HttpStatus.Ok.status,
     items: list(items),
-    itemCount: items.length
+    itemCount: items.length,
   }
 });
 
 const error = (errors: Result[]): RestResult => ({
   error: {
-    errorCount: errors.length,
-    code: 400,
+    code: HttpStatus.BadRequest.status,
     message: errors[0].message.toString() ?? 'Unknown error',
     errors: list(errors),
-  },
+    errorCount: errors.length,
+  }
 });
 
 export const isRestResult = (r: unknown): r is RestResult =>
