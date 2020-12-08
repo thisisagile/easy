@@ -1,11 +1,11 @@
 import { Dev, DevGateway, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
-import { results } from '../../src';
+import { list, results } from '../../src';
 import "@thisisagile/easy-test";
 
 describe('Repo', () => {
 
-  const devs = [Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON()];
+  const devs = list(Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON());
   let gateway: DevGateway;
   let repo: DevRepo;
 
@@ -22,11 +22,11 @@ describe('Repo', () => {
   });
 
   test('byId triggers gateway', async () => {
-    gateway.byId = mock.resolve(devs[0]);
+    gateway.byId = mock.resolve(devs.first());
     const d = await repo.byId(42);
     expect(gateway.byId).toHaveBeenCalledWith(42);
     expect(d).toBeInstanceOf(Dev);
-    expect(d).toMatchObject(devs[0]);
+    expect(d).toMatchObject(devs.first());
   });
 
   test('search triggers gateway', async () => {
