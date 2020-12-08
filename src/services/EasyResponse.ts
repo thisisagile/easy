@@ -10,13 +10,13 @@ export class EasyResponse {
       items: this.content?.data,
       itemCount: this.content?.data.length
     }
-  };
+  }
 
   get error(): { errors: Result[], code: HttpStatus } {
     return {
       errors: this.content?.errors,
       code: HttpStatus.BadRequest
     }
-  };
+  }
 
 }
