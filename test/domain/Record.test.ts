@@ -15,4 +15,8 @@ describe('Record', () => {
   test('isValid fails', () => {
     expect(new Address()).not.toBeValid();
   });
+
+  test('update', () => {
+    expect(new Address().update({})).toBeInstanceOf(Address);
+  });
 });

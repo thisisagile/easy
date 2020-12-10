@@ -9,4 +9,6 @@ export abstract class Record implements Validatable {
     toJSON(): Json {
         return jsonify({ ...this, state: undefined });
     }
+
+    update = (json: Json): this => this;
 }
