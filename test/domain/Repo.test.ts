@@ -18,7 +18,7 @@ describe('Repo', () => {
     gateway.all = mock.resolve(devs);
     const ds = await repo.all();
     expect(gateway.all).toHaveBeenCalled();
-    expect(ds).toBeArrayOf(Dev);
+    expect(ds).toBeArrayOfWithLength(Dev, devs.length);
   });
 
   test('byId triggers gateway', async () => {
@@ -33,7 +33,7 @@ describe('Repo', () => {
     gateway.search = mock.resolve(devs);
     const ds = await repo.search("Kim");
     expect(gateway.search).toHaveBeenCalledWith("Kim");
-    expect(ds).toBeArrayOf(Dev);
+    expect(ds).toBeArrayOfWithLength(Dev, devs.length);
   });
 
   test('exists triggers gateway', async () => {
