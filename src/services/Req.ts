@@ -4,8 +4,8 @@ export type Req = {path?: Json, id?: Id, query?: Json, q?: JsonValue, body?: Jso
 
 export const toReq = (req: any): Req => ({
   path: req.params as Json,
-  id:  req.params.id as Id,
+  id:  req.params?.id as Id,
   query: req.query as Json,
-  q: req.query.q as Json,
+  q: req.query?.q as Json,
   body: req.body as Json
 });
