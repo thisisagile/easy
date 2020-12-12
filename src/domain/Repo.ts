@@ -17,8 +17,8 @@ export class Repo<T extends Record> {
       .then(i => this.gateway.add(jsonify(i)))
       .then(j => new this.ctor(j));
 
-  update = (item: Json): Promise<T> =>
-    this.gateway.byId(item.id as Id)
+  update = (json: Json): Promise<T> =>
+    this.gateway.byId(json.id as Id)
       .then(j => when(j).not.isDefined.reject('Does not exist'))
       .then(j => (new this.ctor(j)).update(j))
       .then(i => when(i).not.isValid.reject())
