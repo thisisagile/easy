@@ -8,15 +8,15 @@ export const route = (uri: Uri): ClassDecorator =>
 
 export type Endpoint<T> = (re: Req) => Promise<T | List<T>>;
 
-class Router<T> {
+class Routes<T> {
   constructor(readonly resource: unknown) {}
 
   get route(): Uri { return meta(this.resource).get('route'); }
 
-  get endpoints(): List<{ verb: HttpVerb, f: Endpoint<T> }> {
+  get endpoints(): List<{ verb: HttpVerb, endpoint: Endpoint<T> }> {
     return meta(this.resource).properties('verb')
-      .map(p => ({ verb: p.get<Verb>('verb').verb, f: (this.resource as any)[p.property] }));
+      .map(p => ({ verb: p.get<Verb>('verb').verb, endpoint: (this.resource as any)[p.property] }));
   }
 }
 
-export const router = <T>(resource: Constructor<T>) => new Router<T>(new resource());
+export const routes = <T>(resource: Constructor<T>) => new Routes<T>(new resource());
