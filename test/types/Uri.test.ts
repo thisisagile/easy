@@ -9,8 +9,12 @@ describe('Uri', () => {
   });
 
   test('toString returns full route', () => {
-    expect(DevUri.Developers).toMatchRoute('$host/$resource/developers');
-    expect(DevUri.Developer).toMatchRoute('$host/$resource/developers/:id');
+    expect(DevUri.Developers).toMatchRoute('$host/dev/developers');
+    expect(DevUri.Developer).toMatchRoute('$host/dev/developers/:id');
+  });
+
+  test('test returns full route', () => {
+    expect(DevUri.Developers.path).toBe('/dev/developers');
   });
 
   test('route returns just route', () => {
@@ -19,22 +23,22 @@ describe('Uri', () => {
   });
 
   test('complete returns just route', () => {
-    expect(DevUri.Developers.complete).toBe('$host/$resource/developers');
-    expect(DevUri.Developer.complete).toBe('$host/$resource/developers/:id');
+    expect(DevUri.Developers.complete).toBe('$host/dev/developers');
+    expect(DevUri.Developer.complete).toBe('$host/dev/developers/:id');
   });
 
   test('toString returns full route plus id', () => {
-    expect(DevUri.Developers.id(42)).toMatchRoute('$host/$resource/developers');
-    expect(DevUri.Developer.id(42)).toMatchRoute('$host/$resource/developers/42');
+    expect(DevUri.Developers.id(42)).toMatchRoute('$host/dev/developers');
+    expect(DevUri.Developer.id(42)).toMatchRoute('$host/dev/developers/42');
   });
 
   test('toString returns full route plus id and a query', () => {
-    expect(DevUri.Developers.query('yes')).toMatchRoute('$host/$resource/developers?q=yes');
-    expect(DevUri.Developer.id(42).query('yes')).toMatchRoute('$host/$resource/developers/42?q=yes');
+    expect(DevUri.Developers.query('yes')).toMatchRoute('$host/dev/developers?q=yes');
+    expect(DevUri.Developer.id(42).query('yes')).toMatchRoute('$host/dev/developers/42?q=yes');
   });
 
   test('toString returns full route plus id and two queries', () => {
-    expect(DevUri.Developers.query('yes').language('Java')).toMatchRoute('$host/$resource/developers?q=yes&language=Java');
-    expect(DevUri.Developer.id(42).query('yes').language('C')).toMatchRoute('$host/$resource/developers/42?q=yes&language=C');
+    expect(DevUri.Developers.query('yes').language('Java')).toMatchRoute('$host/dev/developers?q=yes&language=Java');
+    expect(DevUri.Developer.id(42).query('yes').language('C')).toMatchRoute('$host/dev/developers/42?q=yes&language=C');
   });
 });

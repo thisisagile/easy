@@ -3,11 +3,18 @@ import { list } from './List';
 
 export type Segment = { key: string, segment?: string, query?: (value: unknown) => string };
 
+const name = (name?: string): string => name?.replace("Uri", "").toLowerCase() ?? "$resource";
+
 export const uri = {
 
   host: (key?: string): Segment => ({
     key,
     segment: key ?? '$host',
+  }),
+
+  resource: (resource?: string): Segment => ({
+    key: name(resource),
+    segment: name(resource),
   }),
 
   segment: (key?: string): Segment => ({
@@ -28,19 +35,24 @@ export const uri = {
 
 type Prop = { segment: Segment, value: unknown };
 
+const toRoute = (...segments: Segment[]): string => list(...segments).mapDefined(s => s.segment).join('/');
 const parse = (route: string, p: Prop): string => route.replace(p.segment.segment, p.value.toString());
 
 export class Uri {
+
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
+
   readonly host = uri.host();
-  readonly resource = uri.segment('$resource');
+  readonly resource = uri.resource(this.constructor.name);
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
-  get route(): string { return list(uri.segment(""), ...this.segments).mapDefined(s => s.segment).join('/'); }
+  get route(): string { return toRoute(uri.segment(""), ...this.segments); }
 
-  get complete(): string { return list(this.host, this.resource, ...this.segments).mapDefined(s => s.segment).join('/'); }
+  get path(): string { return toRoute(uri.segment(""), this.resource, ...this.segments); }
+
+  get complete(): string { return toRoute(this.host, this.resource, ...this.segments); }
 
   set = (segment: Segment, value: unknown): this => {
     this.props.push({ segment, value });
