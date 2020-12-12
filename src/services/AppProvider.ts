@@ -1,5 +1,7 @@
 import { Constructor } from '../types';
 
-export class AppProvider {
-  use = <T>(resource: Constructor<T>): this => this;
+export interface AppProvider {
+  use: (h: unknown) => void;
+  route: (r: Constructor) => void;
+  listen: (port: number) => void
 }
