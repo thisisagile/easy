@@ -15,6 +15,8 @@ export abstract class Enum {
   static byId<E extends Enum>(id: Id, alt?: Get<E>): E {
     return meta(this).values().first((e: unknown) => isEnum(e) && e.id === id) ?? ofGet(alt);
   }
+
+  toString(): string { return this.id.toString(); }
 }
 
 export const isEnum = (e?: unknown): e is Enum => isDefined(e) && (e instanceof Enum) && isAn<Enum>(e, 'name', 'id', 'code');

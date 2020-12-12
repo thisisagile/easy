@@ -39,4 +39,9 @@ describe('Enum', () => {
     expect(MoreLanguage.byId('c', MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.JavaScript);
     expect(MoreLanguage.byId('c', () => MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.JavaScript);
   });
+
+  test("toString", () => {
+    expect(Language.Java.toString()).toBe("java");
+    expect(MoreLanguage.Delphi.toString()).toBe("delphi");
+  });
 });
