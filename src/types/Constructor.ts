@@ -1,6 +1,6 @@
 import { isFunction } from './Is';
 
-export type Constructor<T> = { new (...args: any[]): T };
+export type Constructor<T = unknown> = { new (...args: any[]): T };
 
 export type Get<T, Param = unknown> = T | ((...params: Param[]) => T);
 export type Predicate<Param> = Get<boolean, Param>;
