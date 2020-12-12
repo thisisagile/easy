@@ -1,9 +1,11 @@
-import {Enum} from '../types';
+import { Enum } from '../types';
 
 export class HttpVerb extends Enum {
-    static Get = new HttpVerb("Get", "GET", "get");
-    static Put = new HttpVerb("Put", "PUT", "put");
-    static Patch = new HttpVerb("Patch", "PATCH", "patch");
-    static Post = new HttpVerb("Post", "POST", "post");
-    static Delete = new HttpVerb("Delete", "DELETE", "delete");
+  static Get = new HttpVerb('Get');
+  static Put = new HttpVerb('Put');
+  static Patch = new HttpVerb('Patch');
+  static Post = new HttpVerb('Post');
+  static Delete = new HttpVerb('Delete');
+
+  constructor(name: string) {super(name, name.toLowerCase(), name.toUpperCase()); }
 }
