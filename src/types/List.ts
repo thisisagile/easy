@@ -29,9 +29,12 @@ export class List<T> extends Array<T> {
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: any): List<T> =>
     super.filter(p, params) as List<T>;
 
-  concat = (...items: Array<T>[]): List<T> => super.concat(...items) as List<T>;
+  concat = (...items: (T | ConcatArray<T>)[]): List<T> => super.concat(...items) as List<T>;
 
-  add = (...items: (T | T[])[]): List<T> => this.concat(toArray(...items));
+  add = (...items: (T | T[])[]): this => {
+    super.push(...toArray(...items));
+    return this;
+  }
 }
 
 export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));

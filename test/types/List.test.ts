@@ -65,17 +65,25 @@ describe('List', () => {
     expect(devs.concat()).toHaveLength(2);
     expect(devs.concat([])).toHaveLength(2);
     expect(devs.concat([Dev.Naoufal])).toHaveLength(3);
+    expect(devs.concat(Dev.Naoufal)).toHaveLength(3);
+    expect(devs.concat(Dev.Naoufal, Dev.Jeroen)).toHaveLength(4);
     expect(devs.concat(list(Dev.Naoufal, Dev.Jeroen))).toHaveLength(4);
   });
 
   test('add', () => {
-    const devs = list(Dev.Sander, Dev.Wouter);
+    let devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add()).toBeInstanceOf(List);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add()).toHaveLength(2);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add([])).toHaveLength(2);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add(Dev.Naoufal)).toHaveLength(3);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add([Dev.Naoufal])).toHaveLength(3);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add(list(Dev.Naoufal))).toHaveLength(3);
+    devs = list(Dev.Sander, Dev.Wouter);
     expect(devs.add(list(Dev.Naoufal, Dev.Jeroen))).toHaveLength(4);
   });
 
