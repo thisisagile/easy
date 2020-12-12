@@ -14,7 +14,7 @@ describe('AxiosProvider', () => {
   test('Simple get', async () => {
     axios.request = mock.resolve({ name: 'Sander' });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
-    expect(axios.request).toBeCalledWith(fits.with({ url: DevUri.Developers.toString(), method: 'GET' }));
+    expect(axios.request).toBeCalledWith(fits.with({ url: DevUri.Developers.toString(), method: 'get' }));
     expect(r.data.items).toHaveLength(1);
   });
 

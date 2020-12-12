@@ -1,4 +1,4 @@
-import { Code, Id } from './Id';
+import { Id } from './Id';
 import { List } from './List';
 import { isAn } from './IsA';
 import { meta } from './Meta';
@@ -6,7 +6,7 @@ import { isDefined } from './Is';
 import { Get, ofGet } from './Constructor';
 
 export abstract class Enum {
-  constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: Code = id) {}
+  constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
 
   static all<E extends Enum>(): List<E> {
     return meta(this).values().filter((e: unknown) => isEnum(e));
