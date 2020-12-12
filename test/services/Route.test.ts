@@ -13,16 +13,16 @@ describe('Route', () => {
 describe('Router', () => {
 
   test('Router works on a non-valid object', () => {
-    const { route, verbs } = router({});
+    const { route, endpoints } = router({});
     expect(route).toBeUndefined();
-    expect(verbs).toHaveLength(0);
+    expect(endpoints).toHaveLength(0);
   });
 
   test('Router works on a valid class', () => {
-    const { route, verbs } = router(new DevsResource());
+    const { route, endpoints } = router(new DevsResource());
     expect(route).toBeInstanceOf(DevUri);
     expect(route.route.toString()).toBe('/developers');
-    expect(verbs).toHaveLength(2);
-    expect(verbs[0].verb).toBe(HttpVerb.Get);
+    expect(endpoints).toHaveLength(2);
+    expect(endpoints[0].verb).toBe(HttpVerb.Get);
   });
 });
