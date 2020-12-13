@@ -1,5 +1,6 @@
-import { result, Result, results, Results, Text } from '../../src';
+import { isResults, result, Result, results, Results, Text } from '../../src';
 import "@thisisagile/easy-test";
+import { Dev } from '../ref';
 
 describe("Results", () => {
 
@@ -60,4 +61,17 @@ describe("Results", () => {
     const rs2 = res.add(error, r);
     expect(rs2).toHaveLength(4);
   });
+});
+
+describe("isResults", () => {
+
+  test("true", () => {
+    expect(isResults(results())).toBeTruthy();
+    expect(isResults(new Results(""))).toBeTruthy();
+  })
+
+  test("false", () => {
+    expect(isResults()).toBeFalsy();
+    expect(isResults(Dev.Sander)).toBeFalsy();
+  })
 });

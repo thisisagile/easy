@@ -1,6 +1,7 @@
 import { Text } from './Text';
 import { isResult, result, Result } from './Result';
 import { Validatable } from './Validatable';
+import { isDefined } from './Is';
 
 const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => isResult(r) ? r : result(r.toString(), 'easy'));
 
@@ -19,3 +20,5 @@ export class Results implements Validatable {
 }
 
 export const results = (...r: (Text | Result)[]): Results => new Results(...r);
+
+export const isResults = (r?: unknown): r is Results => isDefined(r) && r instanceof Results;
