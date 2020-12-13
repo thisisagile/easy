@@ -3,6 +3,7 @@ export * from "./AppProvider";
 export * from "./AxiosProvider";
 export * from "./ContentType";
 export * from "./EasyResponse";
+export * from "../express/ExpressProvider";
 export * from "./HttpStatus";
 export * from "./HttpVerb";
 export * from "./Req";
