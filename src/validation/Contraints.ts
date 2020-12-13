@@ -1,6 +1,7 @@
-import { inFuture, inPast, isDefined, isIn, isString, isValidatable, meta, Text } from '../types';
+import { inFuture, inPast, isDefined, isIn, isString, isValidatable, meta, Results, Text } from '../types';
+import { validate } from './Validate';
 
-export type Constraint = (value: unknown) => boolean;
+export type Constraint = (value: unknown) => boolean | Results;
 
 export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator =>
   (subject: unknown, property: string): void => {
@@ -15,6 +16,9 @@ export const required = (message?: Text): PropertyDecorator =>
 
 export const valid = (message?: Text): PropertyDecorator =>
   constraint(v => isValidatable(v) && v.isValid, message ?? '$property must be valid.');
+
+export const validated = (message?: Text): PropertyDecorator =>
+  constraint(v => validate(v).isValid, message ?? "$property must be valid.");
 
 export const includes = (sub: string, message?: Text): PropertyDecorator =>
   constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `$value must include '${sub}'.`);
