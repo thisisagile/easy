@@ -1,5 +1,6 @@
 import { Enum } from '../../src';
 import { Language } from '../ref';
+import "@thisisagile/easy-test";
 
 describe('Enum', () => {
 
@@ -43,5 +44,13 @@ describe('Enum', () => {
   test("toString", () => {
     expect(Language.Java.toString()).toBe("java");
     expect(MoreLanguage.Delphi.toString()).toBe("delphi");
+  });
+
+  test("isValid", () => {
+    expect(Language.Java).toBeValid();
+    expect(MoreLanguage.Delphi).toBeValid();
+    expect(MoreLanguage.byId(Language.JavaScript.id)).toBeValid();
+    expect(MoreLanguage.byId("HTML")).not.toBeValid();
+    expect(MoreLanguage.byId("HTML", Language.Java)).toBeValid();
   });
 });
