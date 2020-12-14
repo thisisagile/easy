@@ -8,6 +8,7 @@ export * from "./IsA";
 export * from "./IsDate";
 export * from "./Json";
 export * from "./List";
+export * from "./Message";
 export * from "./Meta";
 export * from "./Result";
 export * from "./Results";
