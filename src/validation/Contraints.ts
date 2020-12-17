@@ -1,7 +1,7 @@
-import { inFuture, inPast, isDefined, isIn, isString, isValidatable, meta, Results, Text } from '../types';
+import { inFuture, inPast, isDefined, isIn, isString, meta, Text } from '../types';
 import { validate } from './Validate';
 
-export type Constraint = (value: unknown) => boolean | Results;
+export type Constraint = (value: unknown) => boolean;
 
 export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator =>
   (subject: unknown, property: string): void => {
@@ -15,32 +15,29 @@ export const required = (message?: Text): PropertyDecorator =>
   constraint(v => isDefined(v), message ?? '$property is required.');
 
 export const valid = (message?: Text): PropertyDecorator =>
-  constraint(v => isValidatable(v) && v.isValid, message ?? '$property must be valid.');
+  constraint(v => validate(v).isValid, message ?? '$property must be valid.');
 
-export const validated = (message?: Text): PropertyDecorator =>
-  constraint(v => validate(v).isValid, message ?? "$property must be valid.");
-
-export const includes = (sub: string, message?: Text): PropertyDecorator =>
-  constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `$value must include '${sub}'.`);
+export const includes = (sub: string, message?: string): PropertyDecorator =>
+  constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `$actual must include '${sub}'.`);
 
 export const inList = (values: unknown[], message?: Text): PropertyDecorator =>
-  constraint(v => isDefined(v) && isIn(v, values), message ?? '$value must appear in list.');
+  constraint(v => isDefined(v) && isIn(v, values), message ?? '$actual must appear in list.');
 
 export const gt = (limit: number, message?: Text): PropertyDecorator =>
-  constraint(v => v > limit, message ?? 'Value for $property must be larger than $actual.');
+  constraint(v => v > limit, message ?? `$actual must be larger than '${limit}'.`);
 
 export const gte = (limit: number, message?: Text): PropertyDecorator =>
-  constraint(v => v >= limit, message ?? 'Value for $property must be larger than or equal to $actual.');
+  constraint(v => v >= limit, message ?? `$actual must be larger than or equal to ${limit}.`);
 
 export const lt = (limit: number, message?: Text): PropertyDecorator =>
-  constraint(v => v < limit, message ?? 'Value for $property must be smaller than $actual.');
+  constraint(v => v < limit, message ?? `$actual must be smaller than ${limit}.`);
 
 export const lte = (limit: number, message?: Text): PropertyDecorator =>
-  constraint(v => v <= limit, message ?? 'Value for $property must be smaller than or equal to $actual.');
+  constraint(v => v <= limit, message ?? `$actual must be smaller than or equal to ${limit}.`);
 
 export const past = (message?: Text): PropertyDecorator =>
-  constraint(v => inPast(v), message ?? 'Value for $property must be in the past.');
+  constraint(v => inPast(v), message ?? '$actual must lay in the past.');
 
 export const future = (message?: Text): PropertyDecorator =>
-  constraint(v => inFuture(v), message ?? 'Value for $property must be in the future.');
+  constraint(v => inFuture(v), message ?? '$actual must lay in the future.');
 

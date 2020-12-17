@@ -10,10 +10,11 @@ import {
   lte,
   past,
   Record,
-  required,
+  required, valid,
   validate,
 } from '../../src';
 import '@thisisagile/easy-test';
+import { Language } from '../ref';
 
 describe('Constraints', () => {
 
@@ -28,15 +29,22 @@ describe('Constraints', () => {
     @gte(4) readonly four = this.state.two;
     @past() readonly past = this.state.past;
     @future() readonly future = this.state.future;
+    @valid() readonly language = Language.byId(this.state.language);
   }
 
+  test("Language is valid", () => {
+    Language.byId("java")
+  })
+
   test('All constraints succeed.', () => {
-    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: days.yesterday(), future: days.tomorrow() });
-    expect(validate(t)).toBeValid();
+    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: days.yesterday(), future: days.tomorrow(), language: "java" });
+    const r = validate(t);
+    expect(r).toBeValid();
   });
 
   test('All constraints fail.', () => {
     const t = new Tester({ one: 42, two: 0 });
-    expect(validate(t)).not.toBeValid();
+    const r = validate(t);
+    expect(r).not.toBeValid();
   });
 });
