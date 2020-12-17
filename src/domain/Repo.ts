@@ -22,7 +22,7 @@ export class Repo<T extends Record> {
     this.gateway
       .byId(json.id as Id)
       .then(j => when(j).not.isDefined.reject('Does not exist'))
-      .then(j => new this.ctor(j).update(j))
+      .then(j => new this.ctor(j).update(json))
       .then(i => when(i).not.isValid.reject())
       .then(i => this.gateway.update(toJson(i)))
       .then(j => new this.ctor(j));
