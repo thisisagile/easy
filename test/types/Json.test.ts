@@ -1,52 +1,5 @@
-import { isJson, jsonify, toJson } from '../../src';
+import { isJson, toJson } from '../../src';
 import { Dev, DevsResource } from '../ref';
-
-describe('jsonify', () => {
-  test('jsonify nothing', () => {
-    const json = jsonify();
-    expect(json).toMatchObject({});
-  });
-
-  test('jsonify empty', () => {
-    const json = jsonify({});
-    expect(json).toMatchObject({});
-  });
-
-  test('jsonify undefined', () => {
-    const json = jsonify(undefined);
-    expect(json).toMatchObject({});
-  });
-
-  test('jsonify null', () => {
-    const json = jsonify(null);
-    expect(json).toMatchObject({});
-  });
-
-  test('jsonify simple', () => {
-    const json = jsonify({ name: 'Sander' });
-    expect(json).toMatchObject({ name: 'Sander' });
-  });
-
-  test('jsonify entity', () => {
-    const json = jsonify(Dev.Wouter);
-    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript', level: 3 });
-  });
-
-  test('jsonify removes undefined', () => {
-    const json = jsonify({ name: 'Wouter', language: 'TypeScript', level: undefined });
-    expect(json?.level).toBeUndefined();
-  });
-
-  test('jsonify removes undefined and adds', () => {
-    const json = jsonify({ name: 'Wouter', language: 'TypeScript' });
-    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript' });
-  });
-
-  test('jsonify object and adds', () => {
-    const json = jsonify(Dev.Wouter);
-    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript', level: 3 });
-  });
-});
 
 describe('isJson', () => {
   test('isJson true', () => {
@@ -116,10 +69,5 @@ describe('toJson', () => {
   test('toJson object and adds object', () => {
     const json = toJson(Dev.Wouter, Dev.Naoufal);
     expect(json).toMatchObject({ id: 2, name: 'Naoufal', language: 'TypeScript', level: 3 });
-  });
-
-  test('update works', () => {
-    const dev = Dev.Sander.update({ level: 2 });
-    expect(dev).toMatchObject({ name: 'Sander', level: 2 });
   });
 });

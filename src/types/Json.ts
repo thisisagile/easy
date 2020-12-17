@@ -5,9 +5,4 @@ export type Json = { [key: string]: JsonValue };
 
 export const isJson = (subject?: unknown): subject is { toJSON: () => Json } => isA<{ toJSON: () => Json }>(subject, 'toJSON');
 
-export const jsonify = (subject: unknown = {}): Json => ({ ...JSON.parse(JSON.stringify(subject)) });
-
-export const toJson = (subject: unknown = {}, add: unknown = {}): Json => ({
-  ...(isJson(subject) ? subject.toJSON() : jsonify(subject)),
-  ...(isJson(add) ? add.toJSON() : jsonify(add)),
-});
+export const toJson = (...items: unknown[]): Json => items.map(i => JSON.parse(JSON.stringify(i ?? {}))).reduce((json, j) => ({ ...json, ...j }), {});
