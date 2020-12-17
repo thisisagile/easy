@@ -16,6 +16,6 @@ describe('Verb', () => {
 
   test('Get all verb decorated properties', () => {
     const verbs = meta(new DevResource()).keys<Verb>('verb');
-    expect(verbs.length).toBe(4);
+    expect(verbs).toHaveLength(4);
   });
 });

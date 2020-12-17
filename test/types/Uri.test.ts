@@ -13,7 +13,7 @@ describe('Uri', () => {
     expect(DevUri.Developer).toMatchRoute('$host/dev/developers/:id');
   });
 
-  test('test returns full route', () => {
+  test('returns full route', () => {
     expect(DevUri.Developers.path).toBe('/dev/developers');
   });
 

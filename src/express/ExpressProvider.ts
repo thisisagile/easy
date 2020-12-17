@@ -11,7 +11,7 @@ const handle = (endpoint: Endpoint): RequestHandler =>
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {}
 
-  listen = (port: number, message: string = `Service is listening on port ${port}.`) =>
+  listen = (port: number, message = `Service is listening on port ${port}.`) =>
     this.app.listen(port, () => { console.log(message); });
 
   use = (h: RequestHandler): void => {
