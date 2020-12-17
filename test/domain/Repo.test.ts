@@ -65,4 +65,29 @@ describe('Repo', () => {
     await expect(repo.add(Dev.Jeroen.toJSON())).resolves.toBeValid();
     return expect(gateway.add).toHaveBeenCalled();
   });
+
+  test('update invalid object does not trigger gateway', async () => {
+    gateway.byId = mock.resolve();
+    gateway.update = mock.resolve({});
+    await expect(repo.update(Dev.Invalid.toJSON())).rejects.not.toBeValid();
+    return expect(gateway.update).not.toHaveBeenCalled();
+  });
+
+  // test('update valid object but fails in repo should not trigger gateway', async () => {
+  //   gateway.byId = mock.resolve(Dev.Naoufal.toJSON());
+  //   await expect(repo.update(Dev.Naoufal.toJSON())).rejects.not.toBeValid();
+  //   return expect(gateway.update).not.toHaveBeenCalled();
+  // });
+  //
+  // test('update valid object but gateway fails trigger gateway', async () => {
+  //   gateway.update = mock.reject(results('Wrong'));
+  //   await expect(repo.update(Dev.Jeroen.toJSON())).rejects.not.toBeValid();
+  //   return expect(gateway.update).toHaveBeenCalled();
+  // });
+  //
+  // test('update valid object does trigger gateway', async () => {
+  //   gateway.update = mock.resolve(Dev.Jeroen.toJSON());
+  //   await expect(repo.update(Dev.Jeroen.toJSON())).resolves.toBeValid();
+  //   return expect(gateway.update).toHaveBeenCalled();
+  // });
 });

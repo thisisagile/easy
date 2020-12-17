@@ -1,4 +1,4 @@
-import { Constructor, Gateway, Id, Json, jsonify, JsonValue, List } from '../types';
+import { Constructor, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
 import { when } from '../validation';
 import { resolve } from '../utils';
 import { Record } from './Record';
@@ -15,7 +15,7 @@ export class Repo<T extends Record> {
     when(new this.ctor(json))
       .not.isValid.reject()
       .then(i => this.validate(i))
-      .then(i => this.gateway.add(jsonify(i)))
+      .then(i => this.gateway.add(toJson(i)))
       .then(j => new this.ctor(j));
 
   update = (json: Json): Promise<T> =>
@@ -24,7 +24,7 @@ export class Repo<T extends Record> {
       .then(j => when(j).not.isDefined.reject('Does not exist'))
       .then(j => new this.ctor(j).update(j))
       .then(i => when(i).not.isValid.reject())
-      .then(i => this.gateway.update(i.toJSON()))
+      .then(i => this.gateway.update(toJson(i)))
       .then(j => new this.ctor(j));
 
   remove = (id: Id): Promise<boolean> => this.gateway.remove(id);
