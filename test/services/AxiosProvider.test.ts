@@ -4,7 +4,7 @@ import axios from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('AxiosProvider', () => {
-
+  const message = 'This is not right.';
   let provider: AxiosProvider;
 
   beforeEach(() => {
@@ -25,32 +25,32 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with transform', async () => {
-    axios.request = mock.resolve({ dev: { name: 'Sander' }});
+    axios.request = mock.resolve({ dev: { name: 'Sander' } });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
-    expect(r.data.items[0]).toMatchObject({name: "Sander"});
+    expect(r.data.items[0]).toMatchObject({ name: 'Sander' });
   });
 
   test('Get with reject and response', async () => {
-    axios.request = mock.reject({ response: { statusText: 'This is wrong' } });
+    axios.request = mock.reject({ response: { statusText: message } });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
-    expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
+    expect(r.error.errors[0]).toMatchObject(fits.with({ message }));
   });
 
   test('Get with reject and request', async () => {
-    axios.request = mock.reject({ request: { statusText: 'This is wrong' } });
+    axios.request = mock.reject({ request: { statusText: message } });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
-    expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
+    expect(r.error.errors[0]).toMatchObject(fits.with({ message }));
   });
 
   test('Get with reject and message', async () => {
-    axios.request = mock.reject({ message: 'This is wrong' });
+    axios.request = mock.reject({ message });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
-    expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
+    expect(r.error.errors[0]).toMatchObject(fits.with({ message }));
   });
 
   test('Get with reject and transform', async () => {
-    axios.request = mock.reject({ message: 'This is wrong' });
+    axios.request = mock.reject({ message });
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
-    expect(r.error.errors[0]).toMatchObject(fits.with({ message: 'This is wrong' }));
+    expect(r.error.errors[0]).toMatchObject(fits.with({ message }));
   });
 });

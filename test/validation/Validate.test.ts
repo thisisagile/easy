@@ -11,7 +11,6 @@ class Below extends Top {
 }
 
 describe('validate', () => {
-
   test('Works on empty objects', () => {
     expect(validate()).toHaveLength(1);
     expect(validate(null)).toHaveLength(1);
@@ -31,7 +30,7 @@ describe('validate', () => {
 
   test('Works on enums', () => {
     expect(validate(Language.Java)).toBeValid();
-    expect(validate(Language.byId("HTML"))).not.toBeValid();
+    expect(validate(Language.byId('HTML'))).not.toBeValid();
   });
 
   test('Works on inherited objects', () => {
@@ -42,13 +41,12 @@ describe('validate', () => {
 });
 
 describe('validateReject', () => {
-
   test('Resolves when ok', () => {
     expect(validate(Dev.Sander)).toBeValid();
-    expect(validateReject(Dev.Sander)).resolves.toBe(Dev.Sander);
+    return expect(validateReject(Dev.Sander)).resolves.toBe(Dev.Sander);
   });
 
   test('Rejects when fails', () => {
-    expect(validateReject(new Dev({ level: 1 }))).rejects.not.toBeValid();
+    return expect(validateReject(new Dev({ level: 1 }))).rejects.not.toBeValid();
   });
 });

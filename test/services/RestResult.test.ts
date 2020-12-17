@@ -4,11 +4,13 @@ import { Dev } from '../ref';
 const data = { data: { items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()], itemCount: 3 } };
 const item = Dev.Wouter.toJSON();
 const items = list([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
-const payload = [{ 'message': 'This is wrong', 'domain': 'easy' }, { 'message': 'Very wrong', 'domain': 'easy' }];
-const error = { error: { errors: [{ 'message': 'This is wrong', 'domain': 'easy' }] } };
+const payload = [
+  { message: 'This is wrong', domain: 'easy' },
+  { message: 'Very wrong', domain: 'easy' },
+];
+const error = { error: { errors: [{ message: 'This is wrong', domain: 'easy' }] } };
 
 describe('toRestResult', () => {
-
   test('From undefined', () => {
     const r = toRestResult();
     expect(isRestResult(r)).toBeTruthy();

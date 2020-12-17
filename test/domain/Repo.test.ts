@@ -1,10 +1,9 @@
 import { Dev, DevGateway, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 import { list, results } from '../../src';
-import "@thisisagile/easy-test";
+import '@thisisagile/easy-test';
 
 describe('Repo', () => {
-
   const devs = list(Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON());
   let gateway: DevGateway;
   let repo: DevRepo;
@@ -31,8 +30,8 @@ describe('Repo', () => {
 
   test('search triggers gateway', async () => {
     gateway.search = mock.resolve(devs);
-    const ds = await repo.search("Kim");
-    expect(gateway.search).toHaveBeenCalledWith("Kim");
+    const ds = await repo.search('Kim');
+    expect(gateway.search).toHaveBeenCalledWith('Kim');
     expect(ds).toBeArrayOfWithLength(Dev, devs.length);
   });
 
@@ -56,7 +55,7 @@ describe('Repo', () => {
   });
 
   test('add valid object but gateway fails trigger gateway', async () => {
-    gateway.add = mock.reject(results("Wrong"));
+    gateway.add = mock.reject(results('Wrong'));
     await expect(repo.add(Dev.Jeroen.toJSON())).rejects.not.toBeValid();
     return expect(gateway.add).toHaveBeenCalled();
   });

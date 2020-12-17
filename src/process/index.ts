@@ -1,2 +1,2 @@
-export * from "./Manage";
-export * from "./Select";
+export * from './Manage';
+export * from './Select';

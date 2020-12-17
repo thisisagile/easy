@@ -1,7 +1,7 @@
 import { isNotEmpty } from './Is';
 import { list } from './List';
 
-export type Segment = { key: string, segment?: string, query?: (value: unknown) => string };
+export type Segment = { key: string; segment?: string; query?: (value: unknown) => string };
 
 const name = (name?: string): string => name?.replace('Uri', '').toLowerCase();
 
@@ -10,16 +10,18 @@ export const uri = {
   resource: (resource: string): Segment => ({ key: name(resource), segment: name(resource) }),
   segment: (key?: string): Segment => ({ key, segment: key }),
   path: (key: string): Segment => ({ key, segment: `:${key}` }),
-  query: (key: string): Segment => ({ key, query: (value: unknown): string => value ? `${key}=${value}` : undefined }),
+  query: (key: string): Segment => ({ key, query: (value: unknown): string => (value ? `${key}=${value}` : undefined) }),
 };
 
-type Prop = { segment: Segment, value: unknown };
+type Prop = { segment: Segment; value: unknown };
 
-const toRoute = (...segments: Segment[]): string => list(...segments).mapDefined(s => s.segment).join('/');
+const toRoute = (...segments: Segment[]): string =>
+  list(...segments)
+    .mapDefined(s => s.segment)
+    .join('/');
 const parse = (route: string, p: Prop): string => route.replace(p.segment.segment, p.value.toString());
 
 export class Uri {
-
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
 
@@ -28,11 +30,17 @@ export class Uri {
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
-  get route(): string { return toRoute(uri.segment(''), ...this.segments); }
+  get route(): string {
+    return toRoute(uri.segment(''), ...this.segments);
+  }
 
-  get path(): string { return toRoute(uri.segment(''), this.resource, ...this.segments); }
+  get path(): string {
+    return toRoute(uri.segment(''), this.resource, ...this.segments);
+  }
 
-  get complete(): string { return toRoute(this.host, this.resource, ...this.segments); }
+  get complete(): string {
+    return toRoute(this.host, this.resource, ...this.segments);
+  }
 
   set = (segment: Segment, value: unknown): this => {
     this.props.push({ segment, value });
@@ -41,7 +49,7 @@ export class Uri {
 
   toString(): string {
     const route = this.props.reduce((r: string, p: Prop) => parse(r, p), this.complete);
-    const q = this.props.mapDefined(p => p.segment?.query ? p.segment?.query(p.value) : undefined)?.join('&');
+    const q = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
     this.props = list<Prop>();
     return isNotEmpty(q) ? `${route}?${q}` : route;
   }

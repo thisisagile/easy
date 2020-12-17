@@ -2,7 +2,6 @@ import { Entity, required } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Entity', () => {
-
   class Manager extends Entity {
     @required() readonly title = this.state.title;
   }

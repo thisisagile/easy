@@ -15,10 +15,12 @@ class ClassMeta {
   properties = (key?: string): List<PropertyMeta> =>
     list([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])
       .map(p => this.property(p))
-      .filter(p => key ? p.get(key) : p);
+      .filter(p => (key ? p.get(key) : p));
 
   keys = <T = any>(key: string): List<T> =>
-    this.properties().map(p => p.get<T>(key)).filter(v => isDefined(v));
+    this.properties()
+      .map(p => p.get<T>(key))
+      .filter(v => isDefined(v));
 
   values = () => this.properties().map(p => p.value);
 
@@ -28,9 +30,11 @@ class ClassMeta {
 class PropertyMeta {
   constructor(readonly subject: unknown, readonly property: string, private readonly data = Reflect.getMetadata(property, subject)) {}
 
-  get value(): any { return (this.subject as any)[this.property]; }
+  get value(): any {
+    return (this.subject as any)[this.property];
+  }
 
-  get = <T>(key: string): T => isDefined(this.data) && isDefined(this.data[key]) ? this.data[key] as T : undefined;
+  get = <T>(key: string): T => (isDefined(this.data) && isDefined(this.data[key]) ? (this.data[key] as T) : undefined);
 
   set = <T>(key: string, value: T): T => {
     Reflect.defineMetadata(this.property, { ...this.data, [key]: value }, this.subject);

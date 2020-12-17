@@ -3,7 +3,6 @@ import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('Api', () => {
-
   const devs = [Dev.Sander, Dev.Naoufal, Dev.Wouter];
   const provider: RequestProvider = { execute: mock.resolve(toRestResult(devs)) };
   let api: Api;

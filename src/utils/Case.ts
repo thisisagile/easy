@@ -11,13 +11,19 @@ class Case<T, V = unknown> {
     }
   }
 
-  else(alt?: Get<T, V>): T { return ofGet(alt, this.value); }
+  else(alt?: Get<T, V>): T {
+    return ofGet(alt, this.value);
+  }
 }
 
 export class Found<T, V = unknown> extends Case<T, V> {
-  case(pred: Predicate<V>, out: Get<T, V>): this { return this; }
+  case(pred: Predicate<V>, out: Get<T, V>): this {
+    return this;
+  }
 
-  else(alt?: Get<T, V>): T { return this.outcome; }
+  else(alt?: Get<T, V>): T {
+    return this.outcome;
+  }
 }
 
 export const choose = <T, V = unknown>(value: V): Case<T, V> => new Case(value);

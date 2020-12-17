@@ -1,9 +1,8 @@
 import { Enum } from '../../src';
 import { Language } from '../ref';
-import "@thisisagile/easy-test";
+import '@thisisagile/easy-test';
 
 describe('Enum', () => {
-
   class MoreLanguage extends Language {
     static readonly Delphi = new Language('Delphi');
     text = () => this.name;
@@ -41,16 +40,16 @@ describe('Enum', () => {
     expect(MoreLanguage.byId('c', () => MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.JavaScript);
   });
 
-  test("toString", () => {
-    expect(Language.Java.toString()).toBe("java");
-    expect(MoreLanguage.Delphi.toString()).toBe("delphi");
+  test('toString', () => {
+    expect(Language.Java.toString()).toBe('java');
+    expect(MoreLanguage.Delphi.toString()).toBe('delphi');
   });
 
-  test("isValid", () => {
+  test('isValid', () => {
     expect(Language.Java).toBeValid();
     expect(MoreLanguage.Delphi).toBeValid();
     expect(MoreLanguage.byId(Language.JavaScript.id)).toBeValid();
-    expect(MoreLanguage.byId("HTML")).not.toBeValid();
-    expect(MoreLanguage.byId("HTML", Language.Java)).toBeValid();
+    expect(MoreLanguage.byId('HTML')).not.toBeValid();
+    expect(MoreLanguage.byId('HTML', Language.Java)).toBeValid();
   });
 });

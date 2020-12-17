@@ -1,9 +1,7 @@
 import { ContentType } from './ContentType';
 import { Enum, isNotEmpty, JsonValue } from '../types';
 
-
 export class RequestOptions extends Enum {
-
   static Json = new RequestOptions(ContentType.Json);
   static Text = new RequestOptions(ContentType.Text);
   static Xml = new RequestOptions(ContentType.Xml);
@@ -26,7 +24,9 @@ export class RequestOptions extends Enum {
   };
 
   bearer = (jwt: JsonValue): this => {
-    if (isNotEmpty(jwt)) { this.authorization(`Bearer ${jwt}`); }
+    if (isNotEmpty(jwt)) {
+      this.authorization(`Bearer ${jwt}`);
+    }
     return this;
   };
 }

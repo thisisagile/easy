@@ -1,4 +1,4 @@
-import { Json, JsonValue } from "../types";
+import { Json, JsonValue } from '../types';
 
 export class Query {
   constructor(readonly key: string, readonly value: JsonValue) {}
@@ -6,4 +6,4 @@ export class Query {
   toJSON = (): Json => ({ [this.key]: this.value });
 }
 
-export const where = (key: string, value: JsonValue) => new Query(key, value);
+export const where = (key: string, value: JsonValue): Query => new Query(key, value);

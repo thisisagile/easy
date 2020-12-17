@@ -3,7 +3,6 @@ import { Dev, DevGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('RouteGateway', () => {
-
   const devs = [Dev.Sander.toJSON(), Dev.Naoufal.toJSON(), Dev.Wouter.toJSON()];
   let api: Api;
   let gateway: RouteGateway;

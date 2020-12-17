@@ -2,7 +2,6 @@ import { choose, isDefined } from '../../src';
 import { Dev } from '../ref';
 
 describe('Case', () => {
-
   const which = (name?: string) =>
     choose<Dev, string>(name)
       .case(n => !isDefined(n), Dev.Jeroen)
@@ -11,29 +10,22 @@ describe('Case', () => {
       .else(Dev.Wouter);
 
   test('Only else', () => {
-    const out = choose<Dev>('')
-      .else(Dev.Naoufal);
+    const out = choose<Dev>('').else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('Empty else', () => {
-    const out = choose<Dev, string>('')
-      .else();
+    const out = choose<Dev, string>('').else();
     expect(out).toBeUndefined();
   });
 
   test('Simple true', () => {
-    const out = choose<Dev>('')
-      .case(true, Dev.Wouter)
-      .else(Dev.Naoufal);
+    const out = choose<Dev>('').case(true, Dev.Wouter).else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('Double true, should find first', () => {
-    const out = choose<Dev>('')
-      .case(true, Dev.Wouter)
-      .case(true, Dev.Sander)
-      .else(Dev.Naoufal);
+    const out = choose<Dev>('').case(true, Dev.Wouter).case(true, Dev.Sander).else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 

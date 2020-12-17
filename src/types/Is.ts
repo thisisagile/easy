@@ -8,7 +8,7 @@ export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o 
 
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === 'string';
 
-export const isObject = (o?: unknown): o is object => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
+export const isObject = (o?: unknown): boolean => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
 
 export const isEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length === 0;
 
@@ -20,5 +20,4 @@ export const isInstance = <T>(ctor: Constructor<T>, o?: unknown): o is T => isFu
 
 export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) && values.some(v => v === o);
 
-export const isPrimitive = (o?: unknown): boolean => (o !== null) && !isObject(o) && !isFunction(o) && !isArray(o);
-
+export const isPrimitive = (o?: unknown): boolean => o !== null && !isObject(o) && !isFunction(o) && !isArray(o);

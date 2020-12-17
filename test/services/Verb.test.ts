@@ -2,7 +2,6 @@ import { HttpStatus, HttpVerb, meta, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref';
 
 describe('Verb', () => {
-
   test('Verb works on a property', () => {
     const verb: Verb = meta(new DevsResource()).property('all').get('verb');
     expect(verb.verb).toBe(HttpVerb.Get);

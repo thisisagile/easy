@@ -1,7 +1,6 @@
 import { uri, Uri } from '../../src';
 
 export class DevUri extends Uri {
-
   static readonly devs = uri.segment('developers');
   static readonly language = uri.query('language');
 

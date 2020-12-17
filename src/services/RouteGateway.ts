@@ -1,9 +1,7 @@
 import { Api } from './Api';
-import { Gateway, Id, Json, JsonValue, Uri } from '../types';
-import { List } from '../types/List';
+import { Gateway, Id, Json, JsonValue, List, Uri } from '../types';
 
 export class RouteGateway implements Gateway {
-
   readonly route: Uri;
   readonly routeId: Uri;
 

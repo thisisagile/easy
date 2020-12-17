@@ -16,7 +16,9 @@ export class Match<S = unknown> {
     return this.not(() => isDefined(p(this.subject)), message);
   }
 
-  get results(): Results { return this.failed ? results(ofMessage(this.message, this.subject)) : results(); }
+  get results(): Results {
+    return this.failed ? results(ofMessage(this.message, this.subject)) : results();
+  }
 }
 
 export const match = <S = unknown>(subject: S): Match<S> => new Match<S>(subject);

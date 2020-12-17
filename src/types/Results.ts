@@ -3,7 +3,7 @@ import { isResult, result, Result } from './Result';
 import { Validatable } from './Validatable';
 import { isDefined } from './Is';
 
-const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => isResult(r) ? r : result(r.toString(), 'easy'));
+const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => (isResult(r) ? r : result(r.toString(), 'easy')));
 
 export class Results implements Validatable {
   public readonly results: Result[];
@@ -12,9 +12,13 @@ export class Results implements Validatable {
     this.results = parse(...rs);
   }
 
-  get length(): number { return this.results.length; }
+  get length(): number {
+    return this.results.length;
+  }
 
-  get isValid(): boolean { return this.results.length === 0; }
+  get isValid(): boolean {
+    return this.results.length === 0;
+  }
 
   add = (...rs: (Text | Result)[]): Results => results(...this.results, ...parse(...rs));
 }

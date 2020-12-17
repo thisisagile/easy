@@ -1,1 +1,1 @@
-export * from "./Query";
+export * from './Query';

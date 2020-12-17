@@ -2,39 +2,38 @@ import { jsonify } from '../../src';
 import { Dev } from '../ref';
 
 describe('Json', () => {
-
-  test("jsonify nothing", () => {
+  test('jsonify nothing', () => {
     const json = jsonify();
     expect(json).toMatchObject({});
-  })
+  });
 
-  test("jsonify empty", () => {
+  test('jsonify empty', () => {
     const json = jsonify({});
     expect(json).toMatchObject({});
-  })
+  });
 
-  test("jsonify undefined", () => {
+  test('jsonify undefined', () => {
     const json = jsonify(undefined);
     expect(json).toMatchObject({});
-  })
+  });
 
-  test("jsonify undefined", () => {
+  test('jsonify null', () => {
     const json = jsonify(null);
     expect(json).toMatchObject({});
-  })
+  });
 
-  test("jsonify simple", () => {
-    const json = jsonify({name: "Sander"});
-    expect(json).toMatchObject({name: "Sander"});
-  })
+  test('jsonify simple', () => {
+    const json = jsonify({ name: 'Sander' });
+    expect(json).toMatchObject({ name: 'Sander' });
+  });
 
-  test("jsonify entity", () => {
+  test('jsonify entity', () => {
     const json = jsonify(Dev.Wouter);
-    expect(json).toMatchObject({name: "Wouter", language: "TypeScript", level: 3});
-  })
+    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript', level: 3 });
+  });
 
-  test("jsonify removes undefined", () => {
-    const json = jsonify({name: "Wouter", language: "TypeScript", level: undefined});
+  test('jsonify removes undefined', () => {
+    const json = jsonify({ name: 'Wouter', language: 'TypeScript', level: undefined });
     expect(json?.level).toBeUndefined();
-  })
+  });
 });

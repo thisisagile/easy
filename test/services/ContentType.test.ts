@@ -2,7 +2,6 @@ import { ContentType } from '../../src';
 import { Dev } from '../ref';
 
 describe('ContentType', () => {
-
   const json = Dev.Wouter.toJSON();
 
   test('Json encode.', () => {

@@ -1,23 +1,16 @@
 module.exports = {
-  preset: "ts-jest",
-  roots: ["<rootDir>/test"],
+  preset: 'ts-jest',
+  roots: ['<rootDir>/test'],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  reporters: ["default", "jest-junit"],
-  testResultsProcessor: "jest-sonar-reporter",
-  coverageReporters: ["json", "lcov", "text", "clover", "cobertura", "text-summary"],
-  moduleFileExtensions: [
-    "ts",
-    "tsx",
-    "js",
-    "jsx",
-    "json",
-    "node"
-  ],
+  reporters: ['default', 'jest-junit'],
+  testResultsProcessor: 'jest-sonar-reporter',
+  coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura', 'text-summary'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   globals: {
-    "ts-jest": {
-      "tsconfig": "tsconfig.json"
-    }
-  }
+    'ts-jest': {
+      tsconfig: 'tsconfig.json',
+    },
+  },
 };

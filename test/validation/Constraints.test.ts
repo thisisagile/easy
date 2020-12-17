@@ -1,23 +1,8 @@
-import {
-  days,
-  defined,
-  future,
-  gt,
-  gte,
-  includes,
-  inList,
-  lt,
-  lte,
-  past,
-  Record,
-  required, valid,
-  validate,
-} from '../../src';
+import { days, defined, future, gt, gte, includes, inList, lt, lte, past, Record, required, valid, validate } from '../../src';
 import '@thisisagile/easy-test';
 import { Language } from '../ref';
 
 describe('Constraints', () => {
-
   class Tester extends Record {
     @defined() readonly first = this.state.first;
     @required() readonly last = this.state.first;
@@ -32,12 +17,8 @@ describe('Constraints', () => {
     @valid() readonly language = Language.byId(this.state.language);
   }
 
-  test("Language is valid", () => {
-    Language.byId("java")
-  })
-
   test('All constraints succeed.', () => {
-    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: days.yesterday(), future: days.tomorrow(), language: "java" });
+    const t = new Tester({ first: 'Sander', one: 6, two: 6, past: days.yesterday(), future: days.tomorrow(), language: 'java' });
     const r = validate(t);
     expect(r).toBeValid();
   });

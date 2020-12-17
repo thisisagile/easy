@@ -1,7 +1,6 @@
 import { ContentType, RequestOptions } from '../../src';
 
 describe('RequestOptions', () => {
-
   let options: RequestOptions;
 
   beforeEach(() => {

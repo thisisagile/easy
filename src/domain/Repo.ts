@@ -12,15 +12,17 @@ export class Repo<T extends Record> {
   exists = (id: Id): Promise<boolean> => this.gateway.exists(id);
 
   add = (json: Json): Promise<T> =>
-    when(new this.ctor(json)).not.isValid.reject()
+    when(new this.ctor(json))
+      .not.isValid.reject()
       .then(i => this.validate(i))
       .then(i => this.gateway.add(jsonify(i)))
       .then(j => new this.ctor(j));
 
   update = (json: Json): Promise<T> =>
-    this.gateway.byId(json.id as Id)
+    this.gateway
+      .byId(json.id as Id)
       .then(j => when(j).not.isDefined.reject('Does not exist'))
-      .then(j => (new this.ctor(j)).update(j))
+      .then(j => new this.ctor(j).update(j))
       .then(i => when(i).not.isValid.reject())
       .then(i => this.gateway.update(i.toJSON()))
       .then(j => new this.ctor(j));
@@ -29,4 +31,3 @@ export class Repo<T extends Record> {
 
   validate = (item: T): Promise<T> => resolve(item);
 }
-

@@ -2,7 +2,6 @@ import { Dev } from '../ref';
 import { isList, List, list, toList } from '../../src';
 
 describe('List', () => {
-
   const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
 
   test('list from spread', () => {
@@ -30,7 +29,12 @@ describe('List', () => {
 
   test('map', () => {
     expect(devs.map(d => d.language)).toBeInstanceOf(List);
-    expect(devs.asc('name').map(d => d.name).first()).toBe(Dev.Jeroen.name);
+    expect(
+      devs
+        .asc('name')
+        .map(d => d.name)
+        .first()
+    ).toBe(Dev.Jeroen.name);
   });
 
   test('mapDefined', () => {
@@ -89,17 +93,18 @@ describe('List', () => {
 
   test('toJSON', () => {
     const json = list(Dev.Sander, Dev.Wouter).toJSON();
-    expect(JSON.stringify(json)).toBe(JSON.stringify((list(Dev.Sander.toJSON(), Dev.Wouter.toJSON()))));
+    expect(JSON.stringify(json)).toBe(JSON.stringify(list(Dev.Sander.toJSON(), Dev.Wouter.toJSON())));
   });
 });
 
 describe('isList', () => {
-
   test('Is false', () => {
     expect(isList()).toBeFalsy();
     expect(isList({})).toBeFalsy();
     expect(isList([])).toBeFalsy();
-    expect(isList<Dev>([Dev.Sander, Dev.Jeroen])).toBeFalsy();
+    expect(
+      isList<Dev>([Dev.Sander, Dev.Jeroen])
+    ).toBeFalsy();
   });
 
   test('Is true', () => {
@@ -108,7 +113,6 @@ describe('isList', () => {
 });
 
 describe('toList', () => {
-
   test('from nothing', () => {
     const l = toList();
     expect(isList(l)).toBeTruthy();
@@ -158,5 +162,3 @@ describe('toList', () => {
     expect(l).toHaveLength(2);
   });
 });
-
-

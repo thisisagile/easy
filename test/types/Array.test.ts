@@ -2,7 +2,6 @@ import { toArray } from '../../src';
 import { Dev } from '../ref';
 
 describe('toArray', () => {
-
   test('from nothing', () => {
     expect(toArray()).toHaveLength(0);
   });
@@ -32,4 +31,3 @@ describe('toArray', () => {
     expect(toArray(...spread)).toHaveLength(2);
   });
 });
-

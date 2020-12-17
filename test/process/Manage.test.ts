@@ -3,7 +3,6 @@ import { Dev, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('Manage', () => {
-
   const repo = new DevRepo();
   let manage: Manage<Dev>;
 
@@ -11,22 +10,21 @@ describe('Manage', () => {
     manage = new Manage<Dev>(repo);
   });
 
-  test('add works', () => {
+  test('add works', async () => {
     repo.add = mock.resolve(Dev.Sander);
-    expect(manage.add({})).resolves.toMatchObject(Dev.Sander);
+    await expect(manage.add({})).resolves.toMatchObject(Dev.Sander);
     expect(repo.add).toHaveBeenCalled();
   });
 
-  test('update works', () => {
+  test('update works', async () => {
     repo.update = mock.resolve(Dev.Sander);
-    expect(manage.update({})).resolves.toMatchObject(Dev.Sander);
+    await expect(manage.update({})).resolves.toMatchObject(Dev.Sander);
     expect(repo.update).toHaveBeenCalled();
   });
 
-  test('remove works', () => {
+  test('remove works', async () => {
     repo.remove = mock.resolve(true);
-    expect(manage.remove(42)).resolves.toBeTruthy();
+    await expect(manage.remove(42)).resolves.toBeTruthy();
     expect(repo.remove).toHaveBeenCalled();
   });
-
 });

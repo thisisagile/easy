@@ -3,7 +3,6 @@ import { when } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {
-
   test('Construct when', () => {
     expect(when(Dev.Sander).invalid).toBeTruthy();
     expect(when(Dev.Sander).not.invalid).toBeFalsy();
@@ -64,11 +63,10 @@ describe('Testing When', () => {
     expect(when(false).not.isTrue.invalid).toBeTruthy();
   });
 
-  test('validation', async () => {
+  test('validation', () => {
     expect(when(Dev.Sander).isValid.invalid).toBeTruthy();
     expect(when(undefined).not.isValid.invalid).toBeTruthy();
     return expect(when(Dev.Wouter).not.isValid.invalid).toBeFalsy();
-    // return expect(when(Dev.Wouter).not.isValidated.reject("test")).rejects.toFailWith(Dev.Wouter.name);
   });
 
   test('Construct with undefined object and isInstanceOf', () => {

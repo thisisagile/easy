@@ -12,4 +12,3 @@ export class Dev extends Entity {
 
   title = (): string => `${this.name} is fluent in ${this.language}.`;
 }
-

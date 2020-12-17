@@ -1,25 +1,14 @@
-import {
-  Entity,
-  isArray,
-  isDefined,
-  isEmpty,
-  isEmptyObject,
-  isInstance,
-  isNotEmpty,
-  isObject,
-  isPrimitive,
-  isString,
-} from '../../src';
+import { Entity, isArray, isDefined, isEmpty, isEmptyObject, isInstance, isNotEmpty, isObject, isPrimitive, isString } from '../../src';
 import { Dev } from '../ref';
 
 describe('isDefined', () => {
-  test('Returns false', () => {
+  test('isDefined false', () => {
     expect(isDefined()).toBeFalsy();
     expect(isDefined(undefined)).toBeFalsy();
     expect(isDefined(null)).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isDefined true', () => {
     expect(isDefined('')).toBeTruthy();
     expect(isDefined({})).toBeTruthy();
     expect(isDefined([])).toBeTruthy();
@@ -28,13 +17,13 @@ describe('isDefined', () => {
 });
 
 describe('isEmpty', () => {
-  test('Returns false', () => {
+  test('isEmpty false', () => {
     expect(isEmpty({})).toBeFalsy();
     expect(isEmpty([])).toBeFalsy();
     expect(isEmpty(Dev.Jeroen)).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isEmpty true', () => {
     expect(isEmpty()).toBeTruthy();
     expect(isEmpty('')).toBeTruthy();
     expect(isEmpty(undefined)).toBeTruthy();
@@ -43,13 +32,13 @@ describe('isEmpty', () => {
 });
 
 describe('isNotEmpty', () => {
-  test('Returns true', () => {
+  test('isNotEmpty true', () => {
     expect(isNotEmpty({})).toBeTruthy();
     expect(isNotEmpty([])).toBeTruthy();
     expect(isNotEmpty(Dev.Jeroen)).toBeTruthy();
   });
 
-  test('Returns false', () => {
+  test('isNotEmpty false', () => {
     expect(isNotEmpty()).toBeFalsy();
     expect(isNotEmpty('')).toBeFalsy();
     expect(isNotEmpty(undefined)).toBeFalsy();
@@ -58,7 +47,7 @@ describe('isNotEmpty', () => {
 });
 
 describe('isString', () => {
-  test('Returns false', () => {
+  test('isString false', () => {
     expect(isString()).toBeFalsy();
     expect(isString({})).toBeFalsy();
     expect(isString([])).toBeFalsy();
@@ -67,13 +56,13 @@ describe('isString', () => {
     expect(isString(null)).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isString true', () => {
     expect(isString('')).toBeTruthy();
   });
 });
 
 describe('isObject', () => {
-  test('Returns false', () => {
+  test('isObject false', () => {
     expect(isObject(undefined)).toBeFalsy();
     expect(isObject(null)).toBeFalsy();
     expect(isObject()).toBeFalsy();
@@ -81,17 +70,16 @@ describe('isObject', () => {
     expect(isObject([])).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isObject true', () => {
     expect(isObject({})).toBeTruthy();
     expect(isObject(Dev.Jeroen)).toBeTruthy();
   });
 });
 
 describe('isNotEmptyObject', () => {
-
   class Empty {}
 
-  test('Returns false', () => {
+  test('isNotEmptyObject false', () => {
     expect(isEmptyObject(undefined)).toBeFalsy();
     expect(isEmptyObject(null)).toBeFalsy();
     expect(isEmptyObject()).toBeFalsy();
@@ -101,14 +89,14 @@ describe('isNotEmptyObject', () => {
     expect(isEmptyObject(Dev.Jeroen)).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isNotEmptyObject true', () => {
     expect(isEmptyObject({})).toBeTruthy();
     expect(isEmptyObject(new Empty())).toBeTruthy();
   });
 });
 
 describe('isArray', () => {
-  test('Returns false', () => {
+  test('isArray false', () => {
     expect(isArray(undefined)).toBeFalsy();
     expect(isArray(null)).toBeFalsy();
     expect(isArray()).toBeFalsy();
@@ -117,7 +105,7 @@ describe('isArray', () => {
     expect(isArray(Dev.Jeroen)).toBeFalsy();
   });
 
-  test('Returns true', () => {
+  test('isArray true', () => {
     expect(isArray([])).toBeTruthy();
   });
 });

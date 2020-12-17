@@ -1,12 +1,11 @@
-import {HttpStatus} from '../../src';
+import { HttpStatus } from '../../src';
 
-describe("HttpStatus", () => {
+describe('HttpStatus', () => {
+  test('Is not an error', () => {
+    expect(HttpStatus.Ok.isError).toBeFalsy();
+  });
 
-    test("Is not an error", () => {
-        expect(HttpStatus.Ok.isError).toBeFalsy();
-    });
-
-    test("Is an error", () => {
-        expect(HttpStatus.BadRequest.isError).toBeTruthy();
-    });
+  test('Is an error', () => {
+    expect(HttpStatus.BadRequest.isError).toBeTruthy();
+  });
 });

@@ -4,9 +4,8 @@ import { ExpressProvider } from '../../src';
 import { DevsResource } from '../ref';
 
 describe('ExpressProvider', () => {
-
-  const app = { listen: mock.return(), use: mock.return() } as unknown as Express;
-  const handler = {} as unknown as RequestHandler;
+  const app = ({ listen: mock.return(), use: mock.return() } as unknown) as Express;
+  const handler = ({} as unknown) as RequestHandler;
   let provider: ExpressProvider;
 
   beforeEach(() => {

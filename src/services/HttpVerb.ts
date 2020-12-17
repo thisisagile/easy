@@ -7,5 +7,7 @@ export class HttpVerb extends Enum {
   static Post = new HttpVerb('Post');
   static Delete = new HttpVerb('Delete');
 
-  constructor(name: string) {super(name, name.toLowerCase(), name.toUpperCase()); }
+  constructor(name: string) {
+    super(name, name.toLowerCase(), name.toUpperCase());
+  }
 }

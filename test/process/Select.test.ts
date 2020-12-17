@@ -3,7 +3,6 @@ import { Dev, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('Select', () => {
-
   const devs = list(Dev.Sander, Dev.Jeroen, Dev.Naoufal);
   const repo = new DevRepo();
   let select: Select<Dev>;
@@ -30,7 +29,7 @@ describe('Select', () => {
     expect(repo.search).toHaveBeenCalledWith(42);
   });
 
-  test('search works', () => {
+  test('exists works', () => {
     repo.exists = mock.resolve(true);
     expect(select.exists(42)).toBeDefined();
     expect(repo.exists).toHaveBeenCalledWith(42);

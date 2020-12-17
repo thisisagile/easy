@@ -3,13 +3,14 @@ import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('Uri', () => {
+  const withHost = '$host/dev/developers';
 
   test('Returns correct type', () => {
     expect(DevUri.Developers).toBeInstanceOf(DevUri);
   });
 
   test('toString returns full route', () => {
-    expect(DevUri.Developers).toMatchRoute('$host/dev/developers');
+    expect(DevUri.Developers).toMatchRoute(withHost);
     expect(DevUri.Developer).toMatchRoute('$host/dev/developers/:id');
   });
 
@@ -23,12 +24,12 @@ describe('Uri', () => {
   });
 
   test('complete returns just route', () => {
-    expect(DevUri.Developers.complete).toBe('$host/dev/developers');
+    expect(DevUri.Developers.complete).toBe(withHost);
     expect(DevUri.Developer.complete).toBe('$host/dev/developers/:id');
   });
 
   test('toString returns full route plus id', () => {
-    expect(DevUri.Developers.id(42)).toMatchRoute('$host/dev/developers');
+    expect(DevUri.Developers.id(42)).toMatchRoute(withHost);
     expect(DevUri.Developer.id(42)).toMatchRoute('$host/dev/developers/42');
   });
 

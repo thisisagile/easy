@@ -3,7 +3,6 @@ import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('Promise', () => {
-
   test('resolve', () => {
     return expect(resolve(Dev.Sander)).resolves.toMatchObject(Dev.Sander);
   });
