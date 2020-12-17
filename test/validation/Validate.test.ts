@@ -1,4 +1,4 @@
-import { Dev } from '../ref';
+import { Dev, Language } from '../ref';
 import { includes, validate, validateReject } from '../../src';
 import '@thisisagile/easy-test';
 
@@ -27,6 +27,11 @@ describe('validate', () => {
     const dev = Dev.Sander;
     expect(validate(dev)).toBeValid();
     expect(validate(dev)).toHaveLength(0);
+  });
+
+  test('Works on enums', () => {
+    expect(validate(Language.Java)).toBeValid();
+    expect(validate(Language.byId("HTML"))).not.toBeValid();
   });
 
   test('Works on inherited objects', () => {

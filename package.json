@@ -17,6 +17,10 @@
     "evolutionay-architecture"
   ],
   "scripts": {
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "postlint": "npm run format",
+    "format": "prettier --write src test *.js *.json",
+    "prebuild": "npm run lint",
     "build": "tsc",
     "pretest": "jest --clearCache",
     "test": "jest --coverage",
