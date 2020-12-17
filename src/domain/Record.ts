@@ -1,4 +1,4 @@
-import { Json, jsonify, Validatable } from '../types';
+import { Json, toJson, Validatable } from '../types';
 import { validate } from '../validation';
 
 export abstract class Record implements Validatable {
@@ -8,9 +8,9 @@ export abstract class Record implements Validatable {
     return validate(this).isValid;
   }
 
-  toJSON(): Json {
-    return jsonify({ ...this, state: undefined });
+  toJSON(add: Json = {}): Json {
+    return toJson({ ...this, ...add, state: undefined });
   }
 
-  update = (add?: unknown): Record => this;
+  update = (add?: Json): Record => this;
 }

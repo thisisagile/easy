@@ -1,4 +1,4 @@
-import { defined, Entity, gt, required, toJson } from '../../src';
+import { defined, Entity, gt, Json, required } from '../../src';
 
 export class Dev extends Entity {
   static readonly Invalid = new Dev({ level: 1 });
@@ -12,5 +12,5 @@ export class Dev extends Entity {
 
   title = (): string => `${this.name} is fluent in ${this.language}.`;
 
-  update = (add?: unknown): Dev => new Dev(toJson(this, add));
+  update = (add?: Json): Dev => new Dev(this.toJSON(add));
 }
