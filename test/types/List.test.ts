@@ -157,8 +157,14 @@ describe('toList', () => {
   });
 
   test('from list of two items', () => {
-    const l = toList(list(Dev.Naoufal, Dev.Jeroen));
-    expect(isList(l)).toBeTruthy();
-    expect(l).toHaveLength(2);
+    const devs = toList(list(Dev.Naoufal, Dev.Jeroen));
+    expect(isList(devs)).toBeTruthy();
+    expect(devs).toHaveLength(2);
+  });
+
+  test('distinct works', () => {
+    const devs = list(Dev.Jeroen, Dev.Sander, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal);
+    const dist = devs.distinct();
+    expect(dist).toHaveLength(3);
   });
 });

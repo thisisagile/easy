@@ -19,6 +19,8 @@ export class List<T> extends Array<T> {
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => this.map(f, params).filter(i => isDefined(i));
 
+  distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
+
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => super.filter(p, params) as List<T>;
 
   concat = (...items: (T | ConcatArray<T>)[]): List<T> => super.concat(...items) as List<T>;
