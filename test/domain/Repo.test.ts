@@ -74,30 +74,28 @@ describe('Repo', () => {
   });
 
   test('update where new object is invalid does not trigger gateway', async () => {
-    gateway.byId = mock.resolve({id: 43});
+    gateway.byId = mock.resolve({ id: 43 });
     gateway.update = mock.resolve();
     await expect(repo.update(Dev.Invalid.toJSON())).rejects.not.toBeValid();
     return expect(gateway.update).not.toHaveBeenCalled();
   });
 
-  test("Dev update works", () => {
-    expect(Dev.Sander.update({level: 4})).toMatchObject(fits.with({level: 4}));
+  test('Dev update works', () => {
+    expect(Dev.Sander.update({ level: 4 })).toMatchObject(fits.with({ level: 4 }));
   });
 
   test('update where gateway fails is not valid', async () => {
     gateway.byId = mock.resolve(Dev.Sander.toJSON());
     gateway.update = mock.reject();
-    await expect(repo.update({id: 43, level: 4})).rejects.not.toBeValid();
-    return expect(gateway.update).toHaveBeenCalledWith(fits.with({id: 3, level: 4}));
+    await expect(repo.update({ id: 43, level: 4 })).rejects.not.toBeValid();
+    return expect(gateway.update).toHaveBeenCalledWith(fits.with({ id: 3, level: 4 }));
   });
 
   test('update where gateway succeeds is valid', async () => {
-    const update = {level: 4, language: "C#"};
+    const update = { level: 4, language: 'C#' };
     gateway.byId = mock.resolve(Dev.Sander.toJSON());
     gateway.update = mock.resolve(Dev.Sander.update(update).toJSON());
     await expect(repo.update(update)).resolves.toMatchObject(fits.with(update));
     return expect(gateway.update).toHaveBeenCalledWith(fits.with(update));
   });
-
-
 });
