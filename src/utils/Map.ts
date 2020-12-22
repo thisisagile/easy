@@ -15,6 +15,5 @@ export class Map {
   }
 
   in = (from?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Column]) => clone(a, k, v.name, v.default, v.converter.to), { ...from });
-
   out = (to?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Column]) => clone(a, v.name, k, undefined, v.converter.from), { ...to });
 }
