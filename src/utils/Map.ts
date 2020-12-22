@@ -1,7 +1,7 @@
 import { isDefined, Json, List, meta } from '../types';
 import { Column, isColumn } from './Column';
 
-const clone = (subject: any, key: string, name: string, def: any, convert = (x: any) => x): any => {
+const clone = (subject: any, key: string, name: string, def: unknown, convert: (x: unknown) => unknown): Json => {
   if (key === name) return subject;
   const value = subject[name] ?? def;
   if (isDefined(value)) subject[key] = convert(value);
