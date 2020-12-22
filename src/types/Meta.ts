@@ -12,6 +12,9 @@ class ClassMeta {
     return value;
   };
 
+  entries = <T = unknown>(): List<[key: string, value: T]> =>
+    list([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<[any, T]>;
+
   properties = (key?: string): List<PropertyMeta> =>
     list([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])
       .map(p => this.property(p))
