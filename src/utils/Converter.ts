@@ -3,7 +3,7 @@ export class Converter<From = unknown, To = unknown> {
 }
 
 export const convert = {
-  default: new Converter<unknown, unknown>(
+  default: new Converter(
     a => a,
     a => a
   ),
