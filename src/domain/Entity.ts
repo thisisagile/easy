@@ -6,7 +6,7 @@ export abstract class Entity extends Record {
   @required() readonly id: Id = this.state.id;
 
   toJSON(add: Json = {}): Json {
-    return toJson({ ...this, ...add, id: this.state.id, state: undefined });
+    return toJson({ ...this, ...add, id: this.id, state: undefined });
   }
 }
 

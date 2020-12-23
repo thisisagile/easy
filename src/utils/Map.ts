@@ -11,7 +11,9 @@ const clone = (subject: any, key: string, name: string, def: unknown, convert: (
 
 export class Map {
   get columns(): List<[string, Column]> {
-    return meta(this).entries<Column>().filter(([, v]) => isColumn(v));
+    return meta(this)
+      .entries<Column>()
+      .filter(([, v]) => isColumn(v));
   }
 
   in = (from?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Column]) => clone(a, k, v.name, v.default, v.converter.to), { ...from });
