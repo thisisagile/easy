@@ -4,6 +4,7 @@ export * from './AxiosProvider';
 export * from './ContentType';
 export * from './HttpStatus';
 export * from './HttpVerb';
+export * from './MappedRouteGateway';
 export * from './Req';
 export * from './RequestOptions';
 export * from './RequestProvider';
