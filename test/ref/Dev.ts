@@ -13,7 +13,9 @@ export class Dev extends Entity {
 
   title = (): string => `${this.name} is fluent in ${this.language}.`;
 
-  toString(): string { return this.name; }
+  toString(): string {
+    return this.name;
+  }
 
   update = (add?: Json): Dev => new Dev(this.toJSON(add));
 }
