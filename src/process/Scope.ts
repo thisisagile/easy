@@ -1,3 +1,6 @@
 import { Enum } from '../types';
 
-export class Scope extends Enum {}
+export class Scope extends Enum {
+  static readonly Basic = new Scope("Basic");
+  static readonly Auth = new Scope("Authorization");
+}
