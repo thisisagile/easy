@@ -1,7 +1,21 @@
-import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, route, Scope, UseCase } from '../../src';
+import {
+  del,
+  get,
+  HttpStatus,
+  isDefined,
+  list,
+  List,
+  patch,
+  post,
+  put,
+  Req,
+  requires,
+  route,
+  Scope,
+  UseCase,
+} from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
-import { requires } from '../../src/services/Requires';
 
 export class Resource<T> {}
 
