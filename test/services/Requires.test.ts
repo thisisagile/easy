@@ -28,7 +28,7 @@ describe('Requires', () => {
     expect(uc).toMatchObject(UseCase.ChangePassword);
   });
 
-  test('scope is not set', () => {
+  test('useCase is not set', () => {
     const uc: UseCase = meta(new DevResource()).property('upsert').get('uc');
     expect(uc).toBeUndefined();
   });

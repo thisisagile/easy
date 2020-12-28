@@ -7,6 +7,7 @@ export class Resource<T> {}
 
 @route(DevUri.Developers)
 export class DevsResource {
+
   @get() @requires.token()
   all = (req: Req): List<Dev> => list(new Dev(req.id));
 
@@ -16,6 +17,7 @@ export class DevsResource {
 
 @route(DevUri.Developer)
 export class DevResource extends Resource<Dev> {
+
   @get(HttpStatus.Ok, HttpStatus.NoContent) @requires.scope(Scope.Basic)
   byId = (req: Req): Dev => new Dev(req.id);
 
