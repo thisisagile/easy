@@ -13,4 +13,12 @@ describe('Stringify', () => {
     expect(wouter.toKebab()).toBe('wouter');
     expect(kim.toKebab()).toBe('kim-van-wilgen');
   });
+
+  test('toCap works', () => {
+    expect(empty.toCap()).toBe('');
+    expect(stringify({}).toCap()).toBe('');
+    expect(stringify(Dev.Sander).toCap()).toBe('');
+    expect(wouter.toKebab()).toBe('wouter');
+    expect(kim.toKebab()).toBe('kim-van-wilgen');
+  });
 });

@@ -18,4 +18,8 @@ describe('Record', () => {
   test('update', () => {
     expect(new Address().update({})).toBeInstanceOf(Address);
   });
+
+  test('toString', () => {
+    expect(new Address().toString()).toBe('Address');
+  });
 });

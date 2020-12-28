@@ -12,5 +12,7 @@ export abstract class Record implements Validatable {
     return toJson({ ...this, ...add, state: undefined });
   }
 
+  toString(): string { return this.constructor.name; }
+
   update = (add?: Json): Record => this;
 }
