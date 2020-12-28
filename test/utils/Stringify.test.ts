@@ -1,4 +1,4 @@
-import { Stringify, stringify } from '../../src';
+import { stringify } from '../../src';
 import { Dev } from '../ref';
 
 describe('Stringify', () => {
