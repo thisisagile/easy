@@ -45,4 +45,12 @@ describe('Stringify', () => {
     expect(stringify(Dev.Sander).toKebab()).toBe('sander');
     expect(kim.toKebab()).toBe('kim-van-wilgen');
   });
+
+  test('toSnake works', () => {
+    expect(empty.toSnake()).toBe('');
+    expect(stringify({}).toSnake()).toBe('');
+    expect(wouter.toSnake()).toBe('WOUTER');
+    expect(stringify(Dev.Sander).toSnake()).toBe('SANDER');
+    expect(kim.toSnake()).toBe('KIM_VAN_WILGEN');
+  });
 });

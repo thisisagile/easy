@@ -14,6 +14,8 @@ class Stringify {
   toCamel = (): string => this.toPascal().charAt(0).toLowerCase() + this.toPascal().slice(1);
 
   toKebab = (): string => this.subject.replace(/ /g, '-').toLowerCase();
+
+  toSnake = (): string => this.subject.replace(/ /g, '_').toUpperCase()
 }
 
 export const stringify = (subject?: unknown): Stringify => {
