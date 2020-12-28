@@ -18,7 +18,15 @@ describe('Stringify', () => {
     expect(empty.toCap()).toBe('');
     expect(stringify({}).toCap()).toBe('');
     expect(stringify(Dev.Sander).toCap()).toBe('Sander');
-    expect(wouter.toKebab()).toBe('wouter');
-    expect(kim.toKebab()).toBe('kim-van-wilgen');
+    expect(wouter.toCap()).toBe('Wouter');
+    expect(kim.toCap()).toBe('Kim van Wilgen');
+  });
+
+  test('toTitle works', () => {
+    expect(empty.toTitle()).toBe('');
+    expect(stringify({}).toTitle()).toBe('');
+    expect(stringify(Dev.Sander).toTitle()).toBe('Sander');
+    expect(wouter.toTitle()).toBe('Wouter');
+    expect(kim.toTitle()).toBe('Kim Van Wilgen');
   });
 });
