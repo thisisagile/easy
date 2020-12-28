@@ -1,4 +1,4 @@
-import { stringify } from '../../src';
+import { Stringify, stringify } from '../../src';
 import { Dev } from '../ref';
 
 describe('Stringify', () => {
@@ -6,59 +6,68 @@ describe('Stringify', () => {
   const wouter = stringify('Wouter');
   const kim = stringify('Kim van Wilgen');
 
-  test('toCap works', () => {
-    expect(empty.toCap()).toBe('');
-    expect(stringify({}).toCap()).toBe('');
-    expect(wouter.toCap()).toBe('Wouter');
-    expect(stringify(Dev.Sander).toCap()).toBe('Sander');
-    expect(kim.toCap()).toBe('Kim van Wilgen');
+  test('cap works', () => {
+    expect(empty.cap).toBe('');
+    expect(stringify({}).cap).toBe('');
+    expect(wouter.cap).toBe('Wouter');
+    expect(stringify(Dev.Sander).cap).toBe('Sander');
+    expect(kim.cap).toBe('Kim van Wilgen');
   });
 
-  test('toTitle works', () => {
-    expect(empty.toTitle()).toBe('');
-    expect(stringify({}).toTitle()).toBe('');
-    expect(wouter.toTitle()).toBe('Wouter');
-    expect(stringify(Dev.Sander).toTitle()).toBe('Sander');
-    expect(kim.toTitle()).toBe('Kim Van Wilgen');
+  test('title works', () => {
+    expect(empty.title).toBe('');
+    expect(stringify({}).title).toBe('');
+    expect(wouter.title).toBe('Wouter');
+    expect(stringify(Dev.Sander).title).toBe('Sander');
+    expect(kim.title).toBe('Kim Van Wilgen');
   });
 
-  test('toPascal works', () => {
-    expect(empty.toPascal()).toBe('');
-    expect(stringify({}).toPascal()).toBe('');
-    expect(wouter.toPascal()).toBe('Wouter');
-    expect(stringify(Dev.Sander).toPascal()).toBe('Sander');
-    expect(kim.toPascal()).toBe('KimVanWilgen');
+  test('pascal works', () => {
+    expect(empty.pascal).toBe('');
+    expect(stringify({}).pascal).toBe('');
+    expect(wouter.pascal).toBe('Wouter');
+    expect(stringify(Dev.Sander).pascal).toBe('Sander');
+    expect(kim.pascal).toBe('KimVanWilgen');
   });
 
-  test('toCamel works', () => {
-    expect(empty.toCamel()).toBe('');
-    expect(stringify({}).toCamel()).toBe('');
-    expect(wouter.toCamel()).toBe('wouter');
-    expect(stringify(Dev.Sander).toCamel()).toBe('sander');
-    expect(kim.toCamel()).toBe('kimVanWilgen');
+  test('camel works', () => {
+    expect(empty.camel).toBe('');
+    expect(stringify({}).camel).toBe('');
+    expect(wouter.camel).toBe('wouter');
+    expect(stringify(Dev.Sander).camel).toBe('sander');
+    expect(kim.camel).toBe('kimVanWilgen');
   });
 
-  test('toKebab works', () => {
-    expect(empty.toKebab()).toBe('');
-    expect(stringify({}).toKebab()).toBe('');
-    expect(wouter.toKebab()).toBe('wouter');
-    expect(stringify(Dev.Sander).toKebab()).toBe('sander');
-    expect(kim.toKebab()).toBe('kim-van-wilgen');
+  test('kebab works', () => {
+    expect(empty.kebab).toBe('');
+    expect(stringify({}).kebab).toBe('');
+    expect(wouter.kebab).toBe('wouter');
+    expect(stringify(Dev.Sander).kebab).toBe('sander');
+    expect(kim.kebab).toBe('kim-van-wilgen');
   });
 
-  test('toSnake works', () => {
-    expect(empty.toSnake()).toBe('');
-    expect(stringify({}).toSnake()).toBe('');
-    expect(wouter.toSnake()).toBe('WOUTER');
-    expect(stringify(Dev.Sander).toSnake()).toBe('SANDER');
-    expect(kim.toSnake()).toBe('KIM_VAN_WILGEN');
+  test('snake works', () => {
+    expect(empty.snake).toBe('');
+    expect(stringify({}).snake).toBe('');
+    expect(wouter.snake).toBe('WOUTER');
+    expect(stringify(Dev.Sander).snake).toBe('SANDER');
+    expect(kim.snake).toBe('KIM_VAN_WILGEN');
   });
 
-  test('toInitials works', () => {
-    expect(empty.toInitials()).toBe('');
-    expect(stringify({}).toInitials()).toBe('');
-    expect(wouter.toInitials()).toBe('W');
-    expect(stringify(Dev.Sander).toInitials()).toBe('S');
-    expect(kim.toInitials()).toBe('KvW');
+  test('initials works', () => {
+    expect(empty.initials).toBe('');
+    expect(stringify({}).initials).toBe('');
+    expect(wouter.initials).toBe('W');
+    expect(stringify(Dev.Sander).initials).toBe('S');
+    expect(kim.initials).toBe('KvW');
+  });
+
+  test('trim works', () => {
+    expect(empty.trim).toBe('');
+    expect(stringify({}).trim).toBe('');
+    expect(wouter.trim).toBe('Wouter');
+    expect(stringify(Dev.Sander).trim).toBe('Sander');
+    expect(kim.trim).toBe('KimvanWilgen');
   });
 });
+

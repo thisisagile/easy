@@ -1,26 +1,28 @@
-class Stringify {
-  constructor(readonly subject: string) {}
+export class Stringify {
 
-  toCap = (): string => this.subject.charAt(0).toUpperCase() + this.subject.slice(1);
+  private constructor(readonly subject: string) {}
 
-  toTitle = (): string =>
-    this.subject
-      .split(' ')
-      .map(w => stringify(w).toCap())
-      .join(' ');
+  get cap(): string { return this.subject.charAt(0).toUpperCase() + this.subject.slice(1); }
 
-  toPascal = (): string => this.toTitle().replace(/ /g, '');
+  get title(): string { return this.subject.split(' ').map(w => stringify(w).cap).join(' '); }
 
-  toCamel = (): string => this.toPascal().charAt(0).toLowerCase() + this.toPascal().slice(1);
+  get pascal(): string { return this.title.replace(/ /g, '');}
 
-  toKebab = (): string => this.subject.replace(/ /g, '-').toLowerCase();
+  get camel(): string { return this.pascal.charAt(0).toLowerCase() + this.pascal.slice(1);}
 
-  toSnake = (): string => this.subject.replace(/ /g, '_').toUpperCase();
+  get kebab(): string { return this.subject.replace(/ /g, '-').toLowerCase();}
 
-  toInitials = (): string => this.subject.split(" ").map(w => w[0]).join("");
+  get snake(): string { return this.subject.replace(/ /g, '_').toUpperCase();}
+
+  get initials(): string { return this.subject.split(' ').map(w => w[0]).join(''); }
+
+  get trim(): string { return this.subject.replace(/ |-|,|_|#|/g, ''); }
+
+  static of = (subject?: unknown): Stringify => {
+    const s = subject?.toString() ?? '';
+    return new Stringify(s !== '[object Object]' ? s : '');
+  };
 }
 
-export const stringify = (subject?: unknown): Stringify => {
-  const s = subject?.toString() ?? '';
-  return new Stringify(s !== '[object Object]' ? s : '');
-};
+export const stringify = (subject?: unknown): Stringify => Stringify.of(subject);
+
