@@ -53,4 +53,12 @@ describe('Stringify', () => {
     expect(stringify(Dev.Sander).toSnake()).toBe('SANDER');
     expect(kim.toSnake()).toBe('KIM_VAN_WILGEN');
   });
+
+  test('toInitials works', () => {
+    expect(empty.toInitials()).toBe('');
+    expect(stringify({}).toInitials()).toBe('');
+    expect(wouter.toInitials()).toBe('W');
+    expect(stringify(Dev.Sander).toInitials()).toBe('S');
+    expect(kim.toInitials()).toBe('KvW');
+  });
 });

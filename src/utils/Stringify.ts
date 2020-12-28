@@ -15,7 +15,9 @@ class Stringify {
 
   toKebab = (): string => this.subject.replace(/ /g, '-').toLowerCase();
 
-  toSnake = (): string => this.subject.replace(/ /g, '_').toUpperCase()
+  toSnake = (): string => this.subject.replace(/ /g, '_').toUpperCase();
+
+  toInitials = (): string => this.subject.split(" ").map(w => w[0]).join("");
 }
 
 export const stringify = (subject?: unknown): Stringify => {
