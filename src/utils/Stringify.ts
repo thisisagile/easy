@@ -1,4 +1,4 @@
-export class Stringify {
+class Stringify {
 
   private constructor(readonly subject: string) {}
 
