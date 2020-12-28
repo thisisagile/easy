@@ -9,7 +9,7 @@ describe('Stringify', () => {
   test('toKebab works', () => {
     expect(empty.toKebab()).toBe('');
     expect(stringify({}).toKebab()).toBe('');
-    expect(stringify(Dev.Sander).toKebab()).toBe('');
+    expect(stringify(Dev.Sander).toKebab()).toBe('sander');
     expect(wouter.toKebab()).toBe('wouter');
     expect(kim.toKebab()).toBe('kim-van-wilgen');
   });
@@ -17,7 +17,7 @@ describe('Stringify', () => {
   test('toCap works', () => {
     expect(empty.toCap()).toBe('');
     expect(stringify({}).toCap()).toBe('');
-    expect(stringify(Dev.Sander).toCap()).toBe('');
+    expect(stringify(Dev.Sander).toCap()).toBe('Sander');
     expect(wouter.toKebab()).toBe('wouter');
     expect(kim.toKebab()).toBe('kim-van-wilgen');
   });
