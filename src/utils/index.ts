@@ -3,3 +3,4 @@ export * from './Column';
 export * from './Converter';
 export * from './Map';
 export * from './Promise';
+export * from './Stringify';
