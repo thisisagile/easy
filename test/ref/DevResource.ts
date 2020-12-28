@@ -1,19 +1,30 @@
-import { del, Req, get, HttpStatus, isDefined, list, List, patch, post, put, route } from '../../src';
+import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, route, Scope, UseCase } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
+import { requires } from '../../src/services/Requires';
 
 export class Resource<T> {}
 
 @route(DevUri.Developers)
 export class DevsResource {
-  @get() all = (req: Req): List<Dev> => list(new Dev(req.id));
-  @post() insert = (req: Req): Dev => new Dev(req.id);
+  @get() @requires.token()
+  all = (req: Req): List<Dev> => list(new Dev(req.id));
+
+  @post()
+  insert = (req: Req): Dev => new Dev(req.id);
 }
 
 @route(DevUri.Developer)
 export class DevResource extends Resource<Dev> {
-  @get(HttpStatus.Ok, HttpStatus.NoContent) byId = (req: Req): Dev => new Dev(req.id);
-  @put() update = (req: Req): Dev => new Dev(req.id);
-  @patch() upsert = (req: Req): Dev => new Dev(req.id);
-  @del() delete = (req: Req): boolean => isDefined(req.id);
+  @get(HttpStatus.Ok, HttpStatus.NoContent) @requires.scope(Scope.Basic)
+  byId = (req: Req): Dev => new Dev(req.id);
+
+  @put() @requires.useCase(UseCase.ChangePassword)
+  update = (req: Req): Dev => new Dev(req.id);
+
+  @patch()
+  upsert = (req: Req): Dev => new Dev(req.id);
+
+  @del()
+  delete = (req: Req): boolean => isDefined(req.id);
 }
