@@ -36,6 +36,31 @@ An example of an entity is the `Movie` class below. Here the content of the obje
 
 Some of the properties of `Movie` have decorators, such as `@required`. These decorators can be used to validate the object, using the separate `validate()` function. 
 
+## Enumerables
+Most modern programming languages support the use of enumerables. The goal of an enumerable is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
+
+First of all, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
+
+Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. Of you would want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
+
+And thridly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
+
+Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is still comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
+
+    export class UseCase extends Enum {
+      constructor(readonly scope: Scope, name: string, id: string = stringify(name).kebab) {
+        super(name, id);
+      }
+
+      static readonly Main = new UseCase(Scope.Basic, "Main");
+      static readonly Login = new UseCase(Scope.Auth, "Login");
+      static readonly Logout = new UseCase(Scope.Auth, "Logout");
+      static readonly ForgotPassword = new UseCase(Scope.Auth, "Forgot password");
+      static readonly ChangePassword = new UseCase(Scope.Auth, "Change password");
+    }
+
+The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actal make it work. All instance of enumerables have a property `id`, which is used to store the enums, when used as property on entities, or for comparison. 
+
 # Process
 The process layer contains use cases, that model your process.
 
