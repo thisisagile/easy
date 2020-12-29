@@ -18,6 +18,19 @@ It is the responsibility of the classes in the data layer to fetch and deliver d
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
+Using **easy** your entities, as described in domain driven design, inherited from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). An example of an entity is the `Movie` class below.
+
+    export class Movie extends Entity {
+        @required() readonly id: Id = this.state.imdbID;
+        @required() readonly title: string = this.state.Title;
+        @required() readonly year: number = this.state.Year;
+        readonly poster: string = this.state.Poster;
+        
+        update = (add?: Json): Movie => new Movie(this.toJSON(add));
+    }
+
+All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. This allows for easy mapping of the content of an entity, which is usually JSON. We prefer to keep our entities immutable. An update should therefore always return a new instance of the entity, instead of modifying its state.
+
 ### Process
 The process layer contains use cases, that model your process.
 
