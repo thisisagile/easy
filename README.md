@@ -19,7 +19,11 @@ In the domain layer there are supertypes to model the domain, such as entities, 
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
 ## Entities
-Using **easy** your entities, as described in domain driven design, inherited from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). An example of an entity is the `Movie` class below.
+Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
+
+All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
+
+An example of an entity is the `Movie` class below. Here the content of the object comes from an external service (called Omdb), and is mapped to the actual properties of the `Movie` class.
 
     export class Movie extends Entity {
         @required() readonly id: Id = this.state.imdbID;
@@ -30,7 +34,7 @@ Using **easy** your entities, as described in domain driven design, inherited fr
         update = (add?: Json): Movie => new Movie(this.toJSON(add));
     }
 
-All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. This allows for easy mapping of the content of an entity, which is usually JSON. We prefer to keep our entities immutable. An update should therefore always return a new instance of the entity, instead of modifying its state.
+Some of the properties of `Movie` have decorators, such as `@required`. These decorators can be used to validate the object, using the separate `validate()` function. 
 
 # Process
 The process layer contains use cases, that model your process.
