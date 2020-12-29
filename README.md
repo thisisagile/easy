@@ -8,16 +8,17 @@ Straightforward library for building domain-driven microservice architectures, i
 
 This library will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
-### Architecture
+# Architecture
 Microservices built with easy have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications.
 
-### Data
+# Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
-### Domain
+# Domain
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
+## Entities
 Using **easy** your entities, as described in domain driven design, inherited from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). An example of an entity is the `Movie` class below.
 
     export class Movie extends Entity {
@@ -31,14 +32,14 @@ Using **easy** your entities, as described in domain driven design, inherited fr
 
 All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. This allows for easy mapping of the content of an entity, which is usually JSON. We prefer to keep our entities immutable. An update should therefore always return a new instance of the entity, instead of modifying its state.
 
-### Process
+# Process
 The process layer contains use cases, that model your process.
 
-### Services
+# Services
 The services layer has resource as the layer supertype, to model the API exposed.
 
-### Utilities
-Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors.
+# Utilities
+Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
 This library will contain a simple validation mechanism, using decorators.
 
