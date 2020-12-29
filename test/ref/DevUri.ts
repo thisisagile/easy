@@ -1,6 +1,6 @@
-import { uri, Uri } from '../../src';
+import { EasyUri, uri } from '../../src';
 
-export class DevUri extends Uri {
+export class DevUri extends EasyUri {
   static readonly devs = uri.segment('developers');
   static readonly language = uri.query('language');
 

@@ -70,4 +70,3 @@ describe('Stringify', () => {
     expect(kim.trim).toBe('KimvanWilgen');
   });
 });
-

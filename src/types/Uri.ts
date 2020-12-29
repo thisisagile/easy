@@ -19,9 +19,17 @@ const toRoute = (...segments: Segment[]): string =>
   list(...segments)
     .mapDefined(s => s.segment)
     .join('/');
+
 const parse = (route: string, p: Prop): string => route.replace(p.segment.segment, p.value.toString());
 
-export class Uri {
+export type Uri = {
+  id: (id?: unknown) => Uri;
+  query: (q?: unknown) => Uri;
+  path: string;
+  toString: () => string;
+};
+
+export class EasyUri implements Uri {
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
 
@@ -54,6 +62,6 @@ export class Uri {
     return isNotEmpty(q) ? `${route}?${q}` : route;
   }
 
-  id = (id?: unknown): this => this.set(Uri.id, id);
-  query = (q?: unknown): this => this.set(Uri.query, q);
+  id = (id?: unknown): this => this.set(EasyUri.id, id);
+  query = (q?: unknown): this => this.set(EasyUri.query, q);
 }

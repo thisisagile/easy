@@ -2,7 +2,6 @@ import { meta, Scope, UseCase } from '../../src';
 import { DevResource, DevsResource } from '../ref';
 
 describe('Requires', () => {
-
   test('token is required', () => {
     const all: boolean = meta(new DevsResource()).property('all').get('token');
     expect(all).toBeTruthy();

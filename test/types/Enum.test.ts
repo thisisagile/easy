@@ -58,5 +58,5 @@ describe('Enum', () => {
     expect(Language.Java.equals(Language.Java)).toBeTruthy();
     expect(Language.Java.equals('javascript')).toBeFalsy();
     expect(Language.Java.equals(Language.JavaScript)).toBeFalsy();
-  })
+  });
 });

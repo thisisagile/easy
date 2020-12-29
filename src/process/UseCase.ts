@@ -7,9 +7,9 @@ export class UseCase extends Enum {
     super(name, id);
   }
 
-  static readonly Main = new UseCase(Scope.Basic, "Main");
-  static readonly Login = new UseCase(Scope.Auth, "Login");
-  static readonly Logout = new UseCase(Scope.Auth, "Logout");
-  static readonly ForgotPassword = new UseCase(Scope.Auth, "Forgot password");
-  static readonly ChangePassword = new UseCase(Scope.Auth, "Change password");
+  static readonly Main = new UseCase(Scope.Basic, 'Main');
+  static readonly Login = new UseCase(Scope.Auth, 'Login');
+  static readonly Logout = new UseCase(Scope.Auth, 'Logout');
+  static readonly ForgotPassword = new UseCase(Scope.Auth, 'Forgot password');
+  static readonly ChangePassword = new UseCase(Scope.Auth, 'Change password');
 }

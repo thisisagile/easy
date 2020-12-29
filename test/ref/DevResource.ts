@@ -1,19 +1,4 @@
-import {
-  del,
-  get,
-  HttpStatus,
-  isDefined,
-  list,
-  List,
-  patch,
-  post,
-  put,
-  Req,
-  requires,
-  route,
-  Scope,
-  UseCase,
-} from '../../src';
+import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, route, Scope, UseCase } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 
@@ -21,8 +6,8 @@ export class Resource<T> {}
 
 @route(DevUri.Developers)
 export class DevsResource {
-
-  @get() @requires.token()
+  @get()
+  @requires.token()
   all = (req: Req): List<Dev> => list(new Dev(req.id));
 
   @post()
@@ -31,11 +16,12 @@ export class DevsResource {
 
 @route(DevUri.Developer)
 export class DevResource extends Resource<Dev> {
-
-  @get(HttpStatus.Ok, HttpStatus.NoContent) @requires.scope(Scope.Basic)
+  @get(HttpStatus.Ok, HttpStatus.NoContent)
+  @requires.scope(Scope.Basic)
   byId = (req: Req): Dev => new Dev(req.id);
 
-  @put() @requires.useCase(UseCase.ChangePassword)
+  @put()
+  @requires.useCase(UseCase.ChangePassword)
   update = (req: Req): Dev => new Dev(req.id);
 
   @patch()
