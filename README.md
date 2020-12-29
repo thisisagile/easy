@@ -18,6 +18,8 @@ It is the responsibility of the classes in the data layer to fetch and deliver d
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
+See [Domain](Domain).
+
 ## Entities
 Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
 
