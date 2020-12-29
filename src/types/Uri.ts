@@ -57,9 +57,9 @@ export class EasyUri implements Uri {
 
   toString(): string {
     const route = this.props.reduce((r: string, p: Prop) => parse(r, p), this.complete);
-    const q = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
+    const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
     this.props = list<Prop>();
-    return isNotEmpty(q) ? `${route}?${q}` : route;
+    return isNotEmpty(query) ? `${route}?${query}` : route;
   }
 
   id = (id?: unknown): this => this.set(EasyUri.id, id);
