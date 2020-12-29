@@ -25,8 +25,8 @@ const parse = (route: string, p: Prop): string => route.replace(p.segment.segmen
 export type Uri = {
   id: (id?: unknown) => Uri;
   query: (q?: unknown) => Uri;
-  path: string,
-  route: string
+  path: string;
+  route: string;
   toString: () => string;
 };
 
