@@ -23,6 +23,10 @@ export abstract class Enum implements Validatable {
     );
   }
 
+  equals<E extends Enum | Id>(other: E): boolean {
+    return this.id === (isEnum(other) ? other.id : other);
+  }
+
   get isValid(): boolean {
     return isDefined(this.id);
   }

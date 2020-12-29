@@ -52,4 +52,11 @@ describe('Enum', () => {
     expect(MoreLanguage.byId('HTML')).not.toBeValid();
     expect(MoreLanguage.byId('HTML', Language.Java)).toBeValid();
   });
+
+  test('equals', () => {
+    expect(Language.Java.equals('java')).toBeTruthy();
+    expect(Language.Java.equals(Language.Java)).toBeTruthy();
+    expect(Language.Java.equals('javascript')).toBeFalsy();
+    expect(Language.Java.equals(Language.JavaScript)).toBeFalsy();
+  })
 });
