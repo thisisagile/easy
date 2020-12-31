@@ -11,7 +11,7 @@ describe('Route', () => {
 
 describe('Router', () => {
   test('Router works on a valid class', () => {
-    const { route, endpoints } = routes(DevsResource);
+    const { route, endpoints } = routes(new DevsResource());
     expect(route).toBeInstanceOf(DevUri);
     expect(route.route.toString()).toBe('/developers');
     expect(endpoints).toHaveLength(2);
