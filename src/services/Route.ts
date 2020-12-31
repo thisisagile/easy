@@ -2,6 +2,7 @@ import { List, meta, Uri } from '../types';
 import { HttpVerb } from './HttpVerb';
 import { Verb } from './Verb';
 import { Req } from './Req';
+import { Resource } from './Resource';
 
 export const route = (uri: Uri): ClassDecorator => (subject: unknown): void => {
   meta(subject).set('route', uri);
@@ -12,7 +13,7 @@ export type Route = { verb: HttpVerb; endpoint: Endpoint };
 export type Routes = { route: Uri; endpoints: List<Route> };
 
 class Router implements Routes {
-  constructor(readonly resource: unknown) {}
+  constructor(readonly resource: Resource) {}
 
   get route(): Uri {
     return meta(this.resource).get('route');
@@ -25,4 +26,4 @@ class Router implements Routes {
   }
 }
 
-export const routes = (resource: unknown): Routes => new Router(resource);
+export const routes = (resource: Resource): Routes => new Router(resource);

@@ -1,6 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, HttpVerb, routes, toReq, toRestResult } from '../services';
-import { Constructor } from '../types';
+import { AppProvider, Endpoint, HttpVerb, Resource, routes, toReq, toRestResult } from '../services';
 
 type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -22,8 +21,8 @@ export class ExpressProvider implements AppProvider {
     this.app.use(h);
   };
 
-  route = (resource: Constructor): void => {
-    const { route, endpoints } = routes(this.create(resource));
+  route = (resource: Resource): void => {
+    const { route, endpoints } = routes(resource);
     const router = express.Router({ mergeParams: true });
 
     endpoints.forEach(({ endpoint, verb }: { endpoint: Endpoint; verb: HttpVerb }) => {
@@ -33,6 +32,4 @@ export class ExpressProvider implements AppProvider {
 
     this.use(router);
   };
-
-  protected create = (resource: Constructor): unknown => new resource();
 }
