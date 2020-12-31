@@ -1,6 +1,5 @@
-import { Service } from '../../src/services/Service';
+import { AppProvider, Service } from '../../src';
 import { DevResource, DevsResource } from '../ref';
-import { AppProvider } from '../../src';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('Service', () => {
@@ -9,8 +8,8 @@ describe('Service', () => {
   test('Set up service works', () => {
     new Service('Dev', app).with(DevsResource, DevResource).listensAt(8080);
     expect(app.route).toHaveBeenCalledTimes(2);
-    expect(app.route).toHaveBeenCalledWith(DevsResource);
-    expect(app.route).toHaveBeenCalledWith(DevResource);
+    expect(app.route).toHaveBeenCalledWith(fits.type(DevsResource));
+    expect(app.route).toHaveBeenCalledWith(fits.type(DevResource));
     expect(app.listen).toHaveBeenCalledWith(8080, fits.any());
   });
 });
