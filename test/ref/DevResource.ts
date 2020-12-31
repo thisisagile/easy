@@ -1,11 +1,9 @@
-import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, route, Scope, UseCase } from '../../src';
+import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, Resource, route, Scope, UseCase } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 
-export class Resource<T> {}
-
 @route(DevUri.Developers)
-export class DevsResource {
+export class DevsResource implements Resource {
   @get()
   @requires.token()
   all = (req: Req): List<Dev> => list(new Dev(req.id));
@@ -15,7 +13,7 @@ export class DevsResource {
 }
 
 @route(DevUri.Developer)
-export class DevResource extends Resource<Dev> {
+export class DevResource implements Resource {
   @get(HttpStatus.Ok, HttpStatus.NoContent)
   @requires.scope(Scope.Basic)
   byId = (req: Req): Dev => new Dev(req.id);

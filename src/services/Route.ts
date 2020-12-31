@@ -22,7 +22,7 @@ class Router implements Routes {
   get endpoints(): List<Route> {
     return meta(this.resource)
       .properties('verb')
-      .map(p => ({ verb: p.get<Verb>('verb').verb, endpoint: (this.resource as any)[p.property] }));
+      .map(p => ({ verb: p.get<Verb>('verb').verb, endpoint: this.resource[p.property] }));
   }
 }
 

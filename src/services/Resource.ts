@@ -1,1 +1,1 @@
-export type Resource = Record<string, never>;
+export type Resource = any;
