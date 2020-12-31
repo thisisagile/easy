@@ -5,6 +5,7 @@ export * from './ContentType';
 export * from './HttpStatus';
 export * from './HttpVerb';
 export * from './MappedRouteGateway';
+export * from './Resource';
 export * from './Req';
 export * from './Requires';
 export * from './RequestOptions';
