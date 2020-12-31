@@ -23,7 +23,7 @@ export class ExpressProvider implements AppProvider {
   };
 
   route = (resource: Constructor): void => {
-    const { route, endpoints } = routes(resource);
+    const { route, endpoints } = routes(this.create(resource));
     const router = express.Router({ mergeParams: true });
 
     endpoints.forEach(({ endpoint, verb }: { endpoint: Endpoint; verb: HttpVerb }) => {
@@ -33,4 +33,6 @@ export class ExpressProvider implements AppProvider {
 
     this.use(router);
   };
+
+  protected create = (resource: Constructor): unknown => new resource();
 }
