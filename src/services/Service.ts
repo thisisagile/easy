@@ -4,7 +4,7 @@ import { Constructor, Enum, list, List } from '../types';
 import { Resource } from './Resource';
 
 export class Service extends Enum {
-  constructor(readonly name: string, private app: AppProvider = new ExpressProvider(), private resources: List<Resource> = list()) {
+  constructor(readonly name: string, protected app: AppProvider = new ExpressProvider(), protected resources: List<Resource> = list()) {
     super(name);
   }
 
