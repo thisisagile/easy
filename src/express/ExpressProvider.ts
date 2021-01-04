@@ -1,5 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, HttpVerb, Resource, routes, toReq, toRestResult } from '../services';
+import { AppProvider, Endpoint, Handler, HttpVerb, Resource, routes, toReq, toRestResult } from '../services';
 
 type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -11,14 +11,8 @@ const handle = (endpoint: Endpoint): RequestHandler => (req: Request, res: Respo
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {}
 
-  listen = (port: number, message = `Service is listening on port ${port}.`): void => {
-    this.app.listen(port, () => {
-      console.log(message);
-    });
-  };
-
-  use = (h: RequestHandler): void => {
-    this.app.use(h);
+  use = (handler: Handler): void => {
+    this.app.use(handler);
   };
 
   route = (resource: Resource): void => {
@@ -30,6 +24,12 @@ export class ExpressProvider implements AppProvider {
       router[verb.toString() as ExpressVerb](route.path, handle(endpoint));
     });
 
-    this.use(router);
+    this.app.use(router);
+  };
+
+  listen = (port: number, message = `Service is listening on port ${port}.`): void => {
+    this.app.listen(port, () => {
+      console.log(message);
+    });
   };
 }
