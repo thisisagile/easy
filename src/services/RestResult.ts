@@ -1,6 +1,6 @@
-import { isDefined, isResult, Json, list, List, Result, toList } from '../types';
+import { isDefined, isResult, Json, list, List, result, Result, toList } from '../types';
 import { choose } from '../utils';
-import { HttpStatus } from './HttpStatus';
+import { HttpStatus, isHttpStatus } from './HttpStatus';
 
 export type RestResult = {
   data?: { code: number; items: List<Json>; itemCount: number };
@@ -15,12 +15,12 @@ const data = (items?: Json[]): RestResult => ({
   },
 });
 
-const error = (errors: Result[]): RestResult => ({
+const error = (status: HttpStatus, errors: Result[] = []): RestResult => ({
   error: {
-    code: HttpStatus.BadRequest.status,
-    message: errors[0].message.toString() ?? 'Unknown error',
+    code: status.status,
+    message: errors[0]?.message.toString() ?? status.name,
     errors: list(errors),
-    errorCount: errors.length,
+    errorCount: errors?.length ?? 1,
   },
 });
 
@@ -33,12 +33,16 @@ export const toRestResult = (payload?: any | any[]): RestResult =>
       () => data()
     )
     .case(
+      p => isHttpStatus(p),
+      p => error(p, [result(p.name)])
+    )
+    .case(
       p => isResult(p),
-      p => error([p])
+      p => error(HttpStatus.BadRequest, [p])
     )
     .case(
       p => p.error && p.error.errors,
-      p => error(p.error.errors)
+      p => error(HttpStatus.BadRequest, p.error.errors)
     )
     .case(
       p => p.data && p.data.items,
