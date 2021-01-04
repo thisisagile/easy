@@ -1,16 +1,23 @@
 import { isNotEmpty } from './Is';
 import { list } from './List';
+import { Text } from './Text';
 
-export type Segment = { key: string; segment?: string; query?: (value: unknown) => string };
+export type Segment = Text & { key: string; segment?: string; query?: (value: unknown) => string };
 
 const name = (name?: string): string => name?.replace('Uri', '').toLowerCase();
+const toSegment = (key: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
+  key,
+  segment: segment ?? key,
+  query,
+  toString: () => key,
+});
 
 export const uri = {
-  host: (key?: string): Segment => ({ key, segment: key ?? '$host' }),
-  resource: (resource: string): Segment => ({ key: name(resource), segment: name(resource) }),
-  segment: (key?: string): Segment => ({ key, segment: key }),
-  path: (key: string): Segment => ({ key, segment: `:${key}` }),
-  query: (key: string): Segment => ({ key, query: (value: unknown): string => (value ? `${key}=${value}` : undefined) }),
+  host: (key?: string): Segment => toSegment(key, { segment: key ?? '$host' }),
+  resource: (resource: string): Segment => toSegment(name(resource)),
+  segment: (key?: string): Segment => toSegment(key),
+  path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
+  query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (value ? `${key}=${value}` : undefined) }),
 };
 
 type Prop = { segment: Segment; value: unknown };
