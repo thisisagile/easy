@@ -9,6 +9,10 @@ import { Validatable } from './Validatable';
 export abstract class Enum implements Validatable {
   constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
 
+  get isValid(): boolean {
+    return isDefined(this.id);
+  }
+
   static all<E extends Enum>(): List<E> {
     return meta(this)
       .values()
@@ -25,10 +29,6 @@ export abstract class Enum implements Validatable {
 
   equals<E extends Enum | Id>(other: E): boolean {
     return this.id === (isEnum(other) ? other.id : other);
-  }
-
-  get isValid(): boolean {
-    return isDefined(this.id);
   }
 
   toString(): string {
