@@ -1,11 +1,18 @@
-import { Id, Json, JsonValue } from '../types';
+import { Id, Json, JsonValue, Text } from '../types';
 
-export type Req = { path?: any; id?: Id; query?: any; q?: JsonValue; body?: Json };
+export class Req {
+  constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: Json) {}
 
-export const toReq = (req: { params?: { id?: unknown }; query?: { q?: unknown }; body?: unknown }): Req => ({
-  path: req.params,
-  id: req.params?.id as Id,
-  query: req.query,
-  q: req.query?.q as Json,
-  body: req.body as Json,
-});
+  get id(): Id {
+    return this.get('id');
+  }
+
+  get q(): JsonValue {
+    return this.get('q');
+  }
+
+  get = (key: Text): any => this.path[key.toString()] ?? this.query[key.toString()];
+}
+
+export const toReq = (req: { params?: { id?: unknown }; query?: { q?: unknown }; body?: unknown }): Req =>
+  new Req(req.params as Json, req.query as Json, req.body as Json);
