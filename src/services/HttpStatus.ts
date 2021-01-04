@@ -1,4 +1,4 @@
-import { Enum } from '../types';
+import { Enum, isAn } from '../types';
 
 export class HttpStatus extends Enum {
   static Ok = new HttpStatus('Ok', 200);
@@ -21,3 +21,5 @@ export class HttpStatus extends Enum {
     return this.id as number;
   }
 }
+
+export const isHttpStatus = (s?: unknown): s is HttpStatus => isAn<HttpStatus>(s, 'id', 'status');
