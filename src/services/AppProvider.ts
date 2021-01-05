@@ -1,6 +1,6 @@
 import { Resource } from './Resource';
 
-export type Handler = () => void;
+export type Handler = (...params: unknown[]) => void;
 
 export interface AppProvider {
   use: (h: Handler) => void;
