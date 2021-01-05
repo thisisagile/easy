@@ -1,11 +1,11 @@
-import express, { Express, RequestHandler } from 'express';
+import express, { Express } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { ExpressProvider } from '../../src';
+import { ExpressProvider, Handler } from '../../src';
 import { DevsResource } from '../ref';
 
 describe('ExpressProvider', () => {
   const app = ({ listen: mock.return(), use: mock.return() } as unknown) as Express;
-  const handler = ({} as unknown) as RequestHandler;
+  const handler: Handler = () => undefined;
   let provider: ExpressProvider;
 
   beforeEach(() => {
