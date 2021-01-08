@@ -8,7 +8,6 @@ class DevService extends Service {
 }
 
 describe('Service', () => {
-
   let app: AppProvider;
 
   beforeEach(() => {
