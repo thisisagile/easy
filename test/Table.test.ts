@@ -1,4 +1,4 @@
-import { DevTable } from './ref';
+import { DevDatabase, DevTable } from './ref';
 
 describe('Table', () => {
 
@@ -8,7 +8,8 @@ describe('Table', () => {
     expect(table.toString()).toBe("DevTable");
   });
 
-  test('columns works', () => {
+  test('db and columns works', () => {
+    expect(table.db).toBe(DevDatabase.DevDB);
     expect(table.columns).toHaveLength(3);
   });
 });
