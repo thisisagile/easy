@@ -4,7 +4,6 @@ import '@thisisagile/easy-test';
 
 describe('quote', () => {
   test('Works', () => {
-
     expect(quote(3)).toMatchText('3');
     expect(quote(true)).toMatchText('true');
     expect(quote('Jeroen')).toMatchText("'Jeroen'");
@@ -13,7 +12,6 @@ describe('quote', () => {
 });
 
 describe('Column', () => {
-
   const devs = new DevTable();
   const name = devs.name;
 

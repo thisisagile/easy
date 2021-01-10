@@ -20,6 +20,6 @@ describe('Record', () => {
   });
 
   test('toString', () => {
-    expect(new Address().toString()).toBe('Address');
+    expect(new Address()).toMatchText('Address');
   });
 });

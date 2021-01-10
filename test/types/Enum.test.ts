@@ -26,7 +26,6 @@ describe('Enum', () => {
   });
 
   test('all with inherited enum', () => {
-    // const ps = meta(MoreLanguage).values<MoreLanguage>().filter(p => isEnum(p));
     expect(MoreLanguage.all()).toHaveLength(4);
     expect(MoreLanguage.all()[3]).toBeInstanceOf(Language);
   });
@@ -41,8 +40,8 @@ describe('Enum', () => {
   });
 
   test('toString', () => {
-    expect(Language.Java.toString()).toBe('java');
-    expect(MoreLanguage.Delphi.toString()).toBe('delphi');
+    expect(Language.Java).toMatchText('java');
+    expect(MoreLanguage.Delphi).toMatchText('delphi');
   });
 
   test('isValid', () => {
