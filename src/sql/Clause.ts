@@ -1,9 +1,9 @@
-import { isA, isBoolean, isNumber } from '../types';
+import { isA, isBoolean, isNumber, Text } from '../types';
 import { convert, Convert } from '../utils';
 
 export const quote = (a: unknown): string => (isNumber(a) || isBoolean(a) || isClause(a) ? a.toString() : `'${a as string}'`);
 
-export class Clause {
+export class Clause implements Text {
   constructor(readonly first: unknown, readonly operator: string, readonly second: unknown) {}
 
   and = (other: Clause): Clause => toClause(this, 'AND', other);
