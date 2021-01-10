@@ -6,22 +6,22 @@ describe('prop', () => {
 
   test('Simple prop', () => {
     const p = col(map, 'Id');
-    expect(p).toMatchObject({ name: 'Id', default: undefined, converter: convert.default });
+    expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
   });
 
   test('Prop with empty options', () => {
     const p = col(map, 'Id', {});
-    expect(p).toMatchObject({ name: 'Id', default: undefined, converter: convert.default });
+    expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
   });
 
   test('Prop with default', () => {
-    const p = col(map, 'Id', { default: 3 });
-    expect(p).toMatchObject({ name: 'Id', default: 3, converter: convert.default });
+    const p = col(map, 'Id', { def: 3 });
+    expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.default } });
   });
 
   test('Prop with default and converter', () => {
-    const p = col(map, 'Id', { default: 3, converter: convert.toNumber.fromString });
-    expect(p).toMatchObject({ name: 'Id', default: 3, converter: convert.toNumber.fromString });
+    const p = col(map, 'Id', { def: 3, convert: convert.toNumber.fromString });
+    expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.toNumber.fromString } });
   });
 });
 
