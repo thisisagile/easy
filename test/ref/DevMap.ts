@@ -1,13 +1,13 @@
-import { convert, Map, col } from '../../src';
+import { convert, Map } from '../../src';
 
 export class DevMap extends Map {
-  readonly id = col('Id', { default: 42 });
-  readonly name = col('Name');
-  readonly level = col('CodingLevel', { default: 3, converter: convert.toNumber.fromString });
+  readonly id = this.col('Id', { default: 42 });
+  readonly name = this.col('Name');
+  readonly level = this.col('CodingLevel', { default: 3, converter: convert.toNumber.fromString });
 }
 
 export class TesterMap extends DevMap {
-  readonly framework = col('Framework', { default: 'Jest' });
+  readonly framework = this.col('Framework', { default: 'Jest' });
 }
 
 export const devData = {
