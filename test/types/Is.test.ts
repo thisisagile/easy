@@ -1,4 +1,16 @@
-import { Entity, isArray, isDefined, isEmpty, isEmptyObject, isInstance, isNotEmpty, isObject, isPrimitive, isString } from '../../src';
+import {
+  Entity,
+  isArray, isBoolean,
+  isDefined,
+  isEmpty,
+  isEmptyObject,
+  isInstance,
+  isNotEmpty,
+  isNumber,
+  isObject,
+  isPrimitive,
+  isString,
+} from '../../src';
 import { Dev } from '../ref';
 
 describe('isDefined', () => {
@@ -140,5 +152,38 @@ describe('isPrimitive', () => {
     expect(isPrimitive(Dev.Wouter)).toBeFalsy();
     expect(isPrimitive(() => true)).toBeFalsy();
     expect(isPrimitive([])).toBeFalsy();
+  });
+});
+
+describe('isNumber', () => {
+  test('Check', () => {
+    expect(isNumber()).toBeFalsy();
+    expect(isNumber(null)).toBeFalsy();
+    expect(isNumber('')).toBeFalsy();
+    expect(isNumber({})).toBeFalsy();
+    expect(isNumber(0)).toBeTruthy();
+    expect(isNumber(123)).toBeTruthy();
+    expect(isNumber(123.45)).toBeTruthy();
+    expect(isNumber(false)).toBeFalsy();
+    expect(isNumber(Dev)).toBeFalsy();
+    expect(isNumber(Dev.Wouter)).toBeFalsy();
+    expect(isNumber(() => true)).toBeFalsy();
+    expect(isNumber([])).toBeFalsy();
+  });
+});
+
+describe('isBoolean', () => {
+  test('Check', () => {
+    expect(isBoolean()).toBeFalsy();
+    expect(isBoolean(null)).toBeFalsy();
+    expect(isBoolean('')).toBeFalsy();
+    expect(isBoolean({})).toBeFalsy();
+    expect(isBoolean(0)).toBeFalsy();
+    expect(isBoolean(true)).toBeTruthy();
+    expect(isBoolean(false)).toBeTruthy();
+    expect(isBoolean(Dev)).toBeFalsy();
+    expect(isBoolean(Dev.Wouter)).toBeFalsy();
+    expect(isBoolean(() => true)).toBeFalsy();
+    expect(isBoolean([])).toBeFalsy();
   });
 });

@@ -8,6 +8,10 @@ export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o 
 
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === 'string';
 
+export const isBoolean = (o?: unknown): o is boolean => isDefined(o) && typeof o === 'boolean';
+
+export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
+
 export const isObject = (o?: unknown): boolean => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
 
 export const isEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length === 0;
