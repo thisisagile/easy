@@ -1,4 +1,4 @@
 export * from './Manage';
 export * from './Scope';
-export * from './Select';
+export * from './Search';
 export * from './UseCase';

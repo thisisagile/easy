@@ -1,7 +1,7 @@
 import { Record, Repo } from '../domain';
 import { Id, JsonValue, List } from '../types';
 
-export class Select<T extends Record> {
+export class Search<T extends Record> {
   constructor(protected repo: Repo<T>) {}
 
   all = (): Promise<List<T>> => this.repo.all();

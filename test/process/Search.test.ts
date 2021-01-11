@@ -1,14 +1,14 @@
-import { list, Select } from '../../src';
+import { list, Search } from '../../src';
 import { Dev, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
-describe('Select', () => {
+describe('Search', () => {
   const devs = list(Dev.Sander, Dev.Jeroen, Dev.Naoufal);
   const repo = new DevRepo();
-  let select: Select<Dev>;
+  let select: Search<Dev>;
 
   beforeEach(() => {
-    select = new Select<Dev>(repo);
+    select = new Search<Dev>(repo);
   });
 
   test('all works', () => {
