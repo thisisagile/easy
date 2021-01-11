@@ -1,5 +1,5 @@
 import { isDefined, Json, List, meta } from '../types';
-import { col as column, Column, ColumnOptions, isColumn } from './Column';
+import { col as column, Property, PropertyOptions, isColumn } from './Property';
 
 const clone = (subject: any, key: string, name: string, def: unknown, convert: (x: unknown) => unknown): Json => {
   if (key === name) return subject;
@@ -10,14 +10,15 @@ const clone = (subject: any, key: string, name: string, def: unknown, convert: (
 };
 
 export class Map {
-  get columns(): List<[string, Column]> {
+  get columns(): List<[string, Property]> {
     return meta(this)
-      .entries<Column>()
+      .entries<Property>()
       .filter(([, v]) => isColumn(v));
   }
 
-  col = <T = unknown>(name: string, options?: ColumnOptions<T>): Column => column(this, name, options);
+  col = <T = unknown>(name: string, options?: PropertyOptions<T>): Property => column(this, name, options);
 
-  in = (from?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Column]) => clone(a, k, v.name, v.options.def, v.options.convert.to), { ...from });
-  out = (to?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Column]) => clone(a, v.name, k, undefined, v.options.convert.from), { ...to });
+  in = (from?: Json): Json =>
+    this.columns.reduce((a: any, [k, v]: [string, Property]) => clone(a, k, v.name, v.options.def, v.options.convert.to), { ...from });
+  out = (to?: Json): Json => this.columns.reduce((a: any, [k, v]: [string, Property]) => clone(a, v.name, k, undefined, v.options.convert.from), { ...to });
 }
