@@ -9,7 +9,7 @@ export class Select extends Query {
   protected limit = 0;
 
   constructor(readonly subject: Table, readonly columns: List<Column> = list()) {
-    super();
+    super(subject.db);
   }
 
   top = (limit: number): this => {
