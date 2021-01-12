@@ -2,7 +2,6 @@ import { Dev } from '../ref';
 import { ifGet, list } from '../../src';
 
 describe('ifGet', () => {
-
   const empty = list();
   const filled = list(Dev.Naoufal);
 
