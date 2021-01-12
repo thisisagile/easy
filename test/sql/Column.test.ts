@@ -15,7 +15,7 @@ describe('Column', () => {
   const devs = new DevTable();
   const name = devs.name;
 
-  test('Clause', () => {
+  test('Clauses', () => {
     expect(name.is(3)).toMatchText('DevTable.Name = 3');
     expect(name.is('Jan')).toMatchText("DevTable.Name = 'Jan'");
     expect(name.not(3)).toMatchText('DevTable.Name <> 3');
@@ -32,5 +32,16 @@ describe('Column', () => {
     expect(name.lessEqual(3)).toMatchText('DevTable.Name <= 3');
     expect(name.greater(3)).toMatchText('DevTable.Name > 3');
     expect(name.greaterEqual(3)).toMatchText('DevTable.Name >= 3');
+  });
+
+  test('as', () => {
+    expect(name.as('LastName')).toMatchText('DevTable.Name AS LastName');
+  });
+
+  test('count', () => {
+    expect(name.count).toMatchText('COUNT(Name)');
+    expect(name.max).toMatchText('MAX(Name)');
+    expect(name.min).toMatchText('MIN(Name)');
+    expect(name.length).toMatchText('LEN(Name)');
   });
 });

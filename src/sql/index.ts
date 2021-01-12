@@ -1,4 +1,4 @@
 export * from './Clause';
-export * from './SqlColumn';
-export * from './SqlQuery';
+export * from './Column';
+export * from './Query';
 export * from './Table';
