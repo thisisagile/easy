@@ -44,4 +44,9 @@ describe('Column', () => {
     expect(name.min).toMatchText('MIN(Name)');
     expect(name.length).toMatchText('LEN(Name)');
   });
+
+  test('sort', () => {
+    expect(name.asc).toMatchText('DevTable.Name ASC');
+    expect(name.desc).toMatchText('DevTable.Name DESC');
+  });
 });
