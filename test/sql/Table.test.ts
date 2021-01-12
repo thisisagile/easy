@@ -14,4 +14,16 @@ describe('Table', () => {
     expect(table.id.name).toBe('Id');
     expect(table.columns).toHaveLength(3);
   });
+
+  test('select without columns', () => {
+    const sel = table.select();
+    expect(sel.subject).toBe(table);
+    expect(sel.columns).toHaveLength(0);
+  });
+
+  test('select with columns', () => {
+    const sel = table.select(table.name, table.level);
+    expect(sel.subject).toBe(table);
+    expect(sel.columns).toHaveLength(2);
+  });
 });
