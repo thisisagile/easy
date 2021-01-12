@@ -1,5 +1,5 @@
 import { Api, RouteGateway, toRestResult } from '../../src';
-import { Dev, DevGateway, DevUri } from '../ref';
+import { Dev, DevRoutedGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('RouteGateway', () => {
@@ -9,7 +9,7 @@ describe('RouteGateway', () => {
 
   beforeEach(() => {
     api = new Api();
-    gateway = new DevGateway(api);
+    gateway = new DevRoutedGateway(api);
   });
 
   test('all calls api correctly', async () => {
@@ -51,7 +51,7 @@ describe('RouteGateway', () => {
 
   test('get calls api correctly with transform', async () => {
     api.get = mock.resolve({ payload: devs });
-    const res = await new DevGateway(api).byName();
+    const res = await new DevRoutedGateway(api).byName();
     expect(api.get).toHaveBeenCalledWith(DevUri.Developers, fits.any());
     expect(res).toBeTruthy();
   });
