@@ -1,5 +1,5 @@
 import { Property, PropertyOptions } from '../utils';
-import { Database } from '../data';
+import { Database } from './index';
 import { Column } from './Column';
 import { list, List, meta } from '../types';
 import { Select } from './Select';
