@@ -1,8 +1,8 @@
 import { Property, PropertyOptions } from '../utils';
 import { Database } from '../data';
 import { Column } from './Column';
-import { List, meta } from '../types';
-import { Select } from './Query';
+import { list, List, meta } from '../types';
+import { Select } from './Select';
 
 export class Table {
   readonly db = Database.Main;
@@ -21,5 +21,5 @@ export class Table {
     return this.constructor.name;
   }
 
-  select = (...columns: Column[]): Select => new Select(this, columns);
+  select = (...columns: Column[]): Select => new Select(this, list(columns));
 }

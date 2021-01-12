@@ -1,4 +1,4 @@
-import { Clause, list, List, Column, Table } from '../index';
+import { Clause, List, list } from '../index';
 
 export class Query {
   constructor(readonly clauses: List<Clause> = list()) {}
@@ -7,10 +7,4 @@ export class Query {
     this.clauses.add(clauses);
     return this;
   };
-}
-
-export class Select extends Query {
-  constructor(readonly subject: Table, readonly columns: Column[]) {
-    super();
-  }
 }

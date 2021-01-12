@@ -22,12 +22,12 @@ export class Column implements Text {
     return new Count(this, 'LEN');
   }
 
-  get asc(): Sort {
-    return new Sort(this, 'ASC');
+  get asc(): Order {
+    return new Order(this, 'ASC');
   }
 
-  get desc(): Sort {
-    return new Sort(this, 'DESC');
+  get desc(): Order {
+    return new Order(this, 'DESC');
   }
 
   is = (value: unknown): Clause => this.clause('=', value);
@@ -70,7 +70,7 @@ export class As extends Column {
 }
 
 export class Count extends Column {
-  constructor(col: Column, private readonly counter: "COUNT" | "LEN" | "MAX" | "MIN") {
+  constructor(col: Column, private readonly counter: 'COUNT' | 'LEN' | 'MAX' | 'MIN') {
     super(col.table, col.name, col.options);
   }
 
@@ -79,8 +79,8 @@ export class Count extends Column {
   }
 }
 
-export class Sort extends Column {
-  constructor(col: Column, private readonly direction: "ASC" | "DESC") {
+export class Order extends Column {
+  constructor(col: Column, private readonly direction: 'ASC' | 'DESC') {
     super(col.table, col.name, col.options);
   }
 
