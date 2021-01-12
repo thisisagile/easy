@@ -1,5 +1,5 @@
 export * from './Dev';
-export * from './DevGateway';
+export * from './DevRoutedGateway';
 export * from './DevMap';
 export * from './DevRepo';
 export * from './DevResource';
