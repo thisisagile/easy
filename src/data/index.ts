@@ -5,3 +5,4 @@ export * from './DataProvider';
 export * from './Query';
 export * from './Select';
 export * from './Table';
+export * from './TableGateway';
