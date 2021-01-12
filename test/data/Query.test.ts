@@ -1,4 +1,4 @@
-import { list, Query } from '../../src';
+import { Database, list, Query } from '../../src';
 import { DevTable } from '../ref';
 
 describe('Query', () => {
@@ -6,7 +6,7 @@ describe('Query', () => {
   let query: Query;
 
   beforeEach(() => {
-    query = new Query();
+    query = new Query(Database.Main);
   });
 
   test('Adding clauses works', () => {
@@ -16,7 +16,7 @@ describe('Query', () => {
   });
 
   test('Adding clauses on to of works', () => {
-    const query = new Query(list(devs.level.is(3)));
+    const query = new Query(Database.Main, list(devs.level.is(3)));
     expect(query.clauses).toHaveLength(1);
     query.where(devs.name.is('Naoufal'));
     expect(query.clauses).toHaveLength(2);
