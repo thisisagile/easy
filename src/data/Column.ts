@@ -6,20 +6,28 @@ import { Text } from '../types';
 export class Column implements Text {
   constructor(readonly table: Table, readonly name: string, readonly options?: PropertyOptions) {}
 
-  get count(): Count {
-    return new Count(this, 'COUNT');
+  get count(): Counter {
+    return new Counter(this, 'COUNT');
   }
 
-  get max(): Count {
-    return new Count(this, 'MAX');
+  get max(): Counter {
+    return new Counter(this, 'MAX');
   }
 
-  get min(): Count {
-    return new Count(this, 'MIN');
+  get min(): Counter {
+    return new Counter(this, 'MIN');
   }
 
-  get length(): Count {
-    return new Count(this, 'LEN');
+  get sum(): Counter {
+    return new Counter(this, 'SUM');
+  }
+
+  get average(): Counter {
+    return new Counter(this, 'AVG');
+  }
+
+  get length(): Counter {
+    return new Counter(this, 'LEN');
   }
 
   get asc(): Order {
@@ -69,13 +77,15 @@ export class As extends Column {
   }
 }
 
-export class Count extends Column {
-  constructor(col: Column, private readonly counter: 'COUNT' | 'LEN' | 'MAX' | 'MIN') {
+export type CounterType = 'COUNT' | 'LEN' | 'MAX' | 'MIN' | 'AVG' | 'SUM';
+
+export class Counter extends Column {
+  constructor(col: Column, private readonly type: CounterType) {
     super(col.table, col.name, col.options);
   }
 
   toString(): string {
-    return `${this.counter}(${this.name})`;
+    return `${this.type}(${this.name})`;
   }
 }
 
