@@ -2,6 +2,7 @@ import { MappedRouteGateway, RestResult, RouteGateway } from '../../src';
 import { DevUri } from './DevUri';
 
 export class DevRoutedGateway extends RouteGateway {
+
   readonly route = DevUri.Developers;
   readonly routeId = DevUri.Developer;
 
