@@ -44,4 +44,9 @@ describe('Select', () => {
     const select = devs.select().where(devs.level.lessEqual(4), devs.level.greaterEqual(2));
     expect(select).toMatchText('SELECT * FROM DevTable WHERE DevTable.CodingLevel <= 4 AND DevTable.CodingLevel >= 2');
   });
+
+  test('With orderBy', () => {
+    const select = devs.select().orderBy(devs.level.desc, devs.name.asc);
+    expect(select).toMatchText('SELECT * FROM DevTable ORDERED BY DevTable.CodingLevel DESC, DevTable.Name ASC');
+  });
 });
