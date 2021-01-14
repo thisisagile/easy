@@ -1,7 +1,7 @@
-import { convert, Database, Table } from '../../src';
+import { convert, Database, SqlServerProvider, Table } from '../../src';
 
 export class DevDatabase extends Database {
-  static readonly DevDB = new Database('DevDB');
+  static readonly DevDB = new Database('DevDB', new SqlServerProvider());
 }
 
 export class DevTable extends Table {

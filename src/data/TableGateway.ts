@@ -1,24 +1,27 @@
-import { Constructor, Gateway, Id, Json, JsonValue, List } from '../types';
+import { Gateway, Id, Json, JsonValue, List } from '../types';
 import { Table } from './Table';
 import { DataProvider } from './DataProvider';
 
-export class TableGateway implements Gateway {
-  constructor(ctor: Constructor<Table>, readonly provider: DataProvider, readonly table = new ctor()) {}
+export class TableGateway<T extends Table> implements Gateway {
+
+  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
 
   add(item: Json): Promise<Json> {
     return Promise.resolve(undefined);
   }
 
   all(): Promise<List<Json>> {
-    return Promise.resolve(undefined);
+    return this.provider.query(this.table.select());
   }
 
   byId(id: Id): Promise<Json> {
-    return Promise.resolve(undefined);
+    const select = this.table.select().where(this.table.id.is(id));
+    return this.provider.query(select).then(js => js.first());
   }
 
   exists(id: Id): Promise<boolean> {
-    return Promise.resolve(false);
+    const select = this.table.select().where(this.table.id.is(id));
+    return this.provider.query(select).then(js => js.length > 0);
   }
 
   remove(id: Id): Promise<boolean> {
