@@ -3,6 +3,7 @@ import { Database } from './index';
 import { Column } from './Column';
 import { list, List, meta } from '../types';
 import { Select } from './Select';
+import { Delete } from './Delete';
 
 export class Table {
   readonly db = Database.Main;
@@ -22,4 +23,5 @@ export class Table {
   }
 
   select = (...columns: Column[]): Select => new Select(this, list(columns));
+  delete = (): Delete => new Delete(this, list());
 }

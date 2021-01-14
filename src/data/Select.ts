@@ -8,8 +8,8 @@ export class Select extends Query {
   protected grouped: List<Column> = list();
   protected limit = 0;
 
-  constructor(readonly subject: Table, readonly columns: List<Column> = list()) {
-    super(subject.db);
+  constructor(table: Table, readonly columns: List<Column> = list()) {
+    super(table);
   }
 
   top = (limit: number): this => {
@@ -31,7 +31,7 @@ export class Select extends Query {
     return (
       `SELECT ${this.limit > 0 ? `TOP ${this.limit} ` : ``}` +
       `${this.columns.length > 0 ? this.columns.map(c => c.toString()).join(`, `) : `*`} ` +
-      `FROM ${this.subject}` +
+      `FROM ${this.table}` +
       (this.clauses.length > 0 ? ` WHERE ${this.clauses.join(` AND `)}` : ``) +
       (this.grouped.length > 0 ? ` GROUP BY ${this.grouped.join(`, `)}` : ``) +
       (this.ordered.length > 0 ? ` ORDERED BY ${this.ordered.join(`, `)}` : ``)
