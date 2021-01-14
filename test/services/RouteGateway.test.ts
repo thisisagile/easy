@@ -46,7 +46,7 @@ describe('RouteGateway', () => {
     api.delete = mock.resolve(toRestResult());
     const res = await gateway.remove(42);
     expect(api.delete).toHaveBeenCalledWith(DevUri.Developer.id(42));
-    expect(res).toBeTruthy();
+    expect(res).toBe(0);
   });
 
   test('get calls api correctly with transform', async () => {

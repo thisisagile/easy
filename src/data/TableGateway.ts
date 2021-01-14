@@ -23,8 +23,8 @@ export class TableGateway<T extends Table> implements Gateway {
     return this.provider.query(select).then(js => js.length > 0);
   }
 
-  remove(id: Id): Promise<boolean> {
-    return Promise.resolve(false);
+  remove(id: Id): Promise<number> {
+    return this.provider.command(this.table.delete().where(this.table.id.is(id)));
   }
 
   search(q: JsonValue): Promise<List<Json>> {
