@@ -4,8 +4,8 @@ import { Table } from './Table';
 import { Query } from './Query';
 
 export class Select extends Query {
-  readonly ordered: List<Order> = list();
-  readonly grouped: List<Column> = list();
+  protected ordered: List<Order> = list();
+  protected grouped: List<Column> = list();
   protected limit = 0;
 
   constructor(readonly subject: Table, readonly columns: List<Column> = list()) {

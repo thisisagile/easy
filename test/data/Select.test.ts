@@ -10,16 +10,6 @@ describe('Select', () => {
     select = devs.select();
   });
 
-  test('orderBy', () => {
-    select.orderBy(devs.name.asc, devs.level.desc);
-    expect(select.ordered).toHaveLength(2);
-  });
-
-  test('groupBy', () => {
-    select.groupBy(devs.level);
-    expect(select.grouped).toHaveLength(1);
-  });
-
   test('Without columns', () => {
     const select = devs.select();
     expect(select).toMatchText('SELECT * FROM DevTable');
@@ -48,5 +38,10 @@ describe('Select', () => {
   test('With orderBy', () => {
     const select = devs.select().orderBy(devs.level.desc, devs.name.asc);
     expect(select).toMatchText('SELECT * FROM DevTable ORDERED BY DevTable.CodingLevel DESC, DevTable.Name ASC');
+  });
+
+  test('With groupBy', () => {
+    const select = devs.select(devs.language, devs.level.max.as('Level')).groupBy(devs.language);
+    expect(select).toMatchText('SELECT DevTable.Language, MAX(CodingLevel) AS Level FROM DevTable GROUP BY DevTable.Language');
   });
 });

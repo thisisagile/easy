@@ -3,7 +3,6 @@ import { Table } from './Table';
 import { DataProvider } from './DataProvider';
 
 export class TableGateway<T extends Table> implements Gateway {
-
   constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
 
   add(item: Json): Promise<Json> {
