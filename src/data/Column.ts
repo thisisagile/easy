@@ -60,12 +60,12 @@ export class Column implements Text {
 }
 
 export class As extends Column {
-  constructor(col: Column, private readonly alias: string) {
+  constructor(protected col: Column, protected readonly alias: string) {
     super(col.table, col.name, col.options);
   }
 
   toString(): string {
-    return `${super.toString()} AS ${this.alias}`;
+    return `${this.col.toString()} AS ${this.alias}`;
   }
 }
 
