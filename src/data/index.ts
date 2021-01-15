@@ -1,4 +1,5 @@
 export * from './Clause';
+export * from './CollectionGateway';
 export * from './Column';
 export * from './Database';
 export * from './DataProvider';
