@@ -31,9 +31,9 @@ describe('Map', () => {
   const tester = new TesterMap();
 
   test('count properties', () => {
-    expect(empty.columns).toHaveLength(0);
-    expect(dev.columns).toHaveLength(3);
-    expect(tester.columns).toHaveLength(4);
+    expect(empty.properties).toHaveLength(0);
+    expect(dev.properties).toHaveLength(3);
+    expect(tester.properties).toHaveLength(4);
   });
 
   test('empty map.from with undefined is undefined', () => {
