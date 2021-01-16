@@ -30,12 +30,12 @@ export class Column implements Text {
     return this.function('LEN');
   }
 
-  get asc(): Column {
-    return this.format( '$col ASC');
+  get asc(): OrderColumn {
+    return this.format('$col ASC') as OrderColumn;
   }
 
-  get desc(): Column {
-    return this.format( '$col DESC');
+  get desc(): OrderColumn {
+    return this.format('$col DESC') as OrderColumn;
   }
 
   function = (func: string): Column => this.format(`${func}($name)`);
@@ -64,28 +64,21 @@ export class Column implements Text {
 
   as = (as: string): Column => this.format(`$col AS ${as}`);
 
-  toString(): string { return `${this.table}.${this.name}`; }
+  toString(): string {
+    return `${this.table}.${this.name}`;
+  }
 
   protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert ?? convert.default);
 }
 
 export class PatternColumn extends Column {
-  constructor(protected col: Column, protected pattern: string) { super(col.table, col.name); }
-
-  toString(): string {
-    return this.pattern
-      .replace('$col', this.col.toString())
-      .replace('$table', this.col.table.toString)
-      .replace('$name', this.col.name);
-  }
-}
-
-export class Order extends Column {
-  constructor(col: Column, private readonly direction: 'ASC' | 'DESC') {
+  constructor(protected col: Column, protected pattern: string) {
     super(col.table, col.name);
   }
 
   toString(): string {
-    return `${super.toString()} ${this.direction}`;
+    return this.pattern.replace('$col', this.col.toString()).replace('$table', this.col.table.toString).replace('$name', this.col.name);
   }
 }
+
+export class OrderColumn extends PatternColumn {}

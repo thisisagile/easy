@@ -1,10 +1,10 @@
 import { list, List } from '../types';
-import { Column, Order } from './Column';
+import { Column, OrderColumn } from './Column';
 import { Table } from './Table';
 import { Query } from './Query';
 
 export class Select extends Query {
-  protected ordered: List<Order> = list();
+  protected ordered: List<OrderColumn> = list();
   protected grouped: List<Column> = list();
   protected limit = 0;
 
@@ -17,7 +17,7 @@ export class Select extends Query {
     return this;
   };
 
-  orderBy = (...ordered: Order[]): this => {
+  orderBy = (...ordered: OrderColumn[]): this => {
     this.ordered.add(ordered);
     return this;
   };

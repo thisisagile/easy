@@ -55,5 +55,5 @@ describe('Column', () => {
   test('Combinations', () => {
     expect(name.count.as('Counter')).toMatchText('COUNT(Name) AS Counter');
     expect(devs.level.max.as('Level')).toMatchText('MAX(CodingLevel) AS Level');
-  })
+  });
 });

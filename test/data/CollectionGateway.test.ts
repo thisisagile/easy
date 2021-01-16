@@ -1,10 +1,8 @@
-import { CollectionGateway } from '../../src/data/CollectionGateway';
+import { CollectionGateway, List, toJson } from '../../src';
 import { Dev, DevCollectionGateway } from '../ref';
-import { List, toJson } from '../../src';
 import { Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('CollectionGateway', () => {
-
   let gateway: DevCollectionGateway;
 
   beforeEach(() => {

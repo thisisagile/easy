@@ -1,8 +1,7 @@
 import { TableGateway } from '../../src';
-import { DevTableGateway } from '../ref/DevTableGateway';
+import { DevTableGateway } from '../ref';
 
 describe('TableGateway', () => {
-
   let target: DevTableGateway;
 
   beforeEach(() => {
