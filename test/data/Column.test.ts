@@ -14,6 +14,7 @@ describe('quote', () => {
 describe('Column', () => {
   const devs = new DevTable();
   const name = devs.name;
+  const level = devs.level;
 
   test('Clauses', () => {
     expect(name.is(3)).toMatchText('DevTable.Name = 3');
@@ -32,6 +33,10 @@ describe('Column', () => {
     expect(name.lessEqual(3)).toMatchText('DevTable.Name <= 3');
     expect(name.greater(3)).toMatchText('DevTable.Name > 3');
     expect(name.greaterEqual(3)).toMatchText('DevTable.Name >= 3');
+  });
+
+  test('Clauses with converter', () => {
+    expect(level.is(3)).toMatchText("DevTable.CodingLevel = '3'");
   });
 
   test('as', () => {

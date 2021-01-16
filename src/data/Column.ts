@@ -1,4 +1,4 @@
-import { convert, PropertyOptions } from '../utils';
+import { PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
 import { Table } from './Table';
 import { Text } from '../types';
@@ -68,7 +68,7 @@ export class Column implements Text {
     return `${this.table}.${this.name}`;
   }
 
-  protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert ?? convert.default);
+  protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert);
 }
 
 export class PatternColumn extends Column {
