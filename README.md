@@ -4,7 +4,7 @@
 [![npm package](https://img.shields.io/npm/v/@thisisagile/easy.svg)](https://www.npmjs.com/package/@thisisagile/easy)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-Straightforward library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
+Straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
 
 This library will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
@@ -17,8 +17,6 @@ It is the responsibility of the classes in the data layer to fetch and deliver d
 # Domain
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
-
-See [Domain](Domain).
 
 ## Entities
 Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
