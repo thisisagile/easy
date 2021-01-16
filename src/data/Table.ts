@@ -1,18 +1,12 @@
 import { Map, PropertyOptions } from '../utils';
 import { Database } from './index';
 import { Column } from './Column';
-import { list, List, meta } from '../types';
+import { list } from '../types';
 import { Select } from './Select';
 import { Delete } from './Delete';
 
-export class Table extends Map {
+export class Table extends Map<Column> {
   readonly db = Database.Main;
-
-  get columns(): List<[string, Column]> {
-    return meta(this)
-      .entries<Column>()
-      .filter(([, v]) => v instanceof Column);
-  }
 
   prop = (name: string, options?: PropertyOptions): Column => new Column(this, name, options);
 

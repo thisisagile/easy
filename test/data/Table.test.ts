@@ -12,7 +12,7 @@ describe('Table', () => {
   test('default setup works', () => {
     expect(table.db).toBe(DevDatabase.DevDB);
     expect(table.id.name).toBe('Id');
-    expect(table.columns).toHaveLength(4);
+    expect(table.properties).toHaveLength(4);
   });
 
   test('select without columns', () => {
