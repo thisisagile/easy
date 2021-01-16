@@ -1,26 +1,26 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { convert, Map, col } from '../../src';
+import { convert, Map, toProperty } from '../../src';
 
 describe('prop', () => {
   const map = new DevMap();
 
   test('Simple prop', () => {
-    const p = col(map, 'Id');
+    const p = toProperty(map, 'Id');
     expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
   });
 
   test('Prop with empty options', () => {
-    const p = col(map, 'Id', {});
+    const p = toProperty(map, 'Id', {});
     expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
   });
 
   test('Prop with default', () => {
-    const p = col(map, 'Id', { def: 3 });
+    const p = toProperty(map, 'Id', { def: 3 });
     expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.default } });
   });
 
   test('Prop with default and converter', () => {
-    const p = col(map, 'Id', { def: 3, convert: convert.toNumber.fromString });
+    const p = toProperty(map, 'Id', { def: 3, convert: convert.toNumber.fromString });
     expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.toNumber.fromString } });
   });
 });
