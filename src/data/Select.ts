@@ -31,8 +31,8 @@ export class Select extends Query {
     return (
       `SELECT ` +
       ifGet(this.limit, `TOP ${this.limit} `, '') +
-      ifGet(this.columns.length, this.columns.join(`, `), '*') + ' ' +
-      `FROM ${this.table}` +
+      ifGet(this.columns.length, this.columns.join(`, `), '*') +
+      ` FROM ${this.table}` +
       ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +
       ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(`, `)}`, '') +
       ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)}`, '')
