@@ -1,4 +1,4 @@
-import { list, List } from '../types';
+import { ifGet, list, List } from '../types';
 import { Column, OrderColumn } from './Column';
 import { Table } from './Table';
 import { Query } from './Query';
@@ -29,12 +29,13 @@ export class Select extends Query {
 
   toString(): string {
     return (
-      `SELECT ${this.limit > 0 ? `TOP ${this.limit} ` : ``}` +
-      `${this.columns.length > 0 ? this.columns.map(c => c.toString()).join(`, `) : `*`} ` +
+      `SELECT ` +
+      ifGet(this.limit, `TOP ${this.limit} `, '') +
+      ifGet(this.columns.length, this.columns.join(`, `), '*') + ' ' +
       `FROM ${this.table}` +
-      (this.clauses.length > 0 ? ` WHERE ${this.clauses.join(` AND `)}` : ``) +
-      (this.grouped.length > 0 ? ` GROUP BY ${this.grouped.join(`, `)}` : ``) +
-      (this.ordered.length > 0 ? ` ORDERED BY ${this.ordered.join(`, `)}` : ``)
+      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +
+      ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(`, `)}`, '') +
+      ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)}`, '')
     );
   }
 }
