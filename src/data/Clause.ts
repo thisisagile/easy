@@ -15,6 +15,6 @@ export class Clause implements Text {
 }
 
 export const toClause = (first: unknown, operator: string, second: unknown, conv: Convert = convert.default): Clause =>
-  new Clause(first, operator, conv.to(second));
+  new Clause(first, operator, conv.from(second));
 
 export const isClause = (c?: unknown): c is Clause => isA<Clause>(c, 'and', 'or');
