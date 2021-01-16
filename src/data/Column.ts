@@ -4,39 +4,43 @@ import { Table } from './Table';
 import { Text } from '../types';
 
 export class Column implements Text {
-  constructor(readonly table: Table, readonly name: string, readonly options?: PropertyOptions) {}
+  constructor(readonly table: Table, readonly name: string, readonly options: PropertyOptions = {}) {}
 
-  get count(): Counter {
-    return new Counter(this, 'COUNT');
+  get count(): Column {
+    return this.function('COUNT');
   }
 
-  get max(): Counter {
-    return new Counter(this, 'MAX');
+  get max(): Column {
+    return this.function('MAX');
   }
 
-  get min(): Counter {
-    return new Counter(this, 'MIN');
+  get min(): Column {
+    return this.function('MIN');
   }
 
-  get sum(): Counter {
-    return new Counter(this, 'SUM');
+  get sum(): Column {
+    return this.function('SUM');
   }
 
-  get average(): Counter {
-    return new Counter(this, 'AVG');
+  get average(): Column {
+    return this.function('AVG');
   }
 
-  get length(): Counter {
-    return new Counter(this, 'LEN');
+  get length(): Column {
+    return this.function('LEN');
   }
 
-  get asc(): Order {
-    return new Order(this, 'ASC');
+  get asc(): Column {
+    return this.format( '$col ASC');
   }
 
-  get desc(): Order {
-    return new Order(this, 'DESC');
+  get desc(): Column {
+    return this.format( '$col DESC');
   }
+
+  function = (func: string): Column => this.format(`${func}($name)`);
+
+  format = (pattern: string): Column => new PatternColumn(this, pattern);
 
   is = (value: unknown): Clause => this.clause('=', value);
 
@@ -58,40 +62,27 @@ export class Column implements Text {
 
   greaterEqual = (value: unknown): Clause => this.clause('>=', value);
 
-  as = (alias: string): As => new As(this, alias);
+  as = (as: string): Column => this.format(`$col AS ${as}`);
 
-  toString(): string {
-    return `${this.table}.${this.name}`;
-  }
+  toString(): string { return `${this.table}.${this.name}`; }
 
   protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert ?? convert.default);
 }
 
-export class As extends Column {
-  constructor(protected col: Column, protected readonly alias: string) {
-    super(col.table, col.name, col.options);
-  }
+export class PatternColumn extends Column {
+  constructor(protected col: Column, protected pattern: string) { super(col.table, col.name); }
 
   toString(): string {
-    return `${this.col.toString()} AS ${this.alias}`;
-  }
-}
-
-export type CounterType = 'COUNT' | 'LEN' | 'MAX' | 'MIN' | 'AVG' | 'SUM';
-
-export class Counter extends Column {
-  constructor(col: Column, private readonly type: CounterType) {
-    super(col.table, col.name, col.options);
-  }
-
-  toString(): string {
-    return `${this.type}(${this.name})`;
+    return this.pattern
+      .replace('$col', this.col.toString())
+      .replace('$table', this.col.table.toString)
+      .replace('$name', this.col.name);
   }
 }
 
 export class Order extends Column {
   constructor(col: Column, private readonly direction: 'ASC' | 'DESC') {
-    super(col.table, col.name, col.options);
+    super(col.table, col.name);
   }
 
   toString(): string {

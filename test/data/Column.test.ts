@@ -39,7 +39,7 @@ describe('Column', () => {
   });
 
   test('count', () => {
-    expect(name.count.as('Counter')).toMatchText('COUNT(Name) AS Counter');
+    expect(name.count).toMatchText('COUNT(Name)');
     expect(name.max).toMatchText('MAX(Name)');
     expect(name.min).toMatchText('MIN(Name)');
     expect(name.length).toMatchText('LEN(Name)');
@@ -51,4 +51,9 @@ describe('Column', () => {
     expect(name.asc).toMatchText('DevTable.Name ASC');
     expect(name.desc).toMatchText('DevTable.Name DESC');
   });
+
+  test('Combinations', () => {
+    expect(name.count.as('Counter')).toMatchText('COUNT(Name) AS Counter');
+    expect(devs.level.max.as('Level')).toMatchText('MAX(CodingLevel) AS Level');
+  })
 });
