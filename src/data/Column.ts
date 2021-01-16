@@ -1,10 +1,10 @@
-import { PropertyOptions } from '../utils';
+import { Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
 import { Table } from './Table';
 import { Text } from '../types';
 
-export class Column implements Text {
-  constructor(readonly table: Table, readonly name: string, readonly options: PropertyOptions = {}) {}
+export class Column implements Text, Property {
+  constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {}
 
   get count(): Column {
     return this.function('COUNT');
@@ -65,7 +65,7 @@ export class Column implements Text {
   as = (as: string): Column => this.format(`$col AS ${as}`);
 
   toString(): string {
-    return `${this.table}.${this.name}`;
+    return `${this.owner}.${this.name}`;
   }
 
   protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert);
@@ -73,11 +73,11 @@ export class Column implements Text {
 
 export class PatternColumn extends Column {
   constructor(protected col: Column, protected pattern: string) {
-    super(col.table, col.name);
+    super(col.owner, col.name);
   }
 
   toString(): string {
-    return this.pattern.replace('$col', this.col.toString()).replace('$table', this.col.table.toString).replace('$name', this.col.name);
+    return this.pattern.replace('$col', this.col.toString()).replace('$table', this.col.owner.toString).replace('$name', this.col.name);
   }
 }
 
