@@ -9,12 +9,12 @@ describe('Delete', () => {
   });
 
   test('With with one clause', () => {
-    expect(devs.delete().where(devs.level.less(3))).toMatchText('DELETE FROM DevTable WHERE DevTable.CodingLevel < 3');
+    expect(devs.delete().where(devs.level.less(3))).toMatchText("DELETE FROM DevTable WHERE DevTable.CodingLevel < '3'");
   });
 
   test('With with multiple clauses', () => {
     expect(devs.delete().where(devs.level.less(3), devs.language.is('Python'))).toMatchText(
-      "DELETE FROM DevTable WHERE DevTable.CodingLevel < 3 AND DevTable.Language = 'Python'"
+      "DELETE FROM DevTable WHERE DevTable.CodingLevel < '3' AND DevTable.Language = 'Python'"
     );
   });
 });
