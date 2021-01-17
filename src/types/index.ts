@@ -14,7 +14,5 @@ export * from './Result';
 export * from './Results';
 export * from './Text';
 export * from './Uri';
+export * from './Uuid';
 export * from './Validatable';
-export { inFuture } from './IsDate';
-export { inPast } from './IsDate';
-export { isDate } from './IsDate';

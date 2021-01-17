@@ -1,7 +1,7 @@
-import { newId } from '../../src';
+import { toId } from '../../src';
 
 describe('newId', () => {
   test('Works', () => {
-    expect(newId()).toBeDefined();
+    expect(toId()).toBeDefined();
   });
 });
