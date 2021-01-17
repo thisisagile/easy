@@ -30,6 +30,11 @@ describe('Map', () => {
   const dev = new DevMap();
   const tester = new TesterMap();
 
+  test('properties are correct', () => {
+    expect(dev.id.options.convert).toBeDefined();
+    expect(dev.id.options.def).toBe(42);
+  });
+
   test('count properties', () => {
     expect(empty.properties).toHaveLength(0);
     expect(dev.properties).toHaveLength(3);

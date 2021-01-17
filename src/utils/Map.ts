@@ -1,7 +1,7 @@
 import { Json, List } from '../types';
 import { clone, Property, PropertyOptions, toProperties, toProperty } from './Property';
 
-export class Map<P extends Property> {
+export class Map<P extends Property = Property> {
   get properties(): List<[string, P]> {
     return toProperties(this);
   }
