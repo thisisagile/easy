@@ -1,29 +1,5 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { convert, Map, toProperty } from '../../src';
-
-describe('prop', () => {
-  const map = new DevMap();
-
-  test('Simple prop', () => {
-    const p = toProperty(map, 'Id');
-    expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
-  });
-
-  test('Prop with empty options', () => {
-    const p = toProperty(map, 'Id', {});
-    expect(p).toMatchObject({ name: 'Id', options: { def: undefined, convert: convert.default } });
-  });
-
-  test('Prop with default', () => {
-    const p = toProperty(map, 'Id', { def: 3 });
-    expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.default } });
-  });
-
-  test('Prop with default and converter', () => {
-    const p = toProperty(map, 'Id', { def: 3, convert: convert.toNumber.fromString });
-    expect(p).toMatchObject({ name: 'Id', options: { def: 3, convert: convert.toNumber.fromString } });
-  });
-});
+import { isUuid, Map, toId } from '../../src';
 
 describe('Map', () => {
   const empty = new Map();
@@ -71,8 +47,17 @@ describe('Map', () => {
     expect(j).toEqual({ id: 54, name: 'Jeroen', level: 3 });
   });
 
-  test('map.from without id uses default', () => {
+  test('map.from without id, so it uses default value', () => {
     const j = dev.in(devData.withoutId);
     expect(j).toEqual({ id: 42, name: 'Sander', level: 3 });
+  });
+
+  class DevMapWithFunction extends DevMap {
+    readonly id = this.prop('Id', { def: () => toId() });
+  }
+
+  test('map.from without id, so it uses default function', () => {
+    const j = new DevMapWithFunction().in(devData.withoutId);
+    expect(isUuid(j.id.toString())).toBeTruthy();
   });
 });
