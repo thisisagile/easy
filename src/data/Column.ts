@@ -1,10 +1,12 @@
-import { Property, PropertyOptions } from '../utils';
+import { convert, Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
 import { Table } from './Table';
 import { Text } from '../types';
 
 export class Column implements Text, Property {
-  constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {}
+  constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {
+    this.options = { def: options?.def, convert: options?.convert ?? convert.default };
+  }
 
   get count(): Column {
     return this.function('COUNT');
