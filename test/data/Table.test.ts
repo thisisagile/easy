@@ -1,5 +1,5 @@
 import { Dev, devData, DevDatabase, DevTable } from '../ref';
-import { Delete, Select, Table } from '../../src';
+import { Delete, isUuid, Select, Table } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Table', () => {
@@ -85,5 +85,12 @@ describe('Table in and out', () => {
   test('table.from without id uses default', () => {
     const j = dev.in(devData.withoutId);
     expect(j).toEqual({ id: 42, name: 'Sander', level: 3, language: 'TypeScript' });
+  });
+
+  class UuidTable extends Table {}
+
+  test('table.from without id uses default uuid if not overriden', () => {
+    const j = new UuidTable().in({});
+    expect(isUuid(j.id)).toBeTruthy();
   });
 });
