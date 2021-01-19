@@ -11,27 +11,33 @@ describe('Search', () => {
     select = new Search<Dev>(repo);
   });
 
-  test('all works', () => {
+  test('all works', async () => {
     repo.all = mock.resolve(devs);
-    expect(select.all()).toBeDefined();
+    await expect(select.all()).resolves.toStrictEqual(devs);
     expect(repo.all).toHaveBeenCalled();
   });
 
-  test('byId works', () => {
+  test('byId works', async () => {
     repo.byId = mock.resolve(devs.first());
-    expect(select.byId(42)).toBeDefined();
+    await expect(select.byId(42)).resolves.toStrictEqual(devs.first());
     expect(repo.byId).toHaveBeenCalledWith(42);
   });
 
-  test('search works', () => {
+  test('search works', async () => {
     repo.search = mock.resolve(devs);
-    expect(select.search(42)).toBeDefined();
+    await expect(select.search(42)).resolves.toStrictEqual(devs);
     expect(repo.search).toHaveBeenCalledWith(42);
   });
 
-  test('exists works', () => {
+  test('search undefined returns empty list', async () => {
+    repo.search = mock.resolve(devs);
+    await expect(select.search(undefined)).resolves.toHaveLength(0);
+    expect(repo.search).not.toHaveBeenCalled();
+  });
+
+  test('exists works', async () => {
     repo.exists = mock.resolve(true);
-    expect(select.exists(42)).toBeDefined();
+    await expect(select.exists(42)).resolves.toBeTruthy();
     expect(repo.exists).toHaveBeenCalledWith(42);
   });
 });
