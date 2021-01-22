@@ -9,8 +9,11 @@ export class Search<T extends Record> {
   byId = (id: Id): Promise<T> => this.repo.byId(id);
   search = (q: JsonValue): Promise<List<T>> => {
     return choose<Promise<List<T>>, JsonValue>(q)
-      .case(q => isDefined(q), (q) => this.repo.search(q))
+      .case(
+        q => isDefined(q),
+        q => this.repo.search(q)
+      )
       .else(resolve(list()));
-  }
+  };
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);
 }

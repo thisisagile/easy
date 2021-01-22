@@ -1,37 +1,38 @@
-import { Gateway, Id, Json, JsonValue, List } from '../types';
+import { Gateway, Id, isDefined, Json, List } from '../types';
 import { Table } from './Table';
 import { DataProvider } from './DataProvider';
+import { when } from '../validation';
 
 export class TableGateway<T extends Table> implements Gateway {
   constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
-
-  add(item: Json): Promise<Json> {
-    return Promise.resolve(undefined);
-  }
 
   all(): Promise<List<Json>> {
     return this.provider.query(this.table.select());
   }
 
   byId(id: Id): Promise<Json> {
-    const select = this.table.select().where(this.table.id.is(id));
-    return this.provider.query(select).then(js => js.first());
+    return this.provider.query(this.table.select().where(this.table.id.is(id))).then(js => js.first());
   }
 
   exists(id: Id): Promise<boolean> {
-    const select = this.table.select().where(this.table.id.is(id));
-    return this.provider.query(select).then(js => js.length > 0);
+    return this.byId(id).then(j => isDefined(j));
+  }
+
+  add(item: Json): Promise<Json> {
+    return this.provider
+      .query(this.table.insert(item))
+      .then(js => when(js.first()).not.isDefined.reject(`Could not add items with id ${item.id}`))
+      .then(j => this.table.in(j));
   }
 
   remove(id: Id): Promise<number> {
     return this.provider.command(this.table.delete().where(this.table.id.is(id)));
   }
 
-  search(q: JsonValue): Promise<List<Json>> {
-    return Promise.resolve(undefined);
-  }
-
   update(item: Json): Promise<Json> {
-    return Promise.resolve(undefined);
+    return this.provider
+      .query(this.table.update(item).where(this.table.id.is(item.id)))
+      .then(js => when(js.first()).not.isDefined.reject(`Could not update item with id ${item.id}`))
+      .then(j => this.table.in(j));
   }
 }
