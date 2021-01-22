@@ -1,4 +1,4 @@
-import { Enum, Get, isDefined, Json, ofGet } from '../types';
+import { Enum, Get, ifGet, Json, ofGet } from '../types';
 
 const formEncode = (body: unknown): string =>
   Object.entries(body)
@@ -18,5 +18,5 @@ export class ContentType extends Enum {
     super(name, type);
   }
 
-  encode = (body?: Json): string => (isDefined(body) ? ofGet(this.encoder, body) : undefined);
+  encode = (body?: Json): string => ifGet(body, ofGet(this.encoder, body), undefined);
 }
