@@ -1,7 +1,7 @@
 import { Id, Json, JsonValue, Text } from '../types';
 
 export class Req {
-  constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: Json) {}
+  constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: unknown) {}
 
   get id(): Id {
     return this.get('id');

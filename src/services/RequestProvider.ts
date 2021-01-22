@@ -1,4 +1,4 @@
-import { Json, Uri } from '../types';
+import { Uri } from '../types';
 import { HttpVerb } from './HttpVerb';
 import { RequestOptions } from './RequestOptions';
 import { RestResult } from './RestResult';
@@ -6,7 +6,7 @@ import { RestResult } from './RestResult';
 export type Request = {
   uri: Uri;
   verb: HttpVerb;
-  body?: Json;
+  body?: unknown;
   transform?: (r: any) => any;
   options?: RequestOptions;
 };
