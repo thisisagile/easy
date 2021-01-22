@@ -2,10 +2,11 @@ import { ContentType } from './ContentType';
 import { Enum, isNotEmpty, JsonValue } from '../types';
 
 export class RequestOptions extends Enum {
+  static Form = new RequestOptions(ContentType.Form);
   static Json = new RequestOptions(ContentType.Json);
+  static Stream = new RequestOptions(ContentType.Stream);
   static Text = new RequestOptions(ContentType.Text);
   static Xml = new RequestOptions(ContentType.Xml);
-  static Form = new RequestOptions(ContentType.Form);
 
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}) {
     super(type.name);
