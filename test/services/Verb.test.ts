@@ -5,7 +5,7 @@ describe('Verb', () => {
   test('Verb works on a property', () => {
     const verb: Verb = meta(new DevsResource()).property('all').get('verb');
     expect(verb.verb).toBe(HttpVerb.Get);
-    expect(verb.onOk).toBe(HttpStatus.Ok);
+    expect(verb.options.onOk).toBe(HttpStatus.Ok);
   });
 
   test('Verb works on a function', () => {

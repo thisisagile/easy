@@ -2,18 +2,35 @@ import { HttpVerb } from './HttpVerb';
 import { HttpStatus } from './HttpStatus';
 import { meta } from '../types';
 
-export type Verb = { verb: HttpVerb; onOk: HttpStatus; onError: HttpStatus };
+export type VerbOptions = { onOk: HttpStatus; onNotFound: HttpStatus; onError: HttpStatus };
+export type Verb = { verb: HttpVerb; options: VerbOptions };
 
-const verb = <T>(v: Verb): PropertyDecorator => (subject: unknown, property: string): void => {
-  meta(subject).property(property).set('verb', v);
+const toVerbOptions = (options: VerbOptions): VerbOptions => ({
+  onOk: options?.onOk ?? HttpStatus.Ok,
+  onNotFound: options?.onNotFound ?? HttpStatus.NotFound,
+  onError: options?.onError ?? HttpStatus.BadRequest,
+});
+
+const verb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (subject: unknown, property: string): void => {
+  meta(subject)
+    .property(property)
+    .set('verb', { verb, options: toVerbOptions(options) });
 };
 
-export const get = (onOk = HttpStatus.Ok, onError = HttpStatus.NotFound): PropertyDecorator => verb({ verb: HttpVerb.Get, onOk, onError });
-
-export const put = (onOk = HttpStatus.Ok, onError = HttpStatus.BadRequest): PropertyDecorator => verb({ verb: HttpVerb.Put, onOk, onError });
-
-export const patch = (onOk = HttpStatus.Ok, onError = HttpStatus.BadRequest): PropertyDecorator => verb({ verb: HttpVerb.Patch, onOk, onError });
-
-export const post = (onOk = HttpStatus.Created, onError = HttpStatus.BadRequest): PropertyDecorator => verb({ verb: HttpVerb.Post, onOk, onError });
-
-export const del = (onOk = HttpStatus.NoContent, onError = HttpStatus.BadRequest): PropertyDecorator => verb({ verb: HttpVerb.Delete, onOk, onError });
+export const get = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Get, options);
+export const find = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Get, {
+  ...options,
+  onNotFound: HttpStatus.Ok,
+});
+export const put = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Put, options);
+export const patch = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Patch, options);
+export const post = (options?: VerbOptions): PropertyDecorator =>
+  verb(HttpVerb.Post, {
+    ...options,
+    onOk: HttpStatus.Created,
+  });
+export const del = (options?: VerbOptions): PropertyDecorator =>
+  verb(HttpVerb.Delete, {
+    ...options,
+    onOk: HttpStatus.NoContent,
+  });
