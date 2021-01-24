@@ -1,10 +1,10 @@
 import { isNotEmpty } from './Is';
 import { list } from './List';
 import { Text } from './Text';
+import { toName } from './Constructor';
 
 export type Segment = Text & { key: string; segment?: string; query?: (value: unknown) => string };
 
-const name = (name?: string): string => name?.replace('Uri', '').toLowerCase();
 const toSegment = (key: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
   key,
   segment: segment ?? key,
@@ -14,7 +14,7 @@ const toSegment = (key: string, { segment, query }: { segment?: string; query?: 
 
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? '$host' }),
-  resource: (resource: string): Segment => toSegment(name(resource)),
+  resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri')),
   segment: (key?: string): Segment => toSegment(key),
   path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (value ? `${key}=${value}` : undefined) }),
@@ -42,7 +42,7 @@ export class EasyUri implements Uri {
   static readonly query = uri.query('q');
 
   readonly host = uri.host();
-  readonly resource = uri.resource(this.constructor.name);
+  readonly resource = uri.resource(this);
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
