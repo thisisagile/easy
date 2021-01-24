@@ -1,34 +1,35 @@
-import { CollectionGateway, List, toJson } from '../../src';
+import { CollectionGateway, Json, List, toJson } from '../../src';
 import { Dev, DevCollectionGateway } from '../ref';
-import { Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('CollectionGateway', () => {
+  const dev = Dev.All.first();
   let gateway: DevCollectionGateway;
 
   beforeEach(() => {
     gateway = new DevCollectionGateway();
   });
 
-  test('Given product with id exists when getting product by id then return product', async () => {
-    await expect(gateway.byId(Dev.All.first().id)).resolves.toStrictEqual(Dev.All.first().toJSON());
+  test('byId with known id returns product', () => {
+    return expect(gateway.byId(dev.id)).resolves.toStrictEqual(dev.toJSON());
   });
 
-  test('Given unknown id when getting product by id then no product is returned', async () => {
-    await expect(gateway.byId('???')).resolves.toBeUndefined();
+  test('byId with unknown id returns undefined', () => {
+    return expect(gateway.byId(0)).resolves.toBeUndefined();
   });
 
-  test('Given product when getting product by id then returned product is copy', async () => {
-    const a: any = await gateway.byId(Dev.All.first().id);
+  test('byId returns a copy', async () => {
+    const a = await gateway.byId(dev.id);
     a.name = 'Hello';
-    expect(a).not.toStrictEqual(Dev.All.first().toJSON());
+    expect(a).not.toStrictEqual(dev.toJSON());
+    return expect(gateway.byId(dev.id)).resolves.not.toStrictEqual(a);
   });
 
-  test('When getting all products then all products are returned', async () => {
-    const a: List<Json> = await gateway.all();
+  test('all returns all products', async () => {
+    const a = await gateway.all();
     expect([...a]).toStrictEqual([...Dev.All.toJSON()]);
   });
 
-  test('When getting all products then returned products are copy', async () => {
+  test('all returns a copy of all products', async () => {
     const a: List<Json> = await gateway.all();
     a.first().name = 'Hello';
     expect(a).not.toStrictEqual(toJson(Dev.All));
