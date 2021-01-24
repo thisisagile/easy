@@ -2,7 +2,7 @@ import { HttpVerb } from './HttpVerb';
 import { HttpStatus } from './HttpStatus';
 import { meta } from '../types';
 
-export type VerbOptions = { onOk: HttpStatus; onNotFound: HttpStatus; onError: HttpStatus };
+export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus };
 export type Verb = { verb: HttpVerb; options: VerbOptions };
 
 const toVerbOptions = (options: VerbOptions): VerbOptions => ({
@@ -18,19 +18,20 @@ const verb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (s
 };
 
 export const get = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Get, options);
-export const find = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Get, {
-  ...options,
-  onNotFound: HttpStatus.Ok,
-});
+export const search = (options?: VerbOptions): PropertyDecorator =>
+  verb(HttpVerb.Get, {
+    onNotFound: HttpStatus.Ok,
+    ...options,
+  });
 export const put = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Put, options);
 export const patch = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Patch, options);
 export const post = (options?: VerbOptions): PropertyDecorator =>
   verb(HttpVerb.Post, {
-    ...options,
     onOk: HttpStatus.Created,
+    ...options,
   });
 export const del = (options?: VerbOptions): PropertyDecorator =>
   verb(HttpVerb.Delete, {
-    ...options,
     onOk: HttpStatus.NoContent,
+    ...options,
   });
