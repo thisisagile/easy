@@ -1,5 +1,13 @@
-import { Dev } from '../ref';
-import { ifGet, list } from '../../src';
+import { Dev, DevUri } from '../ref';
+import { ifGet, list, toName } from '../../src';
+
+describe('toName', () => {
+  test('check', () => {
+    expect(toName(undefined)).toBe('');
+    expect(toName(Dev.Naoufal)).toBe('dev');
+    expect(toName(DevUri.Developers, 'Uri')).toBe('dev');
+  });
+});
 
 describe('ifGet', () => {
   const empty = list();
