@@ -24,14 +24,22 @@ describe('CollectionGateway', () => {
     return expect(gateway.byId(dev.id)).resolves.not.toStrictEqual(a);
   });
 
-  test('all returns all products', async () => {
+  test('all returns all devs', async () => {
     const a = await gateway.all();
     expect([...a]).toStrictEqual([...Dev.All.toJSON()]);
   });
 
-  test('all returns a copy of all products', async () => {
+  test('all returns a copy of all devs', async () => {
     const a: List<Json> = await gateway.all();
     a.first().name = 'Hello';
     expect(a).not.toStrictEqual(toJson(Dev.All));
+  });
+
+  test('exsists is false on non-exsisting dev', async () => {
+    return expect(gateway.exists(Dev.Invalid.id)).resolves.toBeFalsy();
+  });
+
+test('exsists is true on a exsisting dev', async () => {
+    return expect(gateway.exists(dev.id)).resolves.toBeTruthy();
   });
 });
