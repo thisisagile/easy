@@ -2,7 +2,7 @@ import { isFunction } from './Is';
 
 export type Constructor<T = unknown> = { new (...args: any[]): T };
 
-export const toName = (subject: unknown, postfix: string = ''): string => subject?.constructor.name?.replace(postfix, '').toLowerCase() ?? '';
+export const toName = (subject: unknown, postfix = ''): string => subject?.constructor.name?.replace(postfix, '').toLowerCase() ?? '';
 
 export type Get<T = unknown, Param = unknown> = T | ((...params: Param[]) => T);
 export type Predicate<Param> = Get<boolean, Param>;
