@@ -16,7 +16,7 @@ export class Service extends Enum {
     return this;
   };
 
-  listensAt = (port: number, message = `Service ${this.name} listening on port ${port} with ${this.resources.length} resources.`): void => {
+  listensAt = (port = 8080, message = `Service ${this.name} listening on port ${port} with ${this.resources.length} resources.`): void => {
     this.pre().forEach(h => this.app.use(h));
     this.resources.forEach(r => this.app.route(r));
     this.post().forEach(h => this.app.use(h));
