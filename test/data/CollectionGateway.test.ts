@@ -35,11 +35,11 @@ describe('CollectionGateway', () => {
     expect(a).not.toStrictEqual(toJson(Dev.All));
   });
 
-  test('exsists is false on non-exsisting dev', async () => {
+  test('exists is false on non-existing dev', async () => {
     return expect(gateway.exists(Dev.Invalid.id)).resolves.toBeFalsy();
   });
 
-test('exsists is true on a exsisting dev', async () => {
+  test('exists is true on a existing dev', async () => {
     return expect(gateway.exists(dev.id)).resolves.toBeTruthy();
   });
 });
