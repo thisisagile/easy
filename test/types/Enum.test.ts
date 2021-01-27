@@ -44,6 +44,10 @@ describe('Enum', () => {
     expect(MoreLanguage.Delphi).toMatchText('delphi');
   });
 
+  test('toJSON', () => {
+    expect(Language.Java.toJSON()).toMatchText(Language.Java.id);
+  });
+
   test('isValid', () => {
     expect(Language.Java).toBeValid();
     expect(MoreLanguage.Delphi).toBeValid();
