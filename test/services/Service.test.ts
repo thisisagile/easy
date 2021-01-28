@@ -20,13 +20,19 @@ describe('Service', () => {
     expect(service.post()).toHaveLength(2);
   });
 
-  test('Listen works', () => {
+  test('start works', () => {
     const service = new DevService('Dev', app);
-    service.with(DevsResource, DevResource).listensAt(8080);
+    service.with(DevsResource, DevResource).start();
     expect(app.route).toHaveBeenCalledTimes(2);
     expect(app.route).toHaveBeenCalledWith(fits.type(DevsResource));
     expect(app.route).toHaveBeenCalledWith(fits.type(DevResource));
     expect(app.listen).toHaveBeenCalledWith(8080, fits.any());
     expect(app.use).toHaveBeenCalledTimes(service.pre().length + service.post().length);
+  });
+
+  test('atPort works', () => {
+    const service = new DevService('Dev', app);
+    service.with(DevsResource, DevResource).atPort(9001).start();
+    expect(app.listen).toHaveBeenCalledWith(9001, fits.any());
   });
 });
