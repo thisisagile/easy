@@ -5,7 +5,9 @@ export type Constraint = (value: unknown) => boolean;
 
 export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string): void => {
   const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? list<Validator>();
-  meta(subject).property(property).set('constraint', cs.add({ property, constraint: c, message }));
+  meta(subject)
+    .property(property)
+    .set('constraint', cs.add({ property, constraint: c, message }));
 };
 
 export const defined = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? '$property must be defined.');

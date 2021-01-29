@@ -12,21 +12,21 @@ const parse = (subject: unknown, v: Validator): Result =>
       .replace('$property', `Property '${v.property}'`)
       .replace('$actual', `Value '${v.actual}' for property '${v.property}'`),
     subject.constructor.name,
-    v.property,
+    v.property
   );
 
 export const validate = (subject?: unknown): Results => {
   return !isDefined(subject)
     ? results('Subject can not be validated')
     : meta(subject)
-      .keys<List<Validator>>('constraint')
-      .mapDefined(vs => {
-        return vs.mapDefined(v => {
-          v.actual = (subject as any)[v.property];
-          return !v.constraint(v.actual) ? parse(subject, v) : undefined;
-        });
-      })
-      .reduce((rs, r) => rs.add(...r), results());
+        .keys<List<Validator>>('constraint')
+        .mapDefined(vs => {
+          return vs.mapDefined(v => {
+            v.actual = (subject as any)[v.property];
+            return !v.constraint(v.actual) ? parse(subject, v) : undefined;
+          });
+        })
+        .reduce((rs, r) => rs.add(...r), results());
 };
 
 export const validateReject = <T>(subject: T): Promise<T> => when(subject).not.isValid.reject();

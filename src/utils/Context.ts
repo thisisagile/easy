@@ -4,7 +4,7 @@ export type EnvContext = {
   readonly domain: string;
   readonly host: string;
   readonly port: number;
-}
+};
 
 export class DotEnvContext implements EnvContext {
   readonly domain = process.env.DOMAIN ?? 'easy';
@@ -15,16 +15,20 @@ export class DotEnvContext implements EnvContext {
 export type RequestContext = {
   token?: any;
   correlationId?: Uuid;
-}
+};
 
 export class Context {
+  get env(): EnvContext {
+    return (this.state.env = this.state.env ?? new DotEnvContext());
+  }
+  get request(): RequestContext {
+    return this.state.request;
+  }
+  get other(): any {
+    return this.state.other;
+  }
 
-  get env(): EnvContext { return (this.state.env = this.state.env ?? new DotEnvContext()); }
-  get request(): RequestContext { return this.state.request; }
-  get other(): any { return this.state.other; }
-
-  constructor(protected state: any = {request: {}, other: {}}) {}
+  constructor(protected state: any = { request: {}, other: {} }) {}
 }
 
 export const ctx = new Context();
-

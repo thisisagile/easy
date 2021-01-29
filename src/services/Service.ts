@@ -21,7 +21,7 @@ export class Service extends Enum {
   atPort = (port: number): this => {
     this.port = port;
     return this;
-  }
+  };
 
   start = (message = `Service ${this.name} listening on port ${this.port} with ${this.resources.length} resources.`): void => {
     this.pre().forEach(h => this.app.use(h));

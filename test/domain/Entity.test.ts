@@ -28,6 +28,6 @@ describe('Entity', () => {
 
   test('toJSON works', () => {
     const dev = Dev.Sander.toJSON();
-    expect(dev).toStrictEqual({ id: 3, name: 'Sander', level: 3, language: "TypeScript" });
+    expect(dev).toStrictEqual({ id: 3, name: 'Sander', level: 3, language: 'TypeScript' });
   });
 });

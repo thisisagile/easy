@@ -1,7 +1,6 @@
 import { ctx, isUuid, toUuid } from '../../src';
 
 describe('Ctx', () => {
-
   test('env context', () => {
     process.env.HOST = 'www.easy.io';
     expect(ctx.env.host).toBe('www.easy.io');
