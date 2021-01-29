@@ -1,4 +1,4 @@
-import { defined, Entity, gt, Json, list, required } from '../../src';
+import { defined, Entity, gt, Json, list, lt, required } from '../../src';
 
 export class Dev extends Entity {
   static readonly Invalid = new Dev({ level: 1 });
@@ -10,7 +10,7 @@ export class Dev extends Entity {
 
   @required() readonly name: string = this.state.name;
   @defined() readonly language: string = this.state.language ?? 'TypeScript';
-  @gt(1) readonly level: number = this.state.level ?? 1;
+  @gt(1) @lt(10) readonly level: number = this.state.level ?? 1;
 
   title = (): string => `${this.name} is fluent in ${this.language}.`;
 

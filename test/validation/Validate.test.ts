@@ -18,7 +18,11 @@ describe('validate', () => {
 
   test('Works on invalid objects', () => {
     const dev = new Dev({ level: 1 });
+    const higher = Dev.Sander.update({ level: 11 });
+    const lower = Dev.Sander.update({ level: -1 });
     expect(validate(dev)).not.toBeValid();
+    expect(validate(higher)).toHaveLength(1);
+    expect(validate(lower)).toHaveLength(1);
     expect(validate(dev)).toHaveLength(3);
   });
 
