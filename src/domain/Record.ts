@@ -8,8 +8,11 @@ export abstract class Record implements Validatable {
     return validate(this).isValid;
   }
 
+  /**
+   * @deprecated add parameter, use merge instead
+   */
   toJSON(add: Json = {}): Json {
-    return toJson({ ...this, ...add, state: undefined });
+    return typeof add !== "string" ? toJson({ ...this, ...add, state: undefined }) : toJson({ ...this, state: undefined });
   }
 
   toString(): string {
@@ -17,4 +20,6 @@ export abstract class Record implements Validatable {
   }
 
   update = (add?: Json): Record => this;
+
+  protected merge = (a: Json): Json => ({ ...toJson(this), ...a });
 }
