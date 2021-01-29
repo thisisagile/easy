@@ -1,11 +1,13 @@
 import { Uuid } from '../types';
 
 export type EnvContext = {
+  readonly domain: string;
   readonly host: string;
   readonly port: number;
 }
 
 export class DotEnvContext implements EnvContext {
+  readonly domain = process.env.DOMAIN ?? 'easy';
   readonly host = process.env.HOST;
   readonly port = 8080;
 }

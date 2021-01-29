@@ -6,6 +6,7 @@ describe('Ctx', () => {
     process.env.HOST = 'www.easy.io';
     expect(ctx.env.host).toBe('www.easy.io');
     expect(ctx.env.port).toBe(8080);
+    expect(ctx.env.domain).toBe('easy');
   });
 
   test('request context', () => {
