@@ -25,4 +25,9 @@ describe('Entity', () => {
     const dev = Dev.Sander.update({ level: 2, id: 42 });
     expect(dev).toMatchObject({ id: 3, name: 'Sander', level: 2 });
   });
+
+  test('toJSON works', () => {
+    const dev = Dev.Sander.toJSON();
+    expect(dev).toStrictEqual({ id: 3, name: 'Sander', level: 3, language: "TypeScript" });
+  });
 });
