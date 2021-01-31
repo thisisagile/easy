@@ -9,9 +9,16 @@ Straightforward, smart library for building domain-driven microservice architect
 This library will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
 # Architecture
-Microservices built with easy have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications.
+Microservices built with easy have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications:
 
-# Service
+- *Services*. This layer contains resource classes, which handle requests to the microservice's endpoints.
+- *Process*. This second layer contains use cases, which handle all process logic of the microservice.
+- *Domain*. At the heart of each microservice lies its domain, which consists of entities, values objects, enumerations and structs. To approach the objects in the domain, this layer also contains repositories. 
+- *Data*. The bottom layer of each aasy microservices contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
+
+The easy framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above.
+
+# Root
 At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service.   
 
 # Data
