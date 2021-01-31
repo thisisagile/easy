@@ -28,6 +28,16 @@ At the root of each microservice built using eas, there is a class that inherits
 
 This movie service registers two resources, `MoviesResource` and `MovieResource`, each of which handle endpoints. The service listens at port `9001`.
 
+In general, you will not build a single microservices, but rather a collection of microservices, each responsible for a distinct part of the complete business domain. In that case, it can be useful to build a root class for your services, such as the `SampleService` class below. 
+
+    class SampleService extends Service {
+      static readonly Movie = new SampleService('movie');
+      pre = () => [correlation];
+      post = () => [error, notFound];
+    }
+
+The `SampleService` inherits directly from the `Service` layer supertype from `easy`. The methods `pre()` and `post()` can be used to register middleware (by default `easy` uses express as its web server. However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by `easy`.  
+
 # Services
 The services layer has resource as the layer supertype, to model the API exposed.
 
