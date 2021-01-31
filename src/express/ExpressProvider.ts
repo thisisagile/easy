@@ -1,11 +1,16 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { AppProvider, Endpoint, Handler, HttpVerb, Resource, routes, toReq, toRestResult } from '../services';
+import { ctx } from '../types';
+import { correlationHeader } from './CorrelationHandler';
 
 type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 const handle = (endpoint: Endpoint): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
   endpoint(toReq(req))
-    .then((r: any) => res.status(200).json(toRestResult(r)))
+    .then((r: any) => {
+      res.setHeader(correlationHeader, ctx.request.correlationId);
+      res.status(200).json(toRestResult(r));
+    })
     .catch(next);
 
 export class ExpressProvider implements AppProvider {

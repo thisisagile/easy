@@ -1,5 +1,6 @@
 import { ContentType } from './ContentType';
-import { Enum, isNotEmpty, JsonValue } from '../types';
+import { ctx, Enum, isNotEmpty, JsonValue, toUuid } from '../types';
+import { correlationHeader } from '../express';
 
 export class RequestOptions extends Enum {
   static Form = new RequestOptions(ContentType.Form);
@@ -11,7 +12,7 @@ export class RequestOptions extends Enum {
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}) {
     super(type.name);
     this.headers['Content-Type'] = type.id;
-    // this.headers['X-Correlation-Id'] = context.request.correlation ?? newId();
+    this.headers[correlationHeader] = ctx.request.correlationId ?? toUuid();
   }
 
   authorization = (auth: string): this => {
