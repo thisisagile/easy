@@ -9,14 +9,14 @@ Straightforward, smart library for building domain-driven microservice architect
 This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
 # Architecture
-Microservices built with easy have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications:
+Microservices built with **easy** have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications:
 
 - *Services*. This layer contains resource classes, which handle requests to the microservice's endpoints.
 - *Process*. This second layer contains use cases, which handle all process logic of the microservice.
 - *Domain*. At the heart of each microservice lies its domain, which consists of entities, values objects, enumerations and structs. To approach the objects in the domain, this layer also contains repositories. 
 - *Data*. The bottom layer of each aasy microservices contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
 
-The `easy` framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing `easy` specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the `easy` framework.
+The **easy** framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing **easy** specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the **easy** framework.
 
 # Root
 At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service. An example services class is the one below for a movie service.
@@ -36,7 +36,7 @@ In general, you will not build a single microservices, but rather a collection o
       post = () => [error, notFound];
     }
 
-The `SampleService` inherits directly from the `Service` layer supertype from `easy`. The methods `pre()` and `post()` can be used to register middleware (by default `easy` uses express as its web server. However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by `easy`.  
+The `SampleService` inherits directly from the `Service` layer supertype from **easy**. The methods `pre()` and `post()` can be used to register middleware (by default **easy** uses express as its web server. However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by **easy**.  
 
 # Services
 The services layer has resource as the layer supertype, to model the API exposed.
