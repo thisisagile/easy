@@ -6,7 +6,7 @@
 
 Straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
 
-This library will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
+This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
 # Architecture
 Microservices built with easy have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications:
@@ -16,13 +16,16 @@ Microservices built with easy have a four layered architecture: services, proces
 - *Domain*. At the heart of each microservice lies its domain, which consists of entities, values objects, enumerations and structs. To approach the objects in the domain, this layer also contains repositories. 
 - *Data*. The bottom layer of each aasy microservices contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
 
-The easy framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above.
+The `easy` framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above.
 
 # Root
 At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service.   
 
-# Data
-It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
+# Services
+The services layer has resource as the layer supertype, to model the API exposed.
+
+# Process
+The process layer contains use cases, that model your process.
 
 # Domain
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
@@ -71,11 +74,8 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actal make it work. All instance of enumerables have a property `id`, which is used to store the enums, when used as property on entities, or for comparison. 
 
-# Process
-The process layer contains use cases, that model your process.
-
-# Services
-The services layer has resource as the layer supertype, to model the API exposed.
+# Data
+It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
 # Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
