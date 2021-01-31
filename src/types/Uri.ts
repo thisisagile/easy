@@ -2,6 +2,7 @@ import { isNotEmpty } from './Is';
 import { list } from './List';
 import { Text } from './Text';
 import { toName } from './Constructor';
+import { ctx } from './Context';
 
 export type Segment = Text & { key: string; segment?: string; query?: (value: unknown) => string };
 
@@ -13,7 +14,7 @@ const toSegment = (key: string, { segment, query }: { segment?: string; query?: 
 });
 
 export const uri = {
-  host: (key?: string): Segment => toSegment(key, { segment: key ?? '$host' }),
+  host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri')),
   segment: (key?: string): Segment => toSegment(key),
   path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
