@@ -1,8 +1,8 @@
-import { Record, required } from '../../src';
+import { Struct, required } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Record', () => {
-  class Address extends Record {
+  class Address extends Struct {
     readonly street = this.state.street;
     @required() readonly city = this.state.city;
   }

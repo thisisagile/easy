@@ -1,9 +1,9 @@
 import { Constructor, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
 import { when } from '../validation';
 import { resolve } from '../utils';
-import { Record } from './Record';
+import { Struct } from './Struct';
 
-export class Repo<T extends Record> {
+export class Repo<T extends Struct> {
   constructor(protected ctor: Constructor<T>, private gateway: Gateway) {}
 
   all = (): Promise<List<T>> => this.gateway.all().then(js => js.map(j => new this.ctor(j)));

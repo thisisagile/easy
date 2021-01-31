@@ -1,7 +1,7 @@
 import { Json, toJson, Validatable } from '../types';
 import { validate } from '../validation';
 
-export abstract class Record implements Validatable {
+export abstract class Struct implements Validatable {
   constructor(protected readonly state: any = {}) {}
 
   get isValid(): boolean {
@@ -16,7 +16,7 @@ export abstract class Record implements Validatable {
     return this.constructor.name;
   }
 
-  update = (add?: Json): Record => this;
+  update = (add?: Json): Struct => this;
 
   protected merge = (a: Json): Json => toJson(this, a);
 }

@@ -1,9 +1,9 @@
-import { days, defined, future, gt, gte, includes, inList, lt, lte, past, Record, required, valid, validate } from '../../src';
+import { days, defined, future, gt, gte, includes, inList, lt, lte, past, Struct, required, valid, validate } from '../../src';
 import '@thisisagile/easy-test';
 import { Language } from '../ref';
 
 describe('Constraints', () => {
-  class Tester extends Record {
+  class Tester extends Struct {
     @defined() readonly first = this.state.first;
     @required() readonly last = this.state.first;
     @includes('and') readonly middle = this.state.first;

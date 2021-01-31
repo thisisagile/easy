@@ -1,3 +1,3 @@
 export * from './Entity';
-export * from './Record';
+export * from './Struct';
 export * from './Repo';
