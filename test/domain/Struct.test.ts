@@ -22,4 +22,8 @@ describe('Struct', () => {
   test('toString', () => {
     expect(new Address()).toMatchText('Address');
   });
+
+  test('toJson', () => {
+    expect(new Address({ city: 'Amsterdam' }).toJSON()).toStrictEqual({ city: 'Amsterdam' });
+  });
 });
