@@ -16,10 +16,17 @@ Microservices built with easy have a four layered architecture: services, proces
 - *Domain*. At the heart of each microservice lies its domain, which consists of entities, values objects, enumerations and structs. To approach the objects in the domain, this layer also contains repositories. 
 - *Data*. The bottom layer of each aasy microservices contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
 
-The `easy` framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above.
+The `easy` framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing `easy` specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the `easy` framework.
 
 # Root
-At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service.   
+At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service. An example services class is the one below for a movie service.
+
+    SampleService.Movie
+      .with(MoviesResource, MovieResource)
+      .atPort(9001)
+      .start();
+
+This movie service registers two resources, `MoviesResource` and `MovieResource`, each of which handle endpoints. The service listens at port `9001`.
 
 # Services
 The services layer has resource as the layer supertype, to model the API exposed.
