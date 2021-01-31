@@ -1,6 +1,6 @@
 import { isA } from './IsA';
 import { Text } from './Text';
-import { ctx } from '../utils';
+import { ctx } from './Context';
 
 export type Result = { message: Text; domain?: string; location?: string };
 

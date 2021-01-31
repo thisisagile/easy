@@ -1,4 +1,4 @@
-import { Uuid } from '../types';
+import { Uuid } from './Uuid';
 
 export type EnvContext = {
   readonly domain: string;

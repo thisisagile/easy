@@ -1,9 +1,9 @@
 import { ctx, isUuid, toUuid } from '../../src';
+import { host } from '../init';
 
 describe('Ctx', () => {
   test('env context', () => {
-    process.env.HOST = 'www.easy.io';
-    expect(ctx.env.host).toBe('www.easy.io');
+    expect(ctx.env.host).toBe(host);
     expect(ctx.env.port).toBe(8080);
     expect(ctx.env.domain).toBe('easy');
   });
