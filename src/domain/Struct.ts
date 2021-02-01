@@ -1,4 +1,4 @@
-import { Json, toJson, Validatable } from '../types';
+import { json, Json, Validatable } from '../types';
 import { validate } from '../validation';
 
 export abstract class Struct implements Validatable {
@@ -9,7 +9,7 @@ export abstract class Struct implements Validatable {
   }
 
   toJSON(): Json {
-    return toJson({ ...this, state: undefined });
+    return json.omit({ ...this }, 'state');
   }
 
   toString(): string {
@@ -18,5 +18,5 @@ export abstract class Struct implements Validatable {
 
   update = (add?: Json): Struct => this;
 
-  protected merge = (a: Json): Json => toJson(this, a);
+  protected merge = (a: Json): Json => json.merge(this, a);
 }
