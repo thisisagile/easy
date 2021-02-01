@@ -1,4 +1,4 @@
-import { isJson, toJson } from '../../src';
+import { isJson, json, toJson } from '../../src';
 import { Dev, DevsResource } from '../ref';
 
 describe('isJson', () => {
@@ -67,7 +67,20 @@ describe('toJson', () => {
   });
 
   test('toJson object and adds object', () => {
-    const json = toJson(Dev.Wouter, Dev.Naoufal);
-    expect(json).toMatchObject({ id: 2, name: 'Naoufal', language: 'TypeScript', level: 3 });
+    const j = toJson(Dev.Wouter, Dev.Naoufal);
+    expect(j).toMatchObject({ id: 2, name: 'Naoufal', language: 'TypeScript', level: 3 });
+  });
+});
+
+describe('json', () => {
+
+  test('omit', () => {
+    const dev = Dev.Naoufal.toJSON();
+    let dev2 = json.omit(dev, 'language');
+    expect(dev2).toStrictEqual({ id: 2, name: 'Naoufal', level: 3});
+    const dev3 = json.omit(dev, 'state');
+    expect(dev3).toStrictEqual({ id: 2, name: 'Naoufal', level: 3, language: 'TypeScript'});
+    const dev4 = json.omit(dev, 'language', 'id', 'state');
+    expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
 });
