@@ -15,6 +15,7 @@ export class DotEnvContext implements EnvContext {
 export type RequestContext = {
   token?: any;
   correlationId?: Uuid;
+  create: (f: () => void) => void;
 };
 
 export class Context {
