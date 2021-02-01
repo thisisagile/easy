@@ -73,13 +73,12 @@ describe('toJson', () => {
 });
 
 describe('json', () => {
-
   test('omit', () => {
     const dev = Dev.Naoufal.toJSON();
-    let dev2 = json.omit(dev, 'language');
-    expect(dev2).toStrictEqual({ id: 2, name: 'Naoufal', level: 3});
+    const dev2 = json.omit(dev, 'language');
+    expect(dev2).toStrictEqual({ id: 2, name: 'Naoufal', level: 3 });
     const dev3 = json.omit(dev, 'state');
-    expect(dev3).toStrictEqual({ id: 2, name: 'Naoufal', level: 3, language: 'TypeScript'});
+    expect(dev3).toStrictEqual({ id: 2, name: 'Naoufal', level: 3, language: 'TypeScript' });
     const dev4 = json.omit(dev, 'language', 'id', 'state');
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
