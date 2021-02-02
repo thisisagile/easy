@@ -1,3 +1,4 @@
+export * from './Age';
 export * from './Dev';
 export * from './DevCollectionGateway';
 export * from './DevMap';
