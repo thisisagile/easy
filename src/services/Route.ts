@@ -1,5 +1,4 @@
 import { List, meta, Uri } from '../types';
-import { HttpVerb } from './HttpVerb';
 import { Verb } from './Verb';
 import { Req } from './Req';
 import { Resource } from './Resource';
@@ -9,7 +8,7 @@ export const route = (uri: Uri): ClassDecorator => (subject: unknown): void => {
 };
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
-export type Route = { verb: HttpVerb; endpoint: Endpoint };
+export type Route = { verb: Verb; endpoint: Endpoint };
 export type Routes = { route: Uri; endpoints: List<Route> };
 
 class Router implements Routes {
@@ -22,7 +21,7 @@ class Router implements Routes {
   get endpoints(): List<Route> {
     return meta(this.resource)
       .properties('verb')
-      .map(p => ({ verb: p.get<Verb>('verb').verb, endpoint: this.resource[p.property] }));
+      .map(p => ({ verb: p.get<Verb>('verb'), endpoint: this.resource[p.property] }));
   }
 }
 

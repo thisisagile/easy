@@ -29,7 +29,7 @@ describe('Verb', () => {
 
   test('Get all verb options when overridden by verb', () => {
     const verb: Verb = devs.property('all').get('verb');
-    expect(verb.options.onOk).toBe(HttpStatus.Ok);
+    expect(verb.options.onOk).toBe(HttpStatus.NoContent);
     expect(verb.options.onNotFound).toBe(HttpStatus.Ok);
     expect(verb.options.onError).toBe(HttpStatus.BadRequest);
   });

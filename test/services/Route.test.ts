@@ -16,6 +16,6 @@ describe('Router', () => {
     expect(route).toBeInstanceOf(DevUri);
     expect(route.route).toMatchText('/developers');
     expect(endpoints).toHaveLength(2);
-    expect(endpoints[0].verb).toBe(HttpVerb.Get);
+    expect(endpoints[0].verb.verb).toBe(HttpVerb.Get);
   });
 });
