@@ -13,7 +13,7 @@ export class ExpressProvider implements AppProvider {
   private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
       .then((r: any) => res.status(options.onOk.status).json(toRestResult(r)))
-      .catch(() => next);
+      .catch(e => next(e));
 
   route = (resource: Resource): void => {
     const { route, endpoints } = routes(resource);
