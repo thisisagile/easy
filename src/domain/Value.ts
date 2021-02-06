@@ -1,8 +1,9 @@
 import { isA, isDefined, JsonValue, Validatable } from '../types';
 
 export class Value<V extends JsonValue = string> implements Validatable {
-
-  constructor(readonly value: V) { this.value = value; }
+  constructor(readonly value: V) {
+    this.value = value;
+  }
 
   get isValid(): boolean {
     return isDefined(this.value);
