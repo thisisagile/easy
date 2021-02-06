@@ -4,7 +4,7 @@ import { Dev } from './Dev';
 
 @route(DevUri.Developers)
 export class DevsResource implements Resource {
-  @search({onOk: HttpStatus.NoContent})
+  @search({ onOk: HttpStatus.NoContent })
   @requires.token()
   all = (req: Req): List<Dev> => list(new Dev(req.id));
 
