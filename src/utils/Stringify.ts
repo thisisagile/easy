@@ -16,6 +16,10 @@ class Stringify {
     return this.title.replace(/ /g, '');
   }
 
+  get lower(): string {
+    return this.subject.toLowerCase();
+  }
+
   get camel(): string {
     return this.pascal.charAt(0).toLowerCase() + this.pascal.slice(1);
   }
@@ -39,10 +43,10 @@ class Stringify {
     return this.subject.replace(/ |-|,|_|#|/g, '');
   }
 
-  static of = (subject?: unknown): Stringify => {
-    const s = subject?.toString() ?? '';
+  static of = (subject?: unknown, alt = ''): Stringify => {
+    const s = subject?.toString() ?? alt;
     return new Stringify(s !== '[object Object]' ? s : '');
   };
 }
 
-export const stringify = (subject?: unknown): Stringify => Stringify.of(subject);
+export const stringify = (subject?: unknown, alt = ''): Stringify => Stringify.of(subject, alt);
