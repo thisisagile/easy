@@ -1,4 +1,4 @@
-import { isDefined, isResult, Json, list, List, result, Result, toList } from '../types';
+import { isDefined, isResult, Json, list, List, toResult, Result, toList } from '../types';
 import { choose } from '../utils';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 
@@ -34,7 +34,7 @@ export const toRestResult = (payload?: any | any[]): RestResult =>
     )
     .case(
       p => isHttpStatus(p),
-      p => error(p, [result(p.name)])
+      p => error(p, [toResult(p.name)])
     )
     .case(
       p => isResult(p),

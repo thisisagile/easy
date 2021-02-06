@@ -1,4 +1,4 @@
-import { HttpStatus, isRestResult, list, result, toRestResult } from '../../src';
+import { HttpStatus, isRestResult, list, toResult, toRestResult } from '../../src';
 import { Dev } from '../ref';
 
 const data = { data: { items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()], itemCount: 3 } };
@@ -66,7 +66,7 @@ describe('toRestResult', () => {
   });
 
   test('From result', () => {
-    const res = result('A good result');
+    const res = toResult('A good result');
     const r = toRestResult(res);
     expect(isRestResult(r)).toBeTruthy();
     expect(r.error.errors.first()).toMatchObject(res);
