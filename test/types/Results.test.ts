@@ -1,10 +1,10 @@
-import { isResults, result, Result, results, Results, Text } from '../../src';
+import { isResults, toResult, Result, results, Results, Text } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
 describe('Results', () => {
   const error: Text = 'Something went wrong.';
-  const r: Result = result('Something else went wrong.', 'dev');
+  const r: Result = toResult('Something else went wrong.', 'dev');
   const res: Results = results(error, r);
 
   // Create

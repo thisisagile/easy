@@ -1,9 +1,9 @@
 import { Text } from './Text';
-import { isResult, result, Result } from './Result';
+import { isResult, toResult, Result } from './Result';
 import { Validatable } from './Validatable';
 import { isDefined } from './Is';
 
-const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => (isResult(r) ? r : result(r.toString(), 'easy')));
+const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => (isResult(r) ? r : toResult(r.toString(), 'easy')));
 
 export class Results implements Validatable {
   public readonly results: Result[];
