@@ -1,5 +1,5 @@
-import { Dev, Language } from '../ref';
-import { includes, validate, validateReject } from '../../src';
+import { Age, Dev, Language } from '../ref';
+import { includes, Struct, valid, validate, validateReject } from '../../src';
 import '@thisisagile/easy-test';
 
 class Top {
@@ -8,6 +8,10 @@ class Top {
 
 class Below extends Top {
   @includes('b') readonly city: string = 'Amsterdam';
+}
+
+class Person extends Struct {
+  @valid() readonly age: Age = new Age(this.state.age);
 }
 
 describe('validate', () => {
@@ -41,6 +45,13 @@ describe('validate', () => {
     const b = new Below();
     expect(validate(b)).not.toBeValid();
     expect(validate(b)).toHaveLength(2);
+  });
+
+  test('Works with value objects', () => {
+    const me = new Person({ age: 54 });
+    const old = new Person({ age: 128 });
+    expect(validate(me)).toBeValid();
+    expect(validate(old)).not.toBeValid();
   });
 });
 
