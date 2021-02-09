@@ -1,5 +1,6 @@
-import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, Handler, Resource, routes, toReq, toRestResult, Verb, VerbOptions } from '../services';
+import express, { Express, NextFunction, Request, RequestHandler, Response } from "express";
+import { AppProvider, Endpoint, Handler, Resource, routes, toReq, toRestResult, Verb, VerbOptions } from "../services";
+import { Results } from "../types";
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -12,8 +13,8 @@ export class ExpressProvider implements AppProvider {
 
   private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
-      .then((r: any) => res.status(options.onOk.status).json(toRestResult(r)))
-      .catch(e => next(e));
+      .then((r: any) => res.status(options.onOk.status).json(toRestResult(r, options.onOk)))
+      .catch(error => next({error, options}));
 
   route = (resource: Resource): void => {
     const { route, endpoints } = routes(resource);
