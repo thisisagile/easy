@@ -28,6 +28,12 @@ describe('Repo', () => {
     expect(d).toMatchObject(devs.first());
   });
 
+  test('byId rejects if gateway returns undefined', async () => {
+    gateway.byId = mock.resolve(undefined);
+    await expect(repo.byId(42)).rejects.toEqual('Does not exist');
+    expect(gateway.byId).toHaveBeenCalledWith(42);
+  });
+
   test('search triggers gateway', async () => {
     gateway.search = mock.resolve(devs);
     const ds = await repo.search('Kim');
