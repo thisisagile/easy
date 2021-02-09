@@ -1,4 +1,4 @@
-import { Api, RouteGateway, toRestResult } from '../../src';
+import { Api, HttpStatus, RouteGateway, toRestResult } from "../../src";
 import { Dev, DevRoutedGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
@@ -43,10 +43,9 @@ describe('RouteGateway', () => {
   });
 
   test('delete calls api correctly', async () => {
-    api.delete = mock.resolve(toRestResult());
-    const res = await gateway.remove(42);
+    api.delete = mock.resolve(toRestResult(undefined, HttpStatus.NoContent));
+    await gateway.remove(42);
     expect(api.delete).toHaveBeenCalledWith(DevUri.Developer.id(42));
-    expect(res).toBe(0);
   });
 
   test('get calls api correctly with transform', async () => {

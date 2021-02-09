@@ -25,8 +25,8 @@ export class TableGateway<T extends Table> implements Gateway {
       .then(j => this.table.in(j));
   }
 
-  remove(id: Id): Promise<number> {
-    return this.provider.command(this.table.delete().where(this.table.id.is(id)));
+  remove(id: Id): Promise<void> {
+    return this.provider.command(this.table.delete().where(this.table.id.is(id))).then();
   }
 
   update(item: Json): Promise<Json> {
