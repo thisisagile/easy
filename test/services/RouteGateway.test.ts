@@ -1,4 +1,4 @@
-import { Api, HttpStatus, RouteGateway, toRestResult } from "../../src";
+import { Api, HttpStatus, RouteGateway, toResponse, toRestResult } from '../../src';
 import { Dev, DevRoutedGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
@@ -46,7 +46,7 @@ describe('RouteGateway', () => {
   });
 
   test('exists returns false if not found', async () => {
-    api.get = mock.reject(toRestResult(new Error('Does not exists'), HttpStatus.NotFound));
+    api.get = mock.reject(toResponse(HttpStatus.NotFound.status, {}, new Error('Does not exists')));
     await expect(gateway.exists(42)).resolves.toBe(false);
     expect(api.get).toHaveBeenCalledWith(DevUri.Developer.id(42));
   });

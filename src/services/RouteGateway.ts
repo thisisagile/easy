@@ -1,7 +1,6 @@
 import { Api } from './Api';
 import { Gateway, Id, Json, JsonValue, List, Uri } from '../types';
 import { HttpStatus } from "./HttpStatus";
-import { reject } from "../utils";
 
 export class RouteGateway implements Gateway {
   readonly route: Uri;
@@ -24,7 +23,7 @@ export class RouteGateway implements Gateway {
   exists(id: Id): Promise<boolean> {
     return this.api.get(this.routeId.id(id))
       .then(r => r.data.items.length === 1)
-      .catch(r => HttpStatus.NotFound.equals(r.error.code) ? false : Promise.reject(r));
+      .catch(r => HttpStatus.NotFound.equals(r.status) ? false : Promise.reject(r));
   }
 
   add(item: Json): Promise<Json> {
