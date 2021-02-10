@@ -1,4 +1,4 @@
-import { Gateway, Id, Json, JsonValue, List, toList } from "../types";
+import { Gateway, Id, isDefined, Json, JsonValue, List, toList } from "../types";
 import { when } from "../validation";
 
 export class CollectionGateway implements Gateway {
@@ -18,7 +18,7 @@ export class CollectionGateway implements Gateway {
   }
 
   exists(id: Id): Promise<boolean> {
-    return this.data.then(d => d.filter(i => i.id === id)).then(d => !!d?.[0]);
+    return this.byId(id).then(d => isDefined(d));
   }
 
   remove(id: Id): Promise<void> {
