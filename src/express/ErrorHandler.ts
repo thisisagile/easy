@@ -1,4 +1,4 @@
-import { isResults, isString, Results } from "../types";
+import { isError, isResults, Results } from "../types";
 import express from "express";
 import { HttpStatus, Response, toRestResult, VerbOptions } from "../services";
 import { choose } from "../utils";
@@ -7,8 +7,8 @@ export const error = (p: { error: string | Error | Results | Response, options: 
   res.set("Connection", "close");
   const status: HttpStatus = choose<HttpStatus>(p.error)
     .case(e => isResults(e), p.options.onError)
-    .case(e => isString(e) && e === 'Does not exist', p.options.onNotFound)
+    .case(e => isError(e) && e.message === 'Does not exist', p.options.onNotFound)
     .else(HttpStatus.InternalServerError);
-
-  res.status(status.status).json(toRestResult(p.error, status));
+  res.status(status.status);
+  res.json(toRestResult(p.error, status));
 };

@@ -30,7 +30,7 @@ describe('Repo', () => {
 
   test('byId rejects if gateway returns undefined', async () => {
     gateway.byId = mock.resolve(undefined);
-    await expect(repo.byId(42)).rejects.toEqual('Does not exist');
+    await expect(repo.byId(42)).rejects.toEqual(new Error('Does not exist'));
     expect(gateway.byId).toHaveBeenCalledWith(42);
   });
 
