@@ -1,7 +1,7 @@
-import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList } from "../types";
-import { choose } from "../utils";
-import { HttpStatus } from "./HttpStatus";
-import { isResponse } from "./RequestProvider";
+import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList } from '../types';
+import { choose } from '../utils';
+import { HttpStatus } from './HttpStatus';
+import { isResponse } from './RequestProvider';
 
 export type RestResult = {
   data?: { code: number; items: List<Json>; itemCount: number };
@@ -12,8 +12,8 @@ const data = (status: HttpStatus, items?: Json[]): RestResult => ({
   data: {
     code: status.status,
     items: list(items),
-    itemCount: items.length
-  }
+    itemCount: items.length,
+  },
 });
 
 const error = (status: HttpStatus, errors: Result[] = []): RestResult => ({
@@ -21,8 +21,8 @@ const error = (status: HttpStatus, errors: Result[] = []): RestResult => ({
     code: status.status,
     message: errors[0]?.message.toString() ?? status.name,
     errors: list(errors),
-    errorCount: errors?.length ?? 1
-  }
+    errorCount: errors?.length ?? 1,
+  },
 });
 
 export const isRestResult = (r: unknown): r is RestResult => isDefined(r) && (isDefined((r as RestResult).data) || isDefined((r as RestResult).error));

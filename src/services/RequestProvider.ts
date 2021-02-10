@@ -1,8 +1,8 @@
-import { isA, Uri } from "../types";
-import { HttpVerb } from "./HttpVerb";
-import { RequestOptions } from "./RequestOptions";
-import { RestResult, toRestResult } from "./RestResult";
-import { HttpStatus } from "./HttpStatus";
+import { isA, Uri } from '../types';
+import { HttpVerb } from './HttpVerb';
+import { RequestOptions } from './RequestOptions';
+import { RestResult, toRestResult } from './RestResult';
+import { HttpStatus } from './HttpStatus';
 
 export type Request = {
   uri: Uri;
@@ -13,15 +13,15 @@ export type Request = {
 };
 
 export type Response = {
-  status: HttpStatus,
-  headers?: { [key: string]: any },
-  body: RestResult
-}
+  status: HttpStatus;
+  headers?: { [key: string]: any };
+  body: RestResult;
+};
 
 export const toResponse = (status: number, headers?: { [key: string]: any }, body?: unknown): Response => ({
   status: HttpStatus.byId(status),
   headers,
-  body: toRestResult(body)
+  body: toRestResult(body),
 });
 
 export const isResponse = (r?: unknown): r is Response => isA<Response>(r, 'status', 'body');

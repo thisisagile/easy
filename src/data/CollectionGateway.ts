@@ -1,9 +1,8 @@
-import { Gateway, Id, isDefined, Json, JsonValue, List, toList } from "../types";
-import { when } from "../validation";
+import { Gateway, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { when } from '../validation';
 
 export class CollectionGateway implements Gateway {
-  constructor(readonly name: string, private data: Promise<List<Json>>) {
-  }
+  constructor(readonly name: string, private data: Promise<List<Json>>) {}
 
   add(item: Json): Promise<Json> {
     return this.data.then(d => d.add(item)).then(() => ({ ...item }));
@@ -22,11 +21,13 @@ export class CollectionGateway implements Gateway {
   }
 
   remove(id: Id): Promise<void> {
-    return this.data
-      .then(d => when(d.findIndex(i => i.id === id))
-        .with(i => i < 0).reject()
+    return this.data.then(d =>
+      when(d.findIndex(i => i.id === id))
+        .with(i => i < 0)
+        .reject()
         .then(i => d.splice(i, 1))
-        .then());
+        .then()
+    );
   }
 
   search(_q: JsonValue): Promise<List<Json>> {

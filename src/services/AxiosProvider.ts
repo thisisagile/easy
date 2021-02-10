@@ -1,10 +1,10 @@
-import axios, { AxiosError, Method } from "axios";
-import { Request, Response, RequestProvider, toResponse } from "./RequestProvider";
-import { RequestOptions } from "./RequestOptions";
-import { isDefined, toResult, Uri } from "../types";
-import { choose } from "../utils";
-import { HttpVerb } from "./HttpVerb";
-import { HttpStatus } from "./HttpStatus";
+import axios, { AxiosError, Method } from 'axios';
+import { Request, Response, RequestProvider, toResponse } from './RequestProvider';
+import { RequestOptions } from './RequestOptions';
+import { isDefined, toResult, Uri } from '../types';
+import { choose } from '../utils';
+import { HttpVerb } from './HttpVerb';
+import { HttpStatus } from './HttpStatus';
 
 const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
   choose<Response, AxiosError>(error)
@@ -25,7 +25,7 @@ export class AxiosProvider implements RequestProvider {
         url: uri.toString(),
         method: verb.toString() as Method,
         headers: options.headers,
-        data: body
+        data: body,
       })
       .then(r => toResponse(r.status, r.headers, transform(r)))
       .catch(e => Promise.reject(asResponse(uri, verb, e)));

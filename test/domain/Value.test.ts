@@ -11,7 +11,7 @@ describe('Value', () => {
 
   test('value to string', () => {
     const age = new Age(42);
-    expect(age.toString()).toBe("42");
+    expect(age.toString()).toBe('42');
     expect(age).toMatchText('42');
   });
 
