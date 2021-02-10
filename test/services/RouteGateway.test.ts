@@ -14,16 +14,14 @@ describe('RouteGateway', () => {
 
   test('all calls api correctly', async () => {
     api.get = mock.resolve(toRestResult(devs));
-    const res = await gateway.all();
+    await expect(gateway.all()).resolves.toHaveLength(devs.length);
     expect(api.get).toHaveBeenCalledWith(DevUri.Developers);
-    expect(res).toHaveLength(devs.length);
   });
 
   test('byId calls api correctly', async () => {
     api.get = mock.resolve(toRestResult(devs));
-    const res = await gateway.byId(42);
+    await expect(gateway.byId(42)).resolves.toMatchObject(devs[0]);
     expect(api.get).toHaveBeenCalledWith(DevUri.Developer);
-    expect(res).toMatchObject(devs[0]);
   });
 
   test('get calls api correctly with transform', async () => {
@@ -31,6 +29,12 @@ describe('RouteGateway', () => {
     const res = await new DevRoutedGateway(api).byName();
     expect(api.get).toHaveBeenCalledWith(DevUri.Developers, fits.any());
     expect(res).toBeTruthy();
+  });
+
+  test('search calls api correctly', async () => {
+    api.get = mock.resolve(toRestResult(devs));
+    await expect(gateway.search(42)).resolves.toHaveLength(devs.length);
+    expect(api.get).toHaveBeenCalledWith(DevUri.Developers.query(42));
   });
 
   test('exists calls api correctly', async () => {
@@ -61,17 +65,15 @@ describe('RouteGateway', () => {
   test('add calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toRestResult(body));
-    const res = await gateway.add(body);
+    await expect(gateway.add(body)).resolves.toMatchObject(body);
     expect(api.post).toHaveBeenCalledWith(DevUri.Developers, body);
-    expect(res).toMatchObject(body);
   });
 
   test('update calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.patch = mock.resolve(toRestResult(body));
-    const res = await gateway.update(body);
+    await expect(gateway.update(body)).resolves.toMatchObject(body);
     expect(api.patch).toHaveBeenCalledWith(DevUri.Developer, body);
-    expect(res).toMatchObject(body);
   });
 
   test('delete calls api correctly', async () => {
