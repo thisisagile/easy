@@ -7,7 +7,12 @@ describe('Value', () => {
     const age = new Age(54);
     expect(age.value).toBe(54);
     expect(age.toJSON()).toBe(54);
-    expect(age).toMatchText('54');
+  });
+
+  test('value to string', () => {
+    const age = new Age(42);
+    expect(age.toString()).toBe("42");
+    expect(age).toMatchText('42');
   });
 
   test('valid value', () => {
