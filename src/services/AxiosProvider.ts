@@ -2,7 +2,7 @@ import axios, { AxiosError, Method } from "axios";
 import { Request, Response, RequestProvider, toResponse } from "./RequestProvider";
 import { RequestOptions } from "./RequestOptions";
 import { isDefined, toResult, Uri } from "../types";
-import { choose, reject } from "../utils";
+import { choose } from "../utils";
 import { HttpVerb } from "./HttpVerb";
 import { HttpStatus } from "./HttpStatus";
 

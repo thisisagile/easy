@@ -1,6 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from "express";
 import { AppProvider, Endpoint, Handler, Resource, routes, toReq, toRestResult, Verb, VerbOptions } from "../services";
-import { Results } from "../types";
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
