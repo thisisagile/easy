@@ -1,6 +1,7 @@
 import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList } from "../types";
 import { choose } from "../utils";
 import { HttpStatus } from "./HttpStatus";
+import { isResponse } from "./RequestProvider";
 
 export type RestResult = {
   data?: { code: number; items: List<Json>; itemCount: number };
@@ -39,6 +40,10 @@ export const toRestResult = (payload?: any | any[], code?: HttpStatus): RestResu
     .case(
       p => isResults(p),
       p => error(code ?? HttpStatus.BadRequest, p.results)
+    )
+    .case(
+      p => isResponse(p),
+      p => error(code ?? HttpStatus.byId(p.body.error?.code), p.body.error?.errors)
     )
     .case(
       p => p.error && p.error.errors,

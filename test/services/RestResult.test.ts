@@ -1,4 +1,4 @@
-import { HttpStatus, isRestResult, list, results, toRestResult, toResult } from "../../src";
+import { HttpStatus, isRestResult, list, results, toRestResult, toResult, Response, RestResult } from "../../src";
 import { Dev } from "../ref";
 
 const data = {
@@ -14,7 +14,7 @@ const payload = [
   { message: "This is wrong", domain: "easy" },
   { message: "Very wrong", domain: "easy" }
 ];
-const error = { error: { code: HttpStatus.BadGateway.status, errors: [{ message: "This is wrong", domain: "easy" }] } };
+const error = { error: { code: HttpStatus.BadGateway.status,  message: "", errors: [{ message: "This is wrong", domain: "easy" }], errorCount: 1 } };
 
 describe("toRestResult", () => {
   test("From undefined", () => {
@@ -118,5 +118,13 @@ describe("toRestResult", () => {
     expect(isRestResult(r)).toBeTruthy();
     expect(r.error.code).toBe(HttpStatus.BadRequest.status);
     expect(r.error.errors.first()).toMatchObject(res);
+  });
+
+  test("From Response", () => {
+    const res: Response = { status: HttpStatus.InternalServerError, body: error as RestResult };
+    const r = toRestResult(res);
+    expect(isRestResult(r)).toBeTruthy();
+    expect(r.error.code).toBe(error.error.code);
+    expect(r.error.errors.first()).toMatchObject(error.error.errors[0]);
   });
 });
