@@ -1,10 +1,10 @@
-import { Api, HttpVerb, RequestProvider, toRestResult } from '../../src';
+import { Api, HttpStatus, HttpVerb, RequestProvider, toRestResult } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('Api', () => {
   const devs = [Dev.Sander, Dev.Naoufal, Dev.Wouter];
-  const provider: RequestProvider = { execute: mock.resolve(toRestResult(devs)) };
+  const provider: RequestProvider = { execute: mock.resolve(toRestResult(devs, HttpStatus.Ok)) };
   let api: Api;
 
   beforeEach(() => {
