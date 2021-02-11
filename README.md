@@ -1,9 +1,14 @@
-# easy
-[![Easy pipeline](https://github.com/thisisagile/easy/workflows/Easy%20pipeline/badge.svg?branch=main)](https://github.com/thisisagile/easy/actions?query=workflow%3A%22Easy+pipeline%22)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=alert_status)](https://sonarcloud.io/dashboard?id=thisisagile_easy)
-[![npm package](https://img.shields.io/npm/v/@thisisagile/easy.svg)](https://www.npmjs.com/package/@thisisagile/easy)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+ <h1 align="center">easy</h1>
 
+<p align="center">
+<a href="https://www.npmjs.com/package/@thisisagile/easy" target="_blank"><img src="https://img.shields.io/npm/v/@thisisagile/easy.svg" alt="npm version" /></a>
+<a href="https://www.npmjs.com/package/@thisisagile/easy" target="_blank"><img src="https://img.shields.io/npm/dm/@thisisagile/easy.svg" alt="npm downloads" /></a>
+<a href="https://github.com/thisisagile/easy/actions?query=workflow%3A%22pipeline%22"><img src="https://github.com/thisisagile/easy/workflows/pipeline/badge.svg?branch=main" alt="pipeline status" /></a>
+<a href="https://sonarcloud.io/dashboard?id=thisisagile_easy" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=alert_status" alt="quality gate" /></a>
+<a href="https://github.com/semantic-release/semantic-release" target="_blank"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release" /></a>
+</p>
+
+# Description
 Straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
 
 This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
@@ -14,7 +19,7 @@ Microservices built with **easy** have a four layered architecture: services, pr
 - *Services*. This layer contains resource classes, which handle requests to the microservice's endpoints.
 - *Process*. This second layer contains use cases, which handle all process logic of the microservice.
 - *Domain*. At the heart of each microservice lies its domain, which consists of entities, values objects, enumerations and structs. To approach the objects in the domain, this layer also contains repositories. 
-- *Data*. The bottom layer of each aasy microservices contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
+- *Data*. The bottom layer of each microservice contains gateways, that allow the microservice to interact with its outside world, such as relational databases, no-sql databases, file storage or other services.
 
 The **easy** framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing **easy** specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the **easy** framework.
 
