@@ -47,7 +47,7 @@ export class EasyUri implements Uri {
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
-  route = (resource: string = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource), ...this.segments);
+  route = (resource: string = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource.toLowerCase()), ...this.segments);
 
   get path(): string {
     return toRoute(uri.segment(''), this.resource, ...this.segments);
