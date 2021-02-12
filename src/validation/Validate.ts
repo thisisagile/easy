@@ -46,10 +46,7 @@ const val = (subject?: unknown): Results => {
 export const validate = (subject?: unknown): Results => {
   console.log('validate', toName(subject));
   return choose<Results, unknown>(subject)
-    .case(
-      s => !isDefined(s),
-      results('Subject is not defined.')
-    )
+    .case(s => !isDefined(s), results('Subject is not defined.'))
     .case(
       s => isEnum(s),
       (e: Enum) => (e.isValid ? results() : results(asText(e, 'This is not a valid {type.name}.')))

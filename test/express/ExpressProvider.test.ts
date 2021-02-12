@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
 import { ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
-import { DevsResource, DevUri } from '../ref';
+import { DevsResource, DevUri, TestService } from '../ref';
 
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
 type Endpoint = { path?: string; handler?: AsyncHandler };
@@ -32,7 +32,7 @@ describe('ExpressProvider', () => {
   test('route', () => {
     const router = express.Router();
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
-    provider.route(DevsResource);
+    provider.route(TestService.Dev, DevsResource);
     expect(app.use).toHaveBeenCalledWith(router);
     expect(router['get']).toEqual(fits.type(Function));
     expect(router['post']).toEqual(fits.type(Function));
@@ -48,7 +48,7 @@ describe('ExpressProvider', () => {
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
     resource.insert = mock.resolve();
 
-    provider.route(resource);
+    provider.route(TestService.Dev, resource);
     await endpoint.handler({} as Request, res as Response, jest.fn());
 
     expect(endpoint.path).toBe(DevUri.Developers.path);
@@ -66,7 +66,7 @@ describe('ExpressProvider', () => {
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
     resource.all = mock.resolve();
 
-    provider.route(resource);
+    provider.route(TestService.Dev, resource);
     await endpoint.handler({} as Request, res as Response, jest.fn());
 
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NoContent.status);

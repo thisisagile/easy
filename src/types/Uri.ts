@@ -34,7 +34,7 @@ export type Uri = {
   id: (id?: unknown) => Uri;
   query: (q?: unknown) => Uri;
   path: string;
-  route: string;
+  route: (resource: string) => string;
   toString: () => string;
 };
 
@@ -47,9 +47,7 @@ export class EasyUri implements Uri {
 
   constructor(readonly segments: Segment[], private props = list<Prop>()) {}
 
-  get route(): string {
-    return toRoute(uri.segment(''), ...this.segments);
-  }
+  route = (resource: string = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource), ...this.segments);
 
   get path(): string {
     return toRoute(uri.segment(''), this.resource, ...this.segments);

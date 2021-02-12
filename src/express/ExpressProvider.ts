@@ -1,5 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, Handler, Resource, routes, toReq, toRestResult, Verb, VerbOptions } from '../services';
+import { AppProvider, Endpoint, Handler, Resource, routes, Service, toReq, toRestResult, Verb, VerbOptions } from '../services';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -15,13 +15,13 @@ export class ExpressProvider implements AppProvider {
       .then((r: any) => res.status(options.onOk.status).json(toRestResult(r, options.onOk)))
       .catch(error => next({ error, options }));
 
-  route = (resource: Resource): void => {
+  route = (service: Service, resource: Resource): void => {
     const { route, endpoints } = routes(resource);
     const router = express.Router({ mergeParams: true });
 
     endpoints.forEach(({ endpoint, verb }: { endpoint: Endpoint; verb: Verb }) => {
-      console.log(verb.verb.code, route.path);
-      router[verb.verb.toString() as ExpressVerb](route.path, ExpressProvider.handle(endpoint, verb.options));
+      console.log(verb.verb.code, route.route(service.name));
+      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ExpressProvider.handle(endpoint, verb.options));
     });
 
     this.app.use(router);

@@ -9,3 +9,4 @@ export * from './DevTable';
 export * from './DevTableGateway';
 export * from './DevUri';
 export * from './Language';
+export * from './TestService';

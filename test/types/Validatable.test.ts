@@ -4,16 +4,14 @@ import { Validatable } from '@thisisagile/easy-test/dist/utils/Types';
 import { mock } from '@thisisagile/easy-test';
 
 class ValidateMe implements Validatable {
-  constructor(readonly f: () => boolean) {
-  }
+  constructor(readonly f: () => boolean) {}
 
   get isValid(): boolean {
     return this.f();
   }
 }
 
-class ValidateMeToo extends ValidateMe {
-}
+class ValidateMeToo extends ValidateMe {}
 
 describe('Validatable', () => {
   test('isValidatable works', () => {

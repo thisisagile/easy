@@ -24,8 +24,8 @@ describe('Uri', () => {
   });
 
   test('route returns just route', () => {
-    expect(DevUri.Developers.route).toBe('/developers');
-    expect(DevUri.Developer.route).toBe('/developers/:id');
+    expect(DevUri.Developers.route()).toBe('/dev/developers');
+    expect(DevUri.Developer.route()).toBe('/dev/developers/:id');
   });
 
   test('complete returns just route', () => {

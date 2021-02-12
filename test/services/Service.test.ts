@@ -24,8 +24,8 @@ describe('Service', () => {
     const service = new DevService('Dev', app);
     service.with(DevsResource, DevResource).start();
     expect(app.route).toHaveBeenCalledTimes(2);
-    expect(app.route).toHaveBeenCalledWith(fits.type(DevsResource));
-    expect(app.route).toHaveBeenCalledWith(fits.type(DevResource));
+    expect(app.route).toHaveBeenCalledWith(service, fits.type(DevsResource));
+    expect(app.route).toHaveBeenCalledWith(service, fits.type(DevResource));
     expect(app.listen).toHaveBeenCalledWith(8080, fits.any());
     expect(app.use).toHaveBeenCalledTimes(service.pre().length + service.post().length);
   });
