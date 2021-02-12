@@ -6,5 +6,5 @@ import { Json } from '../types';
 @route(HealthUri.Health)
 export class HealthResource implements Resource {
   @get()
-  ok = (): Promise<Json> => resolve({ state: 'Endpoint is healthy' });
+  ok = (): Promise<Json> => resolve({ state: 'Service is healthy' });
 }
