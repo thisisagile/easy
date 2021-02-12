@@ -1,4 +1,4 @@
-import { isA, isDefined, JsonValue, Validatable } from '../types';
+import { isDefined, JsonValue, Validatable } from './index';
 
 export class Value<V extends JsonValue = string> implements Validatable {
   constructor(readonly value: V) {
@@ -18,4 +18,4 @@ export class Value<V extends JsonValue = string> implements Validatable {
   }
 }
 
-export const isValue = (v?: unknown): v is Value => isA<Value>(v, 'value', 'isValid');
+export const isValue = (v?: unknown): v is Value => v instanceof Value;

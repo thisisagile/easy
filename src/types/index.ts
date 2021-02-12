@@ -17,3 +17,4 @@ export * from './Text';
 export * from './Uri';
 export * from './Uuid';
 export * from './Validatable';
+export * from './Value';
