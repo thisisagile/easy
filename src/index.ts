@@ -1,6 +1,7 @@
 export * from './data';
 export * from './domain';
 export * from './express';
+export * from './health';
 export * from './process';
 export * from './services';
 export * from './sql';
