@@ -1,7 +1,7 @@
-import { inFuture, inPast, isDefined, isIn, isString, isValidatable, list, List, meta, Text } from '../types';
-import { Validator } from './Validate';
+import { inFuture, inPast, isDefined, isFunction, isIn, isString, list, List, meta, Results, Text } from '../types';
+import { validate, Validator } from './Validate';
 
-export type Constraint = (value: unknown) => boolean;
+export type Constraint = (value: unknown) => boolean | Results;
 
 export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string): void => {
   const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? list<Validator>();
@@ -14,7 +14,7 @@ export const defined = (message?: Text): PropertyDecorator => constraint(v => is
 
 export const required = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} is required.');
 
-export const valid = (message?: Text): PropertyDecorator => constraint(v => isValidatable(v) && v.isValid, message ?? 'Property {property} must be valid.');
+export const valid = (): PropertyDecorator => constraint(v => validate(v), '');
 
 export const includes = (sub: string, message?: string): PropertyDecorator =>
   constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `Value {actual} must include '${sub}'.`);
@@ -36,4 +36,5 @@ export const past = (message?: Text): PropertyDecorator => constraint(v => inPas
 
 export const future = (message?: Text): PropertyDecorator => constraint(v => inFuture(v), message ?? 'Value {actual} must lay in the future.');
 
-export const yes = (message?: Text): PropertyDecorator => constraint(v => !!v, message ?? `Value {actual} must be true`);
+export const rule = (message?: Text): PropertyDecorator =>
+  constraint(v => (isFunction(v) ? (v() as boolean | Results) : false), message ?? `Value {actual} must be true`);
