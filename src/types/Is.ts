@@ -12,7 +12,7 @@ export const isBoolean = (o?: unknown): o is boolean => isDefined(o) && typeof o
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
 
-export const isObject = (o?: unknown): boolean => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
+export const isObject = (o?: unknown): o is Record<string, unknown> => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
 
 export const isEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length === 0;
 
@@ -24,4 +24,4 @@ export const isInstance = <T>(ctor: Constructor<T>, o?: unknown): o is T => isFu
 
 export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) && values.some(v => v === o);
 
-export const isPrimitive = (o?: unknown): boolean => o !== null && !isObject(o) && !isFunction(o) && !isArray(o);
+export const isPrimitive = (o?: unknown): boolean => !isObject(o) && !isFunction(o) && !isArray(o);
