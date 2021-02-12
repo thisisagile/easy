@@ -129,9 +129,10 @@ describe('isInstance', () => {
 });
 
 describe('isPrimitive', () => {
+
   test('Check', () => {
     expect(isPrimitive()).toBeTruthy();
-    expect(isPrimitive(null)).toBeFalsy();
+    expect(isPrimitive(null)).toBeTruthy();
     expect(isPrimitive('')).toBeTruthy();
     expect(isPrimitive({})).toBeFalsy();
     expect(isPrimitive(123)).toBeTruthy();
