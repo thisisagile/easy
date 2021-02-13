@@ -93,12 +93,19 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
       static readonly ChangePassword = new UseCase(Scope.Auth, "Change password");
     }
 
-The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actal make it work. All instance of enumerables have a property `id`, which is used to store the enums, when used as property on entities, or for comparison. 
+The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actal make it work. All instance of enumerables have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
 # Validation
 All **easy** microservices evolve around their part of the total business domain you are implementing. Quite usually, in it's domain layer, a microservice contains an *aggregate*. In domain-driven design an aggregate maps to a part of the domain that is persisted together. In a relational database, this is usually guarded with a transaction. In a document database, such as MongoDB, this is more often a single serialized `Json` object.
 
 To assure that such an aggregate is valid, when persisted, it is validated, usually starting from the *aggregate root*. In most cases, the aggregate root is the entity that is also the resource that requests are about, and in most often it is also the name of the microservice itself.
+
+The **easy** framework supplies a nice and easy mechanism for validating instances of the microservice's aggregate. We supply to easy-to-use functions, named `validate(subject?: unknown): Results` and `validateReject(subject?: unknown): Promise<unknown>`. Although you can pass any object to these functions, in general, you will pass the aggregate root as an argument.
+
+    validate = (dev: Developer): Results => validate(dev);
+
+The `validate()` function will validate its `subject`, and recursively the subjects properties. The outcome of this validation is always a `Results` object, with a list of shortcomings (in its `results` property) of the subject. The `Results` object also has a property `isValid`, which is set to `true` if the subject is valid, or to `false` when it is not.
+
 
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
