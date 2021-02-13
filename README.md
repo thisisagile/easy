@@ -100,7 +100,7 @@ All **easy** microservices evolve around their part of the total business domain
 
 To assure that such an aggregate is valid, when persisted, it is validated, usually starting from the *aggregate root*. In most cases, the aggregate root is the entity that is also the resource that requests are about, and in most often it is also the name of the microservice itself.
 
-The **easy** framework supplies a nice and easy mechanism for validating instances of the microservice's aggregate. We supply to easy-to-use functions, named `validate(subject?: unknown): Results` and `validateReject(subject?: unknown): Promise<unknown>`. Although you can pass any object to these functions, in general, you will pass the aggregate root as an argument.
+The **easy** framework supplies a nice and easy mechanism for validating instances of the microservice's aggregate. We supply to easy-to-use functions, named `validate(subject?: unknown): Results` and `validateReject = <T>(subject?: T): Promise<T>`. Although you can pass any object to these functions, in general, you will pass the aggregate root as an argument.
 
     validate = (dev: Developer): Results => validate(dev);
 
