@@ -9,7 +9,7 @@ const props = (subject: unknown = {}, template: Text = ''): string => {
     .reduce((res, [k, v]) => res.replace(`{this.${k}}`, v?.toString() ?? ''), template.toString());
 };
 
-export const asText = (subject: unknown, template: Text, options: ParseOptions = {}): Text => {
+export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text => {
   return props(
     subject,
     template
