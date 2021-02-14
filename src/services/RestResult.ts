@@ -1,6 +1,6 @@
-import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList } from '../types';
+import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList, toResult } from '../types';
 import { choose } from '../utils';
-import { HttpStatus } from './HttpStatus';
+import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './RequestProvider';
 
 export type RestResult = {
@@ -32,6 +32,10 @@ export const toRestResult = (payload?: any | any[], code?: HttpStatus): RestResu
     .case(
       p => !isDefined(p),
       p => p
+    )
+    .case(
+      p => isHttpStatus(p),
+      p => error(p ?? code ?? HttpStatus.InternalServerError, [toResult(p.name)])
     )
     .case(
       p => isResult(p) || isError(p),

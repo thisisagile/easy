@@ -89,6 +89,13 @@ describe('toRestResult', () => {
     expect(r.error.errors.first()).toMatchObject(res);
   });
 
+  test('From status', () => {
+    const r = toRestResult(HttpStatus.Conflict);
+    expect(r.error.code).toBe(HttpStatus.Conflict.status);
+    expect(r.error.errorCount).toBe(1);
+    expect(r.error.errors.first()).toMatchObject({message: HttpStatus.Conflict.name });
+  });
+
   test('From errorResponse', () => {
     const r = toRestResult(error);
     expect(isRestResult(r)).toBeTruthy();
