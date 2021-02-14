@@ -1,3 +1,3 @@
-export const host = 'https://www.easy.dev';
+export const host = 'https://www.easy.io';
 
 process.env.HOST = host;

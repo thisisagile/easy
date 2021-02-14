@@ -1,4 +1,4 @@
-import { isNotEmpty } from './Is';
+import { isDefined, isNotEmpty } from './Is';
 import { list } from './List';
 import { Text } from './Text';
 import { toName } from './Constructor';
@@ -8,15 +8,15 @@ export type Segment = Text & { key: string; segment?: string; query?: (value: un
 
 const toSegment = (key: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
   key,
-  segment: segment ?? key,
+  segment,
   query,
   toString: () => key,
 });
 
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
-  resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri')),
-  segment: (key?: string): Segment => toSegment(key),
+  resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
+  segment: (key?: string): Segment => toSegment(key, { segment: key }),
   path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (value ? `${key}=${value}` : undefined) }),
 };
@@ -24,11 +24,9 @@ export const uri = {
 type Prop = { segment: Segment; value: unknown };
 
 const toRoute = (...segments: Segment[]): string =>
-  list(...segments)
+  list(segments)
     .mapDefined(s => s.segment)
     .join('/');
-
-const parse = (route: string, p: Prop): string => route.replace(p.segment.segment, p.value.toString());
 
 export type Uri = {
   id: (id?: unknown) => Uri;
@@ -45,9 +43,9 @@ export class EasyUri implements Uri {
   readonly host = uri.host();
   readonly resource = uri.resource(this);
 
-  constructor(readonly segments: Segment[], private props = list<Prop>()) {}
+  private props = list<Prop>();
 
-  route = (resource: string = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource.toLowerCase()), ...this.segments);
+  constructor(readonly segments: Segment[] = []) {}
 
   get path(): string {
     return toRoute(uri.segment(''), this.resource, ...this.segments);
@@ -57,14 +55,16 @@ export class EasyUri implements Uri {
     return toRoute(this.host, this.resource, ...this.segments);
   }
 
+  route = (resource: string = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource.toLowerCase()), ...this.segments);
+
   set = (segment: Segment, value: unknown): this => {
     this.props.push({ segment, value });
     return this;
   };
 
   toString(): string {
-    const route = this.props.reduce((r: string, p: Prop) => parse(r, p), this.complete);
-    const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
+    const route = this.props.reduce((r: string, p: Prop) => r.replace(p.segment.segment, p.value.toString()), this.complete);
+    const query = this.props.mapDefined(p => (isDefined(p.segment?.query) ? p.segment?.query(p.value) : undefined))?.join('&');
     this.props = list<Prop>();
     return isNotEmpty(query) ? `${route}?${query}` : route;
   }
