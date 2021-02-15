@@ -1,4 +1,4 @@
-import { ctx, isUuid, toUuid } from '../../src';
+import { ctx, isUuid, NamespaceRequestContext, toUuid } from '../../src';
 import { host } from '../init';
 
 describe('Ctx', () => {
@@ -9,14 +9,52 @@ describe('Ctx', () => {
   });
 
   test('request context', () => {
-    ctx.request.token = '42';
-    ctx.request.correlationId = toUuid();
-    expect(ctx.request.token).toBe('42');
-    expect(isUuid(ctx.request.correlationId)).toBeTruthy();
+    ctx.request.create(() => {
+      ctx.request.token = '42';
+      ctx.request.correlationId = toUuid();
+      expect(ctx.request.token).toBe('42');
+      expect(isUuid(ctx.request.correlationId)).toBeTruthy();
+    });
   });
 
   test('other context', () => {
     ctx.other.id = 42;
     expect(ctx.other.id).toBe(42);
+  });
+});
+
+describe('NamespaceRequestContext', () => {
+  let context: NamespaceRequestContext;
+
+  beforeEach(() => {
+    context = new NamespaceRequestContext();
+  });
+
+  test('can store and retrieve from namespace', () => {
+    context.create(() => {
+      expect(context.get('test')).toBeUndefined();
+      context.set('test', 42);
+      expect(context.get('test')).toBe(42);
+    });
+  });
+
+  test('can store and retrieve asynchronously from namespace', () => {
+    jest.useFakeTimers();
+
+    context.create(() => {
+      expect(context.get('test')).toBeUndefined();
+      setImmediate(() => context.set('test', 42));
+      jest.runAllImmediates();
+      expect(context.get('test')).toBe(42);
+    });
+  });
+
+  test('named setters and getters work', () => {
+    context.create(() => {
+      context.token = 'token';
+      context.correlationId = 'correlation';
+      expect(context.token).toBe('token');
+      expect(context.correlationId).toBe('correlation');
+    });
   });
 });
