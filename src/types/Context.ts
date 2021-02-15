@@ -22,20 +22,20 @@ export type RequestContext = {
 export class NamespaceRequestContext implements RequestContext {
   private readonly namespace = createNamespace('context');
 
-  public get token(): any {
-    return this.get('token');
+  get token(): any {
+    return this.namespace.get('token');
   }
 
-  public set token(token: any) {
-    this.set('token', token);
+  set token(token: any) {
+    this.namespace.set('token', token);
   }
 
-  public get correlationId(): Uuid {
-    return this.get('correlationId');
+  get correlationId(): Uuid {
+    return this.namespace.get('correlationId');
   }
 
-  public set correlationId(id: Uuid) {
-    this.set('correlationId', id);
+  set correlationId(id: Uuid) {
+    this.namespace.set('correlationId', id);
   }
 
   public get(key: string): any {
