@@ -9,7 +9,6 @@ export const error = (
   res: express.Response,
   _next: express.NextFunction,
 ): void => {
-  res.set('Connection', 'close');
   const status: HttpStatus = choose<HttpStatus>(p.error)
     .case(e => isResults(e), p.options.onError)
     .case(e => isError(e) && e.message === 'Does not exist', p.options.onNotFound)
