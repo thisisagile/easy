@@ -12,6 +12,7 @@ export class HttpStatus extends Enum {
   static InternalServerError = new HttpStatus('Internal server error', 500);
   static NotImplemented = new HttpStatus('Not implemented', 501);
   static BadGateway = new HttpStatus('Bad gateway', 502);
+  static ServiceUnavailable = new HttpStatus('Service unavailable', 503);
 
   get isError(): boolean {
     return this.id >= 400;
