@@ -7,7 +7,7 @@ export const error = (
   p: { error: string | Error | Results | Response; options: VerbOptions },
   req: express.Request,
   res: express.Response,
-  _next: express.NextFunction,
+  _next: express.NextFunction
 ): void => {
   const status: HttpStatus = choose<HttpStatus>(p.error)
     .case(e => isResults(e), p.options.onError)
