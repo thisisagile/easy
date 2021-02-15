@@ -7,7 +7,7 @@ export const error = (
   p: { error: string | Error | Results | Response; options: VerbOptions },
   req: express.Request,
   res: express.Response,
-  _next: express.NextFunction
+  _next: express.NextFunction,
 ): void => {
   res.set('Connection', 'close');
   const status: HttpStatus = choose<HttpStatus>(p.error)
