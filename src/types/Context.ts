@@ -19,7 +19,7 @@ export type RequestContext = {
   create: (f: () => void) => void;
 };
 
-export class NamespaceRequestContext implements RequestContext {
+export class NamespaceContext implements RequestContext {
   private readonly namespace = createNamespace('context');
 
   get token(): any {
@@ -54,7 +54,7 @@ export class Context {
     return (this.state.env = this.state.env ?? new DotEnvContext());
   }
   get request(): RequestContext {
-    return (this.state.request = this.state.request ?? new NamespaceRequestContext());
+    return (this.state.request = this.state.request ?? new NamespaceContext());
   }
   get other(): any {
     return this.state.other;

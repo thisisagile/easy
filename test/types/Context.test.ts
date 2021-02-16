@@ -1,4 +1,4 @@
-import { ctx, isUuid, NamespaceRequestContext, toUuid } from '../../src';
+import { ctx, isUuid, NamespaceContext, toUuid } from '../../src';
 import { host } from '../init';
 
 describe('Ctx', () => {
@@ -24,10 +24,10 @@ describe('Ctx', () => {
 });
 
 describe('NamespaceRequestContext', () => {
-  let context: NamespaceRequestContext;
+  let context: NamespaceContext;
 
   beforeEach(() => {
-    context = new NamespaceRequestContext();
+    context = new NamespaceContext();
   });
 
   test('can store and retrieve from namespace', () => {
