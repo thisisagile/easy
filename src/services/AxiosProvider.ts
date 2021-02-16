@@ -27,6 +27,6 @@ export class AxiosProvider implements RequestProvider {
         headers: options.headers,
         data: body,
       })
-      .then(r => toResponse(r.status, r.headers, transform(r)))
+      .then(r => toResponse(r.status, r.headers, transform(r.data)))
       .catch(e => Promise.reject(asResponse(uri, verb, e)));
 }

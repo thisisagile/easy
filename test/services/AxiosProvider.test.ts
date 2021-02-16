@@ -1,7 +1,9 @@
-import { AxiosProvider, HttpVerb } from '../../src';
+import { AxiosProvider, HttpStatus, HttpVerb } from '../../src';
 import { DevUri } from '../ref';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
+
+const asResponse = (status: HttpStatus, data: unknown): AxiosResponse => ({status: status.status, data, statusText: status.name, headers: {}, config: {} });
 
 describe('AxiosProvider', () => {
   const message = 'This is not right.';
@@ -12,7 +14,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Simple get', async () => {
-    axios.request = mock.resolve({ name: 'Sander' });
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, { name: 'Sander' }));
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
     expect(axios.request).toHaveBeenCalledWith(
       fits.with({
@@ -24,13 +26,13 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with list', async () => {
-    axios.request = mock.resolve([{ name: 'Sander' }, { name: 'Wouter' }]);
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, [{ name: 'Sander' }, { name: 'Wouter' }]));
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
     expect(r.body.data.items).toHaveLength(2);
   });
 
   test('Get with transform', async () => {
-    axios.request = mock.resolve({ dev: { name: 'Sander' } });
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, { dev: { name: 'Sander' } }));
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
     expect(r.body.data.items[0]).toMatchObject({ name: 'Sander' });
   });
