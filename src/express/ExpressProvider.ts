@@ -29,7 +29,7 @@ export class ExpressProvider implements AppProvider {
       console.log(verb.verb.code, route.route(service.name));
 
       const middleware: RequestHandler[] = [];
-      if (requires.token) middleware.push(passport.authenticate("jwt", { session: false, failWithError: true }));
+      if (requires.token) middleware.push(passport.authenticate('jwt', { session: false, failWithError: true }));
       if (requires.scope) middleware.push(checkScope(requires.scope));
       if (requires.uc) middleware.push(checkUseCase(requires.uc));
 

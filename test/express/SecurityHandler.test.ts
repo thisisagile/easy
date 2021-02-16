@@ -14,9 +14,9 @@ describe('Checks', () => {
     const c = checkScope(Scope.Basic);
 
     c({} as Request, {} as Response, cb);
-    c({ user: {} } as unknown as Request, {} as Response, cb);
-    c({ user: { scopes: [] } } as unknown as Request, {} as Response, cb);
-    c({ user: { scopes: [Scope.Basic.code] } } as unknown as Request, {} as Response, cb);
+    c(({ user: {} } as unknown) as Request, {} as Response, cb);
+    c(({ user: { scopes: [] } } as unknown) as Request, {} as Response, cb);
+    c(({ user: { scopes: [Scope.Basic.code] } } as unknown) as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authenticationError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
@@ -26,9 +26,9 @@ describe('Checks', () => {
     const c = checkUseCase(UseCase.Main);
 
     c({} as Request, {} as Response, cb);
-    c({ user: {} } as unknown as Request, {} as Response, cb);
-    c({ user: { usecases: [] } } as unknown as Request, {} as Response, cb);
-    c({ user: { usecases: [UseCase.Main.code] } } as unknown as Request, {} as Response, cb);
+    c(({ user: {} } as unknown) as Request, {} as Response, cb);
+    c(({ user: { usecases: [] } } as unknown) as Request, {} as Response, cb);
+    c(({ user: { usecases: [UseCase.Main.code] } } as unknown) as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authenticationError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
@@ -36,17 +36,16 @@ describe('Checks', () => {
 });
 
 describe('SecurityHandler', () => {
-
   beforeEach(() => {
-    process.env.TOKEN_SECRET_OR_KEY = "token";
+    process.env.TOKEN_SECRET_OR_KEY = 'token';
   });
 
   test('security middleware with default settings', () => {
-    const useSpy = jest.spyOn(passport, "use");
-    const initializeSpy = jest.spyOn(passport, "initialize");
+    const useSpy = jest.spyOn(passport, 'use');
+    const initializeSpy = jest.spyOn(passport, 'initialize');
 
     useSpy.mockImplementationOnce(((s: any) => {
-      expect(s.name).toBe("jwt");
+      expect(s.name).toBe('jwt');
       expect(s._passReqToCallback).toBeTruthy();
       expect(s._verifOpts).toStrictEqual({
         audience: undefined,
@@ -63,14 +62,14 @@ describe('SecurityHandler', () => {
   });
 
   test('security middleware with custom settings', () => {
-    const useSpy = jest.spyOn(passport, "use");
-    process.env.TOKEN_ISSUER = "issuer";
-    process.env.TOKEN_AUDIENCE = "audience";
+    const useSpy = jest.spyOn(passport, 'use');
+    process.env.TOKEN_ISSUER = 'issuer';
+    process.env.TOKEN_AUDIENCE = 'audience';
 
     useSpy.mockImplementationOnce(((s: any) => {
       expect(s._verifOpts).toStrictEqual({
-        audience: "audience",
-        issuer: "issuer",
+        audience: 'audience',
+        issuer: 'issuer',
         algorithms: undefined,
         ignoreExpiration: false,
       });

@@ -3,7 +3,7 @@ import { DevUri } from '../ref';
 import axios, { AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
 
-const asResponse = (status: HttpStatus, data: unknown): AxiosResponse => ({status: status.status, data, statusText: status.name, headers: {}, config: {} });
+const asResponse = (status: HttpStatus, data: unknown): AxiosResponse => ({ status: status.status, data, statusText: status.name, headers: {}, config: {} });
 
 describe('AxiosProvider', () => {
   const message = 'This is not right.';

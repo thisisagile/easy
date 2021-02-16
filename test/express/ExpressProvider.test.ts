@@ -73,8 +73,8 @@ describe('ExpressProvider', () => {
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NoContent.status);
   });
 
-  test('use security from decorator', async () => {
-    const authSpy = jest.spyOn(passport, "authenticate");
+  test('use security from decorator', () => {
+    const authSpy = jest.spyOn(passport, 'authenticate');
     const resource = new DevResource();
 
     provider.route(TestService.Dev, resource);
