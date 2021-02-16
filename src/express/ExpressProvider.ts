@@ -4,7 +4,9 @@ import { AppProvider, Endpoint, Handler, Resource, routes, Service, toReq, toRes
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export class ExpressProvider implements AppProvider {
-  constructor(private app: Express = express()) {}
+  constructor(private app: Express = express()) {
+    this.app.set("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
+  }
 
   use = (handler: Handler): void => {
     this.app.use(handler);
