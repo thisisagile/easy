@@ -6,6 +6,9 @@ describe('Ctx', () => {
     expect(ctx.env.host).toBe(host);
     expect(ctx.env.port).toBe(port);
     expect(ctx.env.domain).toBe('easy');
+    expect(ctx.env.get("doesNotExist")).toBeUndefined();
+    process.env.VAR_EXISTS = "value";
+    expect(ctx.env.get("varExists")).toBe("value");
   });
 
   test('request context', () => {
