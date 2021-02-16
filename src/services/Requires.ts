@@ -7,10 +7,12 @@ export const requires = {
   },
 
   scope: (scope: Scope): PropertyDecorator => (subject: unknown, property: string): void => {
+    meta(subject).property(property).set('token', true);
     meta(subject).property(property).set('scope', scope);
   },
 
   useCase: (uc: UseCase): PropertyDecorator => (subject: unknown, property: string): void => {
+    meta(subject).property(property).set('token', true);
     meta(subject).property(property).set('uc', uc);
   },
 };

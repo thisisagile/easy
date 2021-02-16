@@ -13,7 +13,9 @@ describe('Requires', () => {
   });
 
   test('scope is set', () => {
+    const all: boolean = meta(new DevsResource()).property('all').get('token');
     const scope: Scope = meta(new DevResource()).property('byId').get('scope');
+    expect(all).toBeTruthy();
     expect(scope).toMatchObject(Scope.Basic);
   });
 
@@ -23,7 +25,9 @@ describe('Requires', () => {
   });
 
   test('useCase is set', () => {
+    const all: boolean = meta(new DevsResource()).property('all').get('token');
     const uc: UseCase = meta(new DevResource()).property('update').get('uc');
+    expect(all).toBeTruthy();
     expect(uc).toMatchObject(UseCase.ChangePassword);
   });
 
