@@ -11,8 +11,9 @@ export const error = (
 ): void => {
   const status: HttpStatus = choose<HttpStatus>(p.error)
     .case(e => isResults(e), p.options.onError)
+    .case(e => isError(e) && e.name === 'AuthenticationError', e => HttpStatus.byId((e as any).status, HttpStatus.InternalServerError))
     .case(e => isError(e) && e.message === 'Does not exist', p.options.onNotFound)
     .else(HttpStatus.InternalServerError);
-  res.status(status.status);
-  res.json(toRestResult(p.error, status));
+
+  res.status(status.status).json(toRestResult(p.error, status));
 };

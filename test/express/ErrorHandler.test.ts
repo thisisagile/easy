@@ -3,6 +3,8 @@ import { NextFunction, Request, Response } from 'express';
 import { error, HttpStatus, results, toRestResult, toResult } from '../../src';
 import * as restResult from '../../src/services/RestResult';
 
+const authenticationError = ({ name, status }: HttpStatus) => ({ ...Error(), name: "AuthenticationError", message: name, status });
+
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.NotFound, onError: HttpStatus.BadRequest };
   let req: Request;
@@ -12,7 +14,7 @@ describe('ErrorHandler', () => {
 
   beforeEach(() => {
     req = ({} as unknown) as Request;
-    res = ({ set: mock.return(), status: mock.return(), json: mock.return() } as unknown) as Response;
+    res = ({ set: mock.this(), status: mock.this(), json: mock.this() } as unknown) as Response;
     next = mock.return();
     toRestResultMock.mockReturnValue({});
   });
@@ -26,6 +28,13 @@ describe('ErrorHandler', () => {
     error({ error: e, options }, req, res, next);
     expect(res.status).toHaveBeenCalledWith(options.onNotFound.status);
     expect(toRestResultMock).toHaveBeenCalledWith(e, options.onNotFound);
+  });
+
+  test('handle AuthenticationError', () => {
+    const e = authenticationError(HttpStatus.Forbidden);
+    error({ error: e, options }, req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Forbidden.status);
+    expect(toRestResultMock).toHaveBeenCalledWith(e, HttpStatus.Forbidden);
   });
 
   test('handle Error', () => {
