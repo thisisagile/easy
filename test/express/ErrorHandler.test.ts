@@ -2,8 +2,7 @@ import { mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
 import { error, HttpStatus, results, toRestResult, toResult } from '../../src';
 import * as restResult from '../../src/services/RestResult';
-
-const authenticationError = ({ name, status }: HttpStatus) => ({ ...Error(), name: "AuthenticationError", message: name, status });
+import { authenticationError } from '../../src/express/SecurityHandler';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.NotFound, onError: HttpStatus.BadRequest };
