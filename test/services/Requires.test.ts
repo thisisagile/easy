@@ -3,19 +3,19 @@ import { DevResource, DevsResource } from '../ref';
 
 describe('Requires', () => {
   test('token is required', () => {
-    const all: boolean = meta(new DevsResource()).property('all').get('token');
-    expect(all).toBeTruthy();
+    const token: boolean = meta(new DevResource()).property('upsert').get('token');
+    expect(token).toBeTruthy();
   });
 
   test('token is not required', () => {
-    const insert: boolean = meta(new DevsResource()).property('insert').get('token');
-    expect(insert).toBeFalsy();
+    const token: boolean = meta(new DevsResource()).property('insert').get('token');
+    expect(token).toBeFalsy();
   });
 
   test('scope is set', () => {
-    const all: boolean = meta(new DevsResource()).property('all').get('token');
+    const token: boolean = meta(new DevResource()).property('byId').get('token');
     const scope: Scope = meta(new DevResource()).property('byId').get('scope');
-    expect(all).toBeTruthy();
+    expect(token).toBeTruthy();
     expect(scope).toMatchObject(Scope.Basic);
   });
 
@@ -25,9 +25,9 @@ describe('Requires', () => {
   });
 
   test('useCase is set', () => {
-    const all: boolean = meta(new DevsResource()).property('all').get('token');
+    const token: boolean = meta(new DevResource()).property('update').get('token');
     const uc: UseCase = meta(new DevResource()).property('update').get('uc');
-    expect(all).toBeTruthy();
+    expect(token).toBeTruthy();
     expect(uc).toMatchObject(UseCase.ChangePassword);
   });
 

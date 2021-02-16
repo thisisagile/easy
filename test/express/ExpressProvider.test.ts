@@ -1,7 +1,8 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
 import { ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
-import { DevsResource, DevUri, TestService } from '../ref';
+import { DevResource, DevsResource, DevUri, TestService } from '../ref';
+import passport from 'passport';
 
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
 type Endpoint = { path?: string; handler?: AsyncHandler };
@@ -70,5 +71,14 @@ describe('ExpressProvider', () => {
     await endpoint.handler({} as Request, res as Response, jest.fn());
 
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NoContent.status);
+  });
+
+  test('use security from decorator', async () => {
+    const authSpy = jest.spyOn(passport, "authenticate");
+    const resource = new DevResource();
+
+    provider.route(TestService.Dev, resource);
+
+    expect(authSpy).toHaveBeenCalledTimes(3);
   });
 });

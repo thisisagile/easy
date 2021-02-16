@@ -17,12 +17,12 @@ describe('Router', () => {
     expect(route.route('dev')).toMatchText('/dev/developers');
     expect(endpoints).toHaveLength(2);
     expect(endpoints[0].verb.verb).toBe(HttpVerb.Get);
-    expect(endpoints[0].requires.token).toBeTruthy();
   });
 
   test('Router works on a secured class', () => {
     const { endpoints } = routes(new DevResource());
     expect(endpoints[0].requires.scope).toBe(Scope.Basic);
     expect(endpoints[1].requires.uc).toBe(UseCase.ChangePassword);
+    expect(endpoints[2].requires.token).toBeTruthy();
   });
 });

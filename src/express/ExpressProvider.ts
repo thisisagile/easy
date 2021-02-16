@@ -1,11 +1,15 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, Handler, Resource, routes, Service, toReq, toRestResult, Verb, VerbOptions } from '../services';
+import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, toRestResult, VerbOptions } from '../services';
+import passport from 'passport';
+import { checkScope, checkUseCase } from './SecurityHandler';
+import { requestContext } from './RequestContextHandler';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
-    this.app.set("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
+    this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+    this.use(requestContext);
   }
 
   use = (handler: Handler): void => {
@@ -21,9 +25,15 @@ export class ExpressProvider implements AppProvider {
     const { route, endpoints } = routes(resource);
     const router = express.Router({ mergeParams: true });
 
-    endpoints.forEach(({ endpoint, verb }: { endpoint: Endpoint; verb: Verb }) => {
+    endpoints.forEach(({ endpoint, verb, requires }: Route) => {
       console.log(verb.verb.code, route.route(service.name));
-      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ExpressProvider.handle(endpoint, verb.options));
+
+      const middleware: RequestHandler[] = [];
+      if (requires.token) middleware.push(passport.authenticate("jwt", { session: false, failWithError: true }));
+      if (requires.scope) middleware.push(checkScope(requires.scope));
+      if (requires.uc) middleware.push(checkUseCase(requires.uc));
+
+      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, ExpressProvider.handle(endpoint, verb.options));
     });
 
     this.app.use(router);

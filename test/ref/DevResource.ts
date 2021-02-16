@@ -5,7 +5,6 @@ import { Dev } from './Dev';
 @route(DevUri.Developers)
 export class DevsResource implements Resource {
   @search({ onOk: HttpStatus.NoContent })
-  @requires.token()
   all = (req: Req): List<Dev> => list(new Dev(req.id));
 
   @post()
@@ -23,6 +22,7 @@ export class DevResource implements Resource {
   update = (req: Req): Dev => new Dev(req.id);
 
   @patch()
+  @requires.token()
   upsert = (req: Req): Dev => new Dev(req.id);
 
   @del({ onOk: HttpStatus.BadGateway })
