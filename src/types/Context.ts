@@ -10,7 +10,7 @@ export type EnvContext = {
 export class DotEnvContext implements EnvContext {
   readonly domain = process.env.DOMAIN ?? 'easy';
   readonly host = process.env.HOST;
-  readonly port = 8080;
+  readonly port = Number.parseInt(process.env.PORT) ?? 8080;
 }
 
 export type RequestContext = {

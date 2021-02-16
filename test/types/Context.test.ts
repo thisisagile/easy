@@ -1,10 +1,10 @@
 import { ctx, isUuid, NamespaceContext, toUuid } from '../../src';
-import { host } from '../init';
+import { host, port } from '../init';
 
 describe('Ctx', () => {
   test('env context', () => {
     expect(ctx.env.host).toBe(host);
-    expect(ctx.env.port).toBe(8080);
+    expect(ctx.env.port).toBe(port);
     expect(ctx.env.domain).toBe('easy');
   });
 
