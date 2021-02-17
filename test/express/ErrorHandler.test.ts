@@ -48,4 +48,12 @@ describe('ErrorHandler', () => {
     expect(res.status).toHaveBeenCalledWith(options.onError.status);
     expect(toRestResultMock).toHaveBeenCalledWith(r, options.onError);
   });
+
+  test('handle non-custom error', () => {
+    const e = new Error('');
+    error(e, req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
+    expect(toRestResultMock).toHaveBeenCalledWith(e, HttpStatus.InternalServerError);
+
+  });
 });
