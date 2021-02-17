@@ -16,7 +16,7 @@ export const authenticationError = ({ name, status }: HttpStatus): Error & { sta
 export function checkScope(scope: Scope): RequestHandler {
   return (req, res, next) => {
     next(
-      choose(scope.code)
+      choose(scope.id)
         .case(s => (req.user as any)?.scopes.includes(s), undefined)
         .else(authenticationError(HttpStatus.Forbidden))
     );
@@ -26,8 +26,8 @@ export function checkScope(scope: Scope): RequestHandler {
 export function checkUseCase(uc: UseCase): RequestHandler {
   return (req, res, next) => {
     next(
-      choose(uc.code)
-        .case(s => (req.user as any)?.usecases.includes(s), undefined)
+      choose(uc.id)
+        .case(u => (req.user as any)?.usecases.includes(u), undefined)
         .else(authenticationError(HttpStatus.Forbidden))
     );
   };
