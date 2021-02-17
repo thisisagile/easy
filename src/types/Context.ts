@@ -13,7 +13,7 @@ export type EnvContext = {
 export class DotEnvContext implements EnvContext {
   readonly domain = process.env.DOMAIN ?? 'easy';
   readonly host = process.env.HOST;
-  readonly port = Number.parseInt(process.env.PORT) ?? 8080;
+  readonly port = Number.parseInt(process.env.PORT) || 8080;
 
   readonly get = (key: string, alt?: string): string => process.env[stringify(key.replace(/([a-z])([A-Z])/g, '$1 $2')).snake] ?? alt;
 }
