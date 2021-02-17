@@ -1,6 +1,5 @@
-import { authenticationError, checkScope, checkUseCase, security } from '../../src/express/SecurityHandler';
 import passport from 'passport';
-import { ctx, HttpStatus, Scope, UseCase } from '../../src';
+import { authenticationError, checkScope, checkUseCase, ctx, HttpStatus, Scope, security, UseCase } from '../../src';
 import { Request, Response } from 'express';
 
 describe('Checks', () => {
