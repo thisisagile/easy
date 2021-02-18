@@ -54,6 +54,5 @@ describe('ErrorHandler', () => {
     error(e, req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
     expect(toRestResultMock).toHaveBeenCalledWith(e, HttpStatus.InternalServerError);
-
   });
 });

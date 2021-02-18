@@ -11,14 +11,14 @@ describe('Environment Context', () => {
   test('override default environment context', () => {
     process.env.DOMAIN = 'domain';
     process.env.PORT = '42';
-    const c = new Context()
+    const c = new Context();
     expect(c.env.domain).toBe('domain');
     expect(c.env.port).toBe(42);
   });
 
   test('invalid env port results in default port', () => {
     process.env.PORT = '';
-    const c = new Context()
+    const c = new Context();
     expect(c.env.port).toBe(8080);
   });
 
