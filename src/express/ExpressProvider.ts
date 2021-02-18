@@ -1,18 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import {
-  AppProvider,
-  Endpoint,
-  Handler,
-  HttpStatus,
-  Resource,
-  rest,
-  RestResult,
-  Route,
-  routes,
-  Service,
-  toReq,
-  VerbOptions,
-} from '../services';
+import { AppProvider, Endpoint, Handler, HttpStatus, Resource, rest, RestResult, Route, routes, Service, toReq, VerbOptions } from '../services';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
 import { isDefined, toList } from '../types';
