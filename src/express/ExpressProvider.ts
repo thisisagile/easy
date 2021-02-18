@@ -1,22 +1,46 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, toRestResult, VerbOptions } from '../services';
+import {
+  AppProvider,
+  Endpoint,
+  Handler,
+  HttpStatus,
+  Resource,
+  rest,
+  RestResult,
+  Route,
+  routes,
+  Service,
+  toReq,
+  VerbOptions,
+} from '../services';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
+import { choose } from '../utils';
+import { isDefined, toList } from '../types';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
+
+export const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
+  choose<RestResult, any>(outcome)
+    .case(() => HttpStatus.NoContent.equals(status), undefined)
+    .case(
+      o => !isDefined(o),
+      () => rest.toData(status, [])
+    )
+    .else(o => rest.toData(status, toList(o)));
 
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 
+  private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+    endpoint(toReq(req))
+      .then((r: any) => res.status(options.onOk.status).json(toBody(options.onOk, r)))
+      .catch(error => next({ error, options }));
+
   use = (handler: Handler): void => {
     this.app.use(handler);
   };
-
-  private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
-    endpoint(toReq(req))
-      .then((r: any) => res.status(options.onOk.status).json(toRestResult(r, options.onOk)))
-      .catch(error => next({ error, options }));
 
   route = (service: Service, resource: Resource): void => {
     const { route, endpoints } = routes(resource);
