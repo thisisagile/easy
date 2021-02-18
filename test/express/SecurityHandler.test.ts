@@ -36,7 +36,7 @@ describe('Checks', () => {
 
 describe('SecurityHandler', () => {
   beforeEach(() => {
-    process.env.TOKEN_SECRET_OR_KEY = 'token';
+    process.env.TOKEN_PUBLIC_KEY = 'token';
   });
 
   test('security middleware with default settings', () => {

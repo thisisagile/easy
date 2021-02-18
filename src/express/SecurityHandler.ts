@@ -13,30 +13,26 @@ export const authenticationError = ({ name, status }: HttpStatus): Error & { sta
   status,
 });
 
-export function checkScope(scope: Scope): RequestHandler {
-  return (req, res, next) => {
-    next(
-      choose(scope.id)
-        .case(s => (req.user as any)?.scopes.includes(s), undefined)
-        .else(authenticationError(HttpStatus.Forbidden))
-    );
-  };
-}
+export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
-export function checkUseCase(uc: UseCase): RequestHandler {
-  return (req, res, next) => {
-    next(
-      choose(uc.id)
-        .case(u => (req.user as any)?.usecases.includes(u), undefined)
-        .else(authenticationError(HttpStatus.Forbidden))
-    );
-  };
-}
+export const checkScope = (scope: Scope): RequestHandler => (req, res, next) =>
+  next(
+    choose(scope.id)
+      .case(s => (req.user as any)?.scopes.includes(s), undefined)
+      .else(authenticationError(HttpStatus.Forbidden))
+  );
+
+export const checkUseCase = (uc: UseCase): RequestHandler => (req, res, next) =>
+  next(
+    choose(uc.id)
+      .case(u => (req.user as any)?.usecases.includes(u), undefined)
+      .else(authenticationError(HttpStatus.Forbidden))
+  );
 
 export const security = (): ((req: express.Request, res: express.Response, next: express.NextFunction) => void) => {
   const jwtConfig: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: ctx.env.get('tokenSecretOrKey'),
+    secretOrKey: ctx.env.get('tokenPublicKey'),
     issuer: ctx.env.get('tokenIssuer', ctx.env.domain),
     audience: ctx.env.get('tokenAudience'),
     passReqToCallback: true,

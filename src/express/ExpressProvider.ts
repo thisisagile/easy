@@ -1,7 +1,6 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, toRestResult, VerbOptions } from '../services';
-import passport from 'passport';
-import { checkScope, checkUseCase } from './SecurityHandler';
+import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { requestContext } from './RequestContextHandler';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -29,7 +28,7 @@ export class ExpressProvider implements AppProvider {
       console.log(verb.verb.code, route.route(service.name));
 
       const middleware: RequestHandler[] = [];
-      if (requires.token) middleware.push(passport.authenticate('jwt', { session: false, failWithError: true }));
+      if (requires.token) middleware.push(checkToken());
       if (requires.scope) middleware.push(checkScope(requires.scope));
       if (requires.uc) middleware.push(checkUseCase(requires.uc));
 
