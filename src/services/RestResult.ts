@@ -9,19 +9,19 @@ export type RestResult = {
 };
 
 export const rest = {
-  toData: (status: HttpStatus, items?: Json[]): RestResult => ({
+  toData: (status: HttpStatus, items: Json[] = []): RestResult => ({
     data: {
       code: status.status,
       items: list(items),
       itemCount: items.length,
     },
   }),
-  toError: (status: HttpStatus, errors: Result[] = []): RestResult => ({
+  toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({
     error: {
       code: status.status,
-      message: errors[0]?.message.toString() ?? status.name,
+      message: errors[0].message.toString(),
       errors: list(errors),
-      errorCount: errors?.length ?? 1,
+      errorCount: errors.length,
     },
   }),
 };
