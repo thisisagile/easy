@@ -1,22 +1,51 @@
-import { isA, isError, isResults, Results } from '../types';
+import { isError, isResults, isString, Result, Results, toResult } from '../types';
 import express from 'express';
-import { HttpStatus, Response, toRestResult, VerbOptions } from '../services';
+import { HttpStatus, isResponse, Response, rest, VerbOptions } from '../services';
 import { choose } from '../utils';
 
-type CustomError = { error: string | Error | Results | Response; options: VerbOptions };
-const isCustomError = (e?: unknown): e is CustomError => isA<CustomError>(e, 'error', 'options');
+type CustomError = { error: string | Error | Results | Response; options?: VerbOptions };
 
-export const error = (error: CustomError | Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
-  const p = isCustomError(error) ? error : { error, options: {} };
+// const isCustomError = (e?: unknown): e is CustomError => isA<CustomError>(e, 'error', 'options');
 
-  const status = choose<HttpStatus, any>(p.error)
-    .case(e => isResults(e), p.options?.onError ?? HttpStatus.BadRequest)
+const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
+  status,
+  body: rest.toError(status, errors),
+});
+
+const toBody = (error: string | Error | Results | Response, options: VerbOptions = {}): Response => {
+  return choose<Response, any>(error)
     .case(
-      e => isError(e) && e.name === 'AuthenticationError',
-      e => HttpStatus.byId(e.status, HttpStatus.InternalServerError)
+      o => isError(o) && o.name === 'AuthenticationError',
+      o => toResponse(HttpStatus.Forbidden, [o]),
     )
-    .case(e => isError(e) && e.message === 'Does not exist', p.options?.onNotFound ?? HttpStatus.NotFound)
-    .else(HttpStatus.InternalServerError);
+    .case(
+      o => isError(o) && o.message === 'Does not exist',
+      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [o]),
+    )
+    .case(
+      // This service breaks with an error
+      o => isError(o),
+      o => toResponse(HttpStatus.InternalServerError, [o]),
+    )
+    .case(
+      // This service fails
+      o => isResults(o),
+      (o: Results) => toResponse(options?.onError ?? HttpStatus.BadRequest, o.results),
+    )
+    .case(
+      // Underlying service fails
+      o => isResponse(o),
+      (o: Response) => toResponse(HttpStatus.InternalServerError, o.body.error?.errors),
+    )
+    .case(
+      // This service fails with a string
+      o => isString(o),
+      (o: Response) => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(o)]),
+    )
+    .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]));
+};
 
-  res.status(status.status).json(toRestResult(p.error, status));
+export const error = (e: CustomError | Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
+  const { status, body } = toBody((e as any)?.error ?? e, (e as any)?.options);
+  res.status(status.status).json(body);
 };
