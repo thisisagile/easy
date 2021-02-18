@@ -9,6 +9,7 @@ export class HttpStatus extends Enum {
   static Forbidden = new HttpStatus('Forbidden', 403);
   static NotFound = new HttpStatus('Not found', 404);
   static Conflict = new HttpStatus('Conflict', 409);
+  static ImATeapot = new HttpStatus("I'm a teapot", 418);
   static InternalServerError = new HttpStatus('Internal server error', 500);
   static NotImplemented = new HttpStatus('Not implemented', 501);
   static BadGateway = new HttpStatus('Bad gateway', 502);
