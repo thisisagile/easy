@@ -8,7 +8,7 @@ export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
-    this.use(requestContext);
+    this.app.use(express.json(), requestContext);
   }
 
   use = (handler: Handler): void => {
