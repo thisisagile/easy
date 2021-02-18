@@ -90,12 +90,12 @@ describe('validate', () => {
   });
 
   test('entity without constraints', () => {
-    expect(validate(new Product())).toHaveLength(1);
+    expect(validate(new Product())).toBeValid();
     expect(validate(new Product({ id: 42 }))).toBeValid();
   });
 
   test('entity with (nested) constraints', () => {
-    expect(validate(new ConstrainedProduct())).toHaveLength(7);
+    expect(validate(new ConstrainedProduct())).toHaveLength(6);
     expect(validate(new ConstrainedProduct({ id: 42 }))).toHaveLength(6);
     expect(validate(new ConstrainedProduct({ id: 42, price: 666, type: 'bulb' }))).toHaveLength(5);
     expect(validate(new ConstrainedProduct({ id: 42, price: 42, type: 'bulb' }))).toHaveLength(4);

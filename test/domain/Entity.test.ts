@@ -1,4 +1,4 @@
-import { Entity, required } from '../../src';
+import { Entity, isUuid, required } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
@@ -9,6 +9,11 @@ describe('Entity', () => {
 
   test('isValid passes', () => {
     expect(new Manager({ id: 42, title: 'CEO' })).toBeValid();
+  });
+
+  test('entity generates an id when not supplied', () => {
+    const m = new Manager({ title: 'CEO' });
+    expect(isUuid(m.id)).toBeTruthy();
   });
 
   test('isValid fails', () => {

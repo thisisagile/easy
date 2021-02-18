@@ -1,11 +1,12 @@
-import { Enum, isDefined, isEnum, isResults, isValidatable, isValue, list, List, meta, results, Results, Text, toResult, Value } from '../types';
+import { Enum, isDefined, isEnum, isResults, isValidatable, isValue, list, List, meta, results, Results, Text, toName, toResult, Value } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
 import { choose, ParseOptions, toText } from '../utils';
 
 export type Validator = { property: string; constraint: Constraint; text: Text; actual?: unknown };
 
-export const asResults = (subject: unknown, template: Text, options: ParseOptions = {}): Results => results(toResult(toText(subject, template, options)));
+export const asResults = (subject: unknown, template: Text, options: ParseOptions = {}): Results =>
+  results(toResult(toText(subject, template, options), toName(subject)));
 
 const validators = (subject: unknown): List<Validator> =>
   meta(subject)
@@ -25,7 +26,10 @@ const constraints = (subject?: unknown): Results =>
 
 export const validate = (subject?: unknown): Results =>
   choose<Results, unknown>(subject)
-    .case(s => !isDefined(s), results('Subject is not defined.'))
+    .case(
+      s => !isDefined(s),
+      s => asResults(s, 'Subject is not defined.')
+    )
     .case(
       s => isEnum(s),
       (e: Enum) => (e.isValid ? results() : asResults(e, 'This is not a valid {type.name}.'))
