@@ -27,11 +27,11 @@ export type RequestContext = {
 export class NamespaceContext implements RequestContext {
   private readonly namespace = createNamespace('context');
 
-  get token(): any {
+  get token(): unknown {
     return this.namespace.get('token');
   }
 
-  set token(token: any) {
+  set token(token: unknown) {
     this.namespace.set('token', token);
   }
 
