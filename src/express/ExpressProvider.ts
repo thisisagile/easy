@@ -1,14 +1,12 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, toRestResult, VerbOptions } from '../services';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
-import { requestContext } from './RequestContextHandler';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
-    this.app.use(express.json(), requestContext);
   }
 
   use = (handler: Handler): void => {
