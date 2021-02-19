@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
-import { HttpStatus, toRestResult } from '../services';
+import { NextFunction, Request, Response } from 'express';
 
-export const notFound = (req: Request, res: Response): void => {
-  res.status(HttpStatus.NotFound.status).json(toRestResult(HttpStatus.NotFound));
+export const notFound = (req: Request, res: Response, next: NextFunction): void => {
+  next(new Error('Does not exist'));
 };
