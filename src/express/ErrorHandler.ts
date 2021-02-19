@@ -16,16 +16,16 @@ const toBody = (error: string | Error | Results | Response, options: VerbOptions
   return choose<Response, any>(error)
     .case(
       o => isError(o) && o.name === 'AuthenticationError',
-      o => toResponse(HttpStatus.Forbidden, [o]),
+      o => toResponse(HttpStatus.Forbidden, [toResult(o.message)]),
     )
     .case(
       o => isError(o) && o.message === 'Does not exist',
-      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [o]),
+      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.message)]),
     )
     .case(
       // This service breaks with an error
       o => isError(o),
-      o => toResponse(HttpStatus.InternalServerError, [o]),
+      o => toResponse(HttpStatus.InternalServerError, [toResult(o.message)]),
     )
     .case(
       // This service fails
