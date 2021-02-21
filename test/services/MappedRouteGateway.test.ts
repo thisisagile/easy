@@ -1,4 +1,4 @@
-import { Api, HttpStatus, Map, MappedRouteGateway, toRestResult } from '../../src';
+import { Api, HttpStatus, Map, MappedRouteGateway, toResponse } from '../../src';
 import { Dev, DevUri, MappedDevGateway } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
@@ -15,7 +15,7 @@ describe('MappedRouteGateway', () => {
   });
 
   test('all calls api correctly', async () => {
-    api.get = mock.resolve(toRestResult(devs, HttpStatus.Ok));
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     map.in = mock.impl(a => a);
     const res = await gateway.all();
     expect(api.get).toHaveBeenCalledWith(DevUri.Developers);
@@ -24,7 +24,7 @@ describe('MappedRouteGateway', () => {
   });
 
   test('byId calls api correctly', async () => {
-    api.get = mock.resolve(toRestResult(devs, HttpStatus.Ok));
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     map.in = mock.impl(a => a);
     const res = await gateway.byId(42);
     expect(api.get).toHaveBeenCalledWith(DevUri.Developer);
@@ -35,7 +35,7 @@ describe('MappedRouteGateway', () => {
   test('add calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     map.out = mock.impl(a => a);
-    api.post = mock.resolve(toRestResult(body, HttpStatus.Ok));
+    api.post = mock.resolve(toResponse(HttpStatus.Ok, body));
     const res = await gateway.add(body);
     expect(map.out).toHaveBeenCalledTimes(1);
     expect(api.post).toHaveBeenCalledWith(DevUri.Developers, body);
@@ -45,7 +45,7 @@ describe('MappedRouteGateway', () => {
   test('update calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     map.out = mock.impl(a => a);
-    api.patch = mock.resolve(toRestResult(body, HttpStatus.Ok));
+    api.patch = mock.resolve(toResponse(HttpStatus.Ok, body));
     const res = await gateway.update(body);
     expect(map.out).toHaveBeenCalledTimes(1);
     expect(api.patch).toHaveBeenCalledWith(DevUri.Developer, body);

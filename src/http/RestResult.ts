@@ -24,38 +24,37 @@ export const rest = {
       errorCount: errors.length,
     },
   }),
+  to: (payload?: any | any[], status?: HttpStatus): RestResult =>
+    choose<RestResult, any>(payload)
+      .case(
+        p => !isDefined(p),
+        p => p
+      )
+      .case(
+        p => isHttpStatus(p),
+        p => rest.toError(p ?? status ?? HttpStatus.InternalServerError, [toResult(p.name)])
+      )
+      .case(
+        p => isResult(p) || isError(p),
+        p => rest.toError(status ?? HttpStatus.BadRequest, [p])
+      )
+      .case(
+        p => isResults(p),
+        p => rest.toError(status ?? HttpStatus.BadRequest, p.results)
+      )
+      .case(
+        p => isResponse(p),
+        p => rest.toError(status ?? HttpStatus.byId(p.body.error?.code), p.body.error?.errors)
+      )
+      .case(
+        p => p.error && p.error.errors,
+        p => rest.toError(status ?? HttpStatus.byId(p.error.code, HttpStatus.BadRequest), p.error.errors)
+      )
+      .case(
+        p => p.data && p.data.items,
+        p => rest.toData(status ?? HttpStatus.byId(p.data.code, HttpStatus.Ok), p.data.items)
+      )
+      .else(p => rest.toData(status ?? HttpStatus.Ok, toList(p))),
 };
 
 export const isRestResult = (r: unknown): r is RestResult => isDefined(r) && (isDefined((r as RestResult).data) || isDefined((r as RestResult).error));
-
-export const toRestResult = (payload?: any | any[], code?: HttpStatus): RestResult =>
-  choose<RestResult, any>(payload)
-    .case(
-      p => !isDefined(p),
-      p => p
-    )
-    .case(
-      p => isHttpStatus(p),
-      p => rest.toError(p ?? code ?? HttpStatus.InternalServerError, [toResult(p.name)])
-    )
-    .case(
-      p => isResult(p) || isError(p),
-      p => rest.toError(code ?? HttpStatus.BadRequest, [p])
-    )
-    .case(
-      p => isResults(p),
-      p => rest.toError(code ?? HttpStatus.BadRequest, p.results)
-    )
-    .case(
-      p => isResponse(p),
-      p => rest.toError(code ?? HttpStatus.byId(p.body.error?.code), p.body.error?.errors)
-    )
-    .case(
-      p => p.error && p.error.errors,
-      p => rest.toError(code ?? HttpStatus.byId(p.error.code, HttpStatus.BadRequest), p.error.errors)
-    )
-    .case(
-      p => p.data && p.data.items,
-      p => rest.toData(code ?? HttpStatus.byId(p.data.code, HttpStatus.Ok), p.data.items)
-    )
-    .else(p => rest.toData(code ?? HttpStatus.Ok, toList(p)));

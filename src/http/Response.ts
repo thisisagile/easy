@@ -1,6 +1,6 @@
-import { HttpStatus, isHttpStatus } from './HttpStatus';
-import { RestResult, toRestResult } from './RestResult';
-import { isA } from '../types';
+import { HttpStatus, toHttpStatus } from './HttpStatus';
+import { rest, RestResult } from './RestResult';
+import { Code, isA } from '../types';
 
 export type Response = {
   status: HttpStatus;
@@ -10,8 +10,8 @@ export type Response = {
 
 export const isResponse = (r?: unknown): r is Response => isA<Response>(r, 'status', 'body');
 
-export const toResponse = (status: HttpStatus | number, body?: unknown, headers?: { [key: string]: any }): Response => ({
-  status: isHttpStatus(status) ? status : HttpStatus.byId(status),
+export const toResponse = (status: HttpStatus | Code, body?: unknown, headers?: { [key: string]: any }): Response => ({
+  status: toHttpStatus(status),
   headers,
-  body: toRestResult(body),
+  body: rest.to(body),
 });
