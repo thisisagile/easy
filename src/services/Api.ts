@@ -21,4 +21,4 @@ export class Api {
     this.provider.execute({ uri, verb: HttpVerb.Delete, transform, options });
 }
 
-export const api = (provider?: RequestProvider): Api => new Api(provider);
+export const api: Api = new Api();
