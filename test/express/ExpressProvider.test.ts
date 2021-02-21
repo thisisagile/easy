@@ -8,7 +8,6 @@ type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise
 type Endpoint = { path?: string; handler?: AsyncHandler };
 
 describe('ExpressProvider', () => {
-
   const app = ({ listen: mock.return(), use: mock.return(), set: mock.return() } as unknown) as Express;
   const handler: Handler = () => undefined;
   let provider: ExpressProvider;
