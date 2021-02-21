@@ -1,4 +1,4 @@
-import { HttpStatus } from './HttpStatus';
+import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { RestResult, toRestResult } from './RestResult';
 import { isA } from '../types';
 
@@ -10,8 +10,8 @@ export type Response = {
 
 export const isResponse = (r?: unknown): r is Response => isA<Response>(r, 'status', 'body');
 
-export const toResponse = (status: number, headers?: { [key: string]: any }, body?: unknown): Response => ({
-  status: HttpStatus.byId(status),
+export const toResponse = (status: HttpStatus | number, body?: unknown, headers?: { [key: string]: any }): Response => ({
+  status: isHttpStatus(status) ? status : HttpStatus.byId(status),
   headers,
   body: toRestResult(body),
 });
