@@ -7,12 +7,15 @@ export class Repo<T extends Struct> {
   constructor(protected ctor: Constructor<T>, private gateway: Gateway) {}
 
   all = (): Promise<List<T>> => this.gateway.all().then(js => js.map(j => new this.ctor(j)));
+
   byId = (id: Id): Promise<T> =>
     this.gateway
       .byId(id)
       .then(j => when(j).not.isDefined.reject(new Error('Does not exist')))
       .then(j => new this.ctor(j));
+
   search = (q: JsonValue): Promise<List<T>> => this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
+
   exists = (id: Id): Promise<boolean> => this.gateway.exists(id);
 
   add = (json: Json): Promise<T> =>
