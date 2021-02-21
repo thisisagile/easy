@@ -1,6 +1,6 @@
 import { Api, HttpStatus, RouteGateway, toResponse } from '../../src';
 import { Dev, DevRoutedGateway, DevUri } from '../ref';
-import { fits, mock } from '@thisisagile/easy-test';
+import { mock } from '@thisisagile/easy-test';
 
 describe('RouteGateway', () => {
   const devs = [Dev.Sander.toJSON(), Dev.Naoufal.toJSON(), Dev.Wouter.toJSON()];
@@ -22,13 +22,6 @@ describe('RouteGateway', () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     await expect(gateway.byId(42)).resolves.toMatchObject(devs[0]);
     expect(api.get).toHaveBeenCalledWith(DevUri.Developer);
-  });
-
-  test('get calls api correctly with transform', async () => {
-    api.get = mock.resolve({ payload: devs });
-    const res = await new DevRoutedGateway(api).byName();
-    expect(api.get).toHaveBeenCalledWith(DevUri.Developers, fits.any());
-    expect(res).toBeTruthy();
   });
 
   test('search calls api correctly', async () => {
