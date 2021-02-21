@@ -1,8 +1,5 @@
 import { Json, Uri } from '../types';
-import { RequestOptions } from './RequestOptions';
-import { RestResult } from './RestResult';
-import { HttpVerb } from './HttpVerb';
-import { RequestProvider } from './RequestProvider';
+import { HttpVerb, RequestOptions, RequestProvider, RestResult } from '../http';
 import { AxiosProvider } from './AxiosProvider';
 
 export class Api {

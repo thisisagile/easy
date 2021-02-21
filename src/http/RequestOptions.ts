@@ -1,6 +1,6 @@
-import { ContentType } from './ContentType';
 import { ctx, Enum, isNotEmpty, JsonValue } from '../types';
-import { correlationHeader } from '../express';
+import { HttpHeader } from './HttpHeader';
+import { ContentType } from './ContentType';
 
 export class RequestOptions extends Enum {
   static Form = new RequestOptions(ContentType.Form);
@@ -20,7 +20,7 @@ export class RequestOptions extends Enum {
   };
 
   correlation = (): this => {
-    this.headers[correlationHeader] = ctx.request.correlationId;
+    this.headers[HttpHeader.Correlation] = ctx.request.correlationId;
     return this;
   };
 

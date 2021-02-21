@@ -1,6 +1,5 @@
-import { HttpVerb } from './HttpVerb';
-import { HttpStatus } from './HttpStatus';
 import { meta } from '../types';
+import { HttpStatus, HttpVerb } from '../http';
 
 export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus };
 export type Verb = { verb: HttpVerb; options: VerbOptions };

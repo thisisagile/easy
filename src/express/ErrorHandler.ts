@@ -1,7 +1,8 @@
 import { isError, isResults, isString, Result, Results, toResult } from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, Response, rest, VerbOptions } from '../services';
+import { HttpStatus, isResponse, Response, rest } from '../http';
 import { choose } from '../utils';
+import { VerbOptions } from '../resources';
 
 type CustomError = { error: string | Error | Results | Response; options?: VerbOptions };
 

@@ -1,12 +1,11 @@
 import { AppProvider, Handler } from './AppProvider';
-import { ExpressProvider } from '../express';
 import { Constructor, Enum, list, List } from '../types';
 import { Resource } from './Resource';
 
 export class Service extends Enum {
   protected port = 8080;
 
-  constructor(readonly name: string, protected app: AppProvider = new ExpressProvider(), protected resources: List<Resource> = list()) {
+  constructor(readonly name: string, protected app: AppProvider, protected resources: List<Resource> = list()) {
     super(name);
   }
 
@@ -30,5 +29,3 @@ export class Service extends Enum {
     this.app.listen(this.port, message);
   }
 }
-
-export const service = (name: string): Service => new Service(name);

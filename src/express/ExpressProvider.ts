@@ -1,8 +1,9 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { AppProvider, Endpoint, Handler, HttpStatus, Resource, rest, RestResult, Route, routes, Service, toReq, VerbOptions } from '../services';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
 import { isDefined, toList } from '../types';
+import { HttpStatus, rest, RestResult } from '../http';
+import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
@@ -53,3 +54,5 @@ export class ExpressProvider implements AppProvider {
     });
   };
 }
+
+export const service = (name: string): Service => new Service(name, new ExpressProvider());

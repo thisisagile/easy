@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { mock } from '@thisisagile/easy-test';
-import { correlation, correlationHeader, ctx, isUuid } from '../../src';
+import { correlation, ctx, HttpHeader, isUuid } from '../../src';
 
 describe('CorrelationHandler', () => {
   test('Correlation already in request', () => {
@@ -9,7 +9,7 @@ describe('CorrelationHandler', () => {
       const res = ({ setHeader: mock.return() } as unknown) as Response;
       const next = mock.return();
       correlation(req, res, next);
-      expect(res.setHeader).toHaveBeenCalledWith(correlationHeader, '42');
+      expect(res.setHeader).toHaveBeenCalledWith(HttpHeader.Correlation, '42');
       expect(ctx.request.correlationId).toBe('42');
     });
   });
@@ -20,7 +20,7 @@ describe('CorrelationHandler', () => {
       const res = ({ setHeader: mock.return() } as unknown) as Response;
       const next = mock.return();
       correlation(req, res, next);
-      expect(res.setHeader).toHaveBeenCalledWith(correlationHeader, ctx.request.correlationId);
+      expect(res.setHeader).toHaveBeenCalledWith(HttpHeader.Correlation, ctx.request.correlationId);
       expect(isUuid(ctx.request.correlationId)).toBeTruthy();
     });
   });

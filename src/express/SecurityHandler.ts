@@ -4,7 +4,7 @@ import { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-j
 import { ctx } from '../types';
 import { Scope, UseCase } from '../process';
 import { choose } from '../utils';
-import { HttpStatus } from '../services';
+import { HttpStatus } from '../http';
 
 export const authenticationError = ({ name, status }: HttpStatus): Error & { status: number } => ({
   ...Error(),
