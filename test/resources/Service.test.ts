@@ -1,11 +1,6 @@
-import { AppProvider, error, Handler, notFound, Service } from '../../src';
-import { DevResource, DevsResource } from '../ref';
+import { AppProvider, Service } from '../../src';
+import { DevResource, DevService, DevsResource } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-
-class DevService extends Service {
-  pre = (): Handler[] => [];
-  post = (): Handler[] => [notFound, error];
-}
 
 describe('Service', () => {
   let app: AppProvider;
@@ -15,7 +10,7 @@ describe('Service', () => {
   });
 
   test('Construction works', () => {
-    const service = new DevService('dev');
+    const service = new DevService('dev', app);
     expect(service.pre()).toHaveLength(0);
     expect(service.post()).toHaveLength(2);
   });

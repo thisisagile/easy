@@ -1,19 +1,22 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
 import { ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
-import { DevResource, DevsResource, DevUri, TestService } from '../ref';
+import { DevResource, DevsResource, DevUri, DevService } from '../ref';
 import passport from 'passport';
 
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
 type Endpoint = { path?: string; handler?: AsyncHandler };
 
 describe('ExpressProvider', () => {
+
   const app = ({ listen: mock.return(), use: mock.return(), set: mock.return() } as unknown) as Express;
   const handler: Handler = () => undefined;
   let provider: ExpressProvider;
+  let service: DevService;
 
   beforeEach(() => {
     provider = new ExpressProvider(app);
+    service = new DevService('dev', provider);
   });
 
   test('use', () => {
@@ -33,7 +36,7 @@ describe('ExpressProvider', () => {
   test('route', () => {
     const router = express.Router();
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
-    provider.route(TestService.Dev, DevsResource);
+    provider.route(service, DevsResource);
     expect(app.use).toHaveBeenCalledWith(router);
     expect(router['get']).toEqual(fits.type(Function));
     expect(router['post']).toEqual(fits.type(Function));
@@ -49,7 +52,7 @@ describe('ExpressProvider', () => {
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
     resource.insert = mock.resolve();
 
-    provider.route(TestService.Dev, resource);
+    provider.route(service, resource);
     await endpoint.handler({} as Request, res as Response, jest.fn());
 
     expect(endpoint.path).toBe(DevUri.Developers.path);
@@ -67,7 +70,7 @@ describe('ExpressProvider', () => {
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
     resource.all = mock.resolve();
 
-    provider.route(TestService.Dev, resource);
+    provider.route(service, resource);
     await endpoint.handler({} as Request, res as Response, jest.fn());
 
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NoContent.status);
@@ -77,7 +80,7 @@ describe('ExpressProvider', () => {
     const authSpy = jest.spyOn(passport, 'authenticate');
     const resource = new DevResource();
 
-    provider.route(TestService.Dev, resource);
+    provider.route(service, resource);
 
     expect(authSpy).toHaveBeenCalledTimes(3);
   });
