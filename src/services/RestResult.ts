@@ -1,7 +1,7 @@
 import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList, toResult } from '../types';
 import { choose } from '../utils';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
-import { isResponse } from './RequestProvider';
+import { isResponse } from './Response';
 
 export type RestResult = {
   data?: { code: number; items: List<Json>; itemCount: number };
