@@ -3,6 +3,7 @@ import express from 'express';
 import { HttpStatus, isResponse, Response, rest } from '../http';
 import { choose } from '../utils';
 import { VerbOptions } from '../resources';
+import { isAuthError } from './AuthError';
 
 type CustomError = { error: string | Error | Results | Response; options?: VerbOptions };
 
@@ -16,7 +17,7 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
 const toBody = (error: string | Error | Results | Response, options: VerbOptions = {}): Response => {
   return choose<Response, any>(error)
     .case(
-      o => isError(o) && o.name === 'AuthenticationError',
+      o => isAuthError(o),
       o => toResponse(HttpStatus.Forbidden, [toResult(o.message)])
     )
     .case(

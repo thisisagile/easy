@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { authenticationError, checkScope, checkUseCase, ctx, HttpStatus, Scope, security, UseCase } from '../../src';
+import { authError, checkScope, checkUseCase, ctx, HttpStatus, Scope, security, UseCase } from '../../src';
 import { Request, Response } from 'express';
 
 describe('Checks', () => {
@@ -17,7 +17,7 @@ describe('Checks', () => {
     c(({ user: { scopes: [] } } as unknown) as Request, {} as Response, cb);
     c(({ user: { scopes: [Scope.Basic.code] } } as unknown) as Request, {} as Response, cb);
 
-    expect(cb).toHaveBeenCalledWith(authenticationError(HttpStatus.Forbidden));
+    expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
   });
 
@@ -29,7 +29,7 @@ describe('Checks', () => {
     c(({ user: { usecases: [] } } as unknown) as Request, {} as Response, cb);
     c(({ user: { usecases: [UseCase.Main.code] } } as unknown) as Request, {} as Response, cb);
 
-    expect(cb).toHaveBeenCalledWith(authenticationError(HttpStatus.Forbidden));
+    expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
   });
 });
