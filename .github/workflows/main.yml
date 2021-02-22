@@ -33,6 +33,7 @@ jobs:
       - name: Test
         run: npm run test
       - name: SonarCloud Scan
+        if: ${{ github.event_name == 'push' }}
         uses: sonarsource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
