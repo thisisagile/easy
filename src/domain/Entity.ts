@@ -7,5 +7,3 @@ export abstract class Entity extends Struct {
 
   protected merge = (a: Json): Json => json.parse({ ...this, ...a, id: this.id });
 }
-
-export const isEntity = (e?: unknown): e is Entity => e instanceof Entity;
