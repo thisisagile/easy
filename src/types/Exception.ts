@@ -1,7 +1,7 @@
-import {Text} from './Text';
-import {Enum} from './Enum';
-import {isDefined} from './Is';
-import {stringify} from '../utils';
+import { Text } from './Text';
+import { Enum } from './Enum';
+import { isDefined } from './Is';
+import { stringify } from '../utils';
 
 export class Exception extends Enum {
   static readonly DoesNotExist = new Exception('Does not exist');
