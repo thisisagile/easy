@@ -1,15 +1,15 @@
-import {Exception, isException} from '../../src/types/Exception';
-import {Dev, Language} from '../ref';
+import { Exception, isException } from '../../src/types/Exception';
+import { Dev, Language } from '../ref';
 
 describe('Exception', () => {
-
-  const exc = new Exception('This is wrong');
-  const exc2 = new Exception('This is wrong');
+  const message = 'This is wrong';
+  const exc = new Exception(message);
+  const exc2 = new Exception(message);
 
   test('name and id are set properly', () => {
-    expect(exc.message).toBe('This is wrong');
+    expect(exc.message).toBe(message);
     expect(exc.id).toBe('ThisIsWrong');
-    expect(exc.name).toBe('This is wrong');
+    expect(exc.name).toBe(message);
   });
 
   test('isException', () => {
@@ -20,7 +20,7 @@ describe('Exception', () => {
 
   test('isException with text', () => {
     expect(isException(exc, '')).toBeFalsy();
-    expect(isException(exc, 'This is wrong')).toBeFalsy();
+    expect(isException(exc, message)).toBeFalsy();
     expect(isException(exc, 'ThisIsWrong')).toBeTruthy();
     expect(isException(exc, Dev.Naoufal)).toBeFalsy();
     expect(isException(exc, Exception.DoesNotExist)).toBeFalsy();
@@ -29,7 +29,7 @@ describe('Exception', () => {
 
   test('equals', () => {
     expect(exc.equals('')).toBeFalsy();
-    expect(exc.equals('Does not exist')).toBeFalsy();
+    expect(exc.equals(message)).toBeFalsy();
     expect(exc.equals(Language.Java)).toBeFalsy();
     expect(exc.equals(Exception.DoesNotExist)).toBeFalsy();
     expect(exc.equals(exc2)).toBeTruthy();
