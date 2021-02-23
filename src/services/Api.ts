@@ -3,8 +3,7 @@ import { HttpVerb, RequestOptions, RequestProvider, Response } from '../http';
 import { AxiosProvider } from './AxiosProvider';
 
 export class Api {
-  constructor(readonly provider: RequestProvider = new AxiosProvider()) {
-  }
+  constructor(readonly provider: RequestProvider = new AxiosProvider()) {}
 
   get = (uri: Uri, options: RequestOptions = RequestOptions.Json, transform?: (r: any) => any): Promise<Response> =>
     this.provider.execute({ uri, verb: HttpVerb.Get, transform, options });
