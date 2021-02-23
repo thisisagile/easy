@@ -4,6 +4,9 @@ export class HttpStatus extends Enum {
   static Ok = new HttpStatus('Ok', 200);
   static Created = new HttpStatus('Created', 201);
   static NoContent = new HttpStatus('No content', 204);
+  static MultipleChoices = new HttpStatus('Multiple Choices', 300);
+  static MovedPermanently = new HttpStatus('Moved Permanently', 301);
+  static Found = new HttpStatus('Found', 302);
   static BadRequest = new HttpStatus('Bad request', 400);
   static NotAuthorized = new HttpStatus('Not authorized', 401);
   static Forbidden = new HttpStatus('Forbidden', 403);
