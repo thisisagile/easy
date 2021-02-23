@@ -1,6 +1,7 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
 import { error, HttpStatus, rest, results } from '../../src';
+import {Exception} from '../../src/types/Exception';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.Conflict, onError: HttpStatus.ImATeapot };
@@ -57,13 +58,13 @@ describe('ErrorHandler', () => {
   });
 
   test('error Does not exist', () => {
-    error({ error: new Error('Does not exist') }, req, res, next);
+    error({ error: Exception.DoesNotExist }, req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
     expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 404, errorCount: 1 }) }));
   });
 
   test('error Does not exist with options', () => {
-    error({ error: new Error('Does not exist'), options }, req, res, next);
+    error({ error: Exception.DoesNotExist, options }, req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Conflict.status);
     expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 409, errorCount: 1 }) }));
   });

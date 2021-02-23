@@ -4,6 +4,7 @@ import { HttpStatus, isResponse, Response, rest } from '../http';
 import { choose } from '../utils';
 import { VerbOptions } from '../resources';
 import { isAuthError } from './AuthError';
+import { Exception } from '../types/Exception';
 
 type CustomError = { error: string | Error | Results | Response; options?: VerbOptions };
 
@@ -21,7 +22,7 @@ const toBody = (error: string | Error | Results | Response, options: VerbOptions
       o => toResponse(HttpStatus.Forbidden, [toResult(o.message)])
     )
     .case(
-      o => isError(o) && o.message === 'Does not exist',
+      o => Exception.DoesNotExist.equals(o),
       o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.message)])
     )
     .case(
