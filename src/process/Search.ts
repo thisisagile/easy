@@ -1,4 +1,4 @@
-import { Struct, Repo } from '../domain';
+import { Repo, Struct } from '../domain';
 import { Id, isDefined, JsonValue, list, List } from '../types';
 import { choose, resolve } from '../utils';
 
@@ -7,8 +7,8 @@ export class Search<T extends Struct> {
 
   all = (): Promise<List<T>> => this.repo.all();
   byId = (id: Id): Promise<T> => this.repo.byId(id);
-  search = (q: JsonValue): Promise<List<T>> => {
-    return choose<Promise<List<T>>, JsonValue>(q)
+  search = (query: JsonValue): Promise<List<T>> => {
+    return choose<Promise<List<T>>, JsonValue>(query)
       .case(
         q => isDefined(q),
         q => this.repo.search(q)
