@@ -2,6 +2,7 @@ export * from './Array';
 export * from './Constructor';
 export * from './Context';
 export * from './Enum';
+export * from './ErrorOrigin';
 export * from './Gateway';
 export * from './Id';
 export * from './Is';
