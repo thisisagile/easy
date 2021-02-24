@@ -5,12 +5,16 @@ import { choose } from '../utils';
 import { VerbOptions } from '../resources';
 import { isAuthError } from './AuthError';
 
+type CustomError = { error: ErrorOrigin; options?: VerbOptions };
+
+const toCustomError = (e?: unknown): CustomError => (isA<CustomError>(e, 'error') ? e : { error: e });
+
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   status,
   body: rest.toError(status, errors),
 });
 
-const toBody = (error: ErrorOrigin, options: VerbOptions = {}): Response => {
+const toBody = ({error, options}: CustomError): Response => {
   return choose<Response, any>(error)
     .case(
       o => isAuthError(o),
@@ -43,12 +47,7 @@ const toBody = (error: ErrorOrigin, options: VerbOptions = {}): Response => {
     .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]));
 };
 
-type CustomError = { error: ErrorOrigin; options?: VerbOptions };
-
-const toCustomError = (e?: unknown): CustomError => (isA<CustomError>(e, 'error') ? e : { error: e });
-
 export const error = (e: CustomError | Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
-  const { error, options } = toCustomError(e);
-  const { status, body } = toBody(error, options);
+  const { status, body } = toBody(toCustomError(e));
   res.status(status.status).json(body);
 };
