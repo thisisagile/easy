@@ -1,21 +1,19 @@
-import { isError, isResults, isString, Result, Results, toResult } from '../types';
+import {ErrorOrigin, isError, isResults, isString, Result, Results, toResult} from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, Response, rest } from '../http';
-import { choose } from '../utils';
-import { VerbOptions } from '../resources';
-import { isAuthError } from './AuthError';
-import { Exception } from '../types/Exception';
+import {HttpStatus, isResponse, Response, rest} from '../http';
+import {choose} from '../utils';
+import {VerbOptions} from '../resources';
+import {isAuthError} from './AuthError';
+import {Exception} from '../types/Exception';
 
-type CustomError = { error: string | Error | Results | Response; options?: VerbOptions };
-
-// const isCustomError = (e?: unknown): e is CustomError => isA<CustomError>(e, 'error', 'options');
+type CustomError = { error: ErrorOrigin; options?: VerbOptions };
 
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   status,
   body: rest.toError(status, errors),
 });
 
-const toBody = (error: string | Error | Results | Response, options: VerbOptions = {}): Response => {
+const toBody = (error: ErrorOrigin, options: VerbOptions = {}): Response => {
   return choose<Response, any>(error)
     .case(
       o => isAuthError(o),
@@ -49,6 +47,6 @@ const toBody = (error: string | Error | Results | Response, options: VerbOptions
 };
 
 export const error = (e: CustomError | Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
-  const { status, body } = toBody((e as any)?.error ?? e, (e as any)?.options);
+  const {status, body} = toBody((e as any)?.error ?? e, (e as any)?.options);
   res.status(status.status).json(body);
 };
