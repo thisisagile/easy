@@ -6,6 +6,7 @@ describe('isText', () => {
 
   test('correct', () => {
     expect(isText()).toBeFalsy();
+    expect(isText(null)).toBeFalsy();
     expect(isText(3)).toBeTruthy();
     expect(isText(has)).toBeFalsy();
     expect(isText({})).toBeTruthy();
