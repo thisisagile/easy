@@ -14,35 +14,35 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   body: rest.toError(status, errors),
 });
 
-const toBody = ({error, options}: CustomError): Response => {
+const toBody = ({ error, options }: CustomError): Response => {
   return choose<Response, any>(error)
     .case(
       o => isAuthError(o),
-      o => toResponse(HttpStatus.Forbidden, [toResult(o.message)]),
+      o => toResponse(HttpStatus.Forbidden, [toResult(o.message)])
     )
     .case(
       o => Exception.DoesNotExist.equals(o),
-      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.message)]),
+      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.message)])
     )
     .case(
       // This service breaks with an error
       o => isError(o),
-      o => toResponse(HttpStatus.InternalServerError, [toResult(o.message)]),
+      o => toResponse(HttpStatus.InternalServerError, [toResult(o.message)])
     )
     .case(
       // This service fails
       o => isResults(o),
-      (o: Results) => toResponse(options?.onError ?? HttpStatus.BadRequest, o.results),
+      (o: Results) => toResponse(options?.onError ?? HttpStatus.BadRequest, o.results)
     )
     .case(
       // Underlying service fails
       o => isResponse(o),
-      (o: Response) => toResponse(HttpStatus.InternalServerError, o.body.error?.errors),
+      (o: Response) => toResponse(HttpStatus.InternalServerError, o.body.error?.errors)
     )
     .case(
       // This service fails with a string
       o => isText(o),
-      (o: Response) => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(toString(o))]),
+      (o: Response) => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(toString(o))])
     )
     .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]));
 };
