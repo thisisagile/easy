@@ -1,6 +1,6 @@
-import { Dev, DevRoutedGateway, DevRepo } from '../ref';
+import { Dev, DevRepo, DevRoutedGateway } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { list, results } from '../../src';
+import { Exception, list, results } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Repo', () => {
@@ -30,7 +30,7 @@ describe('Repo', () => {
 
   test('byId rejects if gateway returns undefined', async () => {
     gateway.byId = mock.resolve(undefined);
-    await expect(repo.byId(42)).rejects.toEqual(new Error('Does not exist'));
+    await expect(repo.byId(42)).rejects.toEqual(Exception.DoesNotExist);
     expect(gateway.byId).toHaveBeenCalledWith(42);
   });
 
@@ -75,7 +75,7 @@ describe('Repo', () => {
   test('update where object is not found does not trigger gateway', async () => {
     gateway.byId = mock.resolve();
     gateway.update = mock.resolve();
-    await expect(repo.update(Dev.Invalid.toJSON())).rejects.not.toBeValid();
+    await expect(repo.update(Dev.Invalid.toJSON())).rejects.toBe(Exception.DoesNotExist);
     return expect(gateway.update).not.toHaveBeenCalled();
   });
 

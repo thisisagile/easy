@@ -1,4 +1,4 @@
-import { Exception, isException } from '../../src/types/Exception';
+import { Exception, isException } from '../../src';
 import { Dev, Language } from '../ref';
 
 describe('Exception', () => {

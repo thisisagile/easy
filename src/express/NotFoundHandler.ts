@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
+import { Exception } from '../types';
 
 export const notFound = (req: Request, res: Response, next: NextFunction): void => {
-  next(new Error('Does not exist'));
+  next(Exception.DoesNotExist);
 };

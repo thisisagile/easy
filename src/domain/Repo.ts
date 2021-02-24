@@ -1,4 +1,4 @@
-import { Constructor, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
+import { Constructor, Exception, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
 import { when } from '../validation';
 import { resolve } from '../utils';
 import { Struct } from './Struct';
@@ -11,7 +11,7 @@ export class Repo<T extends Struct> {
   byId = (id: Id): Promise<T> =>
     this.gateway
       .byId(id)
-      .then(j => when(j).not.isDefined.reject(new Error('Does not exist')))
+      .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j));
 
   search = (q: JsonValue): Promise<List<T>> => this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
@@ -28,7 +28,7 @@ export class Repo<T extends Struct> {
   update = (json: Json): Promise<T> =>
     this.gateway
       .byId(json.id as Id)
-      .then(j => when(j).not.isDefined.reject(new Error('Does not exist')))
+      .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j).update(json))
       .then(i => when(i).not.isValid.reject())
       .then(i => this.gateway.update(toJson(i)))
