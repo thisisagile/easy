@@ -5,9 +5,9 @@ import { isDefined, toList } from '../types';
 import { HttpStatus, rest, RestResult } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
-export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
+type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-export const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
+const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
   choose<RestResult, any>(outcome)
     .case(() => HttpStatus.NoContent.equals(status), undefined)
     .case(
