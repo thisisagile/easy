@@ -47,8 +47,18 @@ describe('AxiosProvider', () => {
     ).rejects.toEqual(expect.objectContaining({ body: { error: expect.objectContaining({ message }) } }));
   });
 
+  test('Get with reject and RestResult response', async () => {
+    axios.request = mock.reject({ response: { data: { error: { errors: [{message}] } }} });
+    return expect(
+      provider.execute({
+        uri: DevUri.Developers,
+        verb: HttpVerb.Get,
+      })
+    ).rejects.toEqual(expect.objectContaining({ body: { error: expect.objectContaining({ message }) } }));
+  });
+
   test('Get with reject and request', async () => {
-    axios.request = mock.reject({ request: { status: 400, statusText: message } });
+    axios.request = mock.reject({ request: { status: 400, message } });
     return expect(
       provider.execute({
         uri: DevUri.Developers,

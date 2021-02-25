@@ -1,5 +1,14 @@
 import axios, { AxiosError, Method } from 'axios';
-import { HttpStatus, HttpVerb, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
+import {
+  HttpStatus,
+  HttpVerb,
+  isRestResult,
+  Request,
+  RequestOptions,
+  RequestProvider,
+  Response,
+  toResponse,
+} from '../http';
 import { isDefined, toResult, Uri } from '../types';
 import { choose } from '../utils';
 
@@ -7,13 +16,13 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
   choose<Response, AxiosError>(error)
     .case(
       e => isDefined(e.response),
-      e => toResponse(e.response.status, toResult(e.response.statusText, verb, uri), e.response.headers)
+      e => toResponse(e.response.status, isRestResult(e.response.data) ? e.response.data : toResult(e.response.statusText, uri.path, uri), e.response.headers),
     )
     .case(
       e => isDefined(e.request),
-      e => toResponse(e.request.status, toResult(e.request.statusText, verb, uri), e.request.headers)
+      e => toResponse(e.request.status, toResult(e.request.message, uri.path, uri)),
     )
-    .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, verb, uri)));
+    .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 
 export class AxiosProvider implements RequestProvider {
   execute = ({ uri, verb, body, transform = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
