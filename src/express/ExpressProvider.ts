@@ -5,7 +5,7 @@ import { isDefined, toList } from '../types';
 import { ContentType, HttpStatus, rest, RestResult } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
-type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
+export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
   choose<RestResult, any>(outcome)
