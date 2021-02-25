@@ -1,4 +1,4 @@
-import { HttpStatus, HttpVerb, meta, Verb } from '../../src';
+import { ContentType, HttpStatus, HttpVerb, meta, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref';
 
 describe('Verb', () => {
@@ -25,6 +25,7 @@ describe('Verb', () => {
     expect(verb.options.onOk).toBe(HttpStatus.Ok);
     expect(verb.options.onNotFound).toBe(HttpStatus.NotFound);
     expect(verb.options.onError).toBe(HttpStatus.BadRequest);
+    expect(verb.options.type).toBe(ContentType.Json);
   });
 
   test('Get all verb options when overridden by verb', () => {
@@ -39,5 +40,6 @@ describe('Verb', () => {
     expect(verb.options.onOk).toBe(HttpStatus.BadGateway);
     expect(verb.options.onNotFound).toBe(HttpStatus.NotFound);
     expect(verb.options.onError).toBe(HttpStatus.BadRequest);
+    expect(verb.options.type).toBe(ContentType.Stream);
   });
 });

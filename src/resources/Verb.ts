@@ -1,13 +1,14 @@
 import { meta } from '../types';
-import { HttpStatus, HttpVerb } from '../http';
+import { ContentType, HttpStatus, HttpVerb } from '../http';
 
-export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus };
+export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType };
 export type Verb = { verb: HttpVerb; options: VerbOptions };
 
 const toVerbOptions = (options: VerbOptions): VerbOptions => ({
   onOk: options?.onOk ?? HttpStatus.Ok,
   onNotFound: options?.onNotFound ?? HttpStatus.NotFound,
   onError: options?.onError ?? HttpStatus.BadRequest,
+  type: options?.type ?? ContentType.Json,
 });
 
 const verb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (subject: unknown, property: string): void => {
