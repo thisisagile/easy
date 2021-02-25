@@ -4,4 +4,4 @@ import { Response } from '../http';
 import { Results } from './Results';
 import { Result } from './Result';
 
-export type ErrorType = Text | Error | Exception | Response | Results | Result;
+export type ErrorOrigin = Text | Error | Exception | Response | Results | Result;

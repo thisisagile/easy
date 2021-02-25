@@ -1,11 +1,10 @@
-import { ErrorType, Exception, isA, isError, isResults, isText, Result, Results, toResult, toString } from '../types';
+import { ErrorOrigin, Exception, isA, isError, isResults, isText, Result, Results, toResult, toString } from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, Response, rest } from '../http';
+import { HttpStatus, isResponse, Response, rest, VerbOptions } from '../http';
 import { choose } from '../utils';
-import { VerbOptions } from '../resources';
 import { isAuthError } from './AuthError';
 
-type CustomError = { error: ErrorType; options?: VerbOptions };
+type CustomError = { error: ErrorOrigin; options?: VerbOptions };
 
 const toCustomError = (e?: unknown): CustomError => (isA<CustomError>(e, 'error') ? e : { error: e });
 

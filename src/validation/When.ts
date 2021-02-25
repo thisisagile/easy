@@ -1,4 +1,4 @@
-import { Constructor, ErrorType, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray } from '../types';
+import { Constructor, ErrorOrigin, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray } from '../types';
 import { validate } from './Validate';
 import { reject, resolve } from '../utils';
 
@@ -34,7 +34,7 @@ class When<T> {
 
   is = (item: T): When<T> => this.clone(this.invalid === (this.subject === item));
 
-  reject = (error?: ErrorType): Promise<T> => (!this.invalid ? resolve(this.subject) : reject(this.results ?? error));
+  reject = (error?: ErrorOrigin): Promise<T> => (!this.invalid ? resolve(this.subject) : reject(this.results ?? error));
 
   recover = (f: (item: T) => T | Promise<T>): Promise<T> => resolve(!this.invalid ? this.subject : f(this.subject));
 

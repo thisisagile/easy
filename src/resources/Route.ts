@@ -1,5 +1,5 @@
 import { List, meta, Uri } from '../types';
-import { Verb } from './Verb';
+import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
 import { Scope, UseCase } from '../process';
