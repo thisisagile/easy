@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, RequestHandler, Response } fro
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
 import { isDefined, toList } from '../types';
-import { HttpStatus, rest, RestResult } from '../http';
+import { ContentType, HttpStatus, rest, RestResult } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -16,6 +16,20 @@ const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
     )
     .else(o => rest.toData(status, toList(o)));
 
+const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
+  res.status(options.onOk.status).type(options.type.id.toString());
+
+  choose<void, ContentType>(options.type)
+    .case(
+      ct => ContentType.Json.equals(ct),
+      () => res.json(toBody(options.onOk, result))
+    )
+    .case(
+      ct => ContentType.Stream.equals(ct),
+      () => res.end(result)
+    );
+};
+
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
@@ -23,7 +37,7 @@ export class ExpressProvider implements AppProvider {
 
   private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
-      .then((r: any) => res.status(options.onOk.status).json(toBody(options.onOk, r)))
+      .then((r: any) => toResponse(res, r, options))
       .catch(error => next({ error, options }));
 
   use = (handler: Handler): void => {
