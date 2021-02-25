@@ -1,4 +1,4 @@
-import { del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, Resource, route, Scope, search, UseCase } from '../../src';
+import { ContentType, del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, Resource, route, Scope, search, UseCase } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 
@@ -25,6 +25,6 @@ export class DevResource implements Resource {
   @requires.token()
   upsert = (req: Req): Dev => new Dev(req.id);
 
-  @del({ onOk: HttpStatus.BadGateway })
+  @del({ onOk: HttpStatus.BadGateway, type: ContentType.Stream })
   delete = (req: Req): boolean => isDefined(req.id);
 }
