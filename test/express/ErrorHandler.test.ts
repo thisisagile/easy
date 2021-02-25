@@ -20,12 +20,6 @@ describe('ErrorHandler', () => {
     expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 500, errorCount: 1 }) }));
   });
 
-  test('undefined', () => {
-    error(toOriginatedError(undefined), req, res, next);
-    expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 500, errorCount: 1 }) }));
-  });
-
   test('error undefined', () => {
     error(toOriginatedError(undefined), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
