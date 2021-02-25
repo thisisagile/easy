@@ -1,4 +1,4 @@
-import { ErrorOrigin, isAn, isError } from '../types';
+import { ErrorOrigin, isError } from '../types';
 import { VerbOptions } from './Verb';
 
 export class OriginatedError extends Error {
@@ -7,4 +7,6 @@ export class OriginatedError extends Error {
   }
 }
 
-export const isOriginatedError = (e?: unknown): e is OriginatedError => isError(e) && isAn<OriginatedError>(e, 'origin');
+export const isOriginatedError = (e?: unknown): e is OriginatedError => isError(e) && e instanceof OriginatedError;
+
+export const toOriginatedError = (e?: unknown, options?: VerbOptions): OriginatedError => (isOriginatedError(e) ? e : new OriginatedError(e, options));

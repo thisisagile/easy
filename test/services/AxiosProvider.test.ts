@@ -48,7 +48,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with reject and RestResult response', async () => {
-    axios.request = mock.reject({ response: { data: { error: { errors: [{message}] } }} });
+    axios.request = mock.reject({ response: { data: { error: { errors: [{ message }] } } } });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
