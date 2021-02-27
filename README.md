@@ -106,7 +106,6 @@ The **easy** framework supplies a nice and easy mechanism for validating instanc
 
 The `validate()` function will validate its `subject`, and recursively the subjects properties. The outcome of this validation is always a `Results` object, with a list of shortcomings (in its `results` property) of the subject. The `Results` object also has a property `isValid`, which is set to `true` if the subject is valid, or to `false` when it is not.
 
-
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
