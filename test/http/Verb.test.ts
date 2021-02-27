@@ -17,7 +17,7 @@ describe('Verb', () => {
 
   test('Get all verb decorated properties', () => {
     const verbs = dev.keys<Verb>('verb');
-    expect(verbs).toHaveLength(4);
+    expect(verbs).toHaveLength(5);
   });
 
   test('Get all verb options', () => {
@@ -40,6 +40,11 @@ describe('Verb', () => {
     expect(verb.options.onOk).toBe(HttpStatus.BadGateway);
     expect(verb.options.onNotFound).toBe(HttpStatus.NotFound);
     expect(verb.options.onError).toBe(HttpStatus.BadRequest);
+    expect(verb.options.type).toBe(ContentType.Stream);
+  });
+
+  test('Get content type when using stream', () => {
+    const verb: Verb = dev.property('pdf').get('verb');
     expect(verb.options.type).toBe(ContentType.Stream);
   });
 });
