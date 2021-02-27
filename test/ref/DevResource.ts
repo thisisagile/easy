@@ -1,4 +1,4 @@
-import { ContentType, del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, Resource, route, Scope, search, UseCase } from '../../src';
+import { ContentType, del, get, HttpStatus, isDefined, list, List, patch, post, put, Req, requires, Resource, route, Scope, search, stream, UseCase } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 
@@ -27,4 +27,7 @@ export class DevResource implements Resource {
 
   @del({ onOk: HttpStatus.BadGateway, type: ContentType.Stream })
   delete = (req: Req): boolean => isDefined(req.id);
+
+  @stream()
+  pdf = (): unknown => '';
 }
