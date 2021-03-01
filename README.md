@@ -119,3 +119,17 @@ We keep this library simple on purpose, extending it using additional libraries 
 Likely we will use jest for unit testing, wrap axios for request handling, and a simple mongodb connector, and wrap tsyringe for dependency injection.
 
 Please note: we are slowly adding more value to the library, step by step. Most of our additions are useful as such, both it will take some effort for the full architecture to be in place to implement fully working microservices. Please bare with us.
+
+## When
+The `When` class is a utility that is usually exposed through the `when()` function. It can be used to make validations in promises a little easier. such as in the following example.
+
+    update = (json: Json): Promise<T> =>
+    this.gateway
+    .byId(json.id as Id)
+    .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
+    .then(j => new this.ctor(j).update(json))
+    .then(i => when(i).not.isValid.reject())
+    .then(i => this.gateway.update(toJson(i)))
+    .then(j => new this.ctor(j));
+
+The `reject()` method is used to reject the chain, so it will not execute any of its following statements. The `reject()` method accept any error type. A special case is made for `when().not.isValid`. This statement validates the subject of the `when`, and reject with the results (an instance of `Results`) if no parameter is passed to `reject()`.
