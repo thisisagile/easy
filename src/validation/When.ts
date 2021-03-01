@@ -2,7 +2,7 @@ import { Constructor, ErrorOrigin, isDefined, isEmpty, isIn, ofGet, Predicate, R
 import { validate } from './Validate';
 import { reject, resolve } from '../utils';
 
-class When<T> {
+export class When<T> {
   constructor(readonly subject: T, readonly invalid = true, private results?: Results) {}
 
   get not(): When<T> {
@@ -34,7 +34,7 @@ class When<T> {
 
   is = (item: T): When<T> => this.clone(this.invalid === (this.subject === item));
 
-  reject = (error?: ErrorOrigin): Promise<T> => (!this.invalid ? resolve(this.subject) : reject(this.results ?? error));
+  reject = (error?: ErrorOrigin): Promise<T> => (!this.invalid ? resolve(this.subject) : reject(error ?? this.results));
 
   recover = (f: (item: T) => T | Promise<T>): Promise<T> => resolve(!this.invalid ? this.subject : f(this.subject));
 
