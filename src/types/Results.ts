@@ -3,7 +3,7 @@ import { isResult, toResult, Result } from './Result';
 import { Validatable } from './Validatable';
 import { isDefined } from './Is';
 
-const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => (isResult(r) ? r : toResult(r.toString(), 'easy')));
+const parse = (...rs: (Text | Result)[]): Result[] => rs.map(r => (isResult(r) ? r : toResult(r)));
 
 export class Results implements Validatable {
   public readonly results: Result[];
