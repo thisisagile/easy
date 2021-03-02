@@ -1,4 +1,4 @@
-import { HttpStatus, isRestResult, list, results, rest, toResult, Response, RestResult } from '../../src';
+import { HttpStatus, isRestResult, list, toResults, rest, toResult, Response, RestResult } from '../../src';
 import { Dev } from '../ref';
 
 const data = {
@@ -112,7 +112,7 @@ describe('rest.to', () => {
   });
 
   test('From results', () => {
-    const res = results('A good result');
+    const res = toResults('A good result');
     const r = rest.to(res, HttpStatus.BadGateway);
     expect(isRestResult(r)).toBeTruthy();
     expect(r.error.code).toBe(HttpStatus.BadGateway.status);

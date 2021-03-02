@@ -1,4 +1,4 @@
-import { Enum, isDefined, isEnum, isResults, isValidatable, isValue, list, List, meta, results, Results, Text, toName, toResult, Value } from '../types';
+import { Enum, isDefined, isEnum, isResults, isValidatable, isValue, list, List, meta, toResults, Results, Text, toName, toResult, Value } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
 import { choose, ParseOptions, toText } from '../utils';
@@ -6,7 +6,7 @@ import { choose, ParseOptions, toText } from '../utils';
 export type Validator = { property: string; constraint: Constraint; text: Text; actual?: unknown };
 
 export const asResults = (subject: unknown, template: Text, options: ParseOptions = {}): Results =>
-  results(toResult(toText(subject, template, options), toName(subject)));
+  toResults(toResult(toText(subject, template, options), toName(subject)));
 
 const validators = (subject: unknown): List<Validator> =>
   meta(subject)
@@ -22,7 +22,7 @@ const runValidator = (v: Validator, subject?: unknown): Results => {
 const constraints = (subject?: unknown): Results =>
   validators(subject)
     .mapDefined(v => runValidator(v, subject))
-    .reduce((rs, r) => rs.add(...r.results), results());
+    .reduce((rs, r) => rs.add(...r.results), toResults());
 
 export const validate = (subject?: unknown): Results =>
   choose<Results, unknown>(subject)
@@ -32,16 +32,16 @@ export const validate = (subject?: unknown): Results =>
     )
     .case(
       s => isEnum(s),
-      (e: Enum) => (e.isValid ? results() : asResults(e, 'This is not a valid {type.name}.'))
+      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type.name}.'))
     )
     .case(
       s => isValue(s),
-      (v: Value) => (v.isValid ? results() : asResults(v, 'This is not a valid {type.name}.'))
+      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type.name}.'))
     )
     .case(
       s => isValidatable(s),
       v => constraints(v)
     )
-    .else(results());
+    .else(toResults());
 
 export const validateReject = <T>(subject?: T): Promise<T> => when(subject).not.isValid.reject();

@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { error, Exception, HttpStatus, rest, results, toOriginatedError } from '../../src';
+import { error, Exception, HttpStatus, rest, toResults, toOriginatedError } from '../../src';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.Conflict, onError: HttpStatus.ImATeapot };
@@ -77,13 +77,13 @@ describe('ErrorHandler', () => {
   });
 
   test('error with results', () => {
-    error(toOriginatedError(results('help', 'me', 'please')), req, res, next);
+    error(toOriginatedError(toResults('help', 'me', 'please')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
     expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 400, errorCount: 3 }) }));
   });
 
   test('error with results and options', () => {
-    error(toOriginatedError(results('help', 'me'), options), req, res, next);
+    error(toOriginatedError(toResults('help', 'me'), options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.ImATeapot.status);
     expect(res.json).toHaveBeenCalledWith(fits.with({ error: fits.with({ code: 418, errorCount: 2 }) }));
   });

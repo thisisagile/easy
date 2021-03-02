@@ -20,9 +20,9 @@ export class Results implements Validatable {
     return this.results.length === 0;
   }
 
-  add = (...rs: (Text | Result)[]): Results => results(...this.results, ...parse(...rs));
+  add = (...rs: (Text | Result)[]): Results => toResults(...this.results, ...parse(...rs));
 }
 
-export const results = (...r: (Text | Result)[]): Results => new Results(...r);
+export const toResults = (...r: (Text | Result)[]): Results => new Results(...r);
 
 export const isResults = (r?: unknown): r is Results => isDefined(r) && r instanceof Results;

@@ -1,36 +1,36 @@
-import { isResults, toResult, Result, results, Results, Text } from '../../src';
+import { isResults, toResult, Result, toResults, Results, Text } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
 describe('Results', () => {
   const error: Text = 'Something went wrong.';
   const r: Result = toResult('Something else went wrong.', 'dev');
-  const res: Results = results(error, r);
+  const res: Results = toResults(error, r);
 
   // Create
 
   test('Create empty results', () => {
-    const rs = results();
+    const rs = toResults();
     expect(rs.results).toHaveLength(0);
     expect(rs).toBeValid();
   });
 
   test('Create with a single string', () => {
-    const rs = results(error);
+    const rs = toResults(error);
     expect(rs).toHaveLength(1);
     expect(rs).not.toBeValid();
     expect(rs.results[0].message).toBe(error);
   });
 
   test('Create with a single result', () => {
-    const rs = results(r);
+    const rs = toResults(r);
     expect(rs).toHaveLength(1);
     expect(rs).not.toBeValid();
     expect(rs.results[0].message).toBe(r.message);
   });
 
   test('Create with a text and a result', () => {
-    const rs = results(error, r);
+    const rs = toResults(error, r);
     expect(rs).toHaveLength(2);
     expect(rs).not.toBeValid();
     expect(rs.results[1].message).toBe(r.message);
@@ -64,7 +64,7 @@ describe('Results', () => {
 
 describe('isResults', () => {
   test('true', () => {
-    expect(isResults(results())).toBeTruthy();
+    expect(isResults(toResults())).toBeTruthy();
     expect(isResults(new Results(''))).toBeTruthy();
   });
 

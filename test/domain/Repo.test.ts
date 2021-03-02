@@ -1,6 +1,6 @@
 import { Dev, DevRepo, DevRoutedGateway } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, list, results } from '../../src';
+import { Exception, list, toResults } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Repo', () => {
@@ -61,7 +61,7 @@ describe('Repo', () => {
   });
 
   test('add valid object but gateway fails trigger gateway', async () => {
-    gateway.add = mock.reject(results('Wrong'));
+    gateway.add = mock.reject(toResults('Wrong'));
     await expect(repo.add(Dev.Jeroen.toJSON())).rejects.not.toBeValid();
     return expect(gateway.add).toHaveBeenCalled();
   });

@@ -1,5 +1,5 @@
-import {Dev, Language} from '../ref';
-import {Exception, Results, when} from '../../src';
+import { Dev, Language } from '../ref';
+import { Exception, Results, when } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {
@@ -80,13 +80,21 @@ describe('Testing When', () => {
   });
 
   test('Reject without error, with error, with exception', async () => {
-    let res = await when(Dev.Invalid).not.isValid.reject().catch(r => r);
+    let res = await when(Dev.Invalid)
+      .not.isValid.reject()
+      .catch(r => r);
     expect(res).toBeInstanceOf(Results);
-    res = await when(Dev.Invalid).not.isValid.reject('Is wrong').catch(r => r);
+    res = await when(Dev.Invalid)
+      .not.isValid.reject('Is wrong')
+      .catch(r => r);
     expect(res).toBe('Is wrong');
-    res = await when(Dev.Invalid).not.isValid.reject(Exception.DoesNotExist).catch(r => r);
+    res = await when(Dev.Invalid)
+      .not.isValid.reject(Exception.DoesNotExist)
+      .catch(r => r);
     expect(res).toBeInstanceOf(Exception);
-    res = await when(Language.byId(42)).not.isValid.reject().catch(r => r);
+    res = await when(Language.byId(42))
+      .not.isValid.reject()
+      .catch(r => r);
     expect(res).toHaveLength(1);
   });
 });
