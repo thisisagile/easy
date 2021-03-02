@@ -84,7 +84,7 @@ describe('ExpressProvider', () => {
     expect(authSpy).toHaveBeenCalledTimes(3);
   });
 
-  test('use security from decorator1', async() => {
+  test('Check rejected endpoint', async () => {
     const router = express.Router();
     const resource = new DevResource();
     let endpoint: Endpoint = {};
@@ -101,6 +101,6 @@ describe('ExpressProvider', () => {
     expect(endpoint.path).toBe(DevUri.Developer.path);
     expect(resource.delete).toHaveBeenCalled();
     expect(res.status).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(fits.with({origin: Exception.DoesNotExist }))
+    expect(next).toHaveBeenCalledWith(fits.with({ origin: Exception.DoesNotExist }));
   });
 });
