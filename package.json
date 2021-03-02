@@ -35,7 +35,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "^1.8.0",
+    "@thisisagile/easy-test": "^1.9.0",
     "@types/cls-hooked": "^4.3.3",
     "@types/form-urlencoded": "^2.0.1",
     "@types/passport": "^1.0.6",
