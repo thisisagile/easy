@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
-import { DevResource, DevsResource, DevUri, DevService } from '../ref';
+import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
+import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
@@ -82,5 +82,25 @@ describe('ExpressProvider', () => {
     provider.route(service, resource);
 
     expect(authSpy).toHaveBeenCalledTimes(3);
+  });
+
+  test('use security from decorator1', async() => {
+    const router = express.Router();
+    const resource = new DevResource();
+    let endpoint: Endpoint = {};
+    const res: any = { status: mock.return({ json: mock.return() }) };
+
+    mockRouterMethodOnce(router, 'delete', e => (endpoint = e));
+    jest.spyOn(express, 'Router').mockReturnValueOnce(router);
+    resource.delete = mock.reject(Exception.DoesNotExist);
+
+    provider.route(service, resource);
+    const next = mock.resolve();
+    await endpoint.handler({} as Request, res as Response, next);
+
+    expect(endpoint.path).toBe(DevUri.Developer.path);
+    expect(resource.delete).toHaveBeenCalled();
+    expect(res.status).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalledWith(fits.with({origin: Exception.DoesNotExist }))
   });
 });

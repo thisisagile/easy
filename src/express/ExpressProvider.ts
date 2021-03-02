@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, RequestHandler, Response } fro
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
 import { isDefined, toList } from '../types';
-import { ContentType, HttpStatus, rest, RestResult } from '../http';
+import { ContentType, HttpStatus, rest, RestResult, toOriginatedError } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -38,7 +38,7 @@ export class ExpressProvider implements AppProvider {
   private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
       .then((r: any) => toResponse(res, r, options))
-      .catch(error => next({ error, options }));
+      .catch(error => next(toOriginatedError(error, options)));
 
   use = (handler: Handler): void => {
     this.app.use(handler);
