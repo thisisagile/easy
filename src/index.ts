@@ -6,6 +6,7 @@ export * from './health';
 export * from './process';
 export * from './resources';
 export * from './services';
+export * from './security';
 export * from './sql';
 export * from './types';
 export * from './utils';
