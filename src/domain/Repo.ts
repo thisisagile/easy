@@ -30,7 +30,8 @@ export class Repo<T extends Struct> {
       .byId(json.id as Id)
       .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j).update(json))
-      .then(i => when(i).not.isValid.reject())
+      .then(i => when(i as T).not.isValid.reject())
+      .then(i => this.validate(i))
       .then(i => this.gateway.update(toJson(i)))
       .then(j => new this.ctor(j));
 
