@@ -1,4 +1,4 @@
-import { inFuture, inPast, isDefined, isFunction, isIn, isString, list, List, meta, Results, Text } from '../types';
+import { inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, list, List, meta, Results, Text } from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = (value: unknown) => boolean | Results;
@@ -13,6 +13,8 @@ export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator =
 export const defined = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} must be defined.');
 
 export const required = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} is required.');
+
+export const notEmpty = (message?: Text): PropertyDecorator => constraint(v => isNotEmpty(v), message ?? 'Property {property} may not be empty.');
 
 export const valid = (): PropertyDecorator => constraint(v => validate(v), '');
 
