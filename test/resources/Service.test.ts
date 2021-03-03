@@ -6,7 +6,7 @@ describe('Service', () => {
   let app: AppProvider;
 
   beforeEach(() => {
-    app = { use: mock.return(), route: mock.return(), listen: mock.return() };
+    app = { use: mock.return(), route: mock.return(), listen: mock.return(), stop: mock.return() };
   });
 
   test('Construction works', () => {

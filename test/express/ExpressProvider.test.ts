@@ -8,7 +8,8 @@ type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise
 type Endpoint = { path?: string; handler?: AsyncHandler };
 
 describe('ExpressProvider', () => {
-  const app = ({ listen: mock.return(), use: mock.return(), set: mock.return() } as unknown) as Express;
+  const server = ({close: mock.return()});
+  const app = ({listen: mock.return(server), use: mock.return(), set: mock.return(), close: mock.return() } as unknown) as Express;
   const handler: Handler = () => undefined;
   let provider: ExpressProvider;
   let service: DevService;
@@ -103,4 +104,10 @@ describe('ExpressProvider', () => {
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalledWith(fits.with({ origin: Exception.DoesNotExist }));
   });
+
+  test('Stop listening', () => {
+    provider.listen(9001);
+    provider.stop();
+    expect(provider.server.close).toHaveBeenCalled();
+  })
 });

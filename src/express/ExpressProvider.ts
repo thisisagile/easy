@@ -1,3 +1,4 @@
+import http from 'http';
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
@@ -31,6 +32,9 @@ const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
 };
 
 export class ExpressProvider implements AppProvider {
+  private _server: http.Server;
+  public get server(): http.Server { return this._server; }
+
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
@@ -63,10 +67,14 @@ export class ExpressProvider implements AppProvider {
   };
 
   listen = (port: number, message = `Service is listening on port ${port}.`): void => {
-    this.app.listen(port, () => {
+    this._server = this.app.listen(port, () => {
       console.log(message);
     });
   };
+
+  stop = (): void => {
+    this._server.close();
+  }
 }
 
 export const service = (name: string): Service => new Service(name, new ExpressProvider());

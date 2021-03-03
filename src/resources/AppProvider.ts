@@ -7,4 +7,5 @@ export interface AppProvider {
   use: (h: Handler) => void;
   route: (s: Service, r: Resource) => void;
   listen: (port: number, message?: string) => void;
+  stop: () => void;
 }
