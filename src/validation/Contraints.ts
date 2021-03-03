@@ -12,7 +12,7 @@ export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator =
 
 export const defined = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} must be defined.');
 
-export const required = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} is required.');
+export const required = (message?: Text): PropertyDecorator => constraint(v => isNotEmpty(v), message ?? 'Property {property} is required, and may not be empty.');
 
 export const notEmpty = (message?: Text): PropertyDecorator => constraint(v => isNotEmpty(v), message ?? 'Property {property} may not be empty.');
 
