@@ -1,12 +1,12 @@
-import { list, Query } from '../../src';
+import { list, SqlQuery } from '../../src';
 import { DevTable } from '../ref';
 
-describe('Query', () => {
+describe('SqlQuery', () => {
   const devs = new DevTable();
-  let query: Query;
+  let query: SqlQuery;
 
   beforeEach(() => {
-    query = new Query(devs);
+    query = new SqlQuery(devs);
   });
 
   test('Adding clauses works', () => {
@@ -16,7 +16,7 @@ describe('Query', () => {
   });
 
   test('Adding clauses on to of works', () => {
-    const query = new Query(devs, list(devs.level.is(3)));
+    const query = new SqlQuery(devs, list(devs.level.is(3)));
     expect(query.clauses).toHaveLength(1);
     query.where(devs.name.is('Naoufal'));
     expect(query.clauses).toHaveLength(2);
