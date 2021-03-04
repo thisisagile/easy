@@ -1,5 +1,5 @@
 import { Map, PropertyOptions } from '../utils';
-import { Database } from './index';
+import { Database } from '../data';
 import { Column } from './Column';
 import { Json, list, toUuid } from '../types';
 import { Select } from './Select';
