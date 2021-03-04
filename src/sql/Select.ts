@@ -1,9 +1,9 @@
 import { ifGet, list, List } from '../types';
 import { Column, OrderColumn } from './Column';
 import { Table } from './Table';
-import { Query } from './Query';
+import { SqlQuery } from './SqlQuery';
 
-export class Select extends Query {
+export class Select extends SqlQuery {
   protected ordered: List<OrderColumn> = list();
   protected grouped: List<Column> = list();
   protected limit = 0;

@@ -1,9 +1,9 @@
-import { Query } from './Query';
+import { SqlQuery } from './SqlQuery';
 import { Table } from './Table';
 import { Json } from '../types';
 import { quote } from './Clause';
 
-export class Insert extends Query {
+export class Insert extends SqlQuery {
   constructor(protected table: Table, protected fields: Json) {
     super(table);
   }
