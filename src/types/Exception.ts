@@ -5,6 +5,7 @@ import { stringify } from '../utils';
 
 export class Exception extends Enum {
   static readonly DoesNotExist = new Exception('Does not exist');
+  static readonly IsNotImplemented = new Exception('Is not implemented');
   static readonly IsNotValid = new Exception('Is not valid');
   static readonly Unknown = new Exception('Unknown error');
 
