@@ -42,7 +42,7 @@ describe('MongoGateway', () => {
 
   test('remove calls the provider', async () => {
     provider.remove = mock.resolve(true);
-    await expect(gateway.remove(42)).resolves;
+    await gateway.remove(42);
     expect(provider.remove).toHaveBeenCalled();
   });
 
