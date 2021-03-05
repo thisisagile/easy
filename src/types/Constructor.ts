@@ -1,6 +1,6 @@
 import { isFunction } from './Is';
 
-export type Constructor<T = unknown> = { new (...args: unknown[]): T };
+export type Constructor<T = any> = { new (...args: unknown[]): T };
 
 export const toName = (subject: unknown, postfix = ''): string => subject?.constructor.name?.replace(postfix, '').toLowerCase() ?? '';
 
