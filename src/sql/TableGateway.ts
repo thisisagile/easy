@@ -1,11 +1,10 @@
-import {Gateway, Id, isDefined, Json, List} from '../types';
-import {Table} from './Table';
-import {DataProvider} from '../data';
-import {when} from '../validation';
+import { Gateway, Id, isDefined, Json, List } from '../types';
+import { Table } from './Table';
+import { DataProvider } from '../data';
+import { when } from '../validation';
 
 export class TableGateway<T extends Table> implements Gateway {
-  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {
-  }
+  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
 
   all(): Promise<List<Json>> {
     return this.provider.query(this.table.select());
