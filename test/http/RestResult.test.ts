@@ -101,7 +101,7 @@ describe('rest.to', () => {
     expect(isRestResult(r)).toBeTruthy();
     expect(r.error.code).toBe(error.error.code);
     expect(r.error.errorCount).toBe(error.error.errors.length);
-    expect(r.error.message).toBe(error.error.errors[0].message);
+    expect(r.error.message).toBe(HttpStatus.BadGateway.name);
     expect(r.error.errors.first()).toMatchObject(error.error.errors[0]);
   });
 

@@ -19,7 +19,7 @@ export const rest = {
   toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({
     error: {
       code: status.status,
-      message: errors[0].message.toString(),
+      message: status.name ?? errors[0].message ?? 'Unknown',
       errors: list(errors),
       errorCount: errors.length,
     },

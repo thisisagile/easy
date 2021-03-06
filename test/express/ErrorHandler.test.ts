@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { Code, error, Exception, HttpStatus, rest, toResults, toOriginatedError } from '../../src';
+import { error, Exception, HttpStatus, rest, toOriginatedError, toResults } from '../../src';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.Conflict, onError: HttpStatus.ImATeapot };
@@ -8,8 +8,23 @@ describe('ErrorHandler', () => {
   let res: Response;
   let next: NextFunction;
 
-  const withError = (code: Code, errorCount = 1) => fits.with({ error: fits.with({ code, errorCount }) });
-  const withErrorAndMessage = (code: Code, errorCount = 1, message?: string) => fits.with({ error: fits.with({ code, errorCount, message }) });
+  const withError = (code: HttpStatus, errorCount = 1) =>
+    fits.with({
+      error: fits.with({
+        code: code.status,
+        errorCount,
+        message: code.name,
+      }),
+    });
+  const withErrorAndMessage = (code: HttpStatus, errorCount = 1, message?: string) =>
+    fits.with({
+      error: fits.with({
+        code: code.status,
+        errorCount,
+        errors: fits.with([{ message, domain: 'easy' }]),
+        message: code.name,
+      }),
+    });
 
   beforeEach(() => {
     req = ({} as unknown) as Request;
@@ -20,91 +35,91 @@ describe('ErrorHandler', () => {
   test('simple error', () => {
     error(new Error('This is wrong'), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError));
   });
 
   test('error undefined', () => {
     error(toOriginatedError(undefined), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError));
   });
 
   test('error undefined with options', () => {
     error(toOriginatedError(undefined, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError));
   });
 
   test('error string', () => {
     error(toOriginatedError('help'), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
-    expect(res.json).toHaveBeenCalledWith(withError(400));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.BadRequest));
   });
 
   test('error string with options', () => {
     error(toOriginatedError('help', options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.ImATeapot.status);
-    expect(res.json).toHaveBeenCalledWith(withError(418));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.ImATeapot));
   });
 
   test('error Error', () => {
     error(toOriginatedError(new Error('help')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError));
   });
 
   test('error Error with options', () => {
     error(toOriginatedError(new Error('help'), options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError));
   });
 
   test('error Does not exist', () => {
     error(toOriginatedError(Exception.DoesNotExist), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, Exception.DoesNotExist.message));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotFound, 1, Exception.DoesNotExist.message));
   });
 
   test('error Does not exist with info', () => {
     error(toOriginatedError(Exception.DoesNotExist.because('Bad parameter')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, 'Bad parameter'));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotFound, 1, 'Bad parameter'));
   });
 
   test('error Does not exist with options', () => {
     error(toOriginatedError(Exception.DoesNotExist, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Conflict.status);
-    expect(res.json).toHaveBeenCalledWith(withError(409));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.Conflict));
   });
 
   test('error other Exceptions', () => {
     error(toOriginatedError(Exception.Unknown), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(400, 1, Exception.Unknown.message));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.BadRequest, 1, Exception.Unknown.message));
   });
 
   test('error other Exceptions with info', () => {
     error(toOriginatedError(Exception.Unknown.because('Broken')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(400, 1, 'Broken'));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.BadRequest, 1, 'Broken'));
   });
 
   test('error other Exceptions with options', () => {
     error(toOriginatedError(Exception.Unknown, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.ImATeapot.status);
-    expect(res.json).toHaveBeenCalledWith(withError(418));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.ImATeapot));
   });
 
   test('error with results', () => {
     error(toOriginatedError(toResults('help', 'me', 'please')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
-    expect(res.json).toHaveBeenCalledWith(withError(400, 3));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.BadRequest, 3));
   });
 
   test('error with results and options', () => {
     error(toOriginatedError(toResults('help', 'me'), options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.ImATeapot.status);
-    expect(res.json).toHaveBeenCalledWith(withError(418, 2));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.ImATeapot, 2));
   });
 
   const resp = {
@@ -115,12 +130,12 @@ describe('ErrorHandler', () => {
   test('error with response', () => {
     error(toOriginatedError(resp), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500, 2));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError, 2));
   });
 
   test('error with response and options', () => {
     error(toOriginatedError(resp, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withError(500, 2));
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError, 2));
   });
 });
