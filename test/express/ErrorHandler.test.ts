@@ -8,7 +8,8 @@ describe('ErrorHandler', () => {
   let res: Response;
   let next: NextFunction;
 
-  const withError = (code: Code, errorCount: number = 1) => fits.with({ error: fits.with({ code, errorCount }) });
+  const withError = (code: Code, errorCount: number = 1) => fits.with({ error: fits.with({ code, errorCount})});
+  const withErrorAndMessage = (code: Code, errorCount: number = 1, message?: string) => fits.with({ error: fits.with({ code, errorCount, message })});
 
   beforeEach(() => {
     req = ({} as unknown) as Request;
@@ -61,15 +62,7 @@ describe('ErrorHandler', () => {
   test('error Does not exist', () => {
     error(toOriginatedError(Exception.DoesNotExist), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
-    expect(res.json).toHaveBeenCalledWith(
-      fits.with({
-        error: fits.with({
-          code: 404,
-          message: Exception.DoesNotExist.message,
-          errorCount: 1,
-        }),
-      })
-    );
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, Exception.DoesNotExist.message));
   });
 
 
