@@ -8,8 +8,8 @@ describe('ErrorHandler', () => {
   let res: Response;
   let next: NextFunction;
 
-  const withError = (code: Code, errorCount: number = 1) => fits.with({ error: fits.with({ code, errorCount})});
-  const withErrorAndMessage = (code: Code, errorCount: number = 1, message?: string) => fits.with({ error: fits.with({ code, errorCount, message })});
+  const withError = (code: Code, errorCount = 1) => fits.with({ error: fits.with({ code, errorCount }) });
+  const withErrorAndMessage = (code: Code, errorCount = 1, message?: string) => fits.with({ error: fits.with({ code, errorCount, message }) });
 
   beforeEach(() => {
     req = ({} as unknown) as Request;
@@ -66,16 +66,33 @@ describe('ErrorHandler', () => {
   });
 
   test('error Does not exist with info', () => {
-    error(toOriginatedError(Exception.DoesNotExist.with('Bad parameter')), req, res, next);
+    error(toOriginatedError(Exception.DoesNotExist.because('Bad parameter')), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
     expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, 'Bad parameter'));
   });
-
 
   test('error Does not exist with options', () => {
     error(toOriginatedError(Exception.DoesNotExist, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Conflict.status);
     expect(res.json).toHaveBeenCalledWith(withError(409));
+  });
+
+  test('error other Exceptions', () => {
+    error(toOriginatedError(Exception.Unknown), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(400, 1, Exception.Unknown.message));
+  });
+
+  test('error other Exceptions with info', () => {
+    error(toOriginatedError(Exception.Unknown.because('Broken')), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.BadRequest.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(400, 1, 'Broken'));
+  });
+
+  test('error other Exceptions with options', () => {
+    error(toOriginatedError(Exception.Unknown, options), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.ImATeapot.status);
+    expect(res.json).toHaveBeenCalledWith(withError(418));
   });
 
   test('error with results', () => {
