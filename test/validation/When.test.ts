@@ -1,5 +1,5 @@
-import { Dev, Language } from '../ref';
-import { Exception, Results, when } from '../../src';
+import {Dev, Language} from '../ref';
+import {Exception, Results, when} from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {
@@ -80,27 +80,25 @@ describe('Testing When', () => {
     expect(when(Dev.Jeroen).with(d => d.language === '').valid).toBeFalsy();
   });
 
-  test('Contains ', () => {
+  test('Contains', () => {
     expect(when(Dev.Jeroen).contains(d => d.language).valid).toBeTruthy();
     expect(when(Dev.Invalid).contains(d => d.name).valid).toBeFalsy();
   });
 
-  test('Reject without error, with error, with exception', async () => {
-    let res = await when(Dev.Invalid)
-      .not.isValid.reject()
-      .catch(r => r);
+  test('Reject without error, with error, with exception, with function', async () => {
+    let res = await when(Dev.Invalid).not.isValid.reject().catch(r => r);
     expect(res).toBeInstanceOf(Results);
-    res = await when(Dev.Invalid)
-      .not.isValid.reject('Is wrong')
-      .catch(r => r);
+
+    res = await when(Dev.Invalid).not.isValid.reject('Is wrong').catch(r => r);
     expect(res).toBe('Is wrong');
-    res = await when(Dev.Invalid)
-      .not.isValid.reject(Exception.DoesNotExist)
-      .catch(r => r);
+
+    res = await when(Dev.Invalid).not.isValid.reject(d => d.language).catch(r => r);
+    expect(res).toBe(Dev.Invalid.language);
+
+    res = await when(Dev.Invalid).not.isValid.reject(Exception.DoesNotExist).catch(r => r);
     expect(res).toBeInstanceOf(Exception);
-    res = await when(Language.byId(42))
-      .not.isValid.reject()
-      .catch(r => r);
+
+    res = await when(Language.byId(42)).not.isValid.reject().catch(r => r);
     expect(res).toHaveLength(1);
   });
 });
