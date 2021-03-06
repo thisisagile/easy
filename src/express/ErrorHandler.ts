@@ -1,8 +1,8 @@
-import { Exception, isError, isResults, isText, Result, Results, toResult, toString } from '../types';
+import {Exception, isError, isResults, isText, Result, Results, toResult, toString} from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, OriginatedError, Response, rest, toOriginatedError } from '../http';
-import { choose } from '../utils';
-import { isAuthError } from './AuthError';
+import {HttpStatus, isResponse, OriginatedError, Response, rest, toOriginatedError} from '../http';
+import {choose} from '../utils';
+import {isAuthError} from './AuthError';
 
 // // type CustomError = { error: ErrorOrigin; options?: VerbOptions };
 //
@@ -13,7 +13,7 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   body: rest.toError(status, errors),
 });
 
-const toBody = ({ origin, options }: OriginatedError): Response => {
+const toBody = ({origin, options}: OriginatedError): Response => {
   return choose<Response, any>(origin)
     .case(
       o => isAuthError(o),
@@ -21,12 +21,12 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
     )
     .case(
       o => Exception.DoesNotExist.equals(o),
-      o => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.message)])
+      (o: Exception) => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.info ?? o.message)])
     )
     .case(
       // This service breaks with an error
       o => isError(o),
-      o => toResponse(HttpStatus.InternalServerError, [toResult(o.message)])
+      (o: Error) => toResponse(HttpStatus.InternalServerError, [toResult(o.message)])
     )
     .case(
       // This service fails
@@ -47,6 +47,6 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
 };
 
 export const error = (e: Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
-  const { status, body } = toBody(toOriginatedError(e));
+  const {status, body} = toBody(toOriginatedError(e));
   res.status(status.status).json(body);
 };

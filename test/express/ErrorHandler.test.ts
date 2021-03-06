@@ -65,6 +65,12 @@ describe('ErrorHandler', () => {
     expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, Exception.DoesNotExist.message));
   });
 
+  test('error Does not exist with info', () => {
+    error(toOriginatedError(Exception.DoesNotExist.with('Bad parameter')), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.NotFound.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(404, 1, 'Bad parameter'));
+  });
+
 
   test('error Does not exist with options', () => {
     error(toOriginatedError(Exception.DoesNotExist, options), req, res, next);
