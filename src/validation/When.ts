@@ -1,42 +1,45 @@
-import { Constructor, ErrorOrigin, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray } from '../types';
-import { validate } from './Validate';
-import { reject, resolve } from '../utils';
+import {Constructor, ErrorOrigin, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray} from '../types';
+import {validate} from './Validate';
+import {reject, resolve} from '../utils';
 
 export class When<T> {
-  constructor(readonly subject: T, readonly invalid = true, private results?: Results) {}
+  constructor(readonly subject: T, readonly valid = true, private results?: Results) {
+  }
 
   get not(): When<T> {
-    return this.clone(!this.invalid);
+    return this.clone(!this.valid);
   }
 
   get isDefined(): When<T> {
-    return this.clone(this.invalid === isDefined(this.subject));
+    return this.clone(this.valid === isDefined(this.subject));
   }
 
   get isEmpty(): When<T> {
-    return this.clone(this.invalid === isEmpty(this.subject));
+    return this.clone(this.valid === isEmpty(this.subject));
   }
 
   get isTrue(): When<T> {
-    return this.clone(this.invalid === !!this.subject);
+    return this.clone(this.valid === !!this.subject);
   }
 
   get isValid(): When<T> {
     this.results = validate(this.subject);
-    return this.clone(this.invalid === this.results.isValid);
+    return this.clone(this.valid === this.results.isValid);
   }
 
-  isInstance = <U>(c: Constructor<U>): When<T> => this.clone(this.invalid === this.subject instanceof c);
+  isInstance = <U>(c: Constructor<U>): When<T> => this.clone(this.valid === this.subject instanceof c);
 
-  with = (pred: Predicate<T>): When<T> => this.clone(this.invalid === ofGet(pred, this.subject));
+  with = (pred: Predicate<T>): When<T> => this.clone(this.valid === ofGet(pred, this.subject));
 
-  in = (...items: T[]): When<T> => this.clone(this.invalid === isIn(this.subject, toArray(...items)));
+  contains = (property: (t: T) => unknown): When<T> => this.clone(this.valid === isDefined(ofGet(property, this.subject)));
 
-  is = (item: T): When<T> => this.clone(this.invalid === (this.subject === item));
+  in = (...items: T[]): When<T> => this.clone(this.valid === isIn(this.subject, toArray(...items)));
 
-  reject = (error?: ErrorOrigin): Promise<T> => (!this.invalid ? resolve(this.subject) : reject(error ?? this.results));
+  is = (item: T): When<T> => this.clone(this.valid === (this.subject === item));
 
-  recover = (f: (item: T) => T | Promise<T>): Promise<T> => resolve(!this.invalid ? this.subject : f(this.subject));
+  reject = (error?: ErrorOrigin): Promise<T> => (!this.valid ? resolve(this.subject) : reject(error ?? this.results));
+
+  recover = (f: (item: T) => T | Promise<T>): Promise<T> => resolve(!this.valid ? this.subject : f(this.subject));
 
   protected clone = (result = true): When<T> => new When(this.subject, result, this.results);
 }
