@@ -34,4 +34,10 @@ describe('Exception', () => {
     expect(exc.equals(Exception.DoesNotExist)).toBeFalsy();
     expect(exc.equals(exc2)).toBeTruthy();
   });
+
+  test('adding additional error', () => {
+    expect(Exception.DoesNotExist.with('Bad parameter').info).toBe('Bad parameter');
+    expect(Exception.DoesNotExist.info).toBeUndefined();
+    expect(Exception.DoesNotExist.with('Bad parameters').equals(Exception.DoesNotExist));
+  });
 });

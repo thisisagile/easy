@@ -9,9 +9,11 @@ export class Exception extends Enum {
   static readonly IsNotValid = new Exception('Is not valid');
   static readonly Unknown = new Exception('Unknown error');
 
-  constructor(readonly message: string) {
+  constructor(readonly message: string, public info?: string) {
     super(message, stringify(stringify(message).title).trim);
   }
+
+  with = (info: string): Exception => new Exception(this.message, info);
 }
 
 export const isException = (e?: unknown, t?: Text): e is Exception => e instanceof Exception && (isDefined(t) ? e.equals(t.toString()) : true);
