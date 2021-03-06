@@ -30,7 +30,7 @@ export class When<T> {
 
   with = (pred: Predicate<T>): When<T> => this.clone(this.valid === ofGet(pred, this.subject));
 
-  contains = (property: (t: T) => unknown): When<T> => this.clone(this.valid === isDefined(ofGet(property, this.subject)));
+  contains = (property: Get<unknown, T>): When<T> => this.clone(this.valid === isDefined(ofGet(property, this.subject)));
 
   in = (...items: T[]): When<T> => this.clone(this.valid === isIn(this.subject, toArray(...items)));
 
