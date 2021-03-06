@@ -12,8 +12,8 @@ The **easy** framework captures the best practices we (the contributors) have bu
 
 The **easy** framework already works fine in many situations. However, it also continuously improves and grows. It is a work-in-progress. Being a framework, it probably not always perfectly fits your situation. Therefore, we aim to implement **easy** so that it is straightforward, simple to use, standardized, and open to extensions. 
 
-# Description
-Straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
+# Welcome!
+The **easy** framework is a straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
 
 This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
