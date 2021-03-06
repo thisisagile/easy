@@ -10,7 +10,7 @@
 # Note
 The **easy** framework captures the best practices we (the contributors) have build up on implementing microservices architectures at a diverse range of clients in Typescript, runninng on node.js and deployed on Amazon, Google Cloud and even on Windows Server. The companies that contribute / have contributed include a well-known Dutch insurance company, an insurance software vendor, an IoT scale-up, a software vendor in logistics and an online e-commerce company. From those practices, the **easy** framework grows step-by-step. 
 
-The **easy** framework already works fine in many situations. However, it also continuously improves and grows. It is a work-in-progress. Being a framework, it probably not always perfectly fits your situation. Therefore, we aim to implement **easy** so that it is straightforward, simple to use, standardized, and open to extensions. 
+The **easy** framework already works fine in many situations. However, it also continuously improves and grows. It is a work-in-progress, including its documentation. Being a framework, it probably not always perfectly fits your situation. Therefore, we aim to implement **easy** so that it is straightforward, simple to use, standardized, and open to extensions. 
 
 # Welcome!
 The **easy** framework is a straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
