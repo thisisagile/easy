@@ -7,7 +7,7 @@ export const toName = (subject: unknown, postfix = ''): string => subject?.const
 export type Get<T = unknown, Param = unknown> = T | ((...params: Param[]) => T);
 export type Predicate<Param> = Get<boolean, Param>;
 
-export const ofGet = <T, Param>(g: Get<T, Param>, ...params: Param[]): T => (isFunction(g) ? g(...params) : g);
+export const ofGet = <T = unknown, Param = unknown>(g: Get<T, Param>, ...params: Param[]): T => (isFunction(g) ? g(...params) : g);
 export const ifGet = <T>(pred: Get, valid: Get<T>, invalid: Get<T>): T => (ofGet(pred) ? ofGet(valid) : ofGet(invalid));
 
 export type GetProperty<T, U> = keyof T | ((t: T) => U);
