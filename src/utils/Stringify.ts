@@ -1,3 +1,5 @@
+import {replaceAll} from '../types';
+
 class Stringify {
   private constructor(readonly subject: string) {}
 
@@ -13,7 +15,7 @@ class Stringify {
   }
 
   get pascal(): string {
-    return this.title.replace(/ /g, '');
+    return replaceAll(this.title, ' ', '');
   }
 
   get lower(): string {
@@ -25,11 +27,11 @@ class Stringify {
   }
 
   get kebab(): string {
-    return this.subject.replace(/ /g, '-').toLowerCase();
+    return replaceAll(this.subject, ' ', '-').toLowerCase();
   }
 
   get snake(): string {
-    return this.subject.replace(/ /g, '_').toUpperCase();
+    return replaceAll(this.subject, ' ', '_').toUpperCase();
   }
 
   get initials(): string {
