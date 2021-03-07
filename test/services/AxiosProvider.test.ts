@@ -1,7 +1,7 @@
-import {AxiosProvider, HttpStatus, HttpVerb} from '../../src';
-import {DevUri} from '../ref';
-import axios, {AxiosResponse} from 'axios';
-import {fits, mock} from '@thisisagile/easy-test';
+import { AxiosProvider, HttpStatus, HttpVerb } from '../../src';
+import { DevUri } from '../ref';
+import axios, { AxiosResponse } from 'axios';
+import { fits, mock } from '@thisisagile/easy-test';
 
 describe('AxiosProvider', () => {
   const message = 'This is not right.';
@@ -21,7 +21,7 @@ describe('AxiosProvider', () => {
         error: fits.with({
           code: code.status,
           errorCount,
-          errors: fits.with([{domain: fits.any(), message, location: fits.any()}]),
+          errors: fits.with([{ domain: fits.any(), message, location: fits.any() }]),
           message: code.name,
         }),
       },
@@ -32,8 +32,8 @@ describe('AxiosProvider', () => {
   });
 
   test('Simple get', async () => {
-    axios.request = mock.resolve(asResponse(HttpStatus.Ok, {name: 'Sander'}));
-    const r = await provider.execute({uri: DevUri.Developers, verb: HttpVerb.Get});
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, { name: 'Sander' }));
+    const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
     expect(axios.request).toHaveBeenCalledWith(
       fits.with({
         url: DevUri.Developers.toString(),
@@ -44,19 +44,19 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with list', async () => {
-    axios.request = mock.resolve(asResponse(HttpStatus.Ok, [{name: 'Sander'}, {name: 'Wouter'}]));
-    const r = await provider.execute({uri: DevUri.Developers, verb: HttpVerb.Get});
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, [{ name: 'Sander' }, { name: 'Wouter' }]));
+    const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
     expect(r.body.data.items).toHaveLength(2);
   });
 
   test('Get with transform', async () => {
-    axios.request = mock.resolve(asResponse(HttpStatus.Ok, {dev: {name: 'Sander'}}));
-    const r = await provider.execute({uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev});
-    expect(r.body.data.items[0]).toMatchObject({name: 'Sander'});
+    axios.request = mock.resolve(asResponse(HttpStatus.Ok, { dev: { name: 'Sander' } }));
+    const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
+    expect(r.body.data.items[0]).toMatchObject({ name: 'Sander' });
   });
 
   test('Get with reject and response', async () => {
-    axios.request = mock.reject({response: {statusText: message}});
+    axios.request = mock.reject({ response: { statusText: message } });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
@@ -66,7 +66,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with reject and RestResult response', async () => {
-    axios.request = mock.reject({response: {data: {error: {errors: [{message}]}}}});
+    axios.request = mock.reject({ response: { data: { error: { errors: [{ message }] } } } });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
@@ -78,7 +78,7 @@ describe('AxiosProvider', () => {
           error: fits.with({
             code: 400,
             errorCount: 1,
-            errors: fits.with([{message: 'This is not right.'}]),
+            errors: fits.with([{ message: 'This is not right.' }]),
             message: 'Bad request',
           }),
         },
@@ -89,7 +89,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with reject and request, should not have headers and status', async () => {
-    axios.request = mock.reject({request: {status: 400, message}});
+    axios.request = mock.reject({ request: { status: 400, message } });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
@@ -99,7 +99,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with reject and message', async () => {
-    axios.request = mock.reject({message});
+    axios.request = mock.reject({ message });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
@@ -109,7 +109,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Get with reject and transform', async () => {
-    axios.request = mock.reject({message});
+    axios.request = mock.reject({ message });
     return expect(
       provider.execute({
         uri: DevUri.Developers,
