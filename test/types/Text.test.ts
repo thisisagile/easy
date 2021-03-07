@@ -1,4 +1,4 @@
-import { toString, isText } from '../../src';
+import { toString, isText, replaceAll } from '../../src';
 import { Dev } from '../ref';
 
 describe('isText', () => {
@@ -26,5 +26,15 @@ describe('isText', () => {
     expect(toString(has, () => 'alt')).toBe('alt');
     expect(toString('hallo', 'alt')).toBe('hallo');
     expect(toString(Dev.Jeroen, Dev.Naoufal)).toBe('Jeroen');
+  });
+
+  test('replaceAll', () => {
+    expect(replaceAll(undefined, 'alt', '')).toBe('');
+    expect(replaceAll(undefined, '', 'alt')).toBe('alt');
+    expect(replaceAll('Hello', 'alt', '')).toBe('Hello');
+    expect(replaceAll('Hello', 'ello', 'alt')).toBe('Halt');
+    expect(replaceAll('Hello hello', 'ello', 'alt')).toBe('Halt halt');
+    expect(replaceAll(Dev.Naoufal, 'Na', 'Ja')).toBe('Jaoufal');
+    expect(replaceAll(Dev.Naoufal, Dev.Naoufal, Dev.Jeroen)).toBe(Dev.Jeroen.name);
   });
 });
