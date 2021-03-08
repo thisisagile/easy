@@ -16,6 +16,10 @@ export class CollectionGateway implements Gateway {
     return this.data.then(d => d.first(i => i.id === id)).then(d => (d ? { ...d } : undefined));
   }
 
+  by = (key: string, value: JsonValue): Promise<List<Json>> => {
+    return this.data.then(d => d.filter(i => i[key] === value));
+  }
+
   exists(id: Id): Promise<boolean> {
     return this.byId(id).then(d => isDefined(d));
   }

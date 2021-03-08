@@ -1,12 +1,12 @@
-import { CollectionGateway, Json, List, toJson } from '../../src';
-import { Dev, DevCollectionGateway } from '../ref';
+import {CollectionGateway, Json, List, resolve, toJson} from '../../src';
+import {Dev} from '../ref';
 
 describe('CollectionGateway', () => {
   const dev = Dev.All.first();
-  let gateway: DevCollectionGateway;
+  let gateway: CollectionGateway;
 
   beforeEach(() => {
-    gateway = new DevCollectionGateway();
+    gateway = new CollectionGateway('devs', resolve(Dev.All.toJSON()));
   });
 
   test('byId with known id returns product', () => {
@@ -22,6 +22,15 @@ describe('CollectionGateway', () => {
     a.name = 'Hello';
     expect(a).not.toStrictEqual(dev.toJSON());
     return expect(gateway.byId(dev.id)).resolves.not.toStrictEqual(a);
+  });
+
+  test('by returns a list', () => {
+    expect(gateway.by('name', 'Wouter')).resolves.toHaveLength(1);
+    return expect(gateway.by('name', 'Laurens')).resolves.toHaveLength(0);
+  });
+
+  test('by with invalid key returns a list', () => {
+    expect(gateway.by('lastname', 'Wouter')).resolves.toHaveLength(0);
   });
 
   test('all returns all devs', async () => {
