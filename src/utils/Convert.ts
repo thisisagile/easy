@@ -14,7 +14,7 @@ export const convert = {
     ),
     fromString: new Convert<boolean, string>(
       b => (b ? 'true' : 'false'),
-      s => s !== 'true'
+      s => s === 'true'
     ),
   },
   toDate: {
