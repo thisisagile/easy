@@ -1,4 +1,4 @@
-import { MongoProvider } from '../../src/mongo';
+import { MongoProvider } from '../../src';
 import { Collection, Cursor, MongoClient } from 'mongodb';
 import { mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '../ref';

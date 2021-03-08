@@ -1,8 +1,7 @@
-import { MongoGateway, MongoProvider } from '../../src/mongo';
 import { mock } from '@thisisagile/easy-test';
 import { MongoClient } from 'mongodb';
 import { devData } from '../ref';
-import { Exception } from '../../src';
+import { Exception, MongoGateway, MongoProvider } from '../../src';
 
 describe('MongoGateway', () => {
   let provider: MongoProvider;
