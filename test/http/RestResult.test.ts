@@ -1,4 +1,4 @@
-import { HttpStatus, isRestResult, list, toResults, rest, toResult, Response, RestResult } from '../../src';
+import { HttpStatus, isRestResult, list, Response, rest, RestResult, toResult, toResults } from '../../src';
 import { Dev } from '../ref';
 
 const data = {

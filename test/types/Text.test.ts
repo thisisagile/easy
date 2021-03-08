@@ -1,4 +1,4 @@
-import { toString, isText, replaceAll } from '../../src';
+import { isText, replaceAll, toString } from '../../src';
 import { Dev } from '../ref';
 
 describe('isText', () => {
