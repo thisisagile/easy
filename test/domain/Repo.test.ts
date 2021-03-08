@@ -104,4 +104,21 @@ describe('Repo', () => {
     await expect(repo.update(update)).resolves.toMatchObject(fits.with(update));
     return expect(gateway.update).toHaveBeenCalledWith(fits.with(update));
   });
+
+  test('Upsert should update', async () => {
+    const update = { level: 4, language: 'COBOL' };
+    gateway.byId = mock.resolve(Dev.Jeroen.toJSON());
+    gateway.update = mock.resolve(Dev.Jeroen.update(update).toJSON());
+    repo.add = mock.resolve();
+    await expect(repo.upsert(update)).resolves.toMatchObject(fits.with(update));
+    expect(repo.add).not.toHaveBeenCalled();
+  });
+
+  test('Upsert should add, when update fails', async () => {
+    const update = { level: 4, language: 'COBOL' };
+    repo.update = mock.reject(Exception.Unknown);
+    repo.add = mock.resolve(update);
+    await expect(repo.upsert(update)).resolves.toMatchObject(fits.with(update));
+    expect(repo.add).toHaveBeenCalledWith(fits.with(update));
+  });
 });

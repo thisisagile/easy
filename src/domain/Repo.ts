@@ -52,8 +52,7 @@ export class Repo<T extends Struct> {
     return resolve(item);
   }
 
-  upsert(a: Json): Promise<T> {
-    const id = a.id as Id;
-    return this.update(a).catch(() => this.add({ id, ...a }));
+  upsert(item: Json): Promise<T> {
+    return this.update(item).catch(() => this.add(item));
   }
 }
