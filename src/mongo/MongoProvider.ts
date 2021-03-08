@@ -1,6 +1,7 @@
-import { ctx, Id, isDefined, Json, List, toList } from '../types';
+import {ctx, Exception, Id, isDefined, Json, JsonValue, List, toList} from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
+import {reject} from '../utils';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -40,6 +41,10 @@ export class MongoProvider {
     return this.collection()
       .then(c => c.findOne({ id: id.toString() }))
       .then(i => clearMongoId(i));
+  }
+
+  by(key: string, value: JsonValue): Promise<List<Json>> {
+    return reject(Exception.IsNotImplemented);
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {

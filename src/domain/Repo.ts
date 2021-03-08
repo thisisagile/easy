@@ -17,6 +17,10 @@ export class Repo<T extends Struct> {
       .then(j => new this.ctor(j));
   }
 
+  by(key: keyof T, value: JsonValue): Promise<List<T>> {
+    return this.gateway.by(key.toString(), value).then(js => js.map(j => new this.ctor(j)));
+  }
+
   search(q: JsonValue): Promise<List<T>> {
     return this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
   }

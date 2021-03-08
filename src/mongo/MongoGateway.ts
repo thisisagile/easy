@@ -13,6 +13,10 @@ export class MongoGateway implements Gateway {
     return this.provider.byId(id);
   }
 
+  by(key: string, value: JsonValue) {
+    return this.provider.by(key, value);
+  }
+
   search(q: JsonValue): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented);
   }

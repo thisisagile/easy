@@ -5,6 +5,7 @@ import { Id } from './Id';
 export interface Gateway {
   all: () => Promise<List<Json>>;
   byId: (id: Id) => Promise<Json>;
+  by: (key: string, value: JsonValue) => Promise<List<Json>>;
   search?: (q: JsonValue) => Promise<List<Json>>;
   exists: (id: Id) => Promise<boolean>;
 

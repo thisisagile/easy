@@ -1,6 +1,7 @@
 import { Api } from './Api';
-import { Gateway, Id, Json, JsonValue, List, Uri } from '../types';
+import { Exception, Gateway, Id, Json, JsonValue, List, Uri } from '../types';
 import { HttpStatus } from '../http';
+import { reject } from '../utils';
 
 export class RouteGateway implements Gateway {
   readonly route: Uri;
@@ -14,6 +15,10 @@ export class RouteGateway implements Gateway {
 
   byId(id: Id): Promise<Json> {
     return this.api.get(this.routeId.id(id)).then(r => r.body.data.items.first());
+  }
+
+  by(key: string, value: JsonValue): Promise<List<Json>> {
+    return reject(Exception.IsNotImplemented);
   }
 
   search(q: JsonValue): Promise<List<Json>> {
