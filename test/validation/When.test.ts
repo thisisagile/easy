@@ -85,10 +85,25 @@ describe('Testing When', () => {
     expect(when(Dev.Invalid).contains(d => d.name).valid).toBeFalsy();
   });
 
-  test('Contains and', async() => {
-    await expect(when(Dev.Jeroen).not.contains(d => d.language).and.contains(d => d.name).reject(Exception.Unknown)).resolves.toBe(Dev.Jeroen);
-    await expect(when(Dev.Invalid).not.contains(d => d.level).and.contains(d => d.name).reject(Exception.Unknown)).rejects.toBe(Exception.Unknown);
-    return expect(when(Dev.Invalid).not.contains(d => d.language).and.contains(d => d.name).reject(Exception.Unknown)).rejects.toBe(Exception.Unknown);
+  test('Contains and', async () => {
+    await expect(
+      when(Dev.Jeroen)
+        .not.contains(d => d.language)
+        .and.contains(d => d.name)
+        .reject(Exception.Unknown)
+    ).resolves.toBe(Dev.Jeroen);
+    await expect(
+      when(Dev.Invalid)
+        .not.contains(d => d.level)
+        .and.contains(d => d.name)
+        .reject(Exception.Unknown)
+    ).rejects.toBe(Exception.Unknown);
+    return expect(
+      when(Dev.Invalid)
+        .not.contains(d => d.language)
+        .and.contains(d => d.name)
+        .reject(Exception.Unknown)
+    ).rejects.toBe(Exception.Unknown);
   });
 
   test('Reject without error, with error, with exception, with function', async () => {
