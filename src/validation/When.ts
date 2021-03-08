@@ -9,6 +9,10 @@ export class When<W> {
     return this.clone(!this.valid);
   }
 
+  get and(): When<W> {
+    return this.clone(this.valid);
+  }
+
   get isDefined(): When<W> {
     return this.clone(this.valid === isDefined(this.subject));
   }
