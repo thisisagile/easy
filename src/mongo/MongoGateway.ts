@@ -30,6 +30,6 @@ export class MongoGateway implements Gateway {
   }
 
   remove(id: Id): Promise<boolean> {
-    return this.provider.remove(id).then(() => true);
+    return this.provider.remove(id);
   }
 }

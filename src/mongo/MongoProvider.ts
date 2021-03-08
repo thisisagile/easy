@@ -60,11 +60,10 @@ export class MongoProvider {
       .then(() => this.byId(item.id as Id));
   }
 
-  remove(id: Id): Promise<void> {
+  remove(id: Id): Promise<boolean> {
     return this.collection()
       .then(c => c.deleteOne({ id: id.toString() }))
-      .then(d => d.result.ok === 1)
-      .then();
+      .then(d => d.result.ok === 1);
   }
 
   createIndex(field: string | any, unique = true): Promise<string> {
