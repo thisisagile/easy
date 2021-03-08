@@ -19,7 +19,7 @@ The **easy** framework is a straightforward, smart library for building domain-d
 This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
 # Architecture
-Microservices built with **easy** have a four layered architecture: services, process, domain, data. Each of the layers serves a single purpose and follows clear patterns and communications:
+Microservices built with **easy** have a four layered architecture: *services*, *process*, *domain*, *data*. Each of the layers serves a single purpose and follows clear patterns and communications:
 
 - *Services*. This layer contains resource classes, which handle requests to the microservice's endpoints.
 - *Process*. This second layer contains use cases, which handle all process logic of the microservice.
