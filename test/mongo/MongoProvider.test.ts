@@ -30,12 +30,13 @@ describe('MongoProvider', () => {
     return expect(provider.byId(42)).resolves.toStrictEqual(devData.jeroen);
   });
 
-  // test('find calls find on the collection', () => {
-  //   cursor.toArray = mock.resolve(toArray(devData.jeroen));
-  //   c.find = mock.resolve(cursor);
-  //   provider.collection = mock.resolve(c);
-  //   expect(provider.find([ {"id": "42"} ])).resolves.toStrictEqual(toList(devData.jeroen));
-  // });
+  test('find calls find on the collection', async () => {
+    cursor.toArray = mock.resolve([devData.jeroen, devData.wouter]);
+    c.find = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    const res = await provider.find([{ 'id': '42' }]);
+    expect(res.last()).toMatchObject(devData.wouter);
+  });
 
   test('group calls aggregate on the collection', () => {
     cursor.toArray = mock.resolve(devData);

@@ -1,4 +1,4 @@
-import { Exception, Gateway, Id, Json, JsonValue, List } from '../types';
+import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
 import { reject } from '../utils';
 import { MongoProvider } from './MongoProvider';
 
@@ -18,7 +18,7 @@ export class MongoGateway implements Gateway {
   }
 
   exists(id: Id): Promise<boolean> {
-    return reject(Exception.IsNotImplemented);
+    return this.provider.byId(id).then(i => isDefined(i));
   }
 
   add(item: Json): Promise<Json> {

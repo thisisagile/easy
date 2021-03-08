@@ -23,15 +23,23 @@ describe('MongoGateway', () => {
   test('byId calls the provider', async () => {
     provider.byId = mock.resolve(devData.naoufal);
     await expect(gateway.byId(42)).resolves.toBe(devData.naoufal);
-    expect(provider.byId).toHaveBeenCalled();
+    expect(provider.byId).toHaveBeenCalledWith(42);
   });
 
   test('search is not implemented', () => {
     return expect(gateway.search).rejects.toBe(Exception.IsNotImplemented);
   });
 
-  test('exists is not implemented', () => {
-    return expect(gateway.exists).rejects.toBe(Exception.IsNotImplemented);
+  test('exists resolves to true on existing item', async () => {
+    provider.byId = mock.resolve(devData.naoufal);
+    await expect(gateway.exists(42)).resolves.toBeTruthy();
+    expect(provider.byId).toHaveBeenCalledWith(42);
+  });
+
+  test('exists resolves to false on non existing item', async () => {
+    provider.byId = mock.resolve();
+    await expect(gateway.exists(42)).resolves.toBeFalsy();
+    expect(provider.byId).toHaveBeenCalledWith(42);
   });
 
   test('add calls the provider', async () => {
