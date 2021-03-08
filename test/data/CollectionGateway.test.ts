@@ -53,12 +53,16 @@ describe('CollectionGateway', () => {
   });
 
   test('add works', async () => {
-    await gateway.add({ id: 42, name: 'Laurens' });
+    await expect(gateway.add({ id: 42, name: 'Laurens' })).resolves.toMatchObject({ id: 42, name: 'Laurens' });
     return expect(gateway.byId(42)).resolves.toStrictEqual({ id: 42, name: 'Laurens' });
   });
 
   test('add without id does not work', async () => {
     return expect(gateway.add({ name: 'Laurens' })).rejects.toBe(Exception.IsMissingId);
+  });
+
+  test('add item that is already present does not work', () => {
+    return expect(gateway.add(Dev.Naoufal.toJSON())).rejects.toBe(Exception.AlreadyExists);
   });
 
   test('update works', async () => {

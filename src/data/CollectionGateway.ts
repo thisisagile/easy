@@ -1,15 +1,16 @@
-import { Exception, Gateway, Id, isDefined, Json, JsonValue, List, toList } from '../types';
-import { when } from '../validation';
+import {Exception, Gateway, Id, isDefined, Json, JsonValue, List, toList} from '../types';
+import {when} from '../validation';
 
 export class CollectionGateway implements Gateway {
-  constructor(private data: Promise<List<Json>>) {}
+  constructor(private data: Promise<List<Json>>) {
+  }
 
   all(): Promise<List<Json>> {
     return this.data.then(d => toList(d));
   }
 
   byId(id: Id): Promise<Json> {
-    return this.data.then(d => d.first(i => i.id === id)).then(d => (d ? { ...d } : undefined));
+    return this.data.then(d => d.first(i => i.id === id)).then(d => (d ? {...d} : undefined));
   }
 
   by = (key: string, value: JsonValue): Promise<List<Json>> => {
@@ -21,11 +22,11 @@ export class CollectionGateway implements Gateway {
   }
 
   add(item: Json): Promise<Json> {
-    return when(item)
-      .not.contains(i => i.id)
-      .reject(Exception.IsMissingId)
-      .then(i => this.data.then(d => d.add(i)))
-      .then(() => ({ ...item }));
+    return when(item).not.contains(i => i.id).reject(Exception.IsMissingId)
+      .then(i => this.exists(i.id as Id))
+      .then(ex => when(ex).isTrue.reject(Exception.AlreadyExists))
+      .then(() => this.data.then(d => d.add(item)))
+      .then(() => ({...item}));
   }
 
   remove(id: Id): Promise<void> {
@@ -43,9 +44,7 @@ export class CollectionGateway implements Gateway {
   }
 
   update(item: Json): Promise<Json> {
-    return when(item)
-      .not.contains(i => i.id)
-      .reject(Exception.IsMissingId)
+    return when(item).not.contains(i => i.id).reject(Exception.IsMissingId)
       .then(i => this.remove(i.id as Id).then(() => this.add(i)));
   }
 }
