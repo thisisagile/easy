@@ -6,7 +6,7 @@ describe('CollectionGateway', () => {
   let gateway: CollectionGateway;
 
   beforeEach(() => {
-    gateway = new CollectionGateway('devs', resolve(Dev.All.toJSON()));
+    gateway = new CollectionGateway(resolve(Dev.All.toJSON()));
   });
 
   test('byId with known id returns product', () => {
