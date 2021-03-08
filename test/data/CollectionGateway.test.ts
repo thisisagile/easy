@@ -1,5 +1,5 @@
-import { CollectionGateway, Json, List, resolve, toJson } from '../../src';
-import { Dev } from '../ref';
+import {CollectionGateway, Exception, resolve, toJson} from '../../src';
+import {Dev} from '../ref';
 
 describe('CollectionGateway', () => {
   const dev = Dev.All.first();
@@ -39,7 +39,7 @@ describe('CollectionGateway', () => {
   });
 
   test('all returns a copy of all devs', async () => {
-    const a: List<Json> = await gateway.all();
+    const a = await gateway.all();
     a.first().name = 'Hello';
     expect(a).not.toStrictEqual(toJson(Dev.All));
   });
@@ -50,5 +50,23 @@ describe('CollectionGateway', () => {
 
   test('exists is true on a existing dev', async () => {
     return expect(gateway.exists(dev.id)).resolves.toBeTruthy();
+  });
+
+  test('add works', async () => {
+    await gateway.add({id: 42, name: 'Laurens'});
+    return expect(gateway.byId(42)).resolves.toStrictEqual({id: 42, name: 'Laurens'});
+  });
+
+  test('add without id does not work', async () => {
+    return expect(gateway.add({name: 'Laurens'})).rejects.toBe(Exception.IsMissingId);
+  });
+
+  test('update works', async () => {
+    await gateway.update({id: Dev.Jeroen.id, name: 'Laurens'});
+    return expect(gateway.byId(Dev.Jeroen.id)).resolves.toMatchObject({id: Dev.Jeroen.id, name: 'Laurens'});
+  });
+
+  test('update without id does not work', async () => {
+    return expect(gateway.update({name: 'Laurens'})).rejects.toBe(Exception.IsMissingId);
   });
 });
