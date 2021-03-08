@@ -1,4 +1,4 @@
-import {replaceAll} from '../types';
+import { replaceAll } from '../types';
 
 class Stringify {
   private constructor(readonly subject: string) {}

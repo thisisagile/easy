@@ -34,7 +34,7 @@ describe('MongoProvider', () => {
     cursor.toArray = mock.resolve([devData.jeroen, devData.wouter]);
     c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
-    const res = await provider.find([{ 'id': '42' }]);
+    const res = await provider.find([{ id: '42' }]);
     expect(res.last()).toMatchObject(devData.wouter);
   });
 
