@@ -9,6 +9,7 @@ export class Exception extends Enum {
   static readonly IsNotImplemented = new Exception('Is not implemented');
   static readonly IsNotValid = new Exception('Is not valid');
   static readonly Unknown = new Exception('Unknown error');
+  static readonly AlreadyExists = new Exception('Subject already exists');
 
   constructor(readonly message: string, public reason?: Text) {
     super(message, stringify(stringify(message).title).trim);
