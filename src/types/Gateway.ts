@@ -10,5 +10,5 @@ export interface Gateway {
 
   add: (item: Json) => Promise<Json>;
   update: (item: Json) => Promise<Json>;
-  remove: (id: Id) => Promise<void>;
+  remove: (id: Id) => Promise<boolean>;
 }

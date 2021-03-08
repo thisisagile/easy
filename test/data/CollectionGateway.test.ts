@@ -75,7 +75,7 @@ describe('CollectionGateway', () => {
   });
 
   test('remove works', async () => {
-    await expect(gateway.remove(Dev.Jeroen.id)).resolves.toBeUndefined();
+    await expect(gateway.remove(Dev.Jeroen.id)).resolves.toBeTruthy();
     return expect(gateway.byId(Dev.Jeroen.id)).resolves.toBeUndefined();
   });
 

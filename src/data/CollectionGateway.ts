@@ -30,7 +30,7 @@ export class CollectionGateway implements Gateway {
       .then(() => ({ ...item }));
   }
 
-  remove(id: Id): Promise<void> {
+  remove(id: Id): Promise<true> {
     return this.data
       .then(d =>
         when(d.findIndex(i => i.id === id))
@@ -38,7 +38,7 @@ export class CollectionGateway implements Gateway {
           .reject(Exception.DoesNotExist)
           .then(i => d.splice(i, 1))
       )
-      .then(() => undefined);
+      .then(() => true);
   }
 
   search(_q: JsonValue): Promise<List<Json>> {

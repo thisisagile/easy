@@ -35,7 +35,7 @@ export class RouteGateway implements Gateway {
     return this.api.patch(this.routeId.id(item.id), item).then(r => r.body.data.items.first());
   }
 
-  remove(id: Id): Promise<void> {
-    return this.api.delete(this.routeId.id(id)).then();
+  remove(id: Id): Promise<boolean> {
+    return this.api.delete(this.routeId.id(id)).then(() => true);
   }
 }

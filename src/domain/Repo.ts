@@ -35,7 +35,7 @@ export class Repo<T extends Struct> {
       .then(i => this.gateway.update(toJson(i)))
       .then(j => new this.ctor(j));
 
-  remove = (id: Id): Promise<void> => this.gateway.remove(id);
+  remove = (id: Id): Promise<boolean> => this.gateway.remove(id);
 
   validate = (item: T): Promise<T> => resolve(item);
 }
