@@ -1,5 +1,5 @@
-import { text } from '../../src';
-import { Dev } from '../ref';
+import {text} from '../../src';
+import {Dev} from '../ref';
 import '@thisisagile/easy-test';
 
 describe('ToText', () => {
@@ -73,4 +73,24 @@ describe('ToText', () => {
     expect(text(Dev.Sander).trim).toMatchText('Sander');
     expect(kim.trim).toMatchText('KimvanWilgen');
   });
+
+  test('startsWith works', () => {
+    expect(empty.startsWith()).toBeTruthy();
+    expect(empty.startsWith('')).toBeTruthy();
+    expect(kim.startsWith()).toBeTruthy();
+    expect(kim.startsWith('')).toBeTruthy();
+    expect(kim.startsWith('Kim')).toBeTruthy();
+    expect(kim.lower.startsWith('kim')).toBeTruthy();
+    expect(kim.startsWith('Sander')).toBeFalsy();
+  });
+
+  test('endsWith works', () => {
+    expect(empty.endsWith()).toBeTruthy();
+    expect(empty.endsWith('')).toBeTruthy();
+    expect(kim.endsWith()).toBeTruthy();
+    expect(kim.endsWith('')).toBeTruthy();
+    expect(kim.endsWith('gen')).toBeTruthy();
+    expect(kim.endsWith('doorn')).toBeFalsy();
+  });
+
 });
