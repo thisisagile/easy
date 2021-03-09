@@ -1,7 +1,6 @@
-import { Text, toString } from './Text';
+import { text, Text, toString } from './Text';
 import { Enum } from './Enum';
 import { isDefined } from './Is';
-import { stringify } from '../utils';
 
 export class Exception extends Enum {
   static readonly IsMissingId = new Exception('Subject is missing an id');
@@ -12,7 +11,7 @@ export class Exception extends Enum {
   static readonly AlreadyExists = new Exception('Subject already exists');
 
   constructor(readonly message: string, public reason?: Text) {
-    super(message, stringify(stringify(message).title).trim);
+    super(message, text(message).pascal.toString());
   }
 
   because = (reason: Text): Exception => new Exception(this.message, reason);

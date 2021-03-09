@@ -1,6 +1,6 @@
 import { Uuid } from './Uuid';
 import { createNamespace } from 'cls-hooked';
-import { stringify } from '../utils';
+import { text } from './Text';
 
 export type EnvContext = {
   readonly domain: string;
@@ -15,7 +15,12 @@ export class DotEnvContext implements EnvContext {
   readonly host = process.env.HOST;
   readonly port = Number.parseInt(process.env.PORT) || 8080;
 
-  readonly get = (key: string, alt?: string): string => process.env[stringify(key.replace(/([a-z])([A-Z])/g, '$1 $2')).snake] ?? alt;
+  readonly get = (key: string, alt?: string): string =>
+    process.env[
+      text(key)
+        .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
+        .snake.toString()
+    ] ?? alt;
 }
 
 export type RequestContext = {

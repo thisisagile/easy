@@ -1,10 +1,9 @@
-import { Enum } from '../types';
+import { Enum, text, Text } from '../types';
 import { Scope } from './Scope';
-import { stringify } from '../utils';
 
 export class UseCase extends Enum {
-  constructor(readonly scope: Scope, name: string, id: string = stringify(name).kebab) {
-    super(name, id);
+  constructor(readonly scope: Scope, name: string, id: Text = text(name).kebab) {
+    super(name, id.toString());
   }
 
   static readonly Main = new UseCase(Scope.Basic, 'Main');

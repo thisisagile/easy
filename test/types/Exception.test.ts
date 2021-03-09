@@ -10,6 +10,7 @@ describe('Exception', () => {
     expect(exc.message).toBe(message);
     expect(exc.id).toBe('ThisIsWrong');
     expect(exc.name).toBe(message);
+    expect(Exception.AlreadyExists.id).toBe('SubjectAlreadyExists');
   });
 
   test('isException', () => {

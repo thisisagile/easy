@@ -1,5 +1,4 @@
-import { stringify } from './Stringify';
-import { meta, Text, toName } from '../types';
+import { meta, text, Text, toName } from '../types';
 
 export type ParseOptions = { property?: unknown; actual?: unknown };
 
@@ -10,17 +9,15 @@ const props = (subject: unknown = {}, template: Text = ''): string => {
 };
 
 export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text => {
-  return props(
-    subject,
-    template
-      .toString()
-      .replace('{type.name}', stringify(toName(subject)).lower)
-      .replace('{type.Name}', stringify(toName(subject)).title)
-      .replace('{subject.name}', stringify(subject).lower)
-      .replace('{subject.Name}', stringify(subject).title)
-      .replace('{property}', stringify(options.property).lower)
-      .replace('{Property}', stringify(options.property).title)
-      .replace('{actual}', stringify(options.actual).lower)
-      .replace('{Actual}', stringify(options.actual).title)
-  );
+  const t = template
+    .toString()
+    .replace('{type.name}', text(toName(subject)).lower.toString())
+    .replace('{type.Name}', text(toName(subject)).title.toString())
+    .replace('{subject.name}', text(subject).lower.toString())
+    .replace('{subject.Name}', text(subject).title.toString())
+    .replace('{property}', text(options.property).lower.toString())
+    .replace('{Property}', text(options.property).title.toString())
+    .replace('{actual}', text(options.actual).lower.toString())
+    .replace('{Actual}', text(options.actual).title.toString())
+  return props(subject, t);
 };

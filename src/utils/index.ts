@@ -4,5 +4,3 @@ export * from './Convert';
 export * from './Map';
 export * from './Parser';
 export * from './Promise';
-export * from './Stringify';
-export * from './ToText';
