@@ -9,15 +9,15 @@ const props = (subject: unknown = {}, template: Text = ''): string => {
 };
 
 export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text => {
-  const t = template
-    .toString()
-    .replace('{type.name}', text(toName(subject)).lower.toString())
-    .replace('{type.Name}', text(toName(subject)).title.toString())
-    .replace('{subject.name}', text(subject).lower.toString())
-    .replace('{subject.Name}', text(subject).title.toString())
-    .replace('{property}', text(options.property).lower.toString())
-    .replace('{Property}', text(options.property).title.toString())
-    .replace('{actual}', text(options.actual).lower.toString())
-    .replace('{Actual}', text(options.actual).title.toString())
-  return props(subject, t);
+  return text(template)
+    .replace('{type.name}', text(toName(subject)).lower)
+    .replace('{type.name}', text(toName(subject)).lower)
+    .replace('{type.Name}', text(toName(subject)).title)
+    .replace('{subject.name}', text(subject).lower)
+    .replace('{subject.Name}', text(subject).title)
+    .replace('{property}', text(options.property).lower)
+    .replace('{Property}', text(options.property).title)
+    .replace('{actual}', text(options.actual).lower)
+    .replace('{Actual}', text(options.actual).title)
+    .map(t => props(subject, t));
 };
