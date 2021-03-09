@@ -6,7 +6,7 @@ describe('Insert', () => {
 
   test('Create insert', () => {
     expect(devs.insert(Dev.Naoufal.toJSON())).toMatchText(
-      "INSERT INTO DevTable (Id, Name, Language, CodingLevel) OUTPUT INSERTED.* VALUES (2, 'Naoufal', 'TypeScript', '3')"
+      "INSERT INTO DevTable (Id, Name, Language, CodingLevel) OUTPUT INSERTED.* VALUES (2, 'Naoufal', 'TypeScript', '3');"
     );
   });
 });

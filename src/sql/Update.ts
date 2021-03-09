@@ -15,7 +15,7 @@ export class Update extends SqlQuery {
         .map(([k, v]) => toClause(k, '=', v))
         .join(`, `)} ` +
       `OUTPUT INSERTED.*` +
-      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '')
+      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)};`, ';')
     );
   }
 }

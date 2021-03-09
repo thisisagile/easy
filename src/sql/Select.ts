@@ -35,7 +35,7 @@ export class Select extends SqlQuery {
       ` FROM ${this.table}` +
       ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +
       ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(`, `)}`, '') +
-      ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)}`, '')
+      ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)};`, ';')
     );
   }
 }

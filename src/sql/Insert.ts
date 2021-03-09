@@ -14,7 +14,7 @@ export class Insert extends SqlQuery {
       `(${Object.keys(this.fields).join(', ')}) OUTPUT INSERTED.* ` +
       `VALUES (${Object.values(this.fields)
         .map(v => quote(v))
-        .join(', ')})`
+        .join(', ')});`
     );
   }
 }
