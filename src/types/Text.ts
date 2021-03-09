@@ -7,4 +7,4 @@ export const isText = (t?: unknown): t is Text => isDefined(t?.toString) && isFu
 
 export const toString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
 
-export const replaceAll = (t: Text, search: Text, replace: Text): string => toString(t).replace(new RegExp(toString(search), 'g'), toString(replace));
+export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => toString(t).replace(new RegExp(toString(search), 'g'), toString(replace));
