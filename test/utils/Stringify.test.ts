@@ -2,16 +2,19 @@ import { stringify } from '../../src';
 import { Dev } from '../ref';
 
 describe('Stringify', () => {
+
   const empty = stringify();
   const wouter = stringify('Wouter');
   const kim = stringify('Kim van Wilgen');
+  const sander = stringify('SanDEr hoogendOOrn');
 
   test('cap works', () => {
     expect(empty.cap).toBe('');
     expect(stringify({}).cap).toBe('');
     expect(wouter.cap).toBe('Wouter');
     expect(stringify(Dev.Sander).cap).toBe('Sander');
-    expect(kim.cap).toBe('Kim van Wilgen');
+    expect(kim.cap).toBe('Kim van wilgen');
+    expect(sander.cap).toBe('Sander hoogendoorn');
   });
 
   test('title works', () => {
@@ -20,6 +23,7 @@ describe('Stringify', () => {
     expect(wouter.title).toBe('Wouter');
     expect(stringify(Dev.Sander).title).toBe('Sander');
     expect(kim.title).toBe('Kim Van Wilgen');
+    expect(sander.title).toBe('Sander Hoogendoorn');
   });
 
   test('pascal works', () => {

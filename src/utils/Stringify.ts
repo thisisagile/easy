@@ -4,14 +4,14 @@ class Stringify {
   private constructor(readonly subject: string) {}
 
   get cap(): string {
-    return this.subject.charAt(0).toUpperCase() + this.subject.slice(1);
+    return this.subject.charAt(0).toUpperCase() + this.subject.slice(1).toLowerCase();
   }
 
   get title(): string {
-    return this.subject
-      .split(' ')
-      .map(w => stringify(w).cap)
-      .join(' ');
+    // return this.subject.split(" ").map(w => Str.cap(w)).join(" ");
+    const res = this.subject.split(' ');
+    const rw = res.map(w => stringify(w).cap);
+      return rw.join(' ');
   }
 
   get pascal(): string {
