@@ -2,14 +2,13 @@ import { meta, text, Text, toName } from '../types';
 
 export type ParseOptions = { property?: unknown; actual?: unknown };
 
-const props = (subject: unknown = {}, template: Text = ''): string => {
-  return meta(subject)
+const props = (subject: unknown = {}, template: Text = ''): string =>
+  meta(subject)
     .entries()
     .reduce((res, [k, v]) => res.replace(`{this.${k}}`, v?.toString() ?? ''), template.toString());
-};
 
-export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text => {
-  return text(template)
+export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text =>
+  text(template)
     .replace('{type.name}', text(toName(subject)).lower)
     .replace('{type.name}', text(toName(subject)).lower)
     .replace('{type.Name}', text(toName(subject)).title)
@@ -20,4 +19,3 @@ export const toText = (subject: unknown, template: Text, options: ParseOptions =
     .replace('{actual}', text(options.actual).lower)
     .replace('{Actual}', text(options.actual).title)
     .map(t => props(subject, t));
-};
