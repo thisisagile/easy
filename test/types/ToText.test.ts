@@ -1,5 +1,5 @@
-import {text} from '../../src';
-import {Dev} from '../ref';
+import { text } from '../../src';
+import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('ToText', () => {
@@ -93,14 +93,14 @@ describe('ToText', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
-  test("Check equals", () => {
-    expect(kim.isLike("Kim van Wilgen")).toBeTruthy();
-    expect(kim.isLike("kimvanwilgen")).toBeTruthy();
-    expect(kim.isLike("kim van wilgen")).toBeTruthy();
-    expect(kim.isLike("kim-van-wilgen")).toBeTruthy();
-    expect(kim.isLike("kim")).toBeFalsy();
-    expect(empty.isLike("")).toBeTruthy();
-    expect(empty.isLike("kim")).toBeFalsy();
+  test('Check equals', () => {
+    expect(kim.isLike('Kim van Wilgen')).toBeTruthy();
+    expect(kim.isLike('kimvanwilgen')).toBeTruthy();
+    expect(kim.isLike('kim van wilgen')).toBeTruthy();
+    expect(kim.isLike('kim-van-wilgen')).toBeTruthy();
+    expect(kim.isLike('kim')).toBeFalsy();
+    expect(empty.isLike('')).toBeTruthy();
+    expect(empty.isLike('kim')).toBeFalsy();
     expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
   });
 });

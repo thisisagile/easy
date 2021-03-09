@@ -2,6 +2,7 @@ export * from './Clause';
 export * from './Column';
 export * from './Delete';
 export * from './Insert';
+export * from './Join';
 export * from './SqlQuery';
 export * from './Select';
 export * from './SqlServerProvider';

@@ -3,7 +3,6 @@ import { toText } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('toString', () => {
-
   test('type', () => {
     expect(toText(Dev.Sander, '')).toMatchText('');
     expect(toText(undefined, '{type.name}')).toMatchText('');

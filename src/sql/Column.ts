@@ -1,7 +1,7 @@
 import { convert, Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
-import { Table } from './Table';
 import { Text } from '../types';
+import { Table } from './Table';
 
 export class Column implements Text, Property {
   constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {

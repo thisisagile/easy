@@ -1,8 +1,8 @@
 import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
-import { Table } from './Table';
 import { DataProvider } from '../data';
 import { when } from '../validation';
 import { reject } from '../utils';
+import { Table } from './Table';
 
 export class TableGateway<T extends Table> implements Gateway {
   constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
@@ -16,7 +16,7 @@ export class TableGateway<T extends Table> implements Gateway {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented);
+    return reject(Exception.IsNotImplemented.because(`Search for key '${key}' and '${value}' is not implemented yet. `));
   }
 
   exists(id: Id): Promise<boolean> {

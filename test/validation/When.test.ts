@@ -1,5 +1,5 @@
-import {Dev, Language} from '../ref';
-import {Exception, Results, when} from '../../src';
+import { Dev, Language } from '../ref';
+import { Exception, Results, when } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {

@@ -20,6 +20,11 @@ describe('Select', () => {
     expect(select).toMatchText('SELECT DevTable.Name, DevTable.CodingLevel FROM DevTable;');
   });
 
+  test('With columns and join', () => {
+    const select = devs.select(devs.name, devs.level).from(devs.join(devs).on(devs.id, devs.language));
+    expect(select).toMatchText('SELECT DevTable.Name, DevTable.CodingLevel FROM DevTable JOIN DevTable ON DevTable.Id = DevTable.Language;');
+  });
+
   test('With a clause', () => {
     const select = devs.select().where(devs.level.lessEqual(4));
     expect(select).toMatchText("SELECT * FROM DevTable WHERE DevTable.CodingLevel <= '4';");

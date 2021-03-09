@@ -16,7 +16,6 @@ describe('Manage', () => {
     expect(repo.add).toHaveBeenCalled();
   });
 
-
   test('update works', async () => {
     repo.update = mock.resolve(Dev.Sander);
     await expect(manage.update({})).resolves.toMatchObject(Dev.Sander);

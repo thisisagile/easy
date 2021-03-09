@@ -1,21 +1,22 @@
 import { ifGet, list, List } from '../types';
 import { Column, OrderColumn } from './Column';
-import { Table } from './Table';
+import { Join } from './Join';
 import { SqlQuery } from './SqlQuery';
+import { Table } from './Table';
 
 export class Select extends SqlQuery {
   protected ordered: List<OrderColumn> = list();
   protected grouped: List<Column> = list();
   protected limit = 0;
 
-  constructor(table: Table, readonly columns: List<Column> = list()) {
+  constructor(table: Table | Join, readonly columns: List<Column> = list()) {
     super(table);
   }
 
-  top = (limit: number): this => {
-    this.limit = limit;
+  from(t?: Table | Join): this {
+    this.table = t ?? this.table;
     return this;
-  };
+  }
 
   orderBy = (...ordered: OrderColumn[]): this => {
     this.ordered.add(ordered);

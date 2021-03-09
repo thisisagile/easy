@@ -1,5 +1,5 @@
-import {isDefined, isFunction} from './Is';
-import {Get, ofGet} from './Constructor';
+import { isDefined, isFunction } from './Is';
+import { Get, ofGet } from './Constructor';
 
 export type Text = { toString(): string };
 
@@ -10,8 +10,7 @@ export const toString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => toString(t).replace(new RegExp(toString(search), 'g'), toString(replace));
 
 class ToText implements Text {
-  constructor(readonly subject: string) {
-  }
+  constructor(readonly subject: string) {}
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());

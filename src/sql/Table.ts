@@ -1,11 +1,12 @@
+import { Column } from './Column';
 import { Map, PropertyOptions } from '../utils';
 import { Database } from '../data';
-import { Column } from './Column';
 import { Json, list, toUuid } from '../types';
 import { Select } from './Select';
-import { Delete } from './Delete';
 import { Insert } from './Insert';
 import { Update } from './Update';
+import { Delete } from './Delete';
+import { Join } from './Join';
 
 export class Table extends Map<Column> {
   readonly db = Database.Main;
@@ -18,4 +19,6 @@ export class Table extends Map<Column> {
   insert = (fields: Json): Insert => new Insert(this, this.out(fields));
   update = (fields: Json): Update => new Update(this, this.out(fields));
   delete = (): Delete => new Delete(this, list());
+
+  readonly join = (t: Table): Join => new Join(this, t);
 }
