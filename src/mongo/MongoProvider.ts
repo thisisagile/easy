@@ -1,7 +1,7 @@
-import {ctx, Exception, Id, isDefined, Json, JsonValue, List, toList} from '../types';
+import { ctx, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
-import {reject} from '../utils';
+import { reject } from '../utils';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -44,7 +44,7 @@ export class MongoProvider {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented);
+    return reject(Exception.IsNotImplemented.because(`Search for key '${key}' and '${value}' is not implemented yet. `));
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {
