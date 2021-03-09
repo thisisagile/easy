@@ -93,4 +93,14 @@ describe('ToText', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
+  test("Check equals", () => {
+    expect(kim.isLike("Kim van Wilgen")).toBeTruthy();
+    expect(kim.isLike("kimvanwilgen")).toBeTruthy();
+    expect(kim.isLike("kim van wilgen")).toBeTruthy();
+    expect(kim.isLike("kim-van-wilgen")).toBeTruthy();
+    expect(kim.isLike("kim")).toBeFalsy();
+    expect(empty.isLike("")).toBeTruthy();
+    expect(empty.isLike("kim")).toBeFalsy();
+    expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
+  });
 });

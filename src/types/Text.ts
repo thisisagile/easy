@@ -63,6 +63,8 @@ class ToText implements Text {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
 
+  isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
+
   endsWith = (end?: unknown): boolean => this.subject.endsWith(toString(end));
 
   startsWith = (end?: unknown): boolean => this.subject.startsWith(toString(end));
