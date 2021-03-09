@@ -2,7 +2,6 @@ import { stringify } from '../../src';
 import { Dev } from '../ref';
 
 describe('Stringify', () => {
-
   const empty = stringify();
   const wouter = stringify('Wouter');
   const kim = stringify('Kim van Wilgen');

@@ -8,10 +8,10 @@ class Stringify {
   }
 
   get title(): string {
-    // return this.subject.split(" ").map(w => Str.cap(w)).join(" ");
-    const res = this.subject.split(' ');
-    const rw = res.map(w => stringify(w).cap);
-      return rw.join(' ');
+    return this.subject
+      .split(' ')
+      .map(w => stringify(w).cap)
+      .join(' ');
   }
 
   get pascal(): string {
