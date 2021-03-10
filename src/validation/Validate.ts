@@ -1,4 +1,21 @@
-import { Enum, isDefined, isEnum, isResults, isValidatable, isValue, list, List, meta, toResults, Results, Text, toName, toResult, Value } from '../types';
+import {
+  Enum,
+  isArray,
+  isDefined,
+  isEnum,
+  isResults,
+  isValidatable,
+  isValue,
+  list,
+  List,
+  meta,
+  Results,
+  Text,
+  toName,
+  toResult,
+  toResults,
+  Value,
+} from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
 import { choose, ParseOptions, toText } from '../utils';
@@ -33,6 +50,10 @@ export const validate = (subject?: unknown): Results =>
     .case(
       s => isEnum(s),
       (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type.name}.'))
+    )
+    .case(
+      s => isArray(s),
+      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults())
     )
     .case(
       s => isValue(s),
