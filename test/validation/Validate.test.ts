@@ -1,4 +1,4 @@
-import { Entity, Enum, includes, required, rule, Struct, valid, validate, Value } from '../../src';
+import { asList, Entity, Enum, includes, required, rule, Struct, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { List, toList } from '../../dist';
 import { Dev } from '../ref';
@@ -18,7 +18,6 @@ class Brand extends Struct {
   readonly name: string = this.state.name;
   readonly site: string = this.state.site;
 }
-
 
 class ConstrainedBrand extends Struct {
   @required() readonly bname: string = this.state.name;
@@ -51,7 +50,7 @@ class PricesProduct extends Entity {
 
 class BrandProductPrices extends Struct {
   @required() readonly brand: string = this.state.brand;
-  @valid() readonly productPrices: List<PricesProduct> = toList(this.state.productPrices.map((p: any) => new PricesProduct(p)));
+  @valid() readonly productPrices: List<PricesProduct> = asList(PricesProduct, this.state.productPrices);
 }
 
 class Extra {
@@ -156,9 +155,20 @@ describe('validate', () => {
     expect(validate(toList(undefined, Dev.Wouter))).not.toBeValid();
   });
 
-  test('validate list as property ', () => {
-    expect(validate(new BrandProductPrices({ id: 3, brand: "Dell", productPrices: [{id: 42,  purchase: 10, sales: 20 }, {id: 43,  purchase: 30, sales: 40 }]}))).toBeValid();
-    expect(validate(new BrandProductPrices({ id: 3, brand: "Dell", productPrices: [{id: 42}, {id: 43 }]}))).not.toBeValid();
-    expect(validate(new BrandProductPrices({ id: 3, brand: "Dell", productPrices: [{}]}))).not.toBeValid();
+  test('validate list as property', () => {
+    expect(
+      validate(
+        new BrandProductPrices({
+          id: 3,
+          brand: 'Dell',
+          productPrices: [
+            { id: 42, purchase: 10, sales: 20 },
+            { id: 43, purchase: 30, sales: 40 },
+          ],
+        })
+      )
+    ).toBeValid();
+    expect(validate(new BrandProductPrices({ id: 3, brand: 'Dell', productPrices: [{ id: 42 }, { id: 43 }] }))).not.toBeValid();
+    expect(validate(new BrandProductPrices({ id: 3, brand: 'Dell', productPrices: [{}] }))).not.toBeValid();
   });
 });

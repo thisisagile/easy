@@ -13,7 +13,7 @@ export class MongoGateway implements Gateway {
     return this.provider.byId(id);
   }
 
-  by(key: string, value: JsonValue) {
+  by(key: string, value: JsonValue): Promise<List<Json>> {
     return this.provider.by(key, value);
   }
 

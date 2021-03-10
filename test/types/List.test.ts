@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { isList, List, list, toList } from '../../src';
+import { asList, isList, List, list, toList } from '../../src';
 
 describe('List', () => {
   const devs = list([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
@@ -166,5 +166,16 @@ describe('toList', () => {
     const devs = list(Dev.Jeroen, Dev.Sander, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal);
     const dist = devs.distinct();
     expect(dist).toHaveLength(3);
+  });
+
+  test('asList of undefined works', () => {
+    expect(asList(undefined, undefined)).toBeInstanceOf(List);
+    expect(asList(undefined, undefined).first()).toBeUndefined();
+    expect(asList(Dev, undefined).first()).toBeUndefined();
+    expect(asList(Dev, []).first()).toBeUndefined();
+  });
+
+  test('asList of devs works', () => {
+    expect(asList(Dev, [Dev.Naoufal.toJSON()]).first()).toMatchObject(Dev.Naoufal.toJSON());
   });
 });

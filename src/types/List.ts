@@ -1,5 +1,5 @@
 import { toArray } from './Array';
-import { GetProperty, ofProperty } from './Constructor';
+import { Constructor, GetProperty, ofProperty } from './Constructor';
 import { Json, toJson } from './Json';
 import { isArray, isDefined } from './Is';
 import { isA } from './IsA';
@@ -36,3 +36,5 @@ export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArra
 export const toList = <T>(...items: (T | T[])[]): List<T> => (items.length > 1 ? list<T>(...items) : list<T>(items[0]));
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
+
+export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
