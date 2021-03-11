@@ -44,7 +44,7 @@ export class MongoProvider {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return this.find([{ [key]: value }]);
+    return this.find({ [key]: value.toString() });
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {

@@ -51,7 +51,7 @@ describe('MongoProvider', () => {
     provider.collection = mock.resolve(c);
     const res = await provider.by('level', 1);
     expect(res.last()).toMatchObject(devData.wouter);
-    expect(c.find).toHaveBeenCalledWith([{ level: 1 }], { limit: 250 });
+    expect(c.find).toHaveBeenCalledWith({ level: "1" }, { limit: 250 });
   });
 
   test('add calls insertOne on the collection', async () => {
