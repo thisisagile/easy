@@ -1,6 +1,6 @@
 import { asList, Entity, Enum, includes, required, rule, Struct, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
-import { List, toList } from '../../dist';
+import { List, toList } from '../../src';
 import { Dev } from '../ref';
 
 class Price extends Value<number> {

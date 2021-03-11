@@ -1,6 +1,6 @@
 import { toArray } from './Array';
 import { Constructor, GetProperty, ofProperty } from './Constructor';
-import { Json, toJson } from './Json';
+import { json, Json } from './Json';
 import { isArray, isDefined } from './Is';
 import { isA } from './IsA';
 
@@ -13,7 +13,7 @@ export class List<T> extends Array<T> {
 
   last = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).last() : this[this.length - 1]);
 
-  toJSON = (): List<Json> => this.map(i => toJson(i));
+  toJSON = (): List<Json> => this.map(i => json.parse(i));
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => super.map(f, params) as List<U>;
 
