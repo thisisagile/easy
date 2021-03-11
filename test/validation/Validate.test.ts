@@ -1,6 +1,18 @@
-import { asList, Entity, Enum, includes, required, rule, Struct, valid, validate, Value } from '../../src';
+import {
+  asList,
+  Entity,
+  Enum,
+  includes,
+  List,
+  required,
+  rule,
+  Struct,
+  toList,
+  valid,
+  validate,
+  Value,
+} from '../../src';
 import '@thisisagile/easy-test';
-import { List, toList } from '../../src';
 import { Dev } from '../ref';
 
 class Price extends Value<number> {
@@ -50,7 +62,7 @@ class PricesProduct extends Entity {
 
 class BrandProductPrices extends Struct {
   @required() readonly brand: string = this.state.brand;
-  @valid() readonly productPrices: List<PricesProduct> = asList(PricesProduct, this.state.productPrices);
+  @required() @valid() readonly productPrices: List<PricesProduct> = asList(PricesProduct, this.state.productPrices);
 }
 
 class Extra {
@@ -159,16 +171,17 @@ describe('validate', () => {
     expect(
       validate(
         new BrandProductPrices({
-          id: 3,
           brand: 'Dell',
           productPrices: [
-            { id: 42, purchase: 10, sales: 20 },
-            { id: 43, purchase: 30, sales: 40 },
+            { purchase: 10, sales: 20 },
+            { purchase: 30, sales: 40 },
           ],
         })
       )
     ).toBeValid();
-    expect(validate(new BrandProductPrices({ id: 3, brand: 'Dell', productPrices: [{ id: 42 }, { id: 43 }] }))).not.toBeValid();
-    expect(validate(new BrandProductPrices({ id: 3, brand: 'Dell', productPrices: [{}] }))).not.toBeValid();
+    expect(validate(new BrandProductPrices({ brand: 'Dell', productPrices: [{ id: 42 }, { id: 43 }] }))).not.toBeValid();
+    expect(validate(new BrandProductPrices({ brand: 'Dell', productPrices: [{}] }))).not.toBeValid();
+    expect(validate(new BrandProductPrices({ productPrices: [{}] }))).not.toBeValid();
+    expect(validate(new BrandProductPrices({ brand: 'Dell' }))).not.toBeValid();
   });
 });

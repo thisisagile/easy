@@ -95,7 +95,7 @@ describe('List', () => {
     const json = list(Dev.Sander, Dev.Wouter).toJSON();
     expect(JSON.stringify(json)).toBe(JSON.stringify([Dev.Sander.toJSON(), Dev.Wouter.toJSON()]));
     const j = list(Scope.Auth, Scope.Basic, Scope.Admin).toJSON();
-    expect(JSON.stringify(j)).toBe(JSON.stringify([Scope.Auth.toJSON(), Scope.Basic.toJSON(), Scope.Admin.toJSON()]))
+    expect(JSON.stringify(j)).toBe(JSON.stringify([Scope.Auth.toJSON(), Scope.Basic.toJSON(), Scope.Admin.toJSON()]));
   });
 });
 

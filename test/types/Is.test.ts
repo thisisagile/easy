@@ -1,4 +1,17 @@
-import { Entity, isArray, isBoolean, isDefined, isEmpty, isEmptyObject, isInstance, isNotEmpty, isNumber, isObject, isPrimitive, isString } from '../../src';
+import {
+  Entity,
+  isArray,
+  isBoolean,
+  isDefined,
+  isEmpty,
+  isEmptyObject,
+  isInstance,
+  isNotEmpty,
+  isNumber,
+  isObject,
+  isPrimitive,
+  isString,
+} from '../../src';
 import { Dev } from '../ref';
 
 describe('isDefined', () => {
@@ -19,7 +32,7 @@ describe('isDefined', () => {
 describe('isEmpty', () => {
   test('isEmpty false', () => {
     expect(isEmpty({})).toBeFalsy();
-    expect(isEmpty([])).toBeFalsy();
+    expect(isEmpty([42])).toBeFalsy();
     expect(isEmpty(Dev.Jeroen)).toBeFalsy();
   });
 
@@ -28,13 +41,14 @@ describe('isEmpty', () => {
     expect(isEmpty('')).toBeTruthy();
     expect(isEmpty(undefined)).toBeTruthy();
     expect(isEmpty(null)).toBeTruthy();
+    expect(isEmpty([])).toBeTruthy();
   });
 });
 
 describe('isNotEmpty', () => {
   test('isNotEmpty true', () => {
     expect(isNotEmpty({})).toBeTruthy();
-    expect(isNotEmpty([])).toBeTruthy();
+    expect(isNotEmpty([42])).toBeTruthy();
     expect(isNotEmpty(Dev.Jeroen)).toBeTruthy();
   });
 
@@ -43,6 +57,7 @@ describe('isNotEmpty', () => {
     expect(isNotEmpty('')).toBeFalsy();
     expect(isNotEmpty(undefined)).toBeFalsy();
     expect(isNotEmpty(null)).toBeFalsy();
+    expect(isNotEmpty([])).toBeFalsy();
   });
 });
 

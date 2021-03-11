@@ -8,8 +8,7 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {
-  }
+  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
 
   private static mongoUrl(): Promise<string> {
     return when(ctx.env.get('mongodbCluster')).not.isDefined.reject('Environment variable MONGODB_CLUSTER not set!');
@@ -21,7 +20,7 @@ export class MongoProvider {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         auth: { user: ctx.env.get('mongodbUser'), password: ctx.env.get('mongodbPassword') },
-      }).connect(),
+      }).connect()
     );
   }
 

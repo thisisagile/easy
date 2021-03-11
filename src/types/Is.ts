@@ -2,9 +2,9 @@ import { Constructor } from './Constructor';
 
 export const isDefined = (o?: unknown): boolean => o !== undefined && o !== null;
 
-export const isEmpty = (o?: unknown): boolean => o === '' || o === null || o === undefined;
+export const isEmpty = (o?: unknown): boolean => o === '' || o === null || o === undefined || (isArray(o) && o.length === 0);
 
-export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o !== undefined;
+export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o !== undefined && (!isArray(o) || o.length > 0);
 
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === 'string';
 
