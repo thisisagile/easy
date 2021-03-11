@@ -35,7 +35,7 @@ export class ExpressProvider implements AppProvider {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 
-  private static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+  protected static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
       .then((r: any) => toResponse(res, r, options))
       .catch(error => next(toOriginatedError(error, options)));

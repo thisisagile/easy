@@ -1,17 +1,4 @@
-import {
-  asList,
-  Entity,
-  Enum,
-  includes,
-  List,
-  required,
-  rule,
-  Struct,
-  toList,
-  valid,
-  validate,
-  Value,
-} from '../../src';
+import { asList, Entity, Enum, includes, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
