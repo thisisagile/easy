@@ -45,6 +45,15 @@ describe('MongoProvider', () => {
     return expect(provider.group([{ id: '42' }])).resolves.toBe(devData);
   });
 
+  test('by calls find on the collection', async () => {
+    cursor.toArray = mock.resolve([devData.jeroen, devData.wouter]);
+    c.find = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    const res = await provider.by('level', 1);
+    expect(res.last()).toMatchObject(devData.wouter);
+    expect(c.find).toHaveBeenCalledWith([{ level: 1 }], { limit: 250 });
+  });
+
   test('add calls insertOne on the collection', async () => {
     c.insertOne = mock.resolve({ ops: [devData.jeroen] });
     provider.collection = mock.resolve(c);

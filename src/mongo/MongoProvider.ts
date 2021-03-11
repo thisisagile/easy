@@ -1,7 +1,6 @@
-import { ctx, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
-import { reject } from '../utils';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -9,7 +8,8 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
+  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {
+  }
 
   private static mongoUrl(): Promise<string> {
     return when(ctx.env.get('mongodbCluster')).not.isDefined.reject('Environment variable MONGODB_CLUSTER not set!');
@@ -21,7 +21,7 @@ export class MongoProvider {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         auth: { user: ctx.env.get('mongodbUser'), password: ctx.env.get('mongodbPassword') },
-      }).connect()
+      }).connect(),
     );
   }
 
@@ -44,7 +44,7 @@ export class MongoProvider {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented.because(`Search for key '${key}' and '${value}' is not implemented yet. `));
+    return this.find([{ [key]: value }]);
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {
