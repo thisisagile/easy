@@ -21,6 +21,8 @@ export class Results implements Validatable {
   }
 
   add = (...rs: (Text | Result)[]): Results => toResults(...this.results, ...parse(...rs));
+
+  combine = (other: Results): Results => this.add(...other.results);
 }
 
 export const toResults = (...r: (Text | Result)[]): Results => new Results(...r);
