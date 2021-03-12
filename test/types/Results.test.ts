@@ -38,17 +38,10 @@ describe('Results', () => {
 
   // Add
 
-  test('Add nothing', () => {
+  test('Add empty results', () => {
     const rs2 = res.add();
     expect(rs2).toHaveLength(2);
     expect(rs2).not.toBeValid();
-  });
-
-  test('Add empty to empty results', () => {
-    const rs = toResults();
-    const rs2 = rs.add(...toResults().results);
-    expect(rs2).toHaveLength(0);
-    expect(rs2).toBeValid();
   });
 
   test('Add with a single string', () => {
@@ -66,21 +59,6 @@ describe('Results', () => {
   test('Add with a text and a result', () => {
     const rs2 = res.add(error, r);
     expect(rs2).toHaveLength(4);
-  });
-
-  // Combine
-
-  test('Combine one Results with another', () => {
-    const other = toResults(error);
-    const rs2 = toResults(r).combine(other);
-    expect(rs2).toHaveLength(2);
-  });
-
-  test('Combine empty with empty results', () => {
-    const other = toResults();
-    const rs2 = toResults().combine(other);
-    expect(rs2).toHaveLength(0);
-    expect(rs2).toBeValid();
   });
 });
 
