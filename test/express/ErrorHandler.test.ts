@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { error, Exception, HttpStatus, rest, toOriginatedError, toResults } from '../../src';
+import { authError, error, Exception, HttpStatus, rest, toOriginatedError, toResults } from '../../src';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.Conflict, onError: HttpStatus.ImATeapot };
@@ -137,5 +137,17 @@ describe('ErrorHandler', () => {
     error(toOriginatedError(resp, options), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
     expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError, 2));
+  });
+
+  test('error with AuthenticationError Forbidden', () => {
+    error(authError(HttpStatus.Forbidden), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Forbidden.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.Forbidden, 1, "Forbidden"));
+  });
+
+  test('error with AuthenticationError NotAuthorized', () => {
+    error(authError(HttpStatus.NotAuthorized), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.NotAuthorized.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotAuthorized, 1, "Not authorized"));
   });
 });

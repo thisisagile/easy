@@ -1,6 +1,6 @@
 import { Exception, isError, isException, isResults, isText, Result, Results, toResult, toString } from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, OriginatedError, Response, rest, toOriginatedError } from '../http';
+import { HttpStatus, isResponse, OriginatedError, Response, rest, toHttpStatus, toOriginatedError } from '../http';
 import { choose } from '../utils';
 import { isAuthError } from './AuthError';
 
@@ -17,7 +17,7 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
   return choose<Response, any>(origin)
     .case(
       o => isAuthError(o),
-      o => toResponse(HttpStatus.Forbidden, [toResult(o.message)])
+      o => toResponse(toHttpStatus(o.status), [toResult(o.message)])
     )
     .case(
       o => Exception.DoesNotExist.equals(o),
