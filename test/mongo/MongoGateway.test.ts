@@ -26,7 +26,7 @@ describe('MongoGateway', () => {
   });
 
   test('search is not implemented', () => {
-    return expect(gateway.search).rejects.toBe(Exception.IsNotImplemented);
+    return expect(gateway.search).rejects.toMatchException(Exception.IsNotImplemented);
   });
 
   test('exists resolves to true on existing item', async () => {
