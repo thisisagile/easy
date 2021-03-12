@@ -75,7 +75,7 @@ describe('Repo', () => {
   test('update where object is not found does not trigger gateway', async () => {
     gateway.byId = mock.resolve();
     gateway.update = mock.resolve();
-    await expect(repo.update(Dev.Invalid.toJSON())).rejects.toBe(Exception.DoesNotExist);
+    await expect(repo.update(Dev.Invalid.toJSON())).rejects.toMatchException(Exception.DoesNotExist);
     return expect(gateway.update).not.toHaveBeenCalled();
   });
 
