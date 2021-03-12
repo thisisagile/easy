@@ -1,5 +1,6 @@
 import { CollectionGateway, Exception, resolve, toJson } from '../../src';
 import { Dev } from '../ref';
+import '@thisisagile/easy-test';
 
 describe('CollectionGateway', () => {
   const dev = Dev.All.first();
@@ -58,7 +59,7 @@ describe('CollectionGateway', () => {
   });
 
   test('add without id does not work', async () => {
-    return expect(gateway.add({ name: 'Laurens' })).rejects.toBe(Exception.IsMissingId);
+    return expect(gateway.add({ name: 'Laurens' })).rejects.toMatchException(Exception.IsMissingId);
   });
 
   test('add item that is already present does not work', () => {
