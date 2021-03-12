@@ -7,22 +7,24 @@ import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
-const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
+export const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
   choose<RestResult, any>(outcome)
-    .case(() => HttpStatus.NoContent.equals(status), undefined)
+    .case(() => HttpStatus.NoContent.equals(status), {})
     .case(
       o => !isDefined(o),
       () => rest.toData(status, [])
     )
     .else(o => rest.toData(status, toList(o)));
 
-const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
-  res.status(options.onOk.status).type(options.type.id.toString());
+export const toExpressResponse = (res: Response, result?: unknown, options?: VerbOptions): void => {
+  const OkStatus = options.onOk ?? HttpStatus.Ok;
+  res.status(OkStatus.status);
+  res.type(options.type?.id.toString() ?? ContentType.Json.code);
 
   choose<void, ContentType>(options.type)
     .case(
       ct => ContentType.Json.equals(ct),
-      () => res.json(toBody(options.onOk, result))
+      () => res.json(toBody(OkStatus, result))
     )
     .case(
       ct => ContentType.Stream.equals(ct),
@@ -31,13 +33,13 @@ const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
 };
 
 export class ExpressProvider implements AppProvider {
-  constructor(private app: Express = express()) {
+  constructor(protected app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 
-  protected static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+  protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
-      .then((r: any) => toResponse(res, r, options))
+      .then((r: any) => toExpressResponse(res, r, options))
       .catch(error => next(toOriginatedError(error, options)));
 
   use = (handler: Handler): void => {
@@ -56,7 +58,7 @@ export class ExpressProvider implements AppProvider {
       if (requires.scope) middleware.push(checkScope(requires.scope));
       if (requires.uc) middleware.push(checkUseCase(requires.uc));
 
-      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, ExpressProvider.handle(endpoint, verb.options));
+      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, this.handle(endpoint, verb.options));
     });
 
     this.app.use(router);

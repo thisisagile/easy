@@ -1,21 +1,101 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus } from '../../src';
+import {
+  Exception,
+  ExpressProvider,
+  ExpressVerb,
+  Handler,
+  HttpStatus,
+  toBody,
+  toExpressResponse,
+  VerbOptions,
+  ContentType,
+  toJson,
+  RestResult,
+} from '../../src';
+import * as exprProvider from '../../src/express/ExpressProvider';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
 type Endpoint = { path?: string; handler?: AsyncHandler };
 
+//maybe this should be in easy-test:
+const mockResponse = (): any =>
+  (({
+    json: mock.this(),
+    status: mock.this(),
+    end: mock.this(),
+    set: mock.this(),
+    type: mock.this(),
+  } as unknown) as Response);
+
 describe('ExpressProvider', () => {
   const app = ({ listen: mock.return(), use: mock.return(), set: mock.return() } as unknown) as Express;
   const handler: Handler = () => undefined;
   let provider: ExpressProvider;
   let service: DevService;
+  let mockToBody: jest.SpyInstance;
 
   beforeEach(() => {
     provider = new ExpressProvider(app);
     service = new DevService('dev', provider);
+    mockToBody = jest.spyOn(exprProvider, 'toBody');
+  });
+
+  afterEach(() => {
+    mockToBody.mockRestore();
+  });
+
+  test('toBody with No Content', () => {
+    expect(toBody(HttpStatus.NoContent, { not: 'used' })).toEqual({});
+  });
+
+  test('toBody with undefined', () => {
+    expect(toJson(toBody(HttpStatus.Conflict, undefined))).toEqual(toJson({ data: { code: HttpStatus.Conflict.status, itemCount: 0, items: [] } }));
+  });
+
+  test('toBody with array', () => {
+    const items = [{ foo: 'bar' }, { foo: 'baz' }];
+    expect(toJson(toBody(HttpStatus.Ok, items))).toEqual(toJson({ data: { code: HttpStatus.Ok.status, itemCount: 2, items } }));
+  });
+
+  test('toExpressResponse Json, no OK status', () => {
+    const res = mockResponse();
+    const fakeRestResult: RestResult = {};
+    mockToBody.mockReturnValue(fakeRestResult);
+    const r = { foo: 'bar' };
+    toExpressResponse(res, r, { type: ContentType.Json } as VerbOptions);
+    expect(mockToBody).toHaveBeenCalledWith(HttpStatus.Ok, r);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Ok.status);
+    expect(res.type).toHaveBeenCalledWith(ContentType.Json.toString());
+    expect(res.json).toHaveBeenCalledWith(fakeRestResult);
+  });
+
+  test('toExpressResponse Json, OK status', () => {
+    const res = mockResponse();
+    const fakeRestResult: RestResult = {};
+    mockToBody.mockReturnValue(fakeRestResult);
+    const r = { foo: 'bar' };
+    toExpressResponse(res, r, { type: ContentType.Json, onOk: HttpStatus.Created } as VerbOptions);
+    expect(mockToBody).toHaveBeenCalledWith(HttpStatus.Created, r);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
+    expect(res.type).toHaveBeenCalledWith(ContentType.Json.toString());
+    expect(res.json).toHaveBeenCalledWith(fakeRestResult);
+    expect(res.end).not.toHaveBeenCalled();
+  });
+
+  test('toExpressResponse with Stream', () => {
+    const res = mockResponse();
+    const fakeRestResult: RestResult = {};
+    mockToBody.mockReturnValue(fakeRestResult);
+    const buf = Buffer.from([]);
+    toExpressResponse(res, buf, { type: ContentType.Stream } as VerbOptions);
+    expect(mockToBody).not.toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Ok.status);
+    expect(res.type).toHaveBeenCalledWith(ContentType.Stream.toString());
+    expect(res.end).toHaveBeenCalledWith(buf);
+    expect(res.json).not.toHaveBeenCalled();
   });
 
   test('use', () => {
@@ -45,7 +125,7 @@ describe('ExpressProvider', () => {
     const router = express.Router();
     const resource = new DevsResource();
     let endpoint: Endpoint = {};
-    const res: any = { status: mock.return({ json: mock.return() }) };
+    const res = mockResponse();
 
     mockRouterMethodOnce(router, 'post', e => (endpoint = e));
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
@@ -63,7 +143,7 @@ describe('ExpressProvider', () => {
     const router = express.Router();
     const resource = new DevsResource();
     let endpoint: Endpoint = {};
-    const res: any = { status: mock.this(), json: mock.this() };
+    const res = mockResponse();
 
     mockRouterMethodOnce(router, 'get', e => (endpoint = e));
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
@@ -88,7 +168,7 @@ describe('ExpressProvider', () => {
     const router = express.Router();
     const resource = new DevResource();
     let endpoint: Endpoint = {};
-    const res: any = { status: mock.return({ json: mock.return() }) };
+    const res = mockResponse();
 
     mockRouterMethodOnce(router, 'delete', e => (endpoint = e));
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
