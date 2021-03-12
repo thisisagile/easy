@@ -63,7 +63,7 @@ describe('CollectionGateway', () => {
   });
 
   test('add item that is already present does not work', () => {
-    return expect(gateway.add(Dev.Naoufal.toJSON())).rejects.toBe(Exception.AlreadyExists);
+    return expect(gateway.add(Dev.Naoufal.toJSON())).rejects.toMatchException(Exception.AlreadyExists);
   });
 
   test('update works', async () => {
@@ -72,7 +72,7 @@ describe('CollectionGateway', () => {
   });
 
   test('update without id does not work', async () => {
-    return expect(gateway.update({ name: 'Laurens' })).rejects.toBe(Exception.IsMissingId);
+    return expect(gateway.update({ name: 'Laurens' })).rejects.toMatchException(Exception.IsMissingId);
   });
 
   test('remove works', async () => {
@@ -81,6 +81,6 @@ describe('CollectionGateway', () => {
   });
 
   test('remove without id doesnt do anything', () => {
-    return expect(gateway.remove(0)).rejects.toBe(Exception.DoesNotExist);
+    return expect(gateway.remove(0)).rejects.toMatchException(Exception.DoesNotExist);
   });
 });
