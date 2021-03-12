@@ -1,7 +1,7 @@
 import { inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, list, List, meta, Results, Text } from '../types';
 import { validate, Validator } from './Validate';
 
-export type Constraint = (value: unknown) => boolean | Results;
+export type Constraint = (...value: unknown[]) => boolean | Results;
 
 export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string): void => {
   const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? list<Validator>();
