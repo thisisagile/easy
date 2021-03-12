@@ -97,13 +97,13 @@ describe('Testing When', () => {
         .not.contains(d => d.level)
         .and.contains(d => d.name)
         .reject(Exception.Unknown)
-    ).rejects.toBe(Exception.Unknown);
+    ).rejects.toMatchException(Exception.Unknown);
     return expect(
       when(Dev.Invalid)
         .not.contains(d => d.language)
         .and.contains(d => d.name)
         .reject(Exception.Unknown)
-    ).rejects.toBe(Exception.Unknown);
+    ).rejects.toMatchException(Exception.Unknown);
   });
 
   test('Reject without error, with error, with exception, with function', async () => {
