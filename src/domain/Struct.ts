@@ -16,7 +16,7 @@ export abstract class Struct implements Validatable {
     return this.constructor.name;
   }
 
-  update = (add: Json): Struct => this;
+  update = (_add: Json): Struct => this;
 
   protected merge = (a: Json): Json => json.merge(this, a);
 }
