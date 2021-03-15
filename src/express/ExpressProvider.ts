@@ -1,34 +1,10 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
-import { choose } from '../utils';
-import { isDefined, toList } from '../types';
-import { HttpStatus, rest, RestResult, toOriginatedError } from '../http';
+import { toList } from '../types';
+import { HttpStatus, rest, toOriginatedError } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
-
-const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
-  choose<RestResult, any>(outcome)
-    .case(() => HttpStatus.NoContent.equals(status), undefined)
-    .case(
-      o => !isDefined(o),
-      () => rest.toData(status, []),
-    )
-    .else(o => rest.toData(status, toList(o)));
-
-// const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
-//   res.status(options.onOk.status).type(options.type.id.toString());
-//
-//   choose<void, ContentType>(options.type)
-//     .case(
-//       ct => ContentType.Json.equals(ct),
-//       () => res.json(toBody(options.onOk, result))
-//     )
-//     .case(
-//       ct => ContentType.Stream.equals(ct),
-//       () => res.end(result)
-//     );
-// };
 
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
@@ -77,7 +53,9 @@ export class ExpressProvider implements AppProvider {
   // Handling responses depending on content type
 
   protected json(res: Response, result: unknown, options: VerbOptions): void {
-    res.json(toBody(options.onOk, result));
+    if (!HttpStatus.NoContent.equals(options.onOk)) {
+      res.json(rest.toData(options.onOk, toList<any>(result)));
+    }
   }
 
   protected stream(res: Response, result: unknown): void {
