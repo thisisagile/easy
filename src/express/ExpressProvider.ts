@@ -55,7 +55,9 @@ export class ExpressProvider implements AppProvider {
   // Handling responses depending on content type
 
   protected json(res: Response, result: unknown, options: VerbOptions): void {
-    if (!HttpStatus.NoContent.equals(options.onOk ?? HttpStatus.Ok)) {
+    if (HttpStatus.NoContent.equals(options.onOk ?? HttpStatus.Ok)) {
+      res.send();
+    } else {
       res.json(rest.toData(options.onOk ?? HttpStatus.Ok, toList<any>(result)));
     }
   }
