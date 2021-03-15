@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { toList } from '../types';
-import { HttpStatus, rest, toOriginatedError } from '../http';
+import { ContentType, HttpStatus, rest, toOriginatedError } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -39,11 +39,13 @@ export class ExpressProvider implements AppProvider {
     });
   };
 
-  protected toResponse = (res: Response, result: unknown, options: VerbOptions): void => {
-    res.status(options.onOk.status).type(options.type.code);
-    const f = (this as any)[options.type.name] ?? this.json;
+  protected toResponse(res: Response, result: unknown, options: VerbOptions): void {
+    res.status((options.onOk ?? HttpStatus.Ok).status);
+    const contentType = options.type ?? ContentType.Json
+    res.type(contentType.code);
+    const f = (this as any)[contentType.name] ?? this.json;
     f(res, result, options);
-  };
+  }
 
   protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
@@ -60,7 +62,7 @@ export class ExpressProvider implements AppProvider {
     }
   }
 
-  protected stream(res: Response, result: unknown): void {
+  protected stream(res: Response, result: unknown, _options: VerbOptions): void {
     res.end(result);
   }
 }
