@@ -7,7 +7,7 @@ import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export class ExpressProvider implements AppProvider {
-  constructor(private app: Express = express()) {
+  constructor(protected app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 

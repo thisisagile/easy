@@ -30,4 +30,11 @@ describe('Service', () => {
     service.with(DevsResource, DevResource).atPort(9001).start();
     expect(app.listen).toHaveBeenCalledWith(9001, fits.any());
   });
+
+  test('bodyLoggerHook works', () => {
+    const service = new DevService('Dev', app);
+    service.bodyLoggerHook = mock.return();
+    service.start();
+    expect(service.bodyLoggerHook).toHaveBeenCalledWith(app);
+  });
 });
