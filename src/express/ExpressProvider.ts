@@ -35,7 +35,7 @@ export class ExpressProvider implements AppProvider {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 
-  protected static handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+  protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
       .then((r: any) => toResponse(res, r, options))
       .catch(error => next(toOriginatedError(error, options)));
@@ -56,7 +56,7 @@ export class ExpressProvider implements AppProvider {
       if (requires.scope) middleware.push(checkScope(requires.scope));
       if (requires.uc) middleware.push(checkUseCase(requires.uc));
 
-      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, ExpressProvider.handle(endpoint, verb.options));
+      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, this.handle(endpoint, verb.options));
     });
 
     this.app.use(router);
