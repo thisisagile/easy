@@ -69,6 +69,13 @@ describe('RouteGateway', () => {
     expect(api.patch).toHaveBeenCalledWith(DevUri.Developer, body);
   });
 
+  test('upsert calls api correctly', async () => {
+    const body = Dev.Sander.toJSON();
+    api.put = mock.resolve(toResponse(HttpStatus.Ok, body));
+    await expect(gateway.upsert(body)).resolves.toMatchObject(body);
+    expect(api.put).toHaveBeenCalledWith(DevUri.Developer.id(Dev.Sander.id), body);
+  });
+
   test('delete calls api correctly', async () => {
     api.delete = mock.resolve(toResponse(HttpStatus.NoContent));
     await gateway.remove(42);
