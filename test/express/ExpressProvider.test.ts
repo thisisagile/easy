@@ -29,7 +29,12 @@ describe('ExpressProvider', () => {
   });
 
   function mockRouterMethodOnce(router: express.Router, method: ExpressVerb, cb: (endpoint: Endpoint) => any) {
-    jest.spyOn(router, method).mockImplementationOnce((path: string, handler: RequestHandler) => cb({ path, handler: handler as AsyncHandler }));
+    jest.spyOn(router, method).mockImplementationOnce((path: string, handler: RequestHandler) =>
+      cb({
+        path,
+        handler: handler as AsyncHandler,
+      })
+    );
   }
 
   test('route', () => {

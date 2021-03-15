@@ -142,12 +142,12 @@ describe('ErrorHandler', () => {
   test('error with AuthenticationError Forbidden', () => {
     error(authError(HttpStatus.Forbidden), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Forbidden.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.Forbidden, 1, "Forbidden"));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.Forbidden, 1, 'Forbidden'));
   });
 
   test('error with AuthenticationError NotAuthorized', () => {
     error(authError(HttpStatus.NotAuthorized), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotAuthorized.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotAuthorized, 1, "Not authorized"));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotAuthorized, 1, 'Not authorized'));
   });
 });

@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, RequestHandler, Response } fro
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { choose } from '../utils';
 import { isDefined, toList } from '../types';
-import { ContentType, HttpStatus, rest, RestResult, toOriginatedError } from '../http';
+import { HttpStatus, rest, RestResult, toOriginatedError } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -12,33 +12,28 @@ const toBody = (status: HttpStatus, outcome?: unknown): RestResult =>
     .case(() => HttpStatus.NoContent.equals(status), undefined)
     .case(
       o => !isDefined(o),
-      () => rest.toData(status, [])
+      () => rest.toData(status, []),
     )
     .else(o => rest.toData(status, toList(o)));
 
-const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
-  res.status(options.onOk.status).type(options.type.id.toString());
-
-  choose<void, ContentType>(options.type)
-    .case(
-      ct => ContentType.Json.equals(ct),
-      () => res.json(toBody(options.onOk, result))
-    )
-    .case(
-      ct => ContentType.Stream.equals(ct),
-      () => res.end(result)
-    );
-};
+// const toResponse = (res: Response, result?: unknown, options?: VerbOptions) => {
+//   res.status(options.onOk.status).type(options.type.id.toString());
+//
+//   choose<void, ContentType>(options.type)
+//     .case(
+//       ct => ContentType.Json.equals(ct),
+//       () => res.json(toBody(options.onOk, result))
+//     )
+//     .case(
+//       ct => ContentType.Stream.equals(ct),
+//       () => res.end(result)
+//     );
+// };
 
 export class ExpressProvider implements AppProvider {
   constructor(private app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
-
-  protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
-    endpoint(toReq(req))
-      .then((r: any) => toResponse(res, r, options))
-      .catch(error => next(toOriginatedError(error, options)));
 
   use = (handler: Handler): void => {
     this.app.use(handler);
@@ -67,6 +62,27 @@ export class ExpressProvider implements AppProvider {
       console.log(message);
     });
   };
+
+  protected toResponse = (res: Response, result: unknown, options: VerbOptions): void => {
+    res.status(options.onOk.status).type(options.type.code);
+    const f = (this as any)[options.type.name] ?? this.json;
+    f(res, result, options);
+  };
+
+  protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+    endpoint(toReq(req))
+      .then((r: any) => this.toResponse(res, r, options))
+      .catch(error => next(toOriginatedError(error, options)));
+
+  // Handling responses depending on content type
+
+  protected json(res: Response, result: unknown, options: VerbOptions): void {
+    res.json(toBody(options.onOk, result));
+  }
+
+  protected stream(res: Response, result: unknown): void {
+    res.end(result);
+  }
 }
 
 export const service = (name: string): Service => new Service(name, new ExpressProvider());
