@@ -17,9 +17,7 @@ export class List<T> extends Array<T> {
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => super.map(f, params) as List<U>;
 
-  mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> =>
-    // this.map(f, params).reduce((list, u) => (u) ? list.add(u) : list, toList<U>());
-    this.map(f, params).filter(i => isDefined(i));
+  mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
@@ -31,6 +29,8 @@ export class List<T> extends Array<T> {
     super.push(...toArray(...items));
     return this;
   };
+
+  defined = (): List<NonNullable<T>> => this.reduce((list, v) => (isDefined(v) ? list.add(v) : list), toList<NonNullable<T>>());
 }
 
 export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
