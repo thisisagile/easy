@@ -1,6 +1,6 @@
 import { Constructor } from './Constructor';
 
-export const isDefined = (o?: unknown): boolean => o !== undefined && o !== null;
+export const isDefined = <T = unknown>(o?: T): o is NonNullable<T> => o !== undefined && o !== null;
 
 export const isEmpty = (o?: unknown): boolean => o === '' || o === null || o === undefined || (isArray(o) && o.length === 0);
 
