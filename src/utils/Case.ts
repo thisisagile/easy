@@ -31,4 +31,4 @@ export class Found<T, V> extends Case<T, V> {
   }
 }
 
-export const choose = <T, V>(value: V): Case<T, V> => new Case(value);
+export const choose = <T, V = unknown>(value: V): Case<T, V> => new Case(value);

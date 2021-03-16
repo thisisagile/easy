@@ -15,8 +15,8 @@ describe('Case', () => {
   });
 
   test('Empty else', () => {
-    const out = choose<Dev, string>('').else();
-    expect(out).toBeUndefined();
+    const out = choose<Dev, string>('').else(Dev.Wouter);
+    expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('Simple true', () => {
