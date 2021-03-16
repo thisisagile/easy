@@ -27,7 +27,7 @@ export const security = (): ((req: express.Request, res: express.Response, next:
   const jwtConfig: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: ctx.env.get('tokenPublicKey'),
-    issuer: ctx.env.get('tokenIssuer', ctx.env.domain),
+    issuer: ctx.env.get('tokenIssuer') ?? ctx.env.domain,
     audience: ctx.env.get('tokenAudience'),
     passReqToCallback: true,
   };

@@ -23,8 +23,8 @@ describe('Environment Context', () => {
   });
 
   test('undefined environment variable', () => {
-    expect(ctx.env.get('')).toBe('');
-    expect(ctx.env.get('doesNotExist')).toBe('');
+    expect(ctx.env.get('')).toBeUndefined();
+    expect(ctx.env.get('doesNotExist')).toBeUndefined();
   });
 
   test('defined environment variables', () => {
