@@ -1,7 +1,8 @@
 import { Resource } from './Resource';
 import { Service } from './Service';
+import { Func } from '../types';
 
-export type Handler = (...params: any[]) => void;
+export type Handler = Func<void, any>;
 
 export interface AppProvider {
   use: (h: Handler) => void;
