@@ -1,4 +1,4 @@
-import { List, meta, toList, Uri } from '../types';
+import { isDefined, List, meta, Uri } from '../types';
 import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
@@ -13,10 +13,15 @@ export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
 export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires };
 export type Routes = { route: Uri; endpoints: List<Route> };
 
-const toRoute = (verb: Verb, endpoint: Endpoint, requires: RouteRequires): Route => ({ verb, endpoint, requires });
+const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb): Route | undefined => isDefined(verb) ? {
+  verb,
+  endpoint,
+  requires,
+} : undefined;
 
 class Router implements Routes {
-  constructor(readonly resource: Resource) {}
+  constructor(readonly resource: Resource) {
+  }
 
   get route(): Uri {
     return meta(this.resource).get('route');
@@ -25,17 +30,11 @@ class Router implements Routes {
   get endpoints(): List<Route> {
     return meta(this.resource)
       .properties('verb')
-      .map(v => {
-        const verb = v.get<Verb>('verb');
-        return verb
-          ? toRoute(verb, this.resource[v.property], {
-              token: v.get<boolean>('token') ?? false,
-              scope: v.get<Scope>('scope'),
-              uc: v.get<UseCase>('uc'),
-            })
-          : undefined;
-      })
-      .reduce((list, v) => (v ? list.add(v) : list), toList<Route>());
+      .mapDefined(v => toRoute(this.resource[v.property], {
+        token: v.get<boolean>('token') ?? false,
+        scope: v.get<Scope>('scope'),
+        uc: v.get<UseCase>('uc'),
+      }, v.get<Verb>('verb')));
   }
 }
 
