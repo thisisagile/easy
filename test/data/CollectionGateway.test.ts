@@ -20,7 +20,9 @@ describe('CollectionGateway', () => {
 
   test('byId returns a copy', async () => {
     const a = await gateway.byId(dev.id);
-    if (a) { a.name = 'Hello'; }
+    if (a) {
+      a.name = 'Hello';
+    }
     expect(a).not.toStrictEqual(dev.toJSON());
     return expect(gateway.byId(dev.id)).resolves.not.toStrictEqual(a);
   });

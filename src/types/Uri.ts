@@ -6,10 +6,7 @@ import { ctx } from './Context';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
-const toSegment = (key?: string, {
-  segment,
-  query,
-}: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
+const toSegment = (key?: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
   key,
   segment,
   query,
@@ -48,8 +45,7 @@ export class EasyUri implements Uri {
 
   private props = list<Prop>();
 
-  constructor(readonly segments: Segment[] = []) {
-  }
+  constructor(readonly segments: Segment[] = []) {}
 
   get path(): string {
     return toRoute(uri.segment(), this.resource, ...this.segments);

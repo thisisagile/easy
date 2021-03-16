@@ -8,13 +8,13 @@ describe('Requires', () => {
   });
 
   test('token is not required', () => {
-    const token: boolean | undefined= meta(new DevsResource()).property('insert').get('token');
+    const token: boolean | undefined = meta(new DevsResource()).property('insert').get('token');
     expect(token).toBeFalsy();
   });
 
   test('scope is set', () => {
-    const token: boolean | undefined= meta(new DevResource()).property('byId').get('token');
-    const scope: Scope | undefined= meta(new DevResource()).property('byId').get('scope');
+    const token: boolean | undefined = meta(new DevResource()).property('byId').get('token');
+    const scope: Scope | undefined = meta(new DevResource()).property('byId').get('scope');
     expect(token).toBeTruthy();
     expect(scope).toMatchObject(Scope.Basic);
   });

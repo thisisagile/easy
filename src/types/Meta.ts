@@ -3,8 +3,7 @@ import { list, List, toList } from './List';
 import { isDefined } from './Is';
 
 class ClassMeta {
-  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {
-  }
+  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
 
   get = <T>(key: string): T => Reflect.getMetadata(key, this.data) as T;
 
@@ -32,8 +31,7 @@ class ClassMeta {
 }
 
 class PropertyMeta {
-  constructor(readonly subject: any, readonly property: string | symbol, private readonly data = Reflect.getMetadata(property, subject)) {
-  }
+  constructor(readonly subject: any, readonly property: string | symbol, private readonly data = Reflect.getMetadata(property, subject)) {}
 
   get value(): any {
     return this.subject[this.property];
