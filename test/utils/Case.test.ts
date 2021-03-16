@@ -1,12 +1,12 @@
-import { choose, isDefined } from '../../src';
+import { choose, isEmpty } from '../../src';
 import { Dev } from '../ref';
 
 describe('Case', () => {
-  const which = (name?: string) =>
+  const which = (name: string) =>
     choose<Dev, string>(name)
-      .case(n => !isDefined(n), Dev.Jeroen)
-      .case(n => n.includes('an'), Dev.Naoufal)
-      .case(n => n.includes('San'), Dev.Sander)
+      .case(n => isEmpty(n), Dev.Jeroen)
+      .case(n => n?.includes('an'), Dev.Naoufal)
+      .case(n => n?.includes('San'), Dev.Sander)
       .else(Dev.Wouter);
 
   test('Only else', () => {
@@ -41,11 +41,11 @@ describe('Case', () => {
     const out = choose<Dev>('Bas')
       .case(true, name => new Dev({ name }))
       .else(Dev.Naoufal);
-    expect(out.name).toBe('Bas');
+    expect(out?.name).toBe('Bas');
   });
 
   test('Full choose case', () => {
-    expect(which()).toMatchObject(Dev.Jeroen);
+    expect(which('')).toMatchObject(Dev.Jeroen);
     expect(which('an')).toMatchObject(Dev.Naoufal);
     expect(which('San')).toMatchObject(Dev.Naoufal);
     expect(which('Kim')).toMatchObject(Dev.Wouter);

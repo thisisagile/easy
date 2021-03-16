@@ -47,7 +47,7 @@ describe('SecurityHandler', () => {
       expect(s.name).toBe('jwt');
       expect(s._passReqToCallback).toBeTruthy();
       expect(s._verifOpts).toStrictEqual({
-        audience: undefined,
+        audience: '',
         issuer: ctx.env.domain,
         algorithms: undefined,
         ignoreExpiration: false,

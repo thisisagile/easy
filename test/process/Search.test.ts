@@ -31,7 +31,7 @@ describe('Search', () => {
 
   test('search undefined returns empty list', async () => {
     repo.search = mock.resolve(devs);
-    await expect(select.search(undefined)).resolves.toHaveLength(0);
+    await expect(select.search('')).resolves.toHaveLength(0);
     expect(repo.search).not.toHaveBeenCalled();
   });
 

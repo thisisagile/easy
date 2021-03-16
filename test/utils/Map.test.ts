@@ -7,8 +7,8 @@ describe('Map', () => {
   const tester = new TesterMap();
 
   test('properties are correct', () => {
-    expect(dev.id.options.convert).toBeDefined();
-    expect(dev.id.options.def).toBe(42);
+    expect(dev.id.options?.convert).toBeDefined();
+    expect(dev.id.options?.def).toBe(42);
   });
 
   test('count properties', () => {
@@ -58,6 +58,6 @@ describe('Map', () => {
 
   test('map.from without id, so it uses default function', () => {
     const j = new DevMapWithFunction().in(devData.withoutId);
-    expect(isUuid(j.id.toString())).toBeTruthy();
+    expect(isUuid(j.id?.toString())).toBeTruthy();
   });
 });

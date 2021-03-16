@@ -40,19 +40,19 @@ describe('AxiosProvider', () => {
         method: HttpVerb.Get.id,
       })
     );
-    expect(r.body.data.items).toHaveLength(1);
+    expect(r.body.data?.items).toHaveLength(1);
   });
 
   test('Get with list', async () => {
     axios.request = mock.resolve(asResponse(HttpStatus.Ok, [{ name: 'Sander' }, { name: 'Wouter' }]));
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get });
-    expect(r.body.data.items).toHaveLength(2);
+    expect(r.body.data?.items).toHaveLength(2);
   });
 
   test('Get with transform', async () => {
     axios.request = mock.resolve(asResponse(HttpStatus.Ok, { dev: { name: 'Sander' } }));
     const r = await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transform: r => r.dev });
-    expect(r.body.data.items[0]).toMatchObject({ name: 'Sander' });
+    expect(r.body.data?.items[0]).toMatchObject({ name: 'Sander' });
   });
 
   test('Get with reject and response', async () => {

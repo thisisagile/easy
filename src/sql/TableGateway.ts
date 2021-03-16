@@ -11,12 +11,16 @@ export class TableGateway<T extends Table> implements Gateway {
     return this.provider.query(this.table.select());
   }
 
-  byId(id: Id): Promise<Json> {
+  byId(id: Id): Promise<Json | undefined> {
     return this.provider.query(this.table.select().where(this.table.id.is(id))).then(js => js.first());
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented.because(`Search for key '${key}' and '${value}' is not implemented yet. `));
+  }
+
+  search(_q: JsonValue): Promise<List<Json>> {
+    return reject(Exception.IsNotImplemented);
   }
 
   exists(id: Id): Promise<boolean> {

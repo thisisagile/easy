@@ -29,8 +29,6 @@ describe('isText', () => {
   });
 
   test('replaceAll', () => {
-    expect(replaceAll(undefined, 'alt', '')).toBe('');
-    expect(replaceAll(undefined, '', 'alt')).toBe('alt');
     expect(replaceAll('Hello', 'alt', '')).toBe('Hello');
     expect(replaceAll('Hello', 'ello', 'alt')).toBe('Halt');
     expect(replaceAll('Hello hello', 'ello', 'alt')).toBe('Halt halt');

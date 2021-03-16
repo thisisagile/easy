@@ -1,7 +1,7 @@
 import { convert, Convert } from './Convert';
 import { Get, isA, Json, List, meta, ofGet } from '../types';
 
-export type PropertyOptions<T = unknown> = { def?: Get<T>; convert?: Convert<T>; format?: string };
+export type PropertyOptions<T = unknown> = { def?: Get<T>; convert?: Convert<any, any>; format?: string };
 export type Property<T = unknown> = { owner: unknown; name: string; options?: PropertyOptions };
 
 export const isProperty = (p: unknown): p is Property => isA<Property>(p, 'owner', 'name', 'options');

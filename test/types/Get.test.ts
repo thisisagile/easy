@@ -1,8 +1,8 @@
 import { Dev } from '../ref';
-import { Get, GetProperty, isFunction, ofGet, ofProperty } from '../../src';
+import { Get, GetProperty, isFunc, ofGet, ofProperty } from '../../src';
 
 describe('Get', () => {
-  const name = (d: Get<Dev, string>): string => (isFunction(d) ? d().name : d.name);
+  const name = (d: Get<Dev, string>): string => (isFunc<Dev, string>(d) ? d().name : d.name);
 
   test('Get works', () => {
     expect(name(Dev.Sander)).toBe(Dev.Sander.name);

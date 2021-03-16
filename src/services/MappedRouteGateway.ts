@@ -1,18 +1,18 @@
 import { Api } from './Api';
-import { Id, Json, JsonValue, List } from '../types';
+import { Id, Json, JsonValue, List, Uri } from '../types';
 import { Map } from '../utils';
 import { RouteGateway } from './RouteGateway';
 
 export class MappedRouteGateway extends RouteGateway {
-  constructor(readonly map = new Map(), readonly api: Api = new Api()) {
-    super(api);
+  constructor(readonly route: Uri, readonly routeId: Uri, readonly map = new Map(), readonly api: Api = new Api()) {
+    super(route, routeId, api);
   }
 
   all(): Promise<List<Json>> {
     return super.all().then(is => is.map(i => this.map.in(i)));
   }
 
-  byId(id: Id): Promise<Json> {
+  byId(id: Id): Promise<Json | undefined> {
     return super.byId(id).then(i => this.map.in(i));
   }
 

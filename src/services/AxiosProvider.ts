@@ -7,11 +7,12 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
   choose<Response, AxiosError>(error)
     .case(
       e => isDefined(e.response),
-      e => toResponse(e.response.status, isRestResult(e.response.data) ? e.response.data : toResult(e.response.statusText, uri.path, uri), e.response.headers)
+      (e: any) =>
+        toResponse(e.response.status, isRestResult(e.response.data) ? e.response.data : toResult(e.response.statusText, uri.path, uri), e.response.headers)
     )
     .case(
       e => isDefined(e.request),
-      e => toResponse(e.request.status, toResult(e.request.message, uri.path, uri))
+      (e: any) => toResponse(e.request.status, toResult(e.request.message, uri.path, uri))
     )
     .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 

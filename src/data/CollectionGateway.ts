@@ -8,7 +8,7 @@ export class CollectionGateway implements Gateway {
     return this.data.then(d => toList(d));
   }
 
-  byId(id: Id): Promise<Json> {
+  byId(id: Id): Promise<Json | undefined> {
     return this.data.then(d => d.first(i => i.id === id)).then(d => (d ? { ...d } : undefined));
   }
 

@@ -20,7 +20,7 @@ import { Constraint } from './Contraints';
 import { when } from './When';
 import { choose, ParseOptions, toText } from '../utils';
 
-export type Validator = { property: string; constraint: Constraint; text: Text; actual?: unknown };
+export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: unknown };
 
 export const asResults = (subject: unknown, template: Text, options: ParseOptions = {}): Results =>
   toResults(toResult(toText(subject, template, options), toName(subject)));
@@ -33,7 +33,7 @@ const validators = (subject: unknown): List<Validator> =>
 const runValidator = (v: Validator, subject?: unknown): Results => {
   v.actual = (subject as any)[v.property];
   const res = v.constraint(v.actual);
-  return isResults(res) ? res : !res ? asResults(subject, v.text, v) : undefined;
+  return isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults();
 };
 
 const constraints = (subject?: unknown): Results =>
@@ -42,7 +42,7 @@ const constraints = (subject?: unknown): Results =>
     .reduce((rs, r) => rs.add(...r.results), toResults());
 
 export const validate = (subject?: unknown): Results =>
-  choose<Results, unknown>(subject)
+  choose<Results, any>(subject)
     .case(
       s => !isDefined(s),
       s => asResults(s, 'Subject is not defined.')
@@ -65,4 +65,4 @@ export const validate = (subject?: unknown): Results =>
     )
     .else(toResults());
 
-export const validateReject = <T>(subject?: T): Promise<T> => when(subject).not.isValid.reject();
+export const validateReject = <T>(subject: T): Promise<T> => when(subject).not.isValid.reject();

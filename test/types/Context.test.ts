@@ -17,14 +17,14 @@ describe('Environment Context', () => {
   });
 
   test('invalid env port results in default port', () => {
-    process.env.PORT = '';
+    delete process.env.PORT;
     const c = new Context();
     expect(c.env.port).toBe(8080);
   });
 
   test('undefined environment variable', () => {
-    expect(ctx.env.get('')).toBeUndefined();
-    expect(ctx.env.get('doesNotExist')).toBeUndefined();
+    expect(ctx.env.get('')).toBe('');
+    expect(ctx.env.get('doesNotExist')).toBe('');
   });
 
   test('defined environment variables', () => {

@@ -1,4 +1,4 @@
-import { ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { ctx, Id, isDefined, Json, JsonValue, List, toList, toString } from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 
@@ -24,7 +24,7 @@ export class MongoProvider {
     );
   }
 
-  find(query?: FilterQuery<any>, limit = 250): Promise<List<Json>> {
+  find(query: FilterQuery<any>, limit = 250): Promise<List<Json>> {
     return this.collection()
       .then(c => c.find(query, { limit }))
       .then(res => res.toArray())
@@ -33,7 +33,7 @@ export class MongoProvider {
   }
 
   all(limit = 250): Promise<List<Json>> {
-    return this.find(undefined, limit);
+    return this.find({}, limit);
   }
 
   byId(id: Id): Promise<Json> {
@@ -43,7 +43,7 @@ export class MongoProvider {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return this.find({ [key]: value.toString() });
+    return this.find({ [key]: toString(value) });
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {

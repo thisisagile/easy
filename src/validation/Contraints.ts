@@ -1,9 +1,9 @@
-import { inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, list, List, meta, Results, Text } from '../types';
+import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, list, List, meta, Results, Text } from '../types';
 import { validate, Validator } from './Validate';
 
-export type Constraint = (...value: unknown[]) => boolean | Results;
+export type Constraint = Func<boolean | Results, any>;
 
-export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string): void => {
+export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string | symbol): void => {
   const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? list<Validator>();
   meta(subject)
     .property(property)

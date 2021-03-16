@@ -29,4 +29,4 @@ export class HttpStatus extends Enum {
 
 export const isHttpStatus = (s?: unknown): s is HttpStatus => isAn<HttpStatus>(s, 'id', 'status');
 
-export const toHttpStatus = (s?: HttpStatus | Code): HttpStatus => (isHttpStatus(s) ? s : HttpStatus.byId(s));
+export const toHttpStatus = (s: HttpStatus | Code): HttpStatus => (isHttpStatus(s) ? s : HttpStatus.byId(s));

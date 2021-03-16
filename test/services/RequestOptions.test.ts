@@ -38,7 +38,5 @@ describe('RequestOptions', () => {
   test('authorization())', () => {
     options.authorization('Hello');
     expect(options.headers.Authorization).toBe('Hello');
-    options.bearer(undefined);
-    expect(options.headers.Authorization).toBe('Hello');
   });
 });

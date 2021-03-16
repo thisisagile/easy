@@ -1,5 +1,5 @@
-import { isFunction } from './Is';
+import { Func, isFunc } from './Constructor';
 
-export type Message<Param extends unknown> = string | ((...params: Param[]) => string);
+export type Message<Args> = string | Func<string, Args>;
 
-export const ofMessage = <Param>(g: Message<Param>, ...params: Param[]): string => (isFunction(g) ? g(...params) : g);
+export const ofMessage = <Args>(g: Message<Args>, ...params: Args[]): string => (isFunc<string, Args>(g) ? g(...params) : g);

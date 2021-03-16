@@ -17,7 +17,9 @@ export class List<T> extends Array<T> {
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => super.map(f, params) as List<U>;
 
-  mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => this.map(f, params).filter(i => isDefined(i));
+  mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> =>
+    // this.map(f, params).reduce((list, u) => (u) ? list.add(u) : list, toList<U>());
+    this.map(f, params).filter(i => isDefined(i));
 
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 

@@ -1,15 +1,16 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus, VerbOptions, ContentType } from '../../src';
+import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '../../src';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 
+type PathParams = string | RegExp | Array<string | RegExp>;
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
-type Endpoint = { path?: string; handler?: AsyncHandler };
+type Endpoint = { path?: PathParams; handler: AsyncHandler };
 
 class ExpressProviderTest extends ExpressProvider {
   toResponse(res: Response, result: unknown, options: VerbOptions): void {
-    super.toResponse(res, result, options);
+    super.toResponse(res, result, toVerbOptions(options));
   }
 }
 
@@ -23,7 +24,7 @@ describe('ExpressProvider', () => {
   beforeEach(() => {
     provider = new ExpressProviderTest(app);
     service = new DevService('dev', provider);
-    res = {json: mock.this(), end: mock.this(), type: mock.this(), status: mock.this()} as unknown as Response;
+    res = ({ json: mock.this(), end: mock.this(), type: mock.this(), status: mock.this() } as unknown) as Response;
   });
 
   test('use', () => {
@@ -43,34 +44,34 @@ describe('ExpressProvider', () => {
     provider.toResponse(res, undefined, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Ok.status);
     expect(res.type).toHaveBeenCalledWith(ContentType.Json.code);
-    expect((provider as any).json).toHaveBeenCalledWith(res, undefined, options);
+    expect((provider as any).json).toHaveBeenCalledWith(res, undefined, toVerbOptions(options));
     expect((provider as any).stream).not.toHaveBeenCalled();
   });
 
   test('toResponse with status and type', () => {
     const result = {};
-    const options: VerbOptions = {onOk: HttpStatus.Created, type: ContentType.Text};
+    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
     expect(res.type).toHaveBeenCalledWith(ContentType.Text.code);
-    expect((provider as any).json).toHaveBeenCalledWith(res, result, options);
+    expect((provider as any).json).toHaveBeenCalledWith(res, result, toVerbOptions(options));
   });
 
   test('toResponse with stream', () => {
-    const buf =  Buffer.from([]);
-    const options: VerbOptions = {type: ContentType.Stream};
+    const buf = Buffer.from([]);
+    const options: VerbOptions = { type: ContentType.Stream };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
     provider.toResponse(res, buf, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Ok.status);
     expect(res.type).toHaveBeenCalledWith(ContentType.Stream.code);
     expect((provider as any).json).not.toHaveBeenCalled();
-    expect((provider as any).stream).toHaveBeenCalledWith(res, buf, options);
+    expect((provider as any).stream).toHaveBeenCalledWith(res, buf, toVerbOptions(options));
   });
 
   function mockRouterMethodOnce(router: express.Router, method: ExpressVerb, cb: (endpoint: Endpoint) => any) {
-    jest.spyOn(router, method).mockImplementationOnce((path: string, handler: RequestHandler) =>
+    jest.spyOn(router, method).mockImplementationOnce((path: PathParams, handler: RequestHandler) =>
       cb({
         path,
         handler: handler as AsyncHandler,
@@ -90,7 +91,7 @@ describe('ExpressProvider', () => {
   test('check if handler works', async () => {
     const router = express.Router();
     const resource = new DevsResource();
-    let endpoint: Endpoint = {};
+    let endpoint: Endpoint = { handler: mock.empty<AsyncHandler>() };
     const res: any = { status: mock.return({ json: mock.return() }) };
 
     mockRouterMethodOnce(router, 'post', e => (endpoint = e));
@@ -108,7 +109,7 @@ describe('ExpressProvider', () => {
   test('use options from decorator', async () => {
     const router = express.Router();
     const resource = new DevsResource();
-    let endpoint: Endpoint = {};
+    let endpoint: Endpoint = { handler: mock.empty<AsyncHandler>() };
     const res: any = { status: mock.this(), json: mock.this() };
 
     mockRouterMethodOnce(router, 'get', e => (endpoint = e));
@@ -133,7 +134,7 @@ describe('ExpressProvider', () => {
   test('Check rejected endpoint', async () => {
     const router = express.Router();
     const resource = new DevResource();
-    let endpoint: Endpoint = {};
+    let endpoint: Endpoint = { handler: mock.empty<AsyncHandler>() };
     const res: any = { status: mock.return({ json: mock.return() }) };
 
     mockRouterMethodOnce(router, 'delete', e => (endpoint = e));

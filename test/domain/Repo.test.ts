@@ -1,15 +1,16 @@
-import { Dev, DevRepo, DevRoutedGateway } from '../ref';
+import { Dev, DevRepo, DevRoutedGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Exception, list, toResults } from '../../src';
 import '@thisisagile/easy-test';
+import { Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('Repo', () => {
-  const devs = list(Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON());
+  const devs = list<Json>(Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON());
   let gateway: DevRoutedGateway;
   let repo: DevRepo;
 
   beforeEach(() => {
-    gateway = new DevRoutedGateway();
+    gateway = new DevRoutedGateway(DevUri.Developers, DevUri.Developer);
     repo = new DevRepo(gateway);
   });
 

@@ -1,4 +1,4 @@
-import { List, meta, Uri } from '../types';
+import { List, meta, toList, Uri } from '../types';
 import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
@@ -13,6 +13,8 @@ export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
 export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires };
 export type Routes = { route: Uri; endpoints: List<Route> };
 
+const toRoute = (verb: Verb, endpoint: Endpoint, requires: RouteRequires): Route => ({ verb, endpoint, requires });
+
 class Router implements Routes {
   constructor(readonly resource: Resource) {}
 
@@ -23,15 +25,17 @@ class Router implements Routes {
   get endpoints(): List<Route> {
     return meta(this.resource)
       .properties('verb')
-      .map(p => ({
-        verb: p.get<Verb>('verb'),
-        endpoint: this.resource[p.property],
-        requires: {
-          token: p.get<boolean>('token') ?? false,
-          scope: p.get<Scope>('scope'),
-          uc: p.get<UseCase>('uc'),
-        },
-      }));
+      .map(v => {
+        const verb = v.get<Verb>('verb');
+        return verb
+          ? toRoute(verb, this.resource[v.property], {
+              token: v.get<boolean>('token') ?? false,
+              scope: v.get<Scope>('scope'),
+              uc: v.get<UseCase>('uc'),
+            })
+          : undefined;
+      })
+      .reduce((list, v) => (v ? list.add(v) : list), toList<Route>());
   }
 }
 

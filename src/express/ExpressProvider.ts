@@ -1,13 +1,13 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import { toList } from '../types';
-import { ContentType, HttpStatus, rest, toOriginatedError } from '../http';
+import { HttpStatus, rest, toOriginatedError, toVerbOptions } from '../http';
 import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export class ExpressProvider implements AppProvider {
-  constructor(private app: Express = express()) {
+  constructor(protected app: Express = express()) {
     this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   }
 
@@ -39,30 +39,28 @@ export class ExpressProvider implements AppProvider {
     });
   };
 
-  protected toResponse(res: Response, result: unknown, options: VerbOptions): void {
-    res.status((options.onOk ?? HttpStatus.Ok).status);
-    const contentType = options.type ?? ContentType.Json
-    res.type(contentType.code);
-    const f = (this as any)[contentType.name] ?? this.json;
-    f(res, result, options);
-  }
-
-  protected handle = (endpoint: Endpoint, options: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
+  protected handle = (endpoint: Endpoint, options?: VerbOptions): RequestHandler => (req: Request, res: Response, next: NextFunction) =>
     endpoint(toReq(req))
-      .then((r: any) => this.toResponse(res, r, options))
+      .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
       .catch(error => next(toOriginatedError(error, options)));
+
+  protected toResponse(res: Response, result: unknown, options: Required<VerbOptions>): void {
+    res.status(options.onOk.status);
+    res.type(options.type.code);
+    ((this as any)[options.type.name] ?? this.json)(res, result, options);
+  }
 
   // Handling responses depending on content type
 
-  protected json(res: Response, result: unknown, options: VerbOptions): void {
-    if (HttpStatus.NoContent.equals(options.onOk ?? HttpStatus.Ok)) {
+  protected json(res: Response, result: unknown, options: Required<VerbOptions>): void {
+    if (HttpStatus.NoContent.equals(options.onOk)) {
       res.send();
     } else {
-      res.json(rest.toData(options.onOk ?? HttpStatus.Ok, toList<any>(result)));
+      res.json(rest.toData(options.onOk, toList<any>(result)));
     }
   }
 
-  protected stream(res: Response, result: unknown, _options: VerbOptions): void {
+  protected stream(res: Response, result: unknown): void {
     res.end(result);
   }
 }

@@ -5,25 +5,30 @@ class Case<T, V = unknown> {
 
   case(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
     try {
-      return ofGet(pred, this.value) ? new Found(this.value, ofGet(out, this.value)) : this;
+      const res = ofGet<boolean, V>(pred, this.value);
+      return res ? new Found(this.value, ofGet<T, V>(out, this.value)) : this;
     } catch {
       return this;
     }
   }
 
-  else(alt?: Get<T, V>): T {
+  else(alt: Get<T, V>): T {
     return ofGet(alt, this.value);
   }
 }
 
-export class Found<T, V = unknown> extends Case<T, V> {
+export class Found<T, V> extends Case<T, V> {
+  constructor(protected value: V, protected outcome: T) {
+    super(value, outcome);
+  }
+
   case(pred: Predicate<V>, out: Get<T, V>): this {
     return this;
   }
 
-  else(alt?: Get<T, V>): T {
+  else(alt: Get<T, V>): T {
     return this.outcome;
   }
 }
 
-export const choose = <T, V = unknown>(value: V): Case<T, V> => new Case(value);
+export const choose = <T, V>(value: V): Case<T, V> => new Case(value);

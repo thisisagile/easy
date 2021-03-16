@@ -9,7 +9,7 @@ export class MongoGateway implements Gateway {
     return this.provider.all();
   }
 
-  byId(id: Id): Promise<Json> {
+  byId(id: Id): Promise<Json | undefined> {
     return this.provider.byId(id);
   }
 
@@ -17,7 +17,7 @@ export class MongoGateway implements Gateway {
     return this.provider.by(key, value);
   }
 
-  search(q: JsonValue): Promise<List<Json>> {
+  search(_q: JsonValue): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 

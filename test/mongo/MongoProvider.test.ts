@@ -16,7 +16,7 @@ describe('MongoProvider', () => {
   test('all calls find', async () => {
     provider.find = mock.resolve(devData);
     await expect(provider.all()).resolves.toBe(devData);
-    expect(provider.find).toHaveBeenCalledWith(undefined, 250);
+    expect(provider.find).toHaveBeenCalledWith({}, 250);
   });
 
   test('byId calls findOne on the collection', () => {

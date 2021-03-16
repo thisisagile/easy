@@ -13,6 +13,6 @@ describe('OriginatedError', () => {
   test('origin', () => {
     const dev = Dev.Wouter;
     expect(new OriginatedError(dev).origin).toBe(dev);
-    expect(new OriginatedError(dev, { type: ContentType.Json }).options.type).toBe(ContentType.Json);
+    expect(new OriginatedError(dev, { type: ContentType.Json }).options?.type).toBe(ContentType.Json);
   });
 });

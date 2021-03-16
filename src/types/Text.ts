@@ -1,9 +1,9 @@
-import { isDefined, isFunction } from './Is';
-import { Get, ofGet } from './Constructor';
+import { isDefined } from './Is';
+import { Get, isFunc, ofGet } from './Constructor';
 
 export type Text = { toString(): string };
 
-export const isText = (t?: unknown): t is Text => isDefined(t?.toString) && isFunction(t.toString);
+export const isText = (t?: unknown): t is Text => isDefined(t) && isFunc<string, any>((t as any).toString);
 
 export const toString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
 
@@ -79,6 +79,6 @@ class ToText implements Text {
 }
 
 export const text = (subject?: unknown, alt = ''): ToText => {
-  const sub = subject?.toString() ?? alt;
+  const sub = toString(subject) ?? alt;
   return new ToText(sub !== '[object Object]' ? sub : '');
 };

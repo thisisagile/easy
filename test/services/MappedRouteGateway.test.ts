@@ -11,7 +11,7 @@ describe('MappedRouteGateway', () => {
   beforeEach(() => {
     api = new Api();
     map = new Map();
-    gateway = new MappedDevGateway(map, api);
+    gateway = new MappedDevGateway(DevUri.Developers, DevUri.Developer, map, api);
   });
 
   test('all calls api correctly', async () => {

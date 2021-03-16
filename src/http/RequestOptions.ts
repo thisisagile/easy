@@ -1,4 +1,4 @@
-import { ctx, Enum, isNotEmpty, JsonValue } from '../types';
+import { ctx, Enum, Text } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -29,10 +29,8 @@ export class RequestOptions extends Enum {
     return this;
   };
 
-  bearer = (jwt: JsonValue): this => {
-    if (isNotEmpty(jwt)) {
-      this.authorization(`Bearer ${jwt}`);
-    }
+  bearer = (jwt: Text): this => {
+    this.authorization(`Bearer ${jwt}`);
     return this;
   };
 }

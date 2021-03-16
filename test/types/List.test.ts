@@ -171,8 +171,6 @@ describe('toList', () => {
   });
 
   test('asList of undefined works', () => {
-    expect(asList(undefined, undefined)).toBeInstanceOf(List);
-    expect(asList(undefined, undefined).first()).toBeUndefined();
     expect(asList(Dev, undefined).first()).toBeUndefined();
     expect(asList(Dev, []).first()).toBeUndefined();
   });

@@ -9,7 +9,7 @@ describe('RouteGateway', () => {
 
   beforeEach(() => {
     api = new Api();
-    gateway = new DevRoutedGateway(api);
+    gateway = new DevRoutedGateway(DevUri.Developers, DevUri.Developer, api);
   });
 
   test('all calls api correctly', async () => {

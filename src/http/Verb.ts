@@ -4,17 +4,15 @@ import { ContentType, HttpStatus, HttpVerb } from './index';
 export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType };
 export type Verb = { verb: HttpVerb; options: VerbOptions };
 
-const asVerbOptions = (options: VerbOptions): VerbOptions => ({
+export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => ({
   onOk: options?.onOk ?? HttpStatus.Ok,
   onNotFound: options?.onNotFound ?? HttpStatus.NotFound,
   onError: options?.onError ?? HttpStatus.BadRequest,
   type: options?.type ?? ContentType.Json,
 });
 
-const verb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (subject: unknown, property: string): void => {
-  meta(subject)
-    .property(property)
-    .set('verb', { verb, options: asVerbOptions(options) });
+const verb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (subject: unknown, property: string | symbol): void => {
+  meta(subject).property(property).set('verb', { verb, options });
 };
 
 export const get = (options?: VerbOptions): PropertyDecorator => verb(HttpVerb.Get, options);

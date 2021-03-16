@@ -1,9 +1,10 @@
 import 'reflect-metadata';
-import { list, List } from './List';
+import { list, List, toList } from './List';
 import { isDefined } from './Is';
 
 class ClassMeta {
-  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
+  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {
+  }
 
   get = <T>(key: string): T => Reflect.getMetadata(key, this.data) as T;
 
@@ -23,21 +24,22 @@ class ClassMeta {
   keys = <T = any>(key: string): List<T> =>
     this.properties()
       .map(p => p.get<T>(key))
-      .filter(v => isDefined(v));
+      .reduce((list, u) => (u ? list.add(u) : list), toList<T>());
 
   values = () => this.properties().map(p => p.value);
 
-  property = (property: string): PropertyMeta => new PropertyMeta(this.subject, property);
+  property = (property: string | symbol): PropertyMeta => new PropertyMeta(this.subject, property);
 }
 
 class PropertyMeta {
-  constructor(readonly subject: unknown, readonly property: string, private readonly data = Reflect.getMetadata(property, subject)) {}
-
-  get value(): any {
-    return (this.subject as any)[this.property];
+  constructor(readonly subject: any, readonly property: string | symbol, private readonly data = Reflect.getMetadata(property, subject)) {
   }
 
-  get = <T>(key: string): T => (isDefined(this.data) && isDefined(this.data[key]) ? (this.data[key] as T) : undefined);
+  get value(): any {
+    return this.subject[this.property];
+  }
+
+  get = <T>(key: string): T | undefined => (isDefined(this.data) && isDefined(this.data[key]) ? (this.data[key] as T) : undefined);
 
   set = <T>(key: string, value: T): T => {
     Reflect.defineMetadata(this.property, { ...this.data, [key]: value }, this.subject);
