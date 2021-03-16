@@ -1,9 +1,10 @@
 import { Dev } from './Dev';
 import { reject, Repo, resolve } from '../../src';
 import { DevRoutedGateway } from './DevRoutedGateway';
+import { DevUri } from './DevUri';
 
 export class DevRepo extends Repo<Dev> {
-  constructor(readonly devs = new DevRoutedGateway()) {
+  constructor(readonly devs = new DevRoutedGateway(DevUri.Developers, DevUri.Developer)) {
     super(Dev, devs);
   }
 
