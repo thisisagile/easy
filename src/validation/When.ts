@@ -1,16 +1,4 @@
-import {
-  Constructor,
-  ErrorOrigin,
-  Exception,
-  Get,
-  isDefined,
-  isEmpty,
-  isIn,
-  ofGet,
-  Predicate,
-  Results,
-  toArray,
-} from '../types';
+import { Constructor, ErrorOrigin, Exception, Get, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray } from '../types';
 import { validate } from './Validate';
 import { reject, resolve } from '../utils';
 

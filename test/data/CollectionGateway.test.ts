@@ -1,4 +1,4 @@
-import { CollectionGateway, Exception, resolve, toJson } from '../../src';
+import { CollectionGateway, Exception, resolve, Json, toJson, toList } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -7,7 +7,7 @@ describe('CollectionGateway', () => {
   let gateway: CollectionGateway;
 
   beforeEach(() => {
-    gateway = new CollectionGateway(resolve(Dev.All.toJSON()));
+    gateway = new CollectionGateway(resolve(toList<Json>(Dev.All.toJSON())));
   });
 
   test('byId with known id returns product', () => {

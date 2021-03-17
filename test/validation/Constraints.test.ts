@@ -58,7 +58,7 @@ describe('Constraints', () => {
   });
 });
 
-const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? 'Property {property} should have value \'42\' instead of \'{actual}\'.');
+const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? "Property {property} should have value '42' instead of '{actual}'.");
 
 class Person extends Struct {
   @valid() readonly age: Age = new Age(this.state.age);
@@ -66,19 +66,18 @@ class Person extends Struct {
 }
 
 describe('Custom constraints', () => {
-
-  test('test age', () => {
+  test('age', () => {
     expect(isValue(new Age(42))).toBeTruthy();
     expect(validate(new Age(42))).toBeValid();
     expect(validate(new Age(142))).not.toBeValid();
   });
 
-  test('test person', () => {
+  test('person', () => {
     expect(validate(new Person({ age: 42 }))).toBeValid();
     expect(validate(new Person({ age: 142 }))).not.toBeValid();
   });
 
-  test('test custom validation', () => {
+  test('custom validation', () => {
     const res = validate(new Person({ age: 142 }));
     expect(res.results).toHaveLength(2);
   });

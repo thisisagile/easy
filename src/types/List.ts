@@ -13,7 +13,7 @@ export class List<T> extends Array<T> {
 
   last = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).last() : this[this.length - 1]);
 
-  toJSON = (): List<Json> => this.map(i => json.parse(i));
+  toJSON = (): Json[] => this.reduce((a, i) => { a.push(json.parse(i)); return a; }, new Array<Json>());
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => super.map(f, params) as List<U>;
 

@@ -93,6 +93,8 @@ describe('List', () => {
 
   test('toJSON', () => {
     const json = list(Dev.Sander, Dev.Wouter).toJSON();
+    expect(json).not.toBeInstanceOf(List);
+    expect(json).toBeInstanceOf(Array);
     expect(JSON.stringify(json)).toBe(JSON.stringify([Dev.Sander.toJSON(), Dev.Wouter.toJSON()]));
     const j = list(Scope.Auth, Scope.Basic, Scope.Admin).toJSON();
     expect(JSON.stringify(j)).toBe(JSON.stringify([Scope.Auth.toJSON(), Scope.Basic.toJSON(), Scope.Admin.toJSON()]));
