@@ -113,6 +113,12 @@ The **easy** framework supplies a nice and easy mechanism for validating instanc
 
 The `validate()` function will validate its `subject`, and recursively the subjects properties. The outcome of this validation is always a `Results` object, with a list of shortcomings (in its `results` property) of the subject. The `Results` object also has a property `isValid`, which is set to `true` if the subject is valid, or to `false` when it is not.
 
+The `validate()` validates the following:
+
+- First it will check if the object you are validating is actually defined. If not, validation fails.
+- On value objects (objects that inherit from the `Value` class), it will check the `isValid` property. Therefore, `isValid` is a suitable location for implementing your value objects validity.
+- On enumerations (objects inheriting from the `Enum` class), it will also check the `isValid` property. However, usually, if enumerations are creating through their `byId()` function, if they are not valid, then `byId()` will have returned `undefined`.
+
 ### Constraints
 The easiest way to validate objects is to use constraints.  
 
