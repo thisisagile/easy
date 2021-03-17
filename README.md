@@ -9,7 +9,7 @@
 <a href="https://sonarcloud.io/dashboard?id=thisisagile_easy" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=coverage" alt="coverage" /></a>
 
 # Note
-The **easy** framework captures the best practices we (the contributors) have build up on implementing microservices architectures at a diverse range of clients in Typescript, runninng on node.js and deployed on Amazon, Google Cloud and even on Windows Server. The companies that contribute / have contributed include a well-known Dutch insurance company, an insurance software vendor, an IoT scale-up, a software vendor in logistics and an online e-commerce company. From those practices, the **easy** framework grows step-by-step. 
+The **easy** framework captures the best practices we (the contributors) have build up on implementing microservices architectures at a diverse range of clients in Typescript, running on node.js and deployed on Amazon, Google Cloud and even on Windows Server. The companies that contribute / have contributed include a well-known Dutch insurance company, an insurance software vendor, an IoT scale-up, a software vendor in logistics and an online e-commerce company. From those practices, the **easy** framework grows step-by-step. 
 
 The **easy** framework already works fine in many situations. However, it also continuously improves and grows. It is a work-in-progress, including its documentation. Being a framework, it probably not always perfectly fits your situation. Therefore, we aim to implement **easy** so that it is straightforward, simple to use, standardized, and open to extensions. 
 
@@ -29,7 +29,7 @@ Microservices built with **easy** have a four layered architecture: *services*, 
 The **easy** framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing **easy** specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the **easy** framework.
 
 # Root
-At the root of each microservice built using eas, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service. An example services class is the one below for a movie service.
+At the root of each microservice built using **easy**, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service. An example services class is the one below for a movie service.
 
     SampleService.Movie
       .with(MoviesResource, MovieResource)
@@ -38,7 +38,7 @@ At the root of each microservice built using eas, there is a class that inherits
 
 This movie service registers two resources, `MoviesResource` and `MovieResource`, each of which handle endpoints. The service listens at port `9001`.
 
-In general, you will not build a single microservices, but rather a collection of microservices, each responsible for a distinct part of the complete business domain. In that case, it can be useful to build a root class for your services, such as the `SampleService` class below. 
+In general, you will not build a single microservice, but rather a collection of microservices, each responsible for a distinct part of the complete business domain. In that case, it can be useful to build a root class for your services, such as the `SampleService` class below. 
 
     class SampleService extends Service {
       static readonly Movie = new SampleService('movie');
@@ -46,7 +46,7 @@ In general, you will not build a single microservices, but rather a collection o
       post = () => [error, notFound];
     }
 
-The `SampleService` inherits directly from the `Service` layer supertype from **easy**. The methods `pre()` and `post()` can be used to register middleware (by default **easy** uses express as its web server. However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by **easy**.  
+The `SampleService` inherits directly from the `Service` layer supertype from **easy**. The methods `pre()` and `post()` can be used to register middleware (by default **easy** uses express as its web server). However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by **easy**.  
 
 # Services
 The services layer has resource as the layer supertype, to model the API exposed.
@@ -81,11 +81,11 @@ Most modern programming languages support the use of enumerables. The goal of an
 
 First of all, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
 
-Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. Of you would want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
+Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
 
-And thridly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
+And thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
 
-Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is still comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
+Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
 
     export class UseCase extends Enum {
       constructor(readonly scope: Scope, name: string, id: string = stringify(name).kebab) {
@@ -99,10 +99,10 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
       static readonly ChangePassword = new UseCase(Scope.Auth, "Change password");
     }
 
-The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actal make it work. All instance of enumerables have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
+The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
 # Validation
-All **easy** microservices evolve around their part of the total business domain you are implementing. Quite usually, in it's domain layer, a microservice contains an *aggregate*. In domain-driven design an aggregate maps to a part of the domain that is persisted together. In a relational database, this is usually guarded with a transaction. In a document database, such as MongoDB, this is more often a single serialized `Json` object.
+All **easy** microservices evolve around their part of the total business domain you are implementing. Quite usually, in its domain layer, a microservice contains an *aggregate*. In domain-driven design an aggregate maps to a part of the domain that is persisted together. In a relational database, this is usually guarded with a transaction. In a document database, such as MongoDB, this is more often a single serialized `Json` object.
 
 To assure that such an aggregate is valid, when persisted, it is validated, usually starting from the *aggregate root*. In most cases, the aggregate root is the entity that is also the resource that requests are about, and in most often it is also the name of the microservice itself.
 
@@ -113,21 +113,13 @@ The **easy** framework supplies a nice and easy mechanism for validating instanc
 The `validate()` function will validate its `subject`, and recursively the subjects properties. The outcome of this validation is always a `Results` object, with a list of shortcomings (in its `results` property) of the subject. The `Results` object also has a property `isValid`, which is set to `true` if the subject is valid, or to `false` when it is not.
 
 # Data
-It is the responsibility of the classes in the data layer to fetch and deliver data from outside the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
+It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
 # Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
-This library will contain a simple validation mechanism, using decorators.
-
-We keep this library simple on purpose, extending it using additional libraries and frameworks should be possible simply by embedding their API's.
-
-Likely we will use jest for unit testing, wrap axios for request handling, and a simple mongodb connector, and wrap tsyringe for dependency injection.
-
-Please note: we are slowly adding more value to the library, step by step. Most of our additions are useful as such, both it will take some effort for the full architecture to be in place to implement fully working microservices. Please bare with us.
-
 ## When
-The `When` class is a utility that is usually exposed through the `when()` function. It can be used to make validations in promises a little easier. such as in the following example.
+The `When` class is a utility that is usually exposed through the `when()` function. It can be used to make validations in promises a little easier such as the following example.
 
     update = (json: Json): Promise<T> =>
     this.gateway
