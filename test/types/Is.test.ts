@@ -1,4 +1,17 @@
-import { Entity, isArray, isBoolean, isDefined, isEmpty, isEmptyObject, isInstance, isNotEmpty, isNumber, isObject, isPrimitive, isString } from '../../src';
+import {
+  Entity,
+  isArray,
+  isBoolean,
+  isDefined,
+  isEmpty,
+  isEmptyObject,
+  isInstance,
+  isNotEmpty,
+  isNumber,
+  isObject,
+  isPrimitive,
+  isString,
+} from '../../src';
 import { Dev } from '../ref';
 
 describe('isDefined', () => {

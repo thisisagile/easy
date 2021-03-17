@@ -13,6 +13,12 @@ describe('MongoProvider', () => {
     provider = new MongoProvider('developers', Promise.resolve(client));
   });
 
+  test('default construction works', () => {
+    const spy = jest.spyOn(MongoProvider, 'setup').mockImplementation(mock.resolve());
+    new MongoProvider('devs');
+    expect(spy).toHaveBeenCalled();
+  });
+
   test('all calls find', async () => {
     provider.find = mock.resolve(devData);
     await expect(provider.all()).resolves.toBe(devData);

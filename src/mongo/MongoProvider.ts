@@ -10,18 +10,16 @@ const clearMongoId = (i: Json): Json => {
 export class MongoProvider {
   constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
 
-  private static mongoUrl(): Promise<string> {
-    return when(ctx.env.get('mongodbCluster')).not.isDefined.reject('Environment variable MONGODB_CLUSTER not set!');
-  }
-
-  private static setup(): Promise<MongoClient> {
-    return MongoProvider.mongoUrl().then(u =>
-      new MongoClient(u, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        auth: { user: ctx.env.get('mongodbUser') ?? 'admin', password: ctx.env.get('mongodbPassword') ?? 'admin' },
-      }).connect()
-    );
+  static setup(): Promise<MongoClient> {
+    return when(ctx.env.get('mongodbCluster'))
+      .not.isDefined.reject('Environment variable MONGODB_CLUSTER not set!')
+      .then(u =>
+        new MongoClient(u, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+          auth: { user: ctx.env.get('mongodbUser') ?? 'admin', password: ctx.env.get('mongodbPassword') ?? 'admin' },
+        }).connect()
+      );
   }
 
   find(query: FilterQuery<any>, limit = 250): Promise<List<Json>> {
