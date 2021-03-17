@@ -120,7 +120,8 @@ The `validate()` validates the following:
 - On enumerations (objects inheriting from the `Enum` class), it will also check the `isValid` property. However, usually, if enumerations are creating through their `byId()` function, if they are not valid, then `byId()` will have returned `undefined`.
 
 ### Constraints
-The easiest way to validate objects is to use constraints.  
+The easiest way to validate objects is to use constraints. By adding constraints, as decorators, to the properties and functions on the object you would like to validate, these properties and functions will be checked when the object is validated through calling `validate(myObject)`. easy comes with a variety of ready-to-use constraints, but it is also easy (no pun intended) to add your own.
+
 
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
