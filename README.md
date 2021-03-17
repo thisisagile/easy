@@ -58,7 +58,7 @@ The process layer contains use cases, that model your process.
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
-## Entities
+### Entities
 Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
 
 All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
@@ -76,7 +76,7 @@ An example of an entity is the `Movie` class below. Here the content of the obje
 
 Some of the properties of `Movie` have decorators, such as `@required`. These decorators can be used to validate the object, using the separate `validate()` function. 
 
-## Enumerables
+### Enumerables
 Most modern programming languages support the use of enumerables. The goal of an enumerable is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
 
 First of all, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
@@ -106,11 +106,15 @@ All **easy** microservices evolve around their part of the total business domain
 
 To assure that such an aggregate is valid, when persisted, it is validated, usually starting from the *aggregate root*. In most cases, the aggregate root is the entity that is also the resource that requests are about, and in most often it is also the name of the microservice itself.
 
+### Validate
 The **easy** framework supplies a nice and easy mechanism for validating instances of the microservice's aggregate. We supply to easy-to-use functions, named `validate(subject?: unknown): Results` and `validateReject = <T>(subject?: T): Promise<T>`. Although you can pass any object to these functions, in general, you will pass the aggregate root as an argument.
 
     validate = (dev: Developer): Results => validate(dev);
 
 The `validate()` function will validate its `subject`, and recursively the subjects properties. The outcome of this validation is always a `Results` object, with a list of shortcomings (in its `results` property) of the subject. The `Results` object also has a property `isValid`, which is set to `true` if the subject is valid, or to `false` when it is not.
+
+### Constraints
+The easiest way to validate objects is to use constraints.  
 
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
@@ -118,7 +122,7 @@ It is the responsibility of the classes in the data layer to fetch and deliver d
 # Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
-## When
+### When
 The `When` class is a utility that is usually exposed through the `when()` function. It can be used to make validations in promises a little easier such as the following example.
 
     update = (json: Json): Promise<T> =>
