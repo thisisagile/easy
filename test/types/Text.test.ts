@@ -1,4 +1,4 @@
-import { isText, replaceAll, toString } from '../../src';
+import { asString, isText, replaceAll } from '../../src';
 import { Dev } from '../ref';
 
 describe('isText', () => {
@@ -15,17 +15,17 @@ describe('isText', () => {
   });
 
   test('ifText without alt', () => {
-    expect(toString()).toBe('');
-    expect(toString('hallo')).toBe('hallo');
-    expect(toString(Dev.Jeroen)).toBe('Jeroen');
+    expect(asString()).toBe('');
+    expect(asString('hallo')).toBe('hallo');
+    expect(asString(Dev.Jeroen)).toBe('Jeroen');
   });
 
   test('ifText with alt', () => {
-    expect(toString(undefined, 'alt')).toBe('alt');
-    expect(toString(undefined, () => 'alt')).toBe('alt');
-    expect(toString(has, () => 'alt')).toBe('alt');
-    expect(toString('hallo', 'alt')).toBe('hallo');
-    expect(toString(Dev.Jeroen, Dev.Naoufal)).toBe('Jeroen');
+    expect(asString(undefined, 'alt')).toBe('alt');
+    expect(asString(undefined, () => 'alt')).toBe('alt');
+    expect(asString(has, () => 'alt')).toBe('alt');
+    expect(asString('hallo', 'alt')).toBe('hallo');
+    expect(asString(Dev.Jeroen, Dev.Naoufal)).toBe('Jeroen');
   });
 
   test('replaceAll', () => {

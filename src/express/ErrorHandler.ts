@@ -1,4 +1,4 @@
-import { Exception, isError, isException, isResults, isText, Result, Results, toResult, toString } from '../types';
+import { asString, Exception, isError, isException, isResults, isText, Result, Results, toResult } from '../types';
 import express from 'express';
 import { HttpStatus, isResponse, OriginatedError, Response, rest, toHttpStatus, toOriginatedError } from '../http';
 import { choose } from '../utils';
@@ -45,7 +45,7 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
     .case(
       // This service fails with a string
       o => isText(o),
-      (o: Response) => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(toString(o))])
+      (o: Response) => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(asString(o))])
     )
     .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]));
 };

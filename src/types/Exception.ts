@@ -1,4 +1,4 @@
-import { text, Text, toString } from './Text';
+import { asString, Text, text } from './Text';
 import { Enum } from './Enum';
 import { isDefined } from './Is';
 
@@ -17,4 +17,4 @@ export class Exception extends Enum {
   because = (reason: Text): Exception => new Exception(this.message, reason);
 }
 
-export const isException = (e?: unknown, t?: Text): e is Exception => e instanceof Exception && (isDefined(t) ? e.equals(toString(t)) : true);
+export const isException = (e?: unknown, t?: Text): e is Exception => e instanceof Exception && (isDefined(t) ? e.equals(asString(t)) : true);

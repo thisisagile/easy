@@ -5,15 +5,15 @@ import { reject } from '../utils';
 import { Table } from './Table';
 
 export class TableGateway<T extends Table> implements Gateway {
-  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {
-  }
+  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
 
   all(): Promise<List<Json>> {
     return this.provider.query(this.table.select());
   }
 
   byId(id: Id): Promise<Json | undefined> {
-    return this.provider.query(this.table.select().where(this.table.id.is(id)))
+    return this.provider
+      .query(this.table.select().where(this.table.id.is(id)))
       .then(js => js.first())
       .then(j => this.table.in(j));
   }

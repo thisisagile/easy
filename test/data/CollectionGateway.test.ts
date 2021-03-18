@@ -1,4 +1,4 @@
-import { CollectionGateway, Exception, resolve, Json, toJson, toList } from '../../src';
+import { CollectionGateway, Exception, Json, resolve, toJson, toList } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -38,7 +38,7 @@ describe('CollectionGateway', () => {
 
   test('all returns all devs', async () => {
     const a = await gateway.all();
-    expect([...a]).toStrictEqual([...Dev.All.toJSON()]);
+    expect(a.toJSON()).toStrictEqual(Dev.All.toJSON());
   });
 
   test('all returns a copy of all devs', async () => {

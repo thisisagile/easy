@@ -5,10 +5,10 @@ export type Text = { toString(): string };
 
 export const isText = (t?: unknown): t is Text => isDefined(t) && isFunc<string, any>((t as any).toString);
 
-export const toString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
+export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
 
 // eslint-disable-next-line security/detect-non-literal-regexp
-export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => toString(t).replace(new RegExp(toString(search), 'g'), toString(replace));
+export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => asString(t).replace(new RegExp(asString(search), 'g'), asString(replace));
 
 class ToText implements Text {
   constructor(readonly subject: string) {}
@@ -65,9 +65,9 @@ class ToText implements Text {
 
   isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
 
-  endsWith = (end?: unknown): boolean => this.subject.endsWith(toString(end));
+  endsWith = (end?: unknown): boolean => this.subject.endsWith(asString(end));
 
-  startsWith = (end?: unknown): boolean => this.subject.startsWith(toString(end));
+  startsWith = (end?: unknown): boolean => this.subject.startsWith(asString(end));
 
   map = (func: Get<string, string>): ToText => text(ofGet(func, this.subject));
 
@@ -79,6 +79,6 @@ class ToText implements Text {
 }
 
 export const text = (subject?: unknown, alt = ''): ToText => {
-  const sub = toString(subject) ?? alt;
+  const sub = asString(subject) ?? alt;
   return new ToText(sub !== '[object Object]' ? sub : '');
 };

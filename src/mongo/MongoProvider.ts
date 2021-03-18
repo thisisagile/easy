@@ -1,4 +1,4 @@
-import { ctx, Id, isDefined, Json, JsonValue, List, toList, toString } from '../types';
+import { asString, ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 
@@ -41,7 +41,7 @@ export class MongoProvider {
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
-    return this.find({ [key]: toString(value) });
+    return this.find({ [key]: asString(value) });
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {

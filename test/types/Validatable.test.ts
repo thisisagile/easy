@@ -1,6 +1,5 @@
 import { Dev } from '../ref';
-import { isValidatable } from '../../src';
-import { Validatable } from '@thisisagile/easy-test/dist/utils/Types';
+import { isValidatable, Validatable } from '../../src';
 import { mock } from '@thisisagile/easy-test';
 
 class ValidateMe implements Validatable {

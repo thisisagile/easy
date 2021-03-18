@@ -17,7 +17,7 @@ expect.extend({
       .undefined(q => q, 'Query is unknown.')
       .not(
         q => q.toString() === expected.toString(),
-        q => `Expected Query to be '${expected}', but got '${q}' instead`,
+        q => `Expected Query to be '${expected}', but got '${q}' instead`
       )
       .else(`Query ${actual} does not match '${expected}'.`);
   },
@@ -34,8 +34,8 @@ describe('TableGateway', () => {
 
   test('byId', async () => {
     const id = 11;
-    provider.query = mock.resolve(toList({Id: 6, Name: "Pawel", CodingLevel: "3", Language: "python"}));
-    await expect(target.byId(id)).resolves.toStrictEqual(expect.objectContaining({id: 6, name: "Pawel", level: 3, language: "python"}));
+    provider.query = mock.resolve(toList({ Id: 6, Name: 'Pawel', CodingLevel: '3', Language: 'python' }));
+    await expect(target.byId(id)).resolves.toStrictEqual(expect.objectContaining({ id: 6, name: 'Pawel', level: 3, language: 'python' }));
     expect(provider.query).toHaveBeenQueriedWith(table.select().where(table.id.is(id)));
   });
 });

@@ -1,8 +1,7 @@
 import { Dev, DevRepo, DevRoutedGateway, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, list, toResults } from '../../src';
+import { Exception, Json, list, toList, toResults } from '../../src';
 import '@thisisagile/easy-test';
-import { Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('Repo', () => {
   const devs = list<Json>(Dev.Sander.toJSON(), Dev.Jeroen.toJSON(), Dev.Naoufal.toJSON());
@@ -33,6 +32,13 @@ describe('Repo', () => {
     gateway.byId = mock.resolve(undefined);
     await expect(repo.byId(42)).rejects.toMatchException(Exception.DoesNotExist);
     expect(gateway.byId).toHaveBeenCalledWith(42);
+  });
+
+  test('by triggers the gateway', async () => {
+    gateway.by = mock.resolve(toList(Dev.Naoufal));
+    const res = await repo.by('level', '42');
+    expect(res.toJSON()).toMatchObject(toList(Dev.Naoufal).toJSON());
+    expect(gateway.by).toHaveBeenCalledWith('level', '42');
   });
 
   test('search triggers gateway', async () => {

@@ -18,23 +18,19 @@ describe('Map', () => {
   });
 
   test('empty map.from with undefined is undefined', () => {
-    const j = empty.in();
-    expect(j).toMatchObject({});
+    expect(empty.in()).toMatchObject({});
   });
 
   test('empty map.to with undefined is undefined', () => {
-    const j = empty.out();
-    expect(j).toMatchObject({});
+    expect(empty.out()).toMatchObject({});
   });
 
   test('empty map.from is correct', () => {
-    const j = empty.in(devData.jeroen);
-    expect(j).toMatchObject(devData.jeroen);
+    expect(empty.in(devData.jeroen)).toMatchObject(devData.jeroen);
   });
 
   test('empty map.to is correct', () => {
-    const j = empty.out(devData.jeroen);
-    expect(j).toMatchObject(devData.jeroen);
+    expect(empty.out(devData.jeroen)).toMatchObject(devData.jeroen);
   });
 
   test('map.to is correct', () => {

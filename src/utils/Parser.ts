@@ -1,11 +1,11 @@
-import { meta, text, Text, toName, toString } from '../types';
+import { asString, meta, Text, text, toName } from '../types';
 
 export type ParseOptions = { property?: unknown; actual?: unknown };
 
 const props = (subject: unknown = {}, template: Text = ''): string =>
   meta(subject)
     .entries()
-    .reduce((res, [k, v]) => res.replace(`{this.${k}}`, toString(v)), toString(template));
+    .reduce((res, [k, v]) => res.replace(`{this.${k}}`, asString(v)), asString(template));
 
 export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text =>
   text(template)

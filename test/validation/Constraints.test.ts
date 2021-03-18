@@ -47,14 +47,12 @@ describe('Constraints', () => {
       language: 'java',
       title: 'Prof.',
     });
-    const r = validate(t);
-    expect(r).toBeValid();
+    expect(validate(t)).toBeValid();
   });
 
   test('All constraints fail.', () => {
     const t = new Tester({ one: 42, two: 0 });
-    const r = validate(t);
-    expect(r).not.toBeValid();
+    expect(validate(t)).not.toBeValid();
   });
 });
 
