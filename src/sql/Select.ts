@@ -7,7 +7,7 @@ import { Table } from './Table';
 export class Select extends SqlQuery {
   protected ordered: List<OrderColumn> = list();
   protected grouped: List<Column> = list();
-  protected limit = 0;
+  protected top = 0;
 
   constructor(table: Table | Join, readonly columns: List<Column> = list()) {
     super(table);
@@ -28,10 +28,15 @@ export class Select extends SqlQuery {
     return this;
   }
 
+  limit(limit: number): this {
+    this.top = limit;
+    return this;
+  }
+
   toString(): string {
     return (
       `SELECT ` +
-      ifGet(this.limit, `TOP ${this.limit} `, '') +
+      ifGet(this.top, `TOP ${this.top} `, '') +
       ifGet(this.columns.length, this.columns.join(`, `), '*') +
       ` FROM ${this.table}` +
       ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +

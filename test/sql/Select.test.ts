@@ -49,4 +49,9 @@ describe('Select', () => {
     const select = devs.select(devs.language, devs.level.max.as('Level')).groupBy(devs.language);
     expect(select).toMatchText('SELECT DevTable.Language, MAX(CodingLevel) AS Level FROM DevTable GROUP BY DevTable.Language;');
   });
+
+  test('With limit', () => {
+    const select = devs.select(devs.language).limit(100);
+    expect(select).toMatchText('SELECT TOP 100 DevTable.Language FROM DevTable;');
+  });
 });
