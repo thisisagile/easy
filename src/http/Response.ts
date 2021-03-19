@@ -13,5 +13,5 @@ export const isResponse = (r?: unknown): r is Response => isA<Response>(r, 'stat
 export const toResponse = (status: HttpStatus | Code, body?: unknown, headers?: { [key: string]: any }): Response => ({
   status: toHttpStatus(status),
   headers,
-  body: rest.to(body),
+  body: rest.to(body, toHttpStatus(status)),
 });

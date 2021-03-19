@@ -105,7 +105,7 @@ describe('AxiosProvider', () => {
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
       })
-    ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
+    ).rejects.toEqual(withErrorAndMessage(HttpStatus.InternalServerError, 1, message));
   });
 
   test('Get with reject and transform', async () => {
@@ -116,6 +116,6 @@ describe('AxiosProvider', () => {
         verb: HttpVerb.Get,
         transform: r => r.dev,
       })
-    ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
+    ).rejects.toEqual(withErrorAndMessage(HttpStatus.InternalServerError, 1, message));
   });
 });
