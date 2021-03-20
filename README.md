@@ -88,7 +88,7 @@ And thirdly, and perhaps the most dangerous one, if you persist your enumerables
 Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
 
     export class UseCase extends Enum {
-      constructor(readonly scope: Scope, name: string, id: string = stringify(name).kebab) {
+      constructor(readonly scope: Scope, name: string, id: string = text(name).kebab) {
         super(name, id);
       }
 
