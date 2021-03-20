@@ -5,7 +5,6 @@ export type ParseOptions = { property?: unknown; actual?: unknown };
 export const toText = (subject: unknown, template: Text, options: ParseOptions = {}): Text =>
   text(template)
     .replace('{type.name}', text(toName(subject)).lower)
-    .replace('{type.name}', text(toName(subject)).lower)
     .replace('{type.Name}', text(toName(subject)).title)
     .replace('{subject.name}', text(subject).lower)
     .replace('{subject.Name}', text(subject).title)
