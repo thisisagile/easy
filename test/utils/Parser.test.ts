@@ -25,8 +25,4 @@ describe('toString', () => {
     expect(toText(Dev.Sander, '{property}', { property: 'name' })).toMatchText('name');
     expect(toText(Dev.Sander, '{Property}', { property: 'name' })).toMatchText('Name');
   });
-
-  test('props', () => {
-    expect(toText(Dev.Sander, '{this.id}.{this.name}.{this.level}')).toMatchText('3.Sander.3');
-  });
 });
