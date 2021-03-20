@@ -70,8 +70,8 @@ class ToText implements Text {
       .entries()
       .reduce((t: ToText, [k, v]) => t.replace(`{this.${k}}`, asString(v)), this)
       .replace('{this}', asString(subject))
-      .replace('{class}', type.lower)
-      .replace('{Class}', type.title);
+      .replace('{type}', type.lower)
+      .replace('{Type}', type.title);
 
   isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
 

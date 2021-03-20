@@ -105,7 +105,7 @@ describe('ToText', () => {
   });
 
   test('parse', () => {
-    const template = text('{this} {this.id}.{this.name}.{this.level} {class} {Class}');
+    const template = text('{this} {this.id}.{this.name}.{this.level} {type} {Type}');
     expect(template.parse(Dev.Sander)).toMatchText('Sander 3.Sander.3 dev Dev');
   });
 });
