@@ -12,7 +12,8 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => asString(t).replace(new RegExp(asString(search), 'g'), asString(replace));
 
 class ToText implements Text {
-  constructor(readonly subject: string) {}
+  constructor(readonly subject: string) {
+  }
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -23,7 +24,7 @@ class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' ')
+        .join(' '),
     );
   }
 
@@ -56,18 +57,21 @@ class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join('')
+        .join(''),
     );
   }
-
-  parse = (subject: unknown = {}): any =>
-    meta(subject)
-      .entries()
-      .reduce((t: ToText, [k, v]) => t.replace(`{this.${k}}`, asString(v)), this);
 
   get trim(): ToText {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
+
+  parse = (subject: unknown = {}, type = text((subject as any)?.constructor.name)): ToText =>
+    meta(subject)
+      .entries()
+      .reduce((t: ToText, [k, v]) => t.replace(`{this.${k}}`, asString(v)), this)
+      .replace('{this}', asString(subject))
+      .replace('{class}', type.lower)
+      .replace('{Class}', type.title);
 
   isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
 

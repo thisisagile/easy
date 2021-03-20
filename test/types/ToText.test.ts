@@ -103,4 +103,9 @@ describe('ToText', () => {
     expect(empty.isLike('kim')).toBeFalsy();
     expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
   });
+
+  test('parse', () => {
+    const template = text('{this} {this.id}.{this.name}.{this.level} {class} {Class}');
+    expect(template.parse(Dev.Sander)).toMatchText('Sander 3.Sander.3 dev Dev');
+  });
 });
