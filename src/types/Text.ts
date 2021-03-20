@@ -1,5 +1,6 @@
 import { isDefined } from './Is';
 import { Get, isFunc, ofGet } from './Constructor';
+import { meta } from './Meta';
 
 export type Text = { toString(): string };
 
@@ -58,6 +59,11 @@ class ToText implements Text {
         .join('')
     );
   }
+
+  parse = (subject: unknown = {}): any =>
+    meta(subject)
+      .entries()
+      .reduce((t: ToText, [k, v]) => t.replace(`{this.${k}}`, asString(v)), this);
 
   get trim(): ToText {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
