@@ -120,7 +120,23 @@ The `validate()` validates the following:
 - On enumerations (objects inheriting from the `Enum` class), it will also check the `isValid` property. However, usually, if enumerations are creating through their `byId()` function, if they are not valid, then `byId()` will have returned `undefined`.
 
 ### Constraints
-The easiest way to validate objects is to use constraints. By adding constraints, as decorators, to the properties and functions on the object you would like to validate, these properties and functions will be checked when the object is validated through calling `validate(myObject)`. easy comes with a variety of ready-to-use constraints, but it is also easy (no pun intended) to add your own.
+The easiest way to validate objects is to use constraints. By adding constraints, as decorators, to the properties and functions on the object you would like to validate, these properties and functions will be checked when the object is validated through calling `validate(myObject)`. **easy** comes with a variety of ready-to-use constraints, but it is also easy (no pun intended) to add your own.
+
+Below is a typical example of an entity, which derives from the `Entity` class in **easy**. It has a number of properties, which are prefilled with values from the internal state (in `state`) of the entity. As you can see, several of these properties have constraint decorators, such as `@required()`, `@valid()` and `@lt()`. 
+
+    export class Product extends Entity {
+        @required() readonly name: string = this.state.name;
+        @required() readonly erpId: Id = this.state.erpId;
+        readonly suppliers: List<Id> = toList(this.state.suppliers);
+        @valid() readonly ean: Ean = new Ean(this.state.ean);
+        @valid() readonly type: ProductType = ProductType.byId(this.state.type);
+        readonly brand: string = this.state.brand;
+        @lt(0) readonly weight: number = this.state.weight;
+        @lt(0) readonly height: number = this.state.height;
+        @lt(0) readonly width: number = this.state.width;
+        
+        update = (add: Json): Product => new Product(this.merge(add));
+    }
 
 
 # Data
