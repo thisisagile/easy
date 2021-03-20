@@ -122,7 +122,7 @@ The `validate()` validates the following:
 ### Constraints
 The easiest way to validate objects is to use constraints. By adding constraints, as decorators, to the properties and functions on the object you would like to validate, these properties and functions will be checked when the object is validated through calling `validate(myObject)`. **easy** comes with a variety of ready-to-use constraints, but it is also easy (no pun intended) to add your own.
 
-Below is a typical example of an entity, which derives from the `Entity` class in **easy**. It has a number of properties, which are prefilled with values from the internal state (in `state`) of the entity. As you can see, several of these properties have constraint decorators, such as `@required()`, `@valid()` and `@lt()`. 
+Below is a typical example of an entity, which derives from the `Entity` class in **easy**. It has a number of properties, which are prefilled with values from the internal state (in `state`) of the entity. As you can see, several of these properties have constraint decorators, such as `@required()`, `@valid()` and `@lt()`. As you can see, properties may have multiple constraints. 
 
     export class Product extends Entity {
         @required() readonly name: string = this.state.name;
@@ -131,13 +131,17 @@ Below is a typical example of an entity, which derives from the `Entity` class i
         @valid() readonly ean: Ean = new Ean(this.state.ean);
         @valid() readonly type: ProductType = ProductType.byId(this.state.type);
         readonly brand: string = this.state.brand;
-        @lt(0) readonly weight: number = this.state.weight;
-        @lt(0) readonly height: number = this.state.height;
-        @lt(0) readonly width: number = this.state.width;
+        @gt(0) @lt(100) readonly weight: number = this.state.weight;
+        @gt(0, 'Current value {this.height} for height is insufficient.') readonly height: number = this.state.height;
+        @gt(0) readonly width: number = this.state.width;
         
         update = (add: Json): Product => new Product(this.merge(add));
     }
 
+When an instance of the `Product` class is validated, through `validate(myProduct)`, all constraint decorators will be checked.
+If one or more constraints fail, the object is considered as invalid. The outcome of `validate()` will contain a `Results` object that has a list of `Result` objects (consisting of `message`, `location` and `domain`). Each failed constrained will have added a `Result` to the list.
+
+Each constraint in **easy** comes with a pre-defined and templated message. However, if needed, you can specify your own messages by adding them to the decorators you use. In the example above, we have added a custom message to the `height` property.
 
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
