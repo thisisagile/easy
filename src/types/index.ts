@@ -15,6 +15,7 @@ export * from './Message';
 export * from './Meta';
 export * from './Result';
 export * from './Results';
+export * from './Template';
 export * from './Text';
 export * from './Uri';
 export * from './Uuid';
