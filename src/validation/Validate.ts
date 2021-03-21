@@ -11,6 +11,7 @@ import {
   meta,
   Results,
   TemplateOptions,
+  text,
   Text,
   toName,
   toResult,
@@ -19,12 +20,12 @@ import {
 } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
-import { choose, toText } from '../utils';
+import { choose } from '../utils';
 
 export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: Text };
 
 export const asResults = (subject: unknown, template: Text, options: TemplateOptions = {}): Results =>
-  toResults(toResult(toText(subject, template, options), toName(subject)));
+  toResults(toResult(text(template).parse(subject, options), toName(subject)));
 
 const validators = (subject: unknown): List<Validator> =>
   meta(subject)
@@ -46,23 +47,23 @@ export const validate = (subject?: unknown): Results =>
   choose<Results, any>(subject)
     .case(
       s => !isDefined(s),
-      s => asResults(s, 'Subject is not defined.')
+      s => asResults(s, 'Subject is not defined.'),
     )
     .case(
       s => isEnum(s),
-      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.'))
+      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')),
     )
     .case(
       s => isArray(s),
-      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults())
+      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()),
     )
     .case(
       s => isValue(s),
-      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.'))
+      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')),
     )
     .case(
       s => isValidatable(s),
-      v => constraints(v)
+      v => constraints(v),
     )
     .else(toResults());
 
