@@ -2,7 +2,7 @@ import { text } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
-describe('ToText', () => {
+describe('text().parse', () => {
   const empty = text();
   const wouter = text('Wouter');
   const kim = text('Kim van Wilgen');
@@ -104,8 +104,36 @@ describe('ToText', () => {
     expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
   });
 
-  test('parse', () => {
-    const template = text('{this} {this.id}.{this.name}.{this.level} {type} {Type}');
-    expect(template.parse(Dev.Sander)).toMatchText('Sander 3.Sander.3 dev Dev');
+  test('type', () => {
+    expect(text('').parse(Dev.Sander)).toMatchText('');
+    expect(text('{type}').parse(undefined)).toMatchText('');
+    expect(text('{type}').parse(Dev.Sander)).toMatchText('dev');
+    expect(text('{type.title}').parse(Dev.Sander)).toMatchText('Dev');
+  });
+
+  test('subject', () => {
+    expect(text('{this}').parse(undefined)).toMatchText('');
+    expect(text('{this.name}').parse(Dev.Sander)).toMatchText('Sander');
+  });
+
+  test('actual', () => {
+    expect(text('{actual}').parse(Dev.Sander, { actual: 'good' })).toMatchText('good');
+    expect(text('{actual.upper}').parse(Dev.Sander, { actual: 'good' })).toMatchText('GOOD');
+  });
+
+  test('property', () => {
+    expect(text('{property}').parse(Dev.Sander, { property: 'name' })).toMatchText('name');
+    expect(text('{property.title}').parse(Dev.Sander, { property: 'name' })).toMatchText('Name');
+  });
+
+  const template = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {type} {property.upper} {actual.lower}';
+
+  test('the full monty', () => {
+    expect(
+      text(template).parse(Dev.Jeroen, {
+        property: 'language',
+        actual: 'C',
+      })
+    ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
 });

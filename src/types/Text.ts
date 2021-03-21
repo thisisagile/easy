@@ -1,6 +1,7 @@
 import { isDefined } from './Is';
-import { Get, isFunc, ofGet } from './Constructor';
+import { Get, isFunc, ofGet, toName } from './Constructor';
 import { meta } from './Meta';
+import { List, toList } from './List';
 
 export type Text = { toString(): string };
 
@@ -11,9 +12,43 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 // eslint-disable-next-line security/detect-non-literal-regexp
 export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => asString(t).replace(new RegExp(asString(search), 'g'), asString(replace));
 
-class ToText implements Text {
-  constructor(readonly subject: string) {
-  }
+class Parser implements Text {
+  constructor(private template: string, private subject: unknown = {}, private options = {}) {}
+
+  toString = (): string => {
+    return meta(this.options)
+      .entries()
+      .reduce((t, [k]) => this.option(t, k), this.object());
+  };
+
+  private value = (subject: any, prop: string): string => {
+    const split = prop.split('.');
+    return split
+      .splice(1)
+      .reduce((t: ToText, s) => (t as any)[s], text(subject[split[0]]))
+      .toString();
+  };
+
+  private props = (template: string, key: string, result: List<string> = toList()): string[] => {
+    const i1 = template.indexOf(`{${key}`);
+    if (i1 < 0) {
+      return result;
+    }
+    const i2 = template.indexOf('}', i1);
+    return this.props(template.slice(i2 + 1), key, result.add(template.substring(i1 + 1, i2)));
+  };
+
+  private object = (): string => {
+    return this.props(this.template, 'this').reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.subject, p.replace('this.', ''))), this.template);
+  };
+
+  private option = (template: string, prop: string): string => {
+    return this.props(template, prop).reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.options, p)), template);
+  };
+}
+
+export class ToText implements Text {
+  constructor(readonly subject: string) {}
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -24,7 +59,7 @@ class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' '),
+        .join(' ')
     );
   }
 
@@ -57,7 +92,7 @@ class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join(''),
+        .join('')
     );
   }
 
@@ -65,13 +100,7 @@ class ToText implements Text {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
 
-  parse = (subject: unknown = {}, type = text((subject as any)?.constructor.name)): ToText =>
-    meta(subject)
-      .entries()
-      .reduce((t: ToText, [k, v]) => t.replace(`{this.${k}}`, asString(v)), this)
-      .replace('{this}', asString(subject))
-      .replace('{type}', type.lower)
-      .replace('{Type}', type.title);
+  parse = (subject: unknown, options = {}): ToText => text(new Parser(this.subject, subject, { type: toName(subject), ...options }));
 
   isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
 
@@ -89,6 +118,8 @@ class ToText implements Text {
 }
 
 export const text = (subject?: unknown, alt = ''): ToText => {
-  const sub = asString(subject) ?? alt;
+  const sub = subject ? asString(subject) : alt;
   return new ToText(sub !== '[object Object]' ? sub : '');
 };
+
+export const toType = (subject: unknown, postfix = ''): ToText => text((subject as any)?.constructor?.name).replace(postfix, '');
