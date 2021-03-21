@@ -49,7 +49,7 @@ export const validate = (subject?: unknown): Results =>
     )
     .case(
       s => isEnum(s),
-      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type.name}.'))
+      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.'))
     )
     .case(
       s => isArray(s),
@@ -57,7 +57,7 @@ export const validate = (subject?: unknown): Results =>
     )
     .case(
       s => isValue(s),
-      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type.name}.'))
+      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.'))
     )
     .case(
       s => isValidatable(s),
