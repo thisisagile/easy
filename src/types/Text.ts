@@ -84,5 +84,3 @@ export const text = (subject?: unknown, alt = ''): ToText => {
   const sub = subject ? asString(subject) : alt;
   return new ToText(sub !== '[object Object]' ? sub : '');
 };
-
-export const toType = (subject: unknown, postfix = ''): ToText => text((subject as any)?.constructor?.name).replace(postfix, '');
