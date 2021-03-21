@@ -3,6 +3,8 @@ import { List, toList } from './List';
 import { text, Text, ToText } from './Text';
 import { toName } from './Constructor';
 
+export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
+
 class Template implements Text {
   constructor(private template: string, private subject: unknown = {}, private options = {}) {}
 
@@ -38,7 +40,7 @@ class Template implements Text {
   };
 }
 
-export const template = (template: Text, subject: unknown, options = {}): Text =>
+export const template = (template: Text, subject: unknown, options: TemplateOptions = {}): Text =>
   new Template(template.toString(), subject, {
     type: toName(subject),
     ...options,

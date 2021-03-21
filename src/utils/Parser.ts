@@ -1,7 +1,5 @@
 import { List, meta, Text, text, toList, toName, ToText } from '../types';
 
-export type ParseOptions = { property?: unknown; actual?: unknown };
-
 export class Parser implements Text {
   constructor(private template: string, private subject: unknown = {}, private options = {}) {}
 

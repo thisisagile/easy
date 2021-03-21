@@ -10,6 +10,7 @@ import {
   List,
   meta,
   Results,
+  TemplateOptions,
   Text,
   toName,
   toResult,
@@ -18,11 +19,11 @@ import {
 } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
-import { choose, ParseOptions, toText } from '../utils';
+import { choose, toText } from '../utils';
 
-export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: unknown };
+export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: Text };
 
-export const asResults = (subject: unknown, template: Text, options: ParseOptions = {}): Results =>
+export const asResults = (subject: unknown, template: Text, options: TemplateOptions = {}): Results =>
   toResults(toResult(toText(subject, template, options), toName(subject)));
 
 const validators = (subject: unknown): List<Validator> =>
