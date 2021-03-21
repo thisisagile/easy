@@ -47,23 +47,23 @@ export const validate = (subject?: unknown): Results =>
   choose<Results, any>(subject)
     .case(
       s => !isDefined(s),
-      s => asResults(s, 'Subject is not defined.'),
+      s => asResults(s, 'Subject is not defined.')
     )
     .case(
       s => isEnum(s),
-      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')),
+      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.'))
     )
     .case(
       s => isArray(s),
-      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()),
+      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults())
     )
     .case(
       s => isValue(s),
-      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')),
+      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.'))
     )
     .case(
       s => isValidatable(s),
-      v => constraints(v),
+      v => constraints(v)
     )
     .else(toResults());
 
