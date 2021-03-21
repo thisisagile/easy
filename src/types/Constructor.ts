@@ -3,7 +3,7 @@ export type Func<T, Args> = (...args: Args[]) => T;
 
 export const isFunc = <T, Args>(o?: unknown): o is (...params: Args[]) => T => !!o && typeof o === 'function';
 
-export const toName = (subject: unknown, postfix = ''): string => (subject as any)?.constructor?.name?.replace(postfix, '').toLowerCase() ?? '';
+export const toName = (subject?: unknown, postfix = ''): string => (subject as any)?.constructor?.name?.replace(postfix, '').toLowerCase() ?? '';
 
 export type Get<T = any, Args = any> = T | Func<T, Args>;
 export type Predicate<Args> = Get<boolean, Args>;
