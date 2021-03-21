@@ -8,8 +8,7 @@ export const isText = (t?: unknown): t is Text => isDefined(t) && isFunc<string,
 
 export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
 
-// eslint-disable-next-line security/detect-non-literal-regexp
-export const replaceAll = (t: Text, search: Text, replace: Text = ''): string => asString(t).replace(new RegExp(asString(search), 'g'), asString(replace));
+export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
 export class ToText implements Text {
   constructor(readonly subject: string) {}
