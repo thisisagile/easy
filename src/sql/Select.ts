@@ -5,10 +5,11 @@ import { SqlQuery } from './SqlQuery';
 import { Table } from './Table';
 
 export class Select extends SqlQuery {
-  protected ordered: List<OrderColumn> = list();
-  protected grouped: List<Column> = list();
-  protected topped = 0;
-  protected limited = 0;
+  private ordered: List<OrderColumn> = list();
+  private grouped: List<Column> = list();
+  private _top = 0;
+  private _limit = 0;
+  private _offset = 0;
 
   constructor(table: Table | Join, readonly columns: List<Column> = list()) {
     super(table);
@@ -30,25 +31,31 @@ export class Select extends SqlQuery {
   }
 
   top(t: number): this {
-    this.topped = t;
+    this._top = t;
     return this;
   }
 
   limit(l: number): this {
-    this.limited = l;
+    this._limit = l;
+    return this;
+  }
+
+  offset(o: number): this {
+    this._offset = o;
     return this;
   }
 
   toString(): string {
     return (
       `SELECT ` +
-      ifGet(this.topped, `TOP ${this.topped} `, '') +
+      ifGet(this._top, `TOP ${this._top} `, '') +
       ifGet(this.columns.length, this.columns.join(`, `), '*') +
       ` FROM ${this.table}` +
       ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +
       ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(`, `)}`, '') +
       ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)}`, '') +
-      ifGet(this.limited, ` LIMIT ${this.limited};`, ';')
+      ifGet(this._limit, ` LIMIT ${this._limit}`, '') +
+      ifGet(this._offset, ` OFFSET ${this._offset};`, ';')
     );
   }
 }

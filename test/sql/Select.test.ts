@@ -59,4 +59,9 @@ describe('Select', () => {
     const select = devs.select(devs.language).limit(100);
     expect(select).toMatchText('SELECT DevTable.Language FROM DevTable LIMIT 100;');
   });
+
+  test('With limit and offset', () => {
+    const select = devs.select(devs.language).limit(100).offset(10);
+    expect(select).toMatchText('SELECT DevTable.Language FROM DevTable LIMIT 100 OFFSET 10;');
+  });
 });
