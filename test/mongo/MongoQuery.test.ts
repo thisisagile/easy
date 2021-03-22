@@ -1,4 +1,4 @@
-import { mongo, MongoQuery } from '../../src/';
+import { mongo, MongoQuery } from '../../src';
 
 describe('MongoQuery', () => {
   test('new query', () => {

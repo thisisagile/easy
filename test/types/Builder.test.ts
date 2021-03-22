@@ -1,4 +1,4 @@
-import { build, singleton } from '../../src/types/Builder';
+import { build, singleton } from '../../src';
 
 const nl = 'The Netherlands';
 
