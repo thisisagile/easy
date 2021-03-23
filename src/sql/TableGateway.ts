@@ -8,7 +8,7 @@ export class TableGateway<T extends Table> implements Gateway {
   constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
 
   all(): Promise<List<Json>> {
-    return this.provider.query(this.table.select());
+    return this.provider.query(this.table.select()).then(js => js.map(j => this.table.in(j)));
   }
 
   byId(id: Id): Promise<Json | undefined> {
