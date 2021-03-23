@@ -143,6 +143,13 @@ If one or more constraints fail, the object is considered as invalid. The outcom
 
 Each constraint in **easy** comes with a pre-defined and templated message. However, if needed, you can specify your own messages by adding them to the decorators you use. In the example above, we have added a custom message to the `height` property.
 
+### Custom constraints.
+It is quite easy to create your own custom constraints. Below is an example of a custom constraint `is42`.
+
+    const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? "Property {property} should have value '42' instead of '{actual}'.");
+
+This custom constraint makes use of the `constraint()` function in **easy**. The first parameter for your constraint is a function that returns true or false. When you use your new constraint, as a decorator on a property, the `validate()` function will pick it up automatically. If your constraint fails, the message will be added to the results. 
+
 # Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
