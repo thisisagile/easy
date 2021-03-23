@@ -11,6 +11,12 @@ describe('TableGateway', () => {
     target = new TableGateway(table, provider);
   });
 
+  test('default construction', () => {
+    const t = new TableGateway(table);
+    expect(t).toBeInstanceOf(TableGateway);
+    expect(t.provider).toBeDefined();
+  });
+
   test('all', async () => {
     provider.query = mock.resolve(toList(devData.wouter, devData.jeroen));
     const res = await target.all();

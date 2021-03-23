@@ -55,6 +55,12 @@ describe('Repo', () => {
     expect(r).toBeTruthy();
   });
 
+  test('remove triggers gateway', async () => {
+    gateway.remove = mock.resolve(true);
+    await expect(repo.remove(42)).resolves.toBeTruthy();
+    expect(gateway.remove).toHaveBeenCalledWith(42);
+  });
+
   test('add invalid object does not trigger gateway', async () => {
     gateway.add = mock.resolve({});
     await expect(repo.add(Dev.Invalid.toJSON())).rejects.not.toBeValid();

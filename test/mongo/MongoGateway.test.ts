@@ -25,6 +25,12 @@ describe('MongoGateway', () => {
     expect(provider.byId).toHaveBeenCalledWith(42);
   });
 
+  test('by calls the provider', async () => {
+    provider.by = mock.resolve(devData.naoufal);
+    await expect(gateway.by('id', 42)).resolves.toBe(devData.naoufal);
+    expect(provider.by).toHaveBeenCalledWith('id', 42);
+  });
+
   test('search is not implemented', () => {
     return expect(gateway.search).rejects.toMatchException(Exception.IsNotImplemented);
   });
