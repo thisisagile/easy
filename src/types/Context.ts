@@ -7,7 +7,7 @@ export type EnvContext = {
   readonly host: string;
   readonly port: number;
 
-  get(key: string): string | undefined;
+  get(key: string, alt?: string): string | undefined;
 };
 
 export class DotEnvContext implements EnvContext {
@@ -15,12 +15,12 @@ export class DotEnvContext implements EnvContext {
   readonly host = process.env.HOST ?? '';
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
 
-  readonly get = (key: string): string | undefined =>
+  readonly get = (key: string, alt?: string): string | undefined =>
     process.env[
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
         .snake.toString()
-    ];
+    ] ?? alt;
 }
 
 export type RequestContext = {

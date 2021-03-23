@@ -31,6 +31,10 @@ describe('Environment Context', () => {
     process.env.VAR_EXISTS = 'value';
     expect(ctx.env.get('varExists')).toBe('value');
   });
+
+  test('alt environment variables', () => {
+    expect(ctx.env.get('doesNotExist', 'value')).toBe('value');
+  });
 });
 
 describe('Other Context', () => {

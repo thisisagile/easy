@@ -17,7 +17,7 @@ export class MongoProvider {
         new MongoClient(u, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
-          auth: { user: ctx.env.get('mongodbUser') ?? 'admin', password: ctx.env.get('mongodbPassword') ?? 'admin' },
+          auth: { user: ctx.env.get('mongodbUser', 'admin') as string, password: ctx.env.get('mongodbPassword', 'admin') as string },
         }).connect()
       );
   }
