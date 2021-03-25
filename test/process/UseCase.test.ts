@@ -6,6 +6,6 @@ describe('UseCase', () => {
   });
 
   test('scope works', () => {
-    expect(UseCase.ChangePassword.scope.id).toBe('authorization');
+    expect(UseCase.ChangePassword.scope.id).toBe('auth');
   });
 });
