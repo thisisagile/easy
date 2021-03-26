@@ -159,7 +159,7 @@ It is the responsibility of the classes in the data layer to fetch and deliver d
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
 ### When
-The `When` class is a utility that is usually exposed through the `when()` function. It can be used to make validations in promises a little easier such as the following example.
+The `When` class is a utility that is usually exposed through the `when()` function. It is one of many monads we use in **easy** to make code more robust, and easier to read. It can be used to make validations in promises a little easier such as the following example.
 
     update = (json: Json): Promise<T> =>
     this.gateway
