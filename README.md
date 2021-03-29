@@ -143,14 +143,7 @@ If one or more constraints fail, the object is considered as invalid. The outcom
 
 Each constraint in **easy** comes with a pre-defined and templated message. However, if needed, you can specify your own messages by adding them to the decorators you use. In the example above, we have added a custom message to the `height` property.
 
-### Adding (business) rules
-Another option to validate objects is to add (business) rules. These can be added to the objects you are validating if the validation itself is more complex than you can solve by adding a decorator constraints to a property of the object, for instance to match prices, or check whether a start date follows an end end date. To achieve this, add a function or a property to your class that either returns a `boolean` or an instance of `Results`. Next, add the `@rule` decorator to it, to which you can add a custom message again, as in the example below.
-
- // Code example
- 
-The new function or property will now play along when you validate objects using the `validate()` function.
-
-### Custom constraints.
+### Custom constraints
 It is quite easy to create your own custom constraints. Below is an example of a custom constraint `is42`.
 
     const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? "Property {property} should have value '42' instead of '{actual}'.");
