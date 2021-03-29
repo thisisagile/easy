@@ -157,6 +157,13 @@ It is quite easy to create your own custom constraints. Below is an example of a
 
 This custom constraint makes use of the `constraint()` function in **easy**. The first parameter for your constraint is a function that returns true or false. When you use your new constraint, as a decorator on a property, the `validate()` function will pick it up automatically. If your constraint fails, the message will be added to the results. 
 
+After creating your custom constraint, you can add them to your classes, like in the example below. 
+
+    class Person extends Struct {
+        @valid() readonly age: Age = new Age(this.state.age);
+        @is42('Value for real age must be 42, not {actual}.') readonly realAge: number = this.state.age;
+    }
+
 P.S. If you create custom constraints that might be helpful for other developers, don't hesitate to do a pull request on **easy**.
 
 # Data
