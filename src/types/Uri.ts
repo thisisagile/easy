@@ -1,8 +1,8 @@
 import { isNotEmpty } from './Is';
-import { list } from './List';
 import { Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
+import { toList } from './List';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -24,7 +24,7 @@ export const uri = {
 type Prop = { segment: Segment; value: any };
 
 const toRoute = (...segments: Segment[]): string =>
-  list(segments)
+  toList(segments)
     .mapDefined(s => s.segment)
     .join('/');
 
@@ -43,7 +43,7 @@ export class EasyUri implements Uri {
   readonly host = uri.host();
   readonly resource = uri.resource(this);
 
-  private props = list<Prop>();
+  private props = toList<Prop>();
 
   constructor(readonly segments: Segment[] = []) {}
 
@@ -65,7 +65,7 @@ export class EasyUri implements Uri {
   toString(): string {
     const route = this.props.reduce((r: string, p: Prop) => r.replace(p.segment?.segment ?? '', p.value ?? ''), this.complete);
     const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
-    this.props = list<Prop>();
+    this.props = toList<Prop>();
     return isNotEmpty(query) ? `${route}?${query}` : route;
   }
 

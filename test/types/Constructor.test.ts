@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { ifGet, list, toName } from '../../src';
+import { ifGet, toName, toList } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
@@ -10,8 +10,8 @@ describe('toName', () => {
 });
 
 describe('ifGet', () => {
-  const empty = list();
-  const filled = list(Dev.Naoufal);
+  const empty = toList();
+  const filled = toList(Dev.Naoufal);
 
   test('ifGet invalid', () => {
     expect(ifGet(undefined, 'Yes', 'No')).toBe('No');

@@ -1,7 +1,7 @@
 import { Column } from './Column';
 import { Map, PropertyOptions } from '../utils';
 import { Database } from '../data';
-import { Json, list, toUuid } from '../types';
+import { Json, toList, toUuid } from '../types';
 import { Select } from './Select';
 import { Insert } from './Insert';
 import { Update } from './Update';
@@ -15,10 +15,10 @@ export class Table extends Map<Column> {
 
   readonly id = this.prop('id', { def: toUuid });
 
-  select = (...columns: Column[]): Select => new Select(this, list(columns));
+  select = (...columns: Column[]): Select => new Select(this, toList(columns));
   insert = (fields: Json): Insert => new Insert(this, this.out(fields));
   update = (fields: Json): Update => new Update(this, this.out(fields));
-  delete = (): Delete => new Delete(this, list());
+  delete = (): Delete => new Delete(this, toList());
 
   readonly join = (t: Table): Join => new Join(this, t);
 }

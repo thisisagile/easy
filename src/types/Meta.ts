@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { list, List, toList } from './List';
+import { List, toList } from './List';
 import { isDefined } from './Is';
 
 class ClassMeta {
@@ -13,10 +13,10 @@ class ClassMeta {
   };
 
   entries = <T = unknown>(): List<[key: string, value: T]> =>
-    list([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<[any, T]>;
+    toList([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<[any, T]>;
 
   properties = (key?: string): List<PropertyMeta> =>
-    list([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])
+    toList([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])
       .map(p => this.property(p))
       .filter(p => (key ? p.get(key) : p));
 

@@ -1,9 +1,9 @@
-import { list, Search } from '../../src';
+import { Search, toList } from '../../src';
 import { Dev, DevRepo } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('Search', () => {
-  const devs = list(Dev.Sander, Dev.Jeroen, Dev.Naoufal);
+  const devs = toList(Dev.Sander, Dev.Jeroen, Dev.Naoufal);
   const repo = new DevRepo();
   let select: Search<Dev>;
 

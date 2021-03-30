@@ -6,13 +6,13 @@ import {
   isResults,
   isValidatable,
   isValue,
-  list,
   List,
   meta,
   Results,
   TemplateOptions,
   text,
   Text,
+  toList,
   toName,
   toResult,
   toResults,
@@ -30,7 +30,7 @@ export const asResults = (subject: unknown, template: Text, options: TemplateOpt
 const validators = (subject: unknown): List<Validator> =>
   meta(subject)
     .keys<List<Validator>>('constraint')
-    .reduce((list, vs) => list.add(vs), list<Validator>());
+    .reduce((list, vs) => list.add(vs), toList<Validator>());
 
 const runValidator = (v: Validator, subject?: unknown): Results => {
   v.actual = (subject as any)[v.property];

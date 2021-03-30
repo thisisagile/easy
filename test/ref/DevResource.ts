@@ -4,7 +4,6 @@ import {
   get,
   HttpStatus,
   isDefined,
-  list,
   List,
   patch,
   post,
@@ -16,6 +15,7 @@ import {
   Scope,
   search,
   stream,
+  toList,
   UseCase,
 } from '../../src';
 import { DevUri } from './DevUri';
@@ -24,7 +24,7 @@ import { Dev } from './Dev';
 @route(DevUri.Developers)
 export class DevsResource implements Resource {
   @search({ onOk: HttpStatus.NoContent })
-  all = (req: Req): List<Dev> => list(new Dev(req.id));
+  all = (req: Req): List<Dev> => toList(new Dev(req.id));
 
   @post()
   insert = (req: Req): Dev => new Dev(req.id);
