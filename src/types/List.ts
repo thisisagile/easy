@@ -42,7 +42,7 @@ export class List<T> extends Array<T> {
  */
 export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
 
-export const toList = <T>(...items: (T | T[])[]): List<T> => (items.length > 1 ? list<T>(...items) : list<T>(items[0]));
+export const toList = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
