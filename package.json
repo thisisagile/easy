@@ -35,7 +35,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "^1.14.0",
+    "@thisisagile/easy-test": "^1.14.1",
     "@types/cls-hooked": "^4.3.3",
     "@types/form-urlencoded": "^2.0.1",
     "@types/jsonwebtoken": "^8.5.1",
@@ -52,7 +52,7 @@
     "axios": "^0.21.1",
     "cls-hooked": "^4.2.2",
     "express": "^4.17.1",
-    "form-urlencoded": "^4.2.1",
+    "form-urlencoded": "^4.4.2",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.5",
     "passport": "^0.4.1",
