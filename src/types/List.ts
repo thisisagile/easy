@@ -34,7 +34,7 @@ export class List<T> extends Array<T> {
     return this;
   };
 
-  defined = (): List<NonNullable<T>> => this.reduce((list, v) => (isDefined(v) ? list.add(v) : list), toList<NonNullable<T>>());
+  defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 }
 
 export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));

@@ -24,7 +24,9 @@ describe('List', () => {
 
   test('asc and desc', () => {
     expect(devs.asc('name').last()).toMatchObject(Dev.Wouter);
+    expect(devs.asc('name').first()).toMatchObject(Dev.Jeroen);
     expect(devs.desc(d => d.name).first()).toMatchObject(Dev.Wouter);
+    expect(devs.desc(d => d.name).last()).toMatchObject(Dev.Jeroen);
   });
 
   test('map', () => {
