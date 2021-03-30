@@ -1,4 +1,4 @@
-import { isDefined, isError, isResult, isResults, Json, list, List, Result, toList, toResult } from '../types';
+import { isDefined, isError, isResult, isResults, Json, List, Result, toList, toResult } from '../types';
 import { choose } from '../utils';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
@@ -12,7 +12,7 @@ export const rest = {
   toData: (status: HttpStatus, items: Json[] = []): RestResult => ({
     data: {
       code: status.status,
-      items: list(items),
+      items: toList(items),
       itemCount: items.length,
     },
   }),
@@ -20,7 +20,7 @@ export const rest = {
     error: {
       code: status.status,
       message: status.name ?? errors[0].message ?? 'Unknown',
-      errors: list(errors),
+      errors: toList(errors),
       errorCount: errors.length,
     },
   }),

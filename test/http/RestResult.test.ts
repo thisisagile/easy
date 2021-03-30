@@ -1,4 +1,4 @@
-import { HttpStatus, isRestResult, list, Response, rest, RestResult, toResult, toResults } from '../../src';
+import { HttpStatus, isRestResult, Response, rest, RestResult, toList, toResult, toResults } from '../../src';
 import { Dev } from '../ref';
 
 const data = {
@@ -9,7 +9,7 @@ const data = {
   },
 };
 const item = Dev.Wouter.toJSON();
-const items = list([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
+const items = toList([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
 const payload = [
   { message: 'This is wrong', domain: 'easy' },
   { message: 'Very wrong', domain: 'easy' },
@@ -78,7 +78,7 @@ describe('rest.to', () => {
     const r = rest.to(payload);
     expect(isRestResult(r)).toBeTruthy();
     expect(r.data?.code).toBe(HttpStatus.Ok.status);
-    expect(r.data?.items.first()).toMatchObject(list(payload).first());
+    expect(r.data?.items.first()).toMatchObject(toList(payload).first());
   });
 
   test('From result', () => {

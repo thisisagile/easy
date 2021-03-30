@@ -1,4 +1,4 @@
-import { list, SqlQuery } from '../../src';
+import { SqlQuery, toList } from '../../src';
 import { DevTable } from '../ref';
 
 describe('SqlQuery', () => {
@@ -16,7 +16,7 @@ describe('SqlQuery', () => {
   });
 
   test('Adding clauses on to of works', () => {
-    const query = new SqlQuery(devs, list(devs.level.is(3)));
+    const query = new SqlQuery(devs, toList(devs.level.is(3)));
     expect(query.clauses).toHaveLength(1);
     query.where(devs.name.is('Naoufal'));
     expect(query.clauses).toHaveLength(2);
