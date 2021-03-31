@@ -1,5 +1,5 @@
 import { isNotEmpty } from './Is';
-import { Text } from './Text';
+import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { toList } from './List';
@@ -16,7 +16,7 @@ const toSegment = (key?: string, { segment, query }: { segment?: string; query?:
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
-  segment: (key = ''): Segment => toSegment(key, { segment: key }),
+  segment: (key?: string): Segment => toSegment(key, { segment: key }),
   path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (value ? `${key}=${value}` : '') }),
 };
@@ -48,14 +48,14 @@ export class EasyUri implements Uri {
   constructor(readonly segments: Segment[] = []) {}
 
   get path(): string {
-    return toRoute(uri.segment(), this.resource, ...this.segments);
+    return toRoute(uri.segment(''), this.resource, ...this.segments);
   }
 
   get complete(): string {
     return toRoute(this.host, this.resource, ...this.segments);
   }
 
-  route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(), uri.segment(resource?.toLowerCase()), ...this.segments);
+  route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
   set = (segment: Segment, value: unknown): this => {
     this.props.push({ segment, value });
@@ -63,7 +63,9 @@ export class EasyUri implements Uri {
   };
 
   toString(): string {
-    const route = this.props.reduce((r: string, p: Prop) => r.replace(p.segment?.segment ?? '', p.value ?? ''), this.complete);
+    const route = this.props
+      .filter(p => p.segment?.segment)
+      .reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), p.value ?? ''), this.complete);
     const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
     this.props = toList<Prop>();
     return isNotEmpty(query) ? `${route}?${query}` : route;

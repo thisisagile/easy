@@ -14,12 +14,12 @@ describe('Uri', () => {
     expect(DevUri.Developers).toBeInstanceOf(DevUri);
   });
 
-  test('toString returns full route', () => {
+  test('returns full route', () => {
     expect(DevUri.Developers).toMatchRoute(withHost);
     expect(DevUri.Developer).toMatchRoute(`${host}/dev/developers/:id`);
   });
 
-  test('returns full route', () => {
+  test('path returns path', () => {
     expect(DevUri.Developers.path).toBe('/dev/developers');
   });
 
@@ -33,18 +33,23 @@ describe('Uri', () => {
     expect(DevUri.Developer.complete).toBe(`${host}/dev/developers/:id`);
   });
 
-  test('toString returns full route plus id', () => {
+  test('returns full route plus id', () => {
     expect(DevUri.Developers.id(42)).toMatchRoute(withHost);
     expect(DevUri.Developer.id(42)).toMatchRoute(`${host}/dev/developers/42`);
   });
 
-  test('toString returns full route plus id and a query', () => {
+  test('returns full route plus id and a query', () => {
     expect(DevUri.Developers.query('yes')).toMatchRoute(`${host}/dev/developers?q=yes`);
     expect(DevUri.Developer.id(42).query('yes')).toMatchRoute(`${host}/dev/developers/42?q=yes`);
   });
 
-  test('toString returns full route plus id and two queries', () => {
+  test('returns full route plus id and two queries', () => {
     expect(DevUri.Developers.query('yes').language('Java')).toMatchRoute(`${host}/dev/developers?q=yes&language=Java`);
     expect(DevUri.Developer.id(42).query('yes').language('C')).toMatchRoute(`${host}/dev/developers/42?q=yes&language=C`);
+  });
+
+  test('toString returns full route with query', () => {
+    expect(DevUri.Developers.query('yes').language('Java').toString()).toStrictEqual(`${host}/dev/developers?q=yes&language=Java`);
+    expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toStrictEqual(`${host}/dev/developers/42?q=yes&language=C`);
   });
 });
