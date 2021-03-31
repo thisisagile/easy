@@ -8,17 +8,17 @@
 <a href="https://github.com/semantic-release/semantic-release" target="_blank"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release" /></a>
 <a href="https://sonarcloud.io/dashboard?id=thisisagile_easy" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=coverage" alt="coverage" /></a>
 
-# Note
+## Note
 The **easy** framework captures the best practices we (the contributors) have build up on implementing microservices architectures at a diverse range of clients in Typescript, running on node.js and deployed on Amazon, Google Cloud and even on Windows Server. The companies that contribute / have contributed include a well-known Dutch insurance company, an insurance software vendor, an IoT scale-up, a software vendor in logistics and an online e-commerce company. From those practices, the **easy** framework grows step-by-step. 
 
 The **easy** framework already works fine in many situations. However, it also continuously improves and grows. It is a work-in-progress, including its documentation. Being a framework, it probably not always perfectly fits your situation. Therefore, we aim to implement **easy** so that it is straightforward, simple to use, standardized, and open to extensions. 
 
-# Welcome!
+## Welcome!
 The **easy** framework is a straightforward, smart library for building domain-driven microservice architectures, implementing a simple evolutionary architecture. This library is distilled from projects where the teams I've worked with built platforms based on a simple, common architecture where each service centers around a small part of the platform domain.
 
 This framework will include best and foremost simple practices to support building microservices, based on the following software architecture and patterns:
 
-# Architecture
+## Architecture
 Microservices built with **easy** have a four layered architecture: *services*, *process*, *domain*, *data*. Each of the layers serves a single purpose and follows clear patterns and communications:
 
 - *Services*. This layer contains resource classes, which handle requests to the microservice's endpoints.
@@ -28,7 +28,7 @@ Microservices built with **easy** have a four layered architecture: *services*, 
 
 The **easy** framework supports this architecture by supplying root classes (or layer supertypes) for each of the types describe above. The repository `easy-test` contains utilities to assist you with testing **easy** specific constructs, such as `toMatchText` or `toMatchPath` for checking paths in uri's. The repository `easy-sample` contains examples of microservices built with the **easy** framework.
 
-# Root
+## Root
 At the root of each microservice built using **easy**, there is a class that inherits from `Service`. These are used to initiate the service, set the `port` at which it runs,  register all resource classes, and start the service. An example services class is the one below for a movie service.
 
     SampleService.Movie
@@ -48,13 +48,13 @@ In general, you will not build a single microservice, but rather a collection of
 
 The `SampleService` inherits directly from the `Service` layer supertype from **easy**. The methods `pre()` and `post()` can be used to register middleware (by default **easy** uses express as its web server). However, this can easily be changed if you require so. The middlewares `correlation`, `error` and `notFound` are also provided by **easy**.  
 
-# Services
+## Services
 The services layer has resource as the layer supertype, to model the API exposed.
 
-# Process
+## Process
 The process layer contains use cases, that model your process.
 
-# Domain
+## Domain
 In the domain layer there are supertypes to model the domain, such as entities, records, value objects and enumerations.
 The domain layer also knows the repository layer supertype, for handling instances of entities and structs.
 
@@ -101,7 +101,7 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
-# Validation
+## Validation
 All **easy** microservices evolve around their part of the total business domain you are implementing. Quite usually, in its domain layer, a microservice contains an *aggregate*. In domain-driven design an aggregate maps to a part of the domain that is persisted together. In a relational database, this is usually guarded with a transaction. In a document database, such as MongoDB, this is more often a single serialized `Json` object.
 
 To assure that such an aggregate is valid, when persisted, it is validated, usually starting from the *aggregate root*. In most cases, the aggregate root is the entity that is also the resource that requests are about, and in most often it is also the name of the microservice itself.
@@ -159,10 +159,10 @@ After creating your custom constraint, you can add them to your classes, like in
 
 P.S. If you create custom constraints that might be helpful for other developers, don't hesitate to do a pull request on **easy**.
 
-# Data
+## Data
 It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
-# Utilities
+## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
 ### When
@@ -178,3 +178,11 @@ The `When` class is a utility that is usually exposed through the `when()` funct
     .then(j => new this.ctor(j));
 
 The `reject()` method is used to reject the chain, so it will not execute any of its following statements. The `reject()` method accept any error type. A special case is made for `when().not.isValid`. This statement validates the subject of the `when`, and reject with the results (an instance of `Results`) if no parameter is passed to `reject()`.
+
+## Authentication and Authorization
+Access to endpoints is configured using the `@requires` decorator group.
+If multiple decorators are added, all conditions must be met to access the endpoint.
+
+To use these decorators, the generic `security` middleware must be loaded first.
+In most cases, it should be added to the `pre` list of handlers of a service.
+The security middleware takes an optional configuration object, which is documented [in code](src/express/SecurityHandler.ts).
