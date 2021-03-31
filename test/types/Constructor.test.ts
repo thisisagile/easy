@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { ifGet, toName, toList } from '../../src';
+import { ifGet, toList, toName } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
