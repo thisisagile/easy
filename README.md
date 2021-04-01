@@ -101,6 +101,26 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
+### Value
+Value classes are single property objects that are immutable and gives meaning to that property. Take for instance a string `john.doe@example.com`. this is a valid string and any validation on whether this string is an email has to be done externally. Creating a `Email` Value object:
+    
+    class Email extends Value<string> {
+        get isValid(): boolean {
+            return validator.isEmail(this.value);
+        }
+    }
+Using the above in an Entity enables us to make sure that the property is an email
+
+#### DateTime
+DateTime is a value object that takes either a Date object, RFC-3339 formatted string, or a number representing Epoch in milliseconds. The json is always an RFC-3339 formatted string. [momentjs](https://momentjs.com/) is used internally.
+
+A few examples of DateTime:
+
+    new DateTime().toJSON() // returns the date formatted as 2021-03-25T08:39:44.000Z
+    new DateTime(new Date()).toJSON() // same as above
+    DateTime.now.toJSON() // same as above
+    new DateTime(1617288152000).toJSON() // returns 2021-04-01T14:42:32.000Z
+
 ## Validation
 All **easy** microservices evolve around their part of the total business domain you are implementing. Quite usually, in its domain layer, a microservice contains an *aggregate*. In domain-driven design an aggregate maps to a part of the domain that is persisted together. In a relational database, this is usually guarded with a transaction. In a document database, such as MongoDB, this is more often a single serialized `Json` object.
 
