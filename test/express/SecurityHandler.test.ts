@@ -1,5 +1,5 @@
 import passport from 'passport';
-import { authError, checkScope, checkUseCase, ctx, HttpStatus, Scope, security, UseCase } from '../../src';
+import { authError, checkScope, checkUseCase, HttpStatus, Scope, security, UseCase } from '../../src';
 import { Request, Response } from 'express';
 
 describe('Checks', () => {
@@ -48,7 +48,7 @@ describe('SecurityHandler', () => {
       expect(s._passReqToCallback).toBeTruthy();
       expect(s._verifOpts).toStrictEqual({
         audience: undefined,
-        issuer: ctx.env.domain,
+        issuer: undefined,
         algorithms: undefined,
         ignoreExpiration: false,
       });
@@ -60,21 +60,23 @@ describe('SecurityHandler', () => {
     expect(initializeSpy).toHaveBeenCalled();
   });
 
-  test('security middleware with custom settings', () => {
+  test('security middleware with custom options', () => {
     const useSpy = jest.spyOn(passport, 'use');
-    process.env.TOKEN_ISSUER = 'issuer';
-    process.env.TOKEN_AUDIENCE = 'audience';
+
+    const options = {
+      audience: 'audience',
+      issuer: 'issuer',
+      algorithms: undefined,
+    };
 
     useSpy.mockImplementationOnce(((s: any) => {
       expect(s._verifOpts).toStrictEqual({
-        audience: 'audience',
-        issuer: 'issuer',
-        algorithms: undefined,
+        ...options,
         ignoreExpiration: false,
       });
     }) as any);
 
-    security();
+    security({ jwtStrategyOptions: options });
 
     expect(useSpy).toHaveBeenCalled();
   });
