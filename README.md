@@ -101,15 +101,27 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
+### Value objects
+When we are not so much interested in the identiy of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evena in his seminal book *Domain Driven Design*.
+
+> An object that represents a descriptive aspect of the domain with no conceptual identity is called a Value Object. Value Objects are instantiated to represent elements of the design that we care about only for what they are, not who or which they are.
+
+The nice thing about value objects is that you can define them once, and then use everywhere, usually as the types of properties of entities, or even of other value objects. Straightforward examples of value objects are `Email`, and `Address`. The nice thing about value objects is that checking its validity is done at the value object itself, so reusing them does not result in validations being re-implemented everywhere. 
+
+In **easy** we have defined two base classes to implement your value objects. For single valued objects, such as `Email`, we use the base class `Value`. For value objects that have multiple properties, such as `Address` or `Money`, we tend to inherit from the base class `Struct`. Classes that derive from `Value` or `Struct` can be easily validated using the `validate()` function.
+
 ### Value
-Value classes are single property objects that are immutable and gives meaning to that property. Take for instance a string `john.doe@example.com`. this is a valid string and any validation on whether this string is an email has to be done externally. Creating a `Email` Value object:
+Values are single property objects that are immutable and give meaning to that single property. If you would take a string `john.doe@example.com`. This string is a valid string and any validation on whether this string is an email or not needs to be done externally. 
+
+However, if you would create an `Email` value object, the validation can be implemented internally, and the `Email` class can then be reused everywhere emails are needed.
     
     class Email extends Value<string> {
         get isValid(): boolean {
             return validator.isEmail(this.value);
         }
     }
-Using the above in an Entity enables us to make sure that the property is an email
+
+You can now use the above `Email` class as the type of an email property in an entity or struct to make sure that this property is a valid email.
 
 #### DateTime
 DateTime is a value object that takes either a Date object, RFC-3339 formatted string, or a number representing Epoch in milliseconds. The json is always an RFC-3339 formatted string. [momentjs](https://momentjs.com/) is used internally.
