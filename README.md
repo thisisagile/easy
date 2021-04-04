@@ -102,7 +102,7 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
 ### Value objects
-When we are not so much interested in the identiy of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evena in his seminal book *Domain Driven Design*.
+When we are not so much interested in the identiy of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
 
 > An object that represents a descriptive aspect of the domain with no conceptual identity is called a Value Object. Value Objects are instantiated to represent elements of the design that we care about only for what they are, not who or which they are.
 
