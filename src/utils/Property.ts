@@ -4,7 +4,7 @@ import { Get, isA, List, meta, ofGet } from '../types';
 export type PropertyOptions<T = unknown> = { dflt?: Get<T>; convert?: Convert<any, any>; format?: string };
 
 export class Property<T = unknown> {
-  constructor(readonly owner: unknown, readonly name: string, readonly options?: PropertyOptions) {
+  constructor(readonly owner: unknown, readonly name: string, readonly options: PropertyOptions = {}) {
   }
 
   in = (value: any): any => this.options?.convert?.to(value[this.name] ?? ofGet(this.options?.dflt));
