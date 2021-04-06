@@ -1,4 +1,4 @@
-import { json, Json, List, ofGet } from '../types';
+import { json, Json, List } from '../types';
 import { Property, PropertyOptions, toProperties, toProperty } from './Property';
 
 export class Map<P extends Property = Property> {
@@ -28,13 +28,7 @@ export class Map<P extends Property = Property> {
 
   in = (from: Json = {}): Json =>
     json.omit(
-      this.properties.reduce(
-        (a, [k, p]) => ({
-          ...a,
-          [k]: p.options?.convert?.to(a[p.name] ?? ofGet(p.options?.dflt)),
-        }),
-        from
-      ),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(a) }), from),
       ...this.dropped
     );
 

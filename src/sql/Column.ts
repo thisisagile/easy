@@ -4,7 +4,6 @@ import { Text } from '../types';
 import { Table } from './Table';
 
 export class Column extends Property implements Text {
-
   constructor(readonly owner: Table, name: string, options: PropertyOptions = {}) {
     super(owner, name, { dflt: options?.dflt, convert: options?.convert ?? convert.default });
   }
