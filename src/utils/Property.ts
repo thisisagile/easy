@@ -3,7 +3,10 @@ import { Get, isA, Json, List, meta, ofGet } from '../types';
 
 export type PropertyOptions<T = unknown> = { dflt?: Get<T>; convert?: Convert<any, any>; format?: string };
 
-export type Property<T = unknown> = { owner: unknown; name: string; options?: PropertyOptions };
+export class Property<T = unknown> {
+  constructor(readonly owner: unknown, readonly name: string, readonly options?: PropertyOptions) {
+  }
+}
 
 export const isProperty = (p: unknown): p is Property => isA<Property>(p, 'owner', 'name', 'options');
 
