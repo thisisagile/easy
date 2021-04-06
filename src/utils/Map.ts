@@ -2,7 +2,8 @@ import { json, Json, List, ofGet } from '../types';
 import { Property, PropertyOptions, toProperties, toProperty } from './Property';
 
 export class Map<P extends Property = Property> {
-  constructor(private props?: List<[string, P]>) {}
+  constructor(private props?: List<[string, P]>) {
+  }
 
   get properties(): List<[string, P]> {
     return this.props ?? (this.props = toProperties(this));
@@ -28,19 +29,16 @@ export class Map<P extends Property = Property> {
 
   in = (from: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a: any, [k, p]: [string, P]) => this.copyIn(a, k, p), from),
-      ...this.dropped
+      this.properties.reduce((a, [k, p]) => ({
+        ...a,
+        [k]: p.options?.convert?.to(a[p.name] ?? ofGet(p.options?.dflt)),
+      }), from),
+      ...this.dropped,
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a: any, [k, p]: [string, P]) => ({ ...a, [p.name]: p.options?.convert?.from(a[k]) }), to),
-      ...this.keys
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.options?.convert?.from(a[k]) }), to),
+      ...this.keys,
     );
-
-  private copyIn = (subject: Json, key: string, prop: Property): Json => {
-    const target: any = { ...subject };
-    target[key] = prop.options?.convert?.to(subject[prop.name] ?? ofGet(prop.options?.dflt));
-    return target;
-  };
 }
