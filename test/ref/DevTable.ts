@@ -6,8 +6,8 @@ export class DevDatabase extends Database {
 
 export class DevTable extends Table {
   readonly db = DevDatabase.DevDB;
-  readonly id = this.prop('Id', { def: 42 });
+  readonly id = this.prop('Id', { dflt: 42 });
   readonly name = this.prop('Name');
-  readonly language = this.prop('Language', { def: 'TypeScript' });
-  readonly level = this.prop('CodingLevel', { def: 3, convert: convert.toNumber.fromString });
+  readonly language = this.prop('Language', { dflt: 'TypeScript' });
+  readonly level = this.prop('CodingLevel', { dflt: 3, convert: convert.toNumber.fromString });
 }

@@ -5,7 +5,7 @@ import { Table } from './Table';
 
 export class Column implements Text, Property {
   constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {
-    this.options = { def: options?.def, convert: options?.convert ?? convert.default };
+    this.options = { dflt: options?.dflt, convert: options?.convert ?? convert.default };
   }
 
   get count(): Column {

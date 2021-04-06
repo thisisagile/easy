@@ -37,13 +37,13 @@ describe('Table in and out', () => {
   const dev = new DevTable();
 
   test('properties are correct', () => {
-    expect(dev.level.options.def).toBe(3);
+    expect(dev.level.options.dflt).toBe(3);
     expect(dev.level.options.convert).toBeDefined();
-    expect(dev.name.options.def).toBeUndefined();
+    expect(dev.name.options.dflt).toBeUndefined();
     expect(dev.name.options.convert).toBeDefined();
-    expect(dev.language.options.def).toBe('TypeScript');
+    expect(dev.language.options.dflt).toBe('TypeScript');
     expect(dev.language.options.convert).toBeDefined();
-    expect(dev.id.options.def).toBe(42);
+    expect(dev.id.options.dflt).toBe(42);
     expect(dev.id.options.convert).toBeDefined();
   });
 

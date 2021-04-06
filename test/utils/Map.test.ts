@@ -8,7 +8,7 @@ describe('Map', () => {
 
   test('properties are correct', () => {
     expect(dev.id.options?.convert).toBeDefined();
-    expect(dev.id.options?.def).toBe(42);
+    expect(dev.id.options?.dflt).toBe(42);
   });
 
   test('count properties', () => {
@@ -49,7 +49,7 @@ describe('Map', () => {
   });
 
   class DevMapWithFunction extends DevMap {
-    readonly id = this.prop('Id', { def: () => toId() });
+    readonly id = this.prop('Id', { dflt: () => toId() });
   }
 
   test('map.from without id, so it uses default function', () => {

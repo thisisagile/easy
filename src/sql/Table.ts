@@ -13,7 +13,7 @@ export class Table extends Map<Column> {
 
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Column => new Column(this, name, options);
 
-  readonly id = this.prop('id', { def: toUuid });
+  readonly id = this.prop('id', { dflt: toUuid });
 
   select = (...columns: Column[]): Select => new Select(this, toList(columns));
   insert = (fields: Json): Insert => new Insert(this, this.out(fields));
