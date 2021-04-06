@@ -23,15 +23,3 @@ export const clone = (subject: Json, from: string, to: string, dflt?: Get, conve
   if (from !== to) delete target[from];
   return target;
 };
-
-export const cloneIn = (subject: Json, key: string, prop: Property): Json => {
-  const target: any = { ...subject };
-  target[key] = prop.options?.convert?.to(subject[prop.name] ?? ofGet(prop.options?.dflt));
-  return target;
-};
-
-export const cloneOut = (subject: Json, key: string, prop: Property): Json => {
-  const target: any = { ...subject };
-  target[prop.name] = prop.options?.convert?.from(subject[key]);
-  return target;
-};
