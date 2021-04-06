@@ -40,7 +40,7 @@ export class Map<P extends Property = Property> {
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.options?.convert?.from(a[k]) }), to),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(a[k]) }), to),
       ...this.keys
     );
 }
