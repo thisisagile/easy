@@ -3,9 +3,10 @@ import { Clause, toClause } from './Clause';
 import { Text } from '../types';
 import { Table } from './Table';
 
-export class Column implements Text, Property {
-  constructor(readonly owner: Table, readonly name: string, readonly options: PropertyOptions = {}) {
-    this.options = { dflt: options?.dflt, convert: options?.convert ?? convert.default };
+export class Column extends Property implements Text {
+
+  constructor(readonly owner: Table, name: string, options: PropertyOptions = {}) {
+    super(owner, name, { dflt: options?.dflt, convert: options?.convert ?? convert.default });
   }
 
   get count(): Column {
