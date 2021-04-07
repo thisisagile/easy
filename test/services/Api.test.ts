@@ -13,28 +13,28 @@ describe('Api', () => {
 
   test('get works', async () => {
     await api.get(DevUri.Developers);
-    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: DevUri.Developers, verb: HttpVerb.Get }));
+    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Get }));
   });
 
   test('post works', async () => {
     const body = Dev.Sander.toJSON();
     await api.post(DevUri.Developers, body);
-    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: DevUri.Developers, verb: HttpVerb.Post, body }));
+    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Post, body }));
   });
 
   test('patch works', async () => {
     const body = Dev.Wouter.toJSON();
     await api.patch(DevUri.Developer, body);
-    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: DevUri.Developer, verb: HttpVerb.Patch, body }));
+    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Patch, body }));
   });
 
   test('put works', async () => {
     const body = Dev.Jeroen.toJSON();
     await api.put(DevUri.Developer, body);
-    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: DevUri.Developer, verb: HttpVerb.Put, body }));
+    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Put, body }));
   });
   test('delete works', async () => {
     await api.delete(DevUri.Developer);
-    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: DevUri.Developer, verb: HttpVerb.Delete }));
+    expect(provider.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Delete }));
   });
 });
