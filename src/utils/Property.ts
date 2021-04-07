@@ -6,7 +6,7 @@ export type PropertyOptions<T = unknown> = { dflt?: Get<T>; convert?: Convert<an
 export class Property<T = unknown> {
   constructor(readonly owner: unknown, readonly name: string, readonly options: PropertyOptions = {}) {}
 
-  in = (value: any): any => this.options?.convert?.to(value[this.name] ?? ofGet(this.options?.dflt));
+  in = (value: unknown): any => this.options?.convert?.to((value as any)[this.name] ?? ofGet(this.options?.dflt));
 
   out = (value: unknown): any => this.options?.convert?.from(value);
 }
