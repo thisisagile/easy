@@ -7,6 +7,7 @@ import { Insert } from './Insert';
 import { Update } from './Update';
 import { Delete } from './Delete';
 import { Join } from './Join';
+import { Count } from './Count';
 
 export class Table extends Map<Column> {
   readonly db = Database.Main;
@@ -16,6 +17,7 @@ export class Table extends Map<Column> {
   readonly id = this.prop('id', { dflt: toUuid });
 
   select = (...columns: Column[]): Select => new Select(this, toList(columns));
+  get count(): Count { return new Count(this); }
   insert = (fields: Json): Insert => new Insert(this, this.out(fields));
   update = (fields: Json): Update => new Update(this, this.out(fields));
   delete = (): Delete => new Delete(this, toList());
