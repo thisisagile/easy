@@ -67,7 +67,6 @@ export class EasyUri implements Uri {
       .filter(p => p.segment?.segment)
       .reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), asString(p.value)), this.complete);
     const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
-    this.props = toList<Prop>();
     return isNotEmpty(query) ? `${route}?${query}` : route;
   }
 
