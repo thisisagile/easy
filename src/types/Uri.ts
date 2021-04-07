@@ -1,4 +1,4 @@
-import { isNotEmpty } from './Is';
+import { isDefined, isNotEmpty } from './Is';
 import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
@@ -18,7 +18,7 @@ export const uri = {
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
   segment: (key?: string): Segment => toSegment(key, { segment: key }),
   path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
-  query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (value ? `${key}=${value}` : '') }),
+  query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
 };
 
 type Prop = { segment: Segment; value: any };
@@ -65,7 +65,7 @@ export class EasyUri implements Uri {
   toString(): string {
     const route = this.props
       .filter(p => p.segment?.segment)
-      .reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), p.value ?? ''), this.complete);
+      .reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), asString(p.value)), this.complete);
     const query = this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&');
     this.props = toList<Prop>();
     return isNotEmpty(query) ? `${route}?${query}` : route;

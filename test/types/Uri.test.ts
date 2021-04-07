@@ -1,4 +1,4 @@
-import { uri, Uri } from '../../src';
+import { asString, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../init';
@@ -34,8 +34,12 @@ describe('Uri', () => {
   });
 
   test('returns full route plus id', () => {
+    expect(asString(0)).toBe('0');
     expect(DevUri.Developers.id(42)).toMatchRoute(withHost);
     expect(DevUri.Developer.id(42)).toMatchRoute(`${host}/dev/developers/42`);
+    expect(DevUri.Developer.id(0)).toMatchRoute(`${host}/dev/developers/0`);
+    expect(DevUri.Developers.level(3)).toMatchRoute(`${host}/dev/developers?level=3`);
+    expect(DevUri.Developers.level(0)).toMatchRoute(`${host}/dev/developers?level=0`);
   });
 
   test('returns full route plus id and a query', () => {
