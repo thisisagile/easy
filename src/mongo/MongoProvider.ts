@@ -1,6 +1,8 @@
 import { asString, ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
+import { Condition } from './Condition';
+import { Field } from './Field';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -22,7 +24,7 @@ export class MongoProvider {
       );
   }
 
-  find(query: FilterQuery<any>, limit = 250): Promise<List<Json>> {
+  find(query: Condition | FilterQuery<any>, limit = 250): Promise<List<Json>> {
     return this.collection()
       .then(c => c.find(query, { limit }))
       .then(res => res.toArray())
@@ -72,8 +74,13 @@ export class MongoProvider {
     return this.collection().then(c => c.createIndex(field, { unique, w: 1 }));
   }
 
-  count(): Promise<number> {
-    return this.collection().then(c => c.countDocuments());
+  createTextIndexes(...fields: Field[]): Promise<string> {
+    const indexes = fields.reduce((i, f) => ({ ...i, [f.name]: 'text' }), {});
+    return this.collection().then(c => c.createIndex(indexes));
+  }
+
+  count(query?: Condition | FilterQuery<any>): Promise<number> {
+    return this.collection().then(c => c.countDocuments(query));
   }
 
   collection(): Promise<Collection> {
