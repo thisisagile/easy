@@ -6,10 +6,10 @@ import { Table } from './Table';
 
 export class Select extends SqlQuery {
   protected ordered: List<OrderColumn> = toList();
-  protected  grouped: List<Column> = toList();
+  protected grouped: List<Column> = toList();
   protected _top = 0;
-  protected  _limit = 0;
-  protected  _offset = 0;
+  protected _limit = 0;
+  protected _offset = 0;
 
   constructor(table: Table | Join, readonly columns: List<Column> = toList()) {
     super(table);
