@@ -5,11 +5,11 @@ import { SqlQuery } from './SqlQuery';
 import { Table } from './Table';
 
 export class Select extends SqlQuery {
-  private ordered: List<OrderColumn> = toList();
-  private grouped: List<Column> = toList();
-  private _top = 0;
-  private _limit = 0;
-  private _offset = 0;
+  protected ordered: List<OrderColumn> = toList();
+  protected  grouped: List<Column> = toList();
+  protected _top = 0;
+  protected  _limit = 0;
+  protected  _offset = 0;
 
   constructor(table: Table | Join, readonly columns: List<Column> = toList()) {
     super(table);
