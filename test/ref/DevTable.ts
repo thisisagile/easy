@@ -1,7 +1,8 @@
-import { convert, Database, SqlServerProvider, Table } from '../../src';
+import { convert, Database, MongoProvider, SqlServerProvider, Table } from '../../src';
 
 export class DevDatabase extends Database {
-  static readonly DevDB = new Database('DevDB', new SqlServerProvider());
+  static readonly DevDB = new Database('DevDB', () => new SqlServerProvider());
+  static readonly DevMongoDB = new Database('DevDB', () => new MongoProvider('dev'));
 }
 
 export class DevTable extends Table {

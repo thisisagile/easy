@@ -4,7 +4,7 @@ import { MongoProvider } from './MongoProvider';
 import { Collection } from './Collection';
 
 export class MongoGateway<C extends Collection> implements Gateway {
-  constructor(readonly collection: C, readonly provider = new MongoProvider(collection)) {}
+  constructor(readonly collection: C, readonly provider = new MongoProvider(collection.toString())) {}
 
   // constructor(protected readonly collection: string, protected readonly provider: MongoProvider = new MongoProvider(collection)) {}
 

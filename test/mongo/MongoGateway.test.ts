@@ -1,16 +1,15 @@
 import { mock } from '@thisisagile/easy-test';
-import { MongoClient } from 'mongodb';
 import { devData } from '../ref';
 import { Exception, MongoGateway, MongoProvider } from '../../src';
+import { DevCollection } from '../ref/DevCollection';
 
 describe('MongoGateway', () => {
-  let provider: MongoProvider;
-  let gateway: MongoGateway;
+  let provider!: MongoProvider;
+  let gateway!: MongoGateway<DevCollection>;
 
   beforeEach(() => {
-    const client: MongoClient = new MongoClient('uri');
-    provider = new MongoProvider('developers', Promise.resolve(client));
-    gateway = new MongoGateway('developers', provider);
+    provider = mock.empty<MongoProvider>();
+    gateway = new MongoGateway(new DevCollection(), provider);
   });
 
   test('All calls the provider', async () => {

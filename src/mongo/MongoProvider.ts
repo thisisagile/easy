@@ -3,7 +3,6 @@ import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb
 import { when } from '../validation';
 import { Condition } from './Condition';
 import { Field } from './Field';
-import { Collection } from './Collection';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -11,7 +10,7 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly collectionName: Collection, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
+  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
 
   static setup(): Promise<MongoClient> {
     return when(ctx.env.get('mongodbCluster'))
@@ -20,7 +19,10 @@ export class MongoProvider {
         new MongoClient(u, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
-          auth: { user: ctx.env.get('mongodbUser', 'admin') as string, password: ctx.env.get('mongodbPassword', 'admin') as string },
+          auth: {
+            user: ctx.env.get('mongodbUser', 'admin') as string,
+            password: ctx.env.get('mongodbPassword', 'admin') as string,
+          },
         }).connect()
       );
   }

@@ -1,6 +1,5 @@
 import { DevMap } from '../ref';
-import { convert, toList, toProperty } from '../../src';
-import { isDefined } from '@thisisagile/easy-test/dist/utils/Utils';
+import { convert, toProperty } from '../../src';
 
 describe('toProperty', () => {
   const map = new DevMap();
