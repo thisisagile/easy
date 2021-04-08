@@ -1,8 +1,7 @@
 import { Collection, Condition, Field } from '../../src';
 import '@thisisagile/easy-test';
 
-class developers extends Collection {
-}
+class developers extends Collection {}
 
 describe('Condition', () => {
   const field = new Field(new developers(), 'name');

@@ -1,8 +1,9 @@
 import { asString, ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
-import { Collection, FilterQuery, MongoClient } from 'mongodb';
+import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
 import { Field } from './Field';
+import { Collection } from './Collection';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -10,7 +11,7 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
+  constructor(readonly collectionName: Collection, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
 
   static setup(): Promise<MongoClient> {
     return when(ctx.env.get('mongodbCluster'))
@@ -83,7 +84,7 @@ export class MongoProvider {
     return this.collection().then(c => c.countDocuments(query));
   }
 
-  collection(): Promise<Collection> {
-    return this.client.then(c => c.db(ctx.env.domain)).then(db => db.collection(this.collectionName));
+  collection(): Promise<MongoCollection> {
+    return this.client.then(c => c.db(ctx.env.domain)).then(db => db.collection(asString(this.collectionName)));
   }
 }

@@ -1,9 +1,12 @@
 import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
 import { reject } from '../utils';
 import { MongoProvider } from './MongoProvider';
+import { Collection } from './Collection';
 
-export class MongoGateway implements Gateway {
-  constructor(protected readonly collection: string, protected readonly provider: MongoProvider = new MongoProvider(collection)) {}
+export class MongoGateway<C extends Collection> implements Gateway {
+  constructor(readonly collection: C, readonly provider = new MongoProvider(collection)) {}
+
+  // constructor(protected readonly collection: string, protected readonly provider: MongoProvider = new MongoProvider(collection)) {}
 
   all(): Promise<List<Json>> {
     return this.provider.all();

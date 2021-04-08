@@ -1,11 +1,11 @@
 import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
-import { DataProvider } from '../data';
+import { DataProvider, SqlProvider } from '../data';
 import { when } from '../validation';
 import { reject } from '../utils';
 import { Table } from './Table';
 
 export class TableGateway<T extends Table> implements Gateway {
-  constructor(readonly table: T, readonly provider: DataProvider = table.db.provider) {}
+  constructor(readonly table: T, readonly provider: SqlProvider = table.db.provider as SqlProvider) {}
 
   all(): Promise<List<Json>> {
     return this.provider.query(this.table.select()).then(js => js.map(j => this.table.in(j)));
