@@ -1,5 +1,5 @@
-import { Value } from '../../types';
-import Validator from 'validatorjs';
+import { asString, isEmpty, Value } from '../../types';
+import validator from 'validator';
 
 export class Email extends Value {
   get isValid(): boolean {
@@ -8,5 +8,5 @@ export class Email extends Value {
 }
 
 export const isEmail = (email?: unknown): boolean => {
-  return !!new Validator({ email }, { email: 'required|email' }).passes();
+  return !isEmpty(email) && validator.isEmail(asString(email));
 };
