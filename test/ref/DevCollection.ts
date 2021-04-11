@@ -2,7 +2,7 @@ import { Collection, convert } from '../../src';
 import { DevDatabase } from './DevTable';
 
 export class DevCollection extends Collection {
-  readonly db = DevDatabase.DevMongoDB;
+  readonly db = DevDatabase.DevDB;
   readonly id = this.prop('Id', { dflt: 42 });
   readonly name = this.prop('Name');
   readonly language = this.prop('Language', { dflt: 'TypeScript' });
