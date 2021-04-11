@@ -10,7 +10,7 @@ import { Join } from './Join';
 import { Count } from './Count';
 
 export class Table extends Map<Column> {
-  readonly db = Database.Main;
+  readonly db = Database.Default;
 
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Column => new Column(this, name, options);
 
