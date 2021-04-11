@@ -1,4 +1,4 @@
-import { DateTime } from '../../src';
+import { DateTime } from '../../../src';
 
 describe('DateTime', () => {
   const testDate = {
