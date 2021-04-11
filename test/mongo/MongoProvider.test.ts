@@ -1,7 +1,7 @@
 import { MongoProvider } from '../../src';
 import { Collection, Cursor, MongoClient } from 'mongodb';
 import { mock } from '@thisisagile/easy-test';
-import { Dev, devData } from '../ref';
+import { Dev, devData, DevDatabase } from '../ref';
 
 describe('MongoProvider', () => {
   const client: MongoClient = new MongoClient('uri');
@@ -10,13 +10,7 @@ describe('MongoProvider', () => {
   const cursor = {} as Cursor;
 
   beforeEach(() => {
-    provider = new MongoProvider('developers', Promise.resolve(client));
-  });
-
-  test('default construction works', () => {
-    const spy = jest.spyOn(MongoProvider, 'setup').mockImplementation(mock.resolve());
-    new MongoProvider('devs');
-    expect(spy).toHaveBeenCalled();
+    provider = new MongoProvider(DevDatabase.DevDB, Promise.resolve(client));
   });
 
   test('all calls find', async () => {

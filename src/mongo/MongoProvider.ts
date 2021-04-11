@@ -1,8 +1,9 @@
-import { asString, ctx, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { asString, ctx, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
 import { Field } from './Field';
+import { Database } from '../data';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -10,19 +11,18 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly collectionName: string, private readonly client: Promise<MongoClient> = MongoProvider.setup()) {}
+  constructor(readonly db: Database, private client?: Promise<MongoClient>) {}
 
-  static setup(): Promise<MongoClient> {
+  connect(db: Database): Promise<MongoClient> {
     return when(ctx.env.get('mongodbCluster'))
-      .not.isDefined.reject('Environment variable MONGODB_CLUSTER not set!')
+      .not.isDefined.reject(Exception.EnvironmentVariableNotFound('MONGODB_CLUSTER'))
       .then(u =>
         new MongoClient(u, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
-          auth: {
-            user: ctx.env.get('mongodbUser', 'admin') as string,
-            password: ctx.env.get('mongodbPassword', 'admin') as string,
-          },
+          auth: { user: asString(db.options?.user), password: asString(db.options?.password) },
+          // user: ctx.env.get('mongodbUser', 'admin') as string,
+          // password: ctx.env.get('mongodbPassword', 'admin') as string,
         }).connect()
       );
   }
@@ -87,6 +87,6 @@ export class MongoProvider {
   }
 
   collection(): Promise<MongoCollection> {
-    return this.client.then(c => c.db(ctx.env.domain)).then(db => db.collection(asString(this.collectionName)));
+    return (this.client ?? (this.client = this.connect(this.db))).then(c => c.db(ctx.env.domain)).then(db => db.collection(asString(this.db)));
   }
 }
