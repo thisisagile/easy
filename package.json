@@ -50,6 +50,7 @@
     "@types/express": "^4.17.11",
     "@types/mongodb": "^3.6.12",
     "@types/mssql": "^6.0.7",
+    "@types/validatorjs": "^3.15.0",
     "axios": "^0.21.1",
     "cls-hooked": "^4.2.2",
     "express": "^4.17.1",
@@ -61,7 +62,8 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "validatorjs": "^3.22.1"
   },
   "engines": {
     "node": ">=v14.16.0",
