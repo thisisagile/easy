@@ -3,8 +3,8 @@ import { reject } from '../utils';
 import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
 
-export class MongoGateway<C extends Collection> implements Gateway {
-  constructor(readonly collection: C, readonly provider = collection.db.provide<MongoProvider>()) {}
+export class MongoGateway implements Gateway {
+  constructor(readonly collection: Collection, readonly provider = collection.db.provide<MongoProvider>()) {}
 
   all(): Promise<List<Json>> {
     return this.provider.all();
