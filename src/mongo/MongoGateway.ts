@@ -4,7 +4,7 @@ import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
 
 export class MongoGateway implements Gateway {
-  constructor(readonly collection: Collection, readonly provider = collection.db.provide<MongoProvider>()) {}
+  constructor(readonly collection: Collection, readonly provider: MongoProvider = new collection.db.provider(collection)) {}
 
   all(): Promise<List<Json>> {
     return this.provider.all();

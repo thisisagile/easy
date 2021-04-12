@@ -1,7 +1,8 @@
 import { MongoProvider } from '../../src';
 import { Collection, Cursor, MongoClient } from 'mongodb';
 import { mock } from '@thisisagile/easy-test';
-import { Dev, devData, DevDatabase } from '../ref';
+import { Dev, devData } from '../ref';
+import { DevCollection } from '../ref/DevCollection';
 
 describe('MongoProvider', () => {
   const client: MongoClient = new MongoClient('uri');
@@ -10,7 +11,7 @@ describe('MongoProvider', () => {
   const cursor = {} as Cursor;
 
   beforeEach(() => {
-    provider = new MongoProvider(DevDatabase.DevDB, Promise.resolve(client));
+    provider = new MongoProvider(new DevCollection(), Promise.resolve(client));
   });
 
   test('all calls find', async () => {

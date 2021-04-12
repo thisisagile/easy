@@ -1,9 +1,10 @@
-import { asString, ctx, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { asString, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
 import { Field } from './Field';
 import { Database } from '../data';
+import { Collection } from './Collection';
 
 const clearMongoId = (i: Json): Json => {
   if (isDefined(i)) delete i._id;
@@ -11,19 +12,18 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly db: Database, private client?: Promise<MongoClient>) {}
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
+  }
 
-  connect(db: Database): Promise<MongoClient> {
-    return when(ctx.env.get('mongodbCluster'))
-      .not.isDefined.reject(Exception.EnvironmentVariableNotFound('MONGODB_CLUSTER'))
+  cluster(db: Database): Promise<MongoClient> {
+    return when(db.options?.cluster)
+      .not.isDefined.reject(new Exception('Missing cluster in database options.'))
       .then(u =>
         new MongoClient(u, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
           auth: { user: asString(db.options?.user), password: asString(db.options?.password) },
-          // user: ctx.env.get('mongodbUser', 'admin') as string,
-          // password: ctx.env.get('mongodbPassword', 'admin') as string,
-        }).connect()
+        }).connect(),
       );
   }
 
@@ -87,6 +87,6 @@ export class MongoProvider {
   }
 
   collection(): Promise<MongoCollection> {
-    return (this.client ?? (this.client = this.connect(this.db))).then(c => c.db(ctx.env.domain)).then(db => db.collection(asString(this.db)));
+    return (this.client ?? (this.client = this.cluster(this.coll.db))).then(c => c.db(this.coll.db.name)).then(db => db.collection(asString(this.coll)));
   }
 }
