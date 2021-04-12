@@ -2,7 +2,6 @@ import { EAN, isEAN } from '../../../src';
 import '@thisisagile/easy-test';
 
 describe('isEAN', () => {
-
   test('invalid', () => {
     expect(isEAN()).toBeFalsy();
     expect(isEAN('')).toBeFalsy();
@@ -17,7 +16,6 @@ describe('isEAN', () => {
 });
 
 describe('EAN', () => {
-
   test('EAN13 valid length, valid checksum', () => {
     expect(new EAN('9780201379624')).toBeValid();
     expect(new EAN('7072506210040')).toBeValid();
