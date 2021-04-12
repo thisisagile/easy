@@ -5,7 +5,7 @@ import { DevCollection } from '../ref/DevCollection';
 
 describe('MongoGateway', () => {
   let provider!: MongoProvider;
-  let gateway!: MongoGateway<DevCollection>;
+  let gateway!: MongoGateway;
 
   beforeEach(() => {
     provider = mock.empty<MongoProvider>();
