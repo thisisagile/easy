@@ -1,4 +1,4 @@
-import { asString, Exception, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { asString, Exception, Id, json, Json, JsonValue, List, toList } from '../types';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
@@ -6,10 +6,7 @@ import { Field } from './Field';
 import { Database } from '../data';
 import { Collection } from './Collection';
 
-const clearMongoId = (i: Json): Json => {
-  if (isDefined(i)) delete i._id;
-  return i;
-};
+const omitId = (j: Json): Json => json.omit(j, '_id');
 
 export class MongoProvider {
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
@@ -30,7 +27,7 @@ export class MongoProvider {
     return this.collection()
       .then(c => c.find(query, { limit }))
       .then(res => res.toArray())
-      .then(res => res.map(i => clearMongoId(i)))
+      .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
   }
 
@@ -40,8 +37,8 @@ export class MongoProvider {
 
   byId(id: Id): Promise<Json> {
     return this.collection()
-      .then(c => c.findOne({ id: id.toString() }))
-      .then(i => clearMongoId(i));
+      .then(c => c.findOne({ id: asString(id.toString) }))
+      .then(i => omitId(i));
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
@@ -56,13 +53,13 @@ export class MongoProvider {
 
   add(o: Json): Promise<Json> {
     return this.collection()
-      .then(c => c.insertOne(clearMongoId(o)))
-      .then(i => clearMongoId(i.ops[0]));
+      .then(c => c.insertOne(omitId(o)))
+      .then(i => omitId(i.ops[0]));
   }
 
   update(item: Json): Promise<Json> {
     return this.collection()
-      .then(c => c.updateOne({ id: item.id }, { $set: clearMongoId(item) }))
+      .then(c => c.updateOne({ id: item.id }, { $set: omitId(item) }))
       .then(() => this.byId(item.id as Id));
   }
 
