@@ -1,7 +1,7 @@
-import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
-import { reject } from '../utils';
+import { asJson, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
 import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
+import { Condition } from './Condition';
 
 export class MongoGateway implements Gateway {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = new collection.db.provider(collection)) {}
@@ -18,8 +18,12 @@ export class MongoGateway implements Gateway {
     return this.provider.by(key, value);
   }
 
-  search(_q: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented);
+  find(q: JsonValue | Condition): Promise<List<Json>> {
+    return this.provider.find(asJson(q));
+  }
+
+  search(q: JsonValue): Promise<List<Json>> {
+    return this.find(this.collection.google(q));
   }
 
   exists(id: Id): Promise<boolean> {
