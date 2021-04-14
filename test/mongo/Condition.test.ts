@@ -47,10 +47,6 @@ describe('Condition', () => {
     expect(field.lessEqual(12).toJSON()).toMatchObject({ name: { $lte: 12 } });
   });
 
-  test('google', () => {
-    expect(field.google('Sander').toJSON()).toMatchObject({ $text: { $search: 'Sander' } });
-  });
-
   test('and', () => {
     expect(field.is('Sander').and(field.isNot('Jeroen'), field.isNot('Wouter')).toJSON()).toMatchObject({
       $and: [{ name: { $eq: 'Sander' } }, { name: { $ne: 'Jeroen' } }, { name: { $ne: 'Wouter' } }],

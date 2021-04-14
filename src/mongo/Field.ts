@@ -26,7 +26,5 @@ export class Field extends Property {
 
   lessEqual = (value: unknown): Condition => this.condition('lte', value);
 
-  google = (value: unknown): Condition => toCondition('$text', 'search', value);
-
   protected condition = (operator: string, value: unknown): Condition => toCondition(this.name, operator, value, this?.options?.convert);
 }

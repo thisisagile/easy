@@ -12,4 +12,8 @@ describe('Collection', () => {
     const where = { $and: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
     expect(devs.where(devs.name.isNot('Jeroen'), devs.level.is(3))).toStrictEqual(where);
   });
+
+  test('google', () => {
+    expect(devs.google('Sander').toJSON()).toMatchObject({ $text: { $search: 'Sander' } });
+  });
 });
