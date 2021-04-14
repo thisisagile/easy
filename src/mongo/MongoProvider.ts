@@ -73,6 +73,10 @@ export class MongoProvider {
       .then(d => d.result.ok === 1);
   }
 
+  count(query?: Condition | FilterQuery<any>): Promise<number> {
+    return this.collection().then(c => c.countDocuments(query));
+  }
+
   createIndex(field: string | any, unique = true): Promise<string> {
     return this.collection().then(c => c.createIndex(field, { unique, w: 1 }));
   }
@@ -80,10 +84,6 @@ export class MongoProvider {
   createTextIndexes(...fields: Field[]): Promise<string> {
     const indexes = fields.reduce((i, f) => ({ ...i, [f.name]: 'text' }), {});
     return this.collection().then(c => c.createIndex(indexes));
-  }
-
-  count(query?: Condition | FilterQuery<any>): Promise<number> {
-    return this.collection().then(c => c.countDocuments(query));
   }
 
   collection(): Promise<MongoCollection> {

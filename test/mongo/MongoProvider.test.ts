@@ -1,17 +1,18 @@
 import { MongoProvider } from '../../src';
-import { Collection, Cursor, MongoClient } from 'mongodb';
+import { Collection, Cursor, Db, MongoClient } from 'mongodb';
 import { mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '../ref';
 import { DevCollection } from '../ref/DevCollection';
 
 describe('MongoProvider', () => {
-  const client: MongoClient = new MongoClient('uri');
-  let provider: MongoProvider;
+  const client: MongoClient = mock.empty<MongoClient>();
   const c = {} as Collection;
   const cursor = {} as Cursor;
+  let provider: MongoProvider;
+  const collection = new DevCollection();
 
   beforeEach(() => {
-    provider = new MongoProvider(new DevCollection(), Promise.resolve(client));
+    provider = new MongoProvider(collection, Promise.resolve(client));
   });
 
   test('all calls find', async () => {
@@ -77,6 +78,13 @@ describe('MongoProvider', () => {
     expect(c.deleteOne).toHaveBeenCalledWith({ id: '42' });
   });
 
+  test('count calls countDocuments on the collection', async () => {
+    c.countDocuments = mock.resolve(42);
+    provider.collection = mock.resolve(c);
+    await expect(provider.count()).resolves.toBe(42);
+    expect(c.countDocuments).toHaveBeenCalled();
+  });
+
   test('createIndex calls createIndex on the collection and creates unique indexes by default', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
@@ -91,10 +99,19 @@ describe('MongoProvider', () => {
     expect(c.createIndex).toHaveBeenCalledWith('name', { unique: false, w: 1 });
   });
 
-  test('count calls countDocuments on the collection', async () => {
-    c.countDocuments = mock.resolve(42);
+  test('create text indexes on the collection', async () => {
+    c.createIndex = mock.resolve('Language_text_Name_text');
     provider.collection = mock.resolve(c);
-    await expect(provider.count()).resolves.toBe(42);
-    expect(c.countDocuments).toHaveBeenCalled();
+    await expect(provider.createTextIndexes(collection.language, collection.name)).resolves.toBe('Language_text_Name_text');
+    expect(c.createIndex).toHaveBeenCalledWith({Language: "text", Name: "text"});
+  });
+
+  test('first time connect to the mongo cluster', async () => {
+    const db = mock.empty<Db>();
+    db.collection = mock.resolve({collectionName: 'devCollection'});
+    client.db = mock.resolve(db)
+    MongoProvider.cluster = mock.resolve(client);
+    const coll = await provider.collection();
+    expect(coll.collectionName).toBe('devCollection');
   });
 });
