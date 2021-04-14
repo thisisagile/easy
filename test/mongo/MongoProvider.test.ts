@@ -103,13 +103,13 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('Language_text_Name_text');
     provider.collection = mock.resolve(c);
     await expect(provider.createTextIndexes(collection.language, collection.name)).resolves.toBe('Language_text_Name_text');
-    expect(c.createIndex).toHaveBeenCalledWith({Language: "text", Name: "text"});
+    expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' });
   });
 
   test('first time connect to the mongo cluster', async () => {
     const db = mock.empty<Db>();
-    db.collection = mock.resolve({collectionName: 'devCollection'});
-    client.db = mock.resolve(db)
+    db.collection = mock.resolve({ collectionName: 'devCollection' });
+    client.db = mock.resolve(db);
     MongoProvider.cluster = mock.resolve(client);
     const coll = await provider.collection();
     expect(coll.collectionName).toBe('devCollection');

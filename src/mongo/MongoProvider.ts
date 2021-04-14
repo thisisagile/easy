@@ -12,8 +12,7 @@ const clearMongoId = (i: Json): Json => {
 };
 
 export class MongoProvider {
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
-  }
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
 
   static cluster(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
@@ -23,7 +22,7 @@ export class MongoProvider {
           useNewUrlParser: true,
           useUnifiedTopology: true,
           auth: { user: asString(db.options?.user), password: asString(db.options?.password) },
-        }).connect(),
+        }).connect()
       );
   }
 
@@ -87,6 +86,8 @@ export class MongoProvider {
   }
 
   collection(): Promise<MongoCollection> {
-    return (this.client ?? (this.client = MongoProvider.cluster(this.coll.db))).then(c => c.db(this.coll.db.name)).then(db => db.collection(asString(this.coll)));
+    return (this.client ?? (this.client = MongoProvider.cluster(this.coll.db)))
+      .then(c => c.db(this.coll.db.name))
+      .then(db => db.collection(asString(this.coll)));
   }
 }

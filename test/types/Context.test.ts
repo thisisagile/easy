@@ -17,7 +17,7 @@ describe('Environment Context', () => {
   });
 
   test('environment name from environment context', () => {
-    process.env.ENVIRONMENT_NAME = 'prd'
+    process.env.ENVIRONMENT_NAME = 'prd';
     const c = new Context();
     expect(c.env.name).toBe('prd');
   });
