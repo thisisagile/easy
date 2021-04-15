@@ -20,7 +20,7 @@ export abstract class Enum implements Validatable {
       .filter((e: unknown) => isEnum(e));
   }
 
-  static byId<E extends Enum>(id: Id, alt?: Get<E>): E {
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
     return (
       meta(this)
         .values()
