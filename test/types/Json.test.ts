@@ -73,12 +73,24 @@ describe('toJson', () => {
 });
 
 describe('json', () => {
-  test('omit', () => {
-    const dev = Dev.Naoufal.toJSON();
+  const dev = Dev.Naoufal.toJSON();
+
+  test('omit undefined should return what?', () => {
+    const empty = json.omit(undefined, 'language');
+    expect(empty).toStrictEqual({});
+  });
+
+  test('omit one property', () => {
     const dev2 = json.omit(dev, 'language');
     expect(dev2).toStrictEqual({ id: 2, name: 'Naoufal', level: 3 });
+  });
+
+  test('omit state', () => {
     const dev3 = json.omit(dev, 'state');
     expect(dev3).toStrictEqual({ id: 2, name: 'Naoufal', level: 3, language: 'TypeScript' });
+  });
+
+  test('omit multiple properties', () => {
     const dev4 = json.omit(dev, 'language', 'id', 'state');
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });

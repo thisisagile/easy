@@ -1,4 +1,4 @@
-import { asString, Exception, Id, json, Json, JsonValue, List, toList } from '../types';
+import { asString, Exception, Id, isDefined, json, Json, JsonValue, List, toList } from '../types';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
@@ -6,7 +6,7 @@ import { Field } from './Field';
 import { Database } from '../data';
 import { Collection } from './Collection';
 
-const omitId = (j: Json): Json => json.omit(j, '_id');
+const omitId = (j: Json): Json => (isDefined(j) ? json.omit(j, '_id') : j);
 
 export class MongoProvider {
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
