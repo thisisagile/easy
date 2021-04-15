@@ -37,7 +37,7 @@ export class MongoProvider {
 
   byId(id: Id): Promise<Json> {
     return this.collection()
-      .then(c => c.findOne({ id: asString(id.toString) }))
+      .then(c => c.findOne({ id: asString(id) }))
       .then(i => omitId(i));
   }
 
@@ -65,7 +65,7 @@ export class MongoProvider {
 
   remove(id: Id): Promise<boolean> {
     return this.collection()
-      .then(c => c.deleteOne({ id: id.toString() }))
+      .then(c => c.deleteOne({ id: asString(id) }))
       .then(d => d.result.ok === 1);
   }
 

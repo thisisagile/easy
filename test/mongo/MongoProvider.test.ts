@@ -21,9 +21,11 @@ describe('MongoProvider', () => {
     expect(provider.find).toHaveBeenCalledWith({}, 250);
   });
 
-  test('byId calls findOne on the collection', () => {
-    provider.collection = mock.resolve({ findOne: mock.resolve(devData.jeroen) });
-    return expect(provider.byId(42)).resolves.toStrictEqual(devData.jeroen);
+  test('byId calls findOne on the collection', async () => {
+    const findOne = mock.resolve(devData.jeroen);
+    provider.collection = mock.resolve({ findOne  });
+    await expect(provider.byId('42')).resolves.toStrictEqual(devData.jeroen);
+    return expect(findOne).toHaveBeenCalledWith({id: '42'});
   });
 
   test('mongoIds are removed from the found items', () => {
