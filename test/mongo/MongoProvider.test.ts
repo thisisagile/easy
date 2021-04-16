@@ -18,7 +18,14 @@ describe('MongoProvider', () => {
   test('all calls find', async () => {
     provider.find = mock.resolve(devData);
     await expect(provider.all()).resolves.toBe(devData);
-    expect(provider.find).toHaveBeenCalledWith({}, 250);
+    expect(provider.find).toHaveBeenCalledWith({}, undefined);
+  });
+
+  test('all calls find with options', async () => {
+    provider.find = mock.resolve(devData);
+    const options = { limit: 300, skip: 4 };
+    await expect(provider.all(options)).resolves.toBe(devData);
+    expect(provider.find).toHaveBeenCalledWith({}, options);
   });
 
   test('byId calls findOne on the collection', async () => {
@@ -40,6 +47,22 @@ describe('MongoProvider', () => {
     provider.collection = mock.resolve(c);
     const res = await provider.find([{ id: '42' }]);
     expect(res.last()).toMatchObject(devData.wouter);
+  });
+
+  test('find with undefined calls find on the collection with default options', async () => {
+    cursor.toArray = mock.resolve([]);
+    c.find = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    await provider.find({});
+    expect(c.find).toHaveBeenCalledWith({}, { limit: 250 });
+  });
+
+  test('find with with only skip keeps limit', async () => {
+    cursor.toArray = mock.resolve([]);
+    c.find = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    await provider.find({}, { skip: 3 });
+    expect(c.find).toHaveBeenCalledWith({}, { skip: 3, limit: 250 });
   });
 
   test('group calls aggregate on the collection', () => {

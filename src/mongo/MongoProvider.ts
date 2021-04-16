@@ -8,6 +8,11 @@ import { Collection } from './Collection';
 
 const omitId = (j: Json): Json => (isDefined(j) ? json.omit(j, '_id') : j);
 
+export type FindOptions = {
+  limit?: number;
+  skip?: number;
+};
+
 export class MongoProvider {
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
 
@@ -23,16 +28,16 @@ export class MongoProvider {
       );
   }
 
-  find(query: Condition | FilterQuery<any>, limit = 250): Promise<List<Json>> {
+  find(query: Condition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
-      .then(c => c.find(query, { limit }))
+      .then(c => c.find(query, { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
   }
 
-  all(limit = 250): Promise<List<Json>> {
-    return this.find({}, limit);
+  all(options?: FindOptions): Promise<List<Json>> {
+    return this.find({}, options);
   }
 
   byId(id: Id): Promise<Json> {
@@ -41,8 +46,8 @@ export class MongoProvider {
       .then(i => omitId(i));
   }
 
-  by(key: string, value: JsonValue): Promise<List<Json>> {
-    return this.find({ [key]: asString(value) });
+  by(key: string, value: JsonValue, options?: FindOptions): Promise<List<Json>> {
+    return this.find({ [key]: asString(value) }, options);
   }
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {
