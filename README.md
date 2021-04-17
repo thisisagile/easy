@@ -207,7 +207,7 @@ Microservices can use data from a variety of sources, transform and process that
 
 The data layer in an **easy** microservice provide the service with gateways to all these possible sources. It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. Depending on the type of the source, **easy** provides a number of gateways, which all implement the `Gateway` interface:
 
-- `StaticGateway` (formerly `CollectionGateway`). Used to provide data which is statically stored inside the services, e.g. in a JSON array.
+- `InMemoryGateway` (formerly `CollectionGateway`). Used to provide data which is statically stored inside the services, e.g. in a JSON array.
 - `RouteGateway`. Allows services to talk to other API's, given a set of URI's.
 - `MappedRouteGateway`. Allows services to talk to other API's, using a predefined URI. This gateway is often used for talking to other **easy** services, which provide a similar experience and API. 
 
