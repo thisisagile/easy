@@ -1,13 +1,13 @@
-import { CollectionGateway, Exception, Json, resolve, toJson, toList } from '../../src';
+import { InMemoryGateway, Exception, Json, resolve, toJson, toList } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('CollectionGateway', () => {
   const dev = Dev.All.first();
-  let gateway: CollectionGateway;
+  let gateway: InMemoryGateway;
 
   beforeEach(() => {
-    gateway = new CollectionGateway(resolve(toList<Json>(Dev.All.toJSON())));
+    gateway = new InMemoryGateway(resolve(toList<Json>(Dev.All.toJSON())));
   });
 
   test('byId with known id returns product', () => {
