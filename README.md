@@ -205,11 +205,26 @@ Microservices can use data from a variety of sources, transform and process that
 - identity access platforms, often in the cloud.
 - and data could even be fixed in the service itself, as a static collection for instance.
 
+### Gateways
 The data layer in an **easy** microservice provide the service with gateways to all these possible sources. It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. Depending on the type of the source, **easy** provides a number of gateways, which all implement the `Gateway` interface:
 
 - `InMemoryGateway` (formerly `CollectionGateway`). Used to provide data which is statically stored inside the services, e.g. in a JSON array.
 - `RouteGateway`. Allows services to talk to other API's, using a predefined URI. This gateway is often used for talking to other **easy** services, which provide a similar experience and API.
 - `MappedRouteGateway`. Allows services to talk to other API's, similar to the `RouteGateway`, but with the ability to map the incoming data (in JSON format) to an internally preferred format. This mapping is based on an instance of the `Map` class.
+- `TableGateway`. Allows to get data (in JSON format) from a relational database. It uses a `QueryProvider` to connect to a specific relational database. We're currently adding providers for SQL Server, MySQL, and PostgreSQL. It uses a `Table` to map the incoming data to the format internal to the service.
+- `CollectionGateway` (formerly `MongoGateway`). Allows to get data (in JSON format) from a document database, for now MongoDB. It uses the `MongoProvider` to connect to the database. It uses a `Collection` to map the incoming data to the format internal to the service.
+ 
+### `'Map`, `Table` and `Collection`
+Because data in exsiting databases rarely supplies the format you need in your service, you can define a `Map` (for other services), a `Table` (for relational databases), or a `Collection` (for MongoDB) to contain all mappings that transform the incoming data to the service internal format, as below.
+
+  export class ErpProductView extends Table {
+    readonly db = MoverDatabase.Erp;
+    readonly id = this.prop('id', { convert: toId.fromLegacyId });
+    readonly brandId = this.prop('brandId', { convert: toId.fromLegacyId });
+    toString(): string {
+      return 'mover_product_view';
+    }
+  }
 
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
