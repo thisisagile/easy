@@ -25,7 +25,8 @@ class ClassMeta {
       .map(p => p.get<T>(key))
       .reduce((list, u) => (u ? list.add(u) : list), toList<T>());
 
-  values = () => this.properties().map(p => p.value);
+  values = <T = unknown>(): List<T> =>
+    toList([...Object.values<T>(this.subject), ...Object.values<T>(Object.getPrototypeOf(this.subject))]);
 
   property = (property: string | symbol): PropertyMeta => new PropertyMeta(this.subject, property);
 }
