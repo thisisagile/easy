@@ -74,16 +74,16 @@ An example of an entity is the `Movie` class below. Here the content of the obje
         update = (add?: Json): Movie => new Movie(this.toJSON(add));
     }
 
-Some of the properties of `Movie` have decorators, such as `@required`. These decorators can be used to validate the object, using the separate `validate()` function. 
+Some properties of `Movie` have decorators, such as `@required`. These decorators can be used to validate the object, using the separate `validate()` function. 
 
 ### Enumerables
-Most modern programming languages support the use of enumerables. The goal of an enumerable is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
+Most modern programming languages support the use of enumerables. The goal of enumerables is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
 
-First of all, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
+First, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
 
 Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
 
-And thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
+Thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
 
 Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
 
@@ -102,7 +102,7 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
 ### Value objects
-When we are not so much interested in the identiy of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
+When we are not so much interested in the identity of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
 
 > An object that represents a descriptive aspect of the domain with no conceptual identity is called a Value Object. Value Objects are instantiated to represent elements of the design that we care about only for what they are, not who or which they are.
 
@@ -111,7 +111,7 @@ The nice thing about value objects is that you can define them once, and then us
 In **easy** we have defined two base classes to implement your value objects. For single valued objects, such as `Email`, we use the base class `Value`. For value objects that have multiple properties, such as `Address` or `Money`, we tend to inherit from the base class `Struct`. Classes that derive from `Value` or `Struct` can be easily validated using the `validate()` function.
 
 ### Value
-Values are single property objects that are immutable and give meaning to that single property. If you would take a string `john.doe@example.com`. This string is a valid string and any validation on whether this string is an email or not needs to be done externally. 
+Values are single property objects that are immutable and give meaning to that single property. If you take a string `john.doe@example.com`. This string is a valid string and any validation on whether this string is an email or not needs to be done externally. 
 
 However, if you would create an `Email` value object, the validation can be implemented internally, and the `Email` class can then be reused everywhere emails are needed.
     
@@ -121,7 +121,7 @@ However, if you would create an `Email` value object, the validation can be impl
         }
     }
 
-You can now use the above `Email` class as the type of an email property in an entity or struct to make sure that this property is a valid email.
+You can now use the above `Email` class as the type of email properties in an entity or struct to make sure that this property is a valid email.
 
 #### DateTime
 DateTime is a value object that takes either a Date object, RFC-3339 formatted string, or a number representing Epoch in milliseconds. The json is always an RFC-3339 formatted string. [momentjs](https://momentjs.com/) is used internally.
@@ -194,28 +194,28 @@ P.S. If you create custom constraints that might be helpful for other developers
 ## Data
 Microservices can use data from a variety of sources, transform and process that data, and expose that to their users through their own API. In the different microservices architecture implementations we've seen data for instance come from:
 
-- a variety of relational databases, such as SQL Server, MySQL, or Postres.
+- a variety of relational databases, such as SQL Server, MySQL, or PostreSQL.
 - a variety of non-relational databases, quite often MongoDB.
 - file systems.
 - systems the organization owns. such as HR, marketing, ERP or CMS.
 - other microservices, internal to the own organization.
 - other microservices, implemented with **easy** too.
 - other services, external to the own organization.
-- systems running in the cloud, such as SalesForce, OFfice365.
+- systems running in the cloud, such as SalesForce, Office365.
 - identity access platforms, often in the cloud.
-- and data could even be fixed in the service itself, as a static collection for instance.
+- last but not least, data could even be fixed in the service itself, as a JSON array for instance.
 
 ### Gateways
 The data layer in an **easy** microservice provide the service with gateways to all these possible sources. It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. Depending on the type of the source, **easy** provides a number of gateways, which all implement the `Gateway` interface:
 
 - `InMemoryGateway` (formerly `CollectionGateway`). Used to provide data which is statically stored inside the services, e.g. in a JSON array.
-- `RouteGateway`. Allows services to talk to other API's, using a predefined URI. This gateway is often used for talking to other **easy** services, which provide a similar experience and API.
-- `MappedRouteGateway`. Allows services to talk to other API's, similar to the `RouteGateway`, but with the ability to map the incoming data (in JSON format) to an internally preferred format. This mapping is based on an instance of the `Map` class.
-- `TableGateway`. Allows to get data (in JSON format) from a relational database. It uses a `QueryProvider` to connect to a specific relational database. We're currently adding providers for SQL Server, MySQL, and PostgreSQL. It uses a `Table` to map the incoming data to the format internal to the service.
-- `CollectionGateway` (formerly `MongoGateway`). Allows to get data (in JSON format) from a document database, for now MongoDB. It uses the `MongoProvider` to connect to the database. It uses a `Collection` to map the incoming data to the format internal to the service.
+- `RouteGateway`. This allows services to talk to other API's, using a predefined URI. This gateway is often used for talking to other **easy** services, which provide a similar experience and API.
+- `MappedRouteGateway`. It allows services to talk to other API's, similar to the `RouteGateway`, but with the ability to map the incoming data (in JSON format) to an internally preferred format. This mapping is based on an instance of the `Map` class.
+- `TableGateway`. This allows to get data (in JSON format) from a relational database. It uses a `QueryProvider` to connect to a specific relational database. We're currently adding providers for SQL Server, MySQL, and PostgreSQL. It uses a `Table` to map the incoming data to the format internal to the service.
+- `CollectionGateway` (formerly `MongoGateway`). It allows to get data (in JSON format) from a document database, for now MongoDB. It uses the `MongoProvider` to connect to the database. It uses a `Collection` to map the incoming data to the format internal to the service.
  
-### `'Map`, `Table` and `Collection`
-Because data in exsiting databases rarely supplies the format you need in your service, you can define a `Map` (for other services), a `Table` (for relational databases), or a `Collection` (for MongoDB) to contain all mappings that transform the incoming data to the service internal format, as below.
+### The `Map`, `Table`, and `Collection` mappings 
+Because data in existing databases rarely supplies the format you need in your service, you can define a `Map` (for other services), a `Table` (for relational databases), or a `Collection` (for MongoDB) to contain all mappings that transform the incoming data to the service internal format, as below.
 
     export class ErpProductView extends Table {
         readonly db = MyDatabase.Erp;
