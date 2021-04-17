@@ -16,14 +16,14 @@ export abstract class Enum implements Validatable {
 
   static all<E extends Enum>(): List<E> {
     return meta(this)
-      .values()
+      .values<E>()
       .filter((e: unknown) => isEnum(e));
   }
 
   static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
     return (
       meta(this)
-        .values()
+        .values<E>()
         .first((e: unknown) => isEnum(e) && e.id === id) ?? ofGet(alt)
     );
   }
