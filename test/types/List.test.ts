@@ -17,7 +17,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -91,7 +91,7 @@ describe('isList', () => {
     expect(isList({})).toBeFalsy();
     expect(isList([])).toBeFalsy();
     expect(
-      isList<Dev>([Dev.Sander, Dev.Jeroen]),
+      isList<Dev>([Dev.Sander, Dev.Jeroen])
     ).toBeFalsy();
   });
 
@@ -182,7 +182,6 @@ describe('asList', () => {
 });
 
 describe('toObject', () => {
-
   test('from undefined works', () => {
     const res = toObject('id');
     expect(res).toStrictEqual({});

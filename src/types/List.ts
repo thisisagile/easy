@@ -48,7 +48,8 @@ export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(
 
 export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
 
-export const toObject = <T>(key: keyof T, ...items: (T | T[])[]): Json => toList(...items).reduce((o: any, i) => {
-  o[i[key]] = i;
-  return o;
-}, {});
+export const toObject = <T>(key: keyof T, ...items: (T | T[])[]): Json =>
+  toList(...items).reduce((o: any, i) => {
+    o[i[key]] = i;
+    return o;
+  }, {});
