@@ -217,6 +217,15 @@ The data layer in an **easy** microservice provide the service with gateways to 
 ### `'Map`, `Table` and `Collection`
 Because data in exsiting databases rarely supplies the format you need in your service, you can define a `Map` (for other services), a `Table` (for relational databases), or a `Collection` (for MongoDB) to contain all mappings that transform the incoming data to the service internal format, as below.
 
+    export class ErpProductView extends Table {
+        readonly db = MoverDatabase.Erp;
+        readonly id = this.prop('id', { convert: toId.fromLegacyId });
+        readonly brandId = this.prop('brandId', { convert: toId.fromLegacyId });
+
+        toString(): string {
+            return 'mover_product_view';
+        }
+    }
 
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
