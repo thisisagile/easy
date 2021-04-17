@@ -12,7 +12,7 @@ export class Field extends Property {
 
   isNot = (value: unknown): Condition => this.condition('ne', value);
 
-  in = (...value: unknown[]): Condition => this.condition('in', toArray(value));
+  isIn = (...value: unknown[]): Condition => this.condition('in', toArray(value));
 
   notIn = (...value: unknown[]): Condition => this.condition('nin', toArray(value));
 
