@@ -192,7 +192,19 @@ After creating your custom constraint, you can add them to your classes, like in
 P.S. If you create custom constraints that might be helpful for other developers, don't hesitate to do a pull request on **easy**.
 
 ## Data
-It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
+Microservices can use data from a variety of sources, transform and process that data, and expose that to their users through their own API. In the different microservices architecture implementations we've seen data for instance come from:
+
+- a variety of relational databases, such as SQL Server, MySQL, or Postres.
+- a variety of non-relational databases, quite often MongoDB.
+- file systems.
+- systems the organization owns. such as HR, marketing, ERP or CMS.
+- other microservices, internal to the own organization.
+- other microservices, implemented with **easy** too.
+- other services, external to the own organization.
+- systems running in the cloud, such as SalesForce, OFfice365.
+- identity access platforms, often in the cloud.
+
+The data layer in an **easy** microservice provide the service with gateways to all these possible sources. It is the responsibility of the classes in the data layer to fetch and deliver data from outside to the microservices. This data can come from e.g. a file system, relational and other types of databases (we prefer document databases), or from other services on your domain, or from services outside your domain. Classes performing this function are called gateways. 
 
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
