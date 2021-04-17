@@ -218,7 +218,7 @@ The data layer in an **easy** microservice provide the service with gateways to 
 Because data in exsiting databases rarely supplies the format you need in your service, you can define a `Map` (for other services), a `Table` (for relational databases), or a `Collection` (for MongoDB) to contain all mappings that transform the incoming data to the service internal format, as below.
 
     export class ErpProductView extends Table {
-        readonly db = MoverDatabase.Erp;
+        readonly db = MyDatabase.Erp;
         readonly id = this.prop('id', { convert: toId.fromLegacyId });
         readonly brandId = this.prop('brandId', { convert: toId.fromLegacyId });
 
@@ -226,6 +226,15 @@ Because data in exsiting databases rarely supplies the format you need in your s
             return 'mover_product_view';
         }
     }
+
+The `Map`, `Table` and `Collection` classes have a property called `db` that represents the database to connect to. This is usually an instance of the `Database` enumeration, which in its turn defines the database (and its provider) to connect to, as in the example below.
+
+    export class MyDatabase extends Database {
+        static readonly Erp = new Database('openerp', PostgreSqlProvider);
+        static readonly Cms = new Database('cms', MySqlProvider);
+    }
+
+Next, the `Map`, `Table` and `Collection` classes, describe a list of properties that you would want mapped in the incoming JSON. Properties in the incoming JSON that are not described here are copied automatically. Properties can use converters, e.g. to converter from number to string and vice versa. Converters are bi-directional, as data that needs to go from the service to storage is mapped back to the database specific format too. 
 
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
