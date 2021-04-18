@@ -1,5 +1,6 @@
 import { json, Json, List } from '../types';
 import { Property, PropertyOptions, toProperties, toProperty } from './Property';
+import { convert } from './Convert';
 
 export class Map<P extends Property = Property> {
   constructor(private props?: List<[string, P]>) {}
@@ -25,6 +26,9 @@ export class Map<P extends Property = Property> {
   }
 
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Property => toProperty(this, name, options);
+  get ignore(): Property {
+    return toProperty(this, '', { convert: convert.ignore });
+  }
 
   in = (from: Json = {}): Json =>
     json.omit(
