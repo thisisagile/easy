@@ -63,7 +63,6 @@ describe('Map', () => {
 
   test('ignore should remove props', () => {
     const im = new IgnoreMap();
-    expect(im.in({level: 3})).toStrictEqual({});
-  })
-
+    expect(im.in({ level: 3 })).toStrictEqual({});
+  });
 });
