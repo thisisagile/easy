@@ -5,6 +5,8 @@ import { convert } from './Convert';
 export class Map<P extends Property = Property> {
   constructor(private props?: List<[string, P]>) {}
 
+  readonly clear = false;
+
   get properties(): List<[string, P]> {
     return this.props ?? (this.props = toProperties(this));
   }
@@ -32,13 +34,13 @@ export class Map<P extends Property = Property> {
 
   in = (from: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(a) }), from),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(a) }), this.clear ? {} : from),
       ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(a[k]) }), to),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(a[k]) }), this.clear ? {} : to),
       ...this.keys
     );
 }
