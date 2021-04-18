@@ -1,15 +1,14 @@
 import { convert } from '../../src';
 
 describe('convert', () => {
-
   test('default works', () => {
     expect(convert.default.from('Sander')).toBe('Sander');
     expect(convert.default.to('Wouter')).toBe('Wouter');
   });
 
   test('remove works', () => {
-    expect(convert.remove.from('Sander')).toBeUndefined();
-    expect(convert.remove.to('Wouter')).toBeUndefined();
+    expect(convert.ignore.from('Sander')).toBeUndefined();
+    expect(convert.ignore.to('Wouter')).toBeUndefined();
   });
 
   test('toBool works', () => {
