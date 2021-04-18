@@ -1,6 +1,12 @@
 import { convert } from '../../src';
 
 describe('convert', () => {
+
+  test('default works', () => {
+    expect(convert.default.from('Sander')).toBe('Sander');
+    expect(convert.default.to('Wouter')).toBe('Wouter');
+  });
+
   test('toBool works', () => {
     expect(convert.toBool.fromNumber.from(true)).toBe(1);
     expect(convert.toBool.fromNumber.from(false)).toBe(0);
