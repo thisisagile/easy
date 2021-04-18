@@ -7,6 +7,11 @@ describe('convert', () => {
     expect(convert.default.to('Wouter')).toBe('Wouter');
   });
 
+  test('remove works', () => {
+    expect(convert.remove.from('Sander')).toBeUndefined();
+    expect(convert.remove.to('Wouter')).toBeUndefined();
+  });
+
   test('toBool works', () => {
     expect(convert.toBool.fromNumber.from(true)).toBe(1);
     expect(convert.toBool.fromNumber.from(false)).toBe(0);
