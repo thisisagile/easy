@@ -16,9 +16,9 @@ describe('Table', () => {
   });
 
   test('Using map options works', () => {
-    const t = new DevTable({clear: true});
+    const t = new DevTable({ clear: true });
     expect(t.options.clear).toBeTruthy();
-    const t2 = new DevTable({clear: false});
+    const t2 = new DevTable({ clear: false });
     expect(t2.options.clear).toBeFalsy();
   });
 
@@ -80,12 +80,12 @@ describe('Table in and out', () => {
   });
 
   test('table.out is correct with clear is false', () => {
-    const res2 = (new DevTable({clear: false})).out(Dev.Jeroen.toJSON());
+    const res2 = new DevTable({ clear: false }).out(Dev.Jeroen.toJSON());
     expect(res2).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
   });
 
   test('table.out is correct with clear is true', () => {
-    const res = (new DevTable({clear: true})).out(Dev.Jeroen.toJSON());
+    const res = new DevTable({ clear: true }).out(Dev.Jeroen.toJSON());
     expect(res).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
   });
 

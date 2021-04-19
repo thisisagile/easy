@@ -1,6 +1,8 @@
 import { isDefined } from './Is';
-import { Get, isFunc, ofGet, toName } from './Constructor';
+import { toName } from './Constructor';
 import { template } from './Template';
+import { isFunc } from './Func';
+import { Get, ofGet } from './Get';
 
 export type Text = { toString(): string };
 

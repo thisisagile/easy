@@ -3,9 +3,9 @@ import { List } from './List';
 import { isAn } from './IsA';
 import { meta } from './Meta';
 import { isDefined } from './Is';
-import { Get, ofGet } from './Constructor';
 import { Validatable } from './Validatable';
 import { JsonValue } from './Json';
+import { Get, ofGet } from './Get';
 
 export abstract class Enum implements Validatable {
   protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}

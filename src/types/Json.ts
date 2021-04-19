@@ -1,6 +1,6 @@
 import { isA } from './IsA';
-import { Get, ofGet } from './Constructor';
 import { isObject } from './Is';
+import { Get, ofGet } from './Get';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };
