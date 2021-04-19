@@ -2,10 +2,10 @@ import { json, Json, List } from '../types';
 import { Property, PropertyOptions, toProperties, toProperty } from './Property';
 import { convert } from './Convert';
 
-export class Map<P extends Property = Property> {
-  constructor(private props?: List<[string, P]>) {}
+export type MapOptions = { clear: boolean };
 
-  readonly clear = false;
+export class Map<P extends Property = Property> {
+  constructor(public options: MapOptions = { clear: false }, private props?: List<[string, P]>) {}
 
   get properties(): List<[string, P]> {
     return this.props ?? (this.props = toProperties(this));
@@ -34,13 +34,13 @@ export class Map<P extends Property = Property> {
 
   in = (from: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(a) }), this.clear ? {} : from),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(from) }), this.options.clear ? {} : from),
       ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(a[k]) }), this.clear ? {} : to),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(to[k]) }), this.options.clear ? {} : to),
       ...this.keys
     );
 }

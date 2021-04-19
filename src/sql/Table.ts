@@ -1,5 +1,5 @@
 import { Column } from './Column';
-import { Map, PropertyOptions } from '../utils';
+import { Map, MapOptions, PropertyOptions } from '../utils';
 import { Database } from '../data';
 import { Json, toList, toUuid } from '../types';
 import { Select } from './Select';
@@ -10,7 +10,9 @@ import { Join } from './Join';
 import { Count } from './Count';
 
 export class Table extends Map<Column> {
-  readonly db = Database.Default;
+  constructor(readonly db: Database = Database.Default, options?: MapOptions) {
+    super(options);
+  }
 
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Column => new Column(this, name, options);
 
