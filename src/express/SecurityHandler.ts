@@ -68,6 +68,7 @@ export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: e
 
   const strategy = new JwtStrategy(jwtConfig, (req: express.Request, payload: any, done: (err: any, user: any) => void) => {
     ctx.request.token = payload;
+    ctx.request.jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req) ?? '';
     done(null, payload);
   });
 

@@ -1,4 +1,4 @@
-import { ctx, Enum, isDefined, Text, toUuid } from '../types';
+import { ctx, Enum, isNotEmpty, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -6,15 +6,19 @@ export class RequestOptions extends Enum {
   static get Form(): RequestOptions {
     return new RequestOptions(ContentType.Form);
   }
+
   static get Json(): RequestOptions {
     return new RequestOptions(ContentType.Json);
   }
+
   static get Stream(): RequestOptions {
     return new RequestOptions(ContentType.Stream);
   }
+
   static get Text(): RequestOptions {
     return new RequestOptions(ContentType.Text);
   }
+
   static get Xml(): RequestOptions {
     return new RequestOptions(ContentType.Xml);
   }
@@ -36,6 +40,6 @@ export class RequestOptions extends Enum {
   };
 
   bearer = (jwt: Text): this => {
-    return isDefined(jwt) ? this.authorization(`Bearer ${jwt}`) : this;
+    return isNotEmpty(jwt) ? this.authorization(`Bearer ${jwt}`) : this;
   };
 }

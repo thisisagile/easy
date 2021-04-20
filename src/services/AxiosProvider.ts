@@ -31,7 +31,7 @@ export class AxiosProvider implements RequestProvider {
       .request({
         url: uri.toString(),
         method: verb.toString() as Method,
-        headers: options.bearer(ctx.request.token).headers,
+        headers: options.bearer(ctx.request.jwt).headers,
         data: options.type.encode(body),
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))

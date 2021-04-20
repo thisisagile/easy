@@ -120,7 +120,7 @@ describe('AxiosProvider', () => {
   });
 
   test('Request with headers and bearer', async () => {
-    jest.spyOn(ctx.request, 'token', 'get').mockReturnValue('token 42');
+    jest.spyOn(ctx.request, 'jwt', 'get').mockReturnValue('token 42');
     jest.spyOn(ctx.request, 'correlationId', 'get').mockReturnValue('4');
     axios.request = mock.resolve({ message });
     await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, options: RequestOptions.Xml });

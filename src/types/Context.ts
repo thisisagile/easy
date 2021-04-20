@@ -22,11 +22,12 @@ export class DotEnvContext implements EnvContext {
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
         .snake.toString()
-    ] ?? alt;
+      ] ?? alt;
 }
 
 export type RequestContext = {
   token?: any;
+  jwt: string;
   correlationId?: Uuid;
   create: (f: () => void) => void;
 };
@@ -40,6 +41,14 @@ export class NamespaceContext implements RequestContext {
 
   set token(token: unknown) {
     this.namespace.set('token', token);
+  }
+
+  get jwt(): string {
+    return this.namespace.get('jwt');
+  }
+
+  set jwt(jwt: string) {
+    this.namespace.set('jwt', jwt);
   }
 
   get correlationId(): Uuid {
@@ -62,7 +71,8 @@ export class NamespaceContext implements RequestContext {
 }
 
 export class Context {
-  constructor(protected state: any = { other: {} }) {}
+  constructor(protected state: any = { other: {} }) {
+  }
 
   get env(): EnvContext {
     return (this.state.env = this.state.env ?? new DotEnvContext());
