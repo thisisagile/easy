@@ -23,8 +23,8 @@ describe('Condition', () => {
     expect(field.isNot(12).toJSON()).toMatchObject({ name: { $ne: 12 } });
   });
 
-  test('in', () => {
-    expect(field.in(12, 13, 14).toJSON()).toMatchObject({ name: { $in: [12, 13, 14] } });
+  test('isIn', () => {
+    expect(field.isIn(12, 13, 14).toJSON()).toMatchObject({ name: { $in: [12, 13, 14] } });
   });
 
   test('nin', () => {
@@ -45,10 +45,6 @@ describe('Condition', () => {
 
   test('lte', () => {
     expect(field.lessEqual(12).toJSON()).toMatchObject({ name: { $lte: 12 } });
-  });
-
-  test('google', () => {
-    expect(field.google('Sander').toJSON()).toMatchObject({ $text: { $search: 'Sander' } });
   });
 
   test('and', () => {

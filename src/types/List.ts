@@ -1,8 +1,9 @@
 import { toArray } from './Array';
-import { Constructor, GetProperty, ofProperty } from './Constructor';
+import { Constructor } from './Constructor';
 import { json, Json } from './Json';
 import { isArray, isDefined } from './Is';
 import { isA } from './IsA';
+import { GetProperty, ofProperty } from './Get';
 
 export class List<T> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
@@ -47,3 +48,9 @@ export const toList = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toAr
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
 export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
+
+export const toObject = <T>(key: keyof T, ...items: (T | T[])[]): Json =>
+  toList(...items).reduce((o: any, i) => {
+    o[i[key]] = i;
+    return o;
+  }, {});

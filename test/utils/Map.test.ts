@@ -56,4 +56,13 @@ describe('Map', () => {
     const j = new DevMapWithFunction().in(devData.withoutId);
     expect(isUuid(j.id?.toString())).toBeTruthy();
   });
+
+  class IgnoreMap extends Map {
+    readonly level = this.ignore;
+  }
+
+  test('ignore should remove props', () => {
+    const im = new IgnoreMap();
+    expect(im.in({ level: 3 })).toStrictEqual({});
+  });
 });

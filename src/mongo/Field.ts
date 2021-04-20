@@ -12,7 +12,7 @@ export class Field extends Property {
 
   isNot = (value: unknown): Condition => this.condition('ne', value);
 
-  in = (...value: unknown[]): Condition => this.condition('in', toArray(value));
+  isIn = (...value: unknown[]): Condition => this.condition('in', toArray(value));
 
   notIn = (...value: unknown[]): Condition => this.condition('nin', toArray(value));
 
@@ -25,8 +25,6 @@ export class Field extends Property {
   less = (value: unknown): Condition => this.condition('lt', value);
 
   lessEqual = (value: unknown): Condition => this.condition('lte', value);
-
-  google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
   protected condition = (operator: string, value: unknown): Condition => toCondition(this.name, operator, value, this?.options?.convert);
 }

@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { ifGet, toList, toName } from '../../src';
+import { isConstructor, ofConstruct, toName, text } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
@@ -9,26 +9,62 @@ describe('toName', () => {
   });
 });
 
-describe('ifGet', () => {
-  const empty = toList();
-  const filled = toList(Dev.Naoufal);
+class Tester {
+  constructor(readonly name = 'Jeroen', readonly level = 3) {}
+}
 
-  test('ifGet invalid', () => {
-    expect(ifGet(undefined, 'Yes', 'No')).toBe('No');
-    expect(ifGet(null, 'Yes', 'No')).toBe('No');
-    expect(ifGet(0, 'Yes', 'No')).toBe('No');
-    expect(ifGet('', 'Yes', 'No')).toBe('No');
-    expect(ifGet(false, 'Yes', 'No')).toBe('No');
-    expect(ifGet(empty.length, 'Yes', 'No')).toBe('No');
-    expect(ifGet(() => 0, 'Yes', 'No')).toBe('No');
+describe('isConstructor', () => {
+  test('false', () => {
+    expect(isConstructor()).toBeFalsy();
+    expect(isConstructor(3)).toBeFalsy();
+    expect(isConstructor('3')).toBeFalsy();
+    expect(isConstructor({})).toBeFalsy();
+    expect(
+      isConstructor(() => {
+        'Naoufal';
+      })
+    ).toBeFalsy();
+    expect(isConstructor(() => text('Yes'))).toBeFalsy();
+    expect(isConstructor(text)).toBeFalsy();
+    expect(isConstructor(new Tester())).toBeFalsy();
+    expect(isConstructor(new Tester())).toBeFalsy();
   });
 
-  test('ifGet valid', () => {
-    expect(ifGet(1, 'Yes', 'No')).toBe('Yes');
-    expect(ifGet({}, 'Yes', 'No')).toBe('Yes');
-    expect(ifGet('1', 'Yes', 'No')).toBe('Yes');
-    expect(ifGet(true, 'Yes', 'No')).toBe('Yes');
-    expect(ifGet(filled.length, 'Yes', 'No')).toBe('Yes');
-    expect(ifGet(() => 1, 'Yes', 'No')).toBe('Yes');
+  test('true', () => {
+    expect(isConstructor(String)).toBeTruthy();
+    expect(isConstructor(Symbol)).toBeTruthy();
+    expect(isConstructor(Tester)).toBeTruthy();
+  });
+});
+
+describe('ofConstruct', () => {
+  test('ofConstruct with instance', () => {
+    const t = ofConstruct(new Tester('Sander', 4));
+    expect(t.name).toBe('Sander');
+    expect(t.level).toBe(4);
+  });
+
+  test('ofConstruct with function', () => {
+    const t = ofConstruct(() => new Tester('Sander', 4));
+    expect(t.name).toBe('Sander');
+    expect(t.level).toBe(4);
+  });
+
+  test('ofConstruct with constructor', () => {
+    const t = ofConstruct(Tester);
+    expect(t.name).toBe('Jeroen');
+    expect(t.level).toBe(3);
+  });
+
+  test('ofConstruct with constructor and one parameter', () => {
+    const t = ofConstruct(Tester, 'Wouter');
+    expect(t.name).toBe('Wouter');
+    expect(t.level).toBe(3);
+  });
+
+  test('ofConstruct with constructor and multiple different parameters', () => {
+    const t = ofConstruct(Tester, 'Wouter', 4);
+    expect(t.name).toBe('Wouter');
+    expect(t.level).toBe(4);
   });
 });

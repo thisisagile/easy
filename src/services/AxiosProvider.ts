@@ -1,6 +1,15 @@
 import axios, { AxiosError, Method } from 'axios';
-import { HttpStatus, HttpVerb, isRestResult, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
-import { isDefined, toResult, Uri } from '../types';
+import {
+  HttpStatus,
+  HttpVerb,
+  isRestResult,
+  Request,
+  RequestOptions,
+  RequestProvider,
+  Response,
+  toResponse,
+} from '../http';
+import { ctx, isDefined, toResult, Uri } from '../types';
 import { choose } from '../utils';
 
 const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
@@ -22,7 +31,7 @@ export class AxiosProvider implements RequestProvider {
       .request({
         url: uri.toString(),
         method: verb.toString() as Method,
-        headers: options.headers,
+        headers: options.bearer(ctx.request.token).headers,
         data: options.type.encode(body),
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))

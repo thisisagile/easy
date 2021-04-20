@@ -15,6 +15,13 @@ describe('Table', () => {
     expect(table.properties).toHaveLength(4);
   });
 
+  test('Using map options works', () => {
+    const t = new DevTable({ clear: true });
+    expect(t.options.clear).toBeTruthy();
+    const t2 = new DevTable({ clear: false });
+    expect(t2.options.clear).toBeFalsy();
+  });
+
   test('select without columns', () => {
     const sel = table.select();
     expect(sel).toBeInstanceOf(Select);
@@ -72,9 +79,14 @@ describe('Table in and out', () => {
     expect(j).toMatchObject(devData.jeroen);
   });
 
-  test('table.out is correct', () => {
-    const j = dev.out(Dev.Jeroen.toJSON());
-    expect(j).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
+  test('table.out is correct with clear is false', () => {
+    const res2 = new DevTable({ clear: false }).out(Dev.Jeroen.toJSON());
+    expect(res2).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
+  });
+
+  test('table.out is correct with clear is true', () => {
+    const res = new DevTable({ clear: true }).out(Dev.Jeroen.toJSON());
+    expect(res).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
   });
 
   test('table.in is correct', () => {

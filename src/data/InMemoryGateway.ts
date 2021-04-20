@@ -1,7 +1,7 @@
 import { Exception, Gateway, Id, isDefined, Json, JsonValue, List, toList } from '../types';
 import { when } from '../validation';
 
-export class CollectionGateway implements Gateway {
+export class InMemoryGateway implements Gateway {
   constructor(private data: Promise<List<Json>>) {}
 
   all(): Promise<List<Json>> {

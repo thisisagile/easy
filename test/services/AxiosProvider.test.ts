@@ -1,4 +1,4 @@
-import { AxiosProvider, HttpStatus, HttpVerb } from '../../src';
+import { AxiosProvider, ctx, HttpStatus, HttpVerb, RequestOptions } from '../../src';
 import { DevUri } from '../ref';
 import axios, { AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
@@ -117,5 +117,18 @@ describe('AxiosProvider', () => {
         transform: r => r.dev,
       })
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
+  });
+
+  test('Request with headers and bearer', async () => {
+    jest.spyOn(ctx.request, 'token', 'get').mockReturnValue('token 42');
+    jest.spyOn(ctx.request, 'correlationId', 'get').mockReturnValue('4');
+    axios.request = mock.resolve({ message });
+    await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, options: RequestOptions.Xml });
+    expect(axios.request).toHaveBeenCalledWith({
+      url: DevUri.Developers.toString(),
+      method: HttpVerb.Get.toString(),
+      headers: RequestOptions.Xml.bearer('token 42').headers,
+      data: RequestOptions.Xml.type.encode(undefined),
+    });
   });
 });

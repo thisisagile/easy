@@ -7,6 +7,10 @@ export const convert = {
     a => a,
     a => a
   ),
+  ignore: new Convert<any, any>(
+    () => undefined,
+    () => undefined
+  ),
   toBool: {
     fromNumber: new Convert<boolean, number>(
       b => (b ? 1 : 0),

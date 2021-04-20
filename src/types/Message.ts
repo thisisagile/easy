@@ -1,4 +1,4 @@
-import { Func, isFunc } from './Constructor';
+import { Func, isFunc } from './Func';
 
 export type Message<Args> = string | Func<string, Args>;
 

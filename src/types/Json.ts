@@ -1,4 +1,6 @@
 import { isA } from './IsA';
+import { isObject } from './Is';
+import { Get, ofGet } from './Get';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };
@@ -16,3 +18,5 @@ export const json = {
 };
 
 export const toJson = json.merge;
+
+export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isA<Json>(j, 'toJSON') ? (j as any).toJSON() : isObject(j) ? j : ofGet(alt));

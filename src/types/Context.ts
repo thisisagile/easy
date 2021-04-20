@@ -4,6 +4,7 @@ import { text } from './Text';
 
 export type EnvContext = {
   readonly domain: string;
+  readonly name: string;
   readonly host: string;
   readonly port: number;
 
@@ -12,6 +13,7 @@ export type EnvContext = {
 
 export class DotEnvContext implements EnvContext {
   readonly domain = process.env.DOMAIN ?? 'easy';
+  readonly name = process.env.ENVIRONMENT_NAME ?? '';
   readonly host = process.env.HOST ?? '';
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
 

@@ -3,9 +3,9 @@ import { List } from './List';
 import { isAn } from './IsA';
 import { meta } from './Meta';
 import { isDefined } from './Is';
-import { Get, ofGet } from './Constructor';
 import { Validatable } from './Validatable';
 import { JsonValue } from './Json';
+import { Get, ofGet } from './Get';
 
 export abstract class Enum implements Validatable {
   protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
@@ -16,14 +16,14 @@ export abstract class Enum implements Validatable {
 
   static all<E extends Enum>(): List<E> {
     return meta(this)
-      .values()
+      .values<E>()
       .filter((e: unknown) => isEnum(e));
   }
 
-  static byId<E extends Enum>(id: Id, alt?: Get<E>): E {
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
     return (
       meta(this)
-        .values()
+        .values<E>()
         .first((e: unknown) => isEnum(e) && e.id === id) ?? ofGet(alt)
     );
   }
