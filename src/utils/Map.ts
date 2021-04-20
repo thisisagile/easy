@@ -1,11 +1,24 @@
-import { json, Json, List } from '../types';
+import { Construct, isEmpty, json, Json, List, ofConstruct, ofGet } from '../types';
 import { Property, PropertyOptions, toProperties, toProperty } from './Property';
 import { convert } from './Convert';
 
-export type MapOptions = { clear: boolean };
+export type MapStartFrom = 'scratch' | 'source';
+export type MapOptions = { startFrom: MapStartFrom };
+
+export class MapProperty extends Property {
+  constructor(owner: unknown, name = '', readonly m: Construct<Map>) {
+    super(owner, name, {});
+  }
+
+  in = (value: unknown): any => ofConstruct(this.m).in(this.val(value)) ?? ofGet(this.options?.dflt);
+
+  out = (value: unknown): any => ofConstruct(this.m).out(this.val(value));
+
+  private val = (value: unknown): any => (isEmpty(this.name) ? value : (value as any)[this.name]);
+}
 
 export class Map<P extends Property = Property> {
-  constructor(public options: MapOptions = { clear: false }, private props?: List<[string, P]>) {}
+  constructor(public options: MapOptions = { startFrom: 'scratch' }, private props?: List<[string, P]>) {}
 
   get properties(): List<[string, P]> {
     return this.props ?? (this.props = toProperties(this));
@@ -28,19 +41,22 @@ export class Map<P extends Property = Property> {
   }
 
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Property => toProperty(this, name, options);
+
+  map = <T = unknown>(map: Construct<Map>, name = ''): Property => new MapProperty(this, name, map);
+
   get ignore(): Property {
     return toProperty(this, '', { convert: convert.ignore });
   }
 
   in = (from: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(from) }), this.options.clear ? {} : from),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [k]: p.in(from) }), this.options.startFrom === 'source' ? from : {}),
       ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(to[k]) }), this.options.clear ? {} : to),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(to[k]) }), this.options.startFrom === 'source' ? to : {}),
       ...this.keys
     );
 }

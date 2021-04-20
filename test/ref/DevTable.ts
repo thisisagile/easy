@@ -5,7 +5,7 @@ export class DevDatabase extends Database {
 }
 
 export class DevTable extends Table {
-  constructor(options: MapOptions = { clear: true }) {
+  constructor(options: MapOptions = { startFrom: 'scratch' }) {
     super(DevDatabase.DevDB, options);
   }
 

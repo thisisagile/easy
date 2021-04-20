@@ -26,16 +26,16 @@ describe('Map', () => {
   });
 
   test('empty map.from is correct', () => {
-    expect(empty.in(devData.jeroen)).toMatchObject(devData.jeroen);
+    expect(empty.in(devData.jeroen)).toMatchObject({});
   });
 
   test('empty map.to is correct', () => {
-    expect(empty.out(devData.jeroen)).toMatchObject(devData.jeroen);
+    expect(empty.out(devData.jeroen)).toMatchObject({});
   });
 
   test('map.to is correct', () => {
     const j = dev.out(Dev.Jeroen.toJSON());
-    expect(j).toEqual({ Id: 1, language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
+    expect(j).toEqual({ Id: 1, Name: 'Jeroen', CodingLevel: '3' });
   });
 
   test('map.from is correct', () => {
@@ -64,5 +64,29 @@ describe('Map', () => {
   test('ignore should remove props', () => {
     const im = new IgnoreMap();
     expect(im.in({ level: 3 })).toStrictEqual({});
+  });
+
+  class Business extends Map {
+    readonly name = this.prop('Name');
+    readonly site = this.prop('WebSite');
+  }
+
+  class Manager extends Map {
+    readonly name = this.prop('Manager');
+    readonly title = this.prop('ManagerTitle');
+  }
+
+  class MapWithSubMap extends Map {
+    readonly name = this.prop('Name');
+    readonly company = this.map(new Business({ startFrom: 'scratch' }), 'Business');
+    readonly manager = this.map(new Manager({ startFrom: 'scratch' }));
+  }
+
+  const original = { Name: 'Sander', Business: { Name: 'ditisagile.nl', WebSite: 'www.ditisagile.nl' }, Manager: 'Rogier', ManagerTitle: 'COO' };
+  const mapped = { name: 'Sander', company: { name: 'ditisagile.nl', site: 'www.ditisagile.nl' }, manager: { name: 'Rogier', title: 'COO' } };
+
+  test('using map properties works', () => {
+    const map = new MapWithSubMap({ startFrom: 'scratch' });
+    expect(map.in(original)).toStrictEqual(mapped);
   });
 });
