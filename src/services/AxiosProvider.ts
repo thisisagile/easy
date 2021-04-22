@@ -1,14 +1,5 @@
 import axios, { AxiosError, Method } from 'axios';
-import {
-  HttpStatus,
-  HttpVerb,
-  isRestResult,
-  Request,
-  RequestOptions,
-  RequestProvider,
-  Response,
-  toResponse,
-} from '../http';
+import { HttpStatus, HttpVerb, isRestResult, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
 import { ctx, isDefined, toResult, Uri } from '../types';
 import { choose } from '../utils';
 
