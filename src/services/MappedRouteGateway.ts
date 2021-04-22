@@ -1,10 +1,10 @@
 import { Api } from './Api';
-import { Id, Json, JsonValue, List, Uri } from '../types';
+import { Func, Id, Json, JsonValue, List, Uri } from '../types';
 import { Map } from '../utils';
 import { RouteGateway } from './RouteGateway';
 
 export class MappedRouteGateway extends RouteGateway {
-  constructor(readonly route: Uri, readonly routeId: Uri, readonly map = new Map(), readonly api: Api = new Api()) {
+  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly map = new Map(), readonly api: Api = new Api()) {
     super(route, routeId, api);
   }
 

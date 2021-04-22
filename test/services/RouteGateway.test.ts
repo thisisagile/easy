@@ -1,5 +1,5 @@
 import { Api, HttpStatus, RouteGateway, toResponse } from '../../src';
-import { Dev, DevRoutedGateway, DevUri } from '../ref';
+import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('RouteGateway', () => {
@@ -9,7 +9,11 @@ describe('RouteGateway', () => {
 
   beforeEach(() => {
     api = new Api();
-    gateway = new DevRoutedGateway(DevUri.Developers, DevUri.Developer, api);
+    gateway = new RouteGateway(
+      () => DevUri.Developers,
+      () => DevUri.Developer,
+      api
+    );
   });
 
   test('all calls api correctly', async () => {

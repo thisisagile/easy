@@ -1,5 +1,5 @@
 import { Api, HttpStatus, Map, MappedRouteGateway, toResponse } from '../../src';
-import { Dev, DevUri, MappedDevGateway } from '../ref';
+import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('MappedRouteGateway', () => {
@@ -11,7 +11,12 @@ describe('MappedRouteGateway', () => {
   beforeEach(() => {
     api = new Api();
     map = new Map();
-    gateway = new MappedDevGateway(DevUri.Developers, DevUri.Developer, map, api);
+    gateway = new MappedRouteGateway(
+      () => DevUri.Developers,
+      () => DevUri.Developer,
+      map,
+      api
+    );
   });
 
   test('all calls api correctly', async () => {
