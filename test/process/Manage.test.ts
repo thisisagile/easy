@@ -18,14 +18,14 @@ describe('Manage', () => {
 
   test('update works', async () => {
     repo.update = mock.resolve(Dev.Sander);
-    await expect(manage.update({})).resolves.toMatchObject(Dev.Sander);
+    await expect(manage.update(4, {})).resolves.toMatchObject(Dev.Sander);
     expect(repo.update).toHaveBeenCalled();
   });
 
   test('upsert works', async () => {
     repo.upsert = mock.resolve(Dev.Sander);
-    await expect(manage.upsert(Dev.Sander.toJSON())).resolves.toMatchObject(Dev.Sander);
-    expect(repo.upsert).toHaveBeenCalledWith(Dev.Sander.toJSON());
+    await expect(manage.upsert(43, Dev.Sander.toJSON())).resolves.toMatchObject(Dev.Sander);
+    expect(repo.upsert).toHaveBeenCalledWith(43, Dev.Sander.toJSON());
   });
 
   test('remove works', async () => {

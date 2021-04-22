@@ -91,14 +91,14 @@ describe('Repo', () => {
   test('update where object is not found does not trigger gateway', async () => {
     gateway.byId = mock.resolve();
     gateway.update = mock.resolve();
-    await expect(repo.update(Dev.Invalid.toJSON())).rejects.toMatchException(Exception.DoesNotExist);
+    await expect(repo.update('4', Dev.Invalid.toJSON())).rejects.toMatchException(Exception.DoesNotExist);
     return expect(gateway.update).not.toHaveBeenCalled();
   });
 
   test('update where new object is invalid does not trigger gateway', async () => {
     gateway.byId = mock.resolve({ id: 43 });
     gateway.update = mock.resolve();
-    await expect(repo.update(Dev.Invalid.toJSON())).rejects.not.toBeValid();
+    await expect(repo.update(43, Dev.Invalid.toJSON())).rejects.not.toBeValid();
     return expect(gateway.update).not.toHaveBeenCalled();
   });
 
@@ -109,7 +109,7 @@ describe('Repo', () => {
   test('update where gateway fails is not valid', async () => {
     gateway.byId = mock.resolve(Dev.Sander.toJSON());
     gateway.update = mock.reject();
-    await expect(repo.update({ id: 43, level: 4 })).rejects.not.toBeValid();
+    await expect(repo.update(43, { id: 43, level: 4 })).rejects.not.toBeValid();
     return expect(gateway.update).toHaveBeenCalledWith(fits.with({ id: 3, level: 4 }));
   });
 
@@ -117,7 +117,7 @@ describe('Repo', () => {
     const update = { level: 4, language: 'C#' };
     gateway.byId = mock.resolve(Dev.Sander.toJSON());
     gateway.update = mock.resolve(Dev.Sander.update(update).toJSON());
-    await expect(repo.update(update)).resolves.toMatchObject(fits.with(update));
+    await expect(repo.update(43, update)).resolves.toMatchObject(fits.with(update));
     return expect(gateway.update).toHaveBeenCalledWith(fits.with(update));
   });
 
@@ -126,7 +126,7 @@ describe('Repo', () => {
     gateway.byId = mock.resolve(Dev.Jeroen.toJSON());
     gateway.update = mock.resolve(Dev.Jeroen.update(update).toJSON());
     repo.add = mock.resolve();
-    await expect(repo.upsert(update)).resolves.toMatchObject(fits.with(update));
+    await expect(repo.upsert(43, update)).resolves.toMatchObject(fits.with(update));
     expect(repo.add).not.toHaveBeenCalled();
   });
 
@@ -134,7 +134,7 @@ describe('Repo', () => {
     const update = { level: 4, language: 'COBOL' };
     repo.update = mock.reject(Exception.Unknown);
     repo.add = mock.resolve(update);
-    await expect(repo.upsert(update)).resolves.toMatchObject(fits.with(update));
+    await expect(repo.upsert(43, update)).resolves.toMatchObject(fits.with(update));
     expect(repo.add).toHaveBeenCalledWith(fits.with(update));
   });
 });

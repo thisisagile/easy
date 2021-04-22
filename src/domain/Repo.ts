@@ -37,9 +37,9 @@ export class Repo<T extends Struct> {
       .then(j => new this.ctor(j));
   }
 
-  update(json: Json): Promise<T> {
+  update(id: Id, json: Json): Promise<T> {
     return this.gateway
-      .byId(json.id as Id)
+      .byId(id)
       .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j).update(json))
       .then(i => when(i as T).not.isValid.reject())
@@ -56,7 +56,7 @@ export class Repo<T extends Struct> {
     return resolve(item);
   }
 
-  upsert(item: Json): Promise<T> {
-    return this.update(item).catch(() => this.add(item));
+  upsert(id: Id, item: Json): Promise<T> {
+    return this.update(id, item).catch(() => this.add(item));
   }
 }
