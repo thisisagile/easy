@@ -2,7 +2,8 @@ import { isDefined, isNotEmpty } from './Is';
 import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
-import { toList } from './List';
+import { List, toList } from './List';
+import { meta } from './Meta';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -43,7 +44,11 @@ export class EasyUri implements Uri {
   readonly host = uri.host();
   readonly resource = uri.resource(this);
 
-  private props = toList<Prop>();
+  private state: any = {};
+
+  private get props(): List<Prop> {
+    return meta(this.state).values<Prop>();
+  }
 
   constructor(readonly segments: Segment[] = []) {}
 
@@ -58,7 +63,7 @@ export class EasyUri implements Uri {
   route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
   set = (segment: Segment, value: unknown): this => {
-    this.props.push({ segment, value });
+    this.state[segment.key ?? ''] = { segment, value };
     return this;
   };
 

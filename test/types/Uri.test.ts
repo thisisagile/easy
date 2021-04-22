@@ -36,7 +36,7 @@ describe('Uri', () => {
   test('returns full route plus id', () => {
     expect(asString(0)).toBe('0');
     expect(DevUri.Developers.id(42)).toMatchRoute(withHost);
-    expect(DevUri.Developer.id(42)).toMatchRoute(`${host}/dev/developers/42`);
+    expect(DevUri.Developer.id(42).id(43)).toMatchRoute(`${host}/dev/developers/43`);
     expect(DevUri.Developer.id(0)).toMatchRoute(`${host}/dev/developers/0`);
     expect(DevUri.Developers.level(3)).toMatchRoute(`${host}/dev/developers?level=3`);
     expect(DevUri.Developers.level(0)).toMatchRoute(`${host}/dev/developers?level=0`);
