@@ -5,7 +5,7 @@ import { Field } from './Field';
 import { Condition, LogicalCondition, toCondition } from './Condition';
 
 export class Collection extends Map<Field> {
-  constructor(readonly db: Database = Database.Default, options: MapOptions = {startFrom: 'source'}) {
+  constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {
     super(options);
   }
 

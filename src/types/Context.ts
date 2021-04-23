@@ -22,7 +22,7 @@ export class DotEnvContext implements EnvContext {
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
         .snake.toString()
-      ] ?? alt;
+    ] ?? alt;
 }
 
 export type RequestContext = {
@@ -71,8 +71,7 @@ export class NamespaceContext implements RequestContext {
 }
 
 export class Context {
-  constructor(protected state: any = { other: {} }) {
-  }
+  constructor(protected state: any = { other: {} }) {}
 
   get env(): EnvContext {
     return (this.state.env = this.state.env ?? new DotEnvContext());

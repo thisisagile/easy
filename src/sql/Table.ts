@@ -10,7 +10,7 @@ import { Join } from './Join';
 import { Count } from './Count';
 
 export class Table extends Map<Column> {
-  constructor(readonly db: Database = Database.Default, options: MapOptions = {startFrom: 'source'}) {
+  constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {
     super(options);
   }
 
