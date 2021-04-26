@@ -1,4 +1,4 @@
-import { inout, Mapper } from '../../src';
+import { Mapper, maps } from '../../src';
 import { Json, JsonValue } from '@thisisagile/easy-test/dist/utils/Types';
 
 const site = 'www.acme.com';
@@ -9,53 +9,72 @@ const Country = 'NL';
 
 describe('Mapper', () => {
   test('empty mapper should return original in', () => {
-    const scratch = new Mapper().in('', { CityName, Country });
+    const scratch = new Mapper().in({ CityName, Country });
     expect(scratch).toStrictEqual({});
-    const source = new Mapper('', { startFrom: 'source' }).in('', { CityName, Country });
+    const source = new Mapper({ startFrom: 'source' }).in({ CityName, Country });
     expect(source).toStrictEqual({ CityName, Country });
   });
 
   test('empty mapper should return original out', () => {
-    const scratch = new Mapper().out('', { CityName, Country });
+    const scratch = new Mapper().out({ CityName, Country });
     expect(scratch).toStrictEqual({});
-    const source = new Mapper('', { startFrom: 'source' }).out('', { CityName, Country });
+    const source = new Mapper({ startFrom: 'source' }).out({ CityName, Country });
     expect(source).toStrictEqual({ CityName, Country });
   });
 
   class SingleMapper extends Mapper {
-    readonly city = inout.prop('CityName');
+    readonly city = this.map.item('CityName');
   }
 
   test('single should return in', () => {
-    const scratch = new SingleMapper().in('', { CityName, Country });
+    const scratch = new SingleMapper().in({ CityName, Country });
     expect(scratch).toStrictEqual({ city });
-    const source = new SingleMapper('', { startFrom: 'source' }).in('', { CityName, Country });
+    const source = new SingleMapper({ startFrom: 'source' }).in({ CityName, Country });
     expect(source).toStrictEqual({ city, Country });
   });
 
   test('single should return out', () => {
-    const scratch = new SingleMapper().out('', { city, Country });
+    const scratch = new SingleMapper().out({ city, Country });
     expect(scratch).toStrictEqual({ CityName });
-    const source = new SingleMapper('', { startFrom: 'source' }).out('', { city, Country });
+    const source = new SingleMapper({ startFrom: 'source' }).out({ city, Country });
+    expect(source).toStrictEqual({ CityName, Country });
+  });
+
+  class InheritedMapper extends Mapper {
+    public readonly map = { ...maps, field: maps.item };
+    readonly city = this.map.field('CityName');
+  }
+
+  test('altered map should return in', () => {
+    const scratch = new InheritedMapper().in({ CityName, Country });
+    expect(scratch).toStrictEqual({ city });
+    const source = new InheritedMapper({ startFrom: 'source' }).in({ CityName, Country });
+    expect(source).toStrictEqual({ city, Country });
+  });
+
+  test('altered map  should return out', () => {
+    const scratch = new InheritedMapper().out({ city, Country });
+    expect(scratch).toStrictEqual({ CityName });
+    const source = new InheritedMapper({ startFrom: 'source' }).out({ city, Country });
     expect(source).toStrictEqual({ CityName, Country });
   });
 
   class IgnoreMapper extends Mapper {
-    readonly city = inout.ignore('CityName');
-    readonly country = inout.prop('Country');
+    readonly city = this.map.ignore('CityName');
+    readonly country = this.map.item('Country');
   }
 
   test('ignore should return in', () => {
-    const scratch = new IgnoreMapper().in('', { CityName, Country });
+    const scratch = new IgnoreMapper().in({ CityName, Country });
     expect(scratch).toStrictEqual({ country });
-    const source = new IgnoreMapper('', { startFrom: 'source' }).in('', { CityName, Country });
+    const source = new IgnoreMapper({ startFrom: 'source' }).in({ CityName, Country });
     expect(source).toStrictEqual({ country });
   });
 
   test('ignore should return out', () => {
-    const scratch = new IgnoreMapper().out('', { city, country });
+    const scratch = new IgnoreMapper().out({ city, country });
     expect(scratch).toStrictEqual({ Country });
-    const source = new IgnoreMapper('', { startFrom: 'source' }).out('', { city, country });
+    const source = new IgnoreMapper({ startFrom: 'source' }).out({ city, country });
     expect(source).toStrictEqual({ Country });
   });
 
@@ -63,42 +82,42 @@ describe('Mapper', () => {
   const listMe = (a: Json): JsonValue[] => [a.city, a.region, a.country];
 
   class FuncMapper extends Mapper {
-    readonly city = inout.prop('CityName');
-    readonly country = inout.func('Country', 'NL', 'nl');
-    readonly region = inout.add(a => region(a));
-    readonly list = inout.add(a => listMe(a));
+    readonly city = this.map.item('CityName');
+    readonly country = this.map.func('Country', 'NL', 'nl');
+    readonly region = this.map.add(a => region(a));
+    readonly list = this.map.add(a => listMe(a));
   }
 
   test('func should return in', () => {
-    const scratch = new FuncMapper().in('', { CityName });
+    const scratch = new FuncMapper().in({ CityName });
     expect(scratch).toStrictEqual({ city, country, region: 'city', list: ['Amsterdam', 'city', 'NL'] });
-    const source = new FuncMapper('', { startFrom: 'source' }).in('', { CityName });
+    const source = new FuncMapper({ startFrom: 'source' }).in({ CityName });
     expect(source).toStrictEqual({ city, country, region: 'city', list: ['Amsterdam', 'city', 'NL'] });
   });
 
   test('func should return out', () => {
-    const scratch = new FuncMapper().out('', { city, Country });
+    const scratch = new FuncMapper().out({ city, Country });
     expect(scratch).toStrictEqual({ CityName, Country: 'nl' });
-    const source = new FuncMapper('', { startFrom: 'source' }).out('', { city, Country });
+    const source = new FuncMapper({ startFrom: 'source' }).out({ city, Country });
     expect(source).toStrictEqual({ CityName, Country: 'nl' });
   });
 
   class DoubleColumnMapper extends Mapper {
-    readonly id = inout.prop('Id');
-    readonly classicId = inout.prop('Id');
+    readonly id = this.map.item('Id');
+    readonly classicId = this.map.item('Id');
   }
 
   test('double columns should return in', () => {
-    const scratch = new DoubleColumnMapper().in('', { Id: 42, Country });
+    const scratch = new DoubleColumnMapper().in({ Id: 42, Country });
     expect(scratch).toStrictEqual({ id: 42, classicId: 42 });
-    const source = new DoubleColumnMapper('', { startFrom: 'source' }).in('', { Id: 42, Country });
+    const source = new DoubleColumnMapper({ startFrom: 'source' }).in({ Id: 42, Country });
     expect(source).toStrictEqual({ id: 42, classicId: 42, Country });
   });
 
   test('double columns should return out', () => {
-    const scratch = new DoubleColumnMapper().out('', { id: 42, classicId: 42, Country });
+    const scratch = new DoubleColumnMapper().out({ id: 42, classicId: 42, Country });
     expect(scratch).toStrictEqual({ Id: 42 });
-    const source = new DoubleColumnMapper('', { startFrom: 'source' }).out('', {
+    const source = new DoubleColumnMapper({ startFrom: 'source' }).out({
       id: 42,
       classicId: 42,
       Country,
@@ -107,19 +126,19 @@ describe('Mapper', () => {
   });
 
   class CompanyMapper extends Mapper {
-    readonly title = inout.prop('Name');
-    readonly site = inout.prop('Website');
+    readonly title = this.map.item('Name');
+    readonly site = this.map.item('Website');
   }
 
   class UseMapperMapper extends Mapper {
-    readonly id = inout.prop('Id');
-    readonly company = inout.map('', new CompanyMapper(''));
+    readonly id = this.map.item('Id');
+    readonly company = this.map.map('', new CompanyMapper());
   }
 
   test('sub maps should return in', () => {
-    const scratch = new UseMapperMapper().in('', { Id: 42, Country, Name: 'Acme', Website: site });
+    const scratch = new UseMapperMapper().in({ Id: 42, Country, Name: 'Acme', Website: site });
     expect(scratch).toStrictEqual({ id: 42, company: { title: 'Acme', site } });
-    const source = new UseMapperMapper('', { startFrom: 'source' }).in('', {
+    const source = new UseMapperMapper({ startFrom: 'source' }).in({
       Id: 42,
       Country,
       Name: 'Google',
@@ -135,9 +154,9 @@ describe('Mapper', () => {
   });
 
   test('sub maps should return out', () => {
-    const scratch = new UseMapperMapper().out('', { id: 42, company: { title: 'Acme', site } });
+    const scratch = new UseMapperMapper().out({ id: 42, company: { title: 'Acme', site } });
     expect(scratch).toStrictEqual({ Id: 42, Name: 'Acme', Website: site });
-    const source = new UseMapperMapper('', { startFrom: 'source' }).out('', {
+    const source = new UseMapperMapper({ startFrom: 'source' }).out({
       id: 42,
       company: { title: 'Acme', site },
     });
@@ -145,18 +164,18 @@ describe('Mapper', () => {
   });
 
   class UseMapperPropertyMapper extends Mapper {
-    readonly id = inout.prop('Id');
-    readonly company = inout.map('Company', new CompanyMapper(''));
+    readonly id = this.map.item('Id');
+    readonly company = this.map.map('Company', new CompanyMapper());
   }
 
   test('sub maps from sub object should return in', () => {
-    const scratch = new UseMapperPropertyMapper().in('', {
+    const scratch = new UseMapperPropertyMapper().in({
       Id: 42,
       Country,
       Company: { Name: 'Acme', Website: site },
     });
     expect(scratch).toStrictEqual({ id: 42, company: { title: 'Acme', site } });
-    const source = new UseMapperPropertyMapper('', { startFrom: 'source' }).in('', {
+    const source = new UseMapperPropertyMapper({ startFrom: 'source' }).in({
       Id: 42,
       Country,
       Company: { Name: 'Google', Website: site },
@@ -165,9 +184,9 @@ describe('Mapper', () => {
   });
 
   test('sub maps from sub object should return out', () => {
-    const scratch = new UseMapperPropertyMapper().out('', { id: 42, company: { title: 'Acme', site } });
+    const scratch = new UseMapperPropertyMapper().out({ id: 42, company: { title: 'Acme', site } });
     expect(scratch).toStrictEqual({ Id: 42, Company: { Name: 'Acme', Website: site } });
-    const source = new UseMapperPropertyMapper('', { startFrom: 'source' }).out('', {
+    const source = new UseMapperPropertyMapper({ startFrom: 'source' }).out({
       id: 42,
       company: { title: 'Acme', site },
     });
