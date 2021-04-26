@@ -1,11 +1,11 @@
-import { convert, Property, PropertyOptions } from '../utils';
+import { Property, PropertyOptions } from '../utils';
 import { Collection } from './Collection';
 import { Condition, toCondition } from './Condition';
 import { toArray } from '../types';
 
 export class Field extends Property {
-  constructor(readonly owner: Collection, name: string, options: PropertyOptions = {}) {
-    super(owner, name, { dflt: options?.dflt, convert: options?.convert ?? convert.default });
+  constructor(readonly owner: Collection, name: string, options?: PropertyOptions) {
+    super(owner, name, options);
   }
 
   is = (value: unknown): Condition => this.condition('eq', value);
@@ -26,5 +26,5 @@ export class Field extends Property {
 
   lessEqual = (value: unknown): Condition => this.condition('lte', value);
 
-  protected condition = (operator: string, value: unknown): Condition => toCondition(this.name, operator, value, this?.options?.convert);
+  protected condition = (operator: string, value: unknown): Condition => toCondition(this.name, operator, value, this.options?.convert);
 }
