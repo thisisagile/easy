@@ -1,11 +1,11 @@
-import { convert, Property, PropertyOptions } from '../utils';
+import { InOut, PropertyOptions, toPropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
-import { Text } from '../types';
+import { Json, JsonValue, ofGet, Text } from '../types';
 import { Table } from './Table';
 
-export class Column extends Property implements Text {
-  constructor(readonly owner: Table, name: string, options: PropertyOptions = {}) {
-    super(owner, name, { dflt: options?.dflt, convert: options?.convert ?? convert.default });
+export class Column implements InOut, Text {
+  constructor(readonly owner: Table, readonly property: string, readonly options?: PropertyOptions) {
+    this.options = toPropertyOptions(options);
   }
 
   get count(): Column {
@@ -40,6 +40,10 @@ export class Column extends Property implements Text {
     return this.format('$col DESC') as OrderColumn;
   }
 
+  in = (source: Json = {}): JsonValue => this.options?.convert?.to(source[this.property] ?? ofGet(this.options?.dflt));
+
+  out = (source: Json = {}, key = ''): JsonValue => this.options?.convert?.from(source[key]);
+
   function = (func: string): Column => this.format(`${func}($name)`);
 
   format = (pattern: string): Column => new PatternColumn(this, pattern);
@@ -67,7 +71,7 @@ export class Column extends Property implements Text {
   as = (as: string): Column => this.format(`$col AS ${as}`);
 
   toString(): string {
-    return `${this.owner}.${this.name}`;
+    return `${this.owner}.${this.property}`;
   }
 
   protected clause = (operator: string, value: unknown): Clause => toClause(this, operator, value, this?.options?.convert);
@@ -75,12 +79,13 @@ export class Column extends Property implements Text {
 
 export class PatternColumn extends Column {
   constructor(protected col: Column, protected pattern: string) {
-    super(col.owner, col.name);
+    super(col.owner, col.property);
   }
 
   toString(): string {
-    return this.pattern.replace('$col', this.col.toString()).replace('$table', this.col.owner.toString).replace('$name', this.col.name);
+    return this.pattern.replace('$col', this.col.toString()).replace('$table', this.col.owner.toString).replace('$name', this.col.property);
   }
 }
 
-export class OrderColumn extends PatternColumn {}
+export class OrderColumn extends PatternColumn {
+}
