@@ -11,11 +11,10 @@ export type InOut = {
 export const isInOut = (io?: unknown): io is InOut => isA<InOut>(io, 'in', 'out');
 
 export class Mapper implements InOut {
-  public readonly map = maps;
+  protected readonly map = maps;
   private props?: List<[string, InOut]>;
 
-  constructor(public options: MapOptions = { startFrom: 'scratch' }) {
-  }
+  constructor(public options: MapOptions = { startFrom: 'scratch' }) {}
 
   get properties(): List<[string, InOut]> {
     return (
@@ -29,7 +28,7 @@ export class Mapper implements InOut {
   in = (from: Json = {}): Json =>
     this.properties.reduce(
       (a, [k, p]) => json.omit({ ...a, [k]: p.in({ ...a, ...from }, k) }, p?.property ?? ''),
-      this.options.startFrom === 'source' ? from : {},
+      this.options.startFrom === 'source' ? from : {}
     );
 
   out = (to: Json = {}): Json =>
@@ -37,7 +36,7 @@ export class Mapper implements InOut {
       (a, [k, p]) => {
         return json.omit(json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }), k);
       },
-      this.options.startFrom === 'source' ? to : {},
+      this.options.startFrom === 'source' ? to : {}
     );
 
   toString(): string {
