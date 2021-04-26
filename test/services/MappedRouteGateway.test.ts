@@ -1,21 +1,21 @@
-import { Api, HttpStatus, Map, MappedRouteGateway, toResponse } from '../../src';
+import { Api, HttpStatus, MappedRouteGateway, Mapper, toResponse } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('MappedRouteGateway', () => {
   const devs = [Dev.Sander.toJSON(), Dev.Naoufal.toJSON(), Dev.Wouter.toJSON()];
-  let map: Map;
+  let map: Mapper;
   let api: Api;
   let gateway: MappedRouteGateway;
 
   beforeEach(() => {
     api = new Api();
-    map = new Map();
+    map = new Mapper();
     gateway = new MappedRouteGateway(
       () => DevUri.Developers,
       () => DevUri.Developer,
       map,
-      api
+      api,
     );
   });
 
