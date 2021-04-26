@@ -6,12 +6,12 @@ describe('toProperty', () => {
 
   test('Simple prop', () => {
     const p = toProperty(map, 'Id');
-    expect(p).toMatchObject({ name: 'Id', options: { dflt: undefined, convert: convert.default } });
+    expect(p).toMatchObject({ name: 'Id', options: { convert: convert.default } });
   });
 
   test('Prop with empty options', () => {
     const p = toProperty(map, 'Id', {});
-    expect(p).toMatchObject({ name: 'Id', options: { dflt: undefined, convert: convert.default } });
+    expect(p).toMatchObject({ name: 'Id', options: { convert: convert.default } });
   });
 
   test('Prop with default', () => {
