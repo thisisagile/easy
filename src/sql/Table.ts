@@ -1,5 +1,5 @@
 import { Column } from './Column';
-import { MapOptions, Mapper, maps, PropertyOptions } from '../utils';
+import { MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
 import { Database } from '../data';
 import { Json, toList, toUuid } from '../types';
 import { Select } from './Select';
@@ -11,7 +11,7 @@ import { Count } from './Count';
 
 export class Table extends Mapper {
   protected readonly map = {
-    ...maps,
+    ...mappings,
     column: <T = unknown>(name: string, options?: PropertyOptions<T>): Column => new Column(this, name, options),
   };
 

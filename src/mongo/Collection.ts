@@ -1,4 +1,4 @@
-import { MapOptions, Mapper, maps, PropertyOptions } from '../utils';
+import { MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
 import { Database } from '../data';
 import { Json, toUuid } from '../types';
 import { Field } from './Field';
@@ -6,7 +6,7 @@ import { Condition, LogicalCondition, toCondition } from './Condition';
 
 export class Collection extends Mapper {
   protected readonly map = {
-    ...maps,
+    ...mappings,
     field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
 

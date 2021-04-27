@@ -1,4 +1,4 @@
-import { Mapper, maps } from '../../src';
+import { Mapper, mappings } from '../../src';
 import { Json, JsonValue } from '@thisisagile/easy-test/dist/utils/Types';
 
 const site = 'www.acme.com';
@@ -41,7 +41,7 @@ describe('Mapper', () => {
   });
 
   class InheritedMapper extends Mapper {
-    public readonly map = { ...maps, field: maps.item };
+    public readonly map = { ...mappings, field: mappings.item };
     readonly city = this.map.field('CityName');
   }
 

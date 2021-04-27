@@ -1,9 +1,6 @@
 import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet } from '../types';
 import { Property, PropertyOptions } from './Property';
 
-export type MapStartFrom = 'scratch' | 'source';
-export type MapOptions = { startFrom: MapStartFrom };
-
 export type InOut = {
   property: string;
   in: (source?: Json, key?: string) => JsonValue | undefined;
@@ -12,18 +9,31 @@ export type InOut = {
 
 export const isInOut = (io?: unknown): io is InOut => isA<InOut>(io, 'in', 'out');
 
+export type MapStartFrom = 'scratch' | 'source';
+export type MapOptions = { startFrom: MapStartFrom };
+
+export class ConditionalState {
+  constructor(protected readonly state: any = {}) {
+  }
+
+  get = <T>(key: string, alt: Construct<T>): T => this.state[key] ?? (this.state[key] = ofConstruct(alt));
+  set = <T>(key: string, value: Construct<T>): T => (this.state[key] = ofConstruct(value));
+}
+
 export class Mapper implements InOut {
-  protected readonly map = maps;
+  protected readonly map = mappings;
+  protected readonly state = new ConditionalState();
   private props?: List<[string, InOut]>;
 
-  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {}
+  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
+  }
 
   get properties(): List<[string, InOut]> {
-    return (
-      this.props ??
-      (this.props = meta(this)
+    return this.state.get(
+      'props',
+      meta(this)
         .entries<InOut>()
-        .filter(([, v]) => isInOut(v)))
+        .filter(([, v]) => isInOut(v)),
     );
   }
 
@@ -42,16 +52,16 @@ export class Mapper implements InOut {
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped
+      ...this.dropped,
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {}
+        this.options.startFrom === 'source' ? to : {},
       ),
-      ...this.keys
+      ...this.keys,
     );
 
   toString(): string {
@@ -59,7 +69,7 @@ export class Mapper implements InOut {
   }
 }
 
-export const maps = {
+export const mappings = {
   item: (property: string, options?: PropertyOptions): Property => new Property(property, options),
   ignore: (property = ''): InOut => ({
     property,
