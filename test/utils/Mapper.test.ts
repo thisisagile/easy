@@ -79,7 +79,7 @@ describe('Mapper', () => {
   class MapWithSubMap extends Mapper {
     readonly name = this.map.item('Name');
     readonly company = this.map.map(new Business({ startFrom: 'scratch' }), 'Business');
-    readonly manager = this.map.map(new Manager({ startFrom: 'scratch' }));
+    readonly manager = this.map.map(Manager);
   }
 
   const original = { Name: 'Sander', Business: { Name: 'ditisagile.nl', WebSite: 'www.ditisagile.nl' }, Manager: 'Rogier', ManagerTitle: 'COO' };
