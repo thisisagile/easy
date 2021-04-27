@@ -7,7 +7,7 @@ import { Condition, LogicalCondition, toCondition } from './Condition';
 export class Collection extends Mapper {
   protected readonly map = {
     ...maps,
-    field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(this, name, options),
+    field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
 
   constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {

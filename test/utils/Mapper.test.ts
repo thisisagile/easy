@@ -1,8 +1,8 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { isUuid, Map, toId } from '../../src';
+import { isUuid, Mapper, toId } from '../../src';
 
-describe('Map', () => {
-  const empty = new Map();
+describe('Mapper', () => {
+  const empty = new Mapper();
   const dev = new DevMap();
   const tester = new TesterMap();
 
@@ -49,7 +49,7 @@ describe('Map', () => {
   });
 
   class DevMapWithFunction extends DevMap {
-    readonly id = this.prop('Id', { dflt: () => toId() });
+    readonly id = this.map.item('Id', { dflt: () => toId() });
   }
 
   test('map.from without id, so it uses default function', () => {
@@ -57,8 +57,8 @@ describe('Map', () => {
     expect(isUuid(j.id?.toString())).toBeTruthy();
   });
 
-  class IgnoreMap extends Map {
-    readonly level = this.ignore;
+  class IgnoreMap extends Mapper {
+    readonly level = this.map.ignore();
   }
 
   test('ignore should remove props', () => {
@@ -66,20 +66,20 @@ describe('Map', () => {
     expect(im.in({ level: 3 })).toStrictEqual({});
   });
 
-  class Business extends Map {
-    readonly name = this.prop('Name');
-    readonly site = this.prop('WebSite');
+  class Business extends Mapper {
+    readonly name = this.map.item('Name');
+    readonly site = this.map.item('WebSite');
   }
 
-  class Manager extends Map {
-    readonly name = this.prop('Manager');
-    readonly title = this.prop('ManagerTitle');
+  class Manager extends Mapper {
+    readonly name = this.map.item('Manager');
+    readonly title = this.map.item('ManagerTitle');
   }
 
-  class MapWithSubMap extends Map {
-    readonly name = this.prop('Name');
-    readonly company = this.map(new Business({ startFrom: 'scratch' }), 'Business');
-    readonly manager = this.map(new Manager({ startFrom: 'scratch' }));
+  class MapWithSubMap extends Mapper {
+    readonly name = this.map.item('Name');
+    readonly company = this.map.map(new Business({ startFrom: 'scratch' }), 'Business');
+    readonly manager = this.map.map(new Manager({ startFrom: 'scratch' }));
   }
 
   const original = { Name: 'Sander', Business: { Name: 'ditisagile.nl', WebSite: 'www.ditisagile.nl' }, Manager: 'Rogier', ManagerTitle: 'COO' };

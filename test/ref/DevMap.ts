@@ -1,13 +1,13 @@
-import { convert, Map } from '../../src';
+import { convert, Mapper } from '../../src';
 
-export class DevMap extends Map {
-  readonly id = this.prop('Id', { dflt: 42 });
-  readonly name = this.prop('Name');
-  readonly level = this.prop('CodingLevel', { dflt: 3, convert: convert.toNumber.fromString });
+export class DevMap extends Mapper {
+  readonly id = this.map.item('Id', { dflt: 42 });
+  readonly name = this.map.item('Name');
+  readonly level = this.map.item('CodingLevel', { dflt: 3, convert: convert.toNumber.fromString });
 }
 
 export class TesterMap extends DevMap {
-  readonly framework = this.prop('Framework', { dflt: 'Jest' });
+  readonly framework = this.map.item('Framework', { dflt: 'Jest' });
 }
 
 export const devData = {

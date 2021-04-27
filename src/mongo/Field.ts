@@ -1,13 +1,8 @@
-import { Property, PropertyOptions } from '../utils';
-import { Collection } from './Collection';
+import { Property } from '../utils';
 import { Condition, toCondition } from './Condition';
 import { toArray } from '../types';
 
 export class Field extends Property {
-  constructor(readonly owner: Collection, name: string, options?: PropertyOptions) {
-    super(owner, name, options);
-  }
-
   is = (value: unknown): Condition => this.condition('eq', value);
 
   isNot = (value: unknown): Condition => this.condition('ne', value);

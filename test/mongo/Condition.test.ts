@@ -1,10 +1,8 @@
-import { Collection, Condition, Field } from '../../src';
+import { Condition, Field } from '../../src';
 import '@thisisagile/easy-test';
 
-class developers extends Collection {}
-
 describe('Condition', () => {
-  const field = new Field(new developers(), 'name');
+  const field = new Field('name');
 
   test('simple', () => {
     expect(new Condition(field.property, 'eq', 'Sander').toJSON()).toMatchObject({ name: { $eq: 'Sander' } });

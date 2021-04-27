@@ -1,6 +1,8 @@
-import { Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofGet } from '../types';
-import { MapOptions } from './Map';
-import { PropertyOptions, toPropertyOptions } from './Property';
+import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet } from '../types';
+import { Property, PropertyOptions } from './Property';
+
+export type MapStartFrom = 'scratch' | 'source';
+export type MapOptions = { startFrom: MapStartFrom };
 
 export type InOut = {
   property: string;
@@ -14,7 +16,8 @@ export class Mapper implements InOut {
   protected readonly map = maps;
   private props?: List<[string, InOut]>;
 
-  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {}
+  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
+  }
 
   get properties(): List<[string, InOut]> {
     return (
@@ -40,16 +43,16 @@ export class Mapper implements InOut {
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped
+      ...this.dropped,
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {}
+        this.options.startFrom === 'source' ? to : {},
       ),
-      ...this.keys
+      ...this.keys,
     );
 
   toString(): string {
@@ -58,12 +61,8 @@ export class Mapper implements InOut {
 }
 
 export const maps = {
-  item: (property: string, options?: PropertyOptions, opts = toPropertyOptions(options)): InOut => ({
-    property,
-    in: (source: Json = {}): JsonValue => opts.convert?.to(source[property] ?? ofGet(options?.dflt)),
-    out: (source: Json = {}, key = ''): JsonValue => opts.convert?.from(source[key]),
-  }),
-  ignore: (property: string): InOut => ({
+  item: (property: string, options?: PropertyOptions): Property => new Property(property, options),
+  ignore: (property = ''): InOut => ({
     property,
     in: (): JsonValue | undefined => undefined,
     out: (): JsonValue | undefined => undefined,
@@ -78,9 +77,9 @@ export const maps = {
     in: (source: Json = {}): JsonValue => ofGet(funcIn, source),
     out: (): JsonValue | undefined => undefined,
   }),
-  map: (property = '', mapper: Mapper): InOut => ({
+  map: (mapper: Construct<Mapper>, property = ''): InOut => ({
     property,
-    in: (source: Json = {}): JsonValue => mapper.in(isEmpty(property) ? source : (source[property] as Json)),
-    out: (source: Json = {}, key = ''): JsonValue => mapper.out(isEmpty(key) ? source : (source[key] as Json)),
+    in: (source: Json = {}): JsonValue => ofConstruct(mapper).in(isEmpty(property) ? source : (source[property] as Json)),
+    out: (source: Json = {}, key = ''): JsonValue => ofConstruct(mapper).out(isEmpty(key) ? source : (source[key] as Json)),
   }),
 };

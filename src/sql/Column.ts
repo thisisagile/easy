@@ -1,11 +1,11 @@
-import { InOut, PropertyOptions, toPropertyOptions } from '../utils';
+import { Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
 import { Json, JsonValue, ofGet, Text } from '../types';
 import { Table } from './Table';
 
-export class Column implements InOut, Text {
-  constructor(readonly owner: Table, readonly property: string, readonly options?: PropertyOptions) {
-    this.options = toPropertyOptions(options);
+export class Column extends Property implements Text {
+  constructor(readonly owner: Table, property: string, options?: PropertyOptions) {
+    super(property, options);
   }
 
   get count(): Column {
@@ -87,4 +87,5 @@ export class PatternColumn extends Column {
   }
 }
 
-export class OrderColumn extends PatternColumn {}
+export class OrderColumn extends PatternColumn {
+}

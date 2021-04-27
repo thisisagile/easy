@@ -1,10 +1,8 @@
-import { Collection, Field } from '../../src';
+import { Field } from '../../src';
 import '@thisisagile/easy-test';
 
-class developers extends Collection {}
-
 describe('Field', () => {
-  const field = new Field(new developers(), 'name');
+  const field = new Field('name');
 
   test('new field', () => {
     expect(field.property).toBe('name');

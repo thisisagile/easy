@@ -132,7 +132,7 @@ describe('Mapper', () => {
 
   class UseMapperMapper extends Mapper {
     readonly id = this.map.item('Id');
-    readonly company = this.map.map('', new CompanyMapper());
+    readonly company = this.map.map(new CompanyMapper());
   }
 
   test('sub maps should return in', () => {
@@ -165,7 +165,7 @@ describe('Mapper', () => {
 
   class UseMapperPropertyMapper extends Mapper {
     readonly id = this.map.item('Id');
-    readonly company = this.map.map('Company', new CompanyMapper());
+    readonly company = this.map.map(new CompanyMapper(), 'Company');
   }
 
   test('sub maps from sub object should return in', () => {
