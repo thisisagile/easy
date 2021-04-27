@@ -2,29 +2,29 @@ import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofCons
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
 
-export type InOut = {
+export type Mapping = {
   property: string;
   in: (source?: Json, key?: string) => JsonValue | undefined;
   out: (source?: Json, key?: string) => JsonValue | undefined;
 };
 
-export const isInOut = (io?: unknown): io is InOut => isA<InOut>(io, 'in', 'out');
+export const isMapping = (m?: unknown): m is Mapping => isA<Mapping>(m, 'in', 'out');
 
 export type MapStartFrom = 'scratch' | 'source';
 export type MapOptions = { startFrom: MapStartFrom };
 
-export class Mapper extends State implements InOut {
+export class Mapper extends State implements Mapping {
   protected readonly map = mappings;
 
   constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
     super();
   }
 
-  get properties(): List<[string, InOut]> {
+  get properties(): List<[string, Mapping]> {
     return this.get('props', () =>
       meta(this)
-        .entries<InOut>()
-        .filter(([, v]) => isInOut(v))
+        .entries<Mapping>()
+        .filter(([, v]) => isMapping(v))
     );
   }
 
@@ -62,22 +62,22 @@ export class Mapper extends State implements InOut {
 
 export const mappings = {
   item: (property: string, options?: PropertyOptions): Property => new Property(property, options),
-  ignore: (property = ''): InOut => ({
+  ignore: (property = ''): Mapping => ({
     property,
     in: (): JsonValue | undefined => undefined,
     out: (): JsonValue | undefined => undefined,
   }),
-  func: (property: string, funcIn: Get<JsonValue, Json>, funcOut: Get<JsonValue, Json>): InOut => ({
+  func: (property: string, funcIn: Get<JsonValue, Json>, funcOut: Get<JsonValue, Json>): Mapping => ({
     property,
     in: (source: Json = {}): JsonValue => ofGet(funcIn, source),
     out: (source: Json = {}): JsonValue => ofGet(funcOut, source),
   }),
-  add: (funcIn: Get<JsonValue, Json>): InOut => ({
+  add: (funcIn: Get<JsonValue, Json>): Mapping => ({
     property: '',
     in: (source: Json = {}): JsonValue => ofGet(funcIn, source),
     out: (): JsonValue | undefined => undefined,
   }),
-  map: (mapper: Construct<Mapper>, property = ''): InOut => ({
+  map: (mapper: Construct<Mapper>, property = ''): Mapping => ({
     property,
     in: (source: Json = {}): JsonValue => ofConstruct(mapper).in(isEmpty(property) ? source : (source[property] as Json)),
     out: (source: Json = {}, key = ''): JsonValue => ofConstruct(mapper).out(isEmpty(key) ? source : (source[key] as Json)),

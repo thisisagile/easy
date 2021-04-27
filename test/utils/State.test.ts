@@ -3,7 +3,6 @@ import { Dev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('State', () => {
-
   class MyState extends State {
     value = () => Dev.Jeroen;
     dev = () => this.get('dev', this.value);
@@ -16,7 +15,7 @@ describe('State', () => {
 
   beforeEach(() => {
     state = new MyState();
-  })
+  });
 
   test('get works', () => {
     const res = state.dev();
@@ -45,5 +44,5 @@ describe('State', () => {
     const res = state.setDev2(Dev.Sander);
     expect(res).toBe(Dev.Sander);
     expect(state.getDev2()).toBe(Dev.Sander);
-  })
+  });
 });
