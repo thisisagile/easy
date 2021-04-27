@@ -1,3 +1,5 @@
+import { asString } from '../types';
+
 export class Convert<From = unknown, To = unknown> {
   constructor(public readonly from: (f: From) => To, public readonly to: (t: To) => From) {}
 }
@@ -29,7 +31,7 @@ export const convert = {
   },
   toNumber: {
     fromString: new Convert<number, string>(
-      n => n.toString(),
+      n => asString(n),
       s => parseInt(s)
     ),
   },
