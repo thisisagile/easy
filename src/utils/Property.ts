@@ -11,15 +11,15 @@ export type PropertyOptions<T = unknown> = {
 export const toPropertyOptions = (options?: PropertyOptions): PropertyOptions => ({ ...options, convert: options?.convert ?? convert.default });
 
 export class Property<T = unknown> implements InOut {
-  constructor(readonly owner: unknown, readonly name: string, readonly options?: PropertyOptions) {
+  constructor(readonly owner: unknown, readonly property: string, readonly options?: PropertyOptions) {
     this.options = toPropertyOptions(options);
   }
 
-  in = (value: unknown): any => this.options?.convert?.to((value as any)[this.name] ?? ofGet(this.options?.dflt));
+  in = (value: unknown): any => this.options?.convert?.to((value as any)[this.property] ?? ofGet(this.options?.dflt));
   out = (value: unknown): any => this.options?.convert?.from(value);
 }
 
-export const isProperty = (p: unknown): p is Property => isA<Property>(p, 'owner', 'name', 'options');
+export const isProperty = (p: unknown): p is Property => isA<Property>(p, 'owner', 'property', 'options');
 
 export const toProperty = <T>(owner: unknown, name: string, options?: PropertyOptions<T>): Property<T> =>
   new Property<T>(owner, name, { ...options, convert: options?.convert ?? convert.default });

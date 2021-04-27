@@ -7,6 +7,6 @@ describe('Field', () => {
   const field = new Field(new developers(), 'name');
 
   test('new field', () => {
-    expect(field.name).toBe('name');
+    expect(field.property).toBe('name');
   });
 });

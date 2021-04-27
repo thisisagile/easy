@@ -7,7 +7,7 @@ describe('Condition', () => {
   const field = new Field(new developers(), 'name');
 
   test('simple', () => {
-    expect(new Condition(field.name, 'eq', 'Sander').toJSON()).toMatchObject({ name: { $eq: 'Sander' } });
+    expect(new Condition(field.property, 'eq', 'Sander').toJSON()).toMatchObject({ name: { $eq: 'Sander' } });
   });
 
   test('exists', () => {

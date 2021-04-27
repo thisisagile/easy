@@ -83,7 +83,7 @@ export class MongoProvider {
   }
 
   createTextIndexes(...fields: Field[]): Promise<string> {
-    const indexes = fields.reduce((i, f) => ({ ...i, [f.name]: 'text' }), {});
+    const indexes = fields.reduce((i, f) => ({ ...i, [f.property]: 'text' }), {});
     return this.collection().then(c => c.createIndex(indexes));
   }
 

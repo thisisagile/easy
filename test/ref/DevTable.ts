@@ -5,7 +5,6 @@ export class DevDatabase extends Database {
 }
 
 export class DevTable extends Table {
-
   readonly id = this.map.column('Id', { dflt: 42 });
   readonly name = this.map.column('Name');
   readonly language = this.map.column('Language', { dflt: 'TypeScript' });

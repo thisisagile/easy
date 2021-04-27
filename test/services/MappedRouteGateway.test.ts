@@ -15,7 +15,7 @@ describe('MappedRouteGateway', () => {
       () => DevUri.Developers,
       () => DevUri.Developer,
       map,
-      api,
+      api
     );
   });
 

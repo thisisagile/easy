@@ -14,7 +14,7 @@ export class MapProperty extends Property {
 
   out = (value: unknown): any => ofConstruct(this.m).out(this.val(value));
 
-  private val = (value: unknown): any => (isEmpty(this.name) ? value : (value as any)[this.name]);
+  private val = (value: unknown): any => (isEmpty(this.property) ? value : (value as any)[this.property]);
 }
 
 export class Map<P extends Property = Property> {
@@ -29,7 +29,7 @@ export class Map<P extends Property = Property> {
   }
 
   get columns(): List<string> {
-    return this.properties.map(([, p]) => p.name);
+    return this.properties.map(([, p]) => p.property);
   }
 
   private get dropped(): List<string> {
@@ -56,7 +56,7 @@ export class Map<P extends Property = Property> {
 
   out = (to: Json = {}): Json =>
     json.omit(
-      this.properties.reduce((a, [k, p]) => ({ ...a, [p.name]: p.out(to[k]) }), this.options.startFrom === 'source' ? to : {}),
+      this.properties.reduce((a, [k, p]) => ({ ...a, [p.property]: p.out(to[k]) }), this.options.startFrom === 'source' ? to : {}),
       ...this.keys
     );
 }

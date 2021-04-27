@@ -26,5 +26,5 @@ export class Field extends Property {
 
   lessEqual = (value: unknown): Condition => this.condition('lte', value);
 
-  protected condition = (operator: string, value: unknown): Condition => toCondition(this.name, operator, value, this.options?.convert);
+  protected condition = (operator: string, value: unknown): Condition => toCondition(this.property, operator, value, this.options?.convert);
 }
