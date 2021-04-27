@@ -16,8 +16,7 @@ export class Mapper implements InOut {
   protected readonly map = maps;
   private props?: List<[string, InOut]>;
 
-  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
-  }
+  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {}
 
   get properties(): List<[string, InOut]> {
     return (
@@ -43,16 +42,16 @@ export class Mapper implements InOut {
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped,
+      ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {},
+        this.options.startFrom === 'source' ? to : {}
       ),
-      ...this.keys,
+      ...this.keys
     );
 
   toString(): string {

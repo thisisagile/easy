@@ -87,5 +87,4 @@ export class PatternColumn extends Column {
   }
 }
 
-export class OrderColumn extends PatternColumn {
-}
+export class OrderColumn extends PatternColumn {}
