@@ -1,5 +1,6 @@
 import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet } from '../types';
 import { Property, PropertyOptions } from './Property';
+import { State } from './State';
 
 export type InOut = {
   property: string;
@@ -12,56 +13,46 @@ export const isInOut = (io?: unknown): io is InOut => isA<InOut>(io, 'in', 'out'
 export type MapStartFrom = 'scratch' | 'source';
 export type MapOptions = { startFrom: MapStartFrom };
 
-export class ConditionalState {
-  constructor(protected readonly state: any = {}) {
-  }
-
-  get = <T>(key: string, alt: Construct<T>): T => this.state[key] ?? (this.state[key] = ofConstruct(alt));
-  set = <T>(key: string, value: Construct<T>): T => (this.state[key] = ofConstruct(value));
-}
-
-export class Mapper implements InOut {
+export class Mapper extends State implements InOut {
   protected readonly map = mappings;
-  protected readonly state = new ConditionalState();
-  private props?: List<[string, InOut]>;
 
   constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
+    super();
   }
 
   get properties(): List<[string, InOut]> {
-    return this.state.get(
-      'props',
+    return this.get('props', () =>
       meta(this)
         .entries<InOut>()
-        .filter(([, v]) => isInOut(v)),
+        .filter(([, v]) => isInOut(v))
     );
   }
 
   get keys(): List<string> {
-    return this.properties.map(([k]) => k);
+    return this.get('keys', () => this.properties.map(([k]) => k));
   }
 
   get columns(): List<string> {
-    return this.properties.map(([, p]) => p.property ?? '');
+    return this.get('columns', () => this.properties.map(([, p]) => p.property ?? ''));
   }
 
   private get dropped(): List<string> {
-    return this.columns.filter(c => !this.keys.some(k => k === c));
+    return this.get('dropped', () => this.columns.filter(c => !this.keys.some(k => k === c)));
   }
 
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped,
+      ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {},
+        this.options.startFrom === 'source' ? to : {}
       ),
-      ...this.keys,
+      ...this.keys
     );
 
   toString(): string {
