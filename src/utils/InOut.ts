@@ -3,7 +3,7 @@ import { MapOptions } from './Map';
 import { PropertyOptions, toPropertyOptions } from './Property';
 
 export type InOut = {
-  property?: string;
+  property: string;
   in: (source?: Json, key?: string) => JsonValue | undefined;
   out: (source?: Json, key?: string) => JsonValue | undefined;
 };
@@ -14,7 +14,8 @@ export class Mapper implements InOut {
   protected readonly map = maps;
   private props?: List<[string, InOut]>;
 
-  constructor(public options: MapOptions = { startFrom: 'scratch' }) {}
+  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
+  }
 
   get properties(): List<[string, InOut]> {
     return (
@@ -25,19 +26,30 @@ export class Mapper implements InOut {
     );
   }
 
+  get keys(): List<string> {
+    return this.properties.map(([k]) => k);
+  }
+
+  get columns(): List<string> {
+    return this.properties.map(([, p]) => p.property ?? '');
+  }
+
+  private get dropped(): List<string> {
+    return this.columns.filter(c => !this.keys.some(k => k === c));
+  }
+
   in = (from: Json = {}): Json =>
-    this.properties.reduce(
-      (a, [k, p]) => json.omit({ ...a, [k]: p.in({ ...a, ...from }, k) }, p?.property ?? ''),
-      this.options.startFrom === 'source' ? from : {}
+    json.omit(
+      this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
+      ...this.dropped,
     );
 
   out = (to: Json = {}): Json =>
-    this.properties.reduce(
-      (a, [k, p]) => {
-        return json.omit(json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }), k);
-      },
-      this.options.startFrom === 'source' ? to : {}
-    );
+    json.omit(
+      this.properties.reduce(
+        (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
+        this.options.startFrom === 'source' ? to : {},
+      ), ...this.keys);
 
   toString(): string {
     return this.constructor.name;
