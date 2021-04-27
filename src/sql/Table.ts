@@ -25,6 +25,9 @@ export class Table extends Mapper {
     return new Count(this);
   }
 
+  /**
+   * @deprecated Since version 6.2. Please use map.column instead.
+   */
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Column => this.map.column(name, options);
 
   select = (...columns: Column[]): Select => new Select(this, toList(columns));

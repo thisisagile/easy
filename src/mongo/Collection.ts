@@ -14,6 +14,9 @@ export class Collection extends Mapper {
     super(options);
   }
 
+  /**
+   * @deprecated Since version 6.2. Please use map.field instead.
+   */
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Field => this.map.field(name, options);
 
   readonly id = this.prop('id', { dflt: toUuid });
