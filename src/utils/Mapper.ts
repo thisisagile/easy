@@ -82,14 +82,13 @@ export const mappings = {
     in: (source: Json = {}): JsonValue => ofConstruct(mapper).in(isEmpty(property) ? source : (source[property] as Json)),
     out: (source: Json = {}, key = ''): JsonValue => ofConstruct(mapper).out(isEmpty(key) ? source : (source[key] as Json)),
   }),
-  list: (...maps: Construct<Mapping>[]): Mapping => ({
+  list: (...maps: Mapping[]): Mapping => ({
     property: '',
     in: (source: Json = {}): JsonValue => toList(maps.map(m => ofConstruct(m).in(source))).toJSON(),
     out: (source: Json = {}, key = ''): JsonValue => maps.reduce((a: Json, m, i) => {
-      const mapping = ofConstruct(m);
       const res = toList(source[key])[i];
-      const out = mapping.out(res as Json);
-      return ({...a, [mapping.property]: out ?? {} });
+      const out = m.out(res as Json);
+      return ({...a, [m.property]: out ?? {} });
     }, {}),
   }),
 };
