@@ -1,6 +1,6 @@
 import { convert, Convert } from './Convert';
 import { Get, Json, JsonValue, ofGet } from '../types';
-import { Mapping } from './Mapping';
+import { Mapping } from './Mapper';
 
 export type PropertyOptions<T = unknown> = {
   convert?: Convert<any, any>;

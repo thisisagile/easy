@@ -192,4 +192,52 @@ describe('Mapper', () => {
     });
     expect(source).toStrictEqual({ Id: 42, Company: { Name: 'Acme', Website: site } });
   });
+
+  class ListMapper extends Mapper {
+    readonly id = this.map.item('Id');
+    readonly companies = this.map.list(this.map.map(CompanyMapper, 'Company'), this.map.map(CompanyMapper, 'StartUp'));
+    readonly company = this.map.ignore('Company');
+    readonly startup = this.map.ignore('StartUp');
+  }
+
+  test('list should return in', () => {
+    const scratch = new ListMapper().in({
+      Id: 42,
+      Company: { Name: 'Acme', Website: site },
+      StartUp: { Name: 'AcmeB', Website: site },
+    });
+    expect(scratch).toStrictEqual({ id: 42, companies: [{ title: 'Acme', site }, { title: 'AcmeB', site }] });
+    const source = new ListMapper({ startFrom: 'source' }).in({
+      Id: 42,
+      Company: { Name: 'Google', Website: site },
+      StartUp: { Name: 'GoogleB', Website: site },
+    });
+    expect(source).toStrictEqual({
+      id: 42,
+      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+    });
+  });
+
+  test('list should return out', () => {
+    const scratch = new ListMapper().out({
+      id: 42,
+      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+    });
+    expect(scratch).toStrictEqual({
+      Id: 42,
+      Company: { Name: 'Google', Website: site },
+      StartUp: { Name: 'GoogleB', Website: site },
+    });
+    const source = new ListMapper({ startFrom: 'source' }).out({
+      id: 42,
+      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+    });
+    expect(source).toStrictEqual({
+      Id: 42,
+      Company: { Name: 'Google', Website: site },
+      StartUp: { Name: 'GoogleB', Website: site },
+    });
+  });
+
+
 });

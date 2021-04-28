@@ -1,4 +1,4 @@
-import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet } from '../types';
+import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, toList } from '../types';
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
 
@@ -24,7 +24,7 @@ export class Mapper extends State implements Mapping {
     return this.get('props', () =>
       meta(this)
         .entries<Mapping>()
-        .filter(([, v]) => isMapping(v))
+        .filter(([, v]) => isMapping(v)),
     );
   }
 
@@ -43,16 +43,16 @@ export class Mapper extends State implements Mapping {
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped
+      ...this.dropped,
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {}
+        this.options.startFrom === 'source' ? to : {},
       ),
-      ...this.keys
+      ...this.keys,
     );
 
   toString(): string {
@@ -82,4 +82,15 @@ export const mappings = {
     in: (source: Json = {}): JsonValue => ofConstruct(mapper).in(isEmpty(property) ? source : (source[property] as Json)),
     out: (source: Json = {}, key = ''): JsonValue => ofConstruct(mapper).out(isEmpty(key) ? source : (source[key] as Json)),
   }),
+  list: (...maps: Construct<Mapping>[]): Mapping => ({
+    property: '',
+    in: (source: Json = {}): JsonValue => toList(maps.map(m => ofConstruct(m).in(source))).toJSON(),
+    out: (source: Json = {}, key = ''): JsonValue => maps.reduce((a: Json, m, i) => {
+      const mapping = ofConstruct(m);
+      const res = toList(source[key])[i];
+      const out = mapping.out(res as Json);
+      return ({...a, [mapping.property]: out ?? {} });
+    }, {}),
+  }),
 };
+
