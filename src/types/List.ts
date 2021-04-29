@@ -38,11 +38,6 @@ export class List<T> extends Array<T> {
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 }
 
-/**
- * @deprecated list will not be exported any more. Will be replaced by toList, to better handle a list of one item.
- */
-export const list = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
-
 export const toList = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
