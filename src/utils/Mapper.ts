@@ -24,7 +24,7 @@ export class Mapper extends State implements Mapping {
     return this.get('props', () =>
       meta(this)
         .entries<Mapping>()
-        .filter(([, v]) => isMapping(v)),
+        .filter(([, v]) => isMapping(v))
     );
   }
 
@@ -43,16 +43,16 @@ export class Mapper extends State implements Mapping {
   in = (from: Json = {}): Json =>
     json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped,
+      ...this.dropped
     );
 
   out = (to: Json = {}): Json =>
     json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {},
+        this.options.startFrom === 'source' ? to : {}
       ),
-      ...this.keys,
+      ...this.keys
     );
 
   toString(): string {
@@ -85,11 +85,11 @@ export const mappings = {
   list: (...maps: Mapping[]): Mapping => ({
     property: '',
     in: (source: Json = {}): JsonValue => toList(maps.map(m => ofConstruct(m).in(source))).toJSON(),
-    out: (source: Json = {}, key = ''): JsonValue => maps.reduce((a: Json, m, i) => {
-      const res = toList(source[key])[i];
-      const out = m.out(res as Json);
-      return ({...a, [m.property]: out ?? {} });
-    }, {}),
+    out: (source: Json = {}, key = ''): JsonValue =>
+      maps.reduce((a: Json, m, i) => {
+        const res = toList(source[key])[i];
+        const out = m.out(res as Json);
+        return { ...a, [m.property]: out ?? {} };
+      }, {}),
   }),
 };
-

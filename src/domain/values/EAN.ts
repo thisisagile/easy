@@ -7,6 +7,6 @@ export class EAN extends Value {
   }
 }
 
-export const isEAN = (EAN?: unknown): boolean => {
-  return !isEmpty(EAN) && validator.isEAN(asString(EAN));
+export const isEAN = (ean?: unknown): boolean => {
+  return !isEmpty(ean) && validator.isEAN(asString(ean));
 };

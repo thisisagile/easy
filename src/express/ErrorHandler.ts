@@ -4,10 +4,6 @@ import { HttpStatus, isResponse, OriginatedError, Response, rest, toHttpStatus, 
 import { choose } from '../utils';
 import { isAuthError } from './AuthError';
 
-// // type CustomError = { error: ErrorOrigin; options?: VerbOptions };
-//
-// const toCustomError = (e?: unknown): OriginatedError => isOriginatedError(e) ? e : new OriginatedError(e);
-
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   status,
   body: rest.toError(status, errors),

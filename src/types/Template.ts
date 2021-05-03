@@ -22,26 +22,26 @@ class Template implements Text {
       .toString();
   };
 
-  private props = (template: string, key: string, result: List<string> = toList()): string[] => {
-    const i1 = template.indexOf(`{${key}`);
+  private props = (tmpl: string, key: string, result: List<string> = toList()): string[] => {
+    const i1 = tmpl.indexOf(`{${key}`);
     if (i1 < 0) {
       return result;
     }
-    const i2 = template.indexOf('}', i1);
-    return this.props(template.slice(i2 + 1), key, result.add(template.substring(i1 + 1, i2)));
+    const i2 = tmpl.indexOf('}', i1);
+    return this.props(tmpl.slice(i2 + 1), key, result.add(tmpl.substring(i1 + 1, i2)));
   };
 
   private object = (): string => {
     return this.props(this.template, 'this').reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.subject, p.replace('this.', ''))), this.template);
   };
 
-  private option = (template: string, prop: string): string => {
-    return this.props(template, prop).reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.options, p)), template);
+  private option = (tmpl: string, prop: string): string => {
+    return this.props(tmpl, prop).reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.options, p)), tmpl);
   };
 }
 
-export const template = (template: Text, subject: unknown, options: TemplateOptions = {}): Text =>
-  new Template(template.toString(), subject, {
+export const template = (tmpl: Text, subject: unknown, options: TemplateOptions = {}): Text =>
+  new Template(tmpl.toString(), subject, {
     type: toName(subject),
     ...options,
   });

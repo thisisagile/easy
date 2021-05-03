@@ -206,7 +206,13 @@ describe('Mapper', () => {
       Company: { Name: 'Acme', Website: site },
       StartUp: { Name: 'AcmeB', Website: site },
     });
-    expect(scratch).toStrictEqual({ id: 42, companies: [{ title: 'Acme', site }, { title: 'AcmeB', site }] });
+    expect(scratch).toStrictEqual({
+      id: 42,
+      companies: [
+        { title: 'Acme', site },
+        { title: 'AcmeB', site },
+      ],
+    });
     const source = new ListMapper({ startFrom: 'source' }).in({
       Id: 42,
       Company: { Name: 'Google', Website: site },
@@ -214,14 +220,20 @@ describe('Mapper', () => {
     });
     expect(source).toStrictEqual({
       id: 42,
-      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+      companies: [
+        { title: 'Google', site },
+        { title: 'GoogleB', site },
+      ],
     });
   });
 
   test('list should return out', () => {
     const scratch = new ListMapper().out({
       id: 42,
-      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+      companies: [
+        { title: 'Google', site },
+        { title: 'GoogleB', site },
+      ],
     });
     expect(scratch).toStrictEqual({
       Id: 42,
@@ -230,7 +242,10 @@ describe('Mapper', () => {
     });
     const source = new ListMapper({ startFrom: 'source' }).out({
       id: 42,
-      companies: [{ title: 'Google', site }, { title: 'GoogleB', site }],
+      companies: [
+        { title: 'Google', site },
+        { title: 'GoogleB', site },
+      ],
     });
     expect(source).toStrictEqual({
       Id: 42,
@@ -238,6 +253,4 @@ describe('Mapper', () => {
       StartUp: { Name: 'GoogleB', Website: site },
     });
   });
-
-
 });

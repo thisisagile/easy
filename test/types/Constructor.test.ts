@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { isConstructor, ofConstruct, toName, text } from '../../src';
+import { isConstructor, ofConstruct, text, toName } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
