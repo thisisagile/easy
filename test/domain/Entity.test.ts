@@ -39,8 +39,8 @@ describe('Entity', () => {
       name: 'Sander',
       level: 3,
       language: 'TypeScript',
-      created: { by: { id: 0, name: 'easy' }, when: Dev.Sander.created.when.value },
-      lastModified: { by: { id: 0, name: 'easy' }, when: Dev.Sander.lastModified.when.value },
+      created: { by: { id: 0, user: 'easy' }, when: Dev.Sander.created.when.value },
+      lastModified: { by: { id: 0, user: 'easy' }, when: Dev.Sander.lastModified.when.value },
     });
   });
 
@@ -53,7 +53,7 @@ describe('Entity', () => {
       name: 'Sander',
       level: 1,
       created: Dev.Sander.created.toJSON(),
-      lastModified: { by: { id: 0, name: 'easy' }, when: d.value },
+      lastModified: { by: { id: 0, user: 'easy' }, when: d.value },
     });
   });
 });
