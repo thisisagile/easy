@@ -10,9 +10,9 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 12.x
+          node-version: '14'
       - name: Setup npm cache
         id: npm-cache
         run: |
@@ -46,9 +46,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 12.x
+          node-version: '14'
       - name: Setup npm cache
         id: npm-cache
         run: |
