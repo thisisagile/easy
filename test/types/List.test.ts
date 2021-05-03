@@ -177,7 +177,7 @@ describe('asList', () => {
   });
 
   test('from devs works', () => {
-    expect(asList(Dev, [Dev.Naoufal.toJSON()]).first()).toMatchObject(Dev.Naoufal.toJSON());
+    expect(asList(Dev, [Dev.Naoufal.toJSON()]).first().toJSON()).toMatchObject(Dev.Naoufal.toJSON());
   });
 });
 

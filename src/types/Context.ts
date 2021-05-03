@@ -1,6 +1,7 @@
 import { Uuid } from './Uuid';
 import { createNamespace } from 'cls-hooked';
 import { text } from './Text';
+import { Identity } from './Identity';
 
 export type EnvContext = {
   readonly domain: string;
@@ -27,6 +28,7 @@ export class DotEnvContext implements EnvContext {
 
 export type RequestContext = {
   token?: any;
+  identity?: Identity;
   jwt: string;
   correlationId?: Uuid;
   create: (f: () => void) => void;
@@ -41,6 +43,10 @@ export class NamespaceContext implements RequestContext {
 
   set token(token: unknown) {
     this.namespace.set('token', token);
+  }
+
+  get identity(): Identity {
+    return this.token as Identity;
   }
 
   get jwt(): string {

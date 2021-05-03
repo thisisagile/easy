@@ -81,7 +81,7 @@ describe('Table in and out', () => {
 
   test('table.out is correct with clear is false', () => {
     const res2 = new DevTable({ startFrom: 'source' }).out(Dev.Jeroen.toJSON());
-    expect(res2).toEqual({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
+    expect(res2).toMatchObject({ Id: 1, Language: 'TypeScript', Name: 'Jeroen', CodingLevel: '3' });
   });
 
   test('table.out is correct with clear is true', () => {

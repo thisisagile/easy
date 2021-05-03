@@ -28,7 +28,7 @@ describe('Repo', () => {
     const d = await repo.byId(42);
     expect(gateway.byId).toHaveBeenCalledWith(42);
     expect(d).toBeInstanceOf(Dev);
-    expect(d).toMatchObject(devs.first());
+    expect(d.toJSON()).toMatchObject(devs.first());
   });
 
   test('byId rejects if gateway returns undefined', async () => {
@@ -38,7 +38,7 @@ describe('Repo', () => {
   });
 
   test('by triggers the gateway', async () => {
-    gateway.by = mock.resolve(toList(Dev.Naoufal));
+    gateway.by = mock.resolve(toList(Dev.Naoufal.toJSON()));
     const res = await repo.by('level', '42');
     expect(res.toJSON()).toMatchObject(toList(Dev.Naoufal).toJSON());
     expect(gateway.by).toHaveBeenCalledWith('level', '42');

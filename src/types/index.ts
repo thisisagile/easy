@@ -9,6 +9,7 @@ export * from './Func';
 export * from './Gateway';
 export * from './Get';
 export * from './Id';
+export * from './Identity';
 export * from './Is';
 export * from './IsA';
 export * from './IsDate';

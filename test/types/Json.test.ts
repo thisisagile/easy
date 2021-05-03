@@ -73,7 +73,7 @@ describe('toJson', () => {
 });
 
 describe('json', () => {
-  const dev = Dev.Naoufal.toJSON();
+  const dev = { id: 2, name: 'Naoufal', level: 3, language: 'TypeScript' };
 
   test('omit undefined should return what?', () => {
     const empty = json.omit(undefined, 'language');

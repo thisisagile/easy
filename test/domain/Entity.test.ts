@@ -1,6 +1,7 @@
-import { Entity, isUuid, required } from '../../src';
+import { Entity, isUuid, required, DateTime } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
+import { mock } from '@thisisagile/easy-test';
 
 describe('Entity', () => {
   class Manager extends Entity {
@@ -33,6 +34,26 @@ describe('Entity', () => {
 
   test('toJSON works', () => {
     const dev = Dev.Sander.toJSON();
-    expect(dev).toStrictEqual({ id: 3, name: 'Sander', level: 3, language: 'TypeScript' });
+    expect(dev).toStrictEqual({
+      id: 3,
+      name: 'Sander',
+      level: 3,
+      language: 'TypeScript',
+      created: { by: { id: 0, name: 'easy' }, when: Dev.Sander.created.when.value },
+      lastModified: { by: { id: 0, name: 'easy' }, when: Dev.Sander.lastModified.when.value },
+    });
+  });
+
+  test('Update sets new lastModified', () => {
+    const d = new DateTime('2021-05-03T10:31:24.000Z');
+    mock.property(DateTime, 'now', d);
+    const dev = Dev.Sander.update({ level: 1 });
+    expect(dev.toJSON()).toMatchObject({
+      id: 3,
+      name: 'Sander',
+      level: 1,
+      created: Dev.Sander.created.toJSON(),
+      lastModified: { by: { id: 0, name: 'easy' }, when: d.value },
+    });
   });
 });
