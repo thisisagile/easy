@@ -81,6 +81,10 @@ export class MongoProvider {
   createIndex(field: string | any, unique = true): Promise<string> {
     return this.collection().then(c => c.createIndex(field, { unique, w: 1 }));
   }
+  
+  createPartialIndex(field: string | any, partialFilterExpression: object, unique = true): Promise<string> {
+      return this.collection().then(c => c.createIndex(field, { partialFilterExpression: partialFilterExpression, unique, w: 1 }));
+  }
 
   createTextIndexes(...fields: Field[]): Promise<string> {
     const indexes = fields.reduce((i, f) => ({ ...i, [f.property]: 'text' }), {});
