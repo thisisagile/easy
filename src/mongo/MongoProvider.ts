@@ -1,4 +1,4 @@
-import { asString, Exception, Id, isDefined, json, Json, JsonValue, List, toList } from '../types';
+import { asJson, asString, Exception, Id, isDefined, json, Json, JsonValue, List, toList } from '../types';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { when } from '../validation';
 import { Condition } from './Condition';
@@ -30,7 +30,7 @@ export class MongoProvider {
 
   find(query: Condition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
-      .then(c => c.find(query, { ...options, limit: options.limit ?? 250 }))
+      .then(c => c.find(asJson(query), { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
@@ -83,7 +83,7 @@ export class MongoProvider {
   }
 
   createPartialIndex(field: string | any, filter: Condition | FilterQuery<any>, unique = true): Promise<string> {
-    return this.collection().then(c => c.createIndex(field, { partialFilterExpression: filter, unique, w: 1 }));
+    return this.collection().then(c => c.createIndex(field, { partialFilterExpression: asJson(filter), unique, w: 1 }));
   }
 
   createTextIndexes(...fields: Field[]): Promise<string> {
