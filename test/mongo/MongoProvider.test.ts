@@ -10,6 +10,7 @@ describe('MongoProvider', () => {
   const cursor = {} as Cursor;
   let provider: MongoProvider;
   const collection = new DevCollection();
+  const filter = { name: { $exists: true } };
 
   beforeEach(() => {
     provider = new MongoProvider(collection, Promise.resolve(client));
@@ -129,6 +130,20 @@ describe('MongoProvider', () => {
     provider.collection = mock.resolve(c);
     await expect(provider.createTextIndexes(collection.language, collection.name)).resolves.toBe('Language_text_Name_text');
     expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' });
+  });
+
+  test('createPartialIndex calls createIndex on the collection with filter expression and creates unique indexes by default', async () => {
+      c.createIndex = mock.resolve('_index');
+      provider.collection = mock.resolve(c);
+      await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
+      expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, w: 1 });
+    });
+  
+  test('create non unique partial index calls createIndex on the collection with filter expression', async () => {
+    c.createIndex = mock.resolve('_index');
+    provider.collection = mock.resolve(c);
+    await expect(provider.createPartialIndex('name', filter, false)).resolves.toBe('_index');
+    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: false, w: 1 });
   });
 
   test('first time connect to the mongo cluster', async () => {
