@@ -133,12 +133,12 @@ describe('MongoProvider', () => {
   });
 
   test('createPartialIndex calls createIndex on the collection with filter expression and creates unique indexes by default', async () => {
-      c.createIndex = mock.resolve('_index');
-      provider.collection = mock.resolve(c);
-      await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
-      expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, w: 1 });
-    });
-  
+    c.createIndex = mock.resolve('_index');
+    provider.collection = mock.resolve(c);
+    await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
+    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, w: 1 });
+  });
+
   test('create non unique partial index calls createIndex on the collection with filter expression', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
