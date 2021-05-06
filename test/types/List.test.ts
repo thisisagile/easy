@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, isList, List, Scope, toList } from '../../src';
+import { asList, isList, List, Scope, toList, toObject } from '../../src';
 
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
@@ -17,7 +17,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -91,12 +91,22 @@ describe('isList', () => {
     expect(isList({})).toBeFalsy();
     expect(isList([])).toBeFalsy();
     expect(
-      isList<Dev>([Dev.Sander, Dev.Jeroen]),
+      isList<Dev>([Dev.Sander, Dev.Jeroen])
     ).toBeFalsy();
   });
 
   test('Is true', () => {
     expect(isList<Dev>(toList(Dev.Sander, Dev.Jeroen))).toBeTruthy();
+  });
+
+  test('toObject', () => {
+    const res = Dev.All.toObject('id');
+    expect(res).toStrictEqual({
+      [Dev.Naoufal.id]: Dev.Naoufal,
+      [Dev.Wouter.id]: Dev.Wouter,
+      [Dev.Sander.id]: Dev.Sander,
+      [Dev.Jeroen.id]: Dev.Jeroen,
+    });
   });
 });
 
@@ -180,4 +190,3 @@ describe('asList', () => {
     expect(asList(Dev, [Dev.Naoufal.toJSON()]).first().toJSON()).toMatchObject(Dev.Naoufal.toJSON());
   });
 });
-
