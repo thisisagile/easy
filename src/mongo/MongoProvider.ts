@@ -82,7 +82,7 @@ export class MongoProvider {
     return this.collection().then(c => c.createIndex(field, { unique, w: 1 }));
   }
 
-  createPartialIndex(field: string | any, filter: Json, unique = true): Promise<string> {
+  createPartialIndex(field: string | any, filter: Condition | FilterQuery<any>, unique = true): Promise<string> {
     return this.collection().then(c => c.createIndex(field, { partialFilterExpression: filter, unique, w: 1 }));
   }
 
