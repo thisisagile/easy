@@ -7,7 +7,6 @@ export type Mapping = {
   in: (source?: Json, key?: string) => JsonValue | undefined;
   out: (source?: Json, key?: string) => JsonValue | undefined;
 };
-
 export const isMapping = (m?: unknown): m is Mapping => isA<Mapping>(m, 'in', 'out');
 
 export type MapStartFrom = 'scratch' | 'source';
