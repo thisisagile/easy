@@ -15,7 +15,7 @@ export class Collection extends Mapper {
   }
 
   /**
-   * @deprecated Since version 6.2. Please use map.field instead.
+   * @deprecated Deprecated since version 6.2. Please use map.field instead.
    */
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Field => this.map.field(name, options);
 
