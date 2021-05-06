@@ -1,4 +1,4 @@
-import { toArray } from './Array';
+import { ArrayLike, toArray } from './Array';
 import { Constructor } from './Constructor';
 import { json, Json } from './Json';
 import { isArray, isDefined } from './Is';
@@ -38,13 +38,13 @@ export class List<T> extends Array<T> {
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 }
 
-export const toList = <T>(...items: (T | T[])[]): List<T> => new List<T>(...toArray(...items));
+export const toList = <T>(...items: ArrayLike<T>): List<T> => new List<T>(...toArray<T>(...items));
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
 export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
 
-export const toObject = <T>(key: keyof T, ...items: (T | T[])[]): Json =>
+export const toObject = <T>(key: keyof T, ...items: ArrayLike<T>): Json =>
   toList(...items).reduce((o: any, i) => {
     o[i[key]] = i;
     return o;
