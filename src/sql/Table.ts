@@ -26,7 +26,7 @@ export class Table extends Mapper {
   }
 
   /**
-   * @deprecated Since version 6.2. Please use map.column instead.
+   * @deprecated Deprecated since version 6.2. Please use map.column instead.
    */
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Column => this.map.column(name, options);
 
