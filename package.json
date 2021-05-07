@@ -9,12 +9,14 @@
     "format": "yarn workspaces foreach run format",
     "lint": "yarn workspaces foreach run lint",
     "build": "yarn workspaces foreach -tp run build",
-    "test": "yarn workspaces foreach run test"
+    "test": "yarn workspaces foreach run test",
+    "release": "release-it"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
+    "@release-it/conventional-changelog": "^2.0.1",
     "@tsconfig/node14": "^1.0.0",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.2",
@@ -32,6 +34,8 @@
     "jest-junit": "^12.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.2.1",
+    "release-it": "^14.6.1",
+    "release-it-yarn-workspaces": "^2.0.1",
     "ts-jest": "^26.5.3",
     "typescript": "^4.2.4"
   }
