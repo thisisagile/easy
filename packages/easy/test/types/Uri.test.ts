@@ -1,7 +1,7 @@
 import { asString, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
-import { host } from '../init';
+import { host } from '../../../../test/init';
 
 describe('Uri', () => {
   const withHost = `${host}/dev/developers`;
