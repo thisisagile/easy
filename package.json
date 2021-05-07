@@ -8,8 +8,8 @@
     "g:jest": "cd $INIT_CWD && jest",
     "format": "yarn workspaces foreach run format",
     "lint": "yarn workspaces foreach run lint",
-    "build": "yarn workspaces foreach -tp run build",
-    "test": "yarn workspaces foreach run test",
+    "build": "yarn workspaces foreach -pt run build",
+    "test": "jest --coverage",
     "release": "release-it"
   },
   "workspaces": [

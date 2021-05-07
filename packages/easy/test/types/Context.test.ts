@@ -1,5 +1,5 @@
 import { Context, ctx, NamespaceContext } from '../../src';
-import { host, port } from '../init';
+import { host, port } from '../../../../test/init';
 
 describe('Environment Context', () => {
   test('default environment context', () => {
