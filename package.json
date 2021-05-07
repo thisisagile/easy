@@ -6,10 +6,11 @@
     "g:eslint": "cd $INIT_CWD && eslint",
     "g:tsc": "cd $INIT_CWD && tsc",
     "g:jest": "cd $INIT_CWD && jest",
-    "format": "yarn workspaces foreach run format",
-    "lint": "yarn workspaces foreach run lint",
-    "build": "yarn workspaces foreach -pt run build",
-    "test": "jest --coverage",
+    "format-all": "yarn workspaces foreach run format",
+    "lint-all": "yarn workspaces foreach run lint",
+    "build-all": "yarn workspaces foreach -pt run build",
+    "test-all": "jest --coverage",
+    "test-sonarqube": "yarn workspaces foreach run test",
     "release": "release-it"
   },
   "workspaces": [
