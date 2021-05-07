@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "yarn g:prettier --write src test *.json",
+    "format": "yarn g:prettier --check --write src test *.json",
     "build": "yarn g:tsc",
     "test": "yarn g:jest --coverage",
     "prepack": "npm run build"
