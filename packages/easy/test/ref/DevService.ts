@@ -1,6 +1,6 @@
-import { error, Handler, notFound, Service } from '../../src';
+import { Handler, Service } from '../../src';
 
 export class DevService extends Service {
   pre = (): Handler[] => [];
-  post = (): Handler[] => [notFound, error];
+  post = (): Handler[] => [];
 }

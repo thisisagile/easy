@@ -1,8 +1,16 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
-import { toList } from '../types';
-import { HttpStatus, rest, toOriginatedError, toVerbOptions } from '../http';
-import { AppProvider, Endpoint, Handler, Resource, Route, routes, Service, toReq, VerbOptions } from '../resources';
+import {
+  AppProvider,
+  Endpoint,
+  Handler, HttpStatus,
+  Resource, rest,
+  Route,
+  routes,
+  Service, toList, toOriginatedError,
+  toReq, toVerbOptions,
+  VerbOptions,
+} from '@thisisagile/easy';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 

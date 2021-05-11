@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { authError, error, Exception, HttpStatus, rest, toOriginatedError, toResults } from '../../src';
+import { authError, error, Exception, HttpStatus, rest, toOriginatedError, toResults } from '@thisisagile/easy';
 
 describe('ErrorHandler', () => {
   const options = { onOk: HttpStatus.Ok, onNotFound: HttpStatus.Conflict, onError: HttpStatus.ImATeapot };

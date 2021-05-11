@@ -1,6 +1,7 @@
 import passport from 'passport';
-import { authError, checkScope, checkUseCase, HttpStatus, Scope, security, UseCase } from '../../src';
+import { authError, checkScope, checkUseCase, security } from '../../src';
 import { Request, Response } from 'express';
+import { HttpStatus, Scope, UseCase } from '@thisisagile/easy';
 
 describe('Checks', () => {
   const cb = jest.fn();

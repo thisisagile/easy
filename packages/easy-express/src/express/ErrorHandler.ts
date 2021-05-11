@@ -1,8 +1,15 @@
-import { asString, Exception, isError, isException, isResults, isText, Result, Results, toResult } from '../types';
 import express from 'express';
-import { HttpStatus, isResponse, OriginatedError, Response, rest, toHttpStatus, toOriginatedError } from '../http';
-import { choose } from '../utils';
 import { isAuthError } from './AuthError';
+import {
+  asString,
+  choose,
+  Exception, HttpStatus, isError,
+  isException,
+  isResponse, isResults, isText,
+  OriginatedError, Response,
+  rest, Result, Results, toHttpStatus,
+  toOriginatedError, toResult,
+} from '@thisisagile/easy';
 
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   status,

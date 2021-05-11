@@ -1,5 +1,4 @@
-import { HttpStatus } from '../http';
-import { isError } from '../types';
+import { HttpStatus, isError } from '@thisisagile/easy';
 
 export class AuthError extends Error {
   status: number;
