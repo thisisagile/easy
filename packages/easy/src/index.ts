@@ -1,6 +1,5 @@
 export * from './data';
 export * from './domain';
-export * from './express';
 export * from './http';
 export * from './health';
 export * from './mongo';

@@ -1,6 +1,6 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '../../src';
+import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { mock } from '@thisisagile/easy-test';
-import { ctx, requestContext } from '../../src';
+import { requestContext } from '../../src';
+import { ctx } from '@thisisagile/easy';
 
 describe('requestContext', () => {
   test('correlation already in request', () => {

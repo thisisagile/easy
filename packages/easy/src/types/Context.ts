@@ -1,5 +1,4 @@
 import { Uuid } from './Uuid';
-import { createNamespace } from 'cls-hooked';
 import { text } from './Text';
 import { Identity } from './Identity';
 
@@ -34,15 +33,15 @@ export type RequestContext = {
   create: (f: () => void) => void;
 };
 
-export class NamespaceContext implements RequestContext {
-  private readonly namespace = createNamespace('context');
+export class BaseContext implements RequestContext {
+  private state: any = {};
 
   get token(): unknown {
-    return this.namespace.get('token');
+    return this.state.token;
   }
 
   set token(token: unknown) {
-    this.namespace.set('token', token);
+    this.state.token = token;
   }
 
   get identity(): Identity {
@@ -50,34 +49,34 @@ export class NamespaceContext implements RequestContext {
   }
 
   get jwt(): string {
-    return this.namespace.get('jwt');
+    return this.state.jwt;
   }
 
   set jwt(jwt: string) {
-    this.namespace.set('jwt', jwt);
+    this.state.jwt = jwt;
   }
 
   get correlationId(): Uuid {
-    return this.namespace.get('correlationId');
+    return this.state.correlationId;
   }
 
   set correlationId(id: Uuid) {
-    this.namespace.set('correlationId', id);
+    this.state.correlationId = id;
   }
 
   public get(key: string): any {
-    return this.namespace.get(key);
+    return this.state[key];
   }
 
   public set<T>(key: string, value: T): T {
-    return this.namespace.set(key, value);
+    return this.state[key] = value;
   }
 
-  public readonly create = (f: () => void): void => this.namespace.run(f);
+  public readonly create = (f: () => void): void => f();
 }
 
 export class Context {
-  constructor(protected state: any = { env: new DotEnvContext(), request: new NamespaceContext(), other: {} }) {}
+  constructor(protected state: any = { env: new DotEnvContext(), request: new BaseContext(), other: {} }) {}
 
   get env(): EnvContext {
     return this.state.env;

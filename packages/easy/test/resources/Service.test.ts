@@ -12,7 +12,7 @@ describe('Service', () => {
   test('Construction works', () => {
     const service = new DevService('dev', app);
     expect(service.pre()).toHaveLength(0);
-    expect(service.post()).toHaveLength(2);
+    expect(service.post()).toHaveLength(0);
   });
 
   test('start works', () => {

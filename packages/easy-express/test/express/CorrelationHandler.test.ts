@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { mock } from '@thisisagile/easy-test';
-import { correlation, ctx, HttpHeader, isUuid } from '../../src';
+import { ctx, HttpHeader, isUuid } from '@thisisagile/easy';
+import { correlation } from '../../src';
 
 describe('CorrelationHandler', () => {
   test('Correlation already in request', () => {
