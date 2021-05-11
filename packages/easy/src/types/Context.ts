@@ -69,7 +69,7 @@ export class BaseContext implements RequestContext {
   }
 
   public set<T>(key: string, value: T): T {
-    return this.state[key] = value;
+    return (this.state[key] = value);
   }
 
   public readonly create = (f: () => void): void => f();

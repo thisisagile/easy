@@ -3,12 +3,21 @@ import { isAuthError } from './AuthError';
 import {
   asString,
   choose,
-  Exception, HttpStatus, isError,
+  Exception,
+  HttpStatus,
+  isError,
   isException,
-  isResponse, isResults, isText,
-  OriginatedError, Response,
-  rest, Result, Results, toHttpStatus,
-  toOriginatedError, toResult,
+  isResponse,
+  isResults,
+  isText,
+  OriginatedError,
+  Response,
+  rest,
+  Result,
+  Results,
+  toHttpStatus,
+  toOriginatedError,
+  toResult,
 } from '@thisisagile/easy';
 
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({

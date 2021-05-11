@@ -3,12 +3,17 @@ import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import {
   AppProvider,
   Endpoint,
-  Handler, HttpStatus,
-  Resource, rest,
+  Handler,
+  HttpStatus,
+  Resource,
+  rest,
   Route,
   routes,
-  Service, toList, toOriginatedError,
-  toReq, toVerbOptions,
+  Service,
+  toList,
+  toOriginatedError,
+  toReq,
+  toVerbOptions,
   VerbOptions,
 } from '@thisisagile/easy';
 
