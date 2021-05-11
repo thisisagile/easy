@@ -77,14 +77,22 @@ export class NamespaceContext implements RequestContext {
 }
 
 export class Context {
-  constructor(protected state: any = { other: {} }) {}
+  constructor(protected state: any = { env: new DotEnvContext(), request: new NamespaceContext(), other: {} }) {}
 
   get env(): EnvContext {
-    return (this.state.env = this.state.env ?? new DotEnvContext());
+    return this.state.env;
+  }
+
+  set env(env: EnvContext) {
+    this.state.env = env;
   }
 
   get request(): RequestContext {
-    return (this.state.request = this.state.request ?? new NamespaceContext());
+    return this.state.request;
+  }
+
+  set request(request: RequestContext) {
+    this.state.request = request;
   }
 
   get other(): any {
