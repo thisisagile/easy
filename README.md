@@ -61,7 +61,7 @@ The domain layer also knows the repository layer supertype, for handling instanc
 ### Entities
 Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
 
-All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
+All classes that inherit from `Record` or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
 
 An example of an entity is the `Movie` class below. Here the content of the object comes from an external service (called OMDb), and is mapped to the actual properties of the `Movie` class.
 
@@ -79,9 +79,9 @@ Some properties of `Movie` have decorators, such as `@required`. These decorator
 ### Enumerables
 Most modern programming languages support the use of enumerables. The goal of enumerables is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
 
-First, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
+First, in most languages, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
 
-Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
+Secondly, in most languages (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
 
 Thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
 
@@ -194,7 +194,7 @@ P.S. If you create custom constraints that might be helpful for other developers
 ## Data
 Microservices can use data from a variety of sources, transform and process that data, and expose that to their users through their own API. In the different microservices architecture implementations we've seen data for instance come from:
 
-- a variety of relational databases, such as SQL Server, MySQL, or PostreSQL.
+- a variety of relational databases, such as SQL Server, MySQL, or PostgreSQL.
 - a variety of non-relational databases, quite often MongoDB.
 - file systems.
 - systems the organization owns. such as HR, marketing, ERP or CMS.
