@@ -61,4 +61,5 @@ jobs:
           git config user.name "${GITHUB_ACTOR}"
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+          npm config set scripts-prepend-node-path true
           yarn release
