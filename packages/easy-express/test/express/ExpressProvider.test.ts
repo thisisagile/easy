@@ -1,8 +1,9 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, ExpressProvider, ExpressVerb, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '@thisisagile/easy';
+import { Exception, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
+import { ExpressProvider, ExpressVerb } from '../../src';
 
 type PathParams = string | RegExp | Array<string | RegExp>;
 type AsyncHandler = (req: Request, res: Response, next: NextFunction) => Promise<any>;
