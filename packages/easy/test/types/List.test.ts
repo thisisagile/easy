@@ -38,6 +38,7 @@ describe('List', () => {
     expect(devs.first()).toMatchObject(Dev.Sander);
     expect(devs.first(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
     expect(devs.first(d => d.name === 'Rene')).toBeUndefined();
+    expect(new List().first()).toBeUndefined();
   });
 
   test('last', () => {
@@ -45,6 +46,7 @@ describe('List', () => {
     expect(devs.last()).toMatchObject(Dev.Naoufal);
     expect(devs.last(d => d.name === Dev.Jeroen.name)).toMatchObject(Dev.Jeroen);
     expect(devs.last(d => d.name === 'Rene')).toBeUndefined();
+    expect(new List().last()).toBeUndefined();
   });
 
   test('concat', () => {
