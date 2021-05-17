@@ -61,9 +61,9 @@ The domain layer also knows the repository layer supertype, for handling instanc
 ### Entities
 Using **easy**, your entities, as described in domain driven design, inherit from the `Entity` class. This gives your entities identity. The default implementation of `Entity` provides a generated `id` property (it's a UUID by default). 
 
-All classes that inherit from `Record`  or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
+All classes that inherit from `Record` or `Entity` will have an internal object called `state`. Normally, the state of an object is passed to it during construction. Using this internal object `state` allows for easy mapping of the content of an entity, which is usually JSON, to its properties. We prefer to keep our entities immutable. Properties therefore can be readonly. An update to an object is considered a state change and should therefore always return a new instance of the entity, instead of modifying the state of the current instance.
 
-An example of an entity is the `Movie` class below. Here the content of the object comes from an external service (called Omdb), and is mapped to the actual properties of the `Movie` class.
+An example of an entity is the `Movie` class below. Here the content of the object comes from an external service (called OMDb), and is mapped to the actual properties of the `Movie` class.
 
     export class Movie extends Entity {
         @required() readonly id: Id = this.state.imdbID;
@@ -79,9 +79,9 @@ Some properties of `Movie` have decorators, such as `@required`. These decorator
 ### Enumerables
 Most modern programming languages support the use of enumerables. The goal of enumerables is to allow only a limited set of values to be chosen for a particular property or passed as a parameter of a function, or its return type. Although this seems trivial, there are some drawbacks to using enumerables. 
 
-First, in most language, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
+First, in most languages, you can not inherit from enumerables. As a result, if you define an enumerable in a library, and would like to add values to it in another repository, this is not possible. If you would, as we do in **easy** support a list of scopes, we could have created an enumerable `Scope`, with the scopes we see. However, if you use **easy** and would like to add your own scopes, this is not possible with a default enumerable.
 
-Secondly, in most language (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
+Secondly, in most languages (Java not included), enumerations only have two properties, the name and the index of its items. If you want to have some more properties on you enumerations, or add some behavior, an enumerable is not your best bet.
 
 Thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
 
@@ -102,7 +102,7 @@ Therefore, **easy** provides an `Enum` class, which is both extendable and allow
 The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
 
 ### Value objects
-When we are not so much interested in the identity of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice usfeul definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
+When we are not so much interested in the identity of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice useful definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
 
 > An object that represents a descriptive aspect of the domain with no conceptual identity is called a Value Object. Value Objects are instantiated to represent elements of the design that we care about only for what they are, not who or which they are.
 
@@ -154,7 +154,7 @@ The `validate()` validates the following:
 ### Constraints
 The easiest way to validate objects is to use constraints. By adding constraints, as decorators, to the properties and functions on the object you would like to validate, these properties and functions will be checked when the object is validated through calling `validate(myObject)`. **easy** comes with a variety of ready-to-use constraints, but it is also easy (no pun intended) to add your own.
 
-Below is a typical example of an entity, which derives from the `Entity` class in **easy**. It has a number of properties, which are prefilled with values from the internal state (in `state`) of the entity. As you can see, several of these properties have constraint decorators, such as `@required()`, `@valid()` and `@lt()`. As you can see, properties may have multiple constraints. 
+Below is a typical example of an entity, which derives from the `Entity` class in **easy**. It has a number of properties, which are pre-filled with values from the internal state (in `state`) of the entity. As you can see, several of these properties have constraint decorators, such as `@required()`, `@valid()` and `@lt()`. As you can see, properties may have multiple constraints. 
 
     export class Product extends Entity {
         @required() readonly name: string = this.state.name;
@@ -194,7 +194,7 @@ P.S. If you create custom constraints that might be helpful for other developers
 ## Data
 Microservices can use data from a variety of sources, transform and process that data, and expose that to their users through their own API. In the different microservices architecture implementations we've seen data for instance come from:
 
-- a variety of relational databases, such as SQL Server, MySQL, or PostreSQL.
+- a variety of relational databases, such as SQL Server, MySQL, or PostgreSQL.
 - a variety of non-relational databases, quite often MongoDB.
 - file systems.
 - systems the organization owns. such as HR, marketing, ERP or CMS.
