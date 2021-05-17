@@ -70,7 +70,7 @@ export class MongoProvider {
 
   remove(id: Id): Promise<boolean> {
     return this.collection()
-      .then(c => c.deleteOne({ id: asString(id) }))
+      .then(c => c.deleteOne({ id }))
       .then(d => d.result.ok === 1);
   }
 

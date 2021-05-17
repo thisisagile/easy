@@ -101,6 +101,13 @@ describe('MongoProvider', () => {
     c.deleteOne = mock.resolve({ result: { ok: 1 } });
     provider.collection = mock.resolve(c);
     await expect(provider.remove(42)).resolves.toBeTruthy();
+    expect(c.deleteOne).toHaveBeenCalledWith({ id: 42 });
+  });
+
+  test('remove calls deleteOne on the collection with id as string', async () => {
+    c.deleteOne = mock.resolve({ result: { ok: 1 } });
+    provider.collection = mock.resolve(c);
+    await expect(provider.remove('42')).resolves.toBeTruthy();
     expect(c.deleteOne).toHaveBeenCalledWith({ id: '42' });
   });
 
