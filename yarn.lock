@@ -939,7 +939,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-express@workspace:packages/easy-express"
   dependencies:
-    "@thisisagile/easy": latest
+    "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": ^1.14.2
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.11
@@ -981,31 +981,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@thisisagile/easy@npm:latest":
-  version: 6.9.0
-  resolution: "@thisisagile/easy@npm:6.9.0"
-  dependencies:
-    "@types/express": ^4.17.11
-    "@types/mongodb": ^3.6.12
-    "@types/mssql": ^6.0.7
-    axios: ^0.21.1
-    cls-hooked: ^4.2.2
-    express: ^4.17.1
-    form-urlencoded: ^6.0.0
-    jsonwebtoken: ^8.5.1
-    moment: ^2.29.1
-    mongodb: ^3.6.6
-    mssql: ^6.3.1
-    passport: ^0.4.1
-    passport-jwt: ^4.0.0
-    reflect-metadata: ^0.1.13
-    uuid: ^8.3.2
-    validator: ^13.5.2
-  checksum: 8a2fada3d1121ad4db6461cd8227aab5a674a25d816887b2207608721eb6017e3fe8095e96ec8da8b17f7f7eac4c257fb671c3dd27af32b38c89b2ef2c7ec247
-  languageName: node
-  linkType: hard
-
-"@thisisagile/easy@workspace:packages/easy":
+"@thisisagile/easy@workspace:*, @thisisagile/easy@workspace:packages/easy":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
