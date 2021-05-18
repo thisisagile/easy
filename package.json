@@ -4,7 +4,7 @@
   "scripts": {
     "g:prettier": "cd $INIT_CWD && prettier",
     "g:eslint": "cd $INIT_CWD && eslint",
-    "g:tsc": "cd $INIT_CWD && tsc",
+    "g:tsc": "cd $INIT_CWD && tsc -b --force",
     "g:jest": "cd $INIT_CWD && jest",
     "format-all": "yarn workspaces foreach run format",
     "lint-all": "yarn workspaces foreach run lint",
