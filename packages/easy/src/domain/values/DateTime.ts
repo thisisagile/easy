@@ -9,4 +9,8 @@ export class DateTime extends Value {
   static get now(): DateTime {
     return new DateTime();
   }
+
+  get fromNow(): string {
+    return moment(this.value).fromNow();
+  }
 }

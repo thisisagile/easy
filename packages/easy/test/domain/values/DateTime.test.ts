@@ -18,4 +18,9 @@ describe('DateTime', () => {
     expect(new DateTime().toJSON()).toBe(testDate.iso);
     expect(DateTime.now.toJSON()).toBe(testDate.iso);
   });
+
+  test('now return correct DateTime 2', () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => testDate.epoch);
+    expect(DateTime.now.fromNow).toBe('a few seconds ago');
+  });
 });
