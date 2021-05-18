@@ -5,7 +5,6 @@ export * from './Insert';
 export * from './Join';
 export * from './SqlQuery';
 export * from './Select';
-export * from './SqlServerProvider';
 export * from './Table';
 export * from './TableGateway';
 export * from './Update';

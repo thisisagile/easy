@@ -1,6 +1,4 @@
-import { Database, Query, QueryProvider } from '../data';
-import { asString, Exception, Json, List, meta } from '../types';
-import { reject } from '../utils';
+import { asString, Database, Exception, Json, List, meta, Query, QueryProvider, reject } from '@thisisagile/easy';
 import { ConnectionPool, IResult } from 'mssql';
 
 export class SqlServerProvider implements QueryProvider {
