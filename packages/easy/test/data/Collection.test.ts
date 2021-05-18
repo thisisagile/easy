@@ -1,4 +1,4 @@
-import { DevCollection } from '../ref/DevCollection';
+import { DevCollection } from '../ref';
 import { Field } from '../../src';
 import { DevDatabase } from '../ref';
 

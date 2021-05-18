@@ -1,7 +1,7 @@
 import { fits, mock } from '@thisisagile/easy-test';
-import { devData } from '../ref';
-import { MongoGateway, MongoProvider } from '../../src';
-import { DevCollection } from '../ref/DevCollection';
+import { devData } from '@thisisagile/easy/test/ref';
+import { MongoGateway, MongoProvider } from '../src';
+import { DevCollection } from './ref/DevCollection';
 
 describe('MongoGateway', () => {
   let provider!: MongoProvider;

@@ -1,10 +1,21 @@
-import { asJson, asString, Exception, Id, isDefined, json, Json, JsonValue, List, toList } from '../types';
+import {
+  asJson,
+  asString,
+  Collection,
+  Condition,
+  Database,
+  Exception,
+  Field,
+  Id,
+  isDefined,
+  json,
+  Json,
+  JsonValue,
+  List,
+  toList,
+  when,
+} from '@thisisagile/easy';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
-import { when } from '../validation';
-import { Condition } from './Condition';
-import { Field } from './Field';
-import { Database } from '../data';
-import { Collection } from './Collection';
 
 const omitId = (j: Json): Json => (isDefined(j) ? json.omit(j, '_id') : j);
 

@@ -2,7 +2,6 @@ export * from './data';
 export * from './domain';
 export * from './http';
 export * from './health';
-export * from './mongo';
 export * from './process';
 export * from './resources';
 export * from './services';

@@ -1,7 +1,5 @@
-import { asJson, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
-import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
-import { Condition } from './Condition';
+import { asJson, Collection, Condition, Gateway, Id, isDefined, Json, JsonValue, List } from '@thisisagile/easy';
 
 export class MongoGateway implements Gateway {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = new collection.db.provider(collection)) {}

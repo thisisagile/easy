@@ -1,8 +1,8 @@
-import { MongoProvider } from '../../src';
 import { Collection, Cursor, Db, MongoClient } from 'mongodb';
+import { MongoProvider } from '../src';
 import { mock } from '@thisisagile/easy-test';
-import { Dev, devData } from '../ref';
-import { DevCollection } from '../ref/DevCollection';
+import { Dev, devData } from '@thisisagile/easy/test/ref';
+import { DevCollection } from './ref/DevCollection';
 
 describe('MongoProvider', () => {
   const client: MongoClient = mock.empty<MongoClient>();
