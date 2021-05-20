@@ -1,6 +1,7 @@
 import { DevCollection } from '../ref';
 import { Field } from '../../src';
 import { DevDatabase } from '../ref';
+import '@thisisagile/easy-test';
 
 describe('Collection', () => {
   const devs = new DevCollection();
@@ -16,6 +17,6 @@ describe('Collection', () => {
   });
 
   test('google', () => {
-    expect(devs.google('Sander').toJSON()).toMatchObject({ $text: { $search: 'Sander' } });
+    expect(devs.google('Sander')).toMatchJson({ $text: { $search: 'Sander' } });
   });
 });
