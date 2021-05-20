@@ -31,7 +31,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "^1.14.2",
+    "@thisisagile/easy-test": "^1.16.0",
     "@types/form-urlencoded": "^2.0.1",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/uuid": "^8.3.0",
