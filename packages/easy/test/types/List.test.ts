@@ -1,5 +1,6 @@
 import { Dev } from '../ref';
 import { asList, isList, List, Scope, toList, toObject } from '../../src';
+import '@thisisagile/easy-test';
 
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
@@ -189,6 +190,6 @@ describe('asList', () => {
   });
 
   test('from devs works', () => {
-    expect(asList(Dev, [Dev.Naoufal.toJSON()]).first().toJSON()).toMatchObject(Dev.Naoufal.toJSON());
+    expect(asList(Dev, [Dev.Naoufal.toJSON()]).first()).toMatchJson(Dev.Naoufal);
   });
 });
