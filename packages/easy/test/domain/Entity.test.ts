@@ -48,7 +48,7 @@ describe('Entity', () => {
     const d = new DateTime('2021-05-03T10:31:24.000Z');
     mock.property(DateTime, 'now', d);
     const dev = Dev.Sander.update({ level: 1 });
-    expect(dev.toJSON()).toMatchObject({
+    expect(dev).toMatchJson({
       id: 3,
       name: 'Sander',
       level: 1,
