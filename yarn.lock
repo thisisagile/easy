@@ -1003,11 +1003,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@thisisagile/easy-test@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "@thisisagile/easy-test@npm:1.16.0"
+  dependencies:
+    "@types/jest": ^26.0.20
+    "@typescript-eslint/eslint-plugin": ^4.17.0
+    "@typescript-eslint/parser": ^4.17.0
+    eslint: ^7.21.0
+    eslint-config-prettier: ^8.1.0
+    eslint-plugin-jest: ^24.2.1
+    eslint-plugin-prettier: ^3.3.1
+    eslint-plugin-promise: ^5.1.0
+    eslint-plugin-security: ^1.4.0
+    eslint-plugin-sonarjs: ^0.7.0
+    eslint-plugin-standard: ^5.0.0
+    jest: ^26.6.3
+    jest-junit: ^12.0.0
+    jest-sonar-reporter: ^2.0.0
+    ts-jest: ^26.5.3
+  checksum: f7bdaa326a4e3083c571a43f5212e12454e3a2fb27b79d1753a28a65b65d25fbc372e9c3f400498e5734e0e7232a5e2f3a5b5ad49a4a9d550f059cba6a0cd2a3
+  languageName: node
+  linkType: hard
+
 "@thisisagile/easy@workspace:*, @thisisagile/easy@workspace:packages/easy":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
-    "@thisisagile/easy-test": ^1.14.2
+    "@thisisagile/easy-test": ^1.16.0
     "@types/form-urlencoded": ^2.0.1
     "@types/jsonwebtoken": ^8.5.1
     "@types/uuid": ^8.3.0
@@ -3623,6 +3646,15 @@ __metadata:
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
   checksum: cbc964d66328aadf352bfd75eed163e6729f891d6c7d16d971161f4e90e03541f66338ea801f7c1bbb20f11b58ddf2aac7ab877a97b02102f1511f50a5a13e38
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-sonarjs@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "eslint-plugin-sonarjs@npm:0.7.0"
+  peerDependencies:
+    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
+  checksum: 32ebd356cff0912c19f359545aade803f0dfa3e93d605b3c1265a3aa3adb2f743eb194f2b696cf7c0d8db3d1c3a524538c5633da703d23d1a6208450e2cf336c
   languageName: node
   linkType: hard
 
