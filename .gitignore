@@ -17,6 +17,8 @@ test-report.xml
 !.yarn/versions
 .pnp.*
 
+package-lock.json
+
 # Logs
 logs
 *.log
