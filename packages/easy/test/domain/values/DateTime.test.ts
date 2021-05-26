@@ -88,3 +88,22 @@ describe('DateTime fromNow', () => {
     expect(res.fromNow).toMatchText('2 months ago');
   });
 });
+
+describe('DateTime isAfter', () => {
+  const date = {
+    now: 1622023108000,
+    future: 1622023109000,
+  };
+
+  test('future is after now.', () => {
+    expect(new DateTime(date.future).isAfter(new DateTime(date.now))).toBeTruthy();
+  });
+
+  test('now is not after future.', () => {
+    expect(new DateTime(date.now).isAfter(new DateTime(date.future))).toBeFalsy();
+  });
+
+  test('now is not after now.', () => {
+    expect(new DateTime(date.now).isAfter(new DateTime(date.future))).toBeFalsy();
+  });
+});

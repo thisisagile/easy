@@ -1,5 +1,5 @@
 import { isDefined, Value } from '../../types';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { ifDefined } from '../../utils';
 
 export class DateTime extends Value<string | undefined> {
@@ -11,12 +11,20 @@ export class DateTime extends Value<string | undefined> {
     return new DateTime(moment().toISOString());
   }
 
-  get fromNow(): string {
-    return this.value ? moment(this.value).fromNow() : '';
+  protected get moment(): Moment {
+    return moment(this.value, true);
   }
 
   get isValid(): boolean {
-    return isDefined(this.value) && moment(this.value, true).isValid();
+    return isDefined(this.value) && this.moment.isValid();
+  }
+
+  get fromNow(): string {
+    return this.value ? this.moment.fromNow() : '';
+  }
+
+  isAfter(dt: DateTime): boolean {
+    return this.moment.isAfter(dt.moment);
   }
 
   toString(): string {
