@@ -1,4 +1,7 @@
 import { DateTime } from '../../../src';
+import '@thisisagile/easy-test';
+import moment from 'moment';
+import { mock } from '@thisisagile/easy-test';
 
 describe('DateTime', () => {
   const testDate = {
@@ -6,33 +9,82 @@ describe('DateTime', () => {
     epoch: 1616661584000,
   };
 
+  test('moment decided to mark undefined as a valid date.', () => {
+    const res = moment(undefined, true);
+    expect(res).toBeTruthy();
+  });
+
+  test('construct from undefined is not valid and value is undefined.', () => {
+    const res = new DateTime((undefined as unknown) as string);
+    expect(res.value).toBeUndefined();
+    expect(res).not.toBeValid();
+  });
+
+  test('construct from empty string is not valid.', () => {
+    const res = new DateTime('');
+    expect(res).not.toBeValid();
+  });
+
+  test('construct from invalid string is not valid.', () => {
+    expect(new DateTime('2021-5-5')).not.toBeValid();
+    expect(new DateTime('invalid')).not.toBeValid();
+  });
+
+  test('construct from epoch 0 is valid.', () => {
+    const res = new DateTime(0);
+    expect(res).toBeValid();
+  });
+
+  test('construct from Date.now is valid.', () => {
+    const res = new DateTime(Date.now());
+    expect(res).toBeValid();
+  });
+
+  test('construct from iso date is valid.', () => {
+    const res = new DateTime(testDate.iso);
+    expect(res).toBeValid();
+  });
+
+  test('construct from Date is valid.', () => {
+    expect(new DateTime(new Date(testDate.epoch))).toBeValid();
+  });
+
+  test('toString from undefined returns empty string.', () => {
+    const res = new DateTime((undefined as unknown) as string);
+    expect(res).toMatchText('');
+  });
+
+  test('toString returns iso formatted string.', () => {
+    const res = new DateTime(testDate.iso);
+    expect(res).toMatchText(testDate.iso);
+  });
+
+  test('toString from epoch date returns a iso string.', () => {
+    Date.now = mock.return(testDate.epoch);
+    const res = new DateTime(Date.now());
+    expect(res).toMatchText(testDate.iso);
+  });
+
+  test('now returns iso string.', () => {
+    Date.now = mock.return(testDate.epoch);
+    expect(DateTime.now).toMatchText(testDate.iso);
+  });
+
   test('from value return correct DateTime', () => {
-    expect(new DateTime(testDate.epoch).toJSON()).toBe(testDate.iso);
-    expect(new DateTime(testDate.iso).toJSON()).toBe(testDate.iso);
-    expect(new DateTime(new Date(testDate.epoch)).toJSON()).toBe(testDate.iso);
+    expect(new DateTime(testDate.iso).toJSON()).toMatchText(testDate.iso);
+    expect(new DateTime(new Date(testDate.epoch)).toJSON()).toMatchText(testDate.iso);
   });
+});
 
-  test('from undefined return empty DateTime', () => {
-    expect(new DateTime(undefined as unknown as string).toJSON()).toBe('');
-    expect(new DateTime(null as unknown as string).toJSON()).toBe('');
-  });
+describe('DateTime fromNow', () => {
+  const testDate = {
+    iso: '2021-03-25T08:39:44.000Z',
+    now: 1622023108000,
+  };
 
-  test('valid', () => {
-    expect(new DateTime(testDate.epoch).isValid).toBeTruthy();
-    expect(new DateTime(testDate.iso).isValid).toBeTruthy();
-    expect(new DateTime(new Date(testDate.epoch)).isValid).toBeTruthy();
-    expect(new DateTime("hello").isValid).toBeFalsy();
-    expect(new DateTime(undefined as unknown as string).isValid).toBeFalsy();
-    expect(new DateTime(null as unknown as string).isValid).toBeFalsy();
-  });
-
-  test('now return correct DateTime', () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => testDate.epoch);
-    expect(DateTime.now.toJSON()).toBe(testDate.iso);
-  });
-
-  test('fromNow return correct', () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => testDate.epoch);
-    expect(DateTime.now.fromNow).toBe('a few seconds ago');
+  test('from now from iso string.', () => {
+    Date.now = mock.return(testDate.now);
+    const res = new DateTime(testDate.iso);
+    expect(res.fromNow).toMatchText('2 months ago');
   });
 });

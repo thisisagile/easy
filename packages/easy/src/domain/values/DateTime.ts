@@ -1,9 +1,10 @@
-import { Value } from '../../types';
+import { isDefined, Value } from '../../types';
 import moment from 'moment';
+import { ifDefined } from '../../utils';
 
-export class DateTime extends Value {
+export class DateTime extends Value<string | undefined> {
   constructor(value: string | number | Date) {
-    super(value && moment(value, true).isValid() ? moment(value).toISOString() : '');
+    super(ifDefined(value, moment(value, true).toISOString()));
   }
 
   static get now(): DateTime {
@@ -11,10 +12,14 @@ export class DateTime extends Value {
   }
 
   get fromNow(): string {
-    return moment(this.value).fromNow();
+    return this.value ? moment(this.value).fromNow() : '';
   }
 
   get isValid(): boolean {
-    return moment(this.value, true).isValid();
+    return isDefined(this.value) && moment(this.value, true).isValid();
+  }
+
+  toString(): string {
+    return this.value ?? '';
   }
 }
