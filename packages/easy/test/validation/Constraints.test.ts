@@ -11,6 +11,7 @@ import {
   lt,
   lte,
   notEmpty,
+  optional,
   past,
   required,
   Struct,
@@ -20,6 +21,7 @@ import {
 } from '../../src';
 import '@thisisagile/easy-test';
 import { Age, Language } from '../ref';
+import { ifDefined } from '../../src/utils/If';
 
 describe('Constraints', () => {
   class Tester extends Struct {
@@ -56,14 +58,37 @@ describe('Constraints', () => {
   });
 });
 
-const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? "Property {property} should have value '42' instead of '{actual}'.");
+describe('Optional constraint', () => {
+  class Cat extends Struct {
+    @required() readonly name = this.state.name;
+    @optional() readonly age = ifDefined(this.state.age, Age);
+  }
 
-class Person extends Struct {
-  @valid() readonly age: Age = new Age(this.state.age);
-  @is42() readonly realAge: number = this.state.age;
-}
+  test('Optional constraint succeeds.', () => {
+    const c = new Cat({ name: 'Felix', age: 10 });
+    expect(validate(c)).toBeValid();
+  });
+
+  test('Optional constraint fails.', () => {
+    const c = new Cat({ name: 'Felix', age: 121 });
+    expect(validate(c)).not.toBeValid();
+    expect(validate(c)).toFailWith('This is not a valid age.');
+  });
+
+  test('Optional property is undefined result is still valid.', () => {
+    const c = new Cat({ name: 'Felix' });
+    expect(validate(c)).toBeValid();
+  });
+});
 
 describe('Custom constraints', () => {
+  const is42 = (message?: Text): PropertyDecorator => constraint(v => v === 42, message ?? "Property {property} should have value '42' instead of '{actual}'.");
+
+  class Person extends Struct {
+    @valid() readonly age: Age = new Age(this.state.age);
+    @is42() readonly realAge: number = this.state.age;
+  }
+
   test('age', () => {
     expect(isValue(new Age(42))).toBeTruthy();
     expect(validate(new Age(42))).toBeValid();

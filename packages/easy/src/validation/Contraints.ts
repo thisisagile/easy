@@ -1,4 +1,18 @@
-import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, Text, toList } from '../types';
+import {
+  Func,
+  inFuture,
+  inPast,
+  isDefined,
+  isFunction,
+  isIn,
+  isNotEmpty,
+  isString,
+  List,
+  meta,
+  Results,
+  Text,
+  toList,
+} from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = Func<boolean | Results, any>;
@@ -18,6 +32,8 @@ export const required = (message?: Text): PropertyDecorator =>
 export const notEmpty = (message?: Text): PropertyDecorator => constraint(v => isNotEmpty(v), message ?? 'Property {property} may not be empty.');
 
 export const valid = (): PropertyDecorator => constraint(v => validate(v), '');
+
+export const optional = (): PropertyDecorator => constraint(v => !isDefined(v) || validate(v), '');
 
 export const includes = (sub: string, message?: string): PropertyDecorator =>
   constraint(s => isDefined(s) && isString(s) && s.includes(sub), message ?? `Value {actual} must include '${sub}'.`);
