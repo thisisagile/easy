@@ -74,6 +74,15 @@ describe('text().parse', () => {
     expect(kim.trim).toMatchText('KimvanWilgen');
   });
 
+  test('add works', () => {
+    expect(text().add()).toMatchText('');
+    expect(text().add(undefined, 'x')).toMatchText('');
+    expect(text('kim').add()).toMatchText('kim');
+    expect(text('kim').add(undefined, 'x')).toMatchText('kim');
+    expect(text('kim').add('sander')).toMatchText('kimsander');
+    expect(text('kim').add('sander', ' ')).toMatchText('kim sander');
+  });
+
   test('startsWith works', () => {
     expect(empty.startsWith()).toBeTruthy();
     expect(empty.startsWith('')).toBeTruthy();

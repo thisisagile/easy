@@ -77,6 +77,9 @@ export class ToText implements Text {
 
   replace = (search: Text, replace: Text): ToText => this.map(s => replaceAll(s, search, replace));
 
+  add = (add?: unknown, separator = ''): ToText =>
+    this.map(s => isDefined(add) ? `${s}${separator}${text(add)}` : s);
+
   toString(): string {
     return this.subject;
   }
