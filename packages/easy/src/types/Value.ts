@@ -1,6 +1,6 @@
-import { isDefined, JsonValue, Validatable } from './index';
+import { asString, isDefined, JsonValue, Validatable } from './index';
 
-export class Value<V extends JsonValue = string> implements Validatable {
+export class Value<V extends unknown = string> implements Validatable {
   constructor(readonly value: V) {
     this.value = value;
   }
@@ -10,11 +10,11 @@ export class Value<V extends JsonValue = string> implements Validatable {
   }
 
   toJSON(): JsonValue {
-    return this.value;
+    return this.value as JsonValue;
   }
 
   toString(): string {
-    return this.value?.toString() ?? '';
+    return asString(this.value);
   }
 }
 
