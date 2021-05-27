@@ -131,9 +131,17 @@ describe('Repo', () => {
     expect(repo.add).not.toHaveBeenCalled();
   });
 
-  test('Upsert should add, when update fails', async () => {
+  test('If update fails, upsert also fails', async () => {
     const update = { level: 4, language: 'COBOL' };
     repo.update = mock.reject(Exception.Unknown);
+    repo.add = mock.resolve(update);
+    await expect(repo.upsert(43, update)).rejects.toMatchException(Exception.Unknown);
+    expect(repo.add).not.toHaveBeenCalled();
+  });
+
+  test('Upsert should add, when update fails with does not exist', async () => {
+    const update = { level: 4, language: 'COBOL' };
+    repo.update = mock.reject(Exception.DoesNotExist);
     repo.add = mock.resolve(update);
     await expect(repo.upsert(43, update)).resolves.toMatchObject(fits.with(update));
     expect(repo.add).toHaveBeenCalledWith(fits.with(update));

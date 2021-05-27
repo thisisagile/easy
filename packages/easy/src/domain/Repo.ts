@@ -1,6 +1,6 @@
 import { Constructor, Exception, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
 import { when } from '../validation';
-import { resolve } from '../utils';
+import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
@@ -57,6 +57,7 @@ export class Repo<T extends Struct> {
   }
 
   upsert(id: Id, item: Json): Promise<T> {
-    return this.update(id, item).catch(() => this.add(item));
+    return this.update(id, item)
+      .catch(e => Exception.DoesNotExist.equals(e) ? this.add(item) : reject(e));
   }
 }
