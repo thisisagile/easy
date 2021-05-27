@@ -59,6 +59,16 @@ describe('DateTime', () => {
     expect(res).toMatchText(testDate.iso);
   });
 
+  test('toDate returns Date.', () => {
+    const res = new DateTime(testDate.iso);
+    expect(res.toDate()).toStrictEqual(new Date(testDate.iso));
+  });
+
+  test('toDate of invalid DateTime returns undefined.', () => {
+    const res = new DateTime("Hello World");
+    expect(res.toDate()).toBeUndefined();
+  });
+
   test('toString from epoch date returns a iso string.', () => {
     Date.now = mock.return(testDate.epoch);
     const res = new DateTime(Date.now());

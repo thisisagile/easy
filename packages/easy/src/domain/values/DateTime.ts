@@ -30,4 +30,8 @@ export class DateTime extends Value<string | undefined> {
   toString(): string {
     return this.value ?? '';
   }
+
+  toDate(): Date | undefined {
+    return this.isValid ? this.moment.toDate() : undefined;
+  }
 }
