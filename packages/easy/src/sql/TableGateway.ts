@@ -1,7 +1,7 @@
 import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
 import { QueryProvider } from '../data';
 import { when } from '../validation';
-import { reject } from '../utils';
+import { ifDefined, reject } from '../utils';
 import { Table } from './Table';
 
 export class TableGateway<T extends Table> implements Gateway {
@@ -15,7 +15,7 @@ export class TableGateway<T extends Table> implements Gateway {
     return this.provider
       .query(this.table.select().where(this.table.id.is(id)))
       .then(js => js.first())
-      .then(j => this.table.in(j));
+      .then(j => ifDefined(j, this.table.in(j)));
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
