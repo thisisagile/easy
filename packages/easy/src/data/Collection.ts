@@ -1,8 +1,27 @@
-import { MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
+import { choose, MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
 import { Database } from '../data';
-import { Json, toUuid } from '../types';
+import { isIsoDateString, isObject, Json, meta, toUuid } from '../types';
 import { Field } from './Field';
 import { Condition, LogicalCondition, toCondition } from './Condition';
+import { DateTime } from '../domain';
+
+const convert = (input: any): Json => {
+  return meta(input)
+    .entries()
+    .reduce((output: Json, [key, value]) => {
+      output[key] = choose<any, any>(value)
+        .case(
+          v => isObject(v),
+          (v: any) => convert(v)
+        )
+        .case(
+          v => isIsoDateString(v),
+          (v: any) => new DateTime(v).toDate()
+        )
+        .else(value);
+      return output;
+    }, {});
+};
 
 export class Collection extends Mapper {
   protected readonly map = {
@@ -24,4 +43,8 @@ export class Collection extends Mapper {
   where = (...conditions: Condition[]): Json => new LogicalCondition('and', conditions).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
+
+  out(to: Json = {}): Json {
+    return convert(super.out(to));
+  }
 }

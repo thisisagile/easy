@@ -39,20 +39,22 @@ export class Mapper extends State implements Mapping {
     return this.get('dropped', () => this.columns.filter(c => !this.keys.some(k => k === c)));
   }
 
-  in = (from: Json = {}): Json =>
-    json.omit(
+  public in(from: Json = {}): Json {
+    return json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
       ...this.dropped
     );
+  }
 
-  out = (to: Json = {}): Json =>
-    json.omit(
+  public out(to: Json = {}): Json {
+    return json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
         this.options.startFrom === 'source' ? to : {}
       ),
       ...this.keys
     );
+  }
 
   toString(): string {
     return this.constructor.name;
