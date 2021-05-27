@@ -26,6 +26,12 @@ describe('MongoGateway', () => {
     expect(provider.byId).toHaveBeenCalledWith(42);
   });
 
+  test('byId returns undefined when provider returns undefined', async () => {
+    provider.byId = mock.resolve(undefined);
+    await expect(gateway.byId(42)).resolves.toStrictEqual(undefined);
+    expect(provider.byId).toHaveBeenCalledWith(42);
+  });
+
   test('by calls the provider', async () => {
     provider.by = mock.resolve([devData.naoufal]);
     await expect(gateway.by('id', 42)).resolves.toStrictEqual([collData.naoufal]);

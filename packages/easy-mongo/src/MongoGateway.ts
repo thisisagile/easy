@@ -1,5 +1,16 @@
 import { MongoProvider } from './MongoProvider';
-import { asJson, Collection, Condition, Gateway, Id, isDefined, Json, JsonValue, List } from '@thisisagile/easy';
+import {
+  asJson,
+  Collection,
+  Condition,
+  Gateway,
+  Id,
+  ifDefined,
+  isDefined,
+  Json,
+  JsonValue,
+  List,
+} from '@thisisagile/easy';
 
 export class MongoGateway implements Gateway {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = new collection.db.provider(collection)) {}
@@ -11,7 +22,7 @@ export class MongoGateway implements Gateway {
 
   byId(id: Id): Promise<Json | undefined> {
     return this.provider.byId(id)
-      .then(j => this.collection.in(j));
+      .then(j => ifDefined(j, this.collection.in(j)));
   }
 
   by(key: string, value: JsonValue): Promise<List<Json>> {
