@@ -1,4 +1,18 @@
-import { Entity, isArray, isBoolean, isDefined, isEmpty, isEmptyObject, isInstance, isNotEmpty, isNumber, isObject, isPrimitive, isString } from '../../src';
+import {
+  Entity,
+  isArray,
+  isBoolean,
+  isDefined,
+  isEmpty,
+  isEmptyObject,
+  isInstance,
+  isIsoDateString,
+  isNotEmpty,
+  isNumber,
+  isObject,
+  isPrimitive,
+  isString,
+} from '../../src';
 import { Dev } from '../ref';
 
 describe('isDefined', () => {
@@ -60,6 +74,26 @@ describe('isString', () => {
 
   test('isString true', () => {
     expect(isString('')).toBeTruthy();
+  });
+});
+
+describe('isIsoDateString', () => {
+
+  test('isIsoDateString false', () => {
+    expect(isIsoDateString()).toBeFalsy();
+    expect(isIsoDateString({})).toBeFalsy();
+    expect(isIsoDateString([])).toBeFalsy();
+    expect(isIsoDateString(Dev.Jeroen)).toBeFalsy();
+    expect(isIsoDateString(undefined)).toBeFalsy();
+    expect(isIsoDateString(null)).toBeFalsy();
+    expect(isIsoDateString('Hello World')).toBeFalsy();
+    expect(isIsoDateString('2020-11-02')).toBeFalsy();
+    expect(isIsoDateString('2020-11-02T23:00:00')).toBeFalsy();
+    expect(isIsoDateString('2020-11-02T23:00:00.000')).toBeFalsy();
+  });
+
+  test('isIsoDateString true', () => {
+    expect(isIsoDateString('2020-11-02T23:00:00.000Z')).toBeTruthy();
   });
 });
 

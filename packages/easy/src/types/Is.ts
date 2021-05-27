@@ -8,6 +8,8 @@ export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o 
 
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === 'string';
 
+export const isIsoDateString = (o?: unknown): o is string => isString(o) && /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/.test(o);
+
 export const isBoolean = (o?: unknown): o is boolean => isDefined(o) && typeof o === 'boolean';
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
