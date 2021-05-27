@@ -19,7 +19,7 @@ export class Collection extends Mapper {
    */
   prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Field => this.map.field(name, options);
 
-  readonly id = this.prop('id', { dflt: toUuid });
+  readonly id = this.map.item('id', { dflt: toUuid });
 
   where = (...conditions: Condition[]): Json => new LogicalCondition('and', conditions).toJSON();
 
