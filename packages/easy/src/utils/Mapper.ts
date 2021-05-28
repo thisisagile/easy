@@ -35,14 +35,18 @@ export class Mapper extends State implements Mapping {
     return this.get('columns', () => this.properties.map(([, p]) => p.property ?? ''));
   }
 
-  private get dropped(): List<string> {
-    return this.get('dropped', () => this.columns.filter(c => !this.keys.some(k => k === c)));
+  private get droppedIn(): List<string> {
+    return this.get('droppedIn', () => this.columns.filter(c => !this.keys.some(k => k === c)));
+  }
+
+  private get droppedOut(): List<string> {
+    return this.get('droppedOut', () => this.properties.filter(([ ,p]) => !this.keys.some(k => k === p.property ?? '')).map(([k]) => k));
   }
 
   public in(from: Json = {}): Json {
     return json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.dropped
+      ...this.droppedIn
     );
   }
 
@@ -52,7 +56,7 @@ export class Mapper extends State implements Mapping {
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
         this.options.startFrom === 'source' ? to : {}
       ),
-      ...this.keys
+      ...this.droppedOut
     );
   }
 
