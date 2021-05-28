@@ -4,6 +4,7 @@ import {
   Database,
   DateTime,
   Field,
+  isArray,
   isIsoDateString,
   isObject,
   Json,
@@ -18,21 +19,25 @@ import {
 } from '@thisisagile/easy';
 
 const convert = (input: any): Json => {
-  return meta(input)
-    .entries()
-    .reduce((output: Json, [key, value]) => {
-      output[key] = choose<any, any>(value)
-        .case(
-          v => isObject(v),
-          (v: any) => convert(v),
+  return choose<any, any>(input)
+    .case(
+      v => isIsoDateString(v),
+      (v: any) => new DateTime(v).toDate()
+    )
+    .case(
+      v => isArray(v),
+      (v: any) => v.map((i: any) => convert(i))
+    )
+    .case(
+      v => isObject(v),
+      (v: any) =>
+        Object.fromEntries(
+          meta(v)
+            .entries()
+            .map(([k, i]) => [k, convert(i)])
         )
-        .case(
-          v => isIsoDateString(v),
-          (v: any) => new DateTime(v).toDate(),
-        )
-        .else(value);
-      return output;
-    }, {});
+    )
+    .else(input);
 };
 
 export class Collection extends Mapper {

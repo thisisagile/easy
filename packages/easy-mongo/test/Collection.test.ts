@@ -35,8 +35,9 @@ describe('Collection', () => {
       id: 4,
       name: 'Dries',
       level: 6,
-      language: 'Java',
+      languages: ['Java', 'Typescript'],
       date: '1992-03-25T22:39:44.000Z',
+      dates: ['1992-03-25T22:55:44.000Z'],
       created: {
         by: { id: '5555', date: '1980-11-22T05:12:50.000Z' },
         when: '2021-05-27T08:15:04.000Z',
@@ -46,8 +47,9 @@ describe('Collection', () => {
       id: 4,
       name: 'Dries',
       CodingLevel: '6',
-      Language: 'Java',
+      languages: ['Java', 'Typescript'],
       date: moment('1992-03-25T22:39:44.000Z').toDate(),
+      dates: [moment('1992-03-25T22:55:44.000Z').toDate()],
       created: {
         by: { id: '5555', date: moment('1980-11-22T05:12:50.000Z').toDate() },
         when: moment('2021-05-27T08:15:04.000Z').toDate(),
