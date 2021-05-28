@@ -1,44 +1,5 @@
-import {
-  choose,
-  Condition,
-  Database,
-  DateTime,
-  Field,
-  isArray,
-  isIsoDateString,
-  isObject,
-  Json,
-  LogicalCondition,
-  MapOptions,
-  Mapper,
-  mappings,
-  meta,
-  PropertyOptions,
-  toCondition,
-  toUuid,
-} from '@thisisagile/easy';
-
-const convert = (input: any): Json => {
-  return choose<any, any>(input)
-    .case(
-      v => isIsoDateString(v),
-      (v: any) => new DateTime(v).toDate()
-    )
-    .case(
-      v => isArray(v),
-      (v: any) => v.map((i: any) => convert(i))
-    )
-    .case(
-      v => isObject(v),
-      (v: any) =>
-        Object.fromEntries(
-          meta(v)
-            .entries()
-            .map(([k, i]) => [k, convert(i)])
-        )
-    )
-    .else(input);
-};
+import { Condition, Database, Field, Json, LogicalCondition, MapOptions, Mapper, mappings, PropertyOptions, toCondition, toUuid } from '@thisisagile/easy';
+import { convert } from './Utils';
 
 export class Collection extends Mapper {
   protected readonly map = {
