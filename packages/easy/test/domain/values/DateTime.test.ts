@@ -40,6 +40,13 @@ describe('DateTime', () => {
     expect(res).toBeValid();
   });
 
+  test('construct from date string', () => {
+    expect(new DateTime("2021-11-11")).toMatchText("2021-11-11T00:00:00.000Z");
+    expect(new DateTime("2021-11-11T01:00")).toMatchText("2021-11-11T01:00:00.000Z");
+    expect(new DateTime("2021-11-11T01:23:11")).toMatchText("2021-11-11T01:23:11.000Z");
+    expect(new DateTime("2021-11-11T01:00:00.000+0100")).toMatchText("2021-11-11T00:00:00.000Z");
+  });
+
   test('construct from iso date is valid.', () => {
     const res = new DateTime(testDate.iso);
     expect(res).toBeValid();

@@ -4,15 +4,15 @@ import { ifDefined } from '../../utils';
 
 export class DateTime extends Value<string | undefined> {
   constructor(value: string | number | Date) {
-    super(ifDefined(value, moment(value, true).toISOString()));
+    super(ifDefined(value, moment.utc(value, true).toISOString()));
   }
 
   static get now(): DateTime {
-    return new DateTime(moment().toISOString());
+    return new DateTime(moment.utc().toISOString());
   }
 
   protected get moment(): Moment {
-    return moment(this.value, true);
+    return moment.utc(this.value, true);
   }
 
   get isValid(): boolean {
