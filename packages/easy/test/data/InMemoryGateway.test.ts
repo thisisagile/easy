@@ -2,7 +2,7 @@ import { Exception, InMemoryGateway, Json, resolve, toJson, toList } from '../..
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
-describe('CollectionGateway', () => {
+describe('InMemoryGateway', () => {
   const dev = Dev.All.first();
   let gateway: InMemoryGateway;
 
