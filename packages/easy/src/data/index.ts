@@ -1,4 +1,3 @@
-export * from './Collection';
 export * from './Condition';
 export * from './InMemoryGateway';
 export * from './Database';

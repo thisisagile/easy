@@ -1,5 +1,6 @@
 import { DevDatabase } from '@thisisagile/easy/test/ref';
-import { Collection, convert } from '@thisisagile/easy';
+import { convert } from '@thisisagile/easy';
+import { Collection } from '../../src';
 
 export class DevCollection extends Collection {
   readonly db = DevDatabase.DevDB;

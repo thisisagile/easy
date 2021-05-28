@@ -1,9 +1,21 @@
-import { choose, MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
-import { Database } from '../data';
-import { isIsoDateString, isObject, Json, meta, toUuid } from '../types';
-import { Field } from './Field';
-import { Condition, LogicalCondition, toCondition } from './Condition';
-import { DateTime } from '../domain';
+import {
+  choose,
+  Condition,
+  Database,
+  DateTime,
+  Field,
+  isIsoDateString,
+  isObject,
+  Json,
+  LogicalCondition,
+  MapOptions,
+  Mapper,
+  mappings,
+  meta,
+  PropertyOptions,
+  toCondition,
+  toUuid,
+} from '@thisisagile/easy';
 
 const convert = (input: any): Json => {
   return meta(input)
@@ -12,11 +24,11 @@ const convert = (input: any): Json => {
       output[key] = choose<any, any>(value)
         .case(
           v => isObject(v),
-          (v: any) => convert(v)
+          (v: any) => convert(v),
         )
         .case(
           v => isIsoDateString(v),
-          (v: any) => new DateTime(v).toDate()
+          (v: any) => new DateTime(v).toDate(),
         )
         .else(value);
       return output;
@@ -32,11 +44,6 @@ export class Collection extends Mapper {
   constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {
     super(options);
   }
-
-  /**
-   * @deprecated Deprecated since version 6.2. Please use map.field instead.
-   */
-  prop = <T = unknown>(name: string, options?: PropertyOptions<T>): Field => this.map.field(name, options);
 
   readonly id = this.map.field('id', { dflt: toUuid });
 

@@ -1,7 +1,9 @@
-import { DevCollection, DevDatabase } from '../ref';
-import { Collection, convert, Field, Json } from '../../src';
+import { convert, Field, Json } from '@thisisagile/easy';
 import '@thisisagile/easy-test';
 import moment from 'moment';
+import { DevCollection } from './ref/DevCollection';
+import { DevDatabase } from '@thisisagile/easy/test/ref';
+import { Collection } from '../src';
 
 describe('Collection', () => {
   const devs = new DevCollection();

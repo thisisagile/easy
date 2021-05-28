@@ -1,7 +1,6 @@
 import {
   asJson,
   asString,
-  Collection,
   Condition,
   Database,
   Exception,
@@ -15,6 +14,7 @@ import {
   when,
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
+import { Collection } from './Collection';
 
 const omitId = (j: Json): Json => {
   if (isDefined(j)) delete j._id;

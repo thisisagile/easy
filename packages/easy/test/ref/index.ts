@@ -1,7 +1,5 @@
 export * from './Age';
 export * from './Dev';
-export * from './DevCollection';
-export * from './DevCollectionGateway';
 export * from './DevMap';
 export * from './DevRepo';
 export * from './DevResource';
