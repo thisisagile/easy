@@ -8,7 +8,6 @@ import {
   Field,
   Id,
   isDefined,
-  json,
   Json,
   JsonValue,
   List,
@@ -17,7 +16,10 @@ import {
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 
-const omitId = (j: Json): Json => (isDefined(j) ? json.omit(j, '_id') : j);
+const omitId = (j: Json): Json => {
+  if (isDefined(j)) delete j._id;
+  return j;
+};
 
 export type FindOptions = {
   limit?: number;
