@@ -21,7 +21,7 @@ describe('NamespaceContext', () => {
     context.create(() => {
       expect(context.get('test')).toBeUndefined();
       setImmediate(() => context.set('test', 42));
-      jest.runAllImmediates();
+      jest.runOnlyPendingTimers();
       expect(context.get('test')).toBe(42);
     });
   });
