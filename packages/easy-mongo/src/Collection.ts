@@ -1,5 +1,17 @@
-import { Condition, Database, Field, Json, LogicalCondition, MapOptions, Mapper, mappings, PropertyOptions, toCondition, toUuid } from '@thisisagile/easy';
-import { convert } from './Utils';
+import {
+  Condition,
+  Database,
+  Field,
+  Json,
+  LogicalCondition,
+  MapOptions,
+  Mapper,
+  mappings,
+  PropertyOptions,
+  toCondition,
+  toUuid,
+} from '@thisisagile/easy';
+import { toMongoType } from './Utils';
 
 export class Collection extends Mapper {
   protected readonly map = {
@@ -18,6 +30,6 @@ export class Collection extends Mapper {
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
   out(to: Json = {}): Json {
-    return convert(super.out(to));
+    return toMongoType(super.out(to));
   }
 }

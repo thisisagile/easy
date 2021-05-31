@@ -15,7 +15,7 @@ import {
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
 import { Collection } from './Collection';
-import { convert } from './Utils';
+import { toMongoType } from './Utils';
 
 const omitId = (j: Json): Json => {
   if (isDefined(j)) delete j._id;
@@ -44,7 +44,7 @@ export class MongoProvider {
 
   find(query: Condition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
-      .then(c => c.find(convert(asJson(query)), { ...options, limit: options.limit ?? 250 }))
+      .then(c => c.find(toMongoType(asJson(query)), { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
