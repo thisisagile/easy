@@ -1,5 +1,16 @@
 import { MongoProvider } from './MongoProvider';
-import { asJson, Condition, Gateway, Id, ifDefined, isDefined, Json, JsonValue, List } from '@thisisagile/easy';
+import {
+  asJson,
+  Condition,
+  Gateway,
+  Id,
+  ifDefined,
+  isDefined,
+  Json,
+  JsonValue,
+  List,
+  LogicalCondition,
+} from '@thisisagile/easy';
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
@@ -20,7 +31,7 @@ export class MongoGateway implements Gateway {
       .then(l => l.map(j => this.collection.in(j)));
   }
 
-  find(q: JsonValue | Condition): Promise<List<Json>> {
+  find(q: JsonValue | Condition | LogicalCondition): Promise<List<Json>> {
     return this.provider.find(asJson(q))
       .then(l => l.map(j => this.collection.in(j)));
   }

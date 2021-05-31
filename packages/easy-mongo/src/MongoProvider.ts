@@ -10,6 +10,7 @@ import {
   Json,
   JsonValue,
   List,
+  LogicalCondition,
   toList,
   when,
 } from '@thisisagile/easy';
@@ -42,7 +43,7 @@ export class MongoProvider {
       );
   }
 
-  find(query: Condition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
+  find(query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
       .then(c => c.find(toMongoType(asJson(query)), { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
@@ -88,7 +89,7 @@ export class MongoProvider {
       .then(d => d.result.ok === 1);
   }
 
-  count(query?: Condition | FilterQuery<any>): Promise<number> {
+  count(query?: Condition | LogicalCondition | FilterQuery<any>): Promise<number> {
     return this.collection().then(c => c.countDocuments(query));
   }
 
@@ -96,7 +97,7 @@ export class MongoProvider {
     return this.collection().then(c => c.createIndex(field, { unique, w: 1 }));
   }
 
-  createPartialIndex(field: string | any, filter: Condition | FilterQuery<any>, unique = true): Promise<string> {
+  createPartialIndex(field: string | any, filter: Condition | LogicalCondition | FilterQuery<any>, unique = true): Promise<string> {
     return this.collection().then(c => c.createIndex(field, { partialFilterExpression: asJson(filter), unique, w: 1 }));
   }
 
