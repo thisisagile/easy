@@ -1,5 +1,6 @@
 import { Condition, Field } from '../../src';
 import '@thisisagile/easy-test';
+import { DateTime } from '@thisisagile/easy';
 
 describe('Condition', () => {
   const field = new Field('name');
@@ -53,5 +54,10 @@ describe('Condition', () => {
 
   test('or', () => {
     expect(field.is('Sander').or(field.isNot('Jeroen'))).toMatchJson({ $or: [{ name: { $eq: 'Sander' } }, { name: { $ne: 'Jeroen' } }] });
+  });
+
+  test('toJson', () => {
+    const d = new DateTime('2021-05-03T10:31:24.000Z');
+    expect(field.greaterEqual(d)).toMatchJson( { name: { $gte: '2021-05-03T10:31:24.000Z' }} );
   });
 });

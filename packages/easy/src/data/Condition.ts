@@ -1,4 +1,4 @@
-import { Json, JsonValue } from '../types';
+import { json, Json, JsonValue } from '../types';
 import { convert, Convert } from '../utils';
 
 export class Condition {
@@ -8,7 +8,7 @@ export class Condition {
   or = (...others: Condition[]): LogicalCondition => new LogicalCondition('or', [this, ...others]);
 
   toJSON(): Json {
-    return { [this.key]: { [`$${this.operator}`]: this.value as any } };
+    return { [this.key]: { [`$${this.operator}`]: json.parse(this.value) } };
   }
 }
 
