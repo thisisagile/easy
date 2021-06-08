@@ -1,6 +1,5 @@
-import { ContentType, HttpStatus, HttpVerb, meta, Verb } from '../../src';
+import { ContentType, HttpStatus, HttpVerb, meta, toVerbOptions, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref';
-import { toVerbOptions } from '../../dist';
 import '@thisisagile/easy-test';
 
 describe('Verb', () => {
@@ -51,16 +50,21 @@ describe('Verb', () => {
 describe('toVerbOptions', () => {
   test('onOk', () => {
     expect(toVerbOptions().onOk).toMatchText(HttpStatus.Ok);
-    expect(toVerbOptions({onOk: HttpStatus.Created}).onOk).toMatchText(HttpStatus.Created);
+    expect(toVerbOptions({ onOk: HttpStatus.Created }).onOk).toMatchText(HttpStatus.Created);
   });
 
   test('onError', () => {
     expect(toVerbOptions().onError).toMatchText(HttpStatus.BadRequest);
-    expect(toVerbOptions({onError: HttpStatus.Created}).onError).toMatchText(HttpStatus.Created);
+    expect(toVerbOptions({ onError: HttpStatus.Created }).onError).toMatchText(HttpStatus.Created);
   });
 
   test('onNotFound', () => {
     expect(toVerbOptions().onNotFound).toMatchText(HttpStatus.NotFound);
-    expect(toVerbOptions({onNotFound: HttpStatus.Created}).onNotFound).toMatchText(HttpStatus.Created);
+    expect(toVerbOptions({ onNotFound: HttpStatus.Created }).onNotFound).toMatchText(HttpStatus.Created);
+  });
+
+  test('type', () => {
+    expect(toVerbOptions().type).toMatchText(ContentType.Json);
+    expect(toVerbOptions({ type: ContentType.Stream }).type).toMatchText(ContentType.Stream);
   });
 });
