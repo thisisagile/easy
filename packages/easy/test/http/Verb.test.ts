@@ -1,5 +1,7 @@
 import { ContentType, HttpStatus, HttpVerb, meta, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref';
+import { toVerbOptions } from '../../dist';
+import '@thisisagile/easy-test';
 
 describe('Verb', () => {
   const devs = meta(new DevsResource());
@@ -43,5 +45,12 @@ describe('Verb', () => {
   test('Get content type when using stream', () => {
     const verb: Verb | undefined = dev.property('pdf').get('verb');
     expect(verb?.options.type).toBe(ContentType.Stream);
+  });
+});
+
+describe('toVerbOptions', () => {
+  test('onOk', () => {
+    expect(toVerbOptions().onOk).toMatchText(HttpStatus.Ok);
+    expect(toVerbOptions({onOk: HttpStatus.Created}).onOk).toMatchText(HttpStatus.Created);
   });
 });
