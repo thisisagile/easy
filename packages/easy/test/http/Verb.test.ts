@@ -58,4 +58,9 @@ describe('toVerbOptions', () => {
     expect(toVerbOptions().onError).toMatchText(HttpStatus.BadRequest);
     expect(toVerbOptions({onError: HttpStatus.Created}).onError).toMatchText(HttpStatus.Created);
   });
+
+  test('onNotFound', () => {
+    expect(toVerbOptions().onNotFound).toMatchText(HttpStatus.NotFound);
+    expect(toVerbOptions({onNotFound: HttpStatus.Created}).onNotFound).toMatchText(HttpStatus.Created);
+  });
 });
