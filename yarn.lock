@@ -989,7 +989,7 @@ __metadata:
   resolution: "@thisisagile/easy-mongo@workspace:packages/easy-mongo"
   dependencies:
     "@thisisagile/easy": "workspace:*"
-    "@types/mongodb": ^3.6.12
+    "@types/mongodb": ^3.6.17
     mongodb: ^3.6.6
   languageName: unknown
   linkType: soft
@@ -1276,13 +1276,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.6.12":
-  version: 3.6.16
-  resolution: "@types/mongodb@npm:3.6.16"
+"@types/mongodb@npm:^3.6.17":
+  version: 3.6.17
+  resolution: "@types/mongodb@npm:3.6.17"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
-  checksum: 8ba17f6df0dc6f9e88b2c8b151f1f67dd1506519a79b0dc5dc847fa05bcd9612f1a8dace824ca8eeb84613717ca2a902e934d646e7a3203ab1b4c64513879f15
+  checksum: c96504ab4b3a07d1bee2a9614c55ec12a035d4564999fb3f6bfdf61ccc71c24bcbaa2af2ae177de44a7b4987397794f51e067533de45db5e995aadc2a3764af8
   languageName: node
   linkType: hard
 
