@@ -1,6 +1,5 @@
-import { ContentType, isOriginatedError, OriginatedError } from '../../src';
+import { ContentType, isOriginatedError, OriginatedError, toOriginatedError, toResults } from '../../src';
 import { Dev } from '../ref';
-import { toOriginatedError } from '../../dist';
 
 describe('OriginatedError', () => {
   test('origin', () => {
@@ -24,6 +23,13 @@ describe('toOriginatedError', () => {
   test('from originated error', () => {
     const e = new OriginatedError(Dev.Naoufal);
     expect(toOriginatedError(e)).toEqual(e);
+  });
+
+  test('from results', () => {
+    const res = toResults('Something is wrong');
+    const e = toOriginatedError(res);
+    expect(e).toBeInstanceOf(OriginatedError);
+    expect(e.origin).toEqual(res);
   });
 });
 
