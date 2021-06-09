@@ -1,5 +1,7 @@
 import { isJson, json, toJson } from '../../src';
 import { Dev, DevsResource } from '../ref';
+import '@thisisagile/easy-test';
+import { asJson } from '../../dist';
 
 describe('isJson', () => {
   test('isJson true', () => {
@@ -94,4 +96,27 @@ describe('json', () => {
     const dev4 = json.omit(dev, 'language', 'id', 'state');
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
+});
+
+describe('asJson', () => {
+
+  test('empty', () => {
+    const j = {};
+    expect(asJson(j)).toMatchJson({});
+  })
+
+  test('target is not Json', () => {
+    const j = 'Not a Json';
+    expect(asJson(j)).toMatchJson({});
+  })
+
+  test('target is not Json, but there is an alt function', () => {
+    const j = 'Not a Json';
+    expect(asJson(j, Dev.Jeroen.toJSON)).toMatchJson(Dev.Jeroen.toJSON());
+  })
+
+  test('is a Json', () => {
+    const j = Dev.Jeroen;
+    expect(asJson(j)).toMatchJson(Dev.Jeroen.toJSON());
+  })
 });
