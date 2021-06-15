@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
-    "@types/mongodb": "^3.6.17",
+    "@types/mongodb": "^3.6.18",
     "mongodb": "^3.6.6"
   }
 }
