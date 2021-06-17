@@ -8,7 +8,7 @@ export class SqlServerProvider implements QueryProvider {
     return (this.pool ?? (this.pool = new ConnectionPool(asString(this.db.options?.connectionString))))
       .request()
       .query(q.toString())
-      .catch(e => reject(Exception.CouldNotExecute(this.db, e)));
+      .catch(e => reject(Exception.CouldNotExecute(this.db).because(e)));
   };
 
   query = (q: Query): Promise<List<Json>> => this.execute(q).then(r => meta(r.recordset).values());
