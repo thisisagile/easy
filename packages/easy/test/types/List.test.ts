@@ -204,4 +204,9 @@ describe('asList', () => {
     expect(devs.next(d => d.is(Dev.Wouter))).toMatchText(Dev.Sander);
     expect(devs.next(d => d.is(Dev.Sander))).toBeUndefined();
   });
+
+  test('prev on empty list works', () => {
+    expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
+  });
+
 });
