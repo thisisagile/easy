@@ -12,6 +12,8 @@ export class List<T> extends Array<T> {
 
   first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).first() : this[0]);
 
+  next = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this[this.findIndex(p, params) + 1] : this[0]);
+
   last = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).last() : this[this.length - 1]);
 
   toJSON = (): Json[] =>
