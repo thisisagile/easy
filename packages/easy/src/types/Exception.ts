@@ -1,9 +1,13 @@
 import { asString, Text, text } from './Text';
 import { Enum } from './Enum';
 import { isDefined } from './Is';
+import { ifDefined } from '../utils';
+
+const because = (error?: Text): string => ifDefined(error, ` because ${error}`) ?? '';
 
 export class Exception extends Enum {
-  static readonly CouldNotExecute = (target: Text, error: Text): Exception => new Exception(`Could not execute on ${target} because ${error}.`);
+  static readonly CouldNotExecute = (target: Text, error?: Text): Exception => new Exception(`Could not execute ${target}${because(error)}.`);
+  static readonly CouldNotValidate = (target: Text, error?: Text): Exception => new Exception(`Could not validate ${target}${because(error)}.)}.`);
   static readonly IsMissingId = new Exception('Subject is missing an id');
   static readonly DoesNotExist = new Exception('Does not exist');
   static readonly EnvironmentVariableNotFound = (variable: Text): Exception =>
