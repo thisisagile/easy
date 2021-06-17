@@ -209,4 +209,12 @@ describe('asList', () => {
     expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
   });
 
+  test('prev on actual list works', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
+    expect(devs.prev()).toMatchText(Dev.Jeroen);
+    expect(devs.prev(d => d.is(Dev.Jeroen))).toBeUndefined();
+    expect(devs.prev(d => d.is(Dev.Naoufal))).toMatchText(Dev.Jeroen);
+    expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Naoufal);
+    expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
+  });
 });
