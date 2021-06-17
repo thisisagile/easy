@@ -39,6 +39,8 @@ describe('Exception', () => {
   test('adding additional error', () => {
     expect(Exception.DoesNotExist.because('Bad parameter').reason).toBe('Bad parameter');
     expect(Exception.DoesNotExist.reason).toBeUndefined();
-    expect(Exception.DoesNotExist.because('Bad parameters').equals(Exception.DoesNotExist)).toBeTruthy();
+    expect(Exception.DoesNotExist.equals(Exception.DoesNotExist)).toBeTruthy();
+    expect(Exception.DoesNotExist.because('Bad parameters').id).toBe(Exception.DoesNotExist.id);
+    expect(Exception.DoesNotExist.because('Bad haircut').equals(Exception.DoesNotExist)).toBeTruthy();
   });
 });
