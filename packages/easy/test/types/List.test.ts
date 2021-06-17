@@ -193,6 +193,10 @@ describe('asList', () => {
     expect(asList(Dev, [Dev.Naoufal.toJSON()]).first()).toMatchJson(Dev.Naoufal);
   });
 
+  test('next on empty list works', () => {
+    expect(asList(Dev).next(d => d.is(Dev.Wouter))).toBeUndefined();
+  });
+
   test('next on actual list works', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
     expect(devs.next()).toMatchText(Dev.Jeroen);
