@@ -18,5 +18,7 @@ export class Dev extends Entity {
     return this.name;
   }
 
+  is = (d: Dev): boolean => d.name === this.name;
+
   update = (add: Json): Dev => new Dev(this.merge(add));
 }
