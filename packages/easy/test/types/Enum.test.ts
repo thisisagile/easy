@@ -20,13 +20,22 @@ describe('Enum', () => {
     expect(Language.JavaScript.code).toBe('js');
   });
 
+  test('byIds', () => {
+    const ids = ['javascript', 'typescript', 'java'];
+    const idsWithWrongOnes = ['javascript', 'typescript', 'java', 'php', 'english'];
+    expect(Language.byIds()).toHaveLength(0);
+    expect(Language.byIds(ids)).toHaveLength(3);
+    expect(Language.byIds(idsWithWrongOnes)).toHaveLength(3);
+    expect(Language.byIds(ids)[0]).toBeInstanceOf(Language);
+  });
+
   test('all', () => {
-    expect(Language.all()).toHaveLength(3);
+    expect(Language.all()).toHaveLength(4);
     expect(Language.all()[0]).toBeInstanceOf(Language);
   });
 
   test('all with inherited enum', () => {
-    expect(MoreLanguage.all()).toHaveLength(4);
+    expect(MoreLanguage.all()).toHaveLength(5);
     expect(MoreLanguage.all()[3]).toBeInstanceOf(Language);
   });
 
