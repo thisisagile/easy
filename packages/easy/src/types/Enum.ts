@@ -29,7 +29,7 @@ export abstract class Enum implements Validatable {
     );
   }
 
-  static byIds<T extends Enum>(ids?: Id[]): T[] {
+  static byIds<T extends Enum>(ids?: Id[]): List<T> {
     return meta(this)
       .values<T>()
       .filter((e: unknown) => isEnum(e) && ids?.includes(e.id));
