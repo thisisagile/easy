@@ -33,7 +33,7 @@
   "devDependencies": {
     "@types/cls-hooked": "^4.3.3",
     "@types/form-urlencoded": "^2.0.1",
-    "@types/jsonwebtoken": "^8.5.1",
+    "@types/jsonwebtoken": "^8.5.2",
     "@types/passport": "^1.0.6",
     "@types/passport-jwt": "^3.0.5",
     "@types/uuid": "^8.3.0",
