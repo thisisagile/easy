@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/cls-hooked": "^4.3.3",
-    "@types/form-urlencoded": "^2.0.1",
+    "@types/form-urlencoded": "^4.4.0",
     "@types/jsonwebtoken": "^8.5.2",
     "@types/passport": "^1.0.6",
     "@types/passport-jwt": "^3.0.5",
