@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
-    "@types/mssql": "^6.0.7",
-    "mssql": "^6.3.1"
+    "@types/mssql": "^6.0.8",
+    "mssql": "^7.1.3"
   }
 }
