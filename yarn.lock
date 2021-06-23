@@ -1341,7 +1341,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.12
-    "@types/form-urlencoded": ^2.0.1
+    "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
     "@types/passport": ^1.0.6
     "@types/passport-jwt": ^3.0.5
@@ -1403,7 +1403,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
-    "@types/form-urlencoded": ^2.0.1
+    "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
     "@types/uuid": ^8.3.0
     "@types/validator": ^13.1.4
@@ -1544,10 +1544,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/form-urlencoded@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@types/form-urlencoded@npm:2.0.1"
-  checksum: 9b0d62b2f56a5917f3aef19e7f68f6319b7eab583ad60123ce171d6f74ce815b0829abff382c17e21625b87d6e09ea80a90f44bae1b399100af73eb05d3bf6ad
+"@types/form-urlencoded@npm:^4.4.0":
+  version: 4.4.0
+  resolution: "@types/form-urlencoded@npm:4.4.0"
+  dependencies:
+    form-urlencoded: "*"
+  checksum: 816f9d874056fc5f5d09854836dfea6cc36eaf2841348429f9eb5cce4bbb7572f0011a879e7bf2136ab400e65477d0f019aae9e31943bbdfccc63d5a641de759
   languageName: node
   linkType: hard
 
@@ -4534,7 +4536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-urlencoded@npm:^6.0.4":
+"form-urlencoded@npm:*, form-urlencoded@npm:^6.0.4":
   version: 6.0.4
   resolution: "form-urlencoded@npm:6.0.4"
   checksum: f396e63d5140dd3b8dffdd49349770d6d73510da1493cade6c7751b79e6996150e5753b0cc76797332561d49c42cca445a2f7775d9bd269ebf8ad8e3d05a5865
