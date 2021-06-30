@@ -181,6 +181,24 @@ describe('toList', () => {
     const dist = devs.distinct();
     expect(dist).toHaveLength(3);
   });
+
+  test('next on actual list works', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
+    expect(devs.next()).toMatchText(Dev.Jeroen);
+    expect(devs.next(d => d.is(Dev.Jeroen))).toMatchText(Dev.Naoufal);
+    expect(devs.next(d => d.is(Dev.Wouter))).toMatchText(Dev.Sander);
+    expect(devs.next(d => d.is(Dev.Sander))).toBeUndefined();
+  });
+
+  test('prev on actual list works', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
+    expect(devs.prev()).toMatchText(Dev.Jeroen);
+    expect(devs.prev(d => d.is(Dev.Jeroen))).toBeUndefined();
+    expect(devs.prev(d => d.is(Dev.Naoufal))).toMatchText(Dev.Jeroen);
+    expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Naoufal);
+    expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
+  });
+
 });
 
 describe('asList', () => {
@@ -197,24 +215,16 @@ describe('asList', () => {
     expect(asList(Dev).next(d => d.is(Dev.Wouter))).toBeUndefined();
   });
 
-  test('next on actual list works', () => {
-    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
-    expect(devs.next()).toMatchText(Dev.Jeroen);
-    expect(devs.next(d => d.is(Dev.Jeroen))).toMatchText(Dev.Naoufal);
-    expect(devs.next(d => d.is(Dev.Wouter))).toMatchText(Dev.Sander);
-    expect(devs.next(d => d.is(Dev.Sander))).toBeUndefined();
-  });
-
   test('prev on empty list works', () => {
     expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
   });
 
-  test('prev on actual list works', () => {
-    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
-    expect(devs.prev()).toMatchText(Dev.Jeroen);
-    expect(devs.prev(d => d.is(Dev.Jeroen))).toBeUndefined();
-    expect(devs.prev(d => d.is(Dev.Naoufal))).toMatchText(Dev.Jeroen);
-    expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Naoufal);
-    expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
+  test('asList on empty list works', () => {
+    expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
   });
+
+  // test('prev on actual list works', () => {
+  //   const devs = asList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
+  //   expect(devs.prev()).toMatchText(Dev.Jeroen);
+  // });
 });
