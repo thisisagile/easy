@@ -6,7 +6,7 @@ export class Jwt extends Value {
   static sign = (token: Json): Jwt => {
     const privateKey = ctx.env.get('tokenPrivateKey');
     if (!privateKey) throw Error('Private key not found');
-    return new Jwt(sign(token, privateKey, JSON.parse(ctx.env.get('tokenSignOptions') ?? 'null') ?? { expiresIn: '1h' } ));
+    return new Jwt(sign(token, privateKey, { expiresIn: ctx.env.get('tokenExpiresIn') ?? '1h', keyid: ctx.env.get('tokenKeyid') ?? 'easy' }));
   };
 
   static of = (a: { jwt: string }): Jwt => new Jwt(a.jwt);
