@@ -3,8 +3,8 @@ import { Exception, Func, Gateway, Id, Json, JsonValue, List, toList, Uri } from
 import { HttpStatus } from '../http';
 import { reject } from '../utils';
 
-export class RouteGateway<U extends Uri> implements Gateway {
-  constructor(readonly route: Func<U>, readonly routeId: Func<U>, readonly api: Api = new Api()) {}
+export class RouteGateway implements Gateway {
+  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {}
 
   all(): Promise<List<Json>> {
     return this.api.get(this.route()).then(r => r.body.data?.items ?? toList());
