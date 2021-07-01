@@ -1,9 +1,13 @@
 import { decode, sign, verify } from 'jsonwebtoken';
-import { Json, Value } from '../types';
+import { ctx, Json, Value } from '../types';
 import { rule } from '../validation';
 
 export class Jwt extends Value {
-  static sign = (token: Json): Jwt => new Jwt(sign(token, 'secret', { expiresIn: '1h' }));
+  static sign = (token: Json): Jwt => {
+    const privateKey = ctx.env.get('tokenPrivateKey');
+    if (!privateKey) throw Error('Private key not found');
+    return new Jwt(sign(token, privateKey, JSON.parse(ctx.env.get('tokenSignOptions') ?? 'null') ?? { expiresIn: '1h' } ));
+  };
 
   static of = (a: { jwt: string }): Jwt => new Jwt(a.jwt);
 
@@ -12,7 +16,7 @@ export class Jwt extends Value {
   @rule('Token is not valid')
   verify(): boolean {
     try {
-      verify(this.value, 'secret');
+      verify(this.value, ctx.env.get('tokenPublicKey') ?? '');
       return true;
     } catch (e) {
       return false;
