@@ -34,7 +34,7 @@
     "@types/form-urlencoded": "^4.4.0",
     "@types/jsonwebtoken": "^8.5.2",
     "@types/uuid": "^8.3.0",
-    "@types/validator": "^13.1.4"
+    "@types/validator": "^13.6.1"
   },
   "dependencies": {
     "axios": "^0.21.1",
