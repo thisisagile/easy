@@ -31,6 +31,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*",
     "@types/cls-hooked": "^4.3.3",
     "@types/form-urlencoded": "^4.4.0",
     "@types/jsonwebtoken": "^8.5.2",

@@ -607,23 +607,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@eslint/eslintrc@npm:0.4.1"
-  dependencies:
-    ajv: ^6.12.4
-    debug: ^4.1.1
-    espree: ^7.3.0
-    globals: ^12.1.0
-    ignore: ^4.0.6
-    import-fresh: ^3.2.1
-    js-yaml: ^3.13.1
-    minimatch: ^3.0.4
-    strip-json-comments: ^3.1.1
-  checksum: 418f5810c8dd9897d2457ceef098197d0e5f1ad345fbe4cd9256fd4223d7ea83d5e350f9091b3ab3483b6b1c367fa560df3ba1fccc7eb8ca6e1aae5a5b126d60
-  languageName: node
-  linkType: hard
-
 "@eslint/eslintrc@npm:^0.4.2":
   version: 0.4.2
   resolution: "@eslint/eslintrc@npm:0.4.2"
@@ -1339,6 +1322,7 @@ __metadata:
   resolution: "@thisisagile/easy-express@workspace:packages/easy-express"
   dependencies:
     "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy-test": "workspace:*"
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.12
     "@types/form-urlencoded": ^4.4.0
@@ -1361,6 +1345,7 @@ __metadata:
   resolution: "@thisisagile/easy-mongo@workspace:packages/easy-mongo"
   dependencies:
     "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy-test": "workspace:*"
     "@types/mongodb": ^3.6.18
     mongodb: ^3.6.9
   languageName: unknown
@@ -1371,38 +1356,31 @@ __metadata:
   resolution: "@thisisagile/easy-mssql@workspace:packages/easy-mssql"
   dependencies:
     "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy-test": "workspace:*"
     "@types/mssql": ^6.0.8
     mssql: ^7.1.3
   languageName: unknown
   linkType: soft
 
-"@thisisagile/easy-test@npm:1.19.0":
-  version: 1.19.0
-  resolution: "@thisisagile/easy-test@npm:1.19.0"
+"@thisisagile/easy-test@workspace:*, @thisisagile/easy-test@workspace:packages/easy-test":
+  version: 0.0.0-use.local
+  resolution: "@thisisagile/easy-test@workspace:packages/easy-test"
   dependencies:
     "@types/jest": ^26.0.23
-    "@typescript-eslint/eslint-plugin": ^4.25.0
-    "@typescript-eslint/parser": ^4.25.0
-    eslint: ^7.27.0
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-jest: ^24.3.6
-    eslint-plugin-prettier: ^3.4.0
-    eslint-plugin-promise: ^5.1.0
-    eslint-plugin-security: ^1.4.0
-    eslint-plugin-sonarjs: ^0.7.0
-    eslint-plugin-standard: ^5.0.0
+    "@types/node": ^15.6.1
     jest: ^27.0.3
     jest-junit: ^12.1.0
     jest-sonar-reporter: ^2.0.0
     ts-jest: ^27.0.2
-  checksum: bed79cd3b8162456828180794adae75da1449ad1d74232e9da2aeb94841e45c787a95bf606fcb775d13781a6c43786c77c7de4436db8abb1228317135dc39570
-  languageName: node
-  linkType: hard
+    weak-napi: ^2.0.2
+  languageName: unknown
+  linkType: soft
 
 "@thisisagile/easy@workspace:*, @thisisagile/easy@workspace:packages/easy":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
+    "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
     "@types/uuid": ^8.3.0
@@ -1703,6 +1681,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^15.6.1":
+  version: 15.14.2
+  resolution: "@types/node@npm:15.14.2"
+  checksum: 10982df2b5b6aa995e4ce12feca15262ea5127ff2e98f4558945dc7d5dd2b78eb1d727318d5f3b3003ef1b066c7f7e6b3df45a5b7fb0b859231028fba3212c6b
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^8.0.47":
   version: 8.10.66
   resolution: "@types/node@npm:8.10.66"
@@ -1867,28 +1852,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^4.25.0":
-  version: 4.25.0
-  resolution: "@typescript-eslint/eslint-plugin@npm:4.25.0"
-  dependencies:
-    "@typescript-eslint/experimental-utils": 4.25.0
-    "@typescript-eslint/scope-manager": 4.25.0
-    debug: ^4.1.1
-    functional-red-black-tree: ^1.0.1
-    lodash: ^4.17.15
-    regexpp: ^3.0.0
-    semver: ^7.3.2
-    tsutils: ^3.17.1
-  peerDependencies:
-    "@typescript-eslint/parser": ^4.0.0
-    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 3bab84b7770485ed0c56d315c0052758908293724b477f4e4a5546c1e1ce17dc2759af0ea5756b09edbf42d82a13436f9a24d563b1222653ec96a79eccb916f9
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/eslint-plugin@npm:^4.28.0":
   version: 4.28.0
   resolution: "@typescript-eslint/eslint-plugin@npm:4.28.0"
@@ -1910,22 +1873,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/experimental-utils@npm:4.25.0, @typescript-eslint/experimental-utils@npm:^4.0.1":
-  version: 4.25.0
-  resolution: "@typescript-eslint/experimental-utils@npm:4.25.0"
-  dependencies:
-    "@types/json-schema": ^7.0.3
-    "@typescript-eslint/scope-manager": 4.25.0
-    "@typescript-eslint/types": 4.25.0
-    "@typescript-eslint/typescript-estree": 4.25.0
-    eslint-scope: ^5.0.0
-    eslint-utils: ^2.0.0
-  peerDependencies:
-    eslint: "*"
-  checksum: 4b83a4cadbf6dbad9d822748e90403f40a749a8f213c92a26f29ce7deab10ee4adc1066f58ec49050a5fafc6fda593f3d672512b787872fae263de81b5ee4faa
-  languageName: node
-  linkType: hard
-
 "@typescript-eslint/experimental-utils@npm:4.28.0":
   version: 4.28.0
   resolution: "@typescript-eslint/experimental-utils@npm:4.28.0"
@@ -1942,20 +1889,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^4.25.0":
+"@typescript-eslint/experimental-utils@npm:^4.0.1":
   version: 4.25.0
-  resolution: "@typescript-eslint/parser@npm:4.25.0"
+  resolution: "@typescript-eslint/experimental-utils@npm:4.25.0"
   dependencies:
+    "@types/json-schema": ^7.0.3
     "@typescript-eslint/scope-manager": 4.25.0
     "@typescript-eslint/types": 4.25.0
     "@typescript-eslint/typescript-estree": 4.25.0
-    debug: ^4.1.1
+    eslint-scope: ^5.0.0
+    eslint-utils: ^2.0.0
   peerDependencies:
-    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: deab7d5edb21e267bc5db41dbfcd7cce5c779d639c5cbc1f2ecc2e9fc08a9d35b66697f090d01d17d2e82dd75ebe0385aef1ed90916ae5051b5541453d9407fa
+    eslint: "*"
+  checksum: 4b83a4cadbf6dbad9d822748e90403f40a749a8f213c92a26f29ce7deab10ee4adc1066f58ec49050a5fafc6fda593f3d672512b787872fae263de81b5ee4faa
   languageName: node
   linkType: hard
 
@@ -4012,55 +3958,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.27.0":
-  version: 7.27.0
-  resolution: "eslint@npm:7.27.0"
-  dependencies:
-    "@babel/code-frame": 7.12.11
-    "@eslint/eslintrc": ^0.4.1
-    ajv: ^6.10.0
-    chalk: ^4.0.0
-    cross-spawn: ^7.0.2
-    debug: ^4.0.1
-    doctrine: ^3.0.0
-    enquirer: ^2.3.5
-    escape-string-regexp: ^4.0.0
-    eslint-scope: ^5.1.1
-    eslint-utils: ^2.1.0
-    eslint-visitor-keys: ^2.0.0
-    espree: ^7.3.1
-    esquery: ^1.4.0
-    esutils: ^2.0.2
-    fast-deep-equal: ^3.1.3
-    file-entry-cache: ^6.0.1
-    functional-red-black-tree: ^1.0.1
-    glob-parent: ^5.0.0
-    globals: ^13.6.0
-    ignore: ^4.0.6
-    import-fresh: ^3.0.0
-    imurmurhash: ^0.1.4
-    is-glob: ^4.0.0
-    js-yaml: ^3.13.1
-    json-stable-stringify-without-jsonify: ^1.0.1
-    levn: ^0.4.1
-    lodash.merge: ^4.6.2
-    minimatch: ^3.0.4
-    natural-compare: ^1.4.0
-    optionator: ^0.9.1
-    progress: ^2.0.0
-    regexpp: ^3.1.0
-    semver: ^7.2.1
-    strip-ansi: ^6.0.0
-    strip-json-comments: ^3.1.0
-    table: ^6.0.9
-    text-table: ^0.2.0
-    v8-compile-cache: ^2.0.3
-  bin:
-    eslint: bin/eslint.js
-  checksum: c91a9a88091fb2654ec599b452f6d8aff22daa4a21761e762536877ec8b65cd6386c29ea2e0fec2668125a07c62973bc23922f924c999e140c1042b8cffca030
-  languageName: node
-  linkType: hard
-
 "eslint@npm:^7.29.0":
   version: 7.29.0
   resolution: "eslint@npm:7.29.0"
@@ -4707,6 +4604,22 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
+"get-symbol-from-current-process-h@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "get-symbol-from-current-process-h@npm:1.0.2"
+  checksum: 6fe90a87893e28ddd071765ff631ced40ab80fd6ee564459867e59db0fc7e61afb93888a0185d7c7174c0171f72c30ff13504260192d7c56e42b43a2fdbcf6db
+  languageName: node
+  linkType: hard
+
+"get-uv-event-loop-napi-h@npm:^1.0.5":
+  version: 1.0.6
+  resolution: "get-uv-event-loop-napi-h@npm:1.0.6"
+  dependencies:
+    get-symbol-from-current-process-h: ^1.0.1
+  checksum: 992c488eb33ac6c3ea97af5fc88f99c491fdfab59f8c4fdb30c7fc368a4a81fb94053417eb55c5e01ff52ae9e0dee51ce5e972f3cd834f55511fbc547e37b4de
+  languageName: node
+  linkType: hard
+
 "git-raw-commits@npm:^2.0.8":
   version: 2.0.10
   resolution: "git-raw-commits@npm:2.0.10"
@@ -4779,7 +4692,7 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"glob-parent@npm:^5.0.0, glob-parent@npm:^5.1.0, glob-parent@npm:^5.1.2":
+"glob-parent@npm:^5.1.0, glob-parent@npm:^5.1.2":
   version: 5.1.2
   resolution: "glob-parent@npm:5.1.2"
   dependencies:
@@ -4815,15 +4728,6 @@ fsevents@^2.3.2:
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
   checksum: 2563d3306a7e646fd9ec484b0ca29bf8847d9dc6ebbe86026f11e31bda04f420f6536c2decbd4cb96350379801d2cce352ab373c40be8b024324775b31f882f9
-  languageName: node
-  linkType: hard
-
-"globals@npm:^12.1.0":
-  version: 12.4.0
-  resolution: "globals@npm:12.4.0"
-  dependencies:
-    type-fest: ^0.8.1
-  checksum: 0b9764bdeab0bc9762dea8954a0d4c5db029420bd8bf693df9098ce7e045ccaf9b2d259185396fd048b051d42fdc8dc7ab02af62e3dbeb2324a78a05aac8d33c
   languageName: node
   linkType: hard
 
@@ -7455,6 +7359,17 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
+"node-gyp-build@npm:^4.2.1":
+  version: 4.2.3
+  resolution: "node-gyp-build@npm:4.2.3"
+  bin:
+    node-gyp-build: bin.js
+    node-gyp-build-optional: optional.js
+    node-gyp-build-test: build-test.js
+  checksum: 8512c25498b1605dbe9d2605cac7f8996d18c35097b3079b232674b0f3b8f1559be6f531ec3a00a94f90a0a69ccc452edb62f8f6dfff8caa3abe4b729cc21b06
+  languageName: node
+  linkType: hard
+
 "node-gyp@npm:latest":
   version: 8.1.0
   resolution: "node-gyp@npm:8.1.0"
@@ -8519,7 +8434,7 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"regexpp@npm:^3.0.0, regexpp@npm:^3.1.0":
+"regexpp@npm:^3.1.0":
   version: 3.1.0
   resolution: "regexpp@npm:3.1.0"
   checksum: 69d0ce6b449cf35d3732d6341a1e70850360ffc619f8eef10629871c462e614853fffb80d3f00fc17cd0bb5b8f34b0cde5be4b434e72c0eb3fbba2360c8b5ac4
@@ -8753,7 +8668,6 @@ fsevents@^2.3.2:
   resolution: "root@workspace:."
   dependencies:
     "@release-it/conventional-changelog": ^3.0.1
-    "@thisisagile/easy-test": 1.19.0
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^26.0.23
     "@types/node": ^15.12.4
@@ -8933,6 +8847,16 @@ fsevents@^2.3.2:
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
   checksum: 0ac2403b0c2d39bf452f6d5d17dfd3cb952b9113098e1231cc0614c436e2f465637e39d27cf3b93556f5c59795e9790fd7e98da784c5f9919edeba4295ffeb29
+  languageName: node
+  linkType: hard
+
+"setimmediate-napi@npm:^1.0.3":
+  version: 1.0.6
+  resolution: "setimmediate-napi@npm:1.0.6"
+  dependencies:
+    get-symbol-from-current-process-h: ^1.0.1
+    get-uv-event-loop-napi-h: ^1.0.5
+  checksum: faacaa355af164d7f1c8f567210c88b90f237c508bdf28235d62111a660452da05c726a2fc01f6219b0e8d5a64219e4c7a92d51ad0d72dbb491f5a41e43fecaf
   languageName: node
   linkType: hard
 
@@ -10161,6 +10085,18 @@ typescript@~4.2.4:
   dependencies:
     defaults: ^1.0.3
   checksum: abf8ba432dd19a95af63895de6af932900a9451e175745551aeca0fd2d46604bc72ff80aa83adc3f67fb8389191329340e2864aefcf20655ffe91f0dbee5d953
+  languageName: node
+  linkType: hard
+
+"weak-napi@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "weak-napi@npm:2.0.2"
+  dependencies:
+    node-addon-api: ^3.0.0
+    node-gyp: latest
+    node-gyp-build: ^4.2.1
+    setimmediate-napi: ^1.0.3
+  checksum: af461ddd5e2d146249398dd9675b65112277b58fc43fd649c6ed7d885222722a087a30d3816da3f0405eb4f1a0d9386f20bc3c575982180a129b909fd50d5651
   languageName: node
   linkType: hard
 

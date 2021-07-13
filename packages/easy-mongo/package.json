@@ -30,6 +30,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*"
+  },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "@types/mongodb": "^3.6.18",

@@ -1,20 +1,22 @@
 {
-  "name": "@thisisagile/easy",
+  "name": "@thisisagile/easy-test",
   "version": "0.1.0",
-  "description": "Straightforward library for building domain-driven microservice architectures",
+  "description": "Straightforward library for testing microservices built with @thisisagile/easy",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git@github.com:thisisagile/easy.git"
+    "url": "git@github.com:thisisagile/easy-test.git"
   },
   "keywords": [
     "typescript",
     "microservices",
     "domain-driven-design",
-    "evolutionary-architecture"
+    "evolutionary-architecture",
+    "jest",
+    "unit testing"
   ],
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
@@ -31,19 +33,18 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "workspace:*",
-    "@types/form-urlencoded": "^4.4.0",
-    "@types/jsonwebtoken": "^8.5.2",
-    "@types/uuid": "^8.3.0",
-    "@types/validator": "^13.1.4"
+    "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "form-urlencoded": "^6.0.4",
-    "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
-    "reflect-metadata": "^0.1.13",
-    "uuid": "^8.3.2",
-    "validator": "^13.6.0"
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.6.1",
+    "jest": "^27.0.3",
+    "jest-junit": "^12.1.0",
+    "jest-sonar-reporter": "^2.0.0",
+    "ts-jest": "^27.0.2"
+  },
+  "engines": {
+    "node": ">=v14.16.0",
+    "npm": ">=7.7.6"
   }
 }
