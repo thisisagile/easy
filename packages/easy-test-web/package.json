@@ -1,7 +1,7 @@
 {
-  "name": "@thisisagile/easy-test",
+  "name": "@thisisagile/easy-test-web",
   "version": "0.1.0",
-  "description": "Straightforward library for testing microservices built with @thisisagile/easy",
+  "description": "Straightforward wrapper library for testing-library/react",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
@@ -36,11 +36,18 @@
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
+    "@testing-library/dom": "8.1.0",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "12.0.0",
+    "@thisisagile/easy-test": "workspace:*",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.1",
+    "@types/react": "17.0.14",
     "jest": "^27.0.3",
     "jest-junit": "^12.1.0",
     "jest-sonar-reporter": "^2.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "ts-jest": "^27.0.2"
   },
   "engines": {

@@ -1,13 +1,13 @@
 const baseConfig = require('./jest.config.base');
 const fs = require('fs');
 
-const roots = fs
+const projects = fs
   .readdirSync('packages/', { withFileTypes: true })
   .filter(c => c.isDirectory())
-  .map(c => `<rootDir>/packages/${c.name}`);
+  .map(c => ({...require(`./packages/${c.name}/jest.config.js`), rootDir: `./packages/${c.name}`}));
 
 module.exports = {
   ...baseConfig,
-  roots,
+  projects,
   setupFilesAfterEnv: ['./test/init.ts'],
 };
