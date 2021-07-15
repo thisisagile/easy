@@ -1,5 +1,7 @@
-import { EasyUri, text, uri, UseCase } from '@thisisagile/easy';
 import { URL } from 'url';
+import { EasyUri, uri } from './Uri';
+import { UseCase } from '../process';
+import { text } from './Text';
 
 export class AppUri extends EasyUri {
   static readonly app = uri.path('app');
