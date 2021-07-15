@@ -14,13 +14,13 @@ jest.mock('@testing-library/react', () => ({
   getByRole,
   getByPlaceholderText,
 }));
-import { ElementTester, renders, Tester } from '../src';
+import { renders, ReactTester, ReactTestElement } from '../src';
 
-describe('Tester', () => {
+describe('ReactTester', () => {
   const a = <div />;
 
   test('renders returns Tester', () => {
-    expect(renders(a)).toBeInstanceOf(Tester);
+    expect(renders(a)).toBeInstanceOf(ReactTester);
     expect(render).toHaveBeenCalledWith(a);
   });
 
@@ -55,9 +55,9 @@ describe('Tester', () => {
   test('at returns ElementTester', () => {
     const t = renders(a);
     expect(render).toHaveBeenCalledWith(a);
-    expect(t.atText('')).toBeInstanceOf(ElementTester);
-    expect(t.atId('')).toBeInstanceOf(ElementTester);
-    expect(t.atRole('')).toBeInstanceOf(ElementTester);
-    expect(t.atPlaceholder('')).toBeInstanceOf(ElementTester);
+    expect(t.atText('')).toBeInstanceOf(ReactTestElement);
+    expect(t.atId('')).toBeInstanceOf(ReactTestElement);
+    expect(t.atRole('')).toBeInstanceOf(ReactTestElement);
+    expect(t.atPlaceholder('')).toBeInstanceOf(ReactTestElement);
   });
 });

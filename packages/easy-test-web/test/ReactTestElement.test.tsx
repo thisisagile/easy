@@ -1,14 +1,13 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
 const getByText = mock.return(<div />);
-jest.mock('@testing-library/react', () => ({...jest.requireActual('@testing-library/react'), getByText}));
-
-import { ElementTester, renders } from '../src';
+jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
 import { fireEvent } from '@testing-library/react';
+import { renders, ReactTestElement } from '../src';
 
-describe('ElementTester', () => {
+describe('ReactTestElement', () => {
   const a = <div />;
-  let e: ElementTester;
+  let e: ReactTestElement;
 
   beforeEach(() => {
     e = renders(a).atText('');

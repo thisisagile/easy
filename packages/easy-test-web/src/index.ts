@@ -1,4 +1,3 @@
-export * from './ElementTester';
-export * from './Tester';
+export * from './ReactTestElement';
+export * from './ReactTester';
 export * from './waitForRender';
-

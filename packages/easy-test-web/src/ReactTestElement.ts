@@ -1,6 +1,6 @@
 import { fireEvent, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 
-export class ElementTester {
+export class ReactTestElement {
   constructor(readonly element: () => Element) {}
 
   get value(): string {
