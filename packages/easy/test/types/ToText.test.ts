@@ -7,6 +7,7 @@ describe('text().parse', () => {
   const wouter = text('Wouter');
   const kim = text('Kim van Wilgen');
   const sander = text('SanDEr hoogendOOrn');
+  const url = text('http://foo.bar/');
 
   test('cap works', () => {
     expect(empty.cap).toMatchText('');
@@ -72,6 +73,8 @@ describe('text().parse', () => {
     expect(wouter.trim).toMatchText('Wouter');
     expect(text(Dev.Sander).trim).toMatchText('Sander');
     expect(kim.trim).toMatchText('KimvanWilgen');
+    expect(url.trimEnd('/')).toMatchText('http://foo.bar');
+    expect(empty.trimEnd('////')).toMatchText('');
   });
 
   test('add works', () => {

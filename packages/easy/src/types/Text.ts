@@ -65,6 +65,8 @@ export class ToText implements Text {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
 
+  trimEnd = (end: string): ToText => this.map(s => (s.endsWith(end) ? s.substring(0, s.length - end.length) : s));
+
   parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
 
   isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
@@ -77,8 +79,7 @@ export class ToText implements Text {
 
   replace = (search: Text, replace: Text): ToText => this.map(s => replaceAll(s, search, replace));
 
-  add = (add?: unknown, separator = ''): ToText =>
-    this.map(s => isDefined(add) ? `${s}${separator}${text(add)}` : s);
+  add = (add?: unknown, separator = ''): ToText => this.map(s => (isDefined(add) ? `${s}${separator}${text(add)}` : s));
 
   toString(): string {
     return this.subject;
