@@ -195,7 +195,7 @@ describe('Mapper', () => {
 
   class ListMapper extends Mapper {
     readonly id = this.map.item('Id');
-    readonly companies = this.map.list(this.map.map(CompanyMapper, 'Company'), this.map.map(CompanyMapper, 'StartUp'));
+    readonly companies = this.map.propsToList(this.map.map(CompanyMapper, 'Company'), this.map.map(CompanyMapper, 'StartUp'));
     readonly company = this.map.ignore('Company');
     readonly startup = this.map.ignore('StartUp');
   }
