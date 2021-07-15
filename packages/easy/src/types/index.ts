@@ -1,3 +1,4 @@
+export * from './AppUri';
 export * from './Array';
 export * from './Builder';
 export * from './Constructor';
