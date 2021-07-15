@@ -87,7 +87,7 @@ export const mappings = {
     in: (source: Json = {}): JsonValue => ofConstruct(mapper).in(isEmpty(property) ? source : (source[property] as Json)),
     out: (source: Json = {}, key = ''): JsonValue => ofConstruct(mapper).out(isEmpty(key) ? source : (source[key] as Json)),
   }),
-  list: (...maps: Mapping[]): Mapping => ({
+  propsToList: (...maps: Mapping[]): Mapping => ({
     property: '',
     in: (source: Json = {}): JsonValue => toList(maps.map(m => ofConstruct(m).in(source))).toJSON(),
     out: (source: Json = {}, key = ''): JsonValue =>
@@ -96,5 +96,11 @@ export const mappings = {
         const out = m.out(res as Json);
         return { ...a, [m.property]: out ?? {} };
       }, {}),
+  }),
+
+  list: (mapper: Mapping, property: string): Mapping => ({
+    property: property,
+    in: (source: Json = {}): JsonValue => toList(source[property]).map((v: any) => mapper.in(v)).toJSON(),
+    out: (source: Json = {}, key = ''): JsonValue => toList(isEmpty(key) ? source : (source[key] as Json)).map((v: any) => mapper.out(v)).toJSON(),
   }),
 };
