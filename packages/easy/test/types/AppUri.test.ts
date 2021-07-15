@@ -1,11 +1,12 @@
 import { AppUri } from '../../src';
 import { UseCase } from '../../src';
-import { URL } from 'url';
+import '@thisisagile/easy-test';
 
 describe('AppUri', () => {
-  test('Route local and not local works.', () => {
+  test('Route local and overload works.', () => {
     expect(AppUri.App.uc(UseCase.Login).toString()).toBe('/main');
-    expect(AppUri.App.uc(UseCase.Login, new URL('http://localhost:8080')).toString()).toBe('http://localhost:8080/main');
+    expect(AppUri.App.uc(UseCase.Login, 'http://localhost:8080').toString()).toBe('http://localhost:8080/main');
+    expect(AppUri.App.uc(UseCase.Login, 'http://localhost:8080/').toString()).toBe('http://localhost:8080/main');
   });
 
   test('Route Uc matches.', () => {
@@ -18,6 +19,6 @@ describe('AppUri', () => {
 
   test('Full route uc with id matches.', () => {
     const res = AppUri.UcAndId.uc(UseCase.Login).id(42).toString();
-    expect(res).toBe('/accounts/manage-account/42');
+    expect(res).toBe('/main/login/42');
   });
 });
