@@ -1,9 +1,9 @@
 import { Scope } from './Scope';
 
 export class App extends Scope {
-  constructor(name: string, readonly port?: number) {
+  constructor(name: string) {
     super(name);
   }
 
-  static readonly Main = new App('Main', 3000);
+  static readonly Main = new App('Main');
 }
