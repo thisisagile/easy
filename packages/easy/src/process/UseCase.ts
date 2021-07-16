@@ -1,14 +1,24 @@
-import { Enum, text, Text } from '../types';
+import { Enum, List, text, toList } from '../types';
 import { Scope } from './Scope';
+import { App } from './App';
 
 export class UseCase extends Enum {
-  constructor(readonly scope: Scope, name: string, id: Text = text(name).kebab) {
-    super(name, id.toString());
+  constructor(readonly app: App, name: string, id: string = text(name).kebab.toString(), readonly scopes: List<Scope> = toList<Scope>()) {
+    super(name, id);
   }
 
-  static readonly Main = new UseCase(Scope.Basic, 'Main');
-  static readonly Login = new UseCase(Scope.Auth, 'Login');
-  static readonly Logout = new UseCase(Scope.Auth, 'Logout');
-  static readonly ForgotPassword = new UseCase(Scope.Auth, 'Forgot password');
-  static readonly ChangePassword = new UseCase(Scope.Auth, 'Change password');
+  //@deprecated Use app instead
+  get scope(): Scope {
+    return this.app;
+  }
+  with = (...s: Scope[]): this => {
+    this.scopes.add(...s);
+    return this;
+  };
+
+  static readonly Main = new UseCase(App.Main, 'Main');
+  static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);
+  static readonly Logout = new UseCase(App.Main, 'Logout').with(Scope.Basic, Scope.Auth);
+  static readonly ForgotPassword = new UseCase(App.Main, 'Forgot password').with(Scope.Basic, Scope.Auth);
+  static readonly ChangePassword = new UseCase(App.Main, 'Change password').with(Scope.Basic, Scope.Auth);
 }
