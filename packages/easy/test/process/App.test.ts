@@ -1,11 +1,7 @@
-import { App } from '../../src/process/App';
+import { App } from '../../src';
 
 describe('App', () => {
-  const app = new App('Test', 5000);
-
-  test('port works', () => {
-    expect(app.port).toBe(5000);
-  });
+  const app = new App('Test');
 
   test('name works', () => {
     expect(app.name).toBe('Test');
