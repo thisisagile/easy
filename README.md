@@ -239,6 +239,10 @@ Next, the `Map`, `Table` and `Collection` classes, describe a list of properties
 ## Handling exceptions in services
 During the execution of a request, lots of things can go wrong. Here as some common failures that occur when you try to reach an endpoint, and how **easy** normally responds, and where and how such failures are handled in a typical **easy** microservices:
 
+* For starters, you might not reach the endpoint, because you've typed in the wrong URL. If this happens, and you still reach your microservice, **easy** handles this in the `NotFoundHandler`, which is plugged-in by default.
+* If you are not allowed to execute an endpoint, for instance because it is secured with one of the security decorators in **easy**, such as `@requires.useCase()`, `@requires.Scope()` or `@requires.token`, the endpoint will not execute, and you will receive a 403. In this case the middleware already breaks the loop, and the code in you microservices is not executed at all.
+* All other failures are handled by the `ErrorHandler`, an can result in any custom HTTP status code, most likely a 400, or a 500. In case the caller makes a mistake, the code should come from the 400 range, in cases the microservice makes the mistake, the code comes from the 500 range.
+
 
 
 ## Utilities
