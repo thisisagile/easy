@@ -236,6 +236,11 @@ The `Map`, `Table` and `Collection` classes have a property called `db` that rep
 
 Next, the `Map`, `Table` and `Collection` classes, describe a list of properties that you would want mapped in the incoming JSON. Properties in the incoming JSON that are not described here are copied automatically. Properties can use converters, e.g. to converter from number to string and vice versa. Converters are bi-directional, as data that needs to go from the service to storage is mapped back to the database specific format too. 
 
+## Handling exceptions in services
+During the execution of a request, lots of things can go wrong. Here as some common failures that occur when you try to reach an endpoint, and how **easy** normally responds, and where and how such failures are handled in a typical **easy** microservices:
+
+
+
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
