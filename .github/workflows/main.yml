@@ -61,11 +61,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Test Web
+      - name: SonarCloud Scan Easy Test React
         if: ${{ github.event_name == 'push' }}
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          projectBaseDir: packages/easy-test-web
+          projectBaseDir: packages/easy-test-react
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
