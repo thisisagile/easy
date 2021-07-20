@@ -1,10 +1,10 @@
-import { isDefined, isFunction } from './Utils';
+import { asString, isFunction } from './Utils';
 
 export type Constructor<T> = { new (...args: any[]): T };
 
 export type Message<P extends unknown> = Text | ((...params: P[]) => Text);
 
-export const toMessage = <P>(g: Message<P>, ...params: P[]): string => toString(isFunction(g) ? g(...params) : g);
+export const toMessage = <P>(g: Message<P>, ...params: P[]): string => asString(isFunction(g) ? g(...params) : g);
 
 export type Validatable = { isValid: boolean };
 
@@ -24,5 +24,3 @@ export type Exception = { id: Id; reason?: string };
 export type Text = { toString: () => string };
 
 export type Query = Text;
-
-export const toString = (t?: unknown): string => (isDefined(t) ? (t as Text).toString() : '');

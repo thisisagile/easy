@@ -6,7 +6,9 @@ export class Match<S> {
   constructor(private readonly subject: S, private readonly failed = false, private readonly message: Message<S> = '') {}
 
   not(p: (s: S) => boolean, message: Message<S>): Match<S> {
-    if (this.failed) return this;
+    if (this.failed) {
+      return this;
+    }
     try {
       return new Match<S>(this.subject, !p(this.subject), toMessage(message, this.subject));
     } catch (e) {
