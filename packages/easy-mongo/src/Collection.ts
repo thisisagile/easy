@@ -1,16 +1,4 @@
-import {
-  Condition,
-  Database,
-  Field,
-  Json,
-  LogicalCondition,
-  MapOptions,
-  Mapper,
-  mappings,
-  PropertyOptions,
-  toCondition,
-  toUuid,
-} from '@thisisagile/easy';
+import { Condition, Database, Field, Json, LogicalCondition, MapOptions, Mapper, mappings, PropertyOptions, toCondition, toUuid } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
 export class Collection extends Mapper {
