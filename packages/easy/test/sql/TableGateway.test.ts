@@ -32,7 +32,7 @@ describe('TableGateway', () => {
 
   test('byId empty response', async () => {
     provider.query = mock.resolve(toList());
-    await expect(target.byId(42)).resolves.toEqual(undefined);
+    await expect(target.byId(42)).resolves.toBeUndefined();
     expect(provider.query).toBeQueriedWith(table.select().where(table.id.is(42)));
   });
 

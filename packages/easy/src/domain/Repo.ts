@@ -57,7 +57,6 @@ export class Repo<T extends Struct> {
   }
 
   upsert(id: Id, item: Json): Promise<T> {
-    return this.update(id, item)
-      .catch(e => Exception.DoesNotExist.equals(e) ? this.add(item) : reject(e));
+    return this.update(id, item).catch(e => (Exception.DoesNotExist.equals(e) ? this.add(item) : reject(e)));
   }
 }

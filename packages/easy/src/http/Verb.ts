@@ -11,9 +11,11 @@ export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => (
   type: options?.type ?? ContentType.Json,
 });
 
-const toVerb = <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator => (subject: unknown, property: string | symbol): void => {
-  meta(subject).property(property).set('verb', { verb, options });
-};
+const toVerb =
+  <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator =>
+  (subject: unknown, property: string | symbol): void => {
+    meta(subject).property(property).set('verb', { verb, options });
+  };
 
 export const get = (options?: VerbOptions): PropertyDecorator => toVerb(HttpVerb.Get, options);
 

@@ -4,9 +4,11 @@ import { Req } from './Req';
 import { Resource } from './Resource';
 import { Scope, UseCase } from '../process';
 
-export const route = (uri: Uri): ClassDecorator => (subject: unknown): void => {
-  meta(subject).set('route', uri);
-};
+export const route =
+  (uri: Uri): ClassDecorator =>
+  (subject: unknown): void => {
+    meta(subject).set('route', uri);
+  };
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
 export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
