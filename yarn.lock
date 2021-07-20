@@ -1301,9 +1301,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thisisagile/easy-test-web@workspace:packages/easy-test-react":
+"@thisisagile/easy-test-web@workspace:packages/easy-test-web":
   version: 0.0.0-use.local
-  resolution: "@thisisagile/easy-test-web@workspace:packages/easy-test-react"
+  resolution: "@thisisagile/easy-test-web@workspace:packages/easy-test-web"
   dependencies:
     "@testing-library/dom": 8.1.0
     "@testing-library/jest-dom": 5.14.1
