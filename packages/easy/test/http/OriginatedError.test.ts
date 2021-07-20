@@ -32,4 +32,3 @@ describe('toOriginatedError', () => {
     expect(e.origin).toEqual(res);
   });
 });
-

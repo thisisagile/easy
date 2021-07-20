@@ -30,19 +30,23 @@ export interface SecurityOptions {
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
-export const checkScope = (scope: Scope): RequestHandler => (req, res, next) =>
-  next(
-    choose(scope.id)
-      .case(s => (req.user as any)?.scopes.includes(s), undefined)
-      .else(authError(HttpStatus.Forbidden))
-  );
+export const checkScope =
+  (scope: Scope): RequestHandler =>
+  (req, res, next) =>
+    next(
+      choose(scope.id)
+        .case(s => (req.user as any)?.scopes.includes(s), undefined)
+        .else(authError(HttpStatus.Forbidden))
+    );
 
-export const checkUseCase = (uc: UseCase): RequestHandler => (req, res, next) =>
-  next(
-    choose(uc.id)
-      .case(u => (req.user as any)?.usecases.includes(u), undefined)
-      .else(authError(HttpStatus.Forbidden))
-  );
+export const checkUseCase =
+  (uc: UseCase): RequestHandler =>
+  (req, res, next) =>
+    next(
+      choose(uc.id)
+        .case(u => (req.user as any)?.usecases.includes(u), undefined)
+        .else(authError(HttpStatus.Forbidden))
+    );
 
 const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrKeyProvider | undefined =>
   p

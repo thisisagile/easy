@@ -28,8 +28,8 @@ describe('ErrorHandler', () => {
     });
 
   beforeEach(() => {
-    req = ({} as unknown) as Request;
-    res = ({ set: mock.this(), status: mock.this(), json: mock.this() } as unknown) as Response;
+    req = {} as unknown as Request;
+    res = { set: mock.this(), status: mock.this(), json: mock.this() } as unknown as Response;
     next = mock.return();
   });
 

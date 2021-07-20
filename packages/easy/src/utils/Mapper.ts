@@ -40,7 +40,7 @@ export class Mapper extends State implements Mapping {
   }
 
   private get droppedOut(): List<string> {
-    return this.get('droppedOut', () => this.properties.filter(([ ,p]) => !this.keys.some(k => k === p.property ?? '')).map(([k]) => k));
+    return this.get('droppedOut', () => this.properties.filter(([, p]) => !this.keys.some(k => k === p.property ?? '')).map(([k]) => k));
   }
 
   public in(from: Json = {}): Json {
@@ -100,7 +100,13 @@ export const mappings = {
 
   list: (mapper: Mapping, property: string): Mapping => ({
     property: property,
-    in: (source: Json = {}): JsonValue => toList(source[property]).map((v: any) => mapper.in(v)).toJSON(),
-    out: (source: Json = {}, key = ''): JsonValue => toList(isEmpty(key) ? source : (source[key] as Json)).map((v: any) => mapper.out(v)).toJSON(),
+    in: (source: Json = {}): JsonValue =>
+      toList(source[property])
+        .map((v: any) => mapper.in(v))
+        .toJSON(),
+    out: (source: Json = {}, key = ''): JsonValue =>
+      toList(isEmpty(key) ? source : (source[key] as Json))
+        .map((v: any) => mapper.out(v))
+        .toJSON(),
   }),
 };

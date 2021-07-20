@@ -1,28 +1,16 @@
-import {
-  Func,
-  inFuture,
-  inPast,
-  isDefined,
-  isFunction,
-  isIn,
-  isNotEmpty,
-  isString,
-  List,
-  meta,
-  Results,
-  Text,
-  toList,
-} from '../types';
+import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, Text, toList } from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = Func<boolean | Results, any>;
 
-export const constraint = <T>(c: Constraint, message: Text): PropertyDecorator => (subject: unknown, property: string | symbol): void => {
-  const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? toList<Validator>();
-  meta(subject)
-    .property(property)
-    .set('constraint', cs.add({ property, constraint: c, text: message }));
-};
+export const constraint =
+  <T>(c: Constraint, message: Text): PropertyDecorator =>
+  (subject: unknown, property: string | symbol): void => {
+    const cs = meta(subject).property(property).get<List<Validator>>('constraint') ?? toList<Validator>();
+    meta(subject)
+      .property(property)
+      .set('constraint', cs.add({ property, constraint: c, text: message }));
+  };
 
 export const defined = (message?: Text): PropertyDecorator => constraint(v => isDefined(v), message ?? 'Property {property} must be defined.');
 

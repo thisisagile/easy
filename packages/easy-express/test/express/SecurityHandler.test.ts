@@ -14,9 +14,9 @@ describe('Checks', () => {
     const c = checkScope(Scope.Basic);
 
     c({} as Request, {} as Response, cb);
-    c(({ user: {} } as unknown) as Request, {} as Response, cb);
-    c(({ user: { scopes: [] } } as unknown) as Request, {} as Response, cb);
-    c(({ user: { scopes: [Scope.Basic.code] } } as unknown) as Request, {} as Response, cb);
+    c({ user: {} } as unknown as Request, {} as Response, cb);
+    c({ user: { scopes: [] } } as unknown as Request, {} as Response, cb);
+    c({ user: { scopes: [Scope.Basic.code] } } as unknown as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
@@ -26,9 +26,9 @@ describe('Checks', () => {
     const c = checkUseCase(UseCase.Main);
 
     c({} as Request, {} as Response, cb);
-    c(({ user: {} } as unknown) as Request, {} as Response, cb);
-    c(({ user: { usecases: [] } } as unknown) as Request, {} as Response, cb);
-    c(({ user: { usecases: [UseCase.Main.code] } } as unknown) as Request, {} as Response, cb);
+    c({ user: {} } as unknown as Request, {} as Response, cb);
+    c({ user: { usecases: [] } } as unknown as Request, {} as Response, cb);
+    c({ user: { usecases: [UseCase.Main.code] } } as unknown as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);

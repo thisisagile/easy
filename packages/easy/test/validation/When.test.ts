@@ -34,7 +34,7 @@ describe('Testing When', () => {
 
   test('Construct, isDefined and recover', async () => {
     await expect(when(Dev.Sander).isDefined.recover(l => l)).resolves.toMatchObject(Dev.Sander);
-    await expect(when((undefined as unknown) as Dev).not.isDefined.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Jeroen);
+    await expect(when(undefined as unknown as Dev).not.isDefined.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Jeroen);
     await expect(when(Dev.Invalid).not.isValid.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Jeroen);
     return expect(when(Dev.Sander).not.isDefined.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Sander);
   });

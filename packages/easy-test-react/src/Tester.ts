@@ -10,13 +10,13 @@ export class Tester {
   static render = (component: ReactElement): Promise<Tester> => waitForRender(component).then(c => new Tester(c.container));
   static renderSync = (component: ReactElement): Tester => new Tester(render(component).container);
 
-  byText = (text: string) => getByText(this.container, text);
+  byText = (text: string): HTMLElement => getByText(this.container, text);
   atText = (text: string): ElementTester => new ElementTester(() => this.byText(text));
-  byId = (id: Id) => getByTestId(this.container, id.toString());
+  byId = (id: Id): HTMLElement => getByTestId(this.container, id.toString());
   atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
-  byRole = (role: string) => getByRole(this.container, role);
+  byRole = (role: string): HTMLElement => getByRole(this.container, role);
   atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
-  byPlaceholder = (placeholder: string) => getByPlaceholderText(this.container, placeholder);
+  byPlaceholder = (placeholder: string): HTMLElement => getByPlaceholderText(this.container, placeholder);
   atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
 }
 

@@ -19,4 +19,4 @@ export const json = {
 
 export const toJson = json.merge;
 
-export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : (isObject(j) ? j as Json : ofGet(alt)));
+export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt));

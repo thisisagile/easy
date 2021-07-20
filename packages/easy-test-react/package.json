@@ -1,5 +1,5 @@
 {
-  "name": "@thisisagile/easy-test-web",
+  "name": "@thisisagile/easy-test-react",
   "version": "0.1.0",
   "description": "Straightforward wrapper library for testing-library/react",
   "author": "Sander Hoogendoorn",

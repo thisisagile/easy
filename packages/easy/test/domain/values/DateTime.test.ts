@@ -15,7 +15,7 @@ describe('DateTime', () => {
   });
 
   test('construct from undefined is not valid and value is undefined.', () => {
-    const res = new DateTime((undefined as unknown) as string);
+    const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
     expect(res).not.toBeValid();
   });
@@ -41,10 +41,10 @@ describe('DateTime', () => {
   });
 
   test('construct from date string', () => {
-    expect(new DateTime("2021-11-11")).toMatchText("2021-11-11T00:00:00.000Z");
-    expect(new DateTime("2021-11-11T01:00")).toMatchText("2021-11-11T01:00:00.000Z");
-    expect(new DateTime("2021-11-11T01:23:11")).toMatchText("2021-11-11T01:23:11.000Z");
-    expect(new DateTime("2021-11-11T01:00:00.000+0100")).toMatchText("2021-11-11T00:00:00.000Z");
+    expect(new DateTime('2021-11-11')).toMatchText('2021-11-11T00:00:00.000Z');
+    expect(new DateTime('2021-11-11T01:00')).toMatchText('2021-11-11T01:00:00.000Z');
+    expect(new DateTime('2021-11-11T01:23:11')).toMatchText('2021-11-11T01:23:11.000Z');
+    expect(new DateTime('2021-11-11T01:00:00.000+0100')).toMatchText('2021-11-11T00:00:00.000Z');
   });
 
   test('construct from iso date is valid.', () => {
@@ -57,7 +57,7 @@ describe('DateTime', () => {
   });
 
   test('toString from undefined returns empty string.', () => {
-    const res = new DateTime((undefined as unknown) as string);
+    const res = new DateTime(undefined as unknown as string);
     expect(res).toMatchText('');
   });
 
@@ -72,7 +72,7 @@ describe('DateTime', () => {
   });
 
   test('toDate of invalid DateTime returns undefined.', () => {
-    const res = new DateTime("Hello World");
+    const res = new DateTime('Hello World');
     expect(res.toDate()).toBeUndefined();
   });
 

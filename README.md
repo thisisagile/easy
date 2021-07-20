@@ -236,6 +236,13 @@ The `Map`, `Table` and `Collection` classes have a property called `db` that rep
 
 Next, the `Map`, `Table` and `Collection` classes, describe a list of properties that you would want mapped in the incoming JSON. Properties in the incoming JSON that are not described here are copied automatically. Properties can use converters, e.g. to converter from number to string and vice versa. Converters are bi-directional, as data that needs to go from the service to storage is mapped back to the database specific format too. 
 
+## Handling exceptions in services
+During the execution of a request, lots of things can go wrong. Here as some common failures that occur when you try to reach an endpoint, and how **easy** normally responds, and where and how such failures are handled in a typical **easy** microservices:
+
+* For starters, you might not reach the endpoint, because you've typed in the wrong URL. If this happens, and you still reach your microservice, **easy** handles this in the `NotFoundHandler`, which is plugged-in by default.
+* If you are not allowed to execute an endpoint, for instance because it is secured with one of the security decorators in **easy**, such as `@requires.useCase()`, `@requires.Scope()` or `@requires.token`, the endpoint will not execute, and you will receive a 403. In this case the middleware from the `SecurityHandler` already breaks the loop, and the code in you microservices is not executed at all.
+* All other failures are handled by the `ErrorHandler`, an can result in any custom HTTP status code, most likely a 400, or a 500. In case the caller makes a mistake, the code should come from the 400 range, in cases the microservice makes the mistake, the code comes from the 500 range.
+
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
 
