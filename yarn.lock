@@ -1308,6 +1308,7 @@ __metadata:
     "@testing-library/dom": 8.1.0
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.0.0
+    "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/jest": ^26.0.23
     "@types/node": ^15.6.1
@@ -1328,6 +1329,7 @@ __metadata:
   dependencies:
     "@types/jest": ^26.0.23
     "@types/node": ^15.6.1
+    expect: ^27.0.6
     jest: ^27.0.3
     jest-junit: ^12.1.0
     jest-sonar-reporter: ^2.0.0
