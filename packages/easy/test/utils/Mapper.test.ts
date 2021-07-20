@@ -94,12 +94,25 @@ describe('Mapper', () => {
     readonly name = this.map.item('Name');
     readonly company = this.map.map(new Business({ startFrom: 'scratch' }), 'Business');
     readonly managers = this.map.list(new Manager(), 'Managers');
-
   }
 
   test('using map array works', () => {
-    const original = { Name: 'iBood', Business: { Name: 'iBood', WebSite: 'www.ibood.com' }, Managers: [ {Manager: 'Rogier', ManagerTitle: 'COO'},{Manager: 'Sander', ManagerTitle: 'CTO'}] };
-    const mapped = { name: 'iBood', company: { name: 'iBood', site: 'www.ibood.com' }, managers: [{ name: 'Rogier', title: 'COO' }, { name: 'Sander', title: 'CTO' }] };
+    const original = {
+      Name: 'iBood',
+      Business: { Name: 'iBood', WebSite: 'www.ibood.com' },
+      Managers: [
+        { Manager: 'Rogier', ManagerTitle: 'COO' },
+        { Manager: 'Sander', ManagerTitle: 'CTO' },
+      ],
+    };
+    const mapped = {
+      name: 'iBood',
+      company: { name: 'iBood', site: 'www.ibood.com' },
+      managers: [
+        { name: 'Rogier', title: 'COO' },
+        { name: 'Sander', title: 'CTO' },
+      ],
+    };
     const map = new MapWithList({ startFrom: 'scratch' });
     expect(map.in(original)).toStrictEqual(mapped);
     expect(map.out(mapped)).toStrictEqual(original);

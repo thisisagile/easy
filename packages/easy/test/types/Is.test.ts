@@ -78,7 +78,6 @@ describe('isString', () => {
 });
 
 describe('isIsoDateString', () => {
-
   test('isIsoDateString false', () => {
     expect(isIsoDateString()).toBeFalsy();
     expect(isIsoDateString({})).toBeFalsy();

@@ -8,8 +8,10 @@ describe('ofMessage', () => {
   });
 
   test('from function', () => {
-    const greeting = (dev: Dev): Message<Dev> => () => dev.name;
+    const greeting =
+      (dev: Dev): Message<Dev> =>
+      () =>
+        dev.name;
     expect(ofMessage(greeting(Dev.Sander))).toBe('Sander');
   });
-
 });

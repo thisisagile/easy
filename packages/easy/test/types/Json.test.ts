@@ -99,25 +99,24 @@ describe('json', () => {
 });
 
 describe('asJson', () => {
-
   test('empty', () => {
     const j = {};
     expect(asJson(j)).toMatchJson({});
-  })
+  });
 
   test('target is not Json', () => {
     const j = 'Not a Json';
     expect(asJson(j)).toMatchJson({});
-  })
+  });
 
   test('target is not Json, but there is an alt function', () => {
     const j = 'Not a Json';
     const json = asJson(j, () => Dev.Jeroen.toJSON());
     expect(json).toMatchJson({ id: 1, name: 'Jeroen' });
-  })
+  });
 
   test('is a Json', () => {
     const j = Dev.Jeroen;
     expect(asJson(j)).toMatchJson(Dev.Jeroen.toJSON());
-  })
+  });
 });

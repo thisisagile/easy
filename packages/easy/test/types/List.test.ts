@@ -93,9 +93,7 @@ describe('isList', () => {
     expect(isList()).toBeFalsy();
     expect(isList({})).toBeFalsy();
     expect(isList([])).toBeFalsy();
-    expect(
-      isList<Dev>([Dev.Sander, Dev.Jeroen])
-    ).toBeFalsy();
+    expect(isList<Dev>([Dev.Sander, Dev.Jeroen])).toBeFalsy();
   });
 
   test('Is true', () => {
@@ -198,7 +196,6 @@ describe('toList', () => {
     expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Naoufal);
     expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
   });
-
 });
 
 describe('asList', () => {
@@ -222,9 +219,4 @@ describe('asList', () => {
   test('asList on empty list works', () => {
     expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
   });
-
-  // test('prev on actual list works', () => {
-  //   const devs = asList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
-  //   expect(devs.prev()).toMatchText(Dev.Jeroen);
-  // });
 });

@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { MongoGateway, MongoProvider } from '../src';
-import { DevCollection, devData, collData } from './ref/DevCollection';
+import { collData, DevCollection, devData } from './ref/DevCollection';
 
 describe('MongoGateway', () => {
   let provider!: MongoProvider;
@@ -28,7 +28,7 @@ describe('MongoGateway', () => {
 
   test('byId returns undefined when provider returns undefined', async () => {
     provider.byId = mock.resolve(undefined);
-    await expect(gateway.byId(42)).resolves.toStrictEqual(undefined);
+    await expect(gateway.byId(42)).resolves.toBeUndefined();
     expect(provider.byId).toHaveBeenCalledWith(42);
   });
 

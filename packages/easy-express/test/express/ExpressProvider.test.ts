@@ -1,6 +1,6 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, Handler, HttpStatus, VerbOptions, ContentType, toVerbOptions } from '@thisisagile/easy';
+import { ContentType, Exception, Handler, HttpStatus, toVerbOptions, VerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 import { ExpressProvider, ExpressVerb } from '../../src';
@@ -16,7 +16,7 @@ class ExpressProviderTest extends ExpressProvider {
 }
 
 describe('ExpressProvider', () => {
-  const app = ({ listen: mock.return(), use: mock.return(), set: mock.return() } as unknown) as Express;
+  const app = { listen: mock.return(), use: mock.return(), set: mock.return() } as unknown as Express;
   const handler: Handler = () => undefined;
   let res: Response;
   let provider: ExpressProviderTest;
@@ -25,7 +25,7 @@ describe('ExpressProvider', () => {
   beforeEach(() => {
     provider = new ExpressProviderTest(app);
     service = new DevService('dev', provider);
-    res = ({ json: mock.this(), end: mock.this(), type: mock.this(), status: mock.this() } as unknown) as Response;
+    res = { json: mock.this(), end: mock.this(), type: mock.this(), status: mock.this() } as unknown as Response;
   });
 
   test('use', () => {

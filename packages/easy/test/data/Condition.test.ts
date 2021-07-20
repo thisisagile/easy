@@ -58,6 +58,6 @@ describe('Condition', () => {
 
   test('toJson', () => {
     const d = new DateTime('2021-05-03T10:31:24.000Z');
-    expect(field.greaterEqual(d)).toMatchJson( { name: { $gte: '2021-05-03T10:31:24.000Z' }} );
+    expect(field.greaterEqual(d)).toMatchJson({ name: { $gte: '2021-05-03T10:31:24.000Z' } });
   });
 });
