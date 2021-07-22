@@ -42,7 +42,7 @@ export class PlaywrightTester implements Tester {
     return new PlaywrightElement(h);
   }
 
-  byDateTestId(Id: string): TestElement {
+  byDataTestId(Id: string): TestElement {
     return this.by('data-testid', Id);
   }
 

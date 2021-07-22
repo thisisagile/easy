@@ -28,7 +28,7 @@ export class PuppeteerTester implements Tester {
     return new PuppeteerElement(h);
   }
 
-  byDateTestId(Id: string): TestElement {
+  byDataTestId(Id: string): TestElement {
     return this.by('data-testid', Id);
   }
 

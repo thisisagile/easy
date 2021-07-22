@@ -10,7 +10,7 @@ export interface Tester {
 
   byId(id: string): TestElement;
 
-  byDateTestId(Id: string): TestElement;
+  byDataTestId(Id: string): TestElement;
 
   byName(name: string): TestElement;
 
