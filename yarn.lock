@@ -1330,12 +1330,15 @@ __metadata:
     "@testing-library/dom": 8.1.0
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.0.0
+    "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/jest": ^26.0.23
     "@types/node": ^15.6.1
     jest: ^27.0.3
     jest-junit: ^12.1.0
     jest-sonar-reporter: ^2.0.0
+    playwright: ^1.12.3
+    puppeteer: ^10.1.0
     ts-jest: ^27.0.2
     weak-napi: ^2.0.2
   languageName: unknown
@@ -8321,9 +8324,7 @@ fsevents@^2.3.2:
     jest: ^27.0.5
     jest-junit: ^12.2.0
     jest-sonar-reporter: ^2.0.0
-    playwright: ^1.12.3
     prettier: ^2.3.1
-    puppeteer: ^10.1.0
     release-it: ^14.10.0
     release-it-yarn-workspaces: ^2.0.1
     ts-jest: ^27.0.3
