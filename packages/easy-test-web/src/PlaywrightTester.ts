@@ -1,8 +1,7 @@
 import { Tester, toUrl } from './Tester';
-import { EnvContext } from '@thisisagile/easy/src/types/Context';
 import playwright, { Browser, chromium, firefox, Page, webkit } from 'playwright';
 import { PlaywrightElement } from './PlaywrightElement';
-import { Id, UseCase } from '@thisisagile/easy';
+import { Id, UseCase, EnvContext } from '@thisisagile/easy';
 import { TestElement } from './TestElement';
 
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';

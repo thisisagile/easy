@@ -1,8 +1,7 @@
 import { Tester, toUrl } from './Tester';
 import { PuppeteerElement } from './PuppeteerElement';
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { EnvContext } from '@thisisagile/easy/src/types/Context';
-import { Id, UseCase } from '@thisisagile/easy';
+import { Id, UseCase, EnvContext } from '@thisisagile/easy';
 import { TestElement } from './TestElement';
 
 export class PuppeteerTester implements Tester {
