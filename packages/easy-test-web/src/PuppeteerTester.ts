@@ -71,7 +71,7 @@ export class PuppeteerTester implements Tester {
     return this.browser.close();
   }
 
-  async login(user = this.env.get('User') as string, password = this.env.get('Password') as string): Promise<boolean> {
+  async login(user = this.env.get('user') as string, password = this.env.get('password') as string): Promise<boolean> {
     await this.byId('form_email').type(user);
     await this.byId('form_password').type(password);
     await this.submit().click();

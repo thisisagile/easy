@@ -61,7 +61,7 @@ describe('PlaywrightTester', () => {
     const pe = new PlaywrightElement(handle);
     page.waitForSelector = mock.return(pe);
 
-    const result = tester.byDateTestId('dateTestIdValue');
+    const result = tester.byDataTestId('dateTestIdValue');
 
     expect(result).toBeInstanceOf(PlaywrightElement);
     expect(result).toMatchObject(pe);
@@ -264,8 +264,8 @@ describe('PlaywrightTester', () => {
 
   test('Login username and password from env', async () => {
     env.get = mock.impl((key: string) => {
-      if (key === 'User') return 'Henkie';
-      if (key === 'Password') return 'Welcome123!';
+      if (key === 'user') return 'Henkie';
+      if (key === 'password') return 'Welcome123!';
       throw new Error('unknown key fetched');
     });
     const eh = mock.empty<ElementHandle>();
