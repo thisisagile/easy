@@ -1,9 +1,13 @@
-import { App } from '../../src';
-import { Scope, UseCase } from '../../src';
+import { App, Scope, UseCase } from '../../src';
 
 describe('UseCase', () => {
   test('id works', () => {
     expect(UseCase.ChangePassword.id).toBe('change-password');
+  });
+
+  test('id overload works', () => {
+    const idUC = new UseCase(App.Main, 'test', 'own-id');
+    expect(idUC.id).toBe('own-id');
   });
 
   test('scopes work', () => {
@@ -11,20 +15,43 @@ describe('UseCase', () => {
   });
 
   test('scope works', () => {
-    expect(UseCase.ChangePassword.scope.id).toBe('main');
+    expect(UseCase.ChangePassword.app.id).toBe('main');
   });
 
-  test('of maps correctly', () => {
-    const basic = new UseCase(App.Main, 'test');
-    const withId = new UseCase(App.Main, 'test', 'own-id');
-    const withScopes = new UseCase(App.Main, 'test').with(Scope.Admin);
-    const withScopesAndID = new UseCase(App.Main, 'test', 'own-id').with(Scope.Admin);
-    expect(basic.id).toBe('test');
-    expect(withId.id).toBe('own-id');
-    expect(withScopes.id).toBe('test');
-    expect(withScopes.scopes).toContain(Scope.Admin);
-    expect(withScopesAndID.id).toBe('own-id');
-    expect(withScopesAndID.scopes).toContain(Scope.Admin);
+  test('with works', () => {
+    const withScope = UseCase.Main.with(Scope.Admin);
+    expect(withScope.scopes).toHaveLength(1);
+    expect(withScope.scopes).toContain(Scope.Admin);
+
+    const withSpread = new UseCase(App.Main, 'test', 'own-id').with(Scope.Admin, Scope.Basic);
+    expect(withSpread.scopes).toHaveLength(2);
+    expect(withSpread.scopes).toContain(Scope.Admin);
+    expect(withSpread.scopes).toContain(Scope.Basic);
+
+    const withChaining = new UseCase(App.Main, 'test', 'own-id').with(Scope.Admin).with(Scope.Auth);
+    expect(withChaining.scopes).toHaveLength(2);
+    expect(withChaining.scopes).toContain(Scope.Admin);
+    expect(withChaining.scopes).toContain(Scope.Auth);
+  });
+
+  test('byScope works', () => {
+    const admin = UseCase.byScopes(Scope.Admin);
+    expect(admin).toHaveLength(1);
+    expect(admin).toContain(UseCase.Main);
+
+    const basic = UseCase.byScopes(Scope.Basic);
+    expect(basic).toHaveLength(4);
+    expect(basic).toContain(UseCase.Login);
+    expect(basic).toContain(UseCase.Logout);
+    expect(basic).toContain(UseCase.ChangePassword);
+    expect(basic).toContain(UseCase.ForgotPassword);
+
+    const adminOrAuth = UseCase.byScopes(Scope.Admin, Scope.Auth);
+    expect(adminOrAuth).toHaveLength(5);
+    expect(adminOrAuth).toContain(UseCase.Login);
+    expect(adminOrAuth).toContain(UseCase.Logout);
+    expect(adminOrAuth).toContain(UseCase.ChangePassword);
+    expect(adminOrAuth).toContain(UseCase.ForgotPassword);
   });
 
   test('backwards compatible with scope', () => {

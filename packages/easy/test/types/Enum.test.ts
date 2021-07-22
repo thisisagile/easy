@@ -48,6 +48,15 @@ describe('Enum', () => {
     expect(MoreLanguage.byId('c', () => MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.JavaScript);
   });
 
+  test('filter works', () => {
+    expect(Language.filter(l => l === MoreLanguage.Delphi)).toHaveLength(0);
+    expect(MoreLanguage.filter(ml => ml === Language.Java)).toHaveLength(1);
+    expect(MoreLanguage.filter(ml => ml === Language.Java)).toContain(Language.Java);
+    expect(MoreLanguage.filter(ml => ml === Language.Java || ml === MoreLanguage.Delphi)).toHaveLength(2);
+    expect(MoreLanguage.filter((ml, i) => ml === Language.Java || i === 0)).toHaveLength(2);
+    expect(MoreLanguage.filter((ml, i, a) => ml === Language.Java || i === 0 || a !== undefined)).toHaveLength(5);
+  });
+
   test('toString', () => {
     expect(Language.Java).toMatchText('java');
     expect(MoreLanguage.Delphi).toMatchText('delphi');
