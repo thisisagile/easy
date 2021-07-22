@@ -12,6 +12,8 @@ import {
   isObject,
   isPrimitive,
   isString,
+  isIn,
+  isInSome,
 } from '../../src';
 import { Dev } from '../ref';
 
@@ -208,5 +210,39 @@ describe('isBoolean', () => {
     expect(isBoolean(Dev.Wouter)).toBeFalsy();
     expect(isBoolean(() => true)).toBeFalsy();
     expect(isBoolean([])).toBeFalsy();
+  });
+});
+
+describe('isIn', () => {
+  test('Check', () => {
+    expect(isIn('a', ['b', 'c'])).toBeFalsy();
+    expect(isIn('a', [])).toBeFalsy();
+    expect(isIn('a', [null])).toBeFalsy();
+    expect(isIn('a', [1])).toBeFalsy();
+    expect(isIn('1', [1])).toBeFalsy();
+
+    expect(isIn('a', ['a'])).toBeTruthy();
+    expect(isIn('a', ['b', 'a'])).toBeTruthy();
+  });
+});
+
+describe('isInSome', () => {
+  test('Check', () => {
+    expect(isInSome()).toBeFalsy();
+    expect(isInSome(undefined, [])).toBeFalsy();
+    expect(isInSome(undefined, [])).toBeFalsy();
+    expect(isInSome(undefined, ['a'])).toBeFalsy();
+    expect(isInSome([])).toBeFalsy();
+    expect(isInSome(['a'])).toBeFalsy();
+    expect(isInSome([], [])).toBeFalsy();
+    expect(isInSome(['a'], [])).toBeFalsy();
+    expect(isInSome([], ['a'])).toBeFalsy();
+    expect(isInSome(['a'], ['b'])).toBeFalsy();
+    expect(isInSome(['a'], ['b', 'c'])).toBeFalsy();
+    expect(isInSome(['a', 'b'], ['c'])).toBeFalsy();
+    expect(isInSome(['a', 'b'], ['a'])).toBeTruthy();
+    expect(isInSome(['a', 'b'], ['a', 'c'])).toBeTruthy();
+    expect(isInSome(['a', 'b'], ['b', 'c'])).toBeTruthy();
+    expect(isInSome(['a', 'b', 'c'], ['b'])).toBeTruthy();
   });
 });
