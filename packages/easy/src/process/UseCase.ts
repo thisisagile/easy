@@ -1,4 +1,4 @@
-import { Enum, List, text, toList } from '../types';
+import { Enum, isIn, List, text, toList } from '../types';
 import { Scope } from './Scope';
 import { App } from './App';
 
@@ -15,6 +15,8 @@ export class UseCase extends Enum {
     this.scopes.add(...s);
     return this;
   };
+
+  static readonly byScopes = (...s: Scope[]): List<UseCase> => UseCase.filter(u => u.scopes.some(us => isIn(us, s)));
 
   static readonly Main = new UseCase(App.Main, 'Main');
   static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);
