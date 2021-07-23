@@ -32,6 +32,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     strategy:
       matrix:
+        fail-fast: false
         package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
     steps:
       - name: Checkout
