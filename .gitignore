@@ -1,3 +1,6 @@
+# Packages copy the root README
+/packages/*/README.md
+
 # Editors
 .vscode
 .idea/*

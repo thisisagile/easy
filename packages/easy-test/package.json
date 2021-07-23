@@ -23,7 +23,7 @@
     "format": "yarn g:prettier --check --write src test *.json",
     "build": "yarn g:tsc",
     "test": "yarn g:jest --coverage",
-    "prepack": "yarn build"
+    "prepack": "yarn build && yarn g:copy-readme"
   },
   "files": [
     "dist",
