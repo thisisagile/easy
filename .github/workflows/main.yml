@@ -41,6 +41,7 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: test-reports
+          path: packages
       - name: SonarCloud Scan ${{ matrix.package }}
         uses: sonarsource/sonarcloud-github-action@master
         with:
