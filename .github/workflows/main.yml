@@ -7,8 +7,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -21,64 +19,39 @@ jobs:
           CI: true
       - name: Test
         run: yarn test-sonarqube
-      - name: SonarCloud Scan Easy
-        if: ${{ github.event_name == 'push' }}
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: |
+            packages/**/test-report.xml
+            packages/**/coverage
+  quality:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
+      - uses: actions/download-artifact@v2
+        with:
+          name: test-reports
+          path: packages
+      - name: SonarCloud Scan ${{ matrix.package }}
         uses: sonarsource/sonarcloud-github-action@master
         with:
-          projectBaseDir: packages/easy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Express
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-express
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy MS-SQL
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-mssql
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Mongo
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-mongo
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Test
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Test React
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-test-react
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: SonarCloud Scan Easy Test Web
-        if: ${{ github.event_name == 'push' }}
-        uses: sonarsource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: packages/easy-test-web
+          projectBaseDir: packages/${{ matrix.package }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   release:
-    needs: build-and-test
+    needs: [build-and-test, quality]
     runs-on: ubuntu-latest
     environment: production
     if: github.ref == 'refs/heads/main'
