@@ -31,8 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
     steps:
       - name: Checkout
