@@ -1,6 +1,7 @@
 {
   "name": "@thisisagile/easy-test-web",
   "version": "0.1.0",
+  "private": true,
   "description": "Straightforward wrapper library for web testing frameworks",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
