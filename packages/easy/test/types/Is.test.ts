@@ -12,6 +12,8 @@ import {
   isObject,
   isPrimitive,
   isString,
+  isIn,
+  isIntersecting,
 } from '../../src';
 import { Dev } from '../ref';
 
@@ -208,5 +210,39 @@ describe('isBoolean', () => {
     expect(isBoolean(Dev.Wouter)).toBeFalsy();
     expect(isBoolean(() => true)).toBeFalsy();
     expect(isBoolean([])).toBeFalsy();
+  });
+});
+
+describe('isIn', () => {
+  test('Check', () => {
+    expect(isIn('a', ['b', 'c'])).toBeFalsy();
+    expect(isIn('a', [])).toBeFalsy();
+    expect(isIn('a', [null])).toBeFalsy();
+    expect(isIn('a', [1])).toBeFalsy();
+    expect(isIn('1', [1])).toBeFalsy();
+
+    expect(isIn('a', ['a'])).toBeTruthy();
+    expect(isIn('a', ['b', 'a'])).toBeTruthy();
+  });
+});
+
+describe('isIntersecting', () => {
+  test('Check', () => {
+    expect(isIntersecting()).toBeFalsy();
+    expect(isIntersecting(undefined, [])).toBeFalsy();
+    expect(isIntersecting(undefined, [])).toBeFalsy();
+    expect(isIntersecting(undefined, ['a'])).toBeFalsy();
+    expect(isIntersecting([])).toBeFalsy();
+    expect(isIntersecting(['a'])).toBeFalsy();
+    expect(isIntersecting([], [])).toBeFalsy();
+    expect(isIntersecting(['a'], [])).toBeFalsy();
+    expect(isIntersecting([], ['a'])).toBeFalsy();
+    expect(isIntersecting(['a'], ['b'])).toBeFalsy();
+    expect(isIntersecting(['a'], ['b', 'c'])).toBeFalsy();
+    expect(isIntersecting(['a', 'b'], ['c'])).toBeFalsy();
+    expect(isIntersecting(['a', 'b'], ['a'])).toBeTruthy();
+    expect(isIntersecting(['a', 'b'], ['a', 'c'])).toBeTruthy();
+    expect(isIntersecting(['a', 'b'], ['b', 'c'])).toBeTruthy();
+    expect(isIntersecting(['a', 'b', 'c'], ['b'])).toBeTruthy();
   });
 });
