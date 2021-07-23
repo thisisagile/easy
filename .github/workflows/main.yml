@@ -7,8 +7,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -36,6 +34,10 @@ jobs:
       matrix:
         package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
       - uses: actions/download-artifact@v2
         with:
           name: test-reports
