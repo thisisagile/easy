@@ -32,8 +32,9 @@ jobs:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
-    matrix:
-      package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
+    strategy:
+      matrix:
+        package: [easy, easy-express, easy-mssql, easy-mongo, easy-test, easy-test-react, easy-test-web]
     steps:
       - uses: actions/download-artifact@v2
         with:
