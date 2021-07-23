@@ -1329,7 +1329,6 @@ __metadata:
   dependencies:
     "@testing-library/dom": 8.1.0
     "@testing-library/jest-dom": 5.14.1
-    "@testing-library/react": 12.0.0
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/jest": ^26.0.23
