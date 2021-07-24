@@ -34,6 +34,10 @@ export abstract class Enum implements Validatable {
       .filter((e: unknown) => isEnum(e) && ids?.includes(e.id));
   }
 
+  static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
+    return this.all<E>().filter(p, params);
+  }
+
   equals<E extends Enum | Id>(other: E): boolean {
     return this.id === (isEnum(other) ? other.id : other);
   }
