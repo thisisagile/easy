@@ -5,3 +5,4 @@ export * from './Mapper';
 export * from './Promise';
 export * from './Property';
 export * from './State';
+export * from './Traverse';
