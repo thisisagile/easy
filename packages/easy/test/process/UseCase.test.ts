@@ -74,9 +74,5 @@ describe('UseCase inheritance', () => {
     const test = ExtUseCase.byScopes(ExtScope.TestScope);
     expect(test).toHaveLength(1);
     expect(test).toContain(ExtUseCase.ExtUseCase);
-
-    const semi = ExtUseCase.byScopes(Scope.Admin);
-    expect(semi).toHaveLength(1);
-    expect(semi).toContain(ExtUseCase.SemiExtUseCase);
   });
 });
