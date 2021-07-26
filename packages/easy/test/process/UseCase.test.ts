@@ -59,3 +59,24 @@ describe('UseCase', () => {
     expect(scope.scope).toBe(Scope.Admin);
   });
 });
+
+describe('UseCase inheritance', () => {
+  class ExtScope extends Scope {
+    static readonly TestScope = new Scope('Test');
+  }
+
+  class ExtUseCase extends UseCase {
+    static readonly ExtUseCase = new UseCase(App.Main, 'test').with(ExtScope.TestScope);
+    static readonly SemiExtUseCase = new UseCase(App.Main, 'test 2').with(Scope.Admin);
+  }
+
+  test('byScope works on subclasses', () => {
+    const test = ExtUseCase.byScopes(ExtScope.TestScope);
+    expect(test).toHaveLength(1);
+    expect(test).toContain(ExtUseCase.ExtUseCase);
+
+    const semi = ExtUseCase.byScopes(Scope.Admin);
+    expect(semi).toHaveLength(1);
+    expect(semi).toContain(ExtUseCase.SemiExtUseCase);
+  });
+});

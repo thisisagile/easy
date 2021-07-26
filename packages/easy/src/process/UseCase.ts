@@ -16,7 +16,7 @@ export class UseCase extends Enum {
     return this;
   };
 
-  static readonly byScopes = (...s: Scope[]): List<UseCase> => UseCase.filter(u => u.scopes.some(us => isIn(us, s)));
+  static byScopes<U extends UseCase> (...s: Scope[]): List<U>{ return this.filter(u => u.scopes.some(us => isIn(us, s)))};
 
   static readonly Main = new UseCase(App.Main, 'Main');
   static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);
