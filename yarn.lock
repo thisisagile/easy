@@ -1327,19 +1327,15 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-web@workspace:packages/easy-test-web"
   dependencies:
-    "@testing-library/dom": 8.1.0
-    "@testing-library/jest-dom": 5.14.1
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/jest": ^26.0.23
-    "@types/node": ^15.6.1
     jest: ^27.0.3
     jest-junit: ^12.1.0
     jest-sonar-reporter: ^2.0.0
     playwright: ^1.12.3
     puppeteer: ^10.1.0
     ts-jest: ^27.0.2
-    weak-napi: ^2.0.2
   languageName: unknown
   linkType: soft
 

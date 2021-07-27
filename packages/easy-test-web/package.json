@@ -34,21 +34,17 @@
     "access": "public"
   },
   "devDependencies": {
-    "@testing-library/dom": "8.1.0",
-    "@testing-library/jest-dom": "5.14.1",
-    "@types/jest": "^26.0.23",
-    "@types/node": "^15.6.1",
-    "jest": "^27.0.3",
-    "jest-junit": "^12.1.0",
-    "jest-sonar-reporter": "^2.0.0",
-    "ts-jest": "^27.0.2",
-    "weak-napi": "^2.0.2"
+    "@types/jest": "^26.0.23"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "@thisisagile/easy-test": "workspace:*",
+    "jest": "^27.0.3",
+    "jest-junit": "^12.1.0",
+    "jest-sonar-reporter": "^2.0.0",
     "playwright": "^1.12.3",
-    "puppeteer": "^10.1.0"
+    "puppeteer": "^10.1.0",
+    "ts-jest": "^27.0.2"
   },
   "engines": {
     "node": ">=v14.16.0",
