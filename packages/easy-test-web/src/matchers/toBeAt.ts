@@ -1,9 +1,9 @@
 import CustomMatcherResult = jest.CustomMatcherResult;
 import { Tester } from '../Tester';
-import { match } from '@thisisagile/easy-test';
+import { Match } from '@thisisagile/easy-test';
 
 export const toBeAt = (tester?: Tester, url?: string): CustomMatcherResult =>
-  match<Tester>(tester as Tester)
+  new Match<Tester>(tester as Tester)
     .undefined(t => t, 'Tester is undefined')
     .not(
       t => t.url === url,
