@@ -1,4 +1,3 @@
-export * from './matchers';
 export * from './PlaywrightElement';
 export * from './PlaywrightTester';
 export * from './PuppeteerElement';
