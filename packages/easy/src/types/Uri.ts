@@ -4,6 +4,7 @@ import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
 import { meta } from './Meta';
+import { ifDefined } from '../utils';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -62,8 +63,8 @@ export class EasyUri implements Uri {
 
   route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
-  set = (segment: Segment, value: unknown): this => {
-    this.state[segment.key ?? ''] = { segment, value };
+  set = (segment: Segment, value?: unknown): this => {
+    ifDefined(value, () => this.state[segment.key ?? ''] = { segment, value });
     return this;
   };
 

@@ -42,6 +42,13 @@ describe('Uri', () => {
     expect(DevUri.Developers.level(0)).toMatchRoute(`${host}/dev/developers?level=0`);
   });
 
+  test('returns ok when query parameter is undefined', () => {
+    expect(DevUri.Developers.language('Java')).toMatchRoute(`${host}/dev/developers?language=Java`);
+    expect(DevUri.Developers.language()).toMatchRoute(`${host}/dev/developers`);
+    expect(DevUri.Developers.level(3).language()).toMatchRoute(`${host}/dev/developers?level=3`);
+    expect(DevUri.Developers.language().level(3)).toMatchRoute(`${host}/dev/developers?level=3`);
+  });
+
   test('returns full route plus id and a query', () => {
     expect(DevUri.Developers.query('yes')).toMatchRoute(`${host}/dev/developers?q=yes`);
     expect(DevUri.Developer.id(42).query('yes')).toMatchRoute(`${host}/dev/developers/42?q=yes`);
