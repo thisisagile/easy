@@ -24,4 +24,10 @@ describe('Email', () => {
   test('valid', () => {
     expect(new Email('sander@gmail.com')).toBeValid();
   });
+
+  test('name', () => {
+    expect(new Email('kim@gmail.com').name).toBe('Kim');
+    expect(new Email('kim.holland@gmail.com').name).toBe('Kim Holland');
+    expect(new Email('kim.van.kooten@gmail.com').name).toBe('Kim Van Kooten');
+  });
 });

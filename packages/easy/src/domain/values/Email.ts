@@ -1,9 +1,13 @@
-import { asString, isEmpty, Value } from '../../types';
+import { asString, isEmpty, text, Value } from '../../types';
 import validator from 'validator';
 
 export class Email extends Value {
   get isValid(): boolean {
     return isEmail(this.value);
+  }
+
+  get name(): string {
+    return text(this.value.split('@')[0]).replace('.', ' ').title.toString();
   }
 }
 
