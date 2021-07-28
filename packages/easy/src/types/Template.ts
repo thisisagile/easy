@@ -11,7 +11,8 @@ class Template implements Text {
   toString = (): string => {
     return meta(this.options)
       .entries()
-      .reduce((t, [k]) => this.option(t, k), this.object());
+      .reduce((t, [k]) => this.option(t, k), this.object())
+      .replace('  ', ' ');
   };
 
   private value = (subject: any, prop: string): string => {
