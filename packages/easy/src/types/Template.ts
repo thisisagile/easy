@@ -1,6 +1,6 @@
 import { meta } from './Meta';
 import { List, toList } from './List';
-import { text, Text, ToText } from './Text';
+import { asString, text, Text, ToText } from './Text';
 import { toName } from './Constructor';
 
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
@@ -41,7 +41,7 @@ class Template implements Text {
 }
 
 export const template = (tmpl: Text, subject: unknown, options: TemplateOptions = {}): Text =>
-  new Template(tmpl.toString(), subject, {
+  new Template(asString(tmpl), subject, {
     type: toName(subject),
     ...options,
   });

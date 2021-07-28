@@ -30,4 +30,13 @@ describe('Template', () => {
   test('the full monty', () => {
     expect(template(temp, Dev.Jeroen, { property: 'language', actual: 'C' })).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
+
+  test('more', () => {
+    const temp = 'We want to work with {this.name}';
+    expect(template(temp, Dev.Wouter)).toMatchText('We want to work with Wouter');
+  });
+
+  test('template is undefined', () => {
+    expect(template(undefined as unknown as string, Dev.Wouter)).toMatchText('');
+  });
 });
