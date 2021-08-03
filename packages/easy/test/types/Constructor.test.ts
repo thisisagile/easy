@@ -67,4 +67,10 @@ describe('ofConstruct', () => {
     expect(t.name).toBe('Wouter');
     expect(t.level).toBe(4);
   });
+
+  test('ofConstruct with instance ignores args', () => {
+    const t = ofConstruct(new Tester('Sander', 4), 'Wouter', 6);
+    expect(t.name).toBe('Sander');
+    expect(t.level).toBe(4);
+  });
 });
