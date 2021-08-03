@@ -1,4 +1,4 @@
-import { Constructor, Enum } from '../types';
+import { Constructor, Enum, ofConstruct } from '../types';
 import { DataProvider } from './DataProvider';
 
 export type DatabaseOptions = {
@@ -15,9 +15,9 @@ export class DefaultProvider implements DataProvider {}
 export class Database extends Enum {
   static readonly Default = new Database('Default', DefaultProvider);
 
-  constructor(name: string, readonly provider: Constructor<DataProvider>, readonly options?: DatabaseOptions) {
+  constructor(name: string, readonly provider: Constructor<DataProvider> | DataProvider, readonly options?: DatabaseOptions) {
     super(name);
   }
 
-  provide = <P>(): P => new this.provider(this) as P;
+  provide = <P>(): P =>  ofConstruct(this.provider, this);
 }
