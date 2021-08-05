@@ -85,8 +85,8 @@ export class PlaywrightTester implements Tester {
     return this.browser.close();
   }
 
-  async login(user = this.env.get('user') as string, password = this.env.get('password') as string): Promise<boolean> {
-    await this.byId('form_email').type(user);
+  async login(email = this.env.get('email') as string, password = this.env.get('password') as string): Promise<boolean> {
+    await this.byId('form_email').type(email);
     await this.byId('form_password').type(password);
     await this.submit().click();
     return this.wait();

@@ -28,7 +28,7 @@ export interface Tester {
 
   search(test: string): Promise<void>;
 
-  login(): Promise<boolean>;
+  login(email?: string, password?: string): Promise<boolean>;
 }
 
 export const toUrl = (uc: UseCase, host?: string, port?: number, id?: Id): string =>
