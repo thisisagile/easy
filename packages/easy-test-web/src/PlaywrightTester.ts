@@ -14,6 +14,14 @@ export class PlaywrightTester implements Tester {
     return this.page.url();
   }
 
+  get domain(): string {
+    return this.env.host;
+  }
+
+  get port(): number {
+    return this.env.port;
+  }
+
   /* istanbul ignore next */
   static async init(env: EnvContext, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
     let browser: playwright.Browser;

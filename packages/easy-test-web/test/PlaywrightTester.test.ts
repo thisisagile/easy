@@ -240,6 +240,14 @@ describe('PlaywrightTester', () => {
     expect(tester.url).toMatch('http://thisurl.com');
   });
 
+  test('domain takes host from env', () => {
+    expect(tester.domain).toMatch('http://localhost')
+  })
+
+  test('port takes host from env', () => {
+    expect(tester.port).toBe(8080)
+  })
+
   test('Login with username and password', async () => {
     const eh = mock.empty<ElementHandle>();
     eh.type = mock.resolve();
@@ -265,7 +273,7 @@ describe('PlaywrightTester', () => {
   test('Login username and password from env', async () => {
     env.get = mock.impl((key: string) => {
       if (key === 'email') return 'Henkie';
-      if (key === 'password') return 'Welcome123!';
+      if (key === 'password') return 'Welcome123';
       throw new Error('unknown key fetched');
     });
     const eh = mock.empty<ElementHandle>();
@@ -281,7 +289,7 @@ describe('PlaywrightTester', () => {
     await expect(tester.login()).resolves.toBeTruthy();
 
     expect(eh.type).toHaveBeenCalledWith('Henkie');
-    expect(eh.type).toHaveBeenCalledWith('Welcome123!');
+    expect(eh.type).toHaveBeenCalledWith('Welcome123');
   });
 
   test('Login with username only and password from env', async () => {

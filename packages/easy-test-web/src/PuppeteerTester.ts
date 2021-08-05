@@ -12,6 +12,14 @@ export class PuppeteerTester implements Tester {
     return this.page.target().url();
   }
 
+  get domain(): string {
+    return this.env.host;
+  }
+
+  get port(): number {
+    return this.env.port;
+  }
+
   /* istanbul ignore next */
   static async init(env: EnvContext, headless = true, width=  1200, height= 800): Promise<Tester> {
     const browser = await puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
