@@ -1,20 +1,22 @@
 import { Tester, toUrl } from './Tester';
 import { PuppeteerElement } from './PuppeteerElement';
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { Id, UseCase, EnvContext } from '@thisisagile/easy';
+import { EnvContext, Id, UseCase } from '@thisisagile/easy';
 import { TestElement } from './TestElement';
 
 export class PuppeteerTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
+  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {
+  }
 
   get url(): string {
     return this.page.target().url();
   }
 
   /* istanbul ignore next */
-  static async init(env: EnvContext, headless = true): Promise<Tester> {
-    const browser = await puppeteer.launch({ headless, args: ['--no-sandbox'] });
+  static async init(env: EnvContext, headless = true, width=  1200, height= 800): Promise<Tester> {
+    const browser = await puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
     const page = await browser.newPage();
+    await page.setViewport({width, height})
     return new PuppeteerTester(env, browser, page);
   }
 
