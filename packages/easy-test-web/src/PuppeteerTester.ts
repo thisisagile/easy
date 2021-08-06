@@ -21,10 +21,10 @@ export class PuppeteerTester implements Tester {
   }
 
   /* istanbul ignore next */
-  static async init(env: EnvContext, headless = true, width=  1200, height= 800): Promise<Tester> {
+  static async init(env: EnvContext, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
     const page = await browser.newPage();
-    await page.setViewport({width, height})
+    await page.setViewport({ width, height });
     return new PuppeteerTester(env, browser, page);
   }
 
