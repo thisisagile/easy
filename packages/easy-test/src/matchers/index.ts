@@ -3,6 +3,7 @@ export * from './Match';
 export * from './ResultMatchers';
 export * from './toBeArrayOf';
 export * from './toBeArrayOfWithLength';
+export * from './toBeAt';
 export * from './toFailMatcher';
 export * from './toBeValid';
 export * from './toMatchExactJson';
