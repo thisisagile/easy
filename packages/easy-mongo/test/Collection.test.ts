@@ -27,6 +27,7 @@ describe('Collection', () => {
     readonly name = this.map.field('name');
     readonly language = this.map.field('Language', { dflt: 'TypeScript' });
     readonly level = this.map.field('CodingLevel', { convert: convert.toNumber.fromString });
+    readonly key = this.search('Language');
   }
 
   test('convert iso date string to Date', () => {
@@ -58,4 +59,6 @@ describe('Collection', () => {
     const out: any = test.out(input);
     expect(out).toStrictEqual(expected);
   });
+
+
 });

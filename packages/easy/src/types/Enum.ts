@@ -8,7 +8,8 @@ import { JsonValue } from './Json';
 import { Get, ofGet } from './Get';
 
 export abstract class Enum implements Validatable {
-  protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
+  protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {
+  }
 
   get isValid(): boolean {
     return isDefined(this.id);
