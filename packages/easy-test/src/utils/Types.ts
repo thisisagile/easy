@@ -24,3 +24,7 @@ export type Exception = { id: Id; reason?: string };
 export type Text = { toString: () => string };
 
 export type Query = Text;
+
+export type UseCase = {app: {id: string}, id: string };
+
+export type Tester = {url: string};
