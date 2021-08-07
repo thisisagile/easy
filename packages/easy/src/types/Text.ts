@@ -67,7 +67,9 @@ export class ToText implements Text {
 
   parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
 
-  isLike = (other?: unknown): boolean => this.trim.lower.toString() === text(other).trim.lower.toString();
+  is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
+
+  isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 
   endsWith = (end?: unknown): boolean => this.subject.endsWith(asString(end));
 

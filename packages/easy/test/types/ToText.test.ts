@@ -2,10 +2,13 @@ import { text } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
+
 describe('text().parse', () => {
+  const KimvanWilgen = 'Kim van Wilgen';
+  const KimKebab = 'kim-van-wilgen';
   const empty = text();
   const wouter = text('Wouter');
-  const kim = text('Kim van Wilgen');
+  const kim = text(KimvanWilgen);
   const sander = text('SanDEr hoogendOOrn');
 
   test('cap works', () => {
@@ -47,7 +50,7 @@ describe('text().parse', () => {
     expect(text({}).kebab).toMatchText('');
     expect(wouter.kebab).toMatchText('wouter');
     expect(text(Dev.Sander).kebab).toMatchText('sander');
-    expect(kim.kebab).toMatchText('kim-van-wilgen');
+    expect(kim.kebab).toMatchText(KimKebab);
   });
 
   test('snake works', () => {
@@ -102,15 +105,30 @@ describe('text().parse', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
-  test('Check equals', () => {
-    expect(kim.isLike('Kim van Wilgen')).toBeTruthy();
+  test('is', () => {
+    expect(kim.is(KimvanWilgen)).toBeTruthy();
+    expect(kim.is('kimvanwilgen')).toBeFalsy();
+    expect(kim.is('kim van wilgen')).toBeFalsy();
+    expect(kim.is(KimKebab)).toBeFalsy();
+    expect(kim.is('kim')).toBeFalsy();
+    expect(empty.is('')).toBeTruthy();
+    expect(empty.is('kim')).toBeFalsy();
+    expect(wouter.is(Dev.Wouter)).toBeTruthy();
+    expect(kim.is(Dev.Jeroen, KimvanWilgen)).toBeTruthy();
+    expect(kim.is(Dev.Jeroen, 'kimvanwilgen')).toBeFalsy();
+  });
+
+  test('isLike', () => {
+    expect(kim.isLike(KimvanWilgen)).toBeTruthy();
     expect(kim.isLike('kimvanwilgen')).toBeTruthy();
     expect(kim.isLike('kim van wilgen')).toBeTruthy();
-    expect(kim.isLike('kim-van-wilgen')).toBeTruthy();
+    expect(kim.isLike(KimKebab)).toBeTruthy();
     expect(kim.isLike('kim')).toBeFalsy();
     expect(empty.isLike('')).toBeTruthy();
     expect(empty.isLike('kim')).toBeFalsy();
     expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
+    expect(kim.isLike(Dev.Jeroen, KimvanWilgen)).toBeTruthy();
+    expect(kim.isLike(Dev.Jeroen, 'kimvanwilgen')).toBeTruthy();
   });
 
   test('type', () => {
