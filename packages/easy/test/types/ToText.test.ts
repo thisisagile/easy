@@ -4,8 +4,11 @@ import '@thisisagile/easy-test';
 
 
 describe('text().parse', () => {
+
   const KimvanWilgen = 'Kim van Wilgen';
   const KimKebab = 'kim-van-wilgen';
+  const KimLower = 'kim van wilgen';
+
   const empty = text();
   const wouter = text('Wouter');
   const kim = text(KimvanWilgen);
@@ -108,7 +111,7 @@ describe('text().parse', () => {
   test('is', () => {
     expect(kim.is(KimvanWilgen)).toBeTruthy();
     expect(kim.is('kimvanwilgen')).toBeFalsy();
-    expect(kim.is('kim van wilgen')).toBeFalsy();
+    expect(kim.is(KimLower)).toBeFalsy();
     expect(kim.is(KimKebab)).toBeFalsy();
     expect(kim.is('kim')).toBeFalsy();
     expect(empty.is('')).toBeTruthy();
@@ -121,7 +124,7 @@ describe('text().parse', () => {
   test('isLike', () => {
     expect(kim.isLike(KimvanWilgen)).toBeTruthy();
     expect(kim.isLike('kimvanwilgen')).toBeTruthy();
-    expect(kim.isLike('kim van wilgen')).toBeTruthy();
+    expect(kim.isLike(KimLower)).toBeTruthy();
     expect(kim.isLike(KimKebab)).toBeTruthy();
     expect(kim.isLike('kim')).toBeFalsy();
     expect(empty.isLike('')).toBeTruthy();
@@ -129,6 +132,19 @@ describe('text().parse', () => {
     expect(wouter.isLike(Dev.Wouter)).toBeTruthy();
     expect(kim.isLike(Dev.Jeroen, KimvanWilgen)).toBeTruthy();
     expect(kim.isLike(Dev.Jeroen, 'kimvanwilgen')).toBeTruthy();
+  });
+
+  test('ifLike', () => {
+    expect(kim.ifLike(KimvanWilgen)).toBe(kim);
+    expect(kim.ifLike('kimvanwilgen')).toBe(kim);
+    expect(kim.ifLike(KimLower)).toBe(kim);
+    expect(kim.ifLike(KimKebab)).toBe(kim);
+    expect(kim.ifLike('kim')).toBeUndefined();
+    expect(empty.ifLike('')).toBe(empty);
+    expect(empty.ifLike('kim')).toBeUndefined();
+    expect(wouter.ifLike(Dev.Wouter)).toBe(wouter);
+    expect(kim.ifLike(Dev.Jeroen, KimvanWilgen)).toBe(kim);
+    expect(kim.ifLike(Dev.Jeroen, 'kimvanwilgen')).toBe(kim);
   });
 
   test('type', () => {
@@ -160,7 +176,7 @@ describe('text().parse', () => {
       text(template).parse(Dev.Jeroen, {
         property: 'language',
         actual: 'C',
-      })
+      }),
     ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
 });
