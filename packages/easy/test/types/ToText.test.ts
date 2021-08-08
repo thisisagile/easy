@@ -3,7 +3,7 @@ import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 
-describe('text().parse', () => {
+describe('text()', () => {
 
   const KimvanWilgen = 'Kim van Wilgen';
   const KimKebab = 'kim-van-wilgen';
