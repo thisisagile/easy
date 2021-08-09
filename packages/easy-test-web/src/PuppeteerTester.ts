@@ -12,14 +12,6 @@ export class PuppeteerTester implements Tester {
     return this.page.target().url();
   }
 
-  get domain(): string {
-    return this.env.host;
-  }
-
-  get port(): number {
-    return this.env.port;
-  }
-
   /* istanbul ignore next */
   static async init(env: EnvContext, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
@@ -60,11 +52,6 @@ export class PuppeteerTester implements Tester {
     return this.byXPath(`(//tr[contains(., '${contains}')])[1]`);
   }
 
-  async search(text: string): Promise<void> {
-    await this.byId('search').type(text);
-    return this.byClass('ant-input-search-button').click();
-  }
-
   redirect(url: string): Promise<boolean> {
     return this.page.goto(url).then(r => r?.ok() ?? false);
   }
@@ -79,13 +66,6 @@ export class PuppeteerTester implements Tester {
 
   close(): Promise<void> {
     return this.browser.close();
-  }
-
-  async login(email = this.env.get('email') as string, password = this.env.get('password') as string): Promise<boolean> {
-    await this.byId('form_email').type(email);
-    await this.byId('form_password').type(password);
-    await this.submit().click();
-    return this.wait();
   }
 
   private byXPath(q: string): TestElement {
