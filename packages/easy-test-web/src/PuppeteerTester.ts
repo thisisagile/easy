@@ -5,8 +5,7 @@ import { EnvContext, Id, UseCase } from '@thisisagile/easy';
 import { TestElement } from './TestElement';
 
 export class PuppeteerTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {
-  }
+  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
 
   get url(): string {
     return this.page.target().url();

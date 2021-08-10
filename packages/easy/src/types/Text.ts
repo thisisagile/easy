@@ -71,7 +71,7 @@ export class ToText implements Text {
 
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 
-  ifLike = (...others: unknown[]): this | undefined => this.isLike(...others) ? this : undefined;
+  ifLike = (...others: unknown[]): this | undefined => (this.isLike(...others) ? this : undefined);
 
   endsWith = (end?: unknown): boolean => this.subject.endsWith(asString(end));
 

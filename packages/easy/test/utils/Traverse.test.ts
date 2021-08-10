@@ -3,7 +3,6 @@ import { Audit, traverse } from '../../src';
 import { Dev } from '../ref';
 
 describe('traverse', () => {
-
   test('traverse with empty subject', () => {
     expect(traverse(undefined, '')).toBeUndefined();
   });

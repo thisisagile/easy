@@ -228,5 +228,4 @@ describe('PlaywrightTester', () => {
   test('env', () => {
     expect(tester.env).toBe(env);
   });
-
 });

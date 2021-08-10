@@ -59,6 +59,4 @@ describe('Collection', () => {
     const out: any = test.out(input);
     expect(out).toStrictEqual(expected);
   });
-
-
 });

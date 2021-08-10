@@ -2,9 +2,7 @@ import { text } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
-
 describe('text()', () => {
-
   const KimvanWilgen = 'Kim van Wilgen';
   const KimKebab = 'kim-van-wilgen';
   const KimLower = 'kim van wilgen';
@@ -176,7 +174,7 @@ describe('text()', () => {
       text(template).parse(Dev.Jeroen, {
         property: 'language',
         actual: 'C',
-      }),
+      })
     ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
 });

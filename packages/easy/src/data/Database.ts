@@ -19,5 +19,5 @@ export class Database extends Enum {
     super(name);
   }
 
-  provide = <P>(): P =>  ofConstruct(this.provider, this);
+  provide = <P>(): P => ofConstruct(this.provider, this);
 }

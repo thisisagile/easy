@@ -3,19 +3,19 @@ import { Id, Tester, UseCase } from '../utils/Types';
 import { isDefined } from '../utils/Utils';
 import { match } from './Match';
 
-const toUrl = (uc: UseCase, id? : Id): string => `/${uc.app.id}/${uc.id}${isDefined(id) ? `/${id}` : ''}`;
+const toUrl = (uc: UseCase, id?: Id): string => `/${uc.app.id}/${uc.id}${isDefined(id) ? `/${id}` : ''}`;
 
-export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherResult =>{
+export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherResult => {
   return match<Tester>(tester as Tester)
     .undefined(t => t, 'Tester is undefined')
     .undefined(t => t.url, 'Tester does not contain a URL')
     .undefined(() => uc, 'Use case is undefined')
     .not(
       t => t.url.includes(toUrl(uc as UseCase, id)),
-      t => `We expected the tester to be at: '${toUrl(uc as UseCase, id)}', but it is at: '${t?.url}' instead.`,
+      t => `We expected the tester to be at: '${toUrl(uc as UseCase, id)}', but it is at: '${t?.url}' instead.`
     )
     .else(t => `The tester is at '${t?.url}'`);
-}
+};
 
 expect.extend({
   toBeAt,
@@ -29,4 +29,3 @@ declare global {
     }
   }
 }
-

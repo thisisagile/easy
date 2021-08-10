@@ -7,8 +7,7 @@ import { TestElement } from './TestElement';
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
 
 export class PlaywrightTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {
-  }
+  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
 
   get url(): string {
     return this.page.url();

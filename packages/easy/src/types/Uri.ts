@@ -64,7 +64,7 @@ export class EasyUri implements Uri {
   route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
   set = (segment: Segment, value?: unknown): this => {
-    ifDefined(value, () => this.state[segment.key ?? ''] = { segment, value });
+    ifDefined(value, () => (this.state[segment.key ?? ''] = { segment, value }));
     return this;
   };
 
