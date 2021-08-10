@@ -7,16 +7,14 @@ export class UseCase extends Enum {
     super(name, id);
   }
 
-  //@deprecated Use app instead
-  get scope(): Scope {
-    return this.app;
-  }
   with = (...s: Scope[]): this => {
     this.scopes.add(...s);
     return this;
   };
 
-  static byScopes<U extends UseCase> (...s: Scope[]): List<U>{ return this.filter(u => u.scopes.some(us => isIn(us, s)))};
+  static byScopes<U extends UseCase>(...s: Scope[]): List<U> {
+    return this.filter(u => u.scopes.some(us => isIn(us, s)));
+  }
 
   static readonly Main = new UseCase(App.Main, 'Main');
   static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);

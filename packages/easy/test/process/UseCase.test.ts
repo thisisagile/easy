@@ -54,15 +54,10 @@ describe('UseCase', () => {
     expect(adminOrAuth).toContain(UseCase.ForgotPassword);
   });
 
-  test('byScope with unknown Scope returns empty list of use cases', () =>{
-    const s = { name: 'new', id: ''} as Scope
-    const uc = UseCase.byScopes(s)
-    expect(uc).toHaveLength(0)
-  })
-
-  test('backwards compatible with scope', () => {
-    const scope = new UseCase(Scope.Admin, 'test');
-    expect(scope.scope).toBe(Scope.Admin);
+  test('byScope with unknown Scope returns empty list of use cases', () => {
+    const s = { name: 'new', id: '' } as Scope;
+    const uc = UseCase.byScopes(s);
+    expect(uc).toHaveLength(0);
   });
 });
 
