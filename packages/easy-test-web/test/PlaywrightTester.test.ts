@@ -225,4 +225,8 @@ describe('PlaywrightTester', () => {
     expect(tester.url).toMatch('http://thisurl.com');
   });
 
+  test('env', () => {
+    expect(tester.env).toBe(env);
+  });
+
 });

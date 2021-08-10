@@ -1,7 +1,9 @@
 import { TestElement } from './TestElement';
-import { asString, Id, text, UseCase } from '@thisisagile/easy';
+import { asString, EnvContext, Id, text, UseCase } from '@thisisagile/easy';
 
 export interface Tester {
+  env: EnvContext
+
   url: string;
 
   by(key: string, value: string): TestElement;
