@@ -5,7 +5,7 @@ import { isArray, isDefined } from './Is';
 import { isA } from './IsA';
 import { GetProperty, ofProperty } from './Get';
 
-export class List<T> extends Array<T> {
+export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
 
   desc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));

@@ -188,12 +188,31 @@ describe('toList', () => {
     expect(devs.next(d => d.is(Dev.Sander))).toBeUndefined();
   });
 
-  test('prev on actual list works', () => {
+  const withSpread = (...d: Dev[]): List<Dev> =>
+    toList<Dev>(d)
+      .add([Dev.Sander, Dev.Sander])
+      .reduce((ds, d) => ds.add(d), toList<Dev>());
+
+  test('next on actual any list works', () => {
+    const devs = withSpread(Dev.Jeroen, Dev.Wouter, Dev.Naoufal);
+    expect(devs).toHaveLength(5);
+  });
+
+  test('prev on actual list from spread works', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Sander);
     expect(devs.prev()).toMatchText(Dev.Jeroen);
     expect(devs.prev(d => d.is(Dev.Jeroen))).toBeUndefined();
     expect(devs.prev(d => d.is(Dev.Naoufal))).toMatchText(Dev.Jeroen);
     expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Naoufal);
+    expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
+  });
+
+  test('prev on actual list with list in first element works', () => {
+    const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
+    expect(devs.prev()).toMatchText(Dev.Naoufal);
+    expect(devs.prev(d => d.is(Dev.Naoufal))).toBeUndefined();
+    expect(devs.prev(d => d.is(Dev.Jeroen))).toMatchText(Dev.Naoufal);
+    expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Jeroen);
     expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
   });
 });
