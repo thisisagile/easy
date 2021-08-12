@@ -29,7 +29,11 @@ export interface Tester {
   goto(to: UseCase, id?: Id): Promise<boolean>;
 }
 
-const toDomainWithPort = (host?: string, port?: number): string => text(`${text(asString(host))}${port ? ':' + port.toString() : ''}`).toString();
 
-export const toUrl = (uc: UseCase, host?: string, port?: number, id?: Id): string =>
-  text(`${toDomainWithPort(host, port)}/${uc.app.name}/${uc.name}${id ? `/${id}` : ''}`).kebab.toString();
+export const toUrl = (uc: UseCase, host?: string, port?: number, id?: Id): string => {
+  const p = port ? `:${port}` : '';
+  const domain = `${asString(host)}${p}`;
+  const i = id ? `/${id}` : '';
+  return text(`${domain}/${uc.app.name}/${uc.name}${i}`).kebab.toString();
+};
+
