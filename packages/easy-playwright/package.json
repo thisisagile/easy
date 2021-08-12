@@ -44,7 +44,7 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "@thisisagile/easy-test-web": "workspace:*",
-    "playwright": "^1.12.3"
+    "playwright": "^1.13.1"
   },
   "engines": {
     "node": ">=v14.16.0",
