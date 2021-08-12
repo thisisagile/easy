@@ -12,7 +12,7 @@
     "build-all": "yarn workspaces foreach -pt run build",
     "test-all": "jest --coverage",
     "test-sonarqube": "yarn workspaces foreach run test",
-    "release": "release-it"
+    "release": "yarn build-all && release-it"
   },
   "workspaces": [
     "packages/easy-test",
