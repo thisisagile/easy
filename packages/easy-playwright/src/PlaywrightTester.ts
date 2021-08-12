@@ -6,30 +6,32 @@ import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
 
 export class PlaywrightTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
+  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {
+  }
 
   get url(): string {
     return this.page.url();
   }
 
   /* istanbul ignore next */
-  static async init(env: EnvContext, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
-    let browser: playwright.Browser;
+  static launch = (browserType: BrowserType, headless: boolean): Promise<Browser> => {
     const options: playwright.LaunchOptions = {
       headless: headless,
       args: ['--no-sandbox', '--start-maximized'],
     };
     switch (browserType) {
       case 'Chromium':
-        browser = await chromium.launch(options);
-        break;
+        return chromium.launch(options);
       case 'Firefox':
-        browser = await firefox.launch(options);
-        break;
+        return firefox.launch(options);
       case 'Webkit':
-        browser = await webkit.launch(options);
-        break;
+        return webkit.launch(options);
     }
+  };
+
+  /* istanbul ignore next */
+  static async init(env: EnvContext, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
+    const browser = await PlaywrightTester.launch(browserType, headless);
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });
     return new PlaywrightTester(env, browser, page);
