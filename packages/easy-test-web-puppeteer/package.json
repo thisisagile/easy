@@ -1,7 +1,7 @@
 {
-  "name": "@thisisagile/easy-test-web",
+  "name": "@thisisagile/easy-test-web-puppeteer",
   "version": "0.1.0",
-  "description": "Straightforward wrapper library for web testing frameworks",
+  "description": "Straightforward wrapper library for Puppeteer web testing framework",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
@@ -34,6 +34,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*",
     "@types/jest": "^26.0.23",
     "jest": "^27.0.3",
     "jest-junit": "^12.1.0",
@@ -41,7 +42,9 @@
     "ts-jest": "^27.0.2"
   },
   "dependencies": {
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:*",
+    "@thisisagile/easy-test-web": "workspace:*",
+    "puppeteer": "^10.1.0"
   },
   "engines": {
     "node": ">=v14.16.0",

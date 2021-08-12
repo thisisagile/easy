@@ -1,5 +1,5 @@
 import { ElementHandle } from 'puppeteer';
-import { TestElement } from './TestElement';
+import { TestElement } from '@thisisagile/easy-test-web';
 
 export class PuppeteerElement implements TestElement {
   constructor(private readonly handle: Promise<ElementHandle | null>) {}

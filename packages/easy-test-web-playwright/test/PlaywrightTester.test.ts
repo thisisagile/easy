@@ -1,7 +1,6 @@
 import { App, EnvContext, UseCase } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, Page, Response } from 'playwright';
-import { HTTPResponse } from 'puppeteer';
 import { PlaywrightElement, PlaywrightTester } from '../src';
 
 describe('PlaywrightTester', () => {
@@ -130,7 +129,7 @@ describe('PlaywrightTester', () => {
   });
 
   test('redirect resolves ok response', async () => {
-    const r = mock.empty<HTTPResponse>();
+    const r = mock.empty<Response>();
     r.ok = mock.return(true);
 
     page.goto = mock.resolve(r);
@@ -140,7 +139,7 @@ describe('PlaywrightTester', () => {
   });
 
   test('redirect resolves not ok response', async () => {
-    const r = mock.empty<HTTPResponse>();
+    const r = mock.empty<Response>();
     r.ok = mock.return(false);
 
     page.goto = mock.resolve(r);
