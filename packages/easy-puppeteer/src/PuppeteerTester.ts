@@ -31,8 +31,8 @@ export class PuppeteerTester implements Tester {
     return new PuppeteerElement(h);
   }
 
-  byDataTestId(Id: string): TestElement {
-    return this.by('data-testid', Id);
+  byDataTestId(id: string): TestElement {
+    return this.by('data-testid', id);
   }
 
   byName(name: string): TestElement {
