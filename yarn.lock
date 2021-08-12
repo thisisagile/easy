@@ -1301,6 +1301,38 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thisisagile/easy-playwright@workspace:packages/easy-playwright":
+  version: 0.0.0-use.local
+  resolution: "@thisisagile/easy-playwright@workspace:packages/easy-playwright"
+  dependencies:
+    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy-test": "workspace:*"
+    "@thisisagile/easy-test-web": "workspace:*"
+    "@types/jest": ^26.0.23
+    jest: ^27.0.3
+    jest-junit: ^12.1.0
+    jest-sonar-reporter: ^2.0.0
+    playwright: ^1.12.3
+    ts-jest: ^27.0.2
+  languageName: unknown
+  linkType: soft
+
+"@thisisagile/easy-puppeteer@workspace:packages/easy-puppeteer":
+  version: 0.0.0-use.local
+  resolution: "@thisisagile/easy-puppeteer@workspace:packages/easy-puppeteer"
+  dependencies:
+    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy-test": "workspace:*"
+    "@thisisagile/easy-test-web": "workspace:*"
+    "@types/jest": ^26.0.23
+    jest: ^27.0.3
+    jest-junit: ^12.1.0
+    jest-sonar-reporter: ^2.0.0
+    puppeteer: ^10.1.0
+    ts-jest: ^27.0.2
+  languageName: unknown
+  linkType: soft
+
 "@thisisagile/easy-test-react@workspace:packages/easy-test-react":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
@@ -1320,38 +1352,6 @@ __metadata:
     react-dom: ^17.0.2
     ts-jest: ^27.0.2
     weak-napi: ^2.0.2
-  languageName: unknown
-  linkType: soft
-
-"@thisisagile/easy-test-web-playwright@workspace:packages/easy-test-web-playwright":
-  version: 0.0.0-use.local
-  resolution: "@thisisagile/easy-test-web-playwright@workspace:packages/easy-test-web-playwright"
-  dependencies:
-    "@thisisagile/easy": "workspace:*"
-    "@thisisagile/easy-test": "workspace:*"
-    "@thisisagile/easy-test-web": "workspace:*"
-    "@types/jest": ^26.0.23
-    jest: ^27.0.3
-    jest-junit: ^12.1.0
-    jest-sonar-reporter: ^2.0.0
-    playwright: ^1.12.3
-    ts-jest: ^27.0.2
-  languageName: unknown
-  linkType: soft
-
-"@thisisagile/easy-test-web-puppeteer@workspace:packages/easy-test-web-puppeteer":
-  version: 0.0.0-use.local
-  resolution: "@thisisagile/easy-test-web-puppeteer@workspace:packages/easy-test-web-puppeteer"
-  dependencies:
-    "@thisisagile/easy": "workspace:*"
-    "@thisisagile/easy-test": "workspace:*"
-    "@thisisagile/easy-test-web": "workspace:*"
-    "@types/jest": ^26.0.23
-    jest: ^27.0.3
-    jest-junit: ^12.1.0
-    jest-sonar-reporter: ^2.0.0
-    puppeteer: ^10.1.0
-    ts-jest: ^27.0.2
   languageName: unknown
   linkType: soft
 

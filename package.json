@@ -22,8 +22,8 @@
     "packages/easy-mssql",
     "packages/easy-test-react",
     "packages/easy-test-web",
-    "packages/easy-test-web-playwright",
-    "packages/easy-test-web-puppeteer"
+    "packages/easy-playwright",
+    "packages/easy-puppeteer"
   ],
   "devDependencies": {
     "@release-it/conventional-changelog": "^3.0.1",
