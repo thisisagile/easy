@@ -15,15 +15,7 @@
     "release": "yarn build-all && release-it"
   },
   "workspaces": [
-    "packages/easy-test",
-    "packages/easy",
-    "packages/easy-express",
-    "packages/easy-mongo",
-    "packages/easy-mssql",
-    "packages/easy-test-react",
-    "packages/easy-test-web",
-    "packages/easy-playwright",
-    "packages/easy-puppeteer"
+    "packages/*"
   ],
   "devDependencies": {
     "@release-it/conventional-changelog": "^3.0.1",
