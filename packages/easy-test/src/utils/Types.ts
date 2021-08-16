@@ -25,6 +25,6 @@ export type Text = { toString: () => string };
 
 export type Query = Text;
 
-export type UseCase = { app: { id: string }; id: string };
+export type UseCase = { app: { id: Text }; id: Text };
 
 export type Tester = { url: string };

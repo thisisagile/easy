@@ -3,8 +3,8 @@ import { Scope } from './Scope';
 import { App } from './App';
 
 export class UseCase extends Enum {
-  constructor(readonly app: App, name: string, id: string = text(name).kebab.toString(), readonly scopes: List<Scope> = toList<Scope>()) {
-    super(name, id);
+  constructor(readonly app: App, name: string, id: Text = text(name).kebab, readonly scopes: List<Scope> = toList<Scope>()) {
+    super(name, id.toString());
   }
 
   with = (...s: Scope[]): this => {
