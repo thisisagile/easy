@@ -6,7 +6,7 @@ import { toName } from './Constructor';
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
 
 class Template implements Text {
-  constructor(private template: string, private subject: unknown = {}, private options = {}) {}
+  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {}
 
   toString = (): string => {
     return meta(this.options)
@@ -15,7 +15,7 @@ class Template implements Text {
       .replace('  ', ' ');
   };
 
-  private value = (subject: any, prop: string): string => {
+  private readonly value = (subject: any, prop: string): string => {
     const split = prop.split('.');
     return split
       .splice(1)
@@ -23,7 +23,7 @@ class Template implements Text {
       .toString();
   };
 
-  private props = (tmpl: string, key: string, result: List<string> = toList()): string[] => {
+  private readonly props = (tmpl: string, key: string, result: List<string> = toList()): string[] => {
     const i1 = tmpl.indexOf(`{${key}`);
     if (i1 < 0) {
       return result;
@@ -32,11 +32,11 @@ class Template implements Text {
     return this.props(tmpl.slice(i2 + 1), key, result.add(tmpl.substring(i1 + 1, i2)));
   };
 
-  private object = (): string => {
+  private readonly object = (): string => {
     return this.props(this.template, 'this').reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.subject, p.replace('this.', ''))), this.template);
   };
 
-  private option = (tmpl: string, prop: string): string => {
+  private readonly option = (tmpl: string, prop: string): string => {
     return this.props(tmpl, prop).reduce((t: string, p) => t.replace(`{${p}}`, this.value(this.options, p)), tmpl);
   };
 }

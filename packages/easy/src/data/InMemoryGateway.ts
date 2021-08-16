@@ -2,7 +2,7 @@ import { Exception, Gateway, Id, isDefined, Json, JsonValue, List, toList } from
 import { when } from '../validation';
 
 export class InMemoryGateway implements Gateway {
-  constructor(private data: Promise<List<Json>>) {}
+  constructor(private readonly data: Promise<List<Json>>) {}
 
   all(): Promise<List<Json>> {
     return this.data.then(d => toList(d));

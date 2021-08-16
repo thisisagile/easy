@@ -4,7 +4,7 @@ import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private gateway: Gateway) {}
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
 
   all(): Promise<List<T>> {
     return this.gateway.all().then(js => js.map(j => new this.ctor(j)));
