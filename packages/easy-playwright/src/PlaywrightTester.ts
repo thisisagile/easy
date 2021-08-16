@@ -20,12 +20,12 @@ export class PlaywrightTester implements Tester {
       args: ['--no-sandbox', '--start-maximized'],
     };
     switch (browserType) {
-      case 'Chromium':
-        return chromium.launch(options);
       case 'Firefox':
         return firefox.launch(options);
       case 'Webkit':
         return webkit.launch(options);
+      default:
+        return chromium.launch(options);
     }
   };
 
