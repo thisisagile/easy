@@ -1,6 +1,7 @@
 import { act, render, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
 import { ReactElement } from 'react';
 
+/* istanbul ignore next */
 export async function waitForRender(ui: ReactElement, options?: Omit<RenderOptions, 'queries'>): Promise<RenderResult> {
   let r = {} as RenderResult;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call

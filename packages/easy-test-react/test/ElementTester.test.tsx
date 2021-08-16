@@ -1,22 +1,35 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
-
-const getByText = mock.return(<div />);
-jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
 import { ElementTester, renders } from '../src';
 import { fireEvent } from '@testing-library/react';
 
+const getByText = mock.return(<div />);
+jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
+
 describe('ElementTester', () => {
   const a = <div />;
-  let e: ElementTester;
+  const e = mock.empty<Element>({value: '42'});
+  let et: ElementTester;
 
   beforeEach(() => {
-    e = renders(a).atText('');
+    et = renders(a).atText('');
+  });
+
+  test('get value', () => {
+    expect(new ElementTester(() => e).value).toBe('42')
+  });
+
+  test('is valid', () => {
+    expect(new ElementTester(() => e).isValid).toBeTruthy();
+  });
+
+  test('is not valid', () => {
+    expect(new ElementTester(undefined as unknown as () => Element ).isValid).toBeFalsy();
   });
 
   test('click fires click event', () => {
     fireEvent.click = mock.return();
-    e.click();
+    et.click();
     expect(getByText).toHaveBeenCalledTimes(2);
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
@@ -24,7 +37,7 @@ describe('ElementTester', () => {
   test('type fires value change event', () => {
     fireEvent.change = mock.return();
     const value = 'hello';
-    e.type(value);
+    et.type(value);
     expect(getByText).toHaveBeenCalled();
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value } });
   });
