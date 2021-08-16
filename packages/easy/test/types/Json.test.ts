@@ -1,7 +1,6 @@
-import { isJson, json, toJson } from '../../src';
+import { asJson, isJson, json, toJson } from '../../src';
 import { Dev, DevsResource } from '../ref';
 import '@thisisagile/easy-test';
-import { asJson } from '../../dist';
 
 describe('isJson', () => {
   test('isJson true', () => {
@@ -71,6 +70,43 @@ describe('toJson', () => {
   test('toJson object and adds object', () => {
     const j = toJson(Dev.Wouter, Dev.Naoufal);
     expect(j).toMatchObject({ id: 2, name: 'Naoufal', language: 'TypeScript', level: 3 });
+  });
+});
+
+describe('asJson', () => {
+  test('asJson nothing', () => {
+    const json = asJson();
+    expect(json).toMatchObject({});
+  });
+
+  test('asJson empty', () => {
+    const json = asJson({});
+    expect(json).toMatchObject({});
+  });
+
+  test('asJson undefined', () => {
+    const json = asJson(undefined);
+    expect(json).toMatchObject({});
+  });
+
+  test('asJson null', () => {
+    const json = asJson(null);
+    expect(json).toMatchObject({});
+  });
+
+  test('asJson simple', () => {
+    const json = asJson({ name: 'Sander' });
+    expect(json).toMatchObject({ name: 'Sander' });
+  });
+
+  test('asJson entity', () => {
+    const json = asJson(Dev.Wouter);
+    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript', level: 3 });
+  });
+
+  test('asJson alt', () => {
+    const json = asJson('Javascript', { language: 'TypeScript'});
+    expect(json).toMatchObject({language: "TypeScript"});
   });
 });
 
