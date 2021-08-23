@@ -44,7 +44,7 @@ export class List<T = unknown> extends Array<T> {
   toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
 }
 
-export const toList = <T>(...items: ArrayLike<T>): List<T> => new List<T>(...toArray<T>(...items));
+export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>(...toArray<T>(...items));
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
