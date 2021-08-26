@@ -54,6 +54,14 @@ describe('text()', () => {
     expect(kim.kebab).toMatchText(KimKebab);
   });
 
+  test('plural works', () => {
+    expect(empty.plural).toMatchText('');
+    expect(text({}).plural).toMatchText('');
+    expect(wouter.plural).toMatchText('Wouters');
+    expect(text(Dev.Sander).plural).toMatchText('Sanders');
+    expect(kim.plural).toMatchText('Kim van Wilgens');
+  });
+
   test('snake works', () => {
     expect(empty.snake).toMatchText('');
     expect(text({}).snake).toMatchText('');
