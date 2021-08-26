@@ -3,6 +3,7 @@ import SpyInstance = jest.SpyInstance;
 import Mock = jest.Mock;
 import { Id, Json } from '../utils/Types';
 import { Req } from '../utils/Req';
+import { HttpStatus, Response } from '../utils/Response';
 
 const mockProperty = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
   jest.spyOn(object, getter, 'get').mockReturnValue(value);
@@ -19,6 +20,29 @@ export const mock = {
     body: (body: unknown): Req => new Req({ body }),
     path: (path: Json): Req => new Req({ path }),
     query: (query: Json): Req => new Req({ query }),
+  },
+  resp: {
+    items: (status: HttpStatus, items: unknown[] = []): Response => ({
+      status: status,
+      body: {
+        data: {
+          code: status.id,
+          itemCount: items.length,
+          items,
+        },
+      },
+    }),
+    errors: (status: HttpStatus, message: string, errors: unknown[] = []): Response => ({
+      status: status,
+      body: {
+        error: {
+          code: status.id,
+          message: message,
+          errorCount: errors.length,
+          errors,
+        },
+      },
+    }),
   },
   resolve: (value?: unknown): Mock => jest.fn().mockResolvedValue(value),
   return: (value?: unknown): Mock => jest.fn().mockReturnValue(value),

@@ -1,4 +1,5 @@
 import { mock } from '../../src';
+import { HttpStatus } from '../../src/utils/Response';
 
 describe('mock', () => {
   const version = 'Version 42';
@@ -62,6 +63,16 @@ describe('mock', () => {
   test('req body works', () => {
     const req = mock.req.body({ name: 'sander' });
     expect(req.body).toStrictEqual({ name: 'sander' });
+  });
+
+  test('response with items works', () => {
+    const resp = mock.resp.items({id: 200} as HttpStatus, [{ name: 'sander' }]);
+    expect(resp.body).toStrictEqual({ data: { code: 200, itemCount: 1, items: [{ name: 'sander' }] } });
+  });
+
+  test('response with errors works', () => {
+    const resp = mock.resp.errors({id: 400} as HttpStatus, 'error', [{ timeout: 'timeout occurred' }]);
+    expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 1, errors: [{ timeout: 'timeout occurred' }] } });
   });
 
   test('get props from state', () => {
