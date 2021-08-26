@@ -1,4 +1,4 @@
-import { isDefined } from './Is';
+import { isDefined, isEmpty } from './Is';
 import { toName } from './Constructor';
 import { template } from './Template';
 import { isFunc } from './Func';
@@ -73,6 +73,8 @@ export class ToText implements Text {
   parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
+
+  get isEmpty(): boolean { return isEmpty(this.toString()); }
 
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 

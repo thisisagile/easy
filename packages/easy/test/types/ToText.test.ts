@@ -62,6 +62,14 @@ describe('text()', () => {
     expect(kim.plural).toMatchText('Kim van Wilgens');
   });
 
+  test('isEmpty works', () => {
+    expect(empty.isEmpty).toBeTruthy();
+    expect(text({}).isEmpty).toBeTruthy();
+    expect(wouter.isEmpty).toBeFalsy();
+    expect(text(Dev.Sander).isEmpty).toBeFalsy();
+    expect(kim.isEmpty).toBeFalsy();
+  });
+
   test('snake works', () => {
     expect(empty.snake).toMatchText('');
     expect(text({}).snake).toMatchText('');
