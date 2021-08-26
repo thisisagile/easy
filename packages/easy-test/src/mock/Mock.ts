@@ -26,7 +26,7 @@ export const mock = {
       status: status,
       body: {
         data: {
-          code: status.id,
+          code: status.id as number,
           itemCount: items.length,
           items,
         },
@@ -36,7 +36,7 @@ export const mock = {
       status: status,
       body: {
         error: {
-          code: status.id,
+          code: status.id as number,
           message: message,
           errorCount: errors.length,
           errors,

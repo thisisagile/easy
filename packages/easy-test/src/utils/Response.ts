@@ -1,4 +1,6 @@
-export type HttpStatus = { name: string; id: number };
+import { Id } from './Types';
+
+export type HttpStatus = { name: string; id: Id };
 
 export type RestResult = {
   data?: { code: number; items: unknown []; itemCount: number };
