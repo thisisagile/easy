@@ -1317,7 +1317,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:*"
-    playwright: ^1.12.3
+    playwright: ^1.14.1
   languageName: unknown
   linkType: soft
 
@@ -7593,7 +7593,7 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.12.3":
+"playwright@npm:^1.14.1":
   version: 1.14.1
   resolution: "playwright@npm:1.14.1"
   dependencies:
