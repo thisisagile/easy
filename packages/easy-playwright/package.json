@@ -34,12 +34,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "workspace:*",
-    "@types/jest": "^26.0.23",
-    "jest": "^27.0.3",
-    "jest-junit": "^12.1.0",
-    "jest-sonar-reporter": "^2.0.0",
-    "ts-jest": "^27.0.2"
+    "@thisisagile/easy-test": "workspace:*"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
