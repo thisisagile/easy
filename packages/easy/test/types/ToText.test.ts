@@ -193,4 +193,20 @@ describe('text()', () => {
       })
     ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
+
+  test('space', () => {
+    expect(text('').space).toMatchText('');
+    expect(text('Jeroen').space).toMatchText('Jeroen');
+    expect(text('NaoufalLamarti').space).toMatchText('Naoufal Lamarti');
+    expect(text('Jeroen Dev').space).toMatchText('Jeroen Dev');
+    expect(text('JEROEN_DEV').space).toMatchText('JEROEN DEV');
+    expect(text('Jeroen.Plug').space).toMatchText('Jeroen.Plug');
+    expect(text('Jeroen-Plug').space).toMatchText('Jeroen Plug');
+    expect(text('Jeroen_Plug').space).toMatchText('Jeroen Plug');
+    expect(text('Jeroen0123').space).toMatchText('Jeroen0123');
+    expect(text('Jeroen0123Plug').space).toMatchText('Jeroen0123 Plug');
+    expect(text('JeroenHTML').space).toMatchText('Jeroen HTML');
+    expect(text('JeroenHTML Plug').space).toMatchText('Jeroen HTML Plug');
+    expect(text('JeroenHtmlPlug').space).toMatchText('Jeroen Html Plug');
+  });
 });

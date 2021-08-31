@@ -57,6 +57,10 @@ export class ToText implements Text {
     return this.ifLike('') ?? this.add('s');
   }
 
+  get space(): ToText {
+    return this.map(s => s.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_-]/g, ' '));
+  }
+
   get initials(): ToText {
     return this.map(s =>
       s
