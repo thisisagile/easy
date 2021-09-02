@@ -209,4 +209,11 @@ describe('text()', () => {
     expect(text('JeroenHTML Plug').space).toMatchText('Jeroen HTML Plug');
     expect(text('JeroenHtmlPlug').space).toMatchText('Jeroen Html Plug');
   });
+
+  test('sentence', () => {
+    expect(text().sentence).toMatchText('');
+    expect(text('').sentence).toMatchText('');
+    expect(text('hallo').sentence).toMatchText('Hallo.');
+    expect(text('hallo wij zijn de heidezangers').sentence).toMatchText('Hallo wij zijn de heidezangers.');
+  });
 });

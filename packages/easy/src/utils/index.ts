@@ -6,4 +6,5 @@ export * from './Mapper';
 export * from './Promise';
 export * from './Property';
 export * from './State';
+export * from './Sentence';
 export * from './Traverse';

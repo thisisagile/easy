@@ -42,7 +42,7 @@ export class ToText implements Text {
   }
 
   get camel(): ToText {
-    return this.title.trim.map(s => s.charAt(0).toLowerCase() + s.slice(1));
+    return this.title.trim.map(s => `${s.charAt(0).toLowerCase()}${s.slice(1)}`);
   }
 
   get kebab(): ToText {
@@ -59,6 +59,10 @@ export class ToText implements Text {
 
   get space(): ToText {
     return this.map(s => s.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/[_-]/g, ' '));
+  }
+
+  get sentence(): ToText {
+    return this.isEmpty ? this : this.map(s => `${s.charAt(0).toUpperCase()}${s.slice(1)}.`);
   }
 
   get initials(): ToText {
