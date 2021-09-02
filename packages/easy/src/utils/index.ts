@@ -1,6 +1,7 @@
 export * from './Case';
 export * from './Convert';
 export * from './If';
+export * from './Log';
 export * from './Mapper';
 export * from './Promise';
 export * from './Property';
