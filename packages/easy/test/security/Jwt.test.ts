@@ -17,14 +17,9 @@ describe('Test Jwt', () => {
     expect(res2).toMatchObject(dev);
   });
 
-  test('Verify', () => {
-    expect(jwt.verify()).toBeTruthy();
-    expect(falseJwt.verify()).toBeFalsy();
-  });
-
   test('Validate', () => {
     expect(validate(jwt)).toBeValid();
-    // expect(validate(falseJwt)).not.toBeValid();
+    expect(validate(falseJwt)).not.toBeValid();
   });
 
   test('toJSON.', () => {

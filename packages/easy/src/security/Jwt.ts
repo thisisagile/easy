@@ -1,6 +1,5 @@
 import { Algorithm, decode, sign, verify } from 'jsonwebtoken';
 import { ctx, Json, Value } from '../types';
-import { rule } from '../validation';
 
 export class Jwt extends Value {
   static sign = (token: Json): Jwt => {
@@ -19,8 +18,7 @@ export class Jwt extends Value {
 
   decode = (): Json => decode(this.value) as Json;
 
-  @rule('Token is not valid')
-  verify(): boolean {
+  get isValid(): boolean {
     try {
       verify(this.value, ctx.env.get('tokenPublicKey') ?? '');
       return true;
