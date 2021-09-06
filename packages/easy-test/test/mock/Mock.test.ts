@@ -71,16 +71,19 @@ describe('mock', () => {
     expect(resp.body).toStrictEqual({ data: { code: 200, itemCount: 1, items: [{ name: 'sander' }] } });
   });
 
+  test('response with 0 items works', () => {
+    const resp = mock.resp.items({ id: 200 } as HttpStatus);
+    expect(resp.body).toStrictEqual({ data: { code: 200, itemCount: 0, items: [] } });
+  });
+
   test('response with errors works', () => {
-    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', [{ timeout: 'timeout occurred' }]);
-    expect(resp.body).toStrictEqual({
-      error: {
-        code: 400,
-        message: 'error',
-        errorCount: 1,
-        errors: [{ timeout: 'timeout occurred' }],
-      },
-    });
+    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', [{ timeout: 'occurred' }]);
+    expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 1, errors: [{ timeout: 'occurred' }] } });
+  });
+
+  test('response with 0 errors works', () => {
+    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', []);
+    expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 0, errors: [] } });
   });
 
   test('get props from state', () => {
@@ -173,6 +176,4 @@ describe('mock', () => {
     expect(resp.body?.error?.errors).toContain('error two');
     expect(resp.body?.error?.message).toContain('u fool');
   });
-
 });
-
