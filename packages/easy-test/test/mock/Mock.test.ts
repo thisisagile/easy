@@ -8,6 +8,7 @@ describe('mock', () => {
     get name() {
       return 'DevOps';
     }
+
     version = (n: number): string => `Version ${n}`;
     fails = (no = true): Promise<string> => (no ? Promise.resolve('Project succeeds') : Promise.reject('Project fails'));
   }
@@ -66,13 +67,20 @@ describe('mock', () => {
   });
 
   test('response with items works', () => {
-    const resp = mock.resp.items({id: 200} as HttpStatus, [{ name: 'sander' }]);
+    const resp = mock.resp.items({ id: 200 } as HttpStatus, [{ name: 'sander' }]);
     expect(resp.body).toStrictEqual({ data: { code: 200, itemCount: 1, items: [{ name: 'sander' }] } });
   });
 
   test('response with errors works', () => {
-    const resp = mock.resp.errors({id: 400} as HttpStatus, 'error', [{ timeout: 'timeout occurred' }]);
-    expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 1, errors: [{ timeout: 'timeout occurred' }] } });
+    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', [{ timeout: 'timeout occurred' }]);
+    expect(resp.body).toStrictEqual({
+      error: {
+        code: 400,
+        message: 'error',
+        errorCount: 1,
+        errors: [{ timeout: 'timeout occurred' }],
+      },
+    });
   });
 
   test('get props from state', () => {
@@ -95,11 +103,24 @@ describe('mock', () => {
 
   test('get provider with data', () => {
     const data = mock.provider.data({ name: 'sander' });
-    return expect(data.execute()).resolves.toMatchObject({ body: { data: { itemCount: 1, items: [{ name: 'sander' }] } } });
+    return expect(data.execute()).resolves.toMatchObject({
+      body: {
+        data: {
+          itemCount: 1,
+          items: [{ name: 'sander' }],
+        },
+      },
+    });
   });
 
   test('mock empty', () => {
     const p = mock.empty<Project>({ version: mock.return() });
+    p.version(42);
+    return expect(p.version).toHaveBeenCalledWith(42);
+  });
+
+  test('mock empty without generic', () => {
+    const p = mock.empty({ version: mock.return() });
     p.version(42);
     return expect(p.version).toHaveBeenCalledWith(42);
   });
@@ -125,5 +146,11 @@ describe('mock', () => {
     expect(project.version(10)).toBe(version);
     expect(project.version(2)).toBe(version2);
     expect(project.version(3)).toBeUndefined();
+  });
+
+  test('this works', () => {
+    const m = mock.this();
+    m(42);
+    expect(m).toHaveBeenCalledWith(42);
   });
 });

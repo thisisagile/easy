@@ -25,7 +25,13 @@ describe('toBeAt', () => {
     );
   });
 
-  test('uc matches tester', () => {
-    expect(toBeAt(tester, uc)).toPassMatcherWith("The tester is at 'http://localhost:1337/profiles/find-profile', which we did not expect.");
+  test('uc and id doesnt match tester', () => {
+    expect(toBeAt(tester, uc, 42)).toFailMatcherWith("We expected the tester to be at: '/profiles/find-profile/42', but it is at: 'http://localhost:1337/profiles/find-profile' instead.");
   });
+
+  test('uc matches tester', () => {
+    expect(toBeAt(tester, uc)).toPassMatcherWith("The tester is at 'http://localhost:1337/profiles/find-profile'");
+  });
+
+
 });
