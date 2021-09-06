@@ -1,5 +1,4 @@
-import { Mapper, mappings } from '../../src';
-import { Json, JsonValue } from '@thisisagile/easy-test/dist/utils/Types';
+import { Json, JsonValue, Mapper, mappings } from '../../src';
 
 const site = 'www.acme.com';
 const city = 'Amsterdam';

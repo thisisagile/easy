@@ -1,6 +1,5 @@
-import { Condition, Field } from '../../src';
+import { Condition, DateTime, Field } from '../../src';
 import '@thisisagile/easy-test';
-import { DateTime } from '@thisisagile/easy';
 
 describe('Condition', () => {
   const field = new Field('name');
