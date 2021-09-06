@@ -82,7 +82,7 @@ describe('mock', () => {
   });
 
   test('response with 0 errors works', () => {
-    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', []);
+    const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error');
     expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 0, errors: [] } });
   });
 
