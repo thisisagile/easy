@@ -1,5 +1,5 @@
 import { mock } from '../../src';
-import { HttpStatus } from '../../src/utils/Response';
+import { HttpStatus } from '@thisisagile/easy';
 
 describe('mock', () => {
   const version = 'Version 42';
@@ -153,4 +153,26 @@ describe('mock', () => {
     m(42);
     expect(m).toHaveBeenCalledWith(42);
   });
+
+  test('get props from resp', () => {
+    const resp = mock.resp.items(HttpStatus.Ok, [project]);
+    expect(resp.status).toBe(HttpStatus.Ok);
+    expect(resp.body?.data?.code).toBe(200);
+    expect(resp.body?.error).toBeUndefined();
+    expect(resp.body?.data?.itemCount).toBe(1);
+    expect(resp.body?.data?.items).toContain(project);
+  });
+
+  test('get props from error resp', () => {
+    const resp = mock.resp.errors(HttpStatus.InternalServerError, 'u fool', ['error', 'error two']);
+    expect(resp.status).toBe(HttpStatus.InternalServerError);
+    expect(resp.body?.data).toBeUndefined();
+    expect(resp.body?.error?.code).toBe(500);
+    expect(resp.body?.error?.errorCount).toBe(2);
+    expect(resp.body?.error?.errors).toContain('error');
+    expect(resp.body?.error?.errors).toContain('error two');
+    expect(resp.body?.error?.message).toContain('u fool');
+  });
+
 });
+
