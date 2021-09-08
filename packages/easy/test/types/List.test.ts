@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, isList, List, Scope, toList, toObject } from '../../src';
+import { asList, Enum, Id, isList, List, Scope, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -238,4 +238,21 @@ describe('asList', () => {
   test('asList on empty list works', () => {
     expect(asList(Dev).prev(d => d.is(Dev.Wouter))).toBeUndefined();
   });
+
+  type HasId = { id: Id };
+  const hasId: HasId = { id: 42 };
+  const stringMe = (s: HasId[] | List<HasId>): string => s[0].id.toString();
+
+  class WithId extends Enum {
+    static Hoi = new WithId('hoi');
+  }
+
+  test('Advanced use', () => {
+    expect(stringMe([hasId])).toMatchText('42');
+    expect(stringMe([Dev.Naoufal])).toMatchText(Dev.Naoufal.id);
+    expect(stringMe(toList(hasId))).toMatchText('42');
+    expect(stringMe(toList(WithId.Hoi))).toMatchText('hoi');
+    expect(stringMe(toList(Dev.Naoufal))).toMatchText(Dev.Naoufal.id);
+  });
+
 });

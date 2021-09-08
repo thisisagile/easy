@@ -24,15 +24,13 @@ export class List<T = unknown> extends Array<T> {
       return a;
     }, new Array<Json>());
 
-  map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => super.map(f, params) as List<U>;
+  map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => toList<U>(super.map(f, params));
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
-  filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => super.filter(p, params) as List<T>;
-
-  concat = (...items: (T | ConcatArray<T>)[]): List<T> => super.concat(...items) as List<T>;
+  filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
 
   add = (...items: (T | T[])[]): this => {
     super.push(...toArray(...items));
