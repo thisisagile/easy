@@ -3,9 +3,11 @@ import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
 
+const iso = '2021-03-25T08:39:44.000Z';
+
 describe('DateTime', () => {
   const testDate = {
-    iso: '2021-03-25T08:39:44.000Z',
+    iso,
     epoch: 1616661584000,
   };
 
@@ -95,7 +97,7 @@ describe('DateTime', () => {
 
 describe('DateTime fromNow', () => {
   const testDate = {
-    iso: '2021-03-25T08:39:44.000Z',
+    iso,
     now: 1622023108000,
   };
 
@@ -122,5 +124,17 @@ describe('DateTime isAfter', () => {
 
   test('now is not after now.', () => {
     expect(new DateTime(date.now).isAfter(new DateTime(date.future))).toBeFalsy();
+  });
+
+});
+
+
+describe('DateTime toLocale', () => {
+
+  test('toLocale', () => {
+    const dt = new DateTime(iso);
+    expect(dt.toLocale()).toMatchText('25-3-2021');
+    expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
+    expect(dt.toLocale('de-DE', {dateStyle: 'full'})).toMatchText('Donnerstag, 25. März 2021');
   });
 });

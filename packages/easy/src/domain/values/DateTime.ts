@@ -11,10 +11,6 @@ export class DateTime extends Value<string | undefined> {
     return new DateTime(moment.utc().toISOString());
   }
 
-  protected get moment(): Moment {
-    return moment.utc(this.value, true);
-  }
-
   get isValid(): boolean {
     return isDefined(this.value) && this.moment.isValid();
   }
@@ -23,12 +19,20 @@ export class DateTime extends Value<string | undefined> {
     return this.value ? this.moment.fromNow() : '';
   }
 
+  protected get moment(): Moment {
+    return moment.utc(this.value, true);
+  }
+
   isAfter(dt: DateTime): boolean {
     return this.moment.isAfter(dt.moment);
   }
 
   toString(): string {
     return this.value ?? '';
+  }
+
+  toLocale(locales: string | string[] = 'nl-NL', options: Intl.DateTimeFormatOptions = {}): string {
+    return this.toDate()?.toLocaleDateString(locales, options) ?? '';
   }
 
   toDate(): Date | undefined {
