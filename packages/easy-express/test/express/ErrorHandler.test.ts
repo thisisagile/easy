@@ -1,6 +1,6 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { Exception, HttpStatus, rest, toOriginatedError, toResults } from '@thisisagile/easy';
+import { ctx, Exception, HttpStatus, rest, toOriginatedError, toResults } from '@thisisagile/easy';
 import { authError, error } from '../../src';
 
 describe('ErrorHandler', () => {
@@ -150,5 +150,15 @@ describe('ErrorHandler', () => {
     error(authError(HttpStatus.NotAuthorized), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.NotAuthorized.status);
     expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotAuthorized, 1, 'Not authorized'));
+  });
+
+  test('Don\'t set lastError on client error', () => {
+    error(toOriginatedError(toResults('Client', 'Error')), req, res, next);
+    expect(ctx.request.lastError).toBeUndefined();
+  });
+
+  test('Set lastError on server error', () => {
+    error(new Error('Server Error'), req, res, next);
+    expect(ctx.request.lastError).toBe("Server Error");
   });
 });

@@ -3,6 +3,7 @@ import { isAuthError } from './AuthError';
 import {
   asString,
   choose,
+  ctx,
   Exception,
   HttpStatus,
   isError,
@@ -64,5 +65,6 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
 
 export const error = (e: Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
   const { status, body } = toBody(toOriginatedError(e));
+  ctx.request.lastError = status.isServerError ? body.error?.errors[0]?.message : undefined;
   res.status(status.status).json(body);
 };
