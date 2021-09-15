@@ -19,7 +19,15 @@ export class HttpStatus extends Enum {
   static ServiceUnavailable = new HttpStatus('Service unavailable', 503);
 
   get isError(): boolean {
-    return this.id >= 400;
+    return this.isClientError || this.isServerError;
+  }
+
+  get isClientError(): boolean {
+    return this.id >= 400 && this.id < 500;
+  }
+
+  get isServerError(): boolean {
+    return this.id >= 500 && this.id < 600;
   }
 
   get status(): number {

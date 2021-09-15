@@ -7,6 +7,17 @@ describe('HttpStatus', () => {
 
   test('Is an error', () => {
     expect(HttpStatus.BadRequest.isError).toBeTruthy();
+    expect(HttpStatus.InternalServerError.isError).toBeTruthy();
+  });
+
+  test('Is a server error', () => {
+    expect(HttpStatus.BadRequest.isServerError).toBeFalsy();
+    expect(HttpStatus.InternalServerError.isServerError).toBeTruthy();
+  });
+
+  test('Is a client error', () => {
+    expect(HttpStatus.BadRequest.isClientError).toBeTruthy();
+    expect(HttpStatus.InternalServerError.isClientError).toBeFalsy();
   });
 
   test('isHttpStatus', () => {
