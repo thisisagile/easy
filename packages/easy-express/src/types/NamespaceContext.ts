@@ -32,6 +32,14 @@ export class NamespaceContext implements RequestContext {
     this.namespace.set('correlationId', id);
   }
 
+  get lastError(): string | undefined {
+    return this.namespace.get('lastError');
+  }
+
+  set lastError(error: string | undefined) {
+    this.namespace.set('lastError', error);
+  }
+
   public get(key: string): any {
     return this.namespace.get(key);
   }

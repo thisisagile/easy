@@ -30,8 +30,10 @@ describe('NamespaceContext', () => {
     context.create(() => {
       context.token = 'token';
       context.correlationId = 'correlation';
+      context.lastError = 'error';
       expect(context.token).toBe('token');
       expect(context.correlationId).toBe('correlation');
+      expect(context.lastError).toBe('error');
     });
   });
 });

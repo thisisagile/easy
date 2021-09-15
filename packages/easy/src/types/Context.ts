@@ -30,6 +30,7 @@ export type RequestContext = {
   identity?: Identity;
   jwt: string;
   correlationId?: Uuid;
+  lastError?: string;
   create: (f: () => void) => void;
 };
 
@@ -62,6 +63,14 @@ export class BaseContext implements RequestContext {
 
   set correlationId(id: Uuid) {
     this.state.correlationId = id;
+  }
+
+  get lastError(): string | undefined {
+    return this.state.lastError;
+  }
+
+  set lastError(error: string | undefined) {
+    this.state.lastError = error;
   }
 
   public get(key: string): any {
