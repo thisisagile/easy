@@ -7,7 +7,7 @@ import {
   HttpStatus,
   Resource,
   rest,
-  Route,
+  Route, RouteRequires,
   routes,
   Service,
   toList,
@@ -35,16 +35,19 @@ export class ExpressProvider implements AppProvider {
     endpoints.forEach(({ endpoint, verb, requires }: Route) => {
       console.log(verb.verb.code, route.route(service.name));
 
-      const middleware: RequestHandler[] = [];
-      if (requires.token) middleware.push(checkToken());
-      if (requires.scope) middleware.push(checkScope(requires.scope));
-      if (requires.uc) middleware.push(checkUseCase(requires.uc));
-
-      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...middleware, this.handle(endpoint, verb.options));
+      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...this.addSecurityMiddleware(requires), this.handle(endpoint, verb.options));
     });
 
     this.app.use(router);
   };
+
+  private addSecurityMiddleware(requires: RouteRequires): RequestHandler[] {
+    const middleware: RequestHandler[] = [];
+    if (requires.token) middleware.push(checkToken());
+    if (requires.scope) middleware.push(checkScope(requires.scope));
+    if (requires.uc) middleware.push(checkUseCase(requires.uc));
+    return middleware;
+  }
 
   listen = (port: number, message = `Service is listening on port ${port}.`): void => {
     this.app.listen(port, () => {
