@@ -41,7 +41,7 @@ export class ExpressProvider implements AppProvider {
     this.app.use(router);
   };
 
-  private addSecurityMiddleware(requires: RouteRequires): RequestHandler[] {
+  protected addSecurityMiddleware(requires: RouteRequires): RequestHandler[] {
     const middleware: RequestHandler[] = [];
     if (requires.token) middleware.push(checkToken());
     if (requires.scope) middleware.push(checkScope(requires.scope));
