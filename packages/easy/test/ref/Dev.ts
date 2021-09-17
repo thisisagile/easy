@@ -6,7 +6,8 @@ export class Dev extends Entity {
   static readonly Naoufal = new Dev({ id: 2, name: 'Naoufal', level: 3 });
   static readonly Sander = new Dev({ id: 3, name: 'Sander', level: 3 });
   static readonly Wouter = new Dev({ id: 4, name: 'Wouter', level: 3 });
-  static readonly All = toList(Dev.Sander, Dev.Jeroen, Dev.Wouter, Dev.Naoufal);
+  static readonly Rob = new Dev({ id: 4, name: 'Rob', level: 3 });
+  static readonly All = toList(Dev.Sander, Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Rob);
 
   @required() readonly name: string = this.state.name;
   @defined() readonly language: string = this.state.language ?? 'TypeScript';
