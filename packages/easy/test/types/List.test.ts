@@ -100,6 +100,17 @@ describe('isList', () => {
     expect(isList<Dev>(toList(Dev.Sander, Dev.Jeroen))).toBeTruthy();
   });
 
+  test('has', () => {
+    const a = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal);
+    expect(a.overlaps()).toBeFalsy();
+    expect(a.overlaps(Dev.Rob)).toBeFalsy();
+    expect(a.overlaps([Dev.Rob, Dev.Sander])).toBeFalsy();
+    expect(a.overlaps(toList(Dev.Rob, Dev.Sander))).toBeFalsy();
+    expect(a.overlaps(Dev.Wouter)).toBeTruthy();
+    expect(a.overlaps(Dev.Wouter, Dev.Sander)).toBeTruthy();
+    expect(a.overlaps(toList(Dev.Rob, Dev.Sander, Dev.Jeroen))).toBeTruthy();
+  });
+
   test('toObject', () => {
     const res = Dev.All.toObject('id');
     expect(res).toStrictEqual({
@@ -107,6 +118,7 @@ describe('isList', () => {
       [Dev.Wouter.id]: Dev.Wouter,
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
+      [Dev.Rob.id]: Dev.Rob,
     });
   });
 });

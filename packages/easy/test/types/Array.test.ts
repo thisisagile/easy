@@ -59,6 +59,7 @@ describe('toObject', () => {
       [Dev.Wouter.id]: Dev.Wouter,
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
+      [Dev.Rob.id]: Dev.Rob,
     });
   });
 });

@@ -18,6 +18,8 @@ export class List<T = unknown> extends Array<T> {
 
   last = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).last() : this[this.length - 1]);
 
+  overlaps = (...items: ArrayLike<T>): boolean => toList<T>(...items).some(i => this.some(t => i === t));
+
   toJSON = (): Json[] =>
     this.reduce((a, i) => {
       a.push(json.parse(i));
