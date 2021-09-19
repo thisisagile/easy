@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Currency, Money } from '../../../src';
+import { Currency, isMoney, money, Money } from '../../../src';
 
 describe('Money', () => {
 
@@ -21,5 +21,17 @@ describe('Money', () => {
     const m2 = m.add(42);
     expect(m2.currency).toBe(m.currency);
     expect(m2.amount).toBe(84);
+  });
+});
+
+describe('isMoney', () => {
+  test('false', () => {
+    expect(isMoney()).toBeFalsy();
+    expect(isMoney({})).toBeFalsy();
+    expect(isMoney('EUR')).toBeFalsy();
+    expect(isMoney(42)).toBeFalsy();
+  });
+  test('true', () => {
+    expect(isMoney(money(Currency.EUR, 42))).toBeTruthy();
   });
 });
