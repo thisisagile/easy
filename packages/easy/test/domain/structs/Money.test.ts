@@ -22,6 +22,18 @@ describe('Money', () => {
     expect(m2.currency).toBe(m.currency);
     expect(m2.amount).toBe(84);
   });
+
+  test('subtract', () => {
+    const m2 = m.subtract(42);
+    expect(m2.currency).toBe(m.currency);
+    expect(m2.amount).toBe(0);
+  });
+
+  test('times', () => {
+    const m2 = m.times(4);
+    expect(m2.currency).toBe(m.currency);
+    expect(m2.amount).toBe(168);
+  });
 });
 
 describe('isMoney', () => {
