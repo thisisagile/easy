@@ -3,7 +3,7 @@ import { Currency, isMoney, money, Money } from '../../../src';
 
 describe('Money', () => {
 
-  const m = new Money({currency: Currency.EUR.id, amount: 42 });
+  const m = new Money({ currency: Currency.EUR.id, amount: 42 });
 
   test('default', () => {
     const m = new Money();
@@ -12,7 +12,7 @@ describe('Money', () => {
   });
 
   test('real money', () => {
-    const m = new Money({currency: Currency.USD.id, amount: 42 });
+    const m = new Money({ currency: Currency.USD.id, amount: 42 });
     expect(m.currency).toBe(Currency.USD);
     expect(m.amount).toBe(42);
   });
