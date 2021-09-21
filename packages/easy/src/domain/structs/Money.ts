@@ -10,6 +10,10 @@ export class Money extends Struct {
   add = (amount: number): Money => money(this.currency, this.value + amount);
   subtract = (amount: number): Money => money(this.currency, this.value - amount);
   times = (n: number): Money => money(this.currency, this.value * n);
+
+  toString(): string {
+    return `${this.currency.code} ${this.value?.toFixed(this.currency.digits)}`;
+  }
 }
 
 export const money = (currency: Currency, value: number): Money => new Money({ currency: currency.id, value });

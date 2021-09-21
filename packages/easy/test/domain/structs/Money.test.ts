@@ -34,6 +34,11 @@ describe('Money', () => {
     expect(m2.currency).toBe(m.currency);
     expect(m2.value).toBe(168);
   });
+
+  test('toString', () => {
+    expect(m).toMatchText("€ 42.00");
+    expect(money(Currency.GBP, 16)).toMatchText("£ 16.00");
+  });
 });
 
 describe('isMoney', () => {
