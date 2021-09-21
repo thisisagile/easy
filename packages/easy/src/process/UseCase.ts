@@ -1,4 +1,4 @@
-import { Enum, isIn, List, text, toList } from '../types';
+import { Enum, isIn, List, Text, text, toList } from '../types';
 import { Scope } from './Scope';
 import { App } from './App';
 
