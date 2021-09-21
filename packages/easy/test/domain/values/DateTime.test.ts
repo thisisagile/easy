@@ -93,6 +93,18 @@ describe('DateTime', () => {
     expect(new DateTime(testDate.iso).toJSON()).toMatchText(testDate.iso);
     expect(new DateTime(new Date(testDate.epoch)).toJSON()).toMatchText(testDate.iso);
   });
+
+  test('add', () => {
+    Date.now = mock.return(testDate.epoch);
+    const tomorrow = DateTime.now.add(5);
+    expect(tomorrow).toMatchText('2021-03-30T08:39:44.000Z');
+  })
+
+  test('subtract', () => {
+    Date.now = mock.return(testDate.epoch);
+    const tomorrow = DateTime.now.add(-5);
+    expect(tomorrow).toMatchText('2021-03-20T08:39:44.000Z');
+  })
 });
 
 describe('DateTime fromNow', () => {
@@ -127,7 +139,6 @@ describe('DateTime isAfter', () => {
   });
 
 });
-
 
 describe('DateTime toLocale', () => {
 

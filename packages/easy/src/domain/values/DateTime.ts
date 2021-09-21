@@ -2,30 +2,31 @@ import { isDefined, Value } from '../../types';
 import moment, { Moment } from 'moment';
 import { ifDefined } from '../../utils';
 
+
+export const ofMoment = (m?: Moment): DateTime => new DateTime(moment.utc(m).toISOString());
+
 export class DateTime extends Value<string | undefined> {
-  constructor(value: string | number | Date) {
-    super(ifDefined(value, moment.utc(value, true).toISOString()));
+  constructor(value: string | number | Date, protected m: Moment = moment.utc(value, true)) {
+    super(ifDefined(value, m.toISOString()));
   }
 
   static get now(): DateTime {
-    return new DateTime(moment.utc().toISOString());
+    return ofMoment();
   }
 
   get isValid(): boolean {
-    return isDefined(this.value) && this.moment.isValid();
+    return isDefined(this.value) && this.m.isValid();
   }
 
   get fromNow(): string {
-    return this.value ? this.moment.fromNow() : '';
-  }
-
-  protected get moment(): Moment {
-    return moment.utc(this.value, true);
+    return this.value ? this.m.fromNow() : '';
   }
 
   isAfter(dt: DateTime): boolean {
-    return this.moment.isAfter(dt.moment);
+    return this.m.isAfter(dt.m);
   }
+
+  add = (n: number): DateTime => ofMoment(this.m.add(n, 'days'));
 
   toString(): string {
     return this.value ?? '';
@@ -36,6 +37,6 @@ export class DateTime extends Value<string | undefined> {
   }
 
   toDate(): Date | undefined {
-    return this.isValid ? this.moment.toDate() : undefined;
+    return this.isValid ? this.m.toDate() : undefined;
   }
 }
