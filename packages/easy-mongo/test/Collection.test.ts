@@ -1,6 +1,5 @@
 import { convert, Field, Json } from '@thisisagile/easy';
 import '@thisisagile/easy-test';
-import moment from 'moment';
 import { DevCollection } from './ref/DevCollection';
 import { DevDatabase } from '@thisisagile/easy/test/ref';
 import { Collection } from '../src';
@@ -49,11 +48,11 @@ describe('Collection', () => {
       name: 'Dries',
       CodingLevel: '6',
       languages: ['Java', 'Typescript'],
-      date: moment('1992-03-25T22:39:44.000Z').toDate(),
-      dates: [moment('1992-03-25T22:55:44.000Z').toDate()],
+      date: new Date('1992-03-25T22:39:44.000Z'),
+      dates: [new Date('1992-03-25T22:55:44.000Z')],
       created: {
-        by: { id: '5555', date: moment('1980-11-22T05:12:50.000Z').toDate() },
-        when: moment('2021-05-27T08:15:04.000Z').toDate(),
+        by: { id: '5555', date: new Date('1980-11-22T05:12:50.000Z') },
+        when: new Date('2021-05-27T08:15:04.000Z'),
       },
     };
     const out: any = test.out(input);

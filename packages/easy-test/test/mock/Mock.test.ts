@@ -1,5 +1,5 @@
 import { mock } from '../../src';
-import { HttpStatus } from '@thisisagile/easy';
+import { HttpStatus } from '../../src/utils/Response';
 
 describe('mock', () => {
   const version = 'Version 42';
@@ -158,19 +158,23 @@ describe('mock', () => {
   });
 
   test('get props from resp', () => {
-    const resp = mock.resp.items(HttpStatus.Ok, [project]);
-    expect(resp.status).toBe(HttpStatus.Ok);
-    expect(resp.body?.data?.code).toBe(200);
+    const ok = { id: 200, name: "OK" } as HttpStatus;
+    const resp = mock.resp.items(ok, [project]);
+
+    expect(resp.status).toBe(ok);
+    expect(resp.body?.data?.code).toBe(ok.id);
     expect(resp.body?.error).toBeUndefined();
     expect(resp.body?.data?.itemCount).toBe(1);
     expect(resp.body?.data?.items).toContain(project);
   });
 
   test('get props from error resp', () => {
-    const resp = mock.resp.errors(HttpStatus.InternalServerError, 'u fool', ['error', 'error two']);
-    expect(resp.status).toBe(HttpStatus.InternalServerError);
+    const serverError = { id: 500, name: "Internal Server Error" } as HttpStatus;
+    const resp = mock.resp.errors(serverError, 'u fool', ['error', 'error two']);
+
+    expect(resp.status).toBe(serverError);
     expect(resp.body?.data).toBeUndefined();
-    expect(resp.body?.error?.code).toBe(500);
+    expect(resp.body?.error?.code).toBe(serverError.id);
     expect(resp.body?.error?.errorCount).toBe(2);
     expect(resp.body?.error?.errors).toContain('error');
     expect(resp.body?.error?.errors).toContain('error two');
