@@ -13,12 +13,12 @@ test-report.xml
 
 # Yarn 2 (Without Zero-Installs)
 .yarn/*
+!.yarn/cache
 !.yarn/patches
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
-.pnp.*
 
 package-lock.json
 
