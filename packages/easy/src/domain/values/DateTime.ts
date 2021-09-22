@@ -28,6 +28,8 @@ export class DateTime extends Value<string | undefined> {
 
   add = (n: number): DateTime => ofMoment(this.m.add(n, 'days'));
 
+  subtract = (n: number): DateTime => ofMoment(this.m.subtract(n, 'days'));
+
   toString(): string {
     return this.value ?? '';
   }
