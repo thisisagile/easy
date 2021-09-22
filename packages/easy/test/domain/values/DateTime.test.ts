@@ -96,13 +96,19 @@ describe('DateTime', () => {
 
   test('add', () => {
     Date.now = mock.return(testDate.epoch);
-    const d = DateTime.now.add(5);
+    const d = new DateTime(iso).add(5);
     expect(d).toMatchText('2021-03-30T08:39:44.000Z');
   })
 
   test('add negative', () => {
     Date.now = mock.return(testDate.epoch);
-    const d = DateTime.now.add(-5);
+    const d = new DateTime(iso).add(-5);
+    expect(d).toMatchText('2021-03-20T08:39:44.000Z');
+  })
+
+  test('subtract', () => {
+    Date.now = mock.return(testDate.epoch);
+    const d = new DateTime(iso).subtract(5);
     expect(d).toMatchText('2021-03-20T08:39:44.000Z');
   })
 });
