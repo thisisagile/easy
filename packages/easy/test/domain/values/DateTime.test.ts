@@ -5,12 +5,13 @@ import { mock } from '@thisisagile/easy-test';
 
 const iso = '2021-03-25T08:39:44.000Z';
 
-describe('DateTime', () => {
-  const testDate = {
-    iso,
-    epoch: 1616661584000,
-  };
+const date = {
+  iso: '2021-03-25T08:39:44.000Z',
+  epoch: 1616661584000,
+  ams: '2021-03-25T09:39:44+01:00'
+};
 
+describe('DateTime', () => {
   test('moment decided to mark undefined as a valid date.', () => {
     const res = moment(undefined, true);
     expect(res).toBeTruthy();
@@ -50,12 +51,16 @@ describe('DateTime', () => {
   });
 
   test('construct from iso date is valid.', () => {
-    const res = new DateTime(testDate.iso);
+    const res = new DateTime(date.iso);
     expect(res).toBeValid();
   });
 
+  test('construct from epoch is valid.', () => {
+    expect(new DateTime(date.epoch)).toBeValid();
+  });
+
   test('construct from Date is valid.', () => {
-    expect(new DateTime(new Date(testDate.epoch))).toBeValid();
+    expect(new DateTime(new Date(date.epoch))).toBeValid();
   });
 
   test('toString from undefined returns empty string.', () => {
@@ -64,13 +69,13 @@ describe('DateTime', () => {
   });
 
   test('toString returns iso formatted string.', () => {
-    const res = new DateTime(testDate.iso);
-    expect(res).toMatchText(testDate.iso);
+    const res = new DateTime(date.iso);
+    expect(res).toMatchText(date.iso);
   });
 
   test('toDate returns Date.', () => {
-    const res = new DateTime(testDate.iso);
-    expect(res.toDate()).toStrictEqual(new Date(testDate.iso));
+    const res = new DateTime(date.iso);
+    expect(res.toDate()).toStrictEqual(new Date(date.iso));
   });
 
   test('toDate of invalid DateTime returns undefined.', () => {
@@ -79,79 +84,70 @@ describe('DateTime', () => {
   });
 
   test('toString from epoch date returns a iso string.', () => {
-    Date.now = mock.return(testDate.epoch);
+    Date.now = mock.return(date.epoch);
     const res = new DateTime(Date.now());
-    expect(res).toMatchText(testDate.iso);
+    expect(res).toMatchText(date.iso);
   });
 
   test('now returns iso string.', () => {
-    Date.now = mock.return(testDate.epoch);
-    expect(DateTime.now).toMatchText(testDate.iso);
+    Date.now = mock.return(date.epoch);
+    expect(DateTime.now).toMatchText(date.iso);
   });
 
   test('from value return correct DateTime', () => {
-    expect(new DateTime(testDate.iso).toJSON()).toMatchText(testDate.iso);
-    expect(new DateTime(new Date(testDate.epoch)).toJSON()).toMatchText(testDate.iso);
+    expect(new DateTime(date.iso).toJSON()).toMatchText(date.iso);
+    expect(new DateTime(new Date(date.epoch)).toJSON()).toMatchText(date.iso);
   });
 
   test('add', () => {
-    Date.now = mock.return(testDate.epoch);
+    Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(5);
     expect(d).toMatchText('2021-03-30T08:39:44.000Z');
-  })
+  });
 
   test('add negative', () => {
-    Date.now = mock.return(testDate.epoch);
+    Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(-5);
     expect(d).toMatchText('2021-03-20T08:39:44.000Z');
-  })
+  });
 
   test('subtract', () => {
-    Date.now = mock.return(testDate.epoch);
+    Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).subtract(5);
     expect(d).toMatchText('2021-03-20T08:39:44.000Z');
-  })
-});
+  });
 
-describe('DateTime fromNow', () => {
-  const testDate = {
-    iso,
-    now: 1622023108000,
-  };
+  test('subtract again, to check immutability', () => {
+    Date.now = mock.return(date.epoch);
+    const d = new DateTime(iso)
+    const d2 = d.subtract(5);
+    expect(d).not.toMatchText(d2);
+  });
 
   test('from now from iso string.', () => {
-    Date.now = mock.return(testDate.now);
-    const res = new DateTime(testDate.iso);
-    expect(res.fromNow).toMatchText('2 months ago');
-  });
-});
-
-describe('DateTime isAfter', () => {
-  const date = {
-    now: 1622023108000,
-    future: 1622023109000,
-  };
-
-  test('future is after now.', () => {
-    expect(new DateTime(date.future).isAfter(new DateTime(date.now))).toBeTruthy();
+    Date.now = mock.return(date.epoch);
+    const d = new DateTime(iso);
+    expect(d.fromNow).toMatchText('a few seconds ago');
   });
 
-  test('now is not after future.', () => {
-    expect(new DateTime(date.now).isAfter(new DateTime(date.future))).toBeFalsy();
+  test('isAfter', () => {
+    const current = DateTime.now;
+    const next = current.add(2);
+    expect(next.isAfter(current)).toBeTruthy();
+    expect(current.isAfter(next)).toBeFalsy();
   });
 
-  test('now is not after now.', () => {
-    expect(new DateTime(date.now).isAfter(new DateTime(date.future))).toBeFalsy();
+  test('isBefore', () => {
+    const current = DateTime.now;
+    const next = current.add(2);
+    expect(next.isBefore(current)).toBeFalsy();
+    expect(current.isBefore(next)).toBeTruthy();
   });
-
-});
-
-describe('DateTime toLocale', () => {
 
   test('toLocale', () => {
     const dt = new DateTime(iso);
     expect(dt.toLocale()).toMatchText('25-3-2021');
     expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
-    expect(dt.toLocale('de-DE', {dateStyle: 'full'})).toMatchText('Donnerstag, 25. März 2021');
+    expect(dt.toLocale('de-DE', { dateStyle: 'full' })).toMatchText('Donnerstag, 25. März 2021');
   });
 });

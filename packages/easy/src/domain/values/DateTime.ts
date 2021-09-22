@@ -2,33 +2,38 @@ import { isDefined, Value } from '../../types';
 import moment, { Moment } from 'moment';
 import { ifDefined } from '../../utils';
 
-
-export const ofMoment = (m?: Moment): DateTime => new DateTime(moment.utc(m).toISOString());
-
 export class DateTime extends Value<string | undefined> {
-  constructor(value: string | number | Date, protected m: Moment = moment.utc(value, true)) {
-    super(ifDefined(value, m.toISOString()));
+  constructor(value?: string | number | Date) {
+    super(ifDefined(value, moment.utc(value, true).toISOString()));
+  }
+
+  protected get utc(): Moment {
+    return moment.utc(this.value);
   }
 
   static get now(): DateTime {
-    return ofMoment();
+    return new DateTime(moment.utc().toISOString());
   }
 
   get isValid(): boolean {
-    return isDefined(this.value) && this.m.isValid();
+    return isDefined(this.value) && this.utc.isValid();
   }
 
   get fromNow(): string {
-    return this.value ? this.m.fromNow() : '';
+    return this.value ? this.utc.fromNow() : '';
   }
 
   isAfter(dt: DateTime): boolean {
-    return this.m.isAfter(dt.m);
+    return this.utc.isAfter(moment.utc(dt.value));
   }
 
-  add = (n: number): DateTime => ofMoment(this.m.add(n, 'days'));
+  isBefore(dt: DateTime): boolean {
+    return this.utc.isBefore(moment.utc(dt.value));
+  }
 
-  subtract = (n: number): DateTime => ofMoment(this.m.subtract(n, 'days'));
+  add = (n: number): DateTime => new DateTime(this.utc.add(n, 'days').toISOString());
+
+  subtract = (n: number): DateTime => new DateTime(this.utc.subtract(n, 'days').toISOString());
 
   toString(): string {
     return this.value ?? '';
@@ -39,6 +44,6 @@ export class DateTime extends Value<string | undefined> {
   }
 
   toDate(): Date | undefined {
-    return this.isValid ? this.m.toDate() : undefined;
+    return this.isValid ? this.utc.toDate() : undefined;
   }
 }
