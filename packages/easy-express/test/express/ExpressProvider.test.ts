@@ -89,6 +89,27 @@ describe('ExpressProvider', () => {
     expect(router['post']).toEqual(fits.type(Function));
   });
 
+  test('resource middleware is added', () => {
+    const router = express.Router();
+    jest.spyOn(express, 'Router').mockReturnValueOnce(router);
+    router.use = mock.return();
+    provider.route(service, DevsResource);
+    expect(app.use).toHaveBeenCalledWith(router);
+    expect(router.use).toHaveBeenCalledWith(expect.arrayContaining([fits.type(Function)]));
+    expect(router['get']).toEqual(fits.type(Function));
+    expect(router['post']).toEqual(fits.type(Function));
+  });
+
+  test('verd middleware is added', () => {
+    const router = express.Router();
+    const resource = new DevResource();
+    jest.spyOn(express, 'Router').mockReturnValueOnce(router);
+    const get = jest.spyOn(router, 'get');
+    provider.route(service, resource);
+    expect(app.use).toHaveBeenCalledWith(router);
+    expect(get).toHaveBeenNthCalledWith(1, "/dev/developers/:id", fits.type(Function), fits.type(Function), fits.type(Function), fits.type(Function));
+  });
+
   test('check if handler works', async () => {
     const router = express.Router();
     const resource = new DevsResource();
@@ -100,7 +121,7 @@ describe('ExpressProvider', () => {
     resource.insert = mock.resolve();
 
     provider.route(service, resource);
-    await endpoint.handler({} as Request, res as Response, jest.fn());
+    await endpoint.handler({ body: { hello: 'World' } } as Request, res as Response, jest.fn());
 
     expect(endpoint.path).toBe(DevUri.Developers.path);
     expect(resource.insert).toHaveBeenCalled();

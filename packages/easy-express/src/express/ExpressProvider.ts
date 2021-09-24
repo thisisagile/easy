@@ -7,10 +7,12 @@ import {
   HttpStatus,
   Resource,
   rest,
-  Route, RouteRequires,
+  Route,
+  RouteRequires,
   routes,
   Service,
   toList,
+  isEmpty,
   toOriginatedError,
   toReq,
   toVerbOptions,
@@ -29,13 +31,18 @@ export class ExpressProvider implements AppProvider {
   };
 
   route = (service: Service, resource: Resource): void => {
-    const { route, endpoints } = routes(resource);
+    const { route, endpoints, middleware } = routes(resource);
     const router = express.Router({ mergeParams: true });
+    if (!isEmpty(middleware)) router.use(middleware);
 
-    endpoints.forEach(({ endpoint, verb, requires }: Route) => {
+    endpoints.forEach(({ endpoint, verb, requires, middleware }: Route) => {
       console.log(verb.verb.code, route.route(service.name));
-
-      router[verb.verb.toString() as ExpressVerb](route.route(service.name), ...this.addSecurityMiddleware(requires), this.handle(endpoint, verb.options));
+      router[verb.verb.toString() as ExpressVerb](
+        route.route(service.name),
+        ...this.addSecurityMiddleware(requires),
+        ...middleware,
+        this.handle(endpoint, verb.options)
+      );
     });
 
     this.app.use(router);

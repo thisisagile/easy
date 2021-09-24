@@ -3,6 +3,7 @@ import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
 import { Scope, UseCase } from '../process';
+import { RequestHandler } from 'express';
 
 export const route =
   (uri: Uri): ClassDecorator =>
@@ -12,15 +13,16 @@ export const route =
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
 export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
-export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires };
-export type Routes = { route: Uri; endpoints: List<Route> };
+export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
+export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
-const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb): Route | undefined =>
+const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Route | undefined =>
   isDefined(verb)
     ? {
         verb,
         endpoint,
         requires,
+        middleware: middleware ?? [],
       }
     : undefined;
 
@@ -29,6 +31,10 @@ class Router implements Routes {
 
   get route(): Uri {
     return meta(this.resource).get('route');
+  }
+
+  get middleware(): RequestHandler[] {
+    return meta(this.resource).get<RequestHandler[]>('middleware') ?? [];
   }
 
   get endpoints(): List<Route> {
@@ -42,7 +48,8 @@ class Router implements Routes {
             scope: v.get<Scope>('scope'),
             uc: v.get<UseCase>('uc'),
           },
-          v.get<Verb>('verb')
+          v.get<Verb>('verb'),
+          v.get<RequestHandler[]>('middleware')
         )
       );
   }
