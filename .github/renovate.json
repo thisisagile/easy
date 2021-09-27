@@ -1,0 +1,8 @@
+{
+  "extends": [
+    "config:base",
+    ":disableDependencyDashboard"
+  ],
+  "updateInternalDeps": true,
+  "rangeStrategy": "bump"
+}
