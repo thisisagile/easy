@@ -18,7 +18,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@release-it/conventional-changelog": "^3.0.1",
+    "@release-it/conventional-changelog": "^3.3.0",
     "@tsconfig/node14": "^1.0.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.6",
