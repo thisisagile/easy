@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
-    "@types/express": "^4.17.12",
+    "@types/express": "^4.17.13",
     "cls-hooked": "^4.2.2",
     "express": "^4.17.1",
     "form-urlencoded": "^6.0.4",

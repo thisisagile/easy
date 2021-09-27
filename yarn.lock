@@ -1272,7 +1272,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/cls-hooked": ^4.3.3
-    "@types/express": ^4.17.12
+    "@types/express": ^4.17.13
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
     "@types/passport": ^1.0.6
@@ -1512,7 +1512,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:*, @types/express@npm:^4.17.12":
+"@types/express@npm:*, @types/express@npm:^4.17.13":
   version: 4.17.13
   resolution: "@types/express@npm:4.17.13"
   dependencies:
