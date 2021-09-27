@@ -36,7 +36,7 @@
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.7.6",
     "expect": "^27.1.0",
     "jest": "^27.1.0",
