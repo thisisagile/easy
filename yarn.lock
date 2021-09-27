@@ -1275,7 +1275,7 @@ __metadata:
     "@types/express": ^4.17.12
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
-    "@types/passport": ^1.0.6
+    "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.5
     "@types/uuid": ^8.3.0
     "@types/validator": ^13.1.4
@@ -1716,7 +1716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/passport@npm:*, @types/passport@npm:^1.0.6":
+"@types/passport@npm:*, @types/passport@npm:^1.0.7":
   version: 1.0.7
   resolution: "@types/passport@npm:1.0.7"
   dependencies:
