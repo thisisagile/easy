@@ -1,5 +1,6 @@
-import { Struct, required } from '../../src';
+import { required, Struct } from '../../src';
 import '@thisisagile/easy-test';
+import { fits } from '@thisisagile/easy-test';
 
 describe('Struct', () => {
   class Address extends Struct {
@@ -17,6 +18,10 @@ describe('Struct', () => {
 
   test('update', () => {
     expect(new Address().update({})).toBeInstanceOf(Address);
+  });
+
+  test('update updates', () => {
+    expect(new Address().update({ city: 'amsterdam' })).toMatchObject(fits.with({ city: 'amsterdam' }));
   });
 
   test('toString', () => {
