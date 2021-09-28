@@ -1274,7 +1274,7 @@ __metadata:
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.13
     "@types/form-urlencoded": ^4.4.0
-    "@types/jsonwebtoken": ^8.5.2
+    "@types/jsonwebtoken": ^8.5.5
     "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.5
     "@types/uuid": ^8.3.1
@@ -1377,7 +1377,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
-    "@types/jsonwebtoken": ^8.5.2
+    "@types/jsonwebtoken": ^8.5.5
     "@types/uuid": ^8.3.1
     "@types/validator": ^13.1.4
     axios: ^0.21.1
@@ -1591,12 +1591,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^8.5.2":
+"@types/jsonwebtoken@npm:*":
   version: 8.5.4
   resolution: "@types/jsonwebtoken@npm:8.5.4"
   dependencies:
     "@types/node": "*"
   checksum: 541d41eb8115afd422e0333d7ba79399febc86818015b3ecb7c36b2b7f9b4476a33aa13a4f23f81a08b201c5cdacbe2903b6d03cd4930abf83a4e14be3696719
+  languageName: node
+  linkType: hard
+
+"@types/jsonwebtoken@npm:^8.5.5":
+  version: 8.5.5
+  resolution: "@types/jsonwebtoken@npm:8.5.5"
+  dependencies:
+    "@types/node": "*"
+  checksum: 33c30354641bc7849be7507e9f48685b1f487e944321a932650eac6c247c85184667f5e207ccfcab0da8cb24bde93a8372c09cacf1849e976bbf2cb90b26ce90
   languageName: node
   linkType: hard
 
