@@ -1277,7 +1277,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.2
     "@types/passport": ^1.0.6
     "@types/passport-jwt": ^3.0.5
-    "@types/uuid": ^8.3.0
+    "@types/uuid": ^8.3.1
     "@types/validator": ^13.1.4
     cls-hooked: ^4.2.2
     express: ^4.17.1
@@ -1378,7 +1378,7 @@ __metadata:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.2
-    "@types/uuid": ^8.3.0
+    "@types/uuid": ^8.3.1
     "@types/validator": ^13.1.4
     axios: ^0.21.1
     form-urlencoded: ^6.0.4
@@ -1833,7 +1833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^8.3.0":
+"@types/uuid@npm:^8.3.1":
   version: 8.3.1
   resolution: "@types/uuid@npm:8.3.1"
   checksum: b41bdc5e86c6f0f1899306be10455636da0f2168c9489b869edd6837ddeb7c0e501b1ff7d857402462986bada2a379125743dd895fa801d03437cd632116a373
