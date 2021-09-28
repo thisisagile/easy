@@ -32,6 +32,10 @@ describe('Entity', () => {
     expect(dev).toMatchObject({ id: 3, name: 'Sander', level: 2 });
   });
 
+  test('update returns correct type', () => {
+    expect(Dev.Sander.update({})).toBeInstanceOf(Dev)
+  })
+
   test('toJSON works', () => {
     const dev = Dev.Sander.toJSON();
     expect(dev).toStrictEqual({
