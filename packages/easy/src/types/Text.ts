@@ -13,8 +13,7 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
 export class ToText implements Text {
-  constructor(readonly subject: string) {
-  }
+  constructor(readonly subject: string) {}
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -25,7 +24,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' '),
+        .join(' ')
     );
   }
 
@@ -70,7 +69,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join(''),
+        .join('')
     );
   }
 
@@ -82,7 +81,9 @@ export class ToText implements Text {
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
 
-  get isEmpty(): boolean { return isEmpty(this.toString()); }
+  get isEmpty(): boolean {
+    return isEmpty(this.toString());
+  }
 
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 

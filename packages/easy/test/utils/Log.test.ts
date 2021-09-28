@@ -4,7 +4,6 @@ import { Dev } from '../ref';
 import { log } from '../../src';
 
 describe('Log', () => {
-
   test('log', () => {
     console.log = mock.return();
     expect(log(Dev.Sander)).toBe(Dev.Sander);

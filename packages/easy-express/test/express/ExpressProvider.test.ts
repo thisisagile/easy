@@ -107,7 +107,7 @@ describe('ExpressProvider', () => {
     const get = jest.spyOn(router, 'get');
     provider.route(service, resource);
     expect(app.use).toHaveBeenCalledWith(router);
-    expect(get).toHaveBeenNthCalledWith(1, "/dev/developers/:id", fits.type(Function), fits.type(Function), fits.type(Function), fits.type(Function));
+    expect(get).toHaveBeenNthCalledWith(1, '/dev/developers/:id', fits.type(Function), fits.type(Function), fits.type(Function), fits.type(Function));
   });
 
   test('check if handler works', async () => {

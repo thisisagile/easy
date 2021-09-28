@@ -15,9 +15,7 @@ describe('Promise', () => {
   });
 });
 
-
 describe('tupel', () => {
-
   const getName = (name: string): Promise<Json> => resolve({ name });
   const getLastName = (lastName: string): Promise<Json> => resolve({ lastName });
   const getId = (id: Id): Promise<Json> => resolve({ id });

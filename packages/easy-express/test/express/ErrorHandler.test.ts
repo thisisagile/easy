@@ -152,13 +152,13 @@ describe('ErrorHandler', () => {
     expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.NotAuthorized, 1, 'Not authorized'));
   });
 
-  test('Don\'t set lastError on client error', () => {
+  test("Don't set lastError on client error", () => {
     error(toOriginatedError(toResults('Client', 'Error')), req, res, next);
     expect(ctx.request.lastError).toBeUndefined();
   });
 
   test('Set lastError on server error', () => {
     error(new Error('Server Error'), req, res, next);
-    expect(ctx.request.lastError).toBe("Server Error");
+    expect(ctx.request.lastError).toBe('Server Error');
   });
 });

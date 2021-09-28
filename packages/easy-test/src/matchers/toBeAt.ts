@@ -15,7 +15,7 @@ export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherRes
     .undefined(() => uc, 'Use case is undefined')
     .not(
       t => t.url.includes(toUrl(uc as UseCase, id)),
-      t => `We expected the tester to be at: '${toUrl(uc as UseCase, id)}', but it is at: '${t?.url}' instead.`,
+      t => `We expected the tester to be at: '${toUrl(uc as UseCase, id)}', but it is at: '${t?.url}' instead.`
     )
     .else(t => `The tester is at '${t?.url}'`);
 };

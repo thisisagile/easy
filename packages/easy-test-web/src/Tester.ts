@@ -29,11 +29,9 @@ export interface Tester {
   goto(to: UseCase, id?: Id): Promise<boolean>;
 }
 
-
 export const toUrl = (uc: UseCase, host?: string, port?: number, id?: Id): string => {
   const p = port ? `:${port}` : '';
   const domain = `${asString(host)}${p}`;
   const i = id ? `/${id}` : '';
   return text(`${domain}/${uc.app.name}/${uc.name}${i}`).kebab.toString();
 };
-

@@ -1,8 +1,7 @@
 import { Id, text, Text } from '../types';
 
 export class Sentence {
-  constructor(word: Text, pre?: Sentence, private sentence: Text[] = (pre?.sentence ?? []).concat(word)) {
-  }
+  constructor(word: Text, pre?: Sentence, private sentence: Text[] = (pre?.sentence ?? []).concat(word)) {}
 
   toString(): string {
     return text(this.sentence.join(' ')).sentence.toString();
@@ -30,8 +29,7 @@ class Verb extends Sentence {
   validate = new Topic('validate', this);
 }
 
-class Not extends Verb {
-}
+class Not extends Verb {}
 
 class SupportVerb extends Verb {
   not = new Not('not', this);

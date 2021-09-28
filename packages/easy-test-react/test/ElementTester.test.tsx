@@ -1,14 +1,14 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
-
-const getByText = mock.return(<div />);
-jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
 import { ElementTester, renders } from '../src';
 import { fireEvent } from '@testing-library/react';
 
+const getByText = mock.return(<div />);
+jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
+
 describe('ElementTester', () => {
   const a = <div />;
-  const e = mock.empty<Element>({value: '42'});
+  const e = mock.empty<Element>({ value: '42' });
   let et: ElementTester;
 
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('ElementTester', () => {
   });
 
   test('get value', () => {
-    expect(new ElementTester(() => e).value).toBe('42')
+    expect(new ElementTester(() => e).value).toBe('42');
   });
 
   test('is valid', () => {
@@ -24,7 +24,7 @@ describe('ElementTester', () => {
   });
 
   test('is not valid', () => {
-    expect(new ElementTester(undefined as unknown as () => Element ).isValid).toBeFalsy();
+    expect(new ElementTester(undefined as unknown as () => Element).isValid).toBeFalsy();
   });
 
   test('click fires click event', () => {

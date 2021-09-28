@@ -8,7 +8,7 @@ const iso = '2021-03-25T08:39:44.000Z';
 const date = {
   iso: '2021-03-25T08:39:44.000Z',
   epoch: 1616661584000,
-  ams: '2021-03-25T09:39:44+01:00'
+  ams: '2021-03-25T09:39:44+01:00',
 };
 
 describe('DateTime', () => {
@@ -119,7 +119,7 @@ describe('DateTime', () => {
 
   test('subtract again, to check immutability', () => {
     Date.now = mock.return(date.epoch);
-    const d = new DateTime(iso)
+    const d = new DateTime(iso);
     const d2 = d.subtract(5);
     expect(d).not.toMatchText(d2);
   });

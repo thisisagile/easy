@@ -11,7 +11,7 @@ export class PuppeteerTester implements Tester {
   }
 
   /* istanbul ignore next */
-  static launch = (headless: boolean) : Promise<Browser> => puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
+  static launch = (headless: boolean): Promise<Browser> => puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
 
   /* istanbul ignore next */
   static async init(env: EnvContext, headless = true, width = 1200, height = 800): Promise<Tester> {

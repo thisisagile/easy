@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -266,5 +266,4 @@ describe('asList', () => {
     expect(stringMe(toList(WithId.Hoi))).toMatchText('hoi');
     expect(stringMe(toList(Dev.Naoufal))).toMatchText(Dev.Naoufal.id);
   });
-
 });

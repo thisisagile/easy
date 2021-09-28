@@ -29,7 +29,7 @@ const log =
   (subject: unknown): void => {
     const middleware = meta(subject).get<RequestHandler[]>('middleware') ?? [];
     middleware.push((req, res, next) => {
-      console.log("Logging");
+      console.log('Logging');
       next();
     });
     meta(subject).set('middleware', middleware);
@@ -37,15 +37,15 @@ const log =
 
 const profile =
   (): PropertyDecorator =>
-    (subject: unknown, property: string | symbol): void => {
-      const middleware = meta(subject).property(property).get<RequestHandler[]>('middleware') ?? [];
-      middleware.push((req, res, next) => {
-        const start = Date.now();
-        next();
-        console.log(`${asString(property)} took ${Date.now() - start}ms`);
-      });
-      meta(subject).property(property).set('middleware', middleware);
-    };
+  (subject: unknown, property: string | symbol): void => {
+    const middleware = meta(subject).property(property).get<RequestHandler[]>('middleware') ?? [];
+    middleware.push((req, res, next) => {
+      const start = Date.now();
+      next();
+      console.log(`${asString(property)} took ${Date.now() - start}ms`);
+    });
+    meta(subject).property(property).set('middleware', middleware);
+  };
 
 @route(DevUri.Developers)
 @log()

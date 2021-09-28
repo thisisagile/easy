@@ -2,7 +2,6 @@ import '@thisisagile/easy-test';
 import { Currency, isMoney, money, Money } from '../../../src';
 
 describe('Money', () => {
-
   const m = new Money({ currency: Currency.EUR.id, value: 42 });
 
   test('default', () => {
@@ -36,8 +35,8 @@ describe('Money', () => {
   });
 
   test('toString', () => {
-    expect(m).toMatchText("€ 42.00");
-    expect(money(Currency.GBP, 16)).toMatchText("£ 16.00");
+    expect(m).toMatchText('€ 42.00');
+    expect(money(Currency.GBP, 16)).toMatchText('£ 16.00');
   });
 });
 

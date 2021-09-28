@@ -158,7 +158,7 @@ describe('mock', () => {
   });
 
   test('get props from resp', () => {
-    const ok = { id: 200, name: "OK" } as HttpStatus;
+    const ok = { id: 200, name: 'OK' } as HttpStatus;
     const resp = mock.resp.items(ok, [project]);
 
     expect(resp.status).toBe(ok);
@@ -169,7 +169,7 @@ describe('mock', () => {
   });
 
   test('get props from error resp', () => {
-    const serverError = { id: 500, name: "Internal Server Error" } as HttpStatus;
+    const serverError = { id: 500, name: 'Internal Server Error' } as HttpStatus;
     const resp = mock.resp.errors(serverError, 'u fool', ['error', 'error two']);
 
     expect(resp.status).toBe(serverError);
