@@ -39,6 +39,6 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "@thisisagile/easy-test-web": "workspace:*",
-    "puppeteer": "^10.1.0"
+    "puppeteer": "^10.4.0"
   }
 }
