@@ -1364,7 +1364,7 @@ __metadata:
     "@types/node": ^16.7.6
     expect: ^27.1.0
     jest: ^27.1.0
-    jest-junit: ^12.2.0
+    jest-junit: ^12.3.0
     jest-sonar-reporter: ^2.0.0
     ts-jest: ^27.0.5
     weak-napi: ^2.0.2
@@ -5675,15 +5675,15 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"jest-junit@npm:^12.2.0":
-  version: 12.2.0
-  resolution: "jest-junit@npm:12.2.0"
+"jest-junit@npm:^12.3.0":
+  version: 12.3.0
+  resolution: "jest-junit@npm:12.3.0"
   dependencies:
     mkdirp: ^1.0.4
     strip-ansi: ^5.2.0
     uuid: ^8.3.2
     xml: ^1.0.1
-  checksum: 6a666b017eac77fd549a64ec68fda858d078e016405318684361392eac4c4d189a42f8dd9d9d1266ceab2245b1d9c7c63ea76827cd6429705ccdc1675b049d7d
+  checksum: b1527eecba967b5f4f021117a14cb5c7cf6b5d99cd0efb50078198ec22a751afde0559db3fd9ff5485959d238787109277fdc8c591d566e270ae742748443407
   languageName: node
   linkType: hard
 
@@ -8333,7 +8333,7 @@ fsevents@^2.3.2:
     eslint-plugin-sonarjs: ^0.7.0
     eslint-plugin-standard: ^5.0.0
     jest: ^27.1.0
-    jest-junit: ^12.2.0
+    jest-junit: ^12.3.0
     jest-sonar-reporter: ^2.0.0
     ncp: ^2.0.0
     prettier: ^2.4.1
