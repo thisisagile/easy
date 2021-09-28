@@ -1,7 +1,7 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
-import { ElementTester, renders } from '../src';
 import { fireEvent } from '@testing-library/react';
+import { ElementTester, renders } from '../src';
 
 const getByText = mock.return(<div />);
 jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));

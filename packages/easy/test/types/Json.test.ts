@@ -74,24 +74,35 @@ describe('toJson', () => {
 });
 
 describe('asJson', () => {
-  test('asJson nothing', () => {
+  test('nothing', () => {
     const json = asJson();
     expect(json).toMatchObject({});
   });
 
-  test('asJson empty', () => {
-    const json = asJson({});
-    expect(json).toMatchObject({});
-  });
-
-  test('asJson undefined', () => {
+  test('explicitly undefined', () => {
     const json = asJson(undefined);
     expect(json).toMatchObject({});
   });
 
-  test('asJson null', () => {
+  test('empty', () => {
+    const j = {};
+    expect(asJson(j)).toMatchJson({});
+  });
+
+  test('null', () => {
     const json = asJson(null);
     expect(json).toMatchObject({});
+  });
+
+  test('target is not Json', () => {
+    const j = 'Not a Json';
+    expect(asJson(j)).toMatchJson({});
+  });
+
+  test('target is not Json, but there is an alt function', () => {
+    const j = 'Not a Json';
+    const json = asJson(j, () => Dev.Jeroen.toJSON());
+    expect(json).toMatchJson({ id: 1, name: 'Jeroen' });
   });
 
   test('asJson simple', () => {
@@ -100,13 +111,13 @@ describe('asJson', () => {
   });
 
   test('asJson entity', () => {
-    const json = asJson(Dev.Wouter);
-    expect(json).toMatchObject({ name: 'Wouter', language: 'TypeScript', level: 3 });
+    const j = Dev.Jeroen;
+    expect(asJson(j)).toMatchJson(Dev.Jeroen.toJSON());
   });
 
   test('asJson alt', () => {
-    const json = asJson('Javascript', { language: 'TypeScript'});
-    expect(json).toMatchObject({language: "TypeScript"});
+    const json = asJson('Javascript', { language: 'TypeScript' });
+    expect(json).toMatchObject({ language: 'TypeScript' });
   });
 });
 
@@ -131,28 +142,5 @@ describe('json', () => {
   test('omit multiple properties', () => {
     const dev4 = json.omit(dev, 'language', 'id', 'state');
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
-  });
-});
-
-describe('asJson', () => {
-  test('empty', () => {
-    const j = {};
-    expect(asJson(j)).toMatchJson({});
-  });
-
-  test('target is not Json', () => {
-    const j = 'Not a Json';
-    expect(asJson(j)).toMatchJson({});
-  });
-
-  test('target is not Json, but there is an alt function', () => {
-    const j = 'Not a Json';
-    const json = asJson(j, () => Dev.Jeroen.toJSON());
-    expect(json).toMatchJson({ id: 1, name: 'Jeroen' });
-  });
-
-  test('is a Json', () => {
-    const j = Dev.Jeroen;
-    expect(asJson(j)).toMatchJson(Dev.Jeroen.toJSON());
   });
 });
