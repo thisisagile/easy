@@ -5,6 +5,7 @@
 .vscode
 .idea/*
 !.idea/runConfigurations
+packages/*/.idea
 
 # Sonarqube
 junit.xml
