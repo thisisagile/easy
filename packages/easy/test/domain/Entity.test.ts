@@ -1,20 +1,11 @@
-import { Constructor, DateTime, Entity, isUuid, Json, required } from '../../src';
+import { Entity, isUuid, required, DateTime } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
-import { fits, mock } from '@thisisagile/easy-test';
+import { mock } from '@thisisagile/easy-test';
 
 describe('Entity', () => {
   class Manager extends Entity {
     @required() readonly title = this.state.title;
-  }
-
-  class DevOps extends Entity {
-    static readonly Jeroen = new DevOps({ id: 1, name: 'Jeroen', level: 5, platform: 'GCP' });
-    readonly platform = this.state.platform;
-
-    update<DevOps>(_add: Json): DevOps {
-      return new (this.constructor as Constructor<DevOps>)(this.merge(_add));
-    }
   }
 
   test('isValid passes', () => {
@@ -39,15 +30,6 @@ describe('Entity', () => {
   test('update works, id is ignored', () => {
     const dev = Dev.Sander.update({ level: 2, id: 42 });
     expect(dev).toMatchObject({ id: 3, name: 'Sander', level: 2 });
-  });
-
-  test('update returns correct type', () => {
-    expect(Dev.Sander.update({})).toBeInstanceOf(Dev);
-  });
-
-  test('update overload works', () => {
-    const devOps = DevOps.Jeroen.update({ platform: 'AWS' });
-    expect(devOps).toMatchObject(fits.with({ platform: 'AWS' }));
   });
 
   test('toJSON works', () => {

@@ -1,9 +1,8 @@
-import { Constructor, json, Json, Validatable } from '../types';
+import { json, Json, Validatable } from '../types';
 import { validate } from '../validation';
 
 export abstract class Struct implements Validatable {
-  constructor(protected readonly state: any = {}) {
-  }
+  constructor(protected readonly state: any = {}) {}
 
   get isValid(): boolean {
     return validate(this).isValid;
@@ -17,9 +16,7 @@ export abstract class Struct implements Validatable {
     return this.constructor.name;
   }
 
-  update<T extends Struct = Struct>(_add: Json): T {
-    return new (this.constructor as Constructor<T>)(this.merge(_add));
-  }
+  update = (_add: Json): Struct => this;
 
   protected merge = (a: Json): Json => json.merge(this, a);
 }
