@@ -3855,9 +3855,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-jest@npm:^24.3.6":
-  version: 24.3.6
-  resolution: "eslint-plugin-jest@npm:24.3.6"
+"eslint-plugin-jest@npm:^24.4.3":
+  version: 24.4.3
+  resolution: "eslint-plugin-jest@npm:24.4.3"
   dependencies:
     "@typescript-eslint/experimental-utils": ^4.0.1
   peerDependencies:
@@ -3866,7 +3866,7 @@ __metadata:
   peerDependenciesMeta:
     "@typescript-eslint/eslint-plugin":
       optional: true
-  checksum: 233e6055b167a58ba2e58cf60dc9ce8a4b065d859abe551cf0029d3d6694aaa4a0cfd3b489dfa7442fffb5f40fc7bc0dc322068dd652d08534d1f5c17c7721a8
+  checksum: 007fdb1d2ff695ac2710da4f3ac386114d19119683a9185cf53bffbbb01066158e3867f5d4bf254f9ddc04a3dc2ed4835420b45e383c1d7de1150279538813e8
   languageName: node
   linkType: hard
 
@@ -8336,7 +8336,7 @@ fsevents@^2.3.2:
     "@typescript-eslint/parser": ^4.28.0
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
-    eslint-plugin-jest: ^24.3.6
+    eslint-plugin-jest: ^24.4.3
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-promise: ^5.1.0
     eslint-plugin-security: ^1.4.0
