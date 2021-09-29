@@ -3903,12 +3903,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sonarjs@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "eslint-plugin-sonarjs@npm:0.7.0"
+"eslint-plugin-sonarjs@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "eslint-plugin-sonarjs@npm:0.10.0"
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 23270281410f49cdd91e9d5fdf179f8a60d376084f13974a467e42c4452971d4b0c3cbb1aef6bd211519a2997e72d0a49acf1af643e0f42db2266c24e036ca0e
+  checksum: 6ef5b2050180a612b310610d9b1f2a89508ecf41326573cd62977ad085b25a6be7e31f47eee5857fb43b4bbd1bea1454419b52545ee3cb6cb2185a1938872009
   languageName: node
   linkType: hard
 
@@ -8340,7 +8340,7 @@ fsevents@^2.3.2:
     eslint-plugin-prettier: ^3.4.1
     eslint-plugin-promise: ^5.1.0
     eslint-plugin-security: ^1.4.0
-    eslint-plugin-sonarjs: ^0.7.0
+    eslint-plugin-sonarjs: ^0.10.0
     eslint-plugin-standard: ^5.0.0
     jest: ^27.1.0
     jest-junit: ^12.3.0
