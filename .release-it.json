@@ -3,7 +3,7 @@
   "git": { "commit": false },
   "github": { "release": true },
   "plugins": {
-    "@release-it/conventional-changelog": { "preset": "angular" },
+    "@release-it/conventional-changelog": { "preset": "conventionalcommits" },
     "release-it-yarn-workspaces": true
   }
 }
