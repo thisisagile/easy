@@ -1349,7 +1349,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:*"
-    playwright: ^1.14.1
+    playwright: ^1.15.0
   languageName: unknown
   linkType: soft
 
@@ -7704,9 +7704,9 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.14.1":
-  version: 1.14.1
-  resolution: "playwright@npm:1.14.1"
+"playwright@npm:^1.15.0":
+  version: 1.15.0
+  resolution: "playwright@npm:1.15.0"
   dependencies:
     commander: ^6.1.0
     debug: ^4.1.1
@@ -7724,7 +7724,7 @@ fsevents@^2.3.2:
     yazl: ^2.5.1
   bin:
     playwright: lib/cli/cli.js
-  checksum: fbf0cd58f3d9eed01c2b5332bf388c89474494bff9027191baf27be2d0dba74af0c506b666ddab356e2f697c3df9ce158969d0b335be352a41710ce07db88b20
+  checksum: b133b084f7192c4e2f2f6722559ed16f2502e5b0920fb4d50dc6688c4521033da98787b3b59fd60073e0556c5be785bd0c87181579ea5364f038c1b6999e0ca5
   languageName: node
   linkType: hard
 
