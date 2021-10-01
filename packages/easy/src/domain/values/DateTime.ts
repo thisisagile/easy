@@ -37,6 +37,8 @@ export class DateTime extends Value<string | undefined> {
 
   subtract = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.subtract(n, unit).toISOString());
 
+  diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
+
   toString(): string {
     return this.value ?? '';
   }

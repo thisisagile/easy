@@ -136,6 +136,18 @@ describe('DateTime', () => {
     expect(d).not.toMatchText(d2);
   });
 
+  test('diff', () => {
+    const d = new DateTime(iso)
+    const d2 = d.add(5);
+    expect(d2.diff(d)).toBe(5);
+  });
+
+  test('diff other unit', () => {
+    const d = new DateTime(iso)
+    const d2 = d.add(6, 'months');
+    expect(d2.diff(d, 'weeks')).toBe(26);
+  });
+
   test('from now from iso string.', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso);
