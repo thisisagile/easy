@@ -33,9 +33,9 @@ export class DateTime extends Value<string | undefined> {
     return this.utc.isBefore(moment.utc(dt.value));
   }
 
-  add = (n: number): DateTime => new DateTime(this.utc.add(n, 'days').toISOString());
+  add = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.add(n, unit).toISOString());
 
-  subtract = (n: number): DateTime => new DateTime(this.utc.subtract(n, 'days').toISOString());
+  subtract = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.subtract(n, unit).toISOString());
 
   toString(): string {
     return this.value ?? '';

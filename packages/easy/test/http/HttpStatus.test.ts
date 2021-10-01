@@ -21,7 +21,7 @@ describe('HttpStatus', () => {
   });
 
   test('HttpStatus is byId', () => {
-    expect(HttpStatus.HttpStatus(404)).toBeTruthy();
+    expect(HttpStatus.byId(404)).toBeTruthy();
     expect(HttpStatus.InternalServerError.isClientError).toBeFalsy();
   });
 

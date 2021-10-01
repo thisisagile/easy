@@ -105,6 +105,12 @@ describe('DateTime', () => {
     expect(d).toMatchText('2021-03-30T08:39:44.000Z');
   });
 
+  test('add other unit', () => {
+    Date.now = mock.return(date.epoch);
+    const d = new DateTime(iso).add(5, 'years');
+    expect(d).toMatchText('2026-03-25T08:39:44.000Z');
+  });
+
   test('add negative', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(-5);
@@ -115,6 +121,12 @@ describe('DateTime', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).subtract(5);
     expect(d).toMatchText('2021-03-20T08:39:44.000Z');
+  });
+
+  test('subtract other unit', () => {
+    Date.now = mock.return(date.epoch);
+    const d = new DateTime(iso).subtract(5, 'years');
+    expect(d).toMatchText('2016-03-25T08:39:44.000Z');
   });
 
   test('subtract again, to check immutability', () => {
