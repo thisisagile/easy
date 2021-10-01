@@ -2,6 +2,8 @@ import { isDefined, Value } from '../../types';
 import moment, { Moment } from 'moment';
 import { ifDefined } from '../../utils';
 
+export type DateTimeUnit = "years" | "quarters" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds";
+
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date) {
     super(ifDefined(value, moment.utc(value, true).toISOString()));
