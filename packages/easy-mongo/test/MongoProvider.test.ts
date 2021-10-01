@@ -122,14 +122,14 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name')).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: true, w: 1 });
+    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: true, writeConcern: { w: 1 } });
   });
 
   test('create non unique index calls createIndex on the collection', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name', false)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: false, w: 1 });
+    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: false, writeConcern: { w: 1 } });
   });
 
   test('create text indexes on the collection', async () => {
@@ -143,7 +143,7 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, w: 1 });
+    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, writeConcern: { w: 1 } });
   });
 
   test('createPartialIndex calls createIndex on the collection with condition and creates unique indexes by default', async () => {
@@ -153,7 +153,7 @@ describe('MongoProvider', () => {
     expect(c.createIndex).toHaveBeenCalledWith('name', {
       partialFilterExpression: collection.name.exists(true).toJSON(),
       unique: true,
-      w: 1,
+      writeConcern: { w: 1 },
     });
   });
 
@@ -161,7 +161,7 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createPartialIndex('name', filter, false)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: false, w: 1 });
+    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: false, writeConcern: { w: 1 } });
   });
 
   test('first time connect to the mongo cluster', async () => {
