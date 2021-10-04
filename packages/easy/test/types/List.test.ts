@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, Enum, Id, isList, List, Scope, toList, toObject } from '../../src';
+import { asList, Currency, Enum, Id, isList, List, Scope, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -226,6 +226,16 @@ describe('toList', () => {
     expect(devs.prev(d => d.is(Dev.Jeroen))).toMatchText(Dev.Naoufal);
     expect(devs.prev(d => d.is(Dev.Wouter))).toMatchText(Dev.Jeroen);
     expect(devs.prev(d => d.is(Dev.Sander))).toMatchText(Dev.Wouter);
+  });
+
+  test('byId', () => {
+    expect(toList()).toHaveLength(0);
+    expect(toList(Currency.all()).byId(42)).toHaveLength(0);
+    expect(toList(Currency.all()).byId(Currency.AUD.id)).toHaveLength(1);
+    const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
+    expect(devs.byId(Dev.Sander.id)).toHaveLength(1);
+    const food = toList("hamburger", "pizza", "fries");
+    expect(food.byId(42)).toHaveLength(0);
   });
 });
 

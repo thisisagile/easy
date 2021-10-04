@@ -4,6 +4,7 @@ import { json, Json } from './Json';
 import { isArray, isDefined } from './Is';
 import { isA } from './IsA';
 import { GetProperty, ofProperty } from './Get';
+import { Id } from './Id';
 
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
@@ -33,6 +34,8 @@ export class List<T = unknown> extends Array<T> {
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
+
+  byId = (id: Id): List<T> => this.filter(i => (i as any).id === id);
 
   add = (...items: (T | T[])[]): this => {
     super.push(...toArray(...items));
