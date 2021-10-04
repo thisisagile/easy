@@ -40,7 +40,7 @@
     "@types/node": "^16.7.6",
     "expect": "^27.1.0",
     "jest": "^27.1.0",
-    "jest-junit": "^12.3.0",
+    "jest-junit": "^13.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "ts-jest": "^27.0.5"
   }
