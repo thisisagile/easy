@@ -1,7 +1,10 @@
 import { createNamespace } from 'cls-hooked';
 import { Identity, RequestContext, Uuid } from '@thisisagile/easy';
 
-export class NamespaceContext implements RequestContext {
+export class
+
+
+NamespaceContext implements RequestContext {
   private readonly namespace = createNamespace('context');
 
   get token(): unknown {
@@ -38,6 +41,14 @@ export class NamespaceContext implements RequestContext {
 
   set lastError(error: string | undefined) {
     this.namespace.set('lastError', error);
+  }
+
+  get tenant(): string | undefined {
+    return this.namespace.get('tenant');
+  }
+
+  set tenant(tenant: string | undefined) {
+    this.namespace.set('tenant', tenant);
   }
 
   public get(key: string): any {

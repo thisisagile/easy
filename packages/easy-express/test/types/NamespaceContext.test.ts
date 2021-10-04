@@ -31,9 +31,11 @@ describe('NamespaceContext', () => {
       context.token = 'token';
       context.correlationId = 'correlation';
       context.lastError = 'error';
+      context.tenant = '42';
       expect(context.token).toBe('token');
       expect(context.correlationId).toBe('correlation');
       expect(context.lastError).toBe('error');
+      expect(context.tenant).toBe('42');
     });
   });
 });
