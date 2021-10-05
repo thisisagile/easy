@@ -1,9 +1,12 @@
 import { DevDatabase } from '@thisisagile/easy/test/ref';
-import { convert } from '@thisisagile/easy';
+import { convert, Database } from '@thisisagile/easy';
 import { Collection } from '../../src';
 
 export class DevCollection extends Collection {
-  readonly db = DevDatabase.DevDB;
+  get db(): Database {
+    return DevDatabase.DevDB;
+  }
+
   readonly id = this.map.field('Id', { dflt: 42 });
   readonly name = this.map.field('Name');
   readonly language = this.map.field('Language', { dflt: 'TypeScript' });

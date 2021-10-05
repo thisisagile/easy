@@ -1,4 +1,4 @@
-import { convert, Field, Json } from '@thisisagile/easy';
+import { convert, Database, Field, Json } from '@thisisagile/easy';
 import '@thisisagile/easy-test';
 import { DevCollection } from './ref/DevCollection';
 import { DevDatabase } from '@thisisagile/easy/test/ref';
@@ -22,7 +22,9 @@ describe('Collection', () => {
   });
 
   class TestCollection extends Collection {
-    readonly db = DevDatabase.DevDB;
+    get db(): Database {
+      return DevDatabase.DevDB;
+    }
     readonly name = this.map.field('name');
     readonly language = this.map.field('Language', { dflt: 'TypeScript' });
     readonly level = this.map.field('CodingLevel', { convert: convert.toNumber.fromString });

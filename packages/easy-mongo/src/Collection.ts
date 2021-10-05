@@ -21,8 +21,12 @@ export class Collection extends Mapper {
     field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
 
-  constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {
+  constructor(options: MapOptions = { startFrom: 'source' }) {
     super(options);
+  }
+
+  get db(): Database {
+    return Database.Default;
   }
 
   readonly id = this.map.field('id', { dflt: toUuid });

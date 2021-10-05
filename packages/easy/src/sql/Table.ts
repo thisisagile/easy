@@ -17,8 +17,12 @@ export class Table extends Mapper {
 
   readonly id = this.map.column('', { dflt: toUuid });
 
-  constructor(readonly db: Database = Database.Default, options: MapOptions = { startFrom: 'source' }) {
+  constructor(options: MapOptions = { startFrom: 'source' }) {
     super(options);
+  }
+
+  get db(): Database {
+    return Database.Default;
   }
 
   get count(): Count {
