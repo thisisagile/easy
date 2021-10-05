@@ -31,6 +31,8 @@ export type RequestContext = {
   jwt: string;
   correlationId?: Uuid;
   lastError?: string;
+  get<T>(key: string): T;
+  set<T>(key: string, value: T): T;
   create: (f: () => void) => void;
 };
 
@@ -73,8 +75,8 @@ export class BaseContext implements RequestContext {
     this.state.lastError = error;
   }
 
-  public get(key: string): any {
-    return this.state[key];
+  public get<T>(key: string): T {
+    return this.state[key] as T;
   }
 
   public set<T>(key: string, value: T): T {
