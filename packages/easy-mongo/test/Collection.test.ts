@@ -12,6 +12,10 @@ describe('Collection', () => {
     expect(devs.db.name).toBe(DevDatabase.DevDB.name);
   });
 
+  test('provider has correct collection instance', () => {
+    expect(devs.provider.coll).toBeInstanceOf(DevCollection);
+  });
+
   test('where creates query and maps', () => {
     const where = { $and: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
     expect(devs.where(devs.name.isNot('Jeroen'), devs.level.is(3))).toStrictEqual(where);

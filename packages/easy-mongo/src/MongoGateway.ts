@@ -3,7 +3,7 @@ import { asJson, Condition, Gateway, Id, ifDefined, isDefined, Json, JsonValue, 
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
-  constructor(readonly collection: Collection, readonly provider: MongoProvider = new collection.db.provider(collection)) {}
+  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
   all(): Promise<List<Json>> {
     return this.provider.all().then(l => l.map(j => this.collection.in(j)));

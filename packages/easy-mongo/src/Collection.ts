@@ -14,6 +14,7 @@ import {
   toUuid,
 } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
+import { MongoProvider } from './MongoProvider';
 
 export class Collection extends Mapper {
   protected readonly map = {
@@ -27,6 +28,10 @@ export class Collection extends Mapper {
 
   get db(): Database {
     return Database.Default;
+  }
+
+  get provider(): MongoProvider {
+    return new MongoProvider(this);
   }
 
   readonly id = this.map.field('id', { dflt: toUuid });
