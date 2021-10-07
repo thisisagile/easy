@@ -14,6 +14,13 @@ describe('MongoGateway', () => {
     gateway = new MongoGateway(devCollection, provider);
   });
 
+  test('Gateway uses provider from collection if none supplied', () => {
+    const p = jest.spyOn(devCollection, 'provider', 'get');
+    p.mockReturnValue(provider);
+    new MongoGateway(devCollection);
+    expect(p).toHaveBeenCalled();
+  })
+
   test('All calls the provider', async () => {
     provider.all = mock.resolve(all);
     await expect(gateway.all()).resolves.toStrictEqual(allColl);

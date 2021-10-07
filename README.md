@@ -227,7 +227,7 @@ Because data in existing databases rarely supplies the format you need in your s
         }
     }
 
-The `Map`, `Table` and `Collection` classes have a property called `db` that represents the database to connect to. This is usually an instance of the `Database` enumeration, which in its turn defines the database (and its provider) to connect to, as in the example below.
+The `Map` and `Table` classes have a property called `db` that represents the database to connect to. This is usually an instance of the `Database` enumeration, which in its turn defines the database (and its provider) to connect to, as in the example below.
 
     export class MyDatabase extends Database {
         static readonly Erp = new Database('openerp', PostgreSqlProvider);
