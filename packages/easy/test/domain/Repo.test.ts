@@ -45,6 +45,14 @@ describe('Repo', () => {
     expect(gateway.by).toHaveBeenCalledWith('level', '42');
   });
 
+  test('byKey triggers the byId', async () => {
+    const list = toList(Dev.Naoufal.toJSON());
+    gateway.by = mock.resolve(list);
+    const res = await repo.byKey(42);
+    expect(res).toMatchJson(list);
+    expect(gateway.by).toHaveBeenCalledWith('key', 42);
+  });
+
   test('search triggers gateway', async () => {
     gateway.search = mock.resolve(devs);
     const ds = await repo.search('Kim');

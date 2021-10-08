@@ -1,4 +1,4 @@
-import { Constructor, Exception, Gateway, Id, Json, JsonValue, List, toJson } from '../types';
+import { Constructor, Exception, Gateway, Id, Json, JsonValue, Key, List, toJson } from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
@@ -15,6 +15,10 @@ export class Repo<T extends Struct> {
       .byId(id)
       .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j));
+  }
+
+  byKey(key: Key): Promise<List<T>> {
+    return this.gateway.by('key', key).then(js => js.map(j => new this.ctor(j)));
   }
 
   by(key: keyof T, value: JsonValue): Promise<List<T>> {
