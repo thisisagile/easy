@@ -37,7 +37,7 @@
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "@testing-library/dom": "8.7.0",
+    "@testing-library/dom": "8.7.2",
     "@testing-library/jest-dom": "5.14.1",
     "@testing-library/react": "12.1.2",
     "@thisisagile/easy": "workspace:*",
