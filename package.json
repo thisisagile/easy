@@ -32,7 +32,7 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-sonarjs": "^0.10.0",
     "eslint-plugin-standard": "^5.0.0",
-    "jest": "^27.1.0",
+    "jest": "^27.2.5",
     "jest-junit": "^13.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "ncp": "^2.0.0",
