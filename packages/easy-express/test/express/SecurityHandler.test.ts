@@ -81,4 +81,22 @@ describe('SecurityHandler', () => {
 
     expect(useSpy).toHaveBeenCalled();
   });
+
+  test('security middleware with secretOrKey', () => {
+    const useSpy = jest.spyOn(passport, 'use');
+
+    const options = {
+      secretOrKey: 'mykey',
+    };
+
+    useSpy.mockImplementationOnce(((s: any) => {
+      s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => {
+        expect(secretOrKey).toBe(options.secretOrKey);
+      })
+    }) as any);
+
+    security({ jwtStrategyOptions: options });
+
+    expect(useSpy).toHaveBeenCalled();
+  });
 });
