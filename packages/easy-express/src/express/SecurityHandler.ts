@@ -59,7 +59,7 @@ const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrK
 export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: express.Request, res: express.Response, next: express.NextFunction) => void) => {
   const jwtConfig: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: jwtStrategyOptions?.secretOrKey ?? jwtStrategyOptions?.secretOrKeyProvider ? undefined : ctx.env.get('tokenPublicKey'),
+    secretOrKey: jwtStrategyOptions?.secretOrKey ?? (jwtStrategyOptions?.secretOrKeyProvider ? undefined : ctx.env.get('tokenPublicKey')),
     secretOrKeyProvider: wrapSecretOrKeyProvider(jwtStrategyOptions?.secretOrKeyProvider),
     issuer: jwtStrategyOptions?.issuer,
     audience: jwtStrategyOptions?.audience,
