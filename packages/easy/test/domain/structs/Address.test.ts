@@ -13,8 +13,22 @@ describe('Address', () => {
     expect(address).toBeValid();
   });
 
-  test('toString', () => {
+  test('not a valid Address', () => {
+    const a = new Address({ ...address, country: undefined });
+    expect(a).not.toBeValid();
+  });
+
+  test('toString of empty address', () => {
+    expect(new Address()).toMatchText('');
+  });
+
+  test('toString without extension', () => {
     expect(address).toMatchText('Kalverstraat 1, 1012 NX Amsterdam Netherlands');
+  });
+
+  test('toString with extension', () => {
+    const a = new Address({...address, extension: 'Zw'})
+    expect(a).toMatchText('Kalverstraat 1 Zw, 1012 NX Amsterdam Netherlands');
   });
 });
 
