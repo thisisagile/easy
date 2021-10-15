@@ -3,6 +3,7 @@ import { MongoProvider } from '../src';
 import { mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
+import { Exception } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   const client: MongoClient = mock.empty<MongoClient>();
@@ -165,11 +166,26 @@ describe('MongoProvider', () => {
   });
 
   test('first time connect to the mongo cluster', async () => {
+    provider = new MongoProvider(collection);
     const db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
     MongoProvider.cluster = mock.resolve(client);
     const coll = await provider.collection();
+    expect(MongoProvider.cluster).toHaveBeenCalledWith(collection.db);
     expect(coll.collectionName).toBe('devCollection');
+  });
+
+  test('reject if db getter throws exception', async () => {
+    jest.spyOn(collection, 'db', 'get').mockImplementation(() => {
+      throw Exception.IsNotImplemented;
+    });
+    provider = new MongoProvider(collection);
+    const db = mock.empty<Db>();
+    db.collection = mock.resolve({ collectionName: 'devCollection' });
+    client.db = mock.resolve(db);
+    MongoProvider.cluster = mock.resolve(client);
+    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
+    expect(MongoProvider.cluster).not.toHaveBeenCalled();
   });
 });

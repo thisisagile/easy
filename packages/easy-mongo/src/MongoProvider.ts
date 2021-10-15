@@ -107,7 +107,8 @@ export class MongoProvider {
   }
 
   collection(): Promise<MongoCollection> {
-    return (this.client ?? (this.client = MongoProvider.cluster(this.coll.db)))
+    return Promise.resolve()
+      .then(() => this.client ?? (this.client = MongoProvider.cluster(this.coll.db)))
       .then(c => c.db(this.coll.db.name))
       .then(db => db.collection(asString(this.coll)));
   }
