@@ -91,6 +91,9 @@ describe('isIsoDateString', () => {
     expect(isIsoDateString('2020-11-02')).toBeFalsy();
     expect(isIsoDateString('2020-11-02T23:00:00')).toBeFalsy();
     expect(isIsoDateString('2020-11-02T23:00:00.000')).toBeFalsy();
+    expect(isIsoDateString('bla bla bla 2020-11-02T23:00:00.000Z bla bla bla')).toBeFalsy();
+    expect(isIsoDateString('b2020-11-02T23:00:00.000Z')).toBeFalsy();
+    expect(isIsoDateString('2020-11-02T23:00:00.000Zb')).toBeFalsy();
   });
 
   test('isIsoDateString true', () => {
