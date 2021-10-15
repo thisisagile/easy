@@ -19,6 +19,7 @@ export * from './Message';
 export * from './Meta';
 export * from './Result';
 export * from './Results';
+export * from './Tag';
 export * from './Template';
 export * from './Text';
 export * from './Uri';
