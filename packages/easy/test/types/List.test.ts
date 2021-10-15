@@ -237,6 +237,16 @@ describe('toList', () => {
     const food = toList("hamburger", "pizza", "fries");
     expect(food.byId(42)).toHaveLength(0);
   });
+
+  test('remove', () => {
+    expect(toList().remove(Dev.Rob)).toHaveLength(0);
+    expect(toList(Dev.Sander).remove(Dev.Rob)).toHaveLength(1);
+    expect(toList(Dev.Sander, Dev.Naoufal).remove(Dev.Rob)).toHaveLength(2);
+    expect(toList({name: "Joyce"}, {name: "Claudia"}).remove(Dev.Rob)).toHaveLength(2);
+    expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen)).toHaveLength(1);
+    expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Jeroen)).toHaveLength(1);
+    expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Wouter)).toHaveLength(0);
+  });
 });
 
 describe('asList', () => {

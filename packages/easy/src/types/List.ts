@@ -42,6 +42,14 @@ export class List<T = unknown> extends Array<T> {
     return this;
   };
 
+  remove = (item: T): List<T> => {
+    const index = this.indexOf(item);
+    if (index > -1) {
+      this.splice(index, 1);
+    }
+    return this;
+  }
+
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
   toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
