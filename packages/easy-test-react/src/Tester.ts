@@ -18,6 +18,7 @@ export class Tester {
   atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
   byPlaceholder = (placeholder: string): HTMLElement => getByPlaceholderText(this.container, placeholder);
   atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
+  submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
 }
 
 export const rendersWait = async (component: ReactElement): Promise<Tester> => await Tester.render(component);

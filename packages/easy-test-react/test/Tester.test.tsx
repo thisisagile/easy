@@ -57,6 +57,7 @@ describe('Tester', () => {
     expect(render).toHaveBeenCalledWith(a);
     expect(t.atText('')).toBeInstanceOf(ElementTester);
     expect(t.atId('')).toBeInstanceOf(ElementTester);
+    expect(t.submit()).toBeInstanceOf(ElementTester);
     expect(t.atRole('')).toBeInstanceOf(ElementTester);
     expect(t.atPlaceholder('')).toBeInstanceOf(ElementTester);
   });

@@ -11,7 +11,8 @@ export class Match<S> {
     }
     try {
       return new Match<S>(this.subject, !p(this.subject), toMessage(message, this.subject));
-    } catch (e) {
+    } catch (e: any) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return new Match<S>(this.subject, true, e.message);
     }
   }
