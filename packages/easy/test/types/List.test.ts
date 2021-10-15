@@ -247,6 +247,15 @@ describe('toList', () => {
     expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Jeroen)).toHaveLength(1);
     expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Wouter)).toHaveLength(0);
   });
+
+  test('switch', () => {
+    const list = toList().switch(Dev.Rob);
+    expect(list).toHaveLength(1);
+    const l2 = list.switch(Dev.Sander);
+    expect(l2).toHaveLength(2);
+    const l3 = l2.switch(Dev.Rob)
+    expect(l3).toHaveLength(1);
+  });
 });
 
 describe('asList', () => {

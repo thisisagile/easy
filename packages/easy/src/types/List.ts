@@ -50,6 +50,8 @@ export class List<T = unknown> extends Array<T> {
     return this;
   }
 
+  switch = (item: T): List<T> => this.includes(item) ? this.remove(item) : this.add(item);
+
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
   toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
