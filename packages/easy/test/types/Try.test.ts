@@ -62,12 +62,7 @@ class Success<T> extends Try<T> {
   }
 
   accept(f: Get<void, T>): Try<T> {
-    try {
-      ofGet(f, this.value);
-      return this;
-    } catch (e) {
-      return new Failure<T>(e as Error);
-    }
+    return toTry(() => { ofGet(f, this.value); return this; });
   }
 
   filter(predicate: Predicate<T>): Try<T> {
