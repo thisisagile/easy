@@ -19,6 +19,7 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
+  abstract accept(action: (value: T) => void): Try<T>;
 }
 
 class Success<T> extends Try<T> {
@@ -34,6 +35,15 @@ class Success<T> extends Try<T> {
   map<U>(f: (value: T) => U | Try<U>): Try<U> {
     return toTry<U>(() => f(this.value));
   };
+
+  accept(f: (value: T) => void): Try<T> {
+    try {
+      f(this.value);
+      return this;
+    } catch (e) {
+      return new Failure<T>(e as Error);
+    }
+  }
 }
 
 class Failure<E = Error> extends Try<E> {
@@ -48,6 +58,10 @@ class Failure<E = Error> extends Try<E> {
   map<U>(f: (value: E) => U | Try<U>): Try<U> {
     return new Failure<U>(this.error);
   };
+
+  accept(f: (value: E) => void): Try<E> {
+    return this;
+  }
 }
 
 const toTry = <T>(c: Construct<T | Try<T>>, ...args: unknown[]) => Try.of<T>(c, ...args);
@@ -103,4 +117,17 @@ describe('Try', () => {
   test.each(errors)('map error', (s) => {
     expect(toTry(s).map(e => e)).toBeInstanceOf(Failure);
   });
+
+  test.each(successes)('accept success to keep original value', (s) => {
+    expect(toTry(s).accept(d => devToId(d)).value).toBeInstanceOf(Dev);
+  });
+
+  test.each(successes)('accept failure to return failure', (s) => {
+    expect(toTry(s).accept(d => devToError(d))).toBeInstanceOf(Failure);
+  });
+
+  test.each(errors)('accept errors to remain failures', (s) => {
+    expect(toTry(s).accept(e => e)).toBeInstanceOf(Failure);
+  });
+
 });
