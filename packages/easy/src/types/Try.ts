@@ -1,7 +1,7 @@
 import { isDefined, isEmpty } from './Is';
 import { validate } from '../validation';
 import { Construct, Constructor, ofConstruct } from './Constructor';
-import { Validatable} from './Validatable';
+import { Validatable } from './Validatable';
 import { Get, ofGet, Predicate } from './Get';
 
 abstract class Try<T = unknown> implements Validatable {
@@ -57,7 +57,9 @@ class Success<T> extends Try<T> {
     throw new Error('No error found');
   }
 
-  get isValid(): boolean { return true; };
+  get isValid(): boolean {
+    return true;
+  };
 
   map<U>(f: Get<U | Try<U>, T>): Try<U> {
     return tryTo<U>(() => ofGet(f, this.value));
@@ -103,7 +105,9 @@ class Failure<T> extends Try<T> {
     throw this.error;
   }
 
-  get isValid(): boolean { return false; };
+  get isValid(): boolean {
+    return false;
+  };
 
   map<U>(f: Get<U | Try<U>, T>): Try<U> {
     return new Failure<U>(this.error);
