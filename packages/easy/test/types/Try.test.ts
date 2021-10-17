@@ -8,6 +8,11 @@ abstract class Try<T = unknown> {
     defined: (): Try<T> => this.filter(v => isDefined(v)),
     empty: (): Try<T> => this.filter(v => isEmpty(v)),
     valid: (): Try<T> => this.filter(v => validate(v).isValid),
+    not: {
+      defined: (): Try<T> => this.filter(v => !isDefined(v)),
+      empty: (): Try<T> => this.filter(v => !isEmpty(v)),
+      valid: (): Try<T> => this.filter(v => !validate(v).isValid),
+    }
   };
 
   abstract get value(): T;
@@ -203,8 +208,32 @@ describe('Try', () => {
     expect(toTry(s).is.valid().value).toBeInstanceOf(Dev);
   });
 
-  test.each(errors)('is empty on failure returns failure', (s) => {
+  test.each(errors)('is valid on failure returns failure', (s) => {
     expect(toTry(s).is.valid()).toBeInstanceOf(Failure);
+  });
+
+  test.each(successes)('is not defined on successes returns original value', (s) => {
+    expect(toTry(s).is.not.defined()).toBeInstanceOf(Failure);
+  });
+
+  test.each(errors)('is not defined on failure returns failure', (s) => {
+    expect(toTry(s).is.not.defined()).toBeInstanceOf(Failure);
+  });
+
+  test.each(successes)('is not empty on successes returns original value', (s) => {
+    expect(toTry(s).is.not.empty().value).toBeInstanceOf(Dev);
+  });
+
+  test.each(errors)('is not empty on failure returns failure', (s) => {
+    expect(toTry(s).is.not.empty()).toBeInstanceOf(Failure);
+  });
+
+  test.each(valids)('is not valid on successes returns original value', (s) => {
+    expect(toTry(s).is.not.valid()).toBeInstanceOf(Failure);
+  });
+
+  test.each(errors)('is not valid on failure returns failure', (s) => {
+    expect(toTry(s).is.not.valid()).toBeInstanceOf(Failure);
   });
 });
 
