@@ -137,13 +137,13 @@ describe('DateTime', () => {
   });
 
   test('diff', () => {
-    const d = new DateTime(iso)
+    const d = new DateTime(iso);
     const d2 = d.add(5);
     expect(d2.diff(d)).toBe(5);
   });
 
   test('diff other unit', () => {
-    const d = new DateTime(iso)
+    const d = new DateTime(iso);
     const d2 = d.add(6, 'months');
     expect(d2.diff(d, 'weeks')).toBe(26);
   });

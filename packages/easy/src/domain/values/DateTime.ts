@@ -1,16 +1,20 @@
-import { isDefined, Value } from '../../types';
+import { isDefined, tryTo, Value } from '../../types';
 import moment, { Moment } from 'moment';
-import { ifDefined } from '../../utils';
 
-export type DateTimeUnit = "years" | "quarters" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds";
+export type DateTimeUnit =
+  'years'
+  | 'quarters'
+  | 'months'
+  | 'weeks'
+  | 'days'
+  | 'hours'
+  | 'minutes'
+  | 'seconds'
+  | 'milliseconds';
 
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date) {
-    super(ifDefined(value, moment.utc(value, true).toISOString()));
-  }
-
-  protected get utc(): Moment {
-    return moment.utc(this.value);
+    super(tryTo(value).is.defined().map(v => moment.utc(v, true).toISOString()).orElse());
   }
 
   static get now(): DateTime {
@@ -23,6 +27,10 @@ export class DateTime extends Value<string | undefined> {
 
   get fromNow(): string {
     return this.value ? this.utc.fromNow() : '';
+  }
+
+  protected get utc(): Moment {
+    return moment.utc(this.value);
   }
 
   isAfter(dt: DateTime): boolean {
