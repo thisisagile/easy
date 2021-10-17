@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Get, ofGet } from '../../src';
+import { Construct, ofConstruct } from '../../src';
 import { Dev } from '../ref';
 
 
@@ -11,9 +11,9 @@ class Try<T = unknown> {
     return this.val;
   }
 
-  static of = <T>(c: Get<T>): Try<T> => {
+  static of = <T>(c: Construct<T>): Try<T> => {
     try {
-      return new Success(ofGet(c));
+      return new Success(ofConstruct(c));
     } catch (e) {
       return new Failure(e as Error);
     }
@@ -29,12 +29,18 @@ class Failure<E = Error> extends Try<E> {
   }
 }
 
-const toTry = <T>(c: Get<T>) => Try.of<T>(c);
+const toTry = <T>(c: Construct<T>) => Try.of<T>(c);
 
 describe('Try', () => {
 
-  const successes = [Dev.Sander, () => Dev.Jeroen];
-  const errors = [(n = 0) => {
+  class ConstructError {
+    constructor() {
+      throw new Error('Error during construction');
+    }
+  }
+
+  const successes = [Dev, Dev.Sander, () => Dev.Jeroen];
+  const errors = [ConstructError, (n = 0) => {
     throw new Error(`Divide ${n} by zero`);
   }];
 
