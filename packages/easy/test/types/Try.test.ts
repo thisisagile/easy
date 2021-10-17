@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate, Get } from '../../src';
+import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate, Get, ofGet } from '../../src';
 import { Dev } from '../ref';
 import { Constructor } from '@thisisagile/easy-test/dist/utils/Types';
 
@@ -28,11 +28,11 @@ abstract class Try<T = unknown> {
       return new Failure(e as Error);
     }
   };
-// (error: Error) => T | Try<T>
+
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
   abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
   abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
-  abstract accept(f: (value: T) => void): Try<T>;
+  abstract accept(f: Get<void, T>): Try<T>;
   abstract filter(predicate: Predicate<T>): Try<T>;
 
   abstract orElse(value: T): T;
@@ -61,9 +61,9 @@ class Success<T> extends Try<T> {
     return this;
   }
 
-  accept(f: (value: T) => void): Try<T> {
+  accept(f: Get<void, T>): Try<T> {
     try {
-      f(this.value);
+      ofGet(f, this.value);
       return this;
     } catch (e) {
       return new Failure<T>(e as Error);
@@ -114,7 +114,7 @@ class Failure<T> extends Try<T> {
     }
   }
 
-  accept(f: (value: T) => void): Try<T> {
+  accept(f: Get<void, T>): Try<T> {
     return this;
   }
 
