@@ -36,6 +36,7 @@ abstract class Try<T = unknown> {
   abstract filter(predicate: Predicate<T>): Try<T>;
 
   abstract orElse(value: T): T;
+  abstract orThrow<E extends Error>(error: () => E): T;
 }
 
 class Success<T> extends Try<T> {
@@ -82,6 +83,10 @@ class Success<T> extends Try<T> {
   orElse(value: T): T {
     return this.value;
   }
+
+  orThrow<E extends Error>(_error: () => E): T {
+    return this.value;
+  }
 }
 
 class Failure<T> extends Try<T> {
@@ -119,6 +124,10 @@ class Failure<T> extends Try<T> {
 
   orElse(value: T): T {
     return value;
+  }
+
+  orThrow<E extends Error>(error: () => E): T {
+    throw error();
   }
 }
 
@@ -301,6 +310,16 @@ describe('Try', () => {
 
   test.each(successes)('or else with successes returns original value', (s) => {
     expect(toTry(s).filter(() => false).orElse(Dev.Wouter)).toBe(Dev.Wouter);
+  });
+
+  // orThrow
+
+  test.each(successes)('or throw with successes returns original value', (s) => {
+    expect(toTry(s).orThrow(() => new NotValidError())).toBeInstanceOf(Dev);
+  });
+
+  test.each(successes)('or throw with successes to throw specific error', (s) => {
+    expect(() => toTry(s).filter(() => false).orThrow(() => new NotValidError())).toThrow(NotValidError);
   });
 
 
