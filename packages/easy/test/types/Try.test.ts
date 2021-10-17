@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate, Get, ofGet } from '../../src';
+import { asString, Construct, Get, isDefined, isEmpty, ofConstruct, ofGet, Predicate, validate } from '../../src';
 import { Dev } from '../ref';
 import { Constructor } from '@thisisagile/easy-test/dist/utils/Types';
 
@@ -13,7 +13,7 @@ abstract class Try<T = unknown> {
       defined: (): Try<T> => this.filter(v => !isDefined(v)),
       empty: (): Try<T> => this.filter(v => !isEmpty(v)),
       valid: (): Try<T> => this.filter(v => !validate(v).isValid),
-    }
+    },
   };
 
   abstract get value(): T;
@@ -30,12 +30,17 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: Get<U | Try<U>, T>): Try<U>;
+
   abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
+
   abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
+
   abstract accept(f: Get<void, T>): Try<T>;
+
   abstract filter(predicate: Predicate<T>): Try<T>;
 
   abstract orElse(value: T): T;
+
   abstract orThrow(error: Construct<Error>): T;
 }
 
@@ -62,17 +67,17 @@ class Success<T> extends Try<T> {
   }
 
   accept(f: Get<void, T>): Try<T> {
-    return toTry(() => { ofGet(f, this.value); return this; });
+    return toTry(() => {
+      ofGet(f, this.value);
+      return this;
+    });
   }
 
   filter(predicate: Predicate<T>): Try<T> {
-    try {
-      return ofGet(predicate, this.value)
-        ? this
-        : new Failure<T>(new Error(`Applying filter(${predicate.toString()}) failed.`));
-    } catch (e) {
-      return new Failure<T>(e as Error);
-    }
+    return toTry(() => {
+      if (ofGet(predicate, this.value)) return this;
+      throw new Error(`Applying filter(${predicate.toString()}) failed.`);
+    });
   }
 
   orElse(value: T): T {
@@ -102,11 +107,7 @@ class Failure<T> extends Try<T> {
   }
 
   recoverFrom<U>(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
-    try {
-      return this.error instanceof type ? this.recover(f) : this;
-    } catch (e) {
-      return new Failure<T>(this.error);
-    }
+    return toTry(() => this.error instanceof type ? this.recover(f) : this);
   }
 
   accept(f: Get<void, T>): Try<T> {
@@ -214,7 +215,8 @@ describe('Try', () => {
 
   // recoverFrom
 
-  class NotValidError extends Error {}
+  class NotValidError extends Error {
+  }
 
   const devToNotValidError = (d: Dev): Dev => {
     throw new NotValidError(`Dev ${d} goes wrong`);
