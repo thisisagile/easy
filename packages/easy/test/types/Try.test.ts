@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Construct, ofConstruct } from '../../src';
+import { Construct, ofConstruct, Predicate } from '../../src';
 import { Dev } from '../ref';
 import { asString } from '@thisisagile/easy-test/dist/utils/Utils';
 
@@ -21,7 +21,7 @@ abstract class Try<T = unknown> {
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
   abstract recover(f: (error: Error) => T | Try<T>): Try<T>;
   abstract accept(f: (value: T) => void): Try<T>;
-
+  abstract filter(predicate: Predicate<T>): Try<T>;
 }
 
 class Success<T> extends Try<T> {
@@ -50,6 +50,16 @@ class Success<T> extends Try<T> {
       return new Failure<T>(e as Error);
     }
   }
+
+  filter(predicate: (value: T) => boolean): Try<T> {
+    try {
+      return predicate(this.value)
+        ? this
+        : new Failure<T>(new Error(`Applying filter(${predicate.toString()}) failed.`));
+    } catch (e) {
+      return new Failure<T>(e as Error);
+    }
+  }
 }
 
 class Failure<T> extends Try<T> {
@@ -69,8 +79,11 @@ class Failure<T> extends Try<T> {
     return toTry<U>(f);
   }
 
-
   accept(f: (value: T) => void): Try<T> {
+    return this;
+  }
+
+  filter(predicate: (value: T) => boolean): Try<T> {
     return this;
   }
 }
@@ -148,4 +161,17 @@ describe('Try', () => {
   test.each(successes)('recover from error to return valid', (s) => {
     expect(toTry(s).map(d => devToError(d)).recover(() => Dev.Wouter).value.name).toBe(Dev.Wouter.name);
   });
+
+  test.each(successes)('filter is successes is true returns original value', (s) => {
+    expect(toTry(s).filter(() => true).value).toBeInstanceOf(Dev);
+  });
+
+  test.each(successes)('filter on successes is false returns failure', (s) => {
+    expect(toTry(s).filter(() => false)).toBeInstanceOf(Failure);
+  });
+
+  test.each(errors)('filter on errors returns failure', (s) => {
+    expect(toTry(s).filter(() => true)).toBeInstanceOf(Failure);
+  });
+
 });
