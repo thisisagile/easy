@@ -70,9 +70,9 @@ class Success<T> extends Try<T> {
     }
   }
 
-  filter(predicate: (value: T) => boolean): Try<T> {
+  filter(predicate: Predicate<T>): Try<T> {
     try {
-      return predicate(this.value)
+      return ofGet(predicate, this.value)
         ? this
         : new Failure<T>(new Error(`Applying filter(${predicate.toString()}) failed.`));
     } catch (e) {
@@ -118,7 +118,7 @@ class Failure<T> extends Try<T> {
     return this;
   }
 
-  filter(predicate: (value: T) => boolean): Try<T> {
+  filter(predicate: Predicate<T>): Try<T> {
     return this;
   }
 
