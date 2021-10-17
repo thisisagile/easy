@@ -1,6 +1,7 @@
 import { Uuid } from './Uuid';
 import { text } from './Text';
 import { Identity } from './Identity';
+import { tryTo } from './Try';
 
 export type EnvContext = {
   readonly domain: string;
@@ -18,11 +19,8 @@ export class DotEnvContext implements EnvContext {
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
 
   readonly get = (key: string, alt?: string): string | undefined =>
-    process.env[
-      text(key)
-        .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
-        .snake.toString()
-    ] ?? alt;
+    tryTo(() => text(key).map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2')).snake.toString())
+      .map(key => process.env[key] ?? alt).value;
 }
 
 export type RequestContext = {
