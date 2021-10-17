@@ -1,12 +1,17 @@
 import '@thisisagile/easy-test';
-import { Construct, ofConstruct, Predicate } from '../../src';
+import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate } from '../../src';
 import { Dev } from '../ref';
-import { asString } from '@thisisagile/easy-test/dist/utils/Utils';
-
 
 abstract class Try<T = unknown> {
 
+  is = {
+    defined: (): Try<T> => this.filter(v => isDefined(v)),
+    empty: (): Try<T> => this.filter(v => isEmpty(v)),
+    valid: (): Try<T> => this.filter(v => validate(v).isValid),
+  };
+
   abstract get value(): T;
+
   abstract get error(): Error;
 
   static of = <T>(c: Construct<T | Try<T>>, ...args: unknown[]): Try<T> => {
@@ -19,8 +24,11 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
+
   abstract recover(f: (error: Error) => T | Try<T>): Try<T>;
+
   abstract accept(f: (value: T) => void): Try<T>;
+
   abstract filter(predicate: Predicate<T>): Try<T>;
 }
 
@@ -31,7 +39,7 @@ class Success<T> extends Try<T> {
   }
 
   get error(): Error {
-    throw new Error("No error found");
+    throw new Error('No error found');
   }
 
   map<U>(f: (value: T) => U | Try<U>): Try<U> {
@@ -67,7 +75,7 @@ class Failure<T> extends Try<T> {
     super();
   }
 
-  get value(): T  {
+  get value(): T {
     throw this.error;
   }
 
@@ -101,6 +109,7 @@ describe('Try', () => {
   const devToId = (d: Dev): string => asString(d.id);
 
   const successes = [Dev, Dev.Sander, () => Dev.Jeroen, toTry(Dev), toTry(Dev.Rob), toTry(() => Dev.Jeroen)];
+  const valids = [Dev.Sander, () => Dev.Jeroen, toTry(Dev.Rob), toTry(() => Dev.Jeroen)];
 
   const devToError = (d: Dev): Dev => {
     throw new Error(`Dev ${d} goes wrong`);
@@ -174,4 +183,28 @@ describe('Try', () => {
     expect(toTry(s).filter(() => true)).toBeInstanceOf(Failure);
   });
 
+  test.each(successes)('is defined on successes returns original value', (s) => {
+    expect(toTry(s).is.defined().value).toBeInstanceOf(Dev);
+  });
+
+  test.each(errors)('is defined on failure returns failure', (s) => {
+    expect(toTry(s).is.defined()).toBeInstanceOf(Failure);
+  });
+
+  test.each(successes)('is empty on successes returns original value', (s) => {
+    expect(toTry(s).is.empty()).toBeInstanceOf(Failure);
+  });
+
+  test.each(errors)('is empty on failure returns failure', (s) => {
+    expect(toTry(s).is.empty()).toBeInstanceOf(Failure);
+  });
+
+  test.each(valids)('is valid on successes returns original value', (s) => {
+    expect(toTry(s).is.valid().value).toBeInstanceOf(Dev);
+  });
+
+  test.each(errors)('is empty on failure returns failure', (s) => {
+    expect(toTry(s).is.valid()).toBeInstanceOf(Failure);
+  });
 });
+
