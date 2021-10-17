@@ -1,5 +1,5 @@
 import { AppProvider, Handler } from './AppProvider';
-import { Constructor, Enum, List, toList } from '../types';
+import { Constructor, Enum, List, toList, tryTo } from '../types';
 import { Resource } from './Resource';
 
 export class Service extends Enum {
@@ -13,19 +13,18 @@ export class Service extends Enum {
   post = (): Handler[] => [];
 
   with(...resources: Constructor<Resource>[]): this {
-    this.resources.add(resources.map(r => new r()));
-    return this;
+    return tryTo(this).accept(t => t.resources.add(resources.map(r => new r()))).value;
   }
 
   atPort(port: number): this {
-    this.port = port;
-    return this;
+    return tryTo(this).accept(t => t.port = port).value;
   }
 
   start(message = `Service ${this.name} listening on port ${this.port} with ${this.resources.length} resources.`): void {
-    this.pre().forEach(h => this.app.use(h));
-    this.resources.forEach(r => this.app.route(this, r));
-    this.post().forEach(h => this.app.use(h));
-    this.app.listen(this.port, message);
+    tryTo(this)
+      .accept(t => t.pre().forEach(h => this.app.use(h)))
+      .accept(t => t.resources.forEach(r => this.app.route(this, r)))
+      .accept(t => t.post().forEach(h => this.app.use(h)))
+      .accept(t => t.app.listen(this.port, message));
   }
 }
