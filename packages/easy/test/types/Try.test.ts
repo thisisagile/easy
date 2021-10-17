@@ -3,7 +3,7 @@ import { Construct, ofConstruct } from '../../src';
 import { Dev } from '../ref';
 
 
-class Try<T = unknown> {
+abstract class Try<T = unknown> {
   protected constructor(protected readonly val?: T) {
   }
 
@@ -11,9 +11,10 @@ class Try<T = unknown> {
     return this.val;
   }
 
-  static of = <T>(c: Construct<T>): Try<T> => {
+  static of = <T>(c: Construct<T | Try<T>>): Try<T> => {
     try {
-      return new Success(ofConstruct(c));
+      const out = ofConstruct(c);
+      return new Success(out instanceof Try ? out.value : out);
     } catch (e) {
       return new Failure(e as Error);
     }
@@ -43,10 +44,12 @@ describe('Try', () => {
     }
   }
 
-  const successes = [Dev, Dev.Sander, () => Dev.Jeroen];
-  const errors = [ConstructError, (n = 0) => {
+  const successes = [Dev, Dev.Sander, () => Dev.Jeroen, toTry(Dev), toTry(Dev.Rob), toTry(() => Dev.Jeroen)];
+
+  const divByZero = (n = 0) => {
     throw new Error(`Divide ${n} by zero`);
-  }];
+  }
+  const errors = [ConstructError, toTry(ConstructError), divByZero, toTry(divByZero), toTry(() => divByZero(3))];
 
   test.each(successes)('of success', (s) => {
     expect(toTry(s)).toBeInstanceOf(Success);
