@@ -19,7 +19,9 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
+  abstract recover(f: (error: Error) => T | Try<T>): Try<T>;
   abstract accept(f: (value: T) => void): Try<T>;
+
 }
 
 class Success<T> extends Try<T> {
@@ -36,6 +38,10 @@ class Success<T> extends Try<T> {
     return toTry<U>(() => f(this.value));
   };
 
+  recover(f: (error: Error) => T | Try<T>): Try<T> {
+    return this;
+  }
+
   accept(f: (value: T) => void): Try<T> {
     try {
       f(this.value);
@@ -46,20 +52,25 @@ class Success<T> extends Try<T> {
   }
 }
 
-class Failure<E = Error> extends Try<E> {
+class Failure<T> extends Try<T> {
   constructor(readonly error: Error) {
     super();
   }
 
-  get value(): E  {
+  get value(): T  {
     throw this.error;
   }
 
-  map<U>(f: (value: E) => U | Try<U>): Try<U> {
+  map<U>(f: (value: T) => U | Try<U>): Try<U> {
     return new Failure<U>(this.error);
   };
 
-  accept(f: (value: E) => void): Try<E> {
+  recover<U>(f: (error: Error) => U | Try<U>): Try<U> {
+    return toTry<U>(f);
+  }
+
+
+  accept(f: (value: T) => void): Try<T> {
     return this;
   }
 }
@@ -78,7 +89,7 @@ describe('Try', () => {
 
   const successes = [Dev, Dev.Sander, () => Dev.Jeroen, toTry(Dev), toTry(Dev.Rob), toTry(() => Dev.Jeroen)];
 
-  const devToError = (d: Dev) => {
+  const devToError = (d: Dev): Dev => {
     throw new Error(`Dev ${d} goes wrong`);
   };
   const divByZero = (n = 0) => {
@@ -130,4 +141,11 @@ describe('Try', () => {
     expect(toTry(s).accept(e => e)).toBeInstanceOf(Failure);
   });
 
+  test.each(successes)('recover success to keep original value', (s) => {
+    expect(toTry(s).recover(() => Dev.Wouter).value.name).not.toBe(Dev.Wouter.name);
+  });
+
+  test.each(successes)('recover from error to return valid', (s) => {
+    expect(toTry(s).map(d => devToError(d)).recover(() => Dev.Wouter).value.name).toBe(Dev.Wouter.name);
+  });
 });
