@@ -1,4 +1,4 @@
-import { isDefined, List, meta, Uri } from '../types';
+import { List, meta, tryTo, Uri } from '../types';
 import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
@@ -7,9 +7,9 @@ import { RequestHandler } from 'express';
 
 export const route =
   (uri: Uri): ClassDecorator =>
-  (subject: unknown): void => {
-    meta(subject).set('route', uri);
-  };
+    (subject: unknown): void => {
+      meta(subject).set('route', uri);
+    };
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
 export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
@@ -17,17 +17,13 @@ export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires; m
 export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
 const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Route | undefined =>
-  isDefined(verb)
-    ? {
-        verb,
-        endpoint,
-        requires,
-        middleware: middleware ?? [],
-      }
-    : undefined;
+  tryTo(verb).is.defined()
+    .map(verb => ({ verb, endpoint, requires, middleware: middleware ?? [] }) as Route)
+    .orElse();
 
 class Router implements Routes {
-  constructor(readonly resource: Resource) {}
+  constructor(readonly resource: Resource) {
+  }
 
   get route(): Uri {
     return meta(this.resource).get('route');
@@ -49,8 +45,8 @@ class Router implements Routes {
             uc: v.get<UseCase>('uc'),
           },
           v.get<Verb>('verb'),
-          v.get<RequestHandler[]>('middleware')
-        )
+          v.get<RequestHandler[]>('middleware'),
+        ),
       );
   }
 }
