@@ -1,6 +1,7 @@
 import '@thisisagile/easy-test';
 import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate } from '../../src';
 import { Dev } from '../ref';
+import { Constructor } from '@thisisagile/easy-test/dist/utils/Types';
 
 abstract class Try<T = unknown> {
 
@@ -29,11 +30,9 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
-
   abstract recover(f: (error: Error) => T | Try<T>): Try<T>;
-
+  abstract recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T>;
   abstract accept(f: (value: T) => void): Try<T>;
-
   abstract filter(predicate: Predicate<T>): Try<T>;
 }
 
@@ -52,6 +51,10 @@ class Success<T> extends Try<T> {
   };
 
   recover(f: (error: Error) => T | Try<T>): Try<T> {
+    return this;
+  }
+
+  recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T> {
     return this;
   }
 
@@ -92,6 +95,14 @@ class Failure<T> extends Try<T> {
     return toTry<U>(f);
   }
 
+  recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T> {
+    try {
+      return this.error instanceof type ? this.recover(f) : this;
+    } catch (e) {
+      return new Failure<T>(this.error);
+    }
+  }
+
   accept(f: (value: T) => void): Try<T> {
     return this;
   }
@@ -119,6 +130,7 @@ describe('Try', () => {
   const devToError = (d: Dev): Dev => {
     throw new Error(`Dev ${d} goes wrong`);
   };
+
   const divByZero = (n = 0) => {
     throw new Error(`Divide ${n} by zero`);
   };
@@ -169,11 +181,28 @@ describe('Try', () => {
   });
 
   test.each(successes)('recover success to keep original value', (s) => {
-    expect(toTry(s).recover(() => Dev.Wouter).value.name).not.toBe(Dev.Wouter.name);
+    expect(toTry(s).recover(() => Dev.Wouter).value).not.toBe(Dev.Wouter);
   });
 
   test.each(successes)('recover from error to return valid', (s) => {
-    expect(toTry(s).map(d => devToError(d)).recover(() => Dev.Wouter).value.name).toBe(Dev.Wouter.name);
+    expect(toTry(s).map(d => devToError(d)).recover(() => Dev.Wouter).value).toBe(Dev.Wouter);
+  });
+
+  class NotValidError extends Error {}
+
+  const devToNotValidError = (d: Dev): Dev => {
+    throw new NotValidError(`Dev ${d} goes wrong`);
+  };
+  test.each(successes)('recover from with success to keep original value', (s) => {
+    expect(toTry(s).recoverFrom(NotValidError, () => Dev.Wouter).value).not.toBe(Dev.Wouter);
+  });
+
+  test.each(successes)('recover from with different error to recover', (s) => {
+    expect(toTry(s).map(d => devToError(d)).recoverFrom(NotValidError, () => Dev.Wouter).recover(() => Dev.Sander).value).toBe(Dev.Sander);
+  });
+
+  test.each(successes)('recover from with specific error to recover', (s) => {
+    expect(toTry(s).map(d => devToNotValidError(d)).recoverFrom(NotValidError, () => Dev.Wouter).recover(() => Dev.Sander).value).toBe(Dev.Wouter);
   });
 
   test.each(successes)('filter is successes is true returns original value', (s) => {
