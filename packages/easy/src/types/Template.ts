@@ -2,11 +2,13 @@ import { meta } from './Meta';
 import { List, toList } from './List';
 import { asString, text, Text, ToText } from './Text';
 import { toName } from './Constructor';
+import { tryTo } from './Try';
 
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
 
 class Template implements Text {
-  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {}
+  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {
+  }
 
   toString = (): string => {
     return meta(this.options)
@@ -15,13 +17,11 @@ class Template implements Text {
       .replace('  ', ' ');
   };
 
-  private readonly value = (subject: any, prop: string): string => {
-    const split = prop.split('.');
-    return split
-      .splice(1)
-      .reduce((t: ToText, s) => (t as any)[s], text(subject[split[0]]))
-      .toString();
-  };
+  private readonly value = (subject: any, prop: string): string =>
+    tryTo(() => prop.split('.'))
+      .map(p => ([p, p.splice(1)]))
+      .map(([p, ps]) => ps.reduce((t: ToText, s) => (t as any)[s], text(subject[p[0]])))
+      .map(p => p.toString()).value;
 
   private readonly props = (tmpl: string, key: string, result: List<string> = toList()): string[] => {
     const i1 = tmpl.indexOf(`{${key}`);
@@ -46,3 +46,4 @@ export const template = (tmpl: Text, subject: unknown, options: TemplateOptions 
     type: toName(subject),
     ...options,
   });
+
