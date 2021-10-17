@@ -136,6 +136,8 @@ describe('Try', () => {
   };
   const errors = [ConstructError, toTry(ConstructError), divByZero, toTry(divByZero), toTry(() => divByZero(3))];
 
+  // toTry
+
   test.each(successes)('of success', (s) => {
     expect(toTry(s)).toBeInstanceOf(Success);
   });
@@ -144,6 +146,8 @@ describe('Try', () => {
     expect(toTry(s)).toBeInstanceOf(Failure);
   });
 
+  // value
+
   test.each(successes)('value success', (s) => {
     expect(toTry(s).value).toBeInstanceOf(Dev);
   });
@@ -151,6 +155,8 @@ describe('Try', () => {
   test.each(errors)('value error', (s) => {
     expect(() => toTry(s).value).toThrow();
   });
+
+  // map
 
   test.each(successes)('map success to success', (s) => {
     expect(toTry(s).map(d => devToId(d))).toBeInstanceOf(Success);
@@ -168,6 +174,8 @@ describe('Try', () => {
     expect(toTry(s).map(e => e)).toBeInstanceOf(Failure);
   });
 
+  // accept
+
   test.each(successes)('accept success to keep original value', (s) => {
     expect(toTry(s).accept(d => devToId(d)).value).toBeInstanceOf(Dev);
   });
@@ -180,6 +188,8 @@ describe('Try', () => {
     expect(toTry(s).accept(e => e)).toBeInstanceOf(Failure);
   });
 
+  // recover
+
   test.each(successes)('recover success to keep original value', (s) => {
     expect(toTry(s).recover(() => Dev.Wouter).value).not.toBe(Dev.Wouter);
   });
@@ -187,6 +197,8 @@ describe('Try', () => {
   test.each(successes)('recover from error to return valid', (s) => {
     expect(toTry(s).map(d => devToError(d)).recover(() => Dev.Wouter).value).toBe(Dev.Wouter);
   });
+
+  // recoverFrom
 
   class NotValidError extends Error {}
 
@@ -205,6 +217,8 @@ describe('Try', () => {
     expect(toTry(s).map(d => devToNotValidError(d)).recoverFrom(NotValidError, () => Dev.Wouter).recover(() => Dev.Sander).value).toBe(Dev.Wouter);
   });
 
+  // filter
+
   test.each(successes)('filter is successes is true returns original value', (s) => {
     expect(toTry(s).filter(() => true).value).toBeInstanceOf(Dev);
   });
@@ -216,6 +230,8 @@ describe('Try', () => {
   test.each(errors)('filter on errors returns failure', (s) => {
     expect(toTry(s).filter(() => true)).toBeInstanceOf(Failure);
   });
+
+  // is
 
   test.each(successes)('is defined on successes returns original value', (s) => {
     expect(toTry(s).is.defined().value).toBeInstanceOf(Dev);
@@ -240,6 +256,8 @@ describe('Try', () => {
   test.each(errors)('is valid on failure returns failure', (s) => {
     expect(toTry(s).is.valid()).toBeInstanceOf(Failure);
   });
+
+  // is.not
 
   test.each(successes)('is not defined on successes returns original value', (s) => {
     expect(toTry(s).is.not.defined()).toBeInstanceOf(Failure);
