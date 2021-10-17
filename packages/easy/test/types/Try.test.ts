@@ -19,7 +19,7 @@ abstract class Try<T = unknown> {
   };
 
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
-  abstract accept(action: (value: T) => void): Try<T>;
+  abstract accept(f: (value: T) => void): Try<T>;
 }
 
 class Success<T> extends Try<T> {
