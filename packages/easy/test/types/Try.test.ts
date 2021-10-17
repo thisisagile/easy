@@ -1,133 +1,6 @@
 import '@thisisagile/easy-test';
-import { asString, Construct, Get, isDefined, isEmpty, ofConstruct, ofGet, Predicate, validate } from '../../src';
 import { Dev } from '../ref';
-import { Constructor } from '@thisisagile/easy-test/dist/utils/Types';
-
-abstract class Try<T = unknown> {
-
-  is = {
-    defined: (): Try<T> => this.filter(v => isDefined(v)),
-    empty: (): Try<T> => this.filter(v => isEmpty(v)),
-    valid: (): Try<T> => this.filter(v => validate(v).isValid),
-    not: {
-      defined: (): Try<T> => this.filter(v => !isDefined(v)),
-      empty: (): Try<T> => this.filter(v => !isEmpty(v)),
-      valid: (): Try<T> => this.filter(v => !validate(v).isValid),
-    },
-  };
-
-  abstract get value(): T;
-
-  abstract get error(): Error;
-
-  static of = <T>(c: Construct<T | Try<T>>, ...args: unknown[]): Try<T> => {
-    try {
-      const out = ofConstruct(c, ...args);
-      return new Success(out instanceof Try ? out.value : out);
-    } catch (e) {
-      return new Failure(e as Error);
-    }
-  };
-
-  abstract map<U>(f: Get<U | Try<U>, T>): Try<U>;
-
-  abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
-
-  abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
-
-  abstract accept(f: Get<void, T>): Try<T>;
-
-  abstract filter(predicate: Predicate<T>): Try<T>;
-
-  abstract orElse(value: T): T;
-
-  abstract orThrow(error: Construct<Error>): T;
-}
-
-class Success<T> extends Try<T> {
-
-  constructor(readonly value: T) {
-    super();
-  }
-
-  get error(): Error {
-    throw new Error('No error found');
-  }
-
-  map<U>(f: Get<U | Try<U>, T>): Try<U> {
-    return tryTo<U>(() => ofGet(f, this.value));
-  };
-
-  recover(f: Get<T | Try<T>, Error>): Try<T> {
-    return this;
-  }
-
-  recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
-    return this;
-  }
-
-  accept(f: Get<void, T>): Try<T> {
-    return tryTo(() => {
-      ofGet(f, this.value);
-      return this;
-    });
-  }
-
-  filter(predicate: Predicate<T>): Try<T> {
-    return tryTo(() => {
-      if (ofGet(predicate, this.value)) return this;
-      throw new Error(`Applying filter(${predicate.toString()}) failed.`);
-    });
-  }
-
-  orElse(value: T): T {
-    return this.value;
-  }
-
-  orThrow(_error: Construct<Error>): T {
-    return this.value;
-  }
-}
-
-class Failure<T> extends Try<T> {
-  constructor(readonly error: Error) {
-    super();
-  }
-
-  get value(): T {
-    throw this.error;
-  }
-
-  map<U>(f: Get<U | Try<U>, T>): Try<U> {
-    return new Failure<U>(this.error);
-  };
-
-  recover<U>(f: Get<U | Try<U>, Error>): Try<U> {
-    return tryTo<U>(f);
-  }
-
-  recoverFrom<U>(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
-    return tryTo(() => this.error instanceof type ? this.recover(f) : this);
-  }
-
-  accept(f: Get<void, T>): Try<T> {
-    return this;
-  }
-
-  filter(predicate: Predicate<T>): Try<T> {
-    return this;
-  }
-
-  orElse(value: T): T {
-    return value;
-  }
-
-  orThrow(error: Construct<Error>): T {
-    throw ofConstruct(error);
-  }
-}
-
-const tryTo = <T>(c: Construct<T | Try<T>>, ...args: unknown[]) => Try.of<T>(c, ...args);
+import { asString, tryTo } from '../../src';
 
 describe('Try', () => {
 
@@ -154,11 +27,11 @@ describe('Try', () => {
   // toTry
 
   test.each(successes)('of success', (s) => {
-    expect(tryTo(s)).toBeInstanceOf(Success);
+    expect(tryTo(s)).toBeValid();
   });
 
   test.each(errors)('of error', (s) => {
-    expect(tryTo(s)).toBeInstanceOf(Failure);
+    expect(tryTo(s)).not.toBeValid();
   });
 
   // value
@@ -174,7 +47,7 @@ describe('Try', () => {
   // map
 
   test.each(successes)('map success to success', (s) => {
-    expect(tryTo(s).map(d => devToId(d))).toBeInstanceOf(Success);
+    expect(tryTo(s).map(d => devToId(d))).toBeValid();
   });
 
   test.each(successes)('map success to success value is a string', (s) => {
@@ -182,11 +55,11 @@ describe('Try', () => {
   });
 
   test.each(successes)('map success to failure should fail', (s) => {
-    expect(tryTo(s).map(d => devToError(d))).toBeInstanceOf(Failure);
+    expect(tryTo(s).map(d => devToError(d))).not.toBeValid();
   });
 
   test.each(errors)('map error', (s) => {
-    expect(tryTo(s).map(e => e)).toBeInstanceOf(Failure);
+    expect(tryTo(s).map(e => e)).not.toBeValid();
   });
 
   // accept
@@ -196,11 +69,11 @@ describe('Try', () => {
   });
 
   test.each(successes)('accept failure to return failure', (s) => {
-    expect(tryTo(s).accept(d => devToError(d))).toBeInstanceOf(Failure);
+    expect(tryTo(s).accept(d => devToError(d))).not.toBeValid();
   });
 
   test.each(errors)('accept errors to remain failures', (s) => {
-    expect(tryTo(s).accept(e => e)).toBeInstanceOf(Failure);
+    expect(tryTo(s).accept(e => e)).not.toBeValid();
   });
 
   // recover
@@ -240,11 +113,11 @@ describe('Try', () => {
   });
 
   test.each(successes)('filter on successes is false returns failure', (s) => {
-    expect(tryTo(s).filter(() => false)).toBeInstanceOf(Failure);
+    expect(tryTo(s).filter(() => false)).not.toBeValid();
   });
 
   test.each(errors)('filter on errors returns failure', (s) => {
-    expect(tryTo(s).filter(() => true)).toBeInstanceOf(Failure);
+    expect(tryTo(s).filter(() => true)).not.toBeValid();
   });
 
   // is
@@ -254,15 +127,15 @@ describe('Try', () => {
   });
 
   test.each(errors)('is defined on failure returns failure', (s) => {
-    expect(tryTo(s).is.defined()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.defined()).not.toBeValid();
   });
 
   test.each(successes)('is empty on successes returns original value', (s) => {
-    expect(tryTo(s).is.empty()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.empty()).not.toBeValid();
   });
 
   test.each(errors)('is empty on failure returns failure', (s) => {
-    expect(tryTo(s).is.empty()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.empty()).not.toBeValid();
   });
 
   test.each(valids)('is valid on successes returns original value', (s) => {
@@ -270,17 +143,17 @@ describe('Try', () => {
   });
 
   test.each(errors)('is valid on failure returns failure', (s) => {
-    expect(tryTo(s).is.valid()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.valid()).not.toBeValid();
   });
 
   // is.not
 
   test.each(successes)('is not defined on successes returns original value', (s) => {
-    expect(tryTo(s).is.not.defined()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.not.defined()).not.toBeValid();
   });
 
   test.each(errors)('is not defined on failure returns failure', (s) => {
-    expect(tryTo(s).is.not.defined()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.not.defined()).not.toBeValid();
   });
 
   test.each(successes)('is not empty on successes returns original value', (s) => {
@@ -288,15 +161,15 @@ describe('Try', () => {
   });
 
   test.each(errors)('is not empty on failure returns failure', (s) => {
-    expect(tryTo(s).is.not.empty()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.not.empty()).not.toBeValid();
   });
 
   test.each(valids)('is not valid on successes returns original value', (s) => {
-    expect(tryTo(s).is.not.valid()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.not.valid()).not.toBeValid();
   });
 
   test.each(errors)('is not valid on failure returns failure', (s) => {
-    expect(tryTo(s).is.not.valid()).toBeInstanceOf(Failure);
+    expect(tryTo(s).is.not.valid()).not.toBeValid();
   });
 
   // orElse
@@ -319,4 +192,3 @@ describe('Try', () => {
     expect(() => tryTo(s).filter(() => false).orThrow(() => new NotValidError('Bummer'))).toThrow(NotValidError);
   });
 });
-

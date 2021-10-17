@@ -22,6 +22,7 @@ export * from './Results';
 export * from './Tag';
 export * from './Template';
 export * from './Text';
+export * from './Try';
 export * from './Uri';
 export * from './Uuid';
 export * from './Validatable';
