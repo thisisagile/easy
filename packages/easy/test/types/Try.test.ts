@@ -27,6 +27,10 @@ class Failure<E = Error> extends Try<E> {
   constructor(readonly error: Error) {
     super();
   }
+
+  get value(): E | undefined {
+    throw this.error;
+  }
 }
 
 const toTry = <T>(c: Construct<T>) => Try.of<T>(c);
@@ -57,6 +61,6 @@ describe('Try', () => {
   });
 
   test.each(errors)('value error', (s) => {
-    expect(toTry(s).value).toBeUndefined();
+    expect(() => toTry(s).value).toThrow();
   });
 });
