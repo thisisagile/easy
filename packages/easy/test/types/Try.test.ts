@@ -34,6 +34,8 @@ abstract class Try<T = unknown> {
   abstract recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T>;
   abstract accept(f: (value: T) => void): Try<T>;
   abstract filter(predicate: Predicate<T>): Try<T>;
+
+  abstract orElse(value: T): T;
 }
 
 class Success<T> extends Try<T> {
@@ -76,6 +78,10 @@ class Success<T> extends Try<T> {
       return new Failure<T>(e as Error);
     }
   }
+
+  orElse(value: T): T {
+    return this.value;
+  }
 }
 
 class Failure<T> extends Try<T> {
@@ -109,6 +115,10 @@ class Failure<T> extends Try<T> {
 
   filter(predicate: (value: T) => boolean): Try<T> {
     return this;
+  }
+
+  orElse(value: T): T {
+    return value;
   }
 }
 
@@ -282,5 +292,17 @@ describe('Try', () => {
   test.each(errors)('is not valid on failure returns failure', (s) => {
     expect(toTry(s).is.not.valid()).toBeInstanceOf(Failure);
   });
+
+  // orElse
+
+  test.each(successes)('or else with successes returns original value', (s) => {
+    expect(toTry(s).orElse(Dev.Wouter)).not.toBe(Dev.Wouter);
+  });
+
+  test.each(successes)('or else with successes returns original value', (s) => {
+    expect(toTry(s).filter(() => false).orElse(Dev.Wouter)).toBe(Dev.Wouter);
+  });
+
+
 });
 
