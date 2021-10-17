@@ -29,7 +29,7 @@ abstract class Try<T = unknown> {
     }
   };
 
-  abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
+  abstract map<U>(f: Get<U | Try<U>, T>): Try<U>;
   abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
   abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
   abstract accept(f: Get<void, T>): Try<T>;
@@ -49,8 +49,8 @@ class Success<T> extends Try<T> {
     throw new Error('No error found');
   }
 
-  map<U>(f: (value: T) => U | Try<U>): Try<U> {
-    return toTry<U>(() => f(this.value));
+  map<U>(f: Get<U | Try<U>, T>): Try<U> {
+    return toTry<U>(() => ofGet(f, this.value));
   };
 
   recover(f: Get<T | Try<T>, Error>): Try<T> {
@@ -98,7 +98,7 @@ class Failure<T> extends Try<T> {
     throw this.error;
   }
 
-  map<U>(f: (value: T) => U | Try<U>): Try<U> {
+  map<U>(f: Get<U | Try<U>, T>): Try<U> {
     return new Failure<U>(this.error);
   };
 
