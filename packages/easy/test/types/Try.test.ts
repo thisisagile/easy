@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate } from '../../src';
+import { Construct, ofConstruct, Predicate, asString, isDefined, isEmpty, validate, Get } from '../../src';
 import { Dev } from '../ref';
 import { Constructor } from '@thisisagile/easy-test/dist/utils/Types';
 
@@ -28,10 +28,10 @@ abstract class Try<T = unknown> {
       return new Failure(e as Error);
     }
   };
-
+// (error: Error) => T | Try<T>
   abstract map<U>(f: (value: T) => U | Try<U>): Try<U>;
-  abstract recover(f: (error: Error) => T | Try<T>): Try<T>;
-  abstract recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T>;
+  abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
+  abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
   abstract accept(f: (value: T) => void): Try<T>;
   abstract filter(predicate: Predicate<T>): Try<T>;
 
@@ -53,11 +53,11 @@ class Success<T> extends Try<T> {
     return toTry<U>(() => f(this.value));
   };
 
-  recover(f: (error: Error) => T | Try<T>): Try<T> {
+  recover(f: Get<T | Try<T>, Error>): Try<T> {
     return this;
   }
 
-  recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T> {
+  recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
     return this;
   }
 
@@ -102,11 +102,11 @@ class Failure<T> extends Try<T> {
     return new Failure<U>(this.error);
   };
 
-  recover<U>(f: (error: Error) => U | Try<U>): Try<U> {
+  recover<U>(f: Get<U | Try<U>, Error>): Try<U> {
     return toTry<U>(f);
   }
 
-  recoverFrom(type: Constructor<Error>, f: (error: Error) => T | Try<T>): Try<T> {
+  recoverFrom<U>(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
     try {
       return this.error instanceof type ? this.recover(f) : this;
     } catch (e) {
