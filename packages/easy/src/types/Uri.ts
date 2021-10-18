@@ -48,7 +48,7 @@ export class EasyUri implements Uri {
   readonly host = uri.host();
   readonly resource = uri.resource(this);
 
-  private state: any = {};
+  protected state: any = {};
 
   constructor(readonly segments: Segment[] = []) {
   }
@@ -61,7 +61,7 @@ export class EasyUri implements Uri {
     return toRoute(this.host, this.resource, ...this.segments);
   }
 
-  private get props(): List<Prop> {
+  protected get props(): List<Prop> {
     return meta(this.state).values<Prop>();
   }
 
@@ -76,8 +76,8 @@ export class EasyUri implements Uri {
     return tryTo(() => this.props)
       .map(ps => ps.filter(p => p.segment?.segment))
       .map(ps => ps.reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), asString(p.value)), this.complete))
-      .map(route => ([route, this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&')]))
-      .map(([route, query]) => isNotEmpty(query) ? `${route}?${query}` : route).value;
+      .map(route => ({route, query: this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&')}))
+      .map(({route, query}) => isNotEmpty(query) ? `${route}?${query}` : route).value;
   }
 
   id = (id?: unknown): this => this.set(EasyUri.id, id);
