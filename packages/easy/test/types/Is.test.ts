@@ -13,7 +13,7 @@ import {
   isPrimitive,
   isString,
   isIn,
-  isIntersecting,
+  isIntersecting, isTrue,
 } from '../../src';
 import { Dev } from '../ref';
 
@@ -133,6 +133,14 @@ describe('isNotEmptyObject', () => {
     expect(isEmptyObject({})).toBeTruthy();
     expect(isEmptyObject(new Empty())).toBeTruthy();
   });
+
+  test.each([undefined, 0, false, ""])('isFalse', (s) => {
+    expect(isTrue(s)).toBeFalsy();
+  })
+
+  test.each([{}, [], 1, 42, true, "false", "true", "something"])('isTrue', (s) => {
+    expect(isTrue(s)).toBeTruthy();
+  })
 });
 
 describe('isArray', () => {

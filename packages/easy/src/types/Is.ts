@@ -12,6 +12,8 @@ export const isIsoDateString = (o?: unknown): o is string => isString(o) && /^\d
 
 export const isBoolean = (o?: unknown): o is boolean => isDefined(o) && typeof o === 'boolean';
 
+export const isTrue = (o?: unknown): boolean => !!o;
+
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
 
 export const isObject = (o?: unknown): o is Record<string, unknown> => o != null && (typeof o === 'object' || typeof o === 'function') && !isArray(o);
