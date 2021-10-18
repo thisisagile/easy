@@ -62,7 +62,7 @@ class Success<T> extends Try<T> {
   };
 
   map<U>(f: Get<U | Try<U>, T>): Try<U> {
-    return tryTo<U>(() => ofGet(f, this.value));
+    return tryTo<U>(f, this.value);
   };
 
   recover(f: Get<T | Try<T>, Error>): Try<T> {
@@ -114,7 +114,7 @@ class Failure<T> extends Try<T> {
   };
 
   recover<U>(f: Get<U | Try<U>, Error>): Try<U> {
-    return tryTo<U>(f);
+    return tryTo<U>(f, this.error);
   }
 
   recoverFrom<U>(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
