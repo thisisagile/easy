@@ -1,4 +1,4 @@
-import { isDefined, isEmpty } from './Is';
+import { isDefined, isEmpty, isTrue } from './Is';
 import { validate } from '../validation';
 import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
@@ -10,6 +10,8 @@ abstract class Try<T = unknown> implements Validatable {
     defined: (): Try<T> => this.filter(v => isDefined(v)),
     empty: (): Try<T> => this.filter(v => isEmpty(v)),
     valid: (): Try<T> => this.filter(v => validate(v).isValid),
+    true: (): Try<T> => this.filter(v => isTrue(v)),
+    false: (): Try<T> => this.filter(v => !isTrue(v)),
     not: {
       defined: (): Try<T> => this.filter(v => !isDefined(v)),
       empty: (): Try<T> => this.filter(v => !isEmpty(v)),

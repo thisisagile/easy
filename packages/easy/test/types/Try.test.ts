@@ -172,6 +172,14 @@ describe('Try', () => {
     expect(tryTo(s).is.not.valid()).not.toBeValid();
   });
 
+  test.each(valids)('is not valid on successes returns original value', (s) => {
+    expect(tryTo(s).map(() => true).is.true()).toBeValid();
+  });
+
+  test.each(errors)('is not valid on failure returns failure', (s) => {
+    expect(tryTo(s).map(() => false).is.false()).not.toBeValid();
+  });
+
   // orElse
 
   test.each(successes)('or else with successes returns original value', (s) => {
