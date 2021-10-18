@@ -1,15 +1,13 @@
-import { Get, ofGet, Predicate } from '../types';
+import { Get, ofGet, Predicate, tryTo } from '../types';
 
 class Case<T, V = unknown> {
   constructor(protected value: V, protected outcome?: T) {}
 
   case(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
-    try {
-      const res = ofGet<boolean, V>(pred, this.value);
-      return res ? new Found(this.value, ofGet<T, V>(out, this.value)) : this;
-    } catch {
-      return this;
-    }
+    return tryTo(pred, this.value).is.true()
+      .map(() => ofGet<T, V>(out, this.value))
+      .map(res => new Found(this.value, res) as Case<T, V>)
+      .or(this);
   }
 
   else(alt: Get<T, V>): T {
