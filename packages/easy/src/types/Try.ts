@@ -44,6 +44,8 @@ abstract class Try<T = unknown> implements Validatable {
 
   abstract filter(predicate: Predicate<T>): Try<T>;
 
+  abstract or(value: T): T;
+
   abstract orElse(value?: T): T | undefined;
 
   abstract orThrow(error: Construct<Error>): T;
@@ -89,6 +91,10 @@ class Success<T> extends Try<T> {
     });
   }
 
+  or(value: T): T {
+    return this.value;
+  }
+
   orElse(value?: T): T | undefined {
     return this.value;
   }
@@ -129,6 +135,10 @@ class Failure<T> extends Try<T> {
 
   filter(predicate: Predicate<T>): Try<T> {
     return this;
+  }
+
+  or(value: T): T {
+    return value;
   }
 
   orElse(value?: T): T | undefined {
