@@ -15,7 +15,7 @@ import {
   toList,
   toName,
   toResult,
-  toResults,
+  toResults, tryTo,
   Value,
 } from '../types';
 import { Constraint } from './Contraints';
@@ -32,11 +32,10 @@ const validators = (subject: unknown): List<Validator> =>
     .keys<List<Validator>>('constraint')
     .reduce((list, vs) => list.add(vs), toList<Validator>());
 
-const runValidator = (v: Validator, subject?: unknown): Results => {
-  v.actual = (subject as any)[v.property];
-  const res = v.constraint(v.actual);
-  return isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults();
-};
+const runValidator = (v: Validator, subject?: unknown): Results =>
+  tryTo(() => (subject as any)[v.property])
+    .map(actual => v.constraint(actual))
+    .map(res => isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults()).value;
 
 const constraints = (subject?: unknown): Results =>
   validators(subject)

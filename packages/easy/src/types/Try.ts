@@ -26,9 +26,9 @@ abstract class Try<T = unknown> implements Validatable {
 
   abstract get isValid(): boolean;
 
-  static of = <T>(c: Construct<T | Try<T>>, ...args: unknown[]): Try<T> => {
+  static of = <T>(c: Get<T | Try<T>>, ...args: unknown[]): Try<T> => {
     try {
-      const out = ofConstruct(c, ...args);
+      const out = ofGet(c, ...args);
       return new Success(out instanceof Try ? out.value : out);
     } catch (e) {
       return new Failure(e as Error);
