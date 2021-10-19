@@ -20,7 +20,7 @@ export class DotEnvContext implements EnvContext {
 
   readonly get = (key: string, alt?: string): string | undefined =>
     tryTo(() => text(key).map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2')).snake.toString())
-      .map(key => process.env[key] ?? alt).value;
+      .map(k => process.env[k] ?? alt).value;
 }
 
 export type RequestContext = {
