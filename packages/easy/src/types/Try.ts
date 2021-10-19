@@ -2,7 +2,7 @@ import { isDefined, isEmpty, isTrue } from './Is';
 import { validate } from '../validation';
 import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
-import { Get, ofGet, Predicate } from './Get';
+import { Get, ofGet } from './Get';
 import { Func } from './Func';
 
 abstract class Try<T = unknown> implements Validatable {
@@ -35,15 +35,15 @@ abstract class Try<T = unknown> implements Validatable {
     }
   };
 
-  abstract map<U>(f: Get<U | Try<U>, T>): Try<U>;
+  abstract map<U>(f: Func<U | Try<U>, T>): Try<U>;
 
-  abstract recover(f: Get<T | Try<T>, Error>): Try<T>;
+  abstract recover(f: Func<T | Try<T>, Error>): Try<T>;
 
-  abstract recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T>;
+  abstract recoverFrom(type: Constructor<Error>, f: Func<T | Try<T>, Error>): Try<T>;
 
-  abstract accept(f: Get<void, T>): Try<T>;
+  abstract accept(f: Func<void, T>): Try<T>;
 
-  abstract filter(predicate: Predicate<T>): Try<T>;
+  abstract filter(predicate: Func<boolean, T>): Try<T>;
 
   abstract or(value: T): T;
 
@@ -80,14 +80,14 @@ class Success<T> extends Try<T> {
 
   accept(f: Func<void, T>): Try<T> {
     return tryTo(() => {
-      ofGet(f, this.value);
+      f(this.value);
       return this;
     });
   }
 
   filter(predicate: Func<boolean, T>): Try<T> {
     return tryTo(() => {
-      if (ofGet(predicate, this.value)) return this;
+      if (predicate(this.value)) return this;
       throw new Error(`Applying filter(${predicate.toString()}) failed.`);
     });
   }
