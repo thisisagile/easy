@@ -4,16 +4,8 @@ import { asString, isConstructor, tryTo } from '../../src';
 
 describe('Try', () => {
 
-  // class ConstructError {
-  //   constructor() {
-  //     throw new Error('Error during construction');
-  //   }
-  // }
-
   const devToId = (d: Dev): string => asString(d.id);
 
-  // const successes = [Dev, Dev.Sander, () => Dev.Jeroen, tryTo(Dev), tryTo(Dev.Rob), tryTo(() => Dev.Jeroen)];
-  // const valids = [Dev.Sander, () => Dev.Jeroen, tryTo(Dev.Rob), tryTo(() => Dev.Jeroen)];
   const successes = [Dev.Sander, () => Dev.Jeroen, tryTo(Dev.Rob), tryTo(() => Dev.Jeroen), () => tryTo(() => tryTo(Dev.Rob))];
   const valids = [Dev.Sander, () => Dev.Jeroen, tryTo(() => Dev.Jeroen)];
 
@@ -26,7 +18,6 @@ describe('Try', () => {
   };
 
   const errors = [divByZero, tryTo(divByZero), tryTo(() => divByZero(3))];
-  // const errors = [ConstructError, tryTo(ConstructError), divByZero, tryTo(divByZero), tryTo(() => divByZero(3))];
 
   // toTry
 
