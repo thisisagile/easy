@@ -3,6 +3,7 @@ import { validate } from '../validation';
 import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
 import { Get, ofGet, Predicate } from './Get';
+import { Func } from './Func';
 
 abstract class Try<T = unknown> implements Validatable {
 
@@ -65,26 +66,26 @@ class Success<T> extends Try<T> {
     return true;
   };
 
-  map<U>(f: Get<U | Try<U>, T>): Try<U> {
+  map<U>(f: Func<U | Try<U>, T>): Try<U> {
     return tryTo<U>(f, this.value);
   };
 
-  recover(f: Get<T | Try<T>, Error>): Try<T> {
+  recover(f: Func<T | Try<T>, Error>): Try<T> {
     return this;
   }
 
-  recoverFrom(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
+  recoverFrom(type: Constructor<Error>, f: Func<T | Try<T>, Error>): Try<T> {
     return this;
   }
 
-  accept(f: Get<void, T>): Try<T> {
+  accept(f: Func<void, T>): Try<T> {
     return tryTo(() => {
       ofGet(f, this.value);
       return this;
     });
   }
 
-  filter(predicate: Predicate<T>): Try<T> {
+  filter(predicate: Func<boolean, T>): Try<T> {
     return tryTo(() => {
       if (ofGet(predicate, this.value)) return this;
       throw new Error(`Applying filter(${predicate.toString()}) failed.`);
@@ -117,23 +118,23 @@ class Failure<T> extends Try<T> {
     return false;
   };
 
-  map<U>(f: Get<U | Try<U>, T>): Try<U> {
+  map<U>(f: Func<U | Try<U>, T>): Try<U> {
     return new Failure<U>(this.error);
   };
 
-  recover<U>(f: Get<U | Try<U>, Error>): Try<U> {
+  recover<U>(f: Func<U | Try<U>, Error>): Try<U> {
     return tryTo<U>(f, this.error);
   }
 
-  recoverFrom<U>(type: Constructor<Error>, f: Get<T | Try<T>, Error>): Try<T> {
+  recoverFrom<U>(type: Constructor<Error>, f: Func<T | Try<T>, Error>): Try<T> {
     return tryTo(() => this.error instanceof type ? this.recover(f) : this);
   }
 
-  accept(f: Get<void, T>): Try<T> {
+  accept(f: Func<void, T>): Try<T> {
     return this;
   }
 
-  filter(predicate: Predicate<T>): Try<T> {
+  filter(predicate: Func<boolean, T>): Try<T> {
     return this;
   }
 
@@ -150,4 +151,4 @@ class Failure<T> extends Try<T> {
   }
 }
 
-export const tryTo = <T>(c: Construct<T | Try<T>>, ...args: unknown[]) => Try.of<T>(c, ...args);
+export const tryTo = <T>(c: Get<T | Try<T>>, ...args: unknown[]) => Try.of<T>(c, ...args);

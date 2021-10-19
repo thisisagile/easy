@@ -1,6 +1,6 @@
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
-import { asString, tryTo } from '../../src';
+import { asString, isConstructor, tryTo } from '../../src';
 
 describe('Try', () => {
 
@@ -33,6 +33,10 @@ describe('Try', () => {
   test.each(errors)('of error', (s) => {
     expect(tryTo(s)).not.toBeValid();
   });
+
+  test('Dinges', () => {
+    expect(isConstructor(() => 'Hello')).toBeFalsy();
+  })
 
   // value
 
