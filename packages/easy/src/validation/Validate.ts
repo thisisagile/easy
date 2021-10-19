@@ -38,9 +38,9 @@ const runValidator = (v: Validator, subject?: unknown): Results =>
     .map(res => isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults()).value;
 
 const constraints = (subject?: unknown): Results =>
-  validators(subject)
-    .mapDefined(v => runValidator(v, subject))
-    .reduce((rs, r) => rs.add(...r.results), toResults());
+  tryTo(() => validators(subject))
+    .map(vs => vs.mapDefined(v => runValidator(v, subject)))
+    .map(res => res.reduce((rs, r) => rs.add(...r.results), toResults())).value;
 
 export const validate = (subject?: unknown): Results =>
   choose<Results, any>(subject)
