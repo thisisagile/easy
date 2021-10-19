@@ -8,15 +8,15 @@ import { Func } from './Func';
 abstract class Try<T = unknown> implements Validatable {
 
   is = {
-    defined: (): Try<T> => this.filter(v => isDefined(v)),
-    empty: (): Try<T> => this.filter(v => isEmpty(v)),
-    valid: (): Try<T> => this.filter(v => validate(v).isValid),
-    true: (): Try<T> => this.filter(v => isTrue(v)),
-    false: (): Try<T> => this.filter(v => !isTrue(v)),
+    defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isDefined(prop ? prop(v) : v)),
+    empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isEmpty(prop ? prop(v) : v)),
+    valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => validate(prop ? prop(v) : v).isValid),
+    true: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isTrue(prop ? prop(v) : v)),
+    false: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isTrue(prop ? prop(v) : v)),
     not: {
-      defined: (): Try<T> => this.filter(v => !isDefined(v)),
-      empty: (): Try<T> => this.filter(v => !isEmpty(v)),
-      valid: (): Try<T> => this.filter(v => !validate(v).isValid),
+      defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isDefined(prop ? prop(v) : v)),
+      empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isEmpty(prop ? prop(v) : v)),
+      valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !validate(prop ? prop(v) : v).isValid),
     },
   };
 

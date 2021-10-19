@@ -134,12 +134,21 @@ describe('Try', () => {
     expect(tryTo(s).is.defined().value).toBeInstanceOf(Dev);
   });
 
+  test('is defined on property', () => {
+    expect(tryTo(Dev.Wouter).is.defined(d => d.name)).toBeValid();
+    expect(tryTo(Dev.Wouter).is.defined(d => d.name).value).toBeInstanceOf(Dev);
+  });
+
   test.each(errors)('is defined on failure returns failure', (s) => {
     expect(tryTo(s).is.defined()).not.toBeValid();
   });
 
   test.each(successes)('is empty on successes returns original value', (s) => {
     expect(tryTo(s).is.empty()).not.toBeValid();
+  });
+
+  test('is empty on property', () => {
+    expect(tryTo({ name: undefined }).is.empty(d => d.name)).toBeValid();
   });
 
   test.each(errors)('is empty on failure returns failure', (s) => {
@@ -150,14 +159,33 @@ describe('Try', () => {
     expect(tryTo(s).is.valid().value).toBeInstanceOf(Dev);
   });
 
+  test('is valid on property', () => {
+    expect(tryTo(Dev.Wouter).is.valid(d => d)).toBeValid();
+    expect(tryTo(Dev.Wouter).is.valid(d => d).value).toBeInstanceOf(Dev);
+  });
+
   test.each(errors)('is valid on failure returns failure', (s) => {
     expect(tryTo(s).is.valid()).not.toBeValid();
+  });
+
+  test('is true on property', () => {
+    expect(tryTo(Dev.Wouter).is.true(() => true)).toBeValid();
+    expect(tryTo(Dev.Wouter).is.true(() => true).value).toBeInstanceOf(Dev);
+  });
+
+  test('is false on property', () => {
+    expect(tryTo(Dev.Wouter).is.false(() => false)).toBeValid();
+    expect(tryTo(Dev.Wouter).is.false(() => false).value).toBeInstanceOf(Dev);
   });
 
   // is.not
 
   test.each(successes)('is not defined on successes returns original value', (s) => {
     expect(tryTo(s).is.not.defined()).not.toBeValid();
+  });
+
+  test('is not defined on property', () => {
+    expect(tryTo({ name: undefined }).is.defined(d => d.name)).not.toBeValid();
   });
 
   test.each(errors)('is not defined on failure returns failure', (s) => {
@@ -168,12 +196,21 @@ describe('Try', () => {
     expect(tryTo(s).is.not.empty().value).toBeInstanceOf(Dev);
   });
 
+  test('is not empty on property', () => {
+    expect(tryTo(Dev.Wouter).is.not.empty(d => d.name)).toBeValid();
+    expect(tryTo(Dev.Wouter).is.not.empty(d => d.name).value).toBeInstanceOf(Dev);
+  });
+
   test.each(errors)('is not empty on failure returns failure', (s) => {
     expect(tryTo(s).is.not.empty()).not.toBeValid();
   });
 
   test.each(valids)('is not valid on successes returns original value', (s) => {
     expect(tryTo(s).is.not.valid()).not.toBeValid();
+  });
+
+  test('is not valid on property', () => {
+    expect(tryTo(Dev.Invalid).is.valid(d => d)).not.toBeValid();
   });
 
   test.each(errors)('is not valid on failure returns failure', (s) => {
