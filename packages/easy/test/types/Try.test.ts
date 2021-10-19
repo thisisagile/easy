@@ -14,7 +14,7 @@ describe('Try', () => {
 
   // const successes = [Dev, Dev.Sander, () => Dev.Jeroen, tryTo(Dev), tryTo(Dev.Rob), tryTo(() => Dev.Jeroen)];
   // const valids = [Dev.Sander, () => Dev.Jeroen, tryTo(Dev.Rob), tryTo(() => Dev.Jeroen)];
-  const successes = [Dev.Sander, () => Dev.Jeroen, tryTo(Dev.Rob), tryTo(() => Dev.Jeroen)];
+  const successes = [Dev.Sander, () => Dev.Jeroen, tryTo(Dev.Rob), tryTo(() => Dev.Jeroen), () => tryTo(() => tryTo(Dev.Rob))];
   const valids = [Dev.Sander, () => Dev.Jeroen, tryTo(() => Dev.Jeroen)];
 
   const devToError = (d: Dev): Dev => {
