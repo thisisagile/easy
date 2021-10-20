@@ -1317,7 +1317,7 @@ __metadata:
     "@types/validator": ^13.6.3
     cls-hooked: ^4.2.2
     express: ^4.17.1
-    form-urlencoded: ^6.0.4
+    form-urlencoded: ^6.0.5
     jsonwebtoken: ^8.5.1
     passport: ^0.5.0
     passport-jwt: ^4.0.0
@@ -1417,7 +1417,7 @@ __metadata:
     "@types/uuid": ^8.3.1
     "@types/validator": ^13.6.3
     axios: ^0.21.1
-    form-urlencoded: ^6.0.4
+    form-urlencoded: ^6.0.5
     jsonwebtoken: ^8.5.1
     moment: ^2.29.1
     reflect-metadata: ^0.1.13
@@ -4508,10 +4508,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-urlencoded@npm:*, form-urlencoded@npm:^6.0.4":
+"form-urlencoded@npm:*":
   version: 6.0.4
   resolution: "form-urlencoded@npm:6.0.4"
   checksum: 195006472c3ee7b4d8a4d47eaef62c5b65f03ac1c23b8c7e34659dc335f4410220ff441f924b79da8353c705bde51d6845b8f9dc3f71b18fa962a858f4148722
+  languageName: node
+  linkType: hard
+
+"form-urlencoded@npm:^6.0.5":
+  version: 6.0.5
+  resolution: "form-urlencoded@npm:6.0.5"
+  checksum: 537221048a3b5753d765e23f08c7fb408ad54cc35027af4bc6a9160df85db4ed4fca7ce4d52bec29824a69fbdb1a3c724cf3ace11c2f5aea714a562b09123756
   languageName: node
   linkType: hard
 
