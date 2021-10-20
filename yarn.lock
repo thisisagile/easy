@@ -1330,8 +1330,8 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/mongodb": ^3.6.18
-    mongodb: ^3.6.9
+    "@types/mongodb": ^3.6.20
+    mongodb: ^3.7.3
   languageName: unknown
   linkType: soft
 
@@ -1685,7 +1685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:^3.6.18":
+"@types/mongodb@npm:^3.6.20":
   version: 3.6.20
   resolution: "@types/mongodb@npm:3.6.20"
   dependencies:
@@ -6954,14 +6954,14 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^3.6.9":
-  version: 3.6.10
-  resolution: "mongodb@npm:3.6.10"
+"mongodb@npm:^3.7.3":
+  version: 3.7.3
+  resolution: "mongodb@npm:3.7.3"
   dependencies:
     bl: ^2.2.1
     bson: ^1.1.4
     denque: ^1.4.1
-    optional-require: ^1.0.3
+    optional-require: ^1.1.8
     safe-buffer: ^5.1.2
     saslprep: ^1.0.0
   dependenciesMeta:
@@ -6980,7 +6980,7 @@ fsevents@^2.3.2:
       optional: true
     snappy:
       optional: true
-  checksum: 9dcf5d26b189f899f4eb31225971c84abaacf8f62d6158a4851baaf758c716779c08085ff09b510a0c627e172b8080bffe093f37bc06d2990a7b48c625b0818d
+  checksum: ef7690fe6ee7d1752f121b14e59b3fabfddc60ff0536babce6c945703ad0010de9e6fa7de4c91b99275c256876a72a06899ce27893aba0838c2b542088bd1044
   languageName: node
   linkType: hard
 
@@ -7322,10 +7322,12 @@ fsevents@^2.3.2:
   languageName: node
   linkType: hard
 
-"optional-require@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "optional-require@npm:1.0.3"
-  checksum: 113d376ee2a130afbca1610c17f25f4d1d7c7e42029f3b4d56334ee5408fec2c3fe31617abdb699025cced274d75fd6f0b2ed5eb49bec47acabeecc3feb76f19
+"optional-require@npm:^1.1.8":
+  version: 1.1.8
+  resolution: "optional-require@npm:1.1.8"
+  dependencies:
+    require-at: ^1.0.6
+  checksum: 437db76f713052925185ae80837b593877f75101154e8937f50d33b0b07bd500c214efc9016748642109b6e3e1197eb0513a2963eb06bcf3890f88a2724b1c87
   languageName: node
   linkType: hard
 
@@ -8280,6 +8282,13 @@ fsevents@^2.3.2:
   bin:
     release-it: bin/release-it.js
   checksum: f9a1ea2dd800c05d0a765130e267e16c9d423153d2f60f1f04d2eeb265fa0ce01cae310940c1166ab70a2d826118713bf6456ce75fe05d853232d0746f3923fd
+  languageName: node
+  linkType: hard
+
+"require-at@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "require-at@npm:1.0.6"
+  checksum: 7753a6ebad99855ef015d5533a787c65e883c94c23371368eebf6f1c7e2a078811013b204823152cbab206a00e825e8e5ca09416fd835a489fa30bf064fbe6d9
   languageName: node
   linkType: hard
 
