@@ -1,4 +1,4 @@
-import { Email, isEmail } from '../../../src';
+import { email, Email, isEmail } from '../../../src';
 import '@thisisagile/easy-test';
 
 describe('isEmail', () => {
@@ -22,12 +22,13 @@ describe('Email', () => {
   });
 
   test('valid', () => {
-    expect(new Email('sander@gmail.com')).toBeValid();
+    expect(email('sander@gmail.com')).toBeValid();
+    expect(email(42)).not.toBeValid();
   });
 
   test('name', () => {
-    expect(new Email('kim@gmail.com').name).toBe('Kim');
-    expect(new Email('kim.holland@gmail.com').name).toBe('Kim Holland');
-    expect(new Email('kim.van.kooten@gmail.com').name).toBe('Kim Van Kooten');
+    expect(email('kim@gmail.com').name).toBe('Kim');
+    expect(email('kim.holland@gmail.com').name).toBe('Kim Holland');
+    expect(email('kim.van.kooten@gmail.com').name).toBe('Kim Van Kooten');
   });
 });
