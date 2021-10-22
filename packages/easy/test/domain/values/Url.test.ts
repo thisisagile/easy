@@ -4,8 +4,8 @@ import validator from 'validator';
 
 describe('Url', () => {
 
-  const valids = ['https://sanderhoogendoorn.com', 'https://www.sanderhoogendoorn.com', 'https://mail.sanderhoogendoorn.com'];
-  const invalids = ['', 'https://', 'sanderhoogendoorn', '666://www.sanderhoogendoorn.42'];
+  const valids = ['https://sander.com', 'https://www.sander.com', 'https://mail.sander.com'];
+  const invalids = ['', 'https://', 'sander', '666://www.sander.42'];
 
   test.each(valids)('valid urls with default options', v => {
     expect(validator.isURL(v)).toBeTruthy();
