@@ -24,6 +24,7 @@ describe('Email', () => {
   test('valid', () => {
     expect(email('sander@gmail.com')).toBeValid();
     expect(email(42)).not.toBeValid();
+    expect(email({})).not.toBeValid();
   });
 
   test('name', () => {
