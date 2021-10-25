@@ -3,7 +3,7 @@ import { money, Money } from '../structs';
 
 export class Currency extends Enum {
   constructor(id: string, name: string, readonly digits: number, code: string) {
-    super(id, name, code);
+    super(name, id, code);
   }
   static readonly EUR = new Currency('EUR', 'Euro', 2, '€');
   static readonly USD = new Currency('USD', 'US Dollar', 2, '$');
