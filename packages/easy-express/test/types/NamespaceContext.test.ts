@@ -29,10 +29,13 @@ describe('NamespaceContext', () => {
   test('named setters and getters work', () => {
     context.create(() => {
       context.token = 'token';
+      context.jwt = 'jwt';
       context.correlationId = 'correlation';
       context.lastError = 'error';
       context.set('tenant',  '42');
       expect(context.token).toBe('token');
+      expect(context.identity).toBe('token');
+      expect(context.jwt).toBe('jwt');
       expect(context.correlationId).toBe('correlation');
       expect(context.lastError).toBe('error');
       expect(context.get('tenant')).toBe('42');
