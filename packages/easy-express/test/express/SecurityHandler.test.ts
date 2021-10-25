@@ -51,6 +51,11 @@ describe('SecurityHandler middleware', () => {
     useSpy = jest.spyOn(passport, 'use');
   });
 
+  const testSecretOrKeyProvider = (cb: (err: any, secretOrKey?: string | Buffer) => void) =>
+    useSpy.mockImplementationOnce(((s: any) => {
+      s._secretOrKeyProvider(null, null, cb);
+    }) as any);
+
   test('security middleware with default settings', () => {
     const initializeSpy = jest.spyOn(passport, 'initialize');
 
@@ -93,11 +98,9 @@ describe('SecurityHandler middleware', () => {
   test('security middleware with secretOrKey', () => {
     const jwtStrategyOptions = { secretOrKey: key };
 
-    useSpy.mockImplementationOnce(((s: any) => {
-      s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => {
-        expect(secretOrKey).toBe(key);
-      });
-    }) as any);
+    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
+      expect(secretOrKey).toBe(key);
+    });
 
     security({ jwtStrategyOptions });
 
@@ -108,11 +111,9 @@ describe('SecurityHandler middleware', () => {
     const keyProvider = mock.resolve(key);
     const jwtStrategyOptions = { secretOrKeyProvider: keyProvider };
 
-    useSpy.mockImplementationOnce(((s: any) => {
-      s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => {
-        expect(secretOrKey).toBe(key);
-      });
-    }) as any);
+    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
+      expect(secretOrKey).toBe(key);
+    });
 
     security({ jwtStrategyOptions });
 
@@ -123,11 +124,9 @@ describe('SecurityHandler middleware', () => {
     const keyProvider = mock.reject("someError");
     const jwtStrategyOptions = { secretOrKeyProvider: keyProvider };
 
-    useSpy.mockImplementationOnce(((s: any) => {
-      s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => {
-        expect(err).toBe("someError");
-      });
-    }) as any);
+    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
+      expect(err).toBe("someError");
+    });
 
     security({ jwtStrategyOptions });
 
