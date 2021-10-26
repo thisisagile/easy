@@ -266,4 +266,4 @@ If multiple decorators are added, all conditions must be met to access the endpo
 
 To use these decorators, the generic `security` middleware must be loaded first.
 In most cases, it should be added to the `pre` list of handlers of a service.
-The security middleware takes an optional configuration object, which is documented [in code](src/express/SecurityHandler.ts).
+The security middleware takes an optional configuration object, which is documented [in code](packages/easy-express/src/express/SecurityHandler.ts).
