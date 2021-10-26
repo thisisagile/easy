@@ -95,7 +95,7 @@ describe('ExpressProvider', () => {
     router.use = mock.return();
     provider.route(service, DevsResource);
     expect(app.use).toHaveBeenCalledWith(router);
-    expect(router.use).toHaveBeenCalledWith(expect.arrayContaining([fits.type(Function)]));
+    expect(router.use).toHaveBeenCalledWith('/dev/developers', expect.arrayContaining([fits.type(Function)]));
     expect(router['get']).toEqual(fits.type(Function));
     expect(router['post']).toEqual(fits.type(Function));
   });
