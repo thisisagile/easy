@@ -13,6 +13,8 @@ export class List<T = unknown> extends Array<T> {
 
   first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).first() : this[0]);
 
+  isFirst = (value: T): boolean => value === this.first();
+
   next = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this[this.findIndex(p, params) + 1] : this[0]);
 
   prev = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this[this.findIndex(p, params) - 1] : this[0]);

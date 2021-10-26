@@ -50,9 +50,16 @@ describe('List', () => {
     expect(new List().last()).toBeUndefined();
   });
 
+  test('isFirst', () => {
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+    expect(new List().isFirst(Dev.Jeroen)).toBeFalsy();
+    expect(devs.isFirst(Dev.Wouter)).toBeFalsy();
+    expect(devs.isFirst(Dev.Sander)).toBeTruthy();
+  });
+
   test('isLast', () => {
     const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
-    expect(new List().last()).toBeFalsy();
+    expect(new List().isLast(Dev.Jeroen)).toBeFalsy();
     expect(devs.isLast(Dev.Wouter)).toBeFalsy();
     expect(devs.isLast(Dev.Naoufal)).toBeTruthy();
   });
