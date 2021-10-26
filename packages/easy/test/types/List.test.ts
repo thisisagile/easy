@@ -50,6 +50,13 @@ describe('List', () => {
     expect(new List().last()).toBeUndefined();
   });
 
+  test('isLast', () => {
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+    expect(new List().last()).toBeFalsy();
+    expect(devs.isLast(Dev.Wouter)).toBeFalsy();
+    expect(devs.isLast(Dev.Naoufal)).toBeTruthy();
+  });
+
   test('concat', () => {
     const devs = toList(Dev.Sander, Dev.Wouter);
     expect(devs.concat()).toBeInstanceOf(List);
