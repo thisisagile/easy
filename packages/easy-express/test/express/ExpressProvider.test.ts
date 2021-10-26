@@ -92,10 +92,10 @@ describe('ExpressProvider', () => {
   test('resource middleware is added', () => {
     const router = express.Router();
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
-    router.use = mock.return();
+    router.all = mock.return();
     provider.route(service, DevsResource);
     expect(app.use).toHaveBeenCalledWith(router);
-    expect(router.use).toHaveBeenCalledWith('/dev/developers', expect.arrayContaining([fits.type(Function)]));
+    expect(router.all).toHaveBeenCalledWith('/dev/developers', expect.arrayContaining([fits.type(Function)]));
     expect(router['get']).toEqual(fits.type(Function));
     expect(router['post']).toEqual(fits.type(Function));
   });

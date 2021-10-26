@@ -33,7 +33,7 @@ export class ExpressProvider implements AppProvider {
   route = (service: Service, resource: Resource): void => {
     const { route, endpoints, middleware } = routes(resource);
     const router = express.Router({ mergeParams: true });
-    if (!isEmpty(middleware)) router.use(route.route(service.name), middleware);
+    if (!isEmpty(middleware)) router.all(route.route(service.name), middleware);
 
     endpoints.forEach(({ endpoint, verb, requires, middleware }: Route) => {
       console.log(verb.verb.code, route.route(service.name));
