@@ -6,13 +6,15 @@ import { DevDatabase, DevTable } from './ref/DevTable';
 describe('SqlServerProvider', () => {
   const table = new DevTable();
   const query = table.select().where(table.id.is(3));
-  const pool = mock.empty<ConnectionPool>();
   const request = mock.empty<Request>();
   const set = { recordset: { key1: 1, key2: 2, key3: 3 }, rowsAffected: [1] };
+  let pool: ConnectionPool;
   let provider: SqlServerProvider;
 
   beforeEach(() => {
+    pool = mock.empty<ConnectionPool>();
     pool.request = mock.return(request);
+    pool.connect = mock.resolve(pool);
     request.query = mock.resolve();
     provider = new SqlServerProvider(DevDatabase.DevDB, pool);
   });
@@ -45,5 +47,26 @@ describe('SqlServerProvider', () => {
     await provider.execute(query);
     expect(pool.request).toHaveBeenCalledTimes(1);
     expect(request.query).toHaveBeenCalledWith(query.toString());
+  });
+
+  test('Connect is called on the pool if it is not connected or connecting', async () => {
+    Object.defineProperty(pool, 'connected', {value: false});
+    Object.defineProperty(pool, 'connecting', {value: false});
+    await provider.execute(query);
+    expect(pool.connect).toHaveBeenCalledTimes(1);
+  });
+
+  test('Connect is not called on the pool if it is connecting', async () => {
+    Object.defineProperty(pool, 'connected', {value: false});
+    Object.defineProperty(pool, 'connecting', {value: true});
+    await provider.execute(query);
+    expect(pool.connect).toHaveBeenCalledTimes(0);
+  });
+
+  test('Connect is not called on the pool if it is connected', async () => {
+    Object.defineProperty(pool, 'connected', {value: true});
+    Object.defineProperty(pool, 'connecting', {value: false});
+    await provider.execute(query);
+    expect(pool.connect).toHaveBeenCalledTimes(0);
   });
 });
