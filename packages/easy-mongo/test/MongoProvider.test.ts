@@ -6,7 +6,8 @@ import { DevCollection } from './ref/DevCollection';
 import { Exception } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
-  const client: MongoClient = mock.empty<MongoClient>();
+  let client: MongoClient;
+  let db: Db;
   const c = {} as Collection;
   const cursor = {} as Cursor;
   let provider: MongoProvider;
@@ -14,6 +15,11 @@ describe('MongoProvider', () => {
   const filter = { name: { $exists: true } };
 
   beforeEach(() => {
+    client = mock.empty<MongoClient>();
+    client.isConnected = mock.return(true);
+    db = mock.empty<Db>();
+    db.collection = mock.resolve({ collectionName: 'devCollection' });
+    client.db = mock.resolve(db);
     provider = new MongoProvider(collection, Promise.resolve(client));
   });
 
@@ -167,12 +173,33 @@ describe('MongoProvider', () => {
 
   test('first time connect to the mongo cluster', async () => {
     provider = new MongoProvider(collection);
-    const db = mock.empty<Db>();
-    db.collection = mock.resolve({ collectionName: 'devCollection' });
-    client.db = mock.resolve(db);
-    MongoProvider.cluster = mock.resolve(client);
+    MongoProvider.connect = mock.resolve(client);
     const coll = await provider.collection();
-    expect(MongoProvider.cluster).toHaveBeenCalledWith(collection.db);
+    expect(MongoProvider.connect).toHaveBeenCalledWith(collection.db);
+    expect(coll.collectionName).toBe('devCollection');
+  });
+
+  test('first time connect fails set client to undefined', async () => {
+    provider = new MongoProvider(collection);
+    MongoProvider.connect = mock.reject(Exception.IsNotValid);
+    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
+    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
+    expect(MongoProvider.connect).toHaveBeenNthCalledWith(1, collection.db);
+    expect(MongoProvider.connect).toHaveBeenNthCalledWith(2, collection.db);
+  });
+
+  test('reconnect if not connected anymore', async () => {
+    client.isConnected = mock.return(false);
+    MongoProvider.connect = mock.resolve(client);
+    const coll = await provider.collection();
+    expect(MongoProvider.connect).toHaveBeenCalledWith(collection.db);
+    expect(coll.collectionName).toBe('devCollection');
+  });
+
+  test('do not reconnect if not connected anymore', async () => {
+    MongoProvider.connect = mock.resolve(client);
+    const coll = await provider.collection();
+    expect(MongoProvider.connect).not.toHaveBeenCalled();
     expect(coll.collectionName).toBe('devCollection');
   });
 
@@ -184,8 +211,8 @@ describe('MongoProvider', () => {
     const db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
-    MongoProvider.cluster = mock.resolve(client);
+    MongoProvider.connect = mock.resolve(client);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.cluster).not.toHaveBeenCalled();
+    expect(MongoProvider.connect).not.toHaveBeenCalled();
   });
 });

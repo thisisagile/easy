@@ -11,6 +11,7 @@ import {
   JsonValue,
   List,
   LogicalCondition,
+  reject,
   toList,
   when,
 } from '@thisisagile/easy';
@@ -31,7 +32,21 @@ export type FindOptions = {
 export class MongoProvider {
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
 
-  static cluster(db: Database): Promise<MongoClient> {
+  cluster(): Promise<MongoClient> {
+    return Promise.resolve()
+      .then(() => this.client ?? (this.client = MongoProvider.connect(this.coll.db)))
+      .catch(e => {
+        this.client = undefined;
+        return reject(e);
+      });
+  }
+
+  reconnect(client: MongoClient): Promise<MongoClient> {
+    this.client = client.isConnected() ? Promise.resolve(client) : undefined;
+    return this.cluster();
+  }
+
+  static connect(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
       .not.isDefined.reject(new Exception('Missing cluster in database options.'))
       .then(u =>
@@ -107,8 +122,8 @@ export class MongoProvider {
   }
 
   collection(): Promise<MongoCollection> {
-    return Promise.resolve()
-      .then(() => this.client ?? (this.client = MongoProvider.cluster(this.coll.db)))
+    return this.cluster()
+      .then(c => this.reconnect(c))
       .then(c => c.db(this.coll.db.name))
       .then(db => db.collection(asString(this.coll)));
   }
