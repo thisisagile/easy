@@ -25,4 +25,10 @@ describe('Test Jwt', () => {
   test('toJSON.', () => {
     expect(jwt.toJSON()).toStrictEqual({ jwt: jwt.value });
   });
+
+  test('Sign with options', ()=>{
+    const jwt = Jwt.sign(dev, {audience: 'audience', issuer: 'issuer'})
+    expect(jwt.decode().iss).toBe('issuer');
+    expect(jwt.decode().aud).toBe('audience');
+  })
 });

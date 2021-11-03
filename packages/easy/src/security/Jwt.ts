@@ -1,6 +1,10 @@
 import { Algorithm, decode, sign, verify } from 'jsonwebtoken';
 import { ctx, Json, tryTo, Validatable, Value } from '../types';
 
+interface SignOptions {
+  audience?: string | string[] | undefined;
+  issuer?: string | undefined;
+}
 export class Jwt extends Value implements Validatable {
 
   get isValid(): boolean {
@@ -9,9 +13,10 @@ export class Jwt extends Value implements Validatable {
       .map(() => true).orElse() ?? false;
   }
 
-  static sign = (token: Json): Jwt =>
+  static sign = (token: Json, options?: SignOptions): Jwt =>
     tryTo(() => ctx.env.get('tokenPrivateKey') ?? '').is.not.empty()
       .map(key => sign(token, key, {
+        ...options,
         expiresIn: ctx.env.get('tokenExpiresIn') ?? '1h',
         keyid: ctx.env.get('tokenKeyid') ?? 'easy',
         algorithm: ctx.env.get('tokenAlgorithm', 'RS256') as Algorithm,
