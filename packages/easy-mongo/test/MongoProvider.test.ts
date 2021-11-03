@@ -1,9 +1,9 @@
 import { Collection, Cursor, Db, MongoClient } from 'mongodb';
 import { MongoProvider } from '../src';
-import { mock } from '@thisisagile/easy-test';
+import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { Exception } from '@thisisagile/easy';
+import { DateTime, Exception } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -13,6 +13,7 @@ describe('MongoProvider', () => {
   let provider: MongoProvider;
   const collection = new DevCollection();
   const filter = { name: { $exists: true } };
+  const date = '2023-09-22T12:30:00.000+00:00';
 
   beforeEach(() => {
     client = mock.empty<MongoClient>();
@@ -73,6 +74,17 @@ describe('MongoProvider', () => {
     expect(c.find).toHaveBeenCalledWith({}, { skip: 3, limit: 250 });
   });
 
+  test('find calls toMongoType on queries, to correct dates', async () => {
+    provider.collection = mock.resolve(c);
+    cursor.toArray = mock.resolve([]);
+    c.find = mock.resolve(cursor);
+
+    await provider.find({ date: date });
+
+    expect(c.find).toHaveBeenCalledWith({ 'date': new DateTime(date).toDate() }, { 'limit': fits.any() });
+    expect(c.find).not.toHaveBeenCalledWith({ 'date': date }, { 'limit': fits.any() });
+  });
+
   test('group calls aggregate on the collection', () => {
     cursor.toArray = mock.resolve(devData);
     c.aggregate = mock.resolve(cursor);
@@ -125,6 +137,17 @@ describe('MongoProvider', () => {
     expect(c.countDocuments).toHaveBeenCalled();
   });
 
+  test('count calls toMongoType on queries, to correct dates', async () => {
+    provider.collection = mock.resolve(c);
+    cursor.toArray = mock.resolve([]);
+    c.countDocuments = mock.resolve(cursor);
+
+    await provider.count({ date: date });
+
+    expect(c.countDocuments).toHaveBeenCalledWith({ 'date': new DateTime(date).toDate() });
+    expect(c.countDocuments).not.toHaveBeenCalledWith({ 'date': date });
+  });
+
   test('createIndex calls createIndex on the collection and creates unique indexes by default', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
@@ -150,7 +173,11 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: true, writeConcern: { w: 1 } });
+    expect(c.createIndex).toHaveBeenCalledWith('name', {
+      partialFilterExpression: filter,
+      unique: true,
+      writeConcern: { w: 1 },
+    });
   });
 
   test('createPartialIndex calls createIndex on the collection with condition and creates unique indexes by default', async () => {
@@ -164,11 +191,36 @@ describe('MongoProvider', () => {
     });
   });
 
+  test('createPartialIndex calls toMongoType on filter, to correct dates', async () => {
+    c.createIndex = mock.resolve('_index');
+    provider.collection = mock.resolve(c);
+
+    await provider.createPartialIndex('date', { date: date });
+
+    expect(c.createIndex).toHaveBeenCalledWith(
+      'date', {
+        partialFilterExpression: { date: new DateTime(date).toDate() },
+        unique: true,
+        writeConcern: { w: 1 },
+      });
+
+    expect(c.createIndex).not.toHaveBeenCalledWith(
+      'date', {
+        partialFilterExpression: { date: date },
+        unique: true,
+        writeConcern: { w: 1 },
+      });
+  });
+
   test('create non unique partial index calls createIndex on the collection with filter expression', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createPartialIndex('name', filter, false)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { partialFilterExpression: filter, unique: false, writeConcern: { w: 1 } });
+    expect(c.createIndex).toHaveBeenCalledWith('name', {
+      partialFilterExpression: filter,
+      unique: false,
+      writeConcern: { w: 1 },
+    });
   });
 
   test('first time connect to the mongo cluster', async () => {

@@ -105,7 +105,7 @@ export class MongoProvider {
   }
 
   count(query?: Condition | LogicalCondition | FilterQuery<any>): Promise<number> {
-    return this.collection().then(c => c.countDocuments(query));
+    return this.collection().then(c => c.countDocuments(toMongoType(asJson(query))));
   }
 
   createIndex(field: string | any, unique = true): Promise<string> {
@@ -113,7 +113,7 @@ export class MongoProvider {
   }
 
   createPartialIndex(field: string | any, filter: Condition | LogicalCondition | FilterQuery<any>, unique = true): Promise<string> {
-    return this.collection().then(c => c.createIndex(field, { partialFilterExpression: asJson(filter), unique, writeConcern: { w: 1 } }));
+    return this.collection().then(c => c.createIndex(field, { partialFilterExpression: toMongoType(asJson(filter)), unique, writeConcern: { w: 1 } }));
   }
 
   createTextIndexes(...fields: Field[]): Promise<string> {
