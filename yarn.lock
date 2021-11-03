@@ -1239,9 +1239,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.10.1":
-  version: 8.10.1
-  resolution: "@testing-library/dom@npm:8.10.1"
+"@testing-library/dom@npm:8.11.0":
+  version: 8.11.0
+  resolution: "@testing-library/dom@npm:8.11.0"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
@@ -1251,7 +1251,7 @@ __metadata:
     dom-accessibility-api: ^0.5.9
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
-  checksum: c11da16d981d4479fa18b2e90a62d2c19871da414016a4f80136394cf35e833ca4de4b56a64225f6bd5d3a13842176236d3508d217e3858c5e2ef35a3f391d5b
+  checksum: e546ef5c2d934fedce1d296763694151dfcb0f25a34301fce83f813924c1bc7926740c7036a2395bd611cbaa2dd604b11508d7bf10231f278400fffb8186f402
   languageName: node
   linkType: hard
 
@@ -1372,7 +1372,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
   dependencies:
-    "@testing-library/dom": 8.10.1
+    "@testing-library/dom": 8.11.0
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@thisisagile/easy": "workspace:*"
