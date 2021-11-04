@@ -1,7 +1,7 @@
 import { meta } from '../types';
-import { ContentType, HttpStatus, HttpVerb } from './index';
+import { CacheControl, ContentType, HttpStatus, HttpVerb } from './index';
 
-export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType };
+export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType, cache?: CacheControl };
 export type Verb = { verb: HttpVerb; options: VerbOptions };
 
 export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => ({
@@ -9,6 +9,7 @@ export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => (
   onNotFound: options?.onNotFound ?? HttpStatus.NotFound,
   onError: options?.onError ?? HttpStatus.BadRequest,
   type: options?.type ?? ContentType.Json,
+  cache: options?.cache ?? CacheControl.disabled()
 });
 
 const toVerb =

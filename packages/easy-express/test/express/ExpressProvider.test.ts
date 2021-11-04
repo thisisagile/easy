@@ -1,6 +1,14 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { ContentType, Exception, Handler, HttpStatus, toVerbOptions, VerbOptions } from '@thisisagile/easy';
+import {
+  CacheControl,
+  ContentType,
+  Exception,
+  Handler,
+  HttpStatus,
+  toVerbOptions,
+  VerbOptions,
+} from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 import { ExpressProvider, ExpressVerb } from '../../src';
@@ -25,7 +33,13 @@ describe('ExpressProvider', () => {
   beforeEach(() => {
     provider = new ExpressProviderTest(app);
     service = new DevService('dev', provider);
-    res = { json: mock.this(), end: mock.this(), type: mock.this(), status: mock.this() } as unknown as Response;
+    res = {
+      json: mock.this(),
+      end: mock.this(),
+      type: mock.this(),
+      status: mock.this(),
+      setHeader: mock.this(),
+    } as unknown as Response;
   });
 
   test('use', () => {
@@ -39,7 +53,9 @@ describe('ExpressProvider', () => {
   });
 
   test('toResponse without status and type', () => {
-    const options: VerbOptions = {};
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    cc.setHeader = mock.return();
+    const options: VerbOptions = { cache: cc };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
     provider.toResponse(res, undefined, options);
@@ -51,7 +67,9 @@ describe('ExpressProvider', () => {
 
   test('toResponse with status and type', () => {
     const result = {};
-    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text };
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    cc.setHeader = mock.return();
+    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text, cache: cc  };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
@@ -59,9 +77,21 @@ describe('ExpressProvider', () => {
     expect((provider as any).json).toHaveBeenCalledWith(res, result, toVerbOptions(options));
   });
 
+  test('toResponse calls cache set header', () => {
+    const result = {};
+    const cc = mock.empty<CacheControl>({ enabled: true });
+    cc.setHeader = mock.return({});
+    const options: VerbOptions = { cache: cc };
+    (provider as any).json = mock.return();
+    provider.toResponse(res, result, options);
+    expect(cc.setHeader).toHaveBeenCalledWith(res.setHeader);
+  });
+
   test('toResponse with stream', () => {
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    cc.setHeader = mock.return();
     const buf = Buffer.from([]);
-    const options: VerbOptions = { type: ContentType.Stream };
+    const options: VerbOptions = { type: ContentType.Stream, cache: cc };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
     provider.toResponse(res, buf, options);
@@ -76,7 +106,7 @@ describe('ExpressProvider', () => {
       cb({
         path,
         handler: handler as AsyncHandler,
-      })
+      }),
     );
   }
 

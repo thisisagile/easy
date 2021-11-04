@@ -16,7 +16,7 @@ import {
   toOriginatedError,
   toReq,
   toVerbOptions,
-  VerbOptions,
+  VerbOptions
 } from '@thisisagile/easy';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -72,6 +72,8 @@ export class ExpressProvider implements AppProvider {
   protected toResponse(res: Response, result: unknown, options: Required<VerbOptions>): void {
     res.status(options.onOk.status);
     res.type(options.type.code);
+    options.cache.setHeader(res.setHeader);
+
     ((this as any)[options.type.name] ?? this.json)(res, result, options);
   }
 

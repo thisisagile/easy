@@ -1,3 +1,4 @@
+export * from './CacheControl'
 export * from './ContentType';
 export * from './HttpHeader';
 export * from './HttpStatus';

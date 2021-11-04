@@ -1,6 +1,7 @@
-import { ContentType, HttpStatus, HttpVerb, meta, toVerbOptions, Verb } from '../../src';
+import { CacheControl, ContentType, HttpStatus, HttpVerb, meta, toVerbOptions, Verb } from '../../src';
 import { DevResource, DevsResource } from '../ref';
 import '@thisisagile/easy-test';
+import { fits } from '@thisisagile/easy-test';
 
 describe('Verb', () => {
   const devs = meta(new DevsResource());
@@ -67,4 +68,9 @@ describe('toVerbOptions', () => {
     expect(toVerbOptions().type).toMatchText(ContentType.Json);
     expect(toVerbOptions({ type: ContentType.Stream }).type).toMatchText(ContentType.Stream);
   });
+
+  test('cache', () => {
+    expect(toVerbOptions().cache).toEqual(fits.with({enabled: false}))
+    expect(toVerbOptions({cache: CacheControl.OneSecond()}).cache).toEqual(fits.with({enabled: true}))
+  })
 });
