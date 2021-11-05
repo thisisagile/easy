@@ -35,7 +35,7 @@ describe('CacheControl', () => {
   test('disabled should not call setHeader', () => {
     const req = mock.empty<request>();
     req.setHeader = mock.return({});
-    const r = CacheControl.disabled().setHeader(req.setHeader);
+    const r = CacheControl.disabled().set(req.setHeader);
     expect(req.setHeader).not.toHaveBeenCalled();
     expect(r).toEqual({ })
   });
@@ -47,7 +47,7 @@ describe('CacheControl', () => {
     req.setHeader = mock.return(headerResult);
     const cc = CacheControl.custom(1, 2);
 
-    const r = cc.setHeader(req.setHeader);
+    const r = cc.set(req.setHeader);
 
     expect(req.setHeader).toHaveBeenCalledWith('Cache-Control', cc.value());
     expect(r).toBe(headerResult)

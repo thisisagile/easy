@@ -54,7 +54,7 @@ describe('ExpressProvider', () => {
 
   test('toResponse without status and type', () => {
     const cc = mock.empty<CacheControl>({ enabled: false });
-    cc.setHeader = mock.return();
+    cc.set = mock.return();
     const options: VerbOptions = { cache: cc };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
@@ -68,7 +68,7 @@ describe('ExpressProvider', () => {
   test('toResponse with status and type', () => {
     const result = {};
     const cc = mock.empty<CacheControl>({ enabled: false });
-    cc.setHeader = mock.return();
+    cc.set = mock.return();
     const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text, cache: cc  };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
@@ -80,16 +80,16 @@ describe('ExpressProvider', () => {
   test('toResponse calls cache set header', () => {
     const result = {};
     const cc = mock.empty<CacheControl>({ enabled: true });
-    cc.setHeader = mock.return({});
+    cc.set = mock.return({});
     const options: VerbOptions = { cache: cc };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
-    expect(cc.setHeader).toHaveBeenCalledWith(res.setHeader);
+    expect(cc.set).toHaveBeenCalledWith(res.setHeader);
   });
 
   test('toResponse with stream', () => {
     const cc = mock.empty<CacheControl>({ enabled: false });
-    cc.setHeader = mock.return();
+    cc.set = mock.return();
     const buf = Buffer.from([]);
     const options: VerbOptions = { type: ContentType.Stream, cache: cc };
     (provider as any).json = mock.return();
