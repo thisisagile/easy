@@ -26,6 +26,6 @@ export class CacheControl {
     return this.enabled ? `max-age=${this.age}${swr}` : '';
   };
 
-  set = (setHeader: (name: string, value: number | string | ReadonlyArray<string>) => any) =>
-    this.enabled ? setHeader('Cache-Control', this.value()) : {};
+  name = 'Cache-Control';
+
 }

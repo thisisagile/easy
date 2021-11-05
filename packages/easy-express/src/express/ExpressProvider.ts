@@ -5,6 +5,7 @@ import {
   Endpoint,
   Handler,
   HttpStatus,
+  isEmpty,
   Resource,
   rest,
   Route,
@@ -12,11 +13,10 @@ import {
   routes,
   Service,
   toList,
-  isEmpty,
   toOriginatedError,
   toReq,
   toVerbOptions,
-  VerbOptions
+  VerbOptions,
 } from '@thisisagile/easy';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
@@ -41,11 +41,17 @@ export class ExpressProvider implements AppProvider {
         route.route(service.name),
         ...this.addSecurityMiddleware(requires),
         ...middleware,
-        this.handle(endpoint, verb.options)
+        this.handle(endpoint, verb.options),
       );
     });
 
     this.app.use(router);
+  };
+
+  listen = (port: number, message = `Service is listening on port ${port}.`): void => {
+    this.app.listen(port, () => {
+      console.log(message);
+    });
   };
 
   protected addSecurityMiddleware(requires: RouteRequires): RequestHandler[] {
@@ -56,23 +62,17 @@ export class ExpressProvider implements AppProvider {
     return middleware;
   }
 
-  listen = (port: number, message = `Service is listening on port ${port}.`): void => {
-    this.app.listen(port, () => {
-      console.log(message);
-    });
-  };
-
   protected handle =
     (endpoint: Endpoint, options?: VerbOptions): RequestHandler =>
-    (req: Request, res: Response, next: NextFunction) =>
-      endpoint(toReq(req))
-        .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
-        .catch(error => next(toOriginatedError(error, options)));
+      (req: Request, res: Response, next: NextFunction) =>
+        endpoint(toReq(req))
+          .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
+          .catch(error => next(toOriginatedError(error, options)));
 
   protected toResponse(res: Response, result: unknown, options: Required<VerbOptions>): void {
     res.status(options.onOk.status);
     res.type(options.type.code);
-    options.cache.set(res.setHeader);
+    if (options.cache.enabled) res.setHeader(options.cache.name, options.cache.value());
 
     ((this as any)[options.type.name] ?? this.json)(res, result, options);
   }
