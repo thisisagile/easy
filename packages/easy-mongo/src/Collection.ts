@@ -21,6 +21,7 @@ export class Collection extends Mapper {
     ...mappings,
     field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
+  readonly id = this.map.field('id', { dflt: toUuid });
 
   constructor(options: MapOptions = { startFrom: 'source' }) {
     super(options);
@@ -34,9 +35,9 @@ export class Collection extends Mapper {
     return new MongoProvider(this);
   }
 
-  readonly id = this.map.field('id', { dflt: toUuid });
-
   where = (...conditions: Condition[]): Json => new LogicalCondition('and', conditions).toJSON();
+
+  match = (...conditions: Condition[]): Json => new LogicalCondition('match', conditions).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
