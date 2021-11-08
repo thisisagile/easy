@@ -35,9 +35,11 @@ export class Collection extends Mapper {
     return new MongoProvider(this);
   }
 
-  where = (...conditions: Condition[]): Json => new LogicalCondition('and', conditions).toJSON();
+  where = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('and', conditions.map(c => ofGet(c, this))).toJSON();
 
-  match = (...conditions: Get<Condition, Collection>[]): Json => new LogicalCondition('match', conditions.map(c => ofGet(c, this))).toJSON();
+  match = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('match', conditions.map(c => ofGet(c, this))).toJSON();
+
+  group = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('group', conditions.map(c => ofGet(c, this))).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 

@@ -21,9 +21,29 @@ describe('Collection', () => {
     expect(devs.where(devs.name.isNot('Jeroen'), devs.level.is(3))).toStrictEqual(where);
   });
 
+  test('where with functions creates query and maps', () => {
+    const where = { $and: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
+    expect(devs.where(d => d.name.isNot('Jeroen'), d => d.level.is(3))).toStrictEqual(where);
+  });
+
   test('match creates query and maps', () => {
     const where = { $match: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
     expect(devs.match(devs.name.isNot('Jeroen'), devs.level.is(3))).toStrictEqual(where);
+  });
+
+  test('match with functions creates query and maps', () => {
+    const where = { $match: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
+    expect(devs.match(d => d.name.isNot('Jeroen'), d => d.level.is(3))).toStrictEqual(where);
+  });
+
+  test('group creates query and maps', () => {
+    const where = { $group: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
+    expect(devs.group(devs.name.isNot('Jeroen'), devs.level.is(3))).toStrictEqual(where);
+  });
+
+  test('group with functions creates query and maps', () => {
+    const where = { $group: [{ Name: { $ne: 'Jeroen' } }, { CodingLevel: { $eq: '3' } }] };
+    expect(devs.group(d => d.name.isNot('Jeroen'), d => d.level.is(3))).toStrictEqual(where);
   });
 
   test('google', () => {
