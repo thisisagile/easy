@@ -2,12 +2,12 @@ import {
   asString,
   Condition,
   Database,
-  Field,
+  Field, Get,
   Json,
   LogicalCondition,
   MapOptions,
   Mapper,
-  mappings,
+  mappings, ofGet,
   PropertyOptions,
   Text,
   toCondition,
@@ -37,7 +37,7 @@ export class Collection extends Mapper {
 
   where = (...conditions: Condition[]): Json => new LogicalCondition('and', conditions).toJSON();
 
-  match = (...conditions: Condition[]): Json => new LogicalCondition('match', conditions).toJSON();
+  match = (...conditions: Get<Condition, Collection>[]): Json => new LogicalCondition('match', conditions.map(c => ofGet(c, this))).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
