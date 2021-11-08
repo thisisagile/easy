@@ -4,8 +4,8 @@ import { Currency } from '../enums';
 import { isEmpty } from '../../types';
 
 export class Money extends Struct {
-  @required() readonly currency: Currency = Currency.byId(this.state.currency, Currency.EUR);
-  @required() readonly value: number = this.state.value ?? 0;
+  @required() readonly currency: Currency = Currency.byId(this.state.currency);
+  @required() readonly value: number = this.state.value;
 
   add = (amount: number): Money => money(this.currency, this.value + amount);
   subtract = (amount: number): Money => money(this.currency, this.value - amount);

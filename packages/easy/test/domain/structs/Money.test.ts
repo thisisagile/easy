@@ -4,12 +4,6 @@ import { Currency, isMoney, money, Money } from '../../../src';
 describe('Money', () => {
   const m = new Money({ currency: Currency.EUR.id, value: 42 });
 
-  test('default', () => {
-    const m = new Money();
-    expect(m.currency).toBe(Currency.EUR);
-    expect(m.value).toBe(0);
-  });
-
   test('real money', () => {
     const m = new Money({ currency: Currency.USD.id, value: 42 });
     expect(m.currency).toBe(Currency.USD);
@@ -37,6 +31,14 @@ describe('Money', () => {
   test('toString', () => {
     expect(m).toMatchText('€ 42.00');
     expect(money(Currency.GBP, 16)).toMatchText('£ 16.00');
+  });
+
+  test('invalid', () => {
+    expect(new Money()).not.toBeValid();
+    expect(new Money({currency: 'wrong'})).not.toBeValid();
+    expect(new Money({currency: 'wrong', value: 0})).not.toBeValid();
+    expect(new Money({value: 0})).not.toBeValid();
+    expect(new Money({currency: 'EUR', value: 0})).toBeValid();
   });
 });
 
