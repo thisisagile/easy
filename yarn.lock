@@ -1397,7 +1397,7 @@ __metadata:
   resolution: "@thisisagile/easy-test@workspace:packages/easy-test"
   dependencies:
     "@types/jest": ^27.0.2
-    "@types/node": ^16.7.6
+    "@types/node": ^16.11.7
     expect: ^27.2.5
     jest: ^27.2.5
     jest-junit: ^13.0.0
@@ -1723,17 +1723,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.11.0":
-  version: 16.11.0
-  resolution: "@types/node@npm:16.11.0"
-  checksum: 194ae80ec72f664e15e03c33f116be96aa1e85b167a19e31003c53ddfc36dabd65744e9a76c1d46b7ce2e5981d2ccb8e84a85c3ec9ac89f1471daaa885bdcfd0
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^16.7.6":
-  version: 16.7.6
-  resolution: "@types/node@npm:16.7.6"
-  checksum: a8533386a1d4ca0ed67885413001af8789c63948df288f3d36e31bd8fccffacf5dffb95e190c8cd57bb40385f010fb9a30f596bad6bb26b2bb88737d54d8ed95
+"@types/node@npm:^16.11.7":
+  version: 16.11.7
+  resolution: "@types/node@npm:16.11.7"
+  checksum: 2706403e6efc4aa40fdce8f0b5d9884d5600c3c8610aedc7fa5e7e298d30366f7e8b7296028d52898dca3edef4c3e827b03bf20952c4780f13fa4e79864f7a86
   languageName: node
   linkType: hard
 
@@ -8463,7 +8456,7 @@ fsevents@^2.3.2:
     "@release-it/conventional-changelog": ^3.3.0
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^27.0.2
-    "@types/node": ^16.11.0
+    "@types/node": ^16.11.7
     "@typescript-eslint/eslint-plugin": ^5.0.0
     "@typescript-eslint/parser": ^5.0.0
     eslint: ^8.0.1
