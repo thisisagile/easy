@@ -8,7 +8,7 @@ import { ElementTester, renders } from '../src';
 
 describe('ElementTester', () => {
   const a = <div />;
-  const e = mock.empty<Element>({ value: '42' });
+  const e = mock.empty<Element & {value: string}>({ value: '42' });
   let et: ElementTester;
 
   beforeEach(() => {
