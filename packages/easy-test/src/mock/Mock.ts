@@ -8,34 +8,6 @@ import { HttpStatus, Response } from '../utils/Response';
 const mockProperty = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
   jest.spyOn(object, getter, 'get').mockReturnValue(value);
 
-// export type Mockes = {
-//   clear: typeof jest,
-//   impl: (f?: (...args: any[]) => any) => Mock,
-//   property: <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]) => SpyInstance,
-//   reject: (value?: unknown) => Mock,
-//   req: {
-//     id: (id: Id) => Req,
-//     q: (q: unknown) => Req,
-//     with: (a: Json) => Req,
-//     body: (body: unknown) => Req,
-//     path: (path: Json) => Req,
-//     query: (query: Json) => Req,
-//   },
-//   resp: {
-//     items: (status: HttpStatus, items?: unknown[]) => Response,
-//     errors: (status: HttpStatus, message: string, errors?: unknown[]) => Response
-//   },
-//   resolve: (value?: unknown) => Mock,
-//   return: (value?: unknown) => Mock,
-//   this: () => Mock,
-//   provider: {
-//     data: (...items: any[]) => { execute: Mock }
-//   },
-//   empty: <T = any>(props?: Partial<T>) => T,
-//   date: (epoch?: number) => Date,
-//   once: (...values: unknown[]) => Mock
-// }
-
 export class Mocks {
   clear = (): typeof jest => jest.clearAllMocks();
   impl = (f?: (...args: any[]) => any): Mock => jest.fn().mockImplementation(f);
