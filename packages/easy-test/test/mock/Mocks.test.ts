@@ -116,6 +116,11 @@ describe('mock', () => {
     });
   });
 
+  test('mock empty without props', () => {
+    const p = mock.empty<Project>();
+    expect(p.version).toBeUndefined();
+  });
+
   test('mock empty', () => {
     const p = mock.empty<Project>({ version: mock.return() });
     p.version(42);
