@@ -137,7 +137,6 @@ describe('mock', () => {
     return expect(p.version).toHaveBeenCalledWith(42);
   });
 
-
   test('date', () => {
     const d = mock.date();
     const d2 = mock.date();
