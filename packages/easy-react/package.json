@@ -1,0 +1,48 @@
+{
+  "name": "@thisisagile/easy-react",
+  "version": "0.1.0",
+  "description": "Straightforward library building micro applications in react",
+  "author": "Sander Hoogendoorn",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thisisagile/easy.git"
+  },
+  "keywords": [
+    "typescript",
+    "microapps",
+    "domain-driven-design",
+    "evolutionary-architecture",
+    "react"
+  ],
+  "scripts": {
+    "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "yarn g:prettier --check --write src test *.json",
+    "build": "yarn g:tsc",
+    "postbuild": "copyfiles -u 1 src/**/*.scss dist",
+    "test": "yarn g:jest --coverage",
+    "prepack": "yarn g:copy-readme"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*",
+    "@thisisagile/easy-test-react": "workspace:*",
+    "@types/copyfiles": "^2",
+    "copyfiles": "^2.4.1",
+    "jest-transform-stub": "^2.0.0"
+  },
+  "dependencies": {
+    "@thisisagile/easy": "workspace:*",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "sass": "^1.42.1"
+  }
+}

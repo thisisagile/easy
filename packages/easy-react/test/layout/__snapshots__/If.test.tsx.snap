@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`If renders correctly 2. 1`] = `<div />`;
+
+exports[`If renders correctly. 1`] = `
+<div>
+  <div
+    data-testid="found"
+  >
+    Hello
+  </div>
+</div>
+`;
