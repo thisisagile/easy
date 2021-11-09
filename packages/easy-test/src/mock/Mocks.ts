@@ -5,13 +5,10 @@ import { Id, Json } from '../utils/Types';
 import { Req } from '../utils/Req';
 import { HttpStatus, Response } from '../utils/Response';
 
-const mockProperty = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
-  jest.spyOn(object, getter, 'get').mockReturnValue(value);
-
 export class Mocks {
   clear = (): typeof jest => jest.clearAllMocks();
   impl = (f?: (...args: any[]) => any): Mock => jest.fn().mockImplementation(f);
-  property = mockProperty;
+  property = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance => jest.spyOn(object, getter, 'get').mockReturnValue(value);
   reject = (value?: unknown): Mock => jest.fn().mockRejectedValue(value);
   req = {
     id: (id: Id): Req => new Req({ id }),

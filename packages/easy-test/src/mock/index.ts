@@ -1,2 +1,2 @@
 export * from './Fits';
-export * from './Mock';
+export * from './Mocks';
