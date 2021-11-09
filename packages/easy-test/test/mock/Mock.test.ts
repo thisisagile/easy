@@ -1,4 +1,4 @@
-import { mock } from '../../src';
+import { mock, Mocks } from '../../src';
 import { HttpStatus } from '../../src/utils/Response';
 
 describe('mock', () => {
@@ -127,6 +127,16 @@ describe('mock', () => {
     p.version(42);
     return expect(p.version).toHaveBeenCalledWith(42);
   });
+
+  const mockInherited: Mocks & {something: () => string }= {...mock, something: () => 'yes' };
+
+  test('extending mock empty without generic', () => {
+    const p = mockInherited.empty<Project>({ version: mock.return() });
+    p.version(42);
+    expect(mockInherited.something()).toBe('yes')
+    return expect(p.version).toHaveBeenCalledWith(42);
+  });
+
 
   test('date', () => {
     const d = mock.date();

@@ -8,7 +8,35 @@ import { HttpStatus, Response } from '../utils/Response';
 const mockProperty = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
   jest.spyOn(object, getter, 'get').mockReturnValue(value);
 
-export const mock = {
+export type Mocks = {
+  clear: typeof jest,
+  impl: (f?: (...args: any[]) => any) => Mock,
+  property: <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]) => SpyInstance,
+  reject: (value?: unknown) => Mock,
+  req: {
+    id: (id: Id) => Req,
+    q: (q: unknown) => Req,
+    with: (a: Json) => Req,
+    body: (body: unknown) => Req,
+    path: (path: Json) => Req,
+    query: (query: Json) => Req,
+  },
+  resp: {
+    items: (status: HttpStatus, items?: unknown[]) => Response,
+    errors: (status: HttpStatus, message: string, errors?: unknown[]) => Response
+  },
+  resolve: (value?: unknown) => Mock,
+  return: (value?: unknown) => Mock,
+  this: () => Mock,
+  provider: {
+    data: (...items: any[]) => { execute: Mock }
+  },
+  empty: <T = any>(props?: Partial<T>) => T,
+  date: (epoch?: number) => Date,
+  once: (...values: unknown[]) => Mock
+}
+
+export const mock: Mocks = {
   clear: jest.clearAllMocks(),
   impl: (f?: (...args: any[]) => any): Mock => jest.fn().mockImplementation(f),
   property: mockProperty,
@@ -59,7 +87,7 @@ export const mock = {
       }),
     }),
   },
-  empty: <T = any>(props: any = {}): T => props as unknown as T,
+  empty: <T = any>(props: Partial<T> = {}): T => props as T,
   date: (epoch = 1621347575): Date => {
     const date = new Date(epoch);
     date.toString = mock.return('Mon Jan 19 1970 19:22:27 GMT+0100 (Central European Standard Time)');
