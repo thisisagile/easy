@@ -86,6 +86,8 @@ export class MongoProvider {
       .then(res => res.toArray());
   }
 
+  aggregate = this.group;
+
   add(o: Json): Promise<Json> {
     return this.collection()
       .then(c => c.insertOne(omitId(o)))
