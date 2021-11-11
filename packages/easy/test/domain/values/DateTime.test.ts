@@ -168,6 +168,13 @@ describe('DateTime', () => {
     expect(current.isBefore(next)).toBeTruthy();
   });
 
+  test('isSame', () => {
+    const current = DateTime.now;
+    const next =  DateTime.now;
+    expect(next.isSame(current)).toBeTruthy();
+    expect(current.isBefore(next)).toBeTruthy();
+  });
+
   test('toLocale', () => {
     const dt = new DateTime(iso);
     expect(dt.toLocale()).toMatchText('25-3-2021');
