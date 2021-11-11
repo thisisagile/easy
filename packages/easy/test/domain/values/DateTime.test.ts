@@ -63,6 +63,34 @@ describe('DateTime', () => {
     expect(new DateTime(new Date(date.epoch))).toBeValid();
   });
 
+  test.each([
+    ['2021-11-10', 'YYYY-DD-MM', '2021-10-11T00:00:00.000Z'],
+    ['2021-10-11', 'YYYY-MM-DD', '2021-10-11T00:00:00.000Z'],
+    ['2021-10-11T01:23', 'YYYY-MM-DD[T]hh:mm', '2021-10-11T01:23:00.000Z'],
+    ['2021-10-11T01:23:11', 'YYYY-MM-DD[T]hh:mm:ss', '2021-10-11T01:23:11.000Z'],
+    ['2021-10-11T01:23:59.123+0100', 'YYYY-MM-DD[T]hh:mm:ss.SSSZ', '2021-10-11T00:23:59.123Z'],
+    ['23/11/2021 09:15:00', 'DD/MM/YYYY hh:mm:ss', '2021-11-23T09:15:00.000Z'],
+    ['Wed Dec 24 09:15:00 -0800 2014', 'ddd MMM DD hh:mm:ss ZZ YYYY', '2014-12-24T17:15:00.000Z'],
+  ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
+    const res = new DateTime(s, f);
+    expect(res).toBeValid();
+    expect(res).toMatchText(new DateTime(e));
+  });
+
+  test.each([
+    [date.iso, 'foo'],
+    ['bar', 'DD/MM/YYYY'],
+    ['01/23/2021', 'DD/MM/YYYY'],
+  ])('construct with date: %s and format: %s should be invalid', (s, f) => {
+    const res = new DateTime(s, f);
+    expect(res).not.toBeValid();
+  });
+
+  test('construct fails when date or format are invalid.', () => {
+    const res = new DateTime('2021-11-10', 'foo');
+    expect(res).not.toBeValid();
+  });
+
   test('toString from undefined returns empty string.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res).toMatchText('');
@@ -170,8 +198,8 @@ describe('DateTime', () => {
 
   test('equals', () => {
     const current = DateTime.now;
-    const next =  current.add(2);
-    const prev =  current.subtract(2);
+    const next = current.add(2);
+    const prev = current.subtract(2);
 
     expect(current.equals(current)).toBeTruthy();
 
