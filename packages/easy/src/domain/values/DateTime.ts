@@ -13,8 +13,8 @@ export type DateTimeUnit =
   | 'milliseconds';
 
 export class DateTime extends Value<string | undefined> {
-  constructor(value?: string | number | Date) {
-    super(tryTo(value).is.defined().map(v => moment.utc(v, true).toISOString()).orElse());
+  constructor(value?: string | number | Date, format?: string) {
+    super(tryTo(value).is.defined().map(v => moment.utc(v, format, true).toISOString()).orElse());
   }
 
   static get now(): DateTime {
