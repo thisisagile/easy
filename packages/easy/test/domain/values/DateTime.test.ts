@@ -168,11 +168,18 @@ describe('DateTime', () => {
     expect(current.isBefore(next)).toBeTruthy();
   });
 
-  test('isSame', () => {
+  test('equals', () => {
     const current = DateTime.now;
-    const next =  DateTime.now;
-    expect(next.isSame(current)).toBeTruthy();
-    expect(current.isBefore(next)).toBeTruthy();
+    const next =  current.add(2);
+    const prev =  current.subtract(2);
+
+    expect(current.equals(current)).toBeTruthy();
+
+    expect(current.equals(next)).toBeFalsy();
+    expect(next.equals(current)).toBeFalsy();
+
+    expect(current.equals(prev)).toBeFalsy();
+    expect(prev.equals(current)).toBeFalsy();
   });
 
   test('toLocale', () => {

@@ -41,7 +41,7 @@ export class DateTime extends Value<string | undefined> {
     return this.utc.isBefore(moment.utc(dt.value));
   }
 
-  isSame(dt: DateTime): boolean {
+  equals(dt: DateTime): boolean {
     return this.utc.isSame(moment.utc(dt.value));
   }
 
