@@ -37,7 +37,7 @@ export class Collection extends Mapper {
 
   where = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('and', conditions.map(c => ofGet(c, this))).toJSON();
 
-  match = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('match', conditions.map(c => ofGet(c, this))).toJSON();
+  match = (condition: Get<Condition | LogicalCondition, this>): Json => ({ $match: ofGet(condition, this).toJSON() });
 
   group = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('group', conditions.map(c => ofGet(c, this))).toJSON();
 
