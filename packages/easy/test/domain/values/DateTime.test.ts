@@ -1,4 +1,4 @@
-import { DateTime } from '../../../src';
+import { DateTime, UnitOfTime } from '../../../src';
 import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
@@ -75,6 +75,39 @@ describe('DateTime', () => {
     const res = new DateTime(s, f);
     expect(res).toBeValid();
     expect(res).toMatchText(new DateTime(e));
+  });
+
+  test.each([
+    [date.iso, 'foo'],
+    ['bar', 'DD/MM/YYYY'],
+    ['01/23/2021', 'DD/MM/YYYY'],
+  ])('construct with date: %s and format: %s should be invalid', (s, f) => {
+    const res = new DateTime(s, f);
+    expect(res).not.toBeValid();
+  });
+
+  test.each([
+    ['year', '2021-01-01T00:00:00.000Z'],
+    ['month', '2021-10-01T00:00:00.000Z'],
+    ['day', '2021-10-17T00:00:00.000Z'],
+    ['hour', '2021-10-17T01:00:00.000Z'],
+    ['minute', '2021-10-17T01:23:00.000Z'],
+    ['second', '2021-10-17T01:23:58.000Z'],
+  ])('startOf with unit: %s should return %s', (u, e) => {
+    const res = new DateTime('2021-10-17T01:23:58.123Z');
+    expect(res.startOf(u as UnitOfTime)).toMatchText(new DateTime(e));
+  });
+
+  test.each([
+    ['year', '2021-12-31T23:59:59.999Z'],
+    ['month', '2021-10-31T23:59:59.999Z'],
+    ['day', '2021-10-17T23:59:59.999Z'],
+    ['hour', '2021-10-17T01:59:59.999Z'],
+    ['minute', '2021-10-17T01:23:59.999Z'],
+    ['second', '2021-10-17T01:23:58.999Z'],
+  ])('endOf with unit: %s should return %s', (u, e) => {
+    const res = new DateTime('2021-10-17T01:23:58.123Z');
+    expect(res.endOf(u as UnitOfTime)).toMatchText(new DateTime(e));
   });
 
   test.each([

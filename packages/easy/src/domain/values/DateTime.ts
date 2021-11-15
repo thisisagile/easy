@@ -12,6 +12,14 @@ export type DateTimeUnit =
   | 'seconds'
   | 'milliseconds';
 
+export type UnitOfTime =
+  'year' |
+  'month' |
+  'day' |
+  'hour' |
+  'minute' |
+  'second'
+
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
     super(tryTo(value).is.defined().map(v => moment.utc(v, format, true).toISOString()).orElse());
@@ -50,6 +58,10 @@ export class DateTime extends Value<string | undefined> {
   subtract = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.subtract(n, unit).toISOString());
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
+
+  startOf = (unitOfTime: UnitOfTime): DateTime => new DateTime(this.utc.startOf(unitOfTime).toISOString())
+
+  endOf = (unitOfTime: UnitOfTime): DateTime => new DateTime(this.utc.endOf(unitOfTime).toISOString())
 
   toString(): string {
     return this.value ?? '';
