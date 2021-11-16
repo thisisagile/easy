@@ -1,4 +1,4 @@
-import { DateTime, Unit } from '../../../src';
+import { DateTime, DateTimeUnit } from '../../../src';
 import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
@@ -104,21 +104,22 @@ describe('DateTime', () => {
     [['hour', 'hours', 'h'], '2021-10-16T01:00:00.000Z'],
     [['minute', 'minutes', 'm'], '2021-10-16T01:23:00.000Z'],
     [['second', 'seconds', 's'], '2021-10-16T01:23:58.000Z'],
-  ])('startOf with unit: %s should return %s', (uts , e) => {
+  ])('startOf with unit: %s should return %s', (us , e) => {
     const res = new DateTime('2021-10-16T01:23:58.123Z');
-    uts.forEach(ut => expect(res.startOf(ut as Unit)).toMatchText(new DateTime(e)))
+    us.forEach(ut => expect(res.startOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)))
   });
 
   test.each([
-    ['year', '2021-12-31T23:59:59.999Z'],
-    ['month', '2021-10-31T23:59:59.999Z'],
-    ['day', '2021-10-17T23:59:59.999Z'],
-    ['hour', '2021-10-17T01:59:59.999Z'],
-    ['minute', '2021-10-17T01:23:59.999Z'],
-    ['second', '2021-10-17T01:23:58.999Z'],
-  ])('endOf with unit: %s should return %s', (u, e) => {
-    const res = new DateTime('2021-10-17T01:23:58.123Z');
-    expect(res.endOf(u as Unit)).toMatchText(new DateTime(e));
+    [['year', 'years', 'y'], '2021-12-31T23:59:59.999Z'],
+    [['month', 'months', 'M'], '2021-10-31T23:59:59.999Z'],
+    [['week', 'weeks', 'w'], '2021-10-16T23:59:59.999Z'],
+    [['day', 'days', 'd'], '2021-10-15T23:59:59.999Z'],
+    [['hour', 'hours', 'h'], '2021-10-15T01:59:59.999Z'],
+    [['minute', 'minutes', 'm'], '2021-10-15T01:23:59.999Z'],
+    [['second', 'seconds', 's'], '2021-10-15T01:23:58.999Z'],
+  ])('endOf with unit: %s should return %s', (us, e) => {
+    const res = new DateTime('2021-10-15T01:23:58.123Z');
+    us.forEach(ut => expect(res.endOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)))
   });
 
   test.each([

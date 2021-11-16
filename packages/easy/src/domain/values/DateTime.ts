@@ -2,24 +2,16 @@ import { isDefined, tryTo, Value } from '../../types';
 import moment, { Moment } from 'moment';
 
 export type DateTimeUnit =
-  'years'
-  | 'quarters'
-  | 'months'
-  | 'weeks'
-  | 'days'
-  | 'hours'
-  | 'minutes'
-  | 'seconds'
-  | 'milliseconds';
+  'year' | 'years' | 'y' |
+  'quarter' | 'quarters' | 'Q' |
+  'month' | 'months' | 'M' |
+  'week' | 'weeks' | 'w' |
+  'day' | 'days' | 'd' |
+  'hour' | 'hours' | 'h' |
+  'minute' | 'minutes' | 'm' |
+  'second' | 'seconds' | 's' |
+  'millisecond' | 'milliseconds' | 'ms';
 
-export type Unit =
-  "year" | "years" | "y" |
-  "month" | "months" | "M" |
-  "week" | "weeks" | "w" |
-  "day" | "days" | "d" |
-  "hour" | "hours" | "h" |
-  "minute" | "minutes" | "m" |
-  "second" | "seconds" | "s";
 
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
@@ -60,9 +52,9 @@ export class DateTime extends Value<string | undefined> {
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
 
-  startOf = (unitOfTime: Unit): DateTime => new DateTime(this.utc.startOf(unitOfTime).toISOString())
+  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString())
 
-  endOf = (unitOfTime: Unit): DateTime => new DateTime(this.utc.endOf(unitOfTime).toISOString())
+  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString())
 
   toString(): string {
     return this.value ?? '';
