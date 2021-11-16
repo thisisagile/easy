@@ -1,11 +1,13 @@
-import { Exception, Gateway, Id, isDefined, Json, JsonValue, List } from '../types';
+import { Gateway, Id, isDefined, Json, List } from '../types';
 import { QueryProvider } from '../data';
 import { when } from '../validation';
-import { ifDefined, reject } from '../utils';
+import { ifDefined } from '../utils';
 import { Table } from './Table';
 
-export class TableGateway<T extends Table> implements Gateway {
-  constructor(readonly table: T, readonly provider = table.db.provide<QueryProvider>()) {}
+export class TableGateway<T extends Table> extends Gateway {
+  constructor(readonly table: T, readonly provider = table.db.provide<QueryProvider>()) {
+    super();
+  }
 
   all(): Promise<List<Json>> {
     return this.provider.query(this.table.select()).then(js => js.map(j => this.table.in(j)));
@@ -16,14 +18,6 @@ export class TableGateway<T extends Table> implements Gateway {
       .query(this.table.select().where(this.table.id.is(id)))
       .then(js => js.first())
       .then(j => ifDefined(j, this.table.in(j)));
-  }
-
-  by(key: string, value: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented.because(`Search for key '${key}' and '${value}' is not implemented yet. `));
-  }
-
-  search(_q: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented);
   }
 
   exists(id: Id): Promise<boolean> {

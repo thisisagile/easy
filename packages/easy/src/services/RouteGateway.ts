@@ -1,10 +1,11 @@
 import { Api } from './Api';
-import { Exception, Func, Gateway, Id, Json, JsonValue, List, toList, Uri } from '../types';
+import { Func, Gateway, Id, Json, JsonValue, List, toList, Uri } from '../types';
 import { HttpStatus } from '../http';
-import { reject } from '../utils';
 
-export class RouteGateway implements Gateway {
-  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {}
+export class RouteGateway extends Gateway {
+  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {
+    super();
+  }
 
   all(): Promise<List<Json>> {
     return this.api.get(this.route()).then(r => r.body.data?.items ?? toList());
@@ -12,10 +13,6 @@ export class RouteGateway implements Gateway {
 
   byId(id: Id): Promise<Json | undefined> {
     return this.api.get(this.routeId().id(id)).then(r => r.body.data?.items.first());
-  }
-
-  by(_key: string, _value: JsonValue): Promise<List<Json>> {
-    return reject(Exception.IsNotImplemented);
   }
 
   search(q: JsonValue): Promise<List<Json>> {
