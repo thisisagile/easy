@@ -12,15 +12,15 @@ export type DateTimeUnit =
   | 'seconds'
   | 'milliseconds';
 
-export type UnitOfTime = (
+export type UnitOfTime =
   "year" | "years" | "y" |
   "month" | "months" | "M" |
   "week" | "weeks" | "w" |
   "day" | "days" | "d" |
   "hour" | "hours" | "h" |
   "minute" | "minutes" | "m" |
-  "second" | "seconds" | "s"
-  );
+  "second" | "seconds" | "s";
+
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
     super(tryTo(value).is.defined().map(v => moment.utc(v, format, true).toISOString()).orElse());
