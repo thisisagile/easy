@@ -1,4 +1,4 @@
-import { DateTime } from '../../../src';
+import { DateTime, UnitOfTime } from '../../../src';
 import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
@@ -10,6 +10,16 @@ const date = {
   epoch: 1616661584000,
   ams: '2021-03-25T09:39:44+01:00',
 };
+const formats = {
+  ddmmyyyy: 'DD/MM/YYYY',
+  yyyymmdd: 'YYYY-DD-MM',
+  yyyyddmm: 'YYYY-MM-DD',
+  yyyymmddthhmm: 'YYYY-MM-DD[T]hh:mm',
+  yyyymmddhhmmss: 'YYYY-MM-DD hh:mm:ss',
+  ddmmyyyyhhmmss: 'DD/MM/YYYY hh:mm:ss',
+  yyyymmddthhmmss: 'YYYY-MM-DD[T]hh:mm:ss',
+  yyyymmddthhmmsssssz: 'YYYY-MM-DD[T]hh:mm:ss.SSSZ',
+}
 
 describe('DateTime', () => {
   test('moment decided to mark undefined as a valid date.', () => {
@@ -64,12 +74,12 @@ describe('DateTime', () => {
   });
 
   test.each([
-    ['2021-11-10', 'YYYY-DD-MM', '2021-10-11T00:00:00.000Z'],
-    ['2021-10-11', 'YYYY-MM-DD', '2021-10-11T00:00:00.000Z'],
-    ['2021-10-11T01:23', 'YYYY-MM-DD[T]hh:mm', '2021-10-11T01:23:00.000Z'],
-    ['2021-10-11T01:23:11', 'YYYY-MM-DD[T]hh:mm:ss', '2021-10-11T01:23:11.000Z'],
-    ['2021-10-11T01:23:59.123+0100', 'YYYY-MM-DD[T]hh:mm:ss.SSSZ', '2021-10-11T00:23:59.123Z'],
-    ['23/11/2021 09:15:00', 'DD/MM/YYYY hh:mm:ss', '2021-11-23T09:15:00.000Z'],
+    ['2021-11-10', formats.yyyymmdd, '2021-10-11T00:00:00.000Z'],
+    ['2021-10-11', formats.yyyyddmm, '2021-10-11T00:00:00.000Z'],
+    ['2021-10-11T01:23', formats.yyyymmddthhmm, '2021-10-11T01:23:00.000Z'],
+    ['2021-10-11T01:23:11', formats.yyyymmddthhmmss, '2021-10-11T01:23:11.000Z'],
+    ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmsssssz , '2021-10-11T00:23:59.123Z'],
+    ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
     ['Wed Dec 24 09:15:00 -0800 2014', 'ddd MMM DD hh:mm:ss ZZ YYYY', '2014-12-24T17:15:00.000Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
     const res = new DateTime(s, f);
@@ -79,8 +89,42 @@ describe('DateTime', () => {
 
   test.each([
     [date.iso, 'foo'],
-    ['bar', 'DD/MM/YYYY'],
-    ['01/23/2021', 'DD/MM/YYYY'],
+    ['bar', formats.ddmmyyyy],
+    ['01/23/2021', formats.ddmmyyyy],
+  ])('construct with date: %s and format: %s should be invalid', (s, f) => {
+    const res = new DateTime(s, f);
+    expect(res).not.toBeValid();
+  });
+
+  test.each([
+    [['year', 'years', 'y'], '2021-01-01T00:00:00.000Z'],
+    [['month', 'months', 'M'], '2021-10-01T00:00:00.000Z'],
+    [['week', 'weeks', 'w'] , '2021-10-10T00:00:00.000Z'],
+    [['day', 'days', 'd'], '2021-10-16T00:00:00.000Z'],
+    [['hour', 'hours', 'h'], '2021-10-16T01:00:00.000Z'],
+    [['minute', 'minutes', 'm'], '2021-10-16T01:23:00.000Z'],
+    [['second', 'seconds', 's'], '2021-10-16T01:23:58.000Z'],
+  ])('startOf with unit: %s should return %s', (uts , e) => {
+    const res = new DateTime('2021-10-16T01:23:58.123Z');
+    uts.forEach(ut => expect(res.startOf(ut as UnitOfTime)).toMatchText(new DateTime(e)))
+  });
+
+  test.each([
+    ['year', '2021-12-31T23:59:59.999Z'],
+    ['month', '2021-10-31T23:59:59.999Z'],
+    ['day', '2021-10-17T23:59:59.999Z'],
+    ['hour', '2021-10-17T01:59:59.999Z'],
+    ['minute', '2021-10-17T01:23:59.999Z'],
+    ['second', '2021-10-17T01:23:58.999Z'],
+  ])('endOf with unit: %s should return %s', (u, e) => {
+    const res = new DateTime('2021-10-17T01:23:58.123Z');
+    expect(res.endOf(u as UnitOfTime)).toMatchText(new DateTime(e));
+  });
+
+  test.each([
+    [date.iso, 'foo'],
+    ['bar', formats.ddmmyyyy],
+    ['01/23/2021', formats.ddmmyyyy],
   ])('construct with date: %s and format: %s should be invalid', (s, f) => {
     const res = new DateTime(s, f);
     expect(res).not.toBeValid();
