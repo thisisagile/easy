@@ -82,7 +82,7 @@ export class MongoProvider {
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {
     return this.collection()
-      .then(c => c.aggregate(qs))
+      .then(c => c.aggregate(qs.map(q => toMongoType(asJson(q)))))
       .then(res => res.toArray());
   }
 

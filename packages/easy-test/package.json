@@ -37,9 +37,9 @@
   },
   "dependencies": {
     "@types/jest": "^27.0.2",
-    "@types/node": "^16.7.6",
-    "expect": "^27.2.5",
-    "jest": "^27.2.5",
+    "@types/node": "^16.11.7",
+    "expect": "^27.3.1",
+    "jest": "^27.3.1",
     "jest-junit": "^13.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "ts-jest": "^27.0.7"
