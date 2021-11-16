@@ -12,7 +12,7 @@ export type DateTimeUnit =
   | 'seconds'
   | 'milliseconds';
 
-export type UnitOfTime =
+export type Unit =
   "year" | "years" | "y" |
   "month" | "months" | "M" |
   "week" | "weeks" | "w" |
@@ -60,9 +60,9 @@ export class DateTime extends Value<string | undefined> {
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
 
-  startOf = (unitOfTime: UnitOfTime): DateTime => new DateTime(this.utc.startOf(unitOfTime).toISOString())
+  startOf = (unitOfTime: Unit): DateTime => new DateTime(this.utc.startOf(unitOfTime).toISOString())
 
-  endOf = (unitOfTime: UnitOfTime): DateTime => new DateTime(this.utc.endOf(unitOfTime).toISOString())
+  endOf = (unitOfTime: Unit): DateTime => new DateTime(this.utc.endOf(unitOfTime).toISOString())
 
   toString(): string {
     return this.value ?? '';

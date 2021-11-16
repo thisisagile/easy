@@ -1,4 +1,4 @@
-import { DateTime, UnitOfTime } from '../../../src';
+import { DateTime, Unit } from '../../../src';
 import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
@@ -106,7 +106,7 @@ describe('DateTime', () => {
     [['second', 'seconds', 's'], '2021-10-16T01:23:58.000Z'],
   ])('startOf with unit: %s should return %s', (uts , e) => {
     const res = new DateTime('2021-10-16T01:23:58.123Z');
-    uts.forEach(ut => expect(res.startOf(ut as UnitOfTime)).toMatchText(new DateTime(e)))
+    uts.forEach(ut => expect(res.startOf(ut as Unit)).toMatchText(new DateTime(e)))
   });
 
   test.each([
@@ -118,7 +118,7 @@ describe('DateTime', () => {
     ['second', '2021-10-17T01:23:58.999Z'],
   ])('endOf with unit: %s should return %s', (u, e) => {
     const res = new DateTime('2021-10-17T01:23:58.123Z');
-    expect(res.endOf(u as UnitOfTime)).toMatchText(new DateTime(e));
+    expect(res.endOf(u as Unit)).toMatchText(new DateTime(e));
   });
 
   test.each([
