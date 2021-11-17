@@ -1,5 +1,6 @@
 import { fireEvent, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { tryTo } from '@thisisagile/easy';
+import { Tester } from './Tester';
 
 export class ElementTester {
   constructor(readonly element: () => Element) {}
@@ -12,6 +13,8 @@ export class ElementTester {
     return tryTo(() => this.element())
       .is.defined().map(() => true).or(false);
   }
+
+  get then(): Tester { return new Tester(this.element() as HTMLElement); }
 
   click = (): boolean => (this.element() ? fireEvent.click(this.element()) : false);
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
