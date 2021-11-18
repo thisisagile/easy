@@ -1,4 +1,4 @@
-import { choose, DateTime, isArray, isIsoDateString, isObject, Json, meta } from '@thisisagile/easy';
+import { choose, DateTime, isArray, isDate, isIsoDateString, isObject, Json, meta } from '@thisisagile/easy';
 
 export const toMongoType = (input: unknown): Json => {
   return choose<any, any>(input)
@@ -11,7 +11,7 @@ export const toMongoType = (input: unknown): Json => {
       (v: any) => v.map((i: any) => toMongoType(i))
     )
     .case(
-      v => isObject(v),
+      v => isObject(v) && !isDate(v),
       (v: any) =>
         Object.fromEntries(
           meta(v)
