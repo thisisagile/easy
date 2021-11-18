@@ -92,6 +92,17 @@ describe('MongoProvider', () => {
     return expect(provider.group([{ id: '42' }])).resolves.toBe(devData);
   });
 
+  test('group calls toMongoType on queries, to correct dates', async () => {
+    provider.collection = mock.resolve(c);
+    cursor.toArray = mock.resolve([]);
+    c.aggregate = mock.resolve(cursor);
+
+    await provider.group([{ date: date }]);
+
+    expect(c.aggregate).toHaveBeenCalledWith([{ 'date': new DateTime(date).toDate() }]);
+    expect(c.aggregate).not.toHaveBeenCalledWith([{ 'date': date }]);
+  });
+
   test('by calls find on the collection', async () => {
     cursor.toArray = mock.resolve([devData.jeroen, devData.wouter]);
     c.find = mock.resolve(cursor);
