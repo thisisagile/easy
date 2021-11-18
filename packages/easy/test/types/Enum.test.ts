@@ -29,6 +29,11 @@ describe('Enum', () => {
     expect(Language.byIds(ids)[0]).toBeInstanceOf(Language);
   });
 
+  test('byIds same ids', () => {
+    const ids = ['typescript', 'typescript', 'typescript'];
+    expect(Language.byIds(ids)).toHaveLength(3);
+  });
+
   test('all', () => {
     expect(Language.all()).toHaveLength(4);
     expect(Language.all()[0]).toBeInstanceOf(Language);

@@ -1,9 +1,27 @@
-import { Enum, Id } from '../../types';
+import { Enum, Get, Id, isEnum, List, meta, ofGet } from '../../types';
+import { text } from '@thisisagile/easy';
 
 export class Locale extends Enum {
   constructor(id: Id, name: string) {
     super(name, id);
   }
+
+  private static toId = (id: Id): Id => text(id).lower.trim.toString();
+
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
+    return (
+      meta(this)
+        .values<E>()
+        .first((e: unknown) => isEnum(e) && this.toId(e.id) === this.toId(id)) ?? ofGet(alt)
+    );
+  }
+
+  static byIds<T extends Enum>(ids?: Id[]): List<T> {
+    return meta(this)
+      .values<T>()
+      .filter((e: unknown) => isEnum(e) && ids?.map(id => this.toId(id))?.includes(this.toId(e.id)));
+  }
+
   static readonly AF = new Locale('af', 'Afrikaans');
   static readonly AF_NA = new Locale('af_NA', 'Afrikaans (Namibia)');
   static readonly AF_ZA = new Locale('af_ZA', 'Afrikaans (South Africa)');
