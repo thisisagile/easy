@@ -1,5 +1,4 @@
-import { Enum, Get, Id, isEnum, List, meta, ofGet } from '../../types';
-import { text } from '@thisisagile/easy';
+import { Enum, Get, Id, isEnum, List, meta, ofGet, text } from '../../types';
 
 export class Locale extends Enum {
   constructor(id: Id, name: string) {
