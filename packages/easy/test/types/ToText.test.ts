@@ -122,6 +122,15 @@ describe('text()', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
+  test('last works', () => {
+    expect(empty.last(1)).toMatchText('');
+    expect(empty.last(-1)).toMatchText('');
+    expect(kim.last(3)).toMatchText('gen');
+    expect(kim.last(2)).toMatchText('en');
+    expect(kim.last(-1)).toMatchText('');
+    expect(kim.last(0)).toMatchText('');
+  });
+
   test('is', () => {
     expect(kim.is(KimvanWilgen)).toBeTruthy();
     expect(kim.is('kimvanwilgen')).toBeFalsy();
