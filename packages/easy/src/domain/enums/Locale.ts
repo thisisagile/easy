@@ -1,26 +1,6 @@
 import { Enum, Get, Id, isEnum, List, meta, ofGet, text } from '../../types';
 
 export class Locale extends Enum {
-  constructor(id: Id, name: string) {
-    super(name, id);
-  }
-
-  private static toId = (id: Id): Id => text(id).lower.trim.toString();
-
-  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return (
-      meta(this)
-        .values<E>()
-        .first((e: unknown) => isEnum(e) && this.toId(e.id) === this.toId(id)) ?? ofGet(alt)
-    );
-  }
-
-  static byIds<T extends Enum>(ids?: Id[]): List<T> {
-    return meta(this)
-      .values<T>()
-      .filter((e: unknown) => isEnum(e) && ids?.map(id => this.toId(id))?.includes(this.toId(e.id)));
-  }
-
   static readonly AF = new Locale('af', 'Afrikaans');
   static readonly AF_NA = new Locale('af_NA', 'Afrikaans (Namibia)');
   static readonly AF_ZA = new Locale('af_ZA', 'Afrikaans (South Africa)');
@@ -67,12 +47,12 @@ export class Locale extends Enum {
   static readonly AZ = new Locale('az', 'Azerbaijani');
   static readonly AZ_AZ = new Locale('az_AZ', 'Azerbaijani (Azerbaijan)');
   static readonly AZ_CYRL_AZ = new Locale('az_Cyrl_AZ', 'Azerbaijani (Cyrillic, Azerbaijan)');
-  static readonly AZ_CYRL = new Locale('az_Cyrl', 'Azerbaijani (Cyrillic)');
+  static readonly AZ_CYRL = new Locale('az_Cyrl', 'Azerbaijani (Cyrillic)', 'az');
   static readonly AZ_LATN_AZ = new Locale('az_Latn_AZ', 'Azerbaijani (Latin, Azerbaijan)');
-  static readonly AZ_LATN = new Locale('az_Latn', 'Azerbaijani (Latin)');
+  static readonly AZ_LATN = new Locale('az_Latn', 'Azerbaijani (Latin)', 'az');
   static readonly BM = new Locale('bm', 'Bambara');
   static readonly BM_LATN_ML = new Locale('bm_Latn_ML', 'Bambara (Latin, Mali)');
-  static readonly BM_LATN = new Locale('bm_Latn', 'Bambara (Latin)');
+  static readonly BM_LATN = new Locale('bm_Latn', 'Bambara (Latin)', 'bm');
   static readonly EU = new Locale('eu', 'Basque');
   static readonly EU_ES = new Locale('eu_ES', 'Basque (Spain)');
   static readonly BE = new Locale('be', 'Belarusian');
@@ -83,9 +63,9 @@ export class Locale extends Enum {
   static readonly BS = new Locale('bs', 'Bosnian');
   static readonly BS_BA = new Locale('bs_BA', 'Bosnian (Bosnia & Herzegovina)');
   static readonly BS_CYRL_BA = new Locale('bs_Cyrl_BA', 'Bosnian (Cyrillic, Bosnia & Herzegovina)');
-  static readonly BS_CYRL = new Locale('bs_Cyrl', 'Bosnian (Cyrillic)');
+  static readonly BS_CYRL = new Locale('bs_Cyrl', 'Bosnian (Cyrillic)', 'bs');
   static readonly BS_LATN_BA = new Locale('bs_Latn_BA', 'Bosnian (Latin, Bosnia & Herzegovina)');
-  static readonly BS_LATN = new Locale('bs_Latn', 'Bosnian (Latin)');
+  static readonly BS_LATN = new Locale('bs_Latn', 'Bosnian (Latin)', 'bs');
   static readonly BR = new Locale('br', 'Breton');
   static readonly BR_FR = new Locale('br_FR', 'Breton (France)');
   static readonly BG = new Locale('bg', 'Bulgarian');
@@ -338,11 +318,11 @@ export class Locale extends Enum {
   static readonly KN_IN = new Locale('kn_IN', 'Kannada (India)');
   static readonly KS = new Locale('ks', 'Kashmiri');
   static readonly KS_ARAB_IN = new Locale('ks_Arab_IN', 'Kashmiri (Arabic, India)');
-  static readonly KS_ARAB = new Locale('ks_Arab', 'Kashmiri (Arabic)');
+  static readonly KS_ARAB = new Locale('ks_Arab', 'Kashmiri (Arabic)', 'ks');
   static readonly KS_IN = new Locale('ks_IN', 'Kashmiri (India)');
   static readonly KK = new Locale('kk', 'Kazakh');
   static readonly KK_CYRL_KZ = new Locale('kk_Cyrl_KZ', 'Kazakh (Cyrillic, Kazakhstan)');
-  static readonly KK_CYRL = new Locale('kk_Cyrl', 'Kazakh (Cyrillic)');
+  static readonly KK_CYRL = new Locale('kk_Cyrl', 'Kazakh (Cyrillic)', 'kk');
   static readonly KK_KZ = new Locale('kk_KZ', 'Kazakh (Kazakhstan)');
   static readonly KM = new Locale('km', 'Khmer');
   static readonly KM_KH = new Locale('km_KH', 'Khmer (Cambodia)');
@@ -355,7 +335,7 @@ export class Locale extends Enum {
   static readonly KO_KR = new Locale('ko_KR', 'Korean (South Korea)');
   static readonly KY = new Locale('ky', 'Kyrgyz');
   static readonly KY_CYRL_KG = new Locale('ky_Cyrl_KG', 'Kyrgyz (Cyrillic, Kyrgyzstan)');
-  static readonly KY_CYRL = new Locale('ky_Cyrl', 'Kyrgyz (Cyrillic)');
+  static readonly KY_CYRL = new Locale('ky_Cyrl', 'Kyrgyz (Cyrillic)', 'ky');
   static readonly KY_KG = new Locale('ky_KG', 'Kyrgyz (Kyrgyzstan)');
   static readonly LO = new Locale('lo', 'Lao');
   static readonly LO_LA = new Locale('lo_LA', 'Lao (Laos)');
@@ -381,7 +361,7 @@ export class Locale extends Enum {
   static readonly MS_LATN_BN = new Locale('ms_Latn_BN', 'Malay (Latin, Brunei)');
   static readonly MS_LATN_MY = new Locale('ms_Latn_MY', 'Malay (Latin, Malaysia)');
   static readonly MS_LATN_SG = new Locale('ms_Latn_SG', 'Malay (Latin, Singapore)');
-  static readonly MS_LATN = new Locale('ms_Latn', 'Malay (Latin)');
+  static readonly MS_LATN = new Locale('ms_Latn', 'Malay (Latin)', 'ms');
   static readonly MS_MY = new Locale('ms_MY', 'Malay (Malaysia)');
   static readonly MS_SG = new Locale('ms_SG', 'Malay (Singapore)');
   static readonly ML = new Locale('ml', 'Malayalam');
@@ -394,7 +374,7 @@ export class Locale extends Enum {
   static readonly MR_IN = new Locale('mr_IN', 'Marathi (India)');
   static readonly MN = new Locale('mn', 'Mongolian');
   static readonly MN_CYRL_MN = new Locale('mn_Cyrl_MN', 'Mongolian (Cyrillic, Mongolia)');
-  static readonly MN_CYRL = new Locale('mn_Cyrl', 'Mongolian (Cyrillic)');
+  static readonly MN_CYRL = new Locale('mn_Cyrl', 'Mongolian (Cyrillic)', 'mn');
   static readonly MN_MN = new Locale('mn_MN', 'Mongolian (Mongolia)');
   static readonly NE = new Locale('ne', 'Nepali');
   static readonly NE_IN = new Locale('ne_IN', 'Nepali (India)');
@@ -439,9 +419,9 @@ export class Locale extends Enum {
   static readonly PT_TL = new Locale('pt_TL', 'Portuguese (Timor-Leste)');
   static readonly PA = new Locale('pa', 'Punjabi');
   static readonly PA_ARAB_PK = new Locale('pa_Arab_PK', 'Punjabi (Arabic, Pakistan)');
-  static readonly PA_ARAB = new Locale('pa_Arab', 'Punjabi (Arabic)');
+  static readonly PA_ARAB = new Locale('pa_Arab', 'Punjabi (Arabic)', 'pa');
   static readonly PA_GURU_IN = new Locale('pa_Guru_IN', 'Punjabi (Gurmukhi, India)');
-  static readonly PA_GURU = new Locale('pa_Guru', 'Punjabi (Gurmukhi)');
+  static readonly PA_GURU = new Locale('pa_Guru', 'Punjabi (Gurmukhi)', 'pa');
   static readonly PA_IN = new Locale('pa_IN', 'Punjabi (India)');
   static readonly PA_PK = new Locale('pa_PK', 'Punjabi (Pakistan)');
   static readonly QU = new Locale('qu', 'Quechua');
@@ -472,13 +452,13 @@ export class Locale extends Enum {
   static readonly SR_CYRL_XK = new Locale('sr_Cyrl_XK', 'Serbian (Cyrillic, Kosovo)');
   static readonly SR_CYRL_ME = new Locale('sr_Cyrl_ME', 'Serbian (Cyrillic, Montenegro)');
   static readonly SR_CYRL_RS = new Locale('sr_Cyrl_RS', 'Serbian (Cyrillic, Serbia)');
-  static readonly SR_CYRL = new Locale('sr_Cyrl', 'Serbian (Cyrillic)');
+  static readonly SR_CYRL = new Locale('sr_Cyrl', 'Serbian (Cyrillic)', 'sr');
   static readonly SR_XK = new Locale('sr_XK', 'Serbian (Kosovo)');
   static readonly SR_LATN_BA = new Locale('sr_Latn_BA', 'Serbian (Latin, Bosnia & Herzegovina)');
   static readonly SR_LATN_XK = new Locale('sr_Latn_XK', 'Serbian (Latin, Kosovo)');
   static readonly SR_LATN_ME = new Locale('sr_Latn_ME', 'Serbian (Latin, Montenegro)');
   static readonly SR_LATN_RS = new Locale('sr_Latn_RS', 'Serbian (Latin, Serbia)');
-  static readonly SR_LATN = new Locale('sr_Latn', 'Serbian (Latin)');
+  static readonly SR_LATN = new Locale('sr_Latn', 'Serbian (Latin)', 'sr');
   static readonly SR_ME = new Locale('sr_ME', 'Serbian (Montenegro)');
   static readonly SR_RS = new Locale('sr_RS', 'Serbian (Serbia)');
   static readonly SH = new Locale('sh', 'Serbo-Croatian');
@@ -566,11 +546,11 @@ export class Locale extends Enum {
   static readonly UZ = new Locale('uz', 'Uzbek');
   static readonly UZ_AF = new Locale('uz_AF', 'Uzbek (Afghanistan)');
   static readonly UZ_ARAB_AF = new Locale('uz_Arab_AF', 'Uzbek (Arabic, Afghanistan)');
-  static readonly UZ_ARAB = new Locale('uz_Arab', 'Uzbek (Arabic)');
+  static readonly UZ_ARAB = new Locale('uz_Arab', 'Uzbek (Arabic)', 'uz');
   static readonly UZ_CYRL_UZ = new Locale('uz_Cyrl_UZ', 'Uzbek (Cyrillic, Uzbekistan)');
-  static readonly UZ_CYRL = new Locale('uz_Cyrl', 'Uzbek (Cyrillic)');
+  static readonly UZ_CYRL = new Locale('uz_Cyrl', 'Uzbek (Cyrillic)', 'uz');
   static readonly UZ_LATN_UZ = new Locale('uz_Latn_UZ', 'Uzbek (Latin, Uzbekistan)');
-  static readonly UZ_LATN = new Locale('uz_Latn', 'Uzbek (Latin)');
+  static readonly UZ_LATN = new Locale('uz_Latn', 'Uzbek (Latin)', 'uz');
   static readonly UZ_UZ = new Locale('uz_UZ', 'Uzbek (Uzbekistan)');
   static readonly VI = new Locale('vi', 'Vietnamese');
   static readonly VI_VN = new Locale('vi_VN', 'Vietnamese (Vietnam)');
@@ -584,4 +564,24 @@ export class Locale extends Enum {
   static readonly YO_NG = new Locale('yo_NG', 'Yoruba (Nigeria)');
   static readonly ZU = new Locale('zu', 'Zulu');
   static readonly ZU_ZA = new Locale('zu_ZA', 'Zulu (South Africa)');
+
+  constructor(id: Id, name: string, readonly country = text(id).lower.last(2).toString()) {
+    super(name, id);
+  }
+
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
+    return (
+      meta(this)
+        .values<E>()
+        .first((e: unknown) => isEnum(e) && this.toId(e.id) === this.toId(id)) ?? ofGet(alt)
+    );
+  }
+
+  static byIds<T extends Enum>(ids?: Id[]): List<T> {
+    return meta(this)
+      .values<T>()
+      .filter((e: unknown) => isEnum(e) && ids?.map(id => this.toId(id))?.includes(this.toId(e.id)));
+  }
+
+  private static toId = (id: Id): Id => text(id).lower.trim.toString();
 }

@@ -22,6 +22,13 @@ describe('Locale', () => {
     expect(Locale.NL_BE.name).toMatchText('Dutch (Belgium)');
   });
 
+  test('short matches.', () => {
+    expect(Locale.NL.country).toBe('nl');
+    expect(Locale.NL_NL.country).toMatchText('nl');
+    expect(Locale.NL_BE.country).toMatchText('be');
+    expect(Locale.AZ_LATN.country).toMatchText('az');
+  });
+
   test('byId is not case sensitive and accepts both dashes as well as underscores.', () => {
     expect(Locale.byId('nl_NL')).toBe(Locale.NL_NL);
     expect(Locale.byId('nl_nl')).toBe(Locale.NL_NL);
