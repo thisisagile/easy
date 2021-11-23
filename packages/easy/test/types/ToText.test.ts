@@ -122,6 +122,16 @@ describe('text()', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
+  test('first works', () => {
+    expect(empty.first(1)).toMatchText('');
+    expect(empty.first(-1)).toMatchText('');
+    expect(kim.first(3)).toMatchText('Kim');
+    expect(text('12').first(3)).toMatchText('12');
+    expect(kim.first(2)).toMatchText('Ki');
+    expect(kim.first(-1)).toMatchText('');
+    expect(kim.first(0)).toMatchText('');
+  });
+
   test('last works', () => {
     expect(empty.last(1)).toMatchText('');
     expect(empty.last(-1)).toMatchText('');

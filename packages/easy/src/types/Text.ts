@@ -93,6 +93,8 @@ export class ToText implements Text {
 
   startsWith = (end?: unknown): boolean => this.subject.startsWith(asString(end));
 
+  first = (n: number): ToText => this.map(s => s.substring(0, n));
+
   last = (n: number): ToText => this.map(s => s.substring(s.length - n));
 
   map = (func: Get<string, string>): ToText => text(ofGet(func, this.subject));
