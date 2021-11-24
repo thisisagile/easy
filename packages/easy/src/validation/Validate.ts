@@ -1,4 +1,5 @@
 import {
+  asString,
   Enum,
   isArray,
   isDefined,
@@ -15,7 +16,8 @@ import {
   toList,
   toName,
   toResult,
-  toResults, tryTo,
+  toResults,
+  tryTo,
   Value,
 } from '../types';
 import { Constraint } from './Contraints';
@@ -35,7 +37,8 @@ const validators = (subject: unknown): List<Validator> =>
 const runValidator = (v: Validator, subject?: unknown): Results =>
   tryTo(() => (subject as any)[v.property])
     .map(actual => v.constraint(actual))
-    .map(res => isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults()).value;
+    .map(res => (isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults()))
+    .recover(e => asResults(subject, asString(e))).value;
 
 const constraints = (subject?: unknown): Results =>
   tryTo(() => validators(subject))

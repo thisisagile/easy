@@ -1,6 +1,7 @@
 import { asList, Entity, Enum, includes, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
+import { Exception } from '@thisisagile/easy';
 
 class Price extends Value<number> {
   get isValid(): boolean {
@@ -35,6 +36,15 @@ class ConstrainedProduct extends Entity {
   @valid() readonly brand: ConstrainedBrand = new ConstrainedBrand(this.state.brand);
   @valid() readonly type: Type = Type.byId(this.state.type);
   @valid() readonly price: Price = new Price(this.state.price);
+}
+
+class ConstrainedProductWithRule extends Struct {
+  @required() readonly id: string = this.state.id;
+
+  @rule('always throw.')
+  check = (): boolean => {
+    throw Exception.IsNotValid;
+  };
 }
 
 class PricesProduct extends Entity {
@@ -137,6 +147,10 @@ describe('validate', () => {
         })
       )
     ).toBeValid();
+  });
+
+  test('entity with double nested constraints', () => {
+    expect(validate(new ConstrainedProductWithRule({ id: 42 }))).toHaveLength(1);
   });
 
   test('business rule', () => {
