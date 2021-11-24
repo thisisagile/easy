@@ -52,17 +52,17 @@ export class DateTime extends Value<string | undefined> {
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
 
-  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString())
+  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString());
 
-  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString())
+  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString());
 
   toString(): string {
     return this.value ?? '';
   }
 
-  toLocale(locales: string | string[] = 'nl-NL', options: Intl.DateTimeFormatOptions = {}): string {
-    return this.toDate()?.toLocaleDateString(locales, options) ?? '';
-  }
+  toLocale = (locales: string | string[] = 'nl-NL', options: Intl.DateTimeFormatOptions = {}): string => this.toDate()?.toLocaleDateString(locales, options) ?? '';
+
+  toFull = (...locales: string[]): string => this.toLocale(locales, { day: 'numeric', month: 'long', year: 'numeric' });
 
   toDate(): Date | undefined {
     return this.isValid ? this.utc.toDate() : undefined;

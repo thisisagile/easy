@@ -19,7 +19,7 @@ const formats = {
   ddmmyyyyhhmmss: 'DD/MM/YYYY hh:mm:ss',
   yyyymmddthhmmss: 'YYYY-MM-DD[T]hh:mm:ss',
   yyyymmddthhmmsssssz: 'YYYY-MM-DD[T]hh:mm:ss.SSSZ',
-}
+};
 
 describe('DateTime', () => {
   test('moment decided to mark undefined as a valid date.', () => {
@@ -78,7 +78,7 @@ describe('DateTime', () => {
     ['2021-10-11', formats.yyyyddmm, '2021-10-11T00:00:00.000Z'],
     ['2021-10-11T01:23', formats.yyyymmddthhmm, '2021-10-11T01:23:00.000Z'],
     ['2021-10-11T01:23:11', formats.yyyymmddthhmmss, '2021-10-11T01:23:11.000Z'],
-    ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmsssssz , '2021-10-11T00:23:59.123Z'],
+    ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmsssssz, '2021-10-11T00:23:59.123Z'],
     ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
     ['Wed Dec 24 09:15:00 -0800 2014', 'ddd MMM DD hh:mm:ss ZZ YYYY', '2014-12-24T17:15:00.000Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
@@ -99,14 +99,14 @@ describe('DateTime', () => {
   test.each([
     [['year', 'years', 'y'], '2021-01-01T00:00:00.000Z'],
     [['month', 'months', 'M'], '2021-10-01T00:00:00.000Z'],
-    [['week', 'weeks', 'w'] , '2021-10-10T00:00:00.000Z'],
+    [['week', 'weeks', 'w'], '2021-10-10T00:00:00.000Z'],
     [['day', 'days', 'd'], '2021-10-16T00:00:00.000Z'],
     [['hour', 'hours', 'h'], '2021-10-16T01:00:00.000Z'],
     [['minute', 'minutes', 'm'], '2021-10-16T01:23:00.000Z'],
     [['second', 'seconds', 's'], '2021-10-16T01:23:58.000Z'],
-  ])('startOf with unit: %s should return %s', (us , e) => {
+  ])('startOf with unit: %s should return %s', (us, e) => {
     const res = new DateTime('2021-10-16T01:23:58.123Z');
-    us.forEach(ut => expect(res.startOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)))
+    us.forEach(ut => expect(res.startOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)));
   });
 
   test.each([
@@ -119,7 +119,7 @@ describe('DateTime', () => {
     [['second', 'seconds', 's'], '2021-10-15T01:23:58.999Z'],
   ])('endOf with unit: %s should return %s', (us, e) => {
     const res = new DateTime('2021-10-15T01:23:58.123Z');
-    us.forEach(ut => expect(res.endOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)))
+    us.forEach(ut => expect(res.endOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)));
   });
 
   test.each([
@@ -260,5 +260,12 @@ describe('DateTime', () => {
     expect(dt.toLocale()).toMatchText('25-3-2021');
     expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
     expect(dt.toLocale('de-DE', { dateStyle: 'full' })).toMatchText('Donnerstag, 25. März 2021');
+  });
+
+  test('toFull', () => {
+    const dt = new DateTime(iso);
+    expect(dt.toFull('nl-NL')).toMatchText('25 maart 2021');
+    expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
+    expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
   });
 });
