@@ -112,7 +112,7 @@ export class Locale extends Enum {
   static readonly NL_SR = new Locale('nl_SR', 'Dutch (Suriname)');
   static readonly DZ = new Locale('dz', 'Dzongkha');
   static readonly DZ_BT = new Locale('dz_BT', 'Dzongkha (Bhutan)');
-  static readonly EN = new Locale('en', 'English');
+  static readonly EN = new Locale('en', 'English', 'gb');
   static readonly EN_AS = new Locale('en_AS', 'English (American Samoa)');
   static readonly EN_AI = new Locale('en_AI', 'English (Anguilla)');
   static readonly EN_AG = new Locale('en_AG', 'English (Antigua & Barbuda)');
