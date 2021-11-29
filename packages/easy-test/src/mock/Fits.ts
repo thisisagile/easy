@@ -4,7 +4,7 @@ import { eq } from '../utils/Eq';
 
 class ObjectContainingText extends AsymmetricMatcher<string> {
   asymmetricMatch(other: any) {
-    return asString(this.sample) === asString(other);
+    return asString(other).includes(asString(this.sample));
   }
 
   toString() {
