@@ -9,9 +9,11 @@ const city = 'Amsterdam';
 
 const ToggleHook = () => {
   const [toggle, setToggle] = useToggle(false);
+  const [, setVisible] = useToggle();
 
   useEffect(() => {
     setToggle();
+    setVisible();
   }, []);
   return <div id={'42'}>{`${toggle}`}</div>;
 };

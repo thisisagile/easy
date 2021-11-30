@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
   const [state, setState] = useState<boolean>(initialState);
-  return [state, () => setState(state => !state)];
+  return [state, () => setState(s => !s)];
 };
 
 export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>): [E, (e: E) => E] => {
