@@ -21,9 +21,3 @@ exports[`Hooks component with useToggle hook renders correctly. 1`] = `
   </div>
 </div>
 `;
-
-exports[`useList renders correctly. 1`] = `
-<div>
-   Amsterdam
-</div>
-`;
