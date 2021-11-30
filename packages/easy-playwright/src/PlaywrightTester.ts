@@ -29,8 +29,8 @@ export class PlaywrightTester implements Tester {
     }
   };
 
-
-  static async init(host: string = ctx.env.get('webHost', '') as string, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
+  /* istanbul ignore next */
+  static async init(browserType: BrowserType, host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await PlaywrightTester.launch(browserType, headless);
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });

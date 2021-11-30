@@ -2,7 +2,6 @@ import { App, UseCase } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, Page, Response } from 'playwright';
 import { PlaywrightElement, PlaywrightTester } from '../src';
-import { PuppeteerTester } from '@thisisagile/easy-puppeteer';
 
 describe('PlaywrightTester', () => {
   let tester: PlaywrightTester;
@@ -227,27 +226,5 @@ describe('PlaywrightTester', () => {
   test('host', () => {
     expect(tester.host).toBe(host);
   });
-
-
-  test('undefined webHost env var will set host to empty string', async () => {
-    const t = await PuppeteerTester.init();
-    expect(t.host).toBe('');
-    return  t.close();
-  }, 10000);
-
-
-  test('webHost uses env var by default', async () => {
-    process.env.WEB_HOST = host;
-    const t = await PuppeteerTester.init();
-    expect(t.host).toBe(host);
-    return  t.close();
-  }, 10000);
-
-  test('webHost uses provided value', async () => {
-    const h = 'http://goof.fy';
-    const t = await PuppeteerTester.init(h);
-    expect(t.host).toBe(h);
-    return  t.close();
-  }, 10000);
 
 });

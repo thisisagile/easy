@@ -13,6 +13,7 @@ export class PuppeteerTester implements Tester {
   /* istanbul ignore next */
   static launch = (headless: boolean): Promise<Browser> => puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
 
+  /* istanbul ignore next */
   static async init(host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await PuppeteerTester.launch(headless);
     const page = await browser.newPage();
