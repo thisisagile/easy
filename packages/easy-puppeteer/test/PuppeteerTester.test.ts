@@ -231,19 +231,22 @@ describe('PuppeteerTester', () => {
   test('undefined webHost env var will set host to empty string', async() => {
     const t = await PuppeteerTester.init()
     expect(t.host).toBe('');
-  }, 50000);
+    return  t.close();
+  }, 10000);
 
 
   test('webHost uses env var by default', async() => {
     process.env.WEB_HOST = host;
     const t = await PuppeteerTester.init()
     expect(t.host).toBe(host);
-  }, 50000);
+    return  t.close();
+  }, 10000);
 
   test('webHost uses provided value', async() => {
     const h = 'http://goof.fy'
     const t = await PuppeteerTester.init(h)
     expect(t.host).toBe(h);
-  }, 50000);
+    return  t.close();
+  }, 10000);
 
 });
