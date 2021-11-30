@@ -23,7 +23,7 @@ export class Mapper extends State implements Mapping {
     return this.get('props', () =>
       meta(this)
         .entries<Mapping>()
-        .filter(([, v]) => isMapping(v))
+        .filter(([, v]) => isMapping(v)),
     );
   }
 
@@ -46,7 +46,7 @@ export class Mapper extends State implements Mapping {
   public in(from: Json = {}): Json {
     return json.omit(
       this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.droppedIn
+      ...this.droppedIn,
     );
   }
 
@@ -54,9 +54,9 @@ export class Mapper extends State implements Mapping {
     return json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {}
+        this.options.startFrom === 'source' ? to : {},
       ),
-      ...this.droppedOut
+      ...this.droppedOut,
     );
   }
 
@@ -72,10 +72,10 @@ export const mappings = {
     in: (): JsonValue | undefined => undefined,
     out: (): JsonValue | undefined => undefined,
   }),
-  func: (property: string, funcIn: Get<JsonValue, Json>, funcOut: Get<JsonValue, Json>): Mapping => ({
+  func: (property: string, funcIn: Get<JsonValue | undefined, Json>, funcOut: Get<JsonValue | undefined, Json>): Mapping => ({
     property,
-    in: (source: Json = {}): JsonValue => ofGet(funcIn, source),
-    out: (source: Json = {}): JsonValue => ofGet(funcOut, source),
+    in: (source: Json = {}): JsonValue | undefined => ofGet(funcIn, source),
+    out: (source: Json = {}): JsonValue | undefined => ofGet(funcOut, source),
   }),
   add: (funcIn: Get<JsonValue, Json>): Mapping => ({
     property: '',

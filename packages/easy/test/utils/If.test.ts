@@ -1,5 +1,6 @@
 import { mock } from '@thisisagile/easy-test';
-import { ifDefined, ifNotEmpty } from '../../src';
+import { ifDefined, ifNotEmpty, ifTrue } from '../../src';
+
 
 describe('IfDefined', () => {
   let f: jest.Mock;
@@ -15,8 +16,8 @@ describe('IfDefined', () => {
       ifDefined(
         'defined',
         () => f(),
-        () => alt()
-      )
+        () => alt(),
+      ),
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -27,8 +28,8 @@ describe('IfDefined', () => {
       ifDefined(
         undefined,
         () => f(),
-        () => alt()
-      )
+        () => alt(),
+      ),
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -54,8 +55,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         [{}, {}],
         () => f(),
-        () => alt()
-      )
+        () => alt(),
+      ),
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -66,8 +67,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         [],
         () => f(),
-        () => alt()
-      )
+        () => alt(),
+      ),
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -78,8 +79,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         '',
         () => f(),
-        () => alt()
-      )
+        () => alt(),
+      ),
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -87,6 +88,68 @@ describe('IfNotEmpty', () => {
 
   test('return undefined when alt is not given.', () => {
     expect(ifNotEmpty([], () => f())).toBeUndefined();
+    expect(f).not.toHaveBeenCalled();
+  });
+});
+
+describe('IfTrue', () => {
+  let f: jest.Mock;
+  let alt: jest.Mock;
+
+  beforeEach(() => {
+    f = mock.return('f');
+    alt = mock.return('alt');
+  });
+
+  test('call f when true', () => {
+    expect(
+      ifTrue(
+        true,
+        () => f(),
+        () => alt(),
+      ),
+    ).toBe('f');
+    expect(f).toHaveBeenCalled();
+    expect(alt).not.toHaveBeenCalled();
+  });
+  test('call f when construct true', () => {
+    expect(
+      ifTrue(
+        () => true,
+        () => f(),
+        () => alt(),
+      ),
+    ).toBe('f');
+    expect(f).toHaveBeenCalled();
+    expect(alt).not.toHaveBeenCalled();
+  });
+
+  test('call alt when false.', () => {
+    expect(
+      ifTrue(
+        '',
+        () => f(),
+        () => alt(),
+      ),
+    ).toBe('alt');
+    expect(f).not.toHaveBeenCalled();
+    expect(alt).toHaveBeenCalled();
+  });
+
+  test('call alt when undefined', () => {
+    expect(
+      ifTrue(
+        undefined,
+        () => f(),
+        () => alt(),
+      ),
+    ).toBe('alt');
+    expect(f).not.toHaveBeenCalled();
+    expect(alt).toHaveBeenCalled();
+  });
+
+  test('ifTrue returns undefined when alt is not given.', () => {
+    expect(ifTrue(false, () => f())).toBeUndefined();
     expect(f).not.toHaveBeenCalled();
   });
 });

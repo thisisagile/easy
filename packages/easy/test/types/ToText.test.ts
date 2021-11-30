@@ -122,6 +122,25 @@ describe('text()', () => {
     expect(kim.endsWith('doorn')).toBeFalsy();
   });
 
+  test('first works', () => {
+    expect(empty.first(1)).toMatchText('');
+    expect(empty.first(-1)).toMatchText('');
+    expect(kim.first(3)).toMatchText('Kim');
+    expect(text('12').first(3)).toMatchText('12');
+    expect(kim.first(2)).toMatchText('Ki');
+    expect(kim.first(-1)).toMatchText('');
+    expect(kim.first(0)).toMatchText('');
+  });
+
+  test('last works', () => {
+    expect(empty.last(1)).toMatchText('');
+    expect(empty.last(-1)).toMatchText('');
+    expect(kim.last(3)).toMatchText('gen');
+    expect(kim.last(2)).toMatchText('en');
+    expect(kim.last(-1)).toMatchText('');
+    expect(kim.last(0)).toMatchText('');
+  });
+
   test('is', () => {
     expect(kim.is(KimvanWilgen)).toBeTruthy();
     expect(kim.is('kimvanwilgen')).toBeFalsy();

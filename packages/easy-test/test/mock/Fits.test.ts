@@ -33,6 +33,8 @@ describe('match', () => {
     expect(new Dev('Sander')).toEqual(fits.text(new Dev('Sander')));
     expect('Sander').toEqual(fits.text(new Dev('Sander')));
     expect('Sander').not.toEqual(fits.text(new Dev('Jeroen')));
+    expect('Sander Hoogendoorn').toEqual(fits.text('Hoogendoorn'));
+    expect('Sander Hoogendoorn').not.toEqual(fits.text('De Vries'));
   });
 
   test('json', () => {

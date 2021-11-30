@@ -1,5 +1,6 @@
 import { isDefined, tryTo, Value } from '../../types';
 import moment, { Moment } from 'moment';
+import { ifNotEmpty } from '../../utils';
 
 export type DateTimeUnit =
   'year' | 'years' | 'y' |
@@ -52,17 +53,17 @@ export class DateTime extends Value<string | undefined> {
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
 
-  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString())
+  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString());
 
-  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString())
+  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString());
 
   toString(): string {
     return this.value ?? '';
   }
 
-  toLocale(locales: string | string[] = 'nl-NL', options: Intl.DateTimeFormatOptions = {}): string {
-    return this.toDate()?.toLocaleDateString(locales, options) ?? '';
-  }
+  toLocale = (locales: string | string[] = 'nl-NL', format = 'L'): string => this.utc.locale(locales).format(format);
+
+  toFull = (...locales: string[]): string => this.toLocale(ifNotEmpty(locales, locales), 'LL');
 
   toDate(): Date | undefined {
     return this.isValid ? this.utc.toDate() : undefined;

@@ -4,7 +4,7 @@ import { mock } from '@thisisagile/easy-test';
 const getByText = mock.return(<div />);
 jest.mock('@testing-library/react', () => ({ ...jest.requireActual('@testing-library/react'), getByText }));
 import { fireEvent } from '@testing-library/react';
-import { ElementTester, renders } from '../src';
+import { ElementTester, Tester, renders } from '../src';
 
 describe('ElementTester', () => {
   const a = <div />;
@@ -25,6 +25,12 @@ describe('ElementTester', () => {
 
   test('is not valid', () => {
     expect(new ElementTester(undefined as unknown as () => Element).isValid).toBeFalsy();
+  });
+
+  test('then returns new Tester', () => {
+    const t = new ElementTester(() => e).then
+    expect(t).toBeInstanceOf(Tester);
+    expect(t.container).toBe(e);
   });
 
   test('click fires click event', () => {

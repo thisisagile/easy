@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hooks component with useEntity hook renders correctly. 1`] = `
+<div>
+   Amsterdam
+</div>
+`;
+
+exports[`Hooks component with useList hook renders correctly. 1`] = `
+<div>
+   Amsterdam
+</div>
+`;
+
+exports[`Hooks component with useToggle hook renders correctly. 1`] = `
+<div>
+  <div
+    id="42"
+  >
+    true
+  </div>
+</div>
+`;

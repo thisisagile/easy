@@ -23,7 +23,8 @@
     "build": "yarn g:tsc",
     "postbuild": "copyfiles -u 1 src/**/*.scss dist",
     "test": "yarn g:jest --coverage",
-    "prepack": "yarn g:copy-readme"
+    "prepack": "yarn g:copy-readme",
+    "demo": "cd demo && next dev -p 3001"
   },
   "files": [
     "dist",
@@ -41,6 +42,8 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
+    "next": "^12.0.4",
+    "next-transpile-modules": "^9.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass": "^1.43.4"

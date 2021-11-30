@@ -261,9 +261,20 @@ The `When` class is a utility that is usually exposed through the `when()` funct
 The `reject()` method is used to reject the chain, so it will not execute any of its following statements. The `reject()` method accept any error type. A special case is made for `when().not.isValid`. This statement validates the subject of the `when`, and reject with the results (an instance of `Results`) if no parameter is passed to `reject()`.
 
 ## Authentication and Authorization
-Access to endpoints is configured using the `@requires` decorator group.
-If multiple decorators are added, all conditions must be met to access the endpoint.
+Access to endpoints is configured using the `@requires` decorator group. If multiple decorators are added, all conditions must be met to access the endpoint. A resource class (which is the main entry to an **easy** service) with security decorators is shown in the following example.
 
-To use these decorators, the generic `security` middleware must be loaded first.
-In most cases, it should be added to the `pre` list of handlers of a service.
+    @route(ProductUri.Products)
+    export class ProductsResource {
+      constructor(readonly manage = new ManageProduct()) {}
+
+      @get()
+      @requires.useCase(UseCase.ViewProduct)
+      search = (req: Req): Promise<List<Product>> => this.manage.search(req.q);
+
+      @post()
+      @requires.useCase(UseCase.ManageProduct)
+      add = (req: Req): Promise<Product> => this.manage.add(req.body as Json);
+    }
+
+To use these decorators, the generic `security` middleware must be loaded first. In most cases, it should be added to the `pre` list of handlers of a service.
 The security middleware takes an optional configuration object, which is documented [in code](packages/easy-express/src/express/SecurityHandler.ts).

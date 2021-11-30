@@ -85,13 +85,27 @@ describe('Mapper', () => {
     readonly country = this.map.func('Country', 'NL', 'nl');
     readonly region = this.map.add(a => region(a));
     readonly list = this.map.add(a => listMe(a));
+    readonly extension = this.map.func('Extension', 'ex', undefined);
+    readonly useless = this.map.func('Useless', undefined, undefined);
   }
 
   test('func should return in', () => {
     const scratch = new FuncMapper().in({ CityName });
-    expect(scratch).toStrictEqual({ city, country, region: 'city', list: ['Amsterdam', 'city', 'NL'] });
+    expect(scratch).toStrictEqual({
+      city,
+      country,
+      region: 'city',
+      list: ['Amsterdam', 'city', 'NL'],
+      extension: 'ex',
+    });
     const source = new FuncMapper({ startFrom: 'source' }).in({ CityName });
-    expect(source).toStrictEqual({ city, country, region: 'city', list: ['Amsterdam', 'city', 'NL'] });
+    expect(source).toStrictEqual({
+      city,
+      country,
+      region: 'city',
+      list: ['Amsterdam', 'city', 'NL'],
+      extension: 'ex',
+    });
   });
 
   test('func should return out', () => {

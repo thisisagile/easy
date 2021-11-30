@@ -57,6 +57,8 @@ export class Mocks {
     }),
   };
   empty = <T = any>(props: Partial<T> = {}): T => props as T;
+  a = this.empty;
+  an = this.empty;
   date = (epoch = 1621347575): Date => {
     const date = new Date(epoch);
     date.toString = mock.return('Mon Jan 19 1970 19:22:27 GMT+0100 (Central European Standard Time)');
