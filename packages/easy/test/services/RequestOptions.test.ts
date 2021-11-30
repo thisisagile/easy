@@ -23,7 +23,6 @@ describe('RequestOptions', () => {
     expect(RequestOptions.Form.type).toBe(ContentType.Form);
   });
 
-
   test('accept().', () => {
     expect(options.accept(ContentType.Json).type).toBe(ContentType.Json);
   });
