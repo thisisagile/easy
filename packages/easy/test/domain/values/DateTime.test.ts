@@ -257,13 +257,14 @@ describe('DateTime', () => {
 
   test('toLocale', () => {
     const dt = new DateTime(iso);
-    expect(dt.toLocale()).toMatchText('25-3-2021');
-    expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
-    expect(dt.toLocale('de-DE', { dateStyle: 'full' })).toMatchText('Donnerstag, 25. März 2021');
+    expect(dt.toLocale()).toMatchText('25-03-2021');
+    expect(dt.toLocale('de-DE')).toMatchText('25.03.2021');
+    expect(dt.toLocale('de-DE', 'LLLL')).toMatchText('Donnerstag, 25. März 2021 08:39');
   });
 
   test('toFull', () => {
     const dt = new DateTime(iso);
+    expect(dt.toFull()).toMatchText('25 maart 2021');
     expect(dt.toFull('nl-NL')).toMatchText('25 maart 2021');
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');

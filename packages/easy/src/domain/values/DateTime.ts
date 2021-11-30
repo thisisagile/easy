@@ -1,5 +1,6 @@
 import { isDefined, tryTo, Value } from '../../types';
 import moment, { Moment } from 'moment';
+import { ifNotEmpty } from '../../utils';
 
 export type DateTimeUnit =
   'year' | 'years' | 'y' |
@@ -60,9 +61,9 @@ export class DateTime extends Value<string | undefined> {
     return this.value ?? '';
   }
 
-  toLocale = (locales: string | string[] = 'nl-NL', options: Intl.DateTimeFormatOptions = {}): string => this.toDate()?.toLocaleDateString(locales, options) ?? '';
+  toLocale = (locales: string | string[] = 'nl-NL', format = 'L'): string => this.utc.locale(locales).format(format);
 
-  toFull = (...locales: string[]): string => this.toLocale(locales, { day: 'numeric', month: 'long', year: 'numeric' });
+  toFull = (...locales: string[]): string => this.toLocale(ifNotEmpty(locales, locales), 'LL');
 
   toDate(): Date | undefined {
     return this.isValid ? this.utc.toDate() : undefined;
