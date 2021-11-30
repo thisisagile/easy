@@ -1,12 +1,13 @@
 import playwright, { Browser, chromium, firefox, Page, webkit } from 'playwright';
 import { PlaywrightElement } from './PlaywrightElement';
-import { EnvContext, Id, UseCase } from '@thisisagile/easy';
+import { ctx, Id, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
 
 export class PlaywrightTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
+  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {
+  }
 
   get url(): string {
     return this.page.url();
@@ -28,12 +29,12 @@ export class PlaywrightTester implements Tester {
     }
   };
 
-  /* istanbul ignore next */
-  static async init(env: EnvContext, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
+
+  static async init(host: string = ctx.env.get('webHost', '') as string, browserType: BrowserType, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await PlaywrightTester.launch(browserType, headless);
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });
-    return new PlaywrightTester(env, browser, page);
+    return new PlaywrightTester(host, browser, page);
   }
 
   byClass(c: string): TestElement {
@@ -73,7 +74,7 @@ export class PlaywrightTester implements Tester {
   }
 
   goto(to: UseCase, id?: Id): Promise<boolean> {
-    return this.redirect(toUrl(to, this.env.host, this.env.port, id));
+    return this.redirect(toUrl(to, this.host, id));
   }
 
   wait(): Promise<boolean> {

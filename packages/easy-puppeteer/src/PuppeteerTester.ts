@@ -1,10 +1,10 @@
 import { PuppeteerElement } from './PuppeteerElement';
 import puppeteer, { Browser, Page } from 'puppeteer';
-import { EnvContext, Id, UseCase } from '@thisisagile/easy';
+import { ctx, Id, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 
 export class PuppeteerTester implements Tester {
-  constructor(public env: EnvContext, private readonly browser: Browser, private readonly page: Page) {}
+  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {}
 
   get url(): string {
     return this.page.target().url();
@@ -13,12 +13,11 @@ export class PuppeteerTester implements Tester {
   /* istanbul ignore next */
   static launch = (headless: boolean): Promise<Browser> => puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'] });
 
-  /* istanbul ignore next */
-  static async init(env: EnvContext, headless = true, width = 1200, height = 800): Promise<Tester> {
+  static async init(host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800): Promise<Tester> {
     const browser = await PuppeteerTester.launch(headless);
     const page = await browser.newPage();
     await page.setViewport({ width, height });
-    return new PuppeteerTester(env, browser, page);
+    return new PuppeteerTester(host, browser, page);
   }
 
   byClass(c: string): TestElement {
@@ -58,7 +57,7 @@ export class PuppeteerTester implements Tester {
   }
 
   goto(to: UseCase, id?: Id): Promise<boolean> {
-    return this.redirect(toUrl(to, this.env.host, this.env.port, id));
+    return this.redirect(toUrl(to, this.host, id));
   }
 
   wait(): Promise<boolean> {

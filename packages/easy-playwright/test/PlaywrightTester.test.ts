@@ -1,22 +1,22 @@
-import { App, EnvContext, UseCase } from '@thisisagile/easy';
+import { App, UseCase } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, Page, Response } from 'playwright';
 import { PlaywrightElement, PlaywrightTester } from '../src';
+import { PuppeteerTester } from '@thisisagile/easy-puppeteer';
 
 describe('PlaywrightTester', () => {
   let tester: PlaywrightTester;
-  let env: EnvContext;
   let browser: Browser;
   let page: Page;
   let app: App;
   let uc: UseCase;
+  const host = 'http://localhost:8080';
   const testUrl = 'http://localhost/shops';
 
   beforeEach(() => {
-    env = mock.empty<EnvContext>({ host: 'http://localhost', port: 8080 });
     browser = mock.empty<Browser>();
     page = mock.empty<Page>();
-    tester = new PlaywrightTester(env, browser, page);
+    tester = new PlaywrightTester(host, browser, page);
     app = mock.empty<App>({ name: 'shops' });
     uc = mock.empty<UseCase>({ app: app, name: 'find shop' });
   });
@@ -224,7 +224,27 @@ describe('PlaywrightTester', () => {
     expect(tester.url).toMatch('http://thisurl.com');
   });
 
-  test('env', () => {
-    expect(tester.env).toBe(env);
+  test('host', () => {
+    expect(tester.host).toBe(host);
   });
+
+
+  test('undefined webHost env var will set host to empty string', async () => {
+    const t = await PuppeteerTester.init();
+    expect(t.host).toBe('');
+  }, 50000);
+
+
+  test('webHost uses env var by default', async () => {
+    process.env.WEB_HOST = host;
+    const t = await PuppeteerTester.init();
+    expect(t.host).toBe(host);
+  }, 50000);
+
+  test('webHost uses provided value', async () => {
+    const h = 'http://goof.fy';
+    const t = await PuppeteerTester.init(h);
+    expect(t.host).toBe(h);
+  }, 50000);
+
 });

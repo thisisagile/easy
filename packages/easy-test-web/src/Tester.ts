@@ -1,8 +1,8 @@
 import { TestElement } from './TestElement';
-import { asString, EnvContext, Id, text, tryTo, UseCase } from '@thisisagile/easy';
+import { Id, text, tryTo, UseCase } from '@thisisagile/easy';
 
 export interface Tester {
-  env: EnvContext;
+  host: string;
 
   url: string;
 
@@ -29,10 +29,9 @@ export interface Tester {
   goto(to: UseCase, id?: Id): Promise<boolean>;
 }
 
-export const toUrl = (uc: UseCase, host?: string, port?: number, id?: Id): string =>
-  tryTo(() => port ? `:${port}` : '')
-    .map(p => `${asString(host)}${p}`)
-    .map(domain => ({domain, i: id ? `/${id}` : ''}))
-    .map(({domain, i}) => text(`${domain}/${uc.app.name}/${uc.name}${i}`))
+export const toUrl = (uc: UseCase, host?: string, id?: Id): string =>
+  tryTo(() => host)
+    .map(domain => ({ domain, i: id ? `/${id}` : '' }))
+    .map(({ domain, i }) => text(`${domain}/${uc.app.name}/${uc.name}${i}`))
     .map(url => url.kebab.toString()).value;
 
