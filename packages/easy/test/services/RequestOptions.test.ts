@@ -1,10 +1,18 @@
-import { ContentType, RequestOptions } from '../../src';
+import { ContentType, ctx, HttpHeader, RequestOptions } from '../../src';
 
 describe('RequestOptions', () => {
   let options: RequestOptions;
 
   beforeEach(() => {
     options = new RequestOptions();
+  });
+
+  test('constructor', () => {
+    jest.spyOn(ctx.request, 'correlationId', 'get').mockReturnValue('4');
+    const ro = new RequestOptions(ContentType.Xml, { foo: 'bar' });
+    expect(ro.type).toBe(ContentType.Xml);
+    expect(ro.headers.foo).toBe('bar');
+    expect(ro.headers[HttpHeader.Correlation]).toBe("4");
   });
 
   test('type matches.', () => {
@@ -33,6 +41,11 @@ describe('RequestOptions', () => {
     const jwt = '12324';
     const options = RequestOptions.Json.bearer(jwt);
     expect(options.headers.Authorization).toBe(`Bearer ${jwt}`);
+  });
+
+  test('basic()', () => {
+    const options = RequestOptions.Json.basic('username', 'password');
+    expect(options.headers.Authorization).toBe(`Basic dXNlcm5hbWU6cGFzc3dvcmQ=`);
   });
 
   test('authorization())', () => {

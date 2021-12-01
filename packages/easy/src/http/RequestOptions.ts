@@ -42,4 +42,9 @@ export class RequestOptions extends Enum {
   bearer = (jwt: Text): this => {
     return isNotEmpty(jwt) ? this.authorization(`Bearer ${jwt}`) : this;
   };
+
+  basic = (username: Text, password: Text): this => {
+    const basicAuth = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
+    return this.authorization(`Basic ${basicAuth}`);
+  };
 }
