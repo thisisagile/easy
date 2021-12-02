@@ -61,6 +61,10 @@ export class EasyUri implements Uri {
     return toRoute(this.host, this.resource, ...this.segments);
   }
 
+  get isInternal (): boolean  {
+    return toRoute(this.host) === ctx.env.host;
+  }
+
   protected get props(): List<Prop> {
     return meta(this.state).values<Prop>();
   }
