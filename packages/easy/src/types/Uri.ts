@@ -38,6 +38,7 @@ export type Uri = {
   query: (q?: unknown) => Uri;
   path: string;
   route: (resource: string) => string;
+  isInternal: boolean;
   toString: () => string;
 };
 
