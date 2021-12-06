@@ -1,7 +1,17 @@
-import { asString, uri, Uri } from '../../src';
+import { asString, EasyUri, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
+
+const externalHost = 'https://www.external.com';
+class ExternalUri extends EasyUri {
+  readonly host = uri.host(externalHost);
+  static readonly api = uri.segment('api');
+
+  static get Api(): ExternalUri {
+    return new ExternalUri([ExternalUri.api]);
+  }
+}
 
 describe('Uri', () => {
   const withHost = `${host}/dev/developers`;
@@ -17,6 +27,12 @@ describe('Uri', () => {
   test('returns full route', () => {
     expect(DevUri.Developers).toMatchRoute(withHost);
     expect(DevUri.Developer).toMatchRoute(`${host}/dev/developers/:id`);
+  });
+
+  test('isInternal', () => {
+    expect(ExternalUri.Api.host.segment).toBe(externalHost)
+    expect(ExternalUri.Api.isInternal).toBeFalsy();
+    expect(DevUri.Developers.isInternal).toBeTruthy();
   });
 
   test('path returns path', () => {
