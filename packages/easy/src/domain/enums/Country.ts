@@ -251,11 +251,11 @@ export class Country extends Enum {
   static readonly ZM = new Country('Zambia', 'ZM');
   static readonly ZW = new Country('Zimbabwe', 'ZW');
 
-  constructor(name: string, id: string, private readonly lower = text(id).lower.toString()) {
+  constructor(name: string, id: string, private readonly lower = text(id).lower.trim.toString()) {
     super(name, id);
   }
 
   equals<E extends Enum | Id>(other: E): boolean {
-    return this.lower === text(isEnum(other) ? other.id : other).lower.toString();
+    return this.lower === text(isEnum(other) ? other.id : other).lower.trim.toString();
   }
 }

@@ -1,4 +1,4 @@
-import { Enum, Get, Id, isEnum, List, meta, ofGet, text } from '../../types';
+import { Enum, Id, isEnum, text } from '../../types';
 
 export class Locale extends Enum {
   static readonly AF = new Locale('af', 'Afrikaans');
@@ -565,23 +565,11 @@ export class Locale extends Enum {
   static readonly ZU = new Locale('zu', 'Zulu');
   static readonly ZU_ZA = new Locale('zu_ZA', 'Zulu (South Africa)');
 
-  constructor(id: Id, name: string, readonly country = text(id).lower.last(2).toString()) {
+  constructor(id: Id, name: string, readonly country = text(id).lower.last(2).toString(), private readonly lower = text(id).lower.trim.toString()) {
     super(name, id);
   }
 
-  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return (
-      meta(this)
-        .values<E>()
-        .first((e: unknown) => isEnum(e) && this.toId(e.id) === this.toId(id)) ?? ofGet(alt)
-    );
+  equals<E extends Enum | Id>(other: E): boolean {
+    return this.lower === text(isEnum(other) ? other.id : other).lower.trim.toString();
   }
-
-  static byIds<T extends Enum>(ids?: Id[]): List<T> {
-    return meta(this)
-      .values<T>()
-      .filter((e: unknown) => isEnum(e) && ids?.map(id => this.toId(id))?.includes(this.toId(e.id)));
-  }
-
-  private static toId = (id: Id): Id => text(id).lower.trim.toString();
 }
