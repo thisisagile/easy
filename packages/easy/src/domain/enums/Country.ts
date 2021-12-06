@@ -251,7 +251,7 @@ export class Country extends Enum {
   static readonly ZM = new Country('Zambia', 'ZM');
   static readonly ZW = new Country('Zimbabwe', 'ZW');
 
-  constructor(name: string, id: string, readonly lower = text(id).lower.toString()) {
+  constructor(name: string, id: string, private readonly lower = text(id).lower.toString()) {
     super(name, id);
   }
 
