@@ -81,6 +81,8 @@ export class ToText implements Text {
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
 
+  equals = this.is;
+
   get isEmpty(): boolean {
     return isEmpty(this.toString());
   }
