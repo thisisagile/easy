@@ -24,8 +24,7 @@ describe('Country', () => {
 
   test('equals.', () => {
     expect(Country.NL.equals(Country.NL)).toBeTruthy();
-
-    // expect(Country.NL.equals('nl')).toBeTruthy();
+    expect(Country.NL.equals('nl')).toBeTruthy();
     expect(Country.NL.equals('NL')).toBeTruthy();
     expect(Country.NL.equals('BE')).toBeFalsy();
   });
