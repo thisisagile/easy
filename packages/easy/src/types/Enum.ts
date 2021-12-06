@@ -24,7 +24,7 @@ export abstract class Enum implements Validatable {
     return (
       meta(this)
         .values<E>()
-        .first((e: unknown) => isEnum(e) && e.id === id) ?? ofGet(alt)
+        .first((e: unknown) => isEnum(e) && e.equals(id)) ?? ofGet(alt)
     );
   }
 
