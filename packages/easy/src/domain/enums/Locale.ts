@@ -1,4 +1,4 @@
-import { Enum, Id, isEnum, text } from '../../types';
+import { Enum, Id, text } from '../../types';
 
 export class Locale extends Enum {
   static readonly AF = new Locale('af', 'Afrikaans');
@@ -570,6 +570,6 @@ export class Locale extends Enum {
   }
 
   equals<E extends Enum | Id>(other: E): boolean {
-    return this.lower === text(isEnum(other) ? other.id : other).lower.trim.toString();
+    return text(other).lower.trim.equals(this.lower);
   }
 }
