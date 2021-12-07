@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, Currency, Enum, Id, isList, List, Scope, toList, toObject } from '../../src';
+import { asList, Currency, Enum, Id, isList, List, Scope, toList, toObject, isEmpty } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -99,6 +99,16 @@ describe('List', () => {
     expect(JSON.stringify(json)).toBe(JSON.stringify([Dev.Sander.toJSON(), Dev.Wouter.toJSON()]));
     const j = toList(Scope.Auth, Scope.Basic, Scope.Admin).toJSON();
     expect(JSON.stringify(j)).toBe(JSON.stringify([Scope.Auth.toJSON(), Scope.Basic.toJSON(), Scope.Admin.toJSON()]));
+  });
+
+  test('orElse', () => {
+    expect(isEmpty(toList())).toBeTruthy();
+    expect(toList().orElse()).toBeUndefined();
+    expect(toList(Dev.Rob).orElse()).toHaveLength(1);
+    expect(toList(Dev.Rob, Dev.Wouter).orElse(Dev.Jeroen)).toHaveLength(2);
+    expect(toList().orElse(Dev.Rob, Dev.Jeroen)).toHaveLength(2);
+    expect(toList().orElse([Dev.Rob, Dev.Jeroen])).toHaveLength(2);
+    expect(toList().orElse(toList(Dev.Rob, Dev.Jeroen))).toHaveLength(2);
   });
 });
 
@@ -248,7 +258,7 @@ describe('toList', () => {
     expect(toList(Currency.all()).byId(Currency.AUD.id)).toHaveLength(1);
     const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
     expect(devs.byId(Dev.Sander.id)).toHaveLength(1);
-    const food = toList("hamburger", "pizza", "fries");
+    const food = toList('hamburger', 'pizza', 'fries');
     expect(food.byId(42)).toHaveLength(0);
   });
 
@@ -256,7 +266,7 @@ describe('toList', () => {
     expect(toList().remove(Dev.Rob)).toHaveLength(0);
     expect(toList(Dev.Sander).remove(Dev.Rob)).toHaveLength(1);
     expect(toList(Dev.Sander, Dev.Naoufal).remove(Dev.Rob)).toHaveLength(2);
-    expect(toList({name: "Joyce"}, {name: "Claudia"}).remove(Dev.Rob)).toHaveLength(2);
+    expect(toList({ name: 'Joyce' }, { name: 'Claudia' }).remove(Dev.Rob)).toHaveLength(2);
     expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen)).toHaveLength(1);
     expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Jeroen)).toHaveLength(1);
     expect(toList(Dev.Wouter, Dev.Jeroen).remove(Dev.Jeroen).remove(Dev.Wouter)).toHaveLength(0);
@@ -267,7 +277,7 @@ describe('toList', () => {
     expect(list).toHaveLength(1);
     const l2 = list.switch(Dev.Sander);
     expect(l2).toHaveLength(2);
-    const l3 = l2.switch(Dev.Rob)
+    const l3 = l2.switch(Dev.Rob);
     expect(l3).toHaveLength(1);
   });
 });
