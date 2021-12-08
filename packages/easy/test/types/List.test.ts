@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, Currency, Enum, Id, isList, List, Scope, toList, toObject, isEmpty } from '../../src';
+import { asList, Currency, Enum, Id, isEmpty, isList, List, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -97,8 +97,8 @@ describe('List', () => {
     expect(json).not.toBeInstanceOf(List);
     expect(json).toBeInstanceOf(Array);
     expect(JSON.stringify(json)).toBe(JSON.stringify([Dev.Sander.toJSON(), Dev.Wouter.toJSON()]));
-    const j = toList(Scope.Auth, Scope.Basic, Scope.Admin).toJSON();
-    expect(JSON.stringify(j)).toBe(JSON.stringify([Scope.Auth.toJSON(), Scope.Basic.toJSON(), Scope.Admin.toJSON()]));
+    const j = toList(Dev.Sander, Dev.Wouter).toJSON();
+    expect(JSON.stringify(j)).toBe(JSON.stringify([Dev.Sander.toJSON(), Dev.Wouter.toJSON()]));
   });
 
   test('orElse', () => {

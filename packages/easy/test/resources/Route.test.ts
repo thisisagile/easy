@@ -1,6 +1,7 @@
-import { HttpVerb, meta, route, routes, Scope, Uri, UseCase } from '../../src';
+import { HttpVerb, meta, routes, Uri } from '../../src';
 import { DevResource, DevsResource, DevUri } from '../ref';
 import '@thisisagile/easy-test';
+import { DevScope, DevUseCase } from '../ref/DevUseCase';
 
 describe('Route', () => {
   test('Route works on a class', () => {
@@ -21,8 +22,8 @@ describe('Router', () => {
 
   test('Router works on a secured class', () => {
     const { endpoints } = routes(new DevResource());
-    expect(endpoints[0].requires.scope).toBe(Scope.Basic);
-    expect(endpoints[1].requires.uc).toBe(UseCase.ChangePassword);
+    expect(endpoints[0].requires.scope).toBe(DevScope.Dev);
+    expect(endpoints[1].requires.uc).toBe(DevUseCase.WriteCode);
     expect(endpoints[2].requires.token).toBeTruthy();
   });
 });

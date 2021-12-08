@@ -1,9 +1,10 @@
 import { Scope } from '../../src';
+import { DevScope } from '../ref/DevUseCase';
 
 describe('Scope', () => {
   test('id works', () => {
-    expect(Scope.Auth.name).toBe('Authorization');
-    expect(Scope.Auth.id).toBe('auth');
-    expect(Scope.Auth.code).toBe('auth');
+    expect(DevScope.Manager.name).toBe('Manager');
+    expect(DevScope.Manager.id).toBe('mngr');
+    expect(DevScope.Manager.code).toBe('mngr');
   });
 });

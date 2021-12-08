@@ -1,8 +1,9 @@
 import { App, Scope, UseCase } from '../../src';
+import { DevScope, DevUseCase } from '../ref/DevUseCase';
 
 describe('UseCase', () => {
   test('id works', () => {
-    expect(UseCase.ChangePassword.id).toBe('change-password');
+    expect(DevUseCase.ReleaseCode.id).toBe('release-code');
   });
 
   test('id overload works', () => {
@@ -11,69 +12,52 @@ describe('UseCase', () => {
   });
 
   test('scopes work', () => {
-    expect(UseCase.ChangePassword.scopes).toContain(Scope.Auth);
+    expect(DevUseCase.ReleaseCode.scopes).toContain(DevScope.Dev);
   });
 
   test('scope works', () => {
-    expect(UseCase.ChangePassword.app.id).toBe('main');
+    expect(DevUseCase.ReleaseCode.app.id).toBe('main');
   });
 
   test('with works', () => {
-    const withScope = UseCase.Main.with(Scope.Admin);
-    expect(withScope.scopes).toHaveLength(1);
-    expect(withScope.scopes).toContain(Scope.Admin);
+    const withScope = DevUseCase.ReleaseCode.with(DevScope.Manager);
+    expect(withScope.scopes).toHaveLength(3);
+    expect(withScope.scopes).toContain(DevScope.Manager);
 
-    const withSpread = new UseCase(App.Main, 'test', 'own-id').with(Scope.Admin, Scope.Basic);
+    const withSpread = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester);
     expect(withSpread.scopes).toHaveLength(2);
-    expect(withSpread.scopes).toContain(Scope.Admin);
-    expect(withSpread.scopes).toContain(Scope.Basic);
+    expect(withSpread.scopes).toContain(DevScope.Manager);
+    expect(withSpread.scopes).toContain(DevScope.Tester);
 
-    const withChaining = new UseCase(App.Main, 'test', 'own-id').with(Scope.Admin).with(Scope.Auth);
+    const withChaining = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager).with(DevScope.Tester);
     expect(withChaining.scopes).toHaveLength(2);
-    expect(withChaining.scopes).toContain(Scope.Admin);
-    expect(withChaining.scopes).toContain(Scope.Auth);
+    expect(withChaining.scopes).toContain(DevScope.Manager);
+    expect(withChaining.scopes).toContain(DevScope.Tester);
   });
 
   test('byScope works', () => {
-    const admin = UseCase.byScopes(Scope.Admin);
-    expect(admin).toHaveLength(1);
-    expect(admin).toContain(UseCase.Main);
+    const admin = DevUseCase.byScopes(DevScope.Manager);
+    expect(admin).toHaveLength(2);
+    expect(admin).toContain(DevUseCase.ReleaseCode);
+    expect(admin).toContain(DevUseCase.CreateSpreadSheet);
 
-    const basic = UseCase.byScopes(Scope.Basic);
+    const basic = DevUseCase.byScopes(DevScope.Dev);
     expect(basic).toHaveLength(4);
-    expect(basic).toContain(UseCase.Login);
-    expect(basic).toContain(UseCase.Logout);
-    expect(basic).toContain(UseCase.ChangePassword);
-    expect(basic).toContain(UseCase.ForgotPassword);
+    expect(basic).toContain(DevUseCase.BuildCode);
+    expect(basic).toContain(DevUseCase.WriteCode);
+    expect(basic).toContain(DevUseCase.ReleaseCode);
 
-    const adminOrAuth = UseCase.byScopes(Scope.Admin, Scope.Auth);
-    expect(adminOrAuth).toHaveLength(5);
-    expect(adminOrAuth).toContain(UseCase.Login);
-    expect(adminOrAuth).toContain(UseCase.Logout);
-    expect(adminOrAuth).toContain(UseCase.ChangePassword);
-    expect(adminOrAuth).toContain(UseCase.ForgotPassword);
+    const adminOrAuth = DevUseCase.byScopes(DevScope.Tester, DevScope.Manager);
+    expect(adminOrAuth).toHaveLength(4);
+    expect(adminOrAuth).not.toContain(DevUseCase.WriteCode);
+    expect(adminOrAuth).toContain(DevUseCase.ReleaseCode);
+    expect(adminOrAuth).toContain(DevUseCase.BuildCode);
+    expect(adminOrAuth).toContain(DevUseCase.CreateSpreadSheet);
   });
 
   test('byScope with unknown Scope returns empty list of use cases', () => {
     const s = { name: 'new', id: '' } as Scope;
     const uc = UseCase.byScopes(s);
     expect(uc).toHaveLength(0);
-  });
-});
-
-describe('UseCase inheritance', () => {
-  class ExtScope extends Scope {
-    static readonly TestScope = new Scope('Test');
-  }
-
-  class ExtUseCase extends UseCase {
-    static readonly ExtUseCase = new UseCase(App.Main, 'test').with(ExtScope.TestScope);
-    static readonly SemiExtUseCase = new UseCase(App.Main, 'test 2').with(Scope.Admin);
-  }
-
-  test('byScope works on subclasses', () => {
-    const test = ExtUseCase.byScopes(ExtScope.TestScope);
-    expect(test).toHaveLength(1);
-    expect(test).toContain(ExtUseCase.ExtUseCase);
   });
 });
