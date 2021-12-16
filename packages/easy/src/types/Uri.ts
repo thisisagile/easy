@@ -38,6 +38,7 @@ export type Uri = {
   query: (q?: unknown) => Uri;
   path: string;
   route: (resource: string) => string;
+  isInternal: boolean;
   toString: () => string;
 };
 
@@ -59,6 +60,10 @@ export class EasyUri implements Uri {
 
   get complete(): string {
     return toRoute(this.host, this.resource, ...this.segments);
+  }
+
+  get isInternal (): boolean  {
+    return toRoute(this.host) === ctx.env.host ?? '$host';
   }
 
   protected get props(): List<Prop> {

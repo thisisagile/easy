@@ -12,14 +12,13 @@ import {
   requires,
   Resource,
   route,
-  Scope,
   search,
   stream,
   toList,
-  UseCase,
 } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
+import { DevScope, DevUseCase } from './DevUseCase';
 
 @route(DevUri.Developers)
 export class DevsResource implements Resource {
@@ -33,11 +32,11 @@ export class DevsResource implements Resource {
 @route(DevUri.Developer)
 export class DevResource implements Resource {
   @get()
-  @requires.scope(Scope.Basic)
+  @requires.scope(DevScope.Dev)
   byId = (req: Req): Dev => new Dev(req.id);
 
   @put()
-  @requires.useCase(UseCase.ChangePassword)
+  @requires.useCase(DevUseCase.WriteCode)
   update = (req: Req): Dev => new Dev(req.id);
 
   @patch()

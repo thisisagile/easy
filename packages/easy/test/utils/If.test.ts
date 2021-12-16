@@ -136,6 +136,18 @@ describe('IfTrue', () => {
     expect(alt).toHaveBeenCalled();
   });
 
+  test('dont call f when construct false', () => {
+    expect(
+      ifTrue(
+        () => false,
+        () => f(),
+        () => alt(),
+      ),
+    ).toBe('alt');
+    expect(f).not.toHaveBeenCalled();
+    expect(alt).toHaveBeenCalled();
+  });
+
   test('call alt when undefined', () => {
     expect(
       ifTrue(

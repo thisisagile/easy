@@ -134,11 +134,11 @@ describe('isNotEmptyObject', () => {
     expect(isEmptyObject(new Empty())).toBeTruthy();
   });
 
-  test.each([undefined, 0, false, ""])('isFalse', (s) => {
+  test.each([undefined, 0, false, "", () => false])('isFalse', (s) => {
     expect(isTrue(s)).toBeFalsy();
   })
 
-  test.each([{}, [], 1, 42, true, "false", "true", "something"])('isTrue', (s) => {
+  test.each([{}, [], 1, 42, true, "false", "true", "something", () => true, () => () => true])('isTrue', (s) => {
     expect(isTrue(s)).toBeTruthy();
   })
 });

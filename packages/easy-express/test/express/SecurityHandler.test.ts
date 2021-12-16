@@ -1,8 +1,9 @@
 import passport from 'passport';
 import { authError, checkScope, checkToken, checkUseCase, security } from '../../src';
 import { Request, Response } from 'express';
-import { ctx, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
+import { ctx, HttpStatus } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
+import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
 describe('SecurityHandler decorators', () => {
   const cb = jest.fn();
@@ -15,27 +16,27 @@ describe('SecurityHandler decorators', () => {
     const authenticateSpy = jest.spyOn(passport, 'authenticate');
     checkToken();
     expect(authenticateSpy).toHaveBeenCalledWith('jwt', { session: false, failWithError: true });
-  })
+  });
 
   test('checkScope', () => {
-    const c = checkScope(Scope.Basic);
+    const c = checkScope(DevScope.Dev);
 
     c({} as Request, {} as Response, cb);
     c({ user: {} } as unknown as Request, {} as Response, cb);
     c({ user: { scopes: [] } } as unknown as Request, {} as Response, cb);
-    c({ user: { scopes: [Scope.Basic.code] } } as unknown as Request, {} as Response, cb);
+    c({ user: { scopes: [DevScope.Dev.code] } } as unknown as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
   });
 
   test('checkUseCase', () => {
-    const c = checkUseCase(UseCase.Main);
+    const c = checkUseCase(DevUseCase.ReleaseCode);
 
     c({} as Request, {} as Response, cb);
     c({ user: {} } as unknown as Request, {} as Response, cb);
     c({ user: { usecases: [] } } as unknown as Request, {} as Response, cb);
-    c({ user: { usecases: [UseCase.Main.code] } } as unknown as Request, {} as Response, cb);
+    c({ user: { usecases: [DevUseCase.ReleaseCode.code] } } as unknown as Request, {} as Response, cb);
 
     expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
     expect(cb).toHaveBeenLastCalledWith(undefined);
@@ -43,7 +44,7 @@ describe('SecurityHandler decorators', () => {
 });
 
 describe('SecurityHandler middleware', () => {
-  const key = "secretKey";
+  const key = 'secretKey';
   let useSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -121,11 +122,11 @@ describe('SecurityHandler middleware', () => {
   });
 
   test('security middleware with failing secretOrKeyProvider', () => {
-    const keyProvider = mock.reject("someError");
+    const keyProvider = mock.reject('someError');
     const jwtStrategyOptions = { secretOrKeyProvider: keyProvider };
 
     testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
-      expect(err).toBe("someError");
+      expect(err).toBe('someError');
     });
 
     security({ jwtStrategyOptions });
@@ -134,11 +135,11 @@ describe('SecurityHandler middleware', () => {
   });
 
   test('JWT strategy sets context', () => {
-    const payload = { key: "value" };
+    const payload = { key: 'value' };
     const done = jest.fn();
 
     useSpy.mockImplementationOnce(((s: any) => {
-      s._verify({ headers: { authorization: `Bearer ${key}`} }, payload, done);
+      s._verify({ headers: { authorization: `Bearer ${key}` } }, payload, done);
     }) as any);
 
     security();
@@ -154,7 +155,7 @@ describe('SecurityHandler middleware', () => {
     }) as any);
 
     security();
-    expect(ctx.request.jwt).toBe("");
+    expect(ctx.request.jwt).toBe('');
     expect(useSpy).toHaveBeenCalled();
   });
 });

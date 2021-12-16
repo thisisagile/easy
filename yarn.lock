@@ -1459,9 +1459,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:8.11.0":
-  version: 8.11.0
-  resolution: "@testing-library/dom@npm:8.11.0"
+"@testing-library/dom@npm:8.11.1":
+  version: 8.11.1
+  resolution: "@testing-library/dom@npm:8.11.1"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
@@ -1471,7 +1471,7 @@ __metadata:
     dom-accessibility-api: ^0.5.9
     lz-string: ^1.4.4
     pretty-format: ^27.0.2
-  checksum: e546ef5c2d934fedce1d296763694151dfcb0f25a34301fce83f813924c1bc7926740c7036a2395bd611cbaa2dd604b11508d7bf10231f278400fffb8186f402
+  checksum: 082104b104def94db071fe35f967124c52d387d995a61327cd60ed39c310126f4cde2fa51054c37977cd3a2082311795417413506ad1a14df1010bd1cbb02bc5
   languageName: node
   linkType: hard
 
@@ -1533,7 +1533,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.6
     "@types/passport": ^1.0.7
     "@types/passport-jwt": ^3.0.6
-    "@types/uuid": ^8.3.1
+    "@types/uuid": ^8.3.3
     "@types/validator": ^13.7.0
     cls-hooked: ^4.2.2
     express: ^4.17.1
@@ -1610,12 +1610,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
   dependencies:
-    "@testing-library/dom": 8.11.0
+    "@testing-library/dom": 8.11.1
     "@testing-library/jest-dom": 5.14.1
     "@testing-library/react": 12.1.2
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/react": 17.0.34
+    "@types/react": 17.0.37
     react: ^17.0.2
     react-dom: ^17.0.2
     weak-napi: ^2.0.2
@@ -1652,9 +1652,9 @@ __metadata:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.6
-    "@types/uuid": ^8.3.1
+    "@types/uuid": ^8.3.3
     "@types/validator": ^13.7.0
-    axios: ^0.21.1
+    axios: ^0.24.0
     form-urlencoded: ^6.0.5
     jsonwebtoken: ^8.5.1
     moment: ^2.29.1
@@ -2054,14 +2054,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:17.0.34":
-  version: 17.0.34
-  resolution: "@types/react@npm:17.0.34"
+"@types/react@npm:17.0.37":
+  version: 17.0.37
+  resolution: "@types/react@npm:17.0.37"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 16729ad7d50922ccbf8eb93874d7781dc2f1c64edc78134b5edc7154839d41e9fe320eb1c11ad2d1c9bf28b99cb1febda344509c1fda025955a5c2b43c688c8f
+  checksum: e68b0d59aa69577fc6a6d654b25d5d8408625498f4c483f160b557fac21e840f6e8807cbde93e9f039949b6d624a019b1990d18499c1d65aecf3605c25e30242
   languageName: node
   linkType: hard
 
@@ -2134,10 +2134,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/uuid@npm:^8.3.1":
-  version: 8.3.1
-  resolution: "@types/uuid@npm:8.3.1"
-  checksum: b41bdc5e86c6f0f1899306be10455636da0f2168c9489b869edd6837ddeb7c0e501b1ff7d857402462986bada2a379125743dd895fa801d03437cd632116a373
+"@types/uuid@npm:^8.3.3":
+  version: 8.3.3
+  resolution: "@types/uuid@npm:8.3.3"
+  checksum: 3f340155bb1161f9ffa7163926d6222fea8f3505c23619b72bcc230883354926672c08a06510c7a543f73553c792a84444cc1744cff631b4ba988763e4bd7a8f
   languageName: node
   linkType: hard
 
@@ -2697,6 +2697,15 @@ __metadata:
   dependencies:
     follow-redirects: ^1.10.0
   checksum: c87915fa0b18c15c63350112b6b3563a3e2ae524d7707de0a73d2e065e0d30c5d3da8563037bc29d4cc1b7424b5a350cb7274fa52525c6c04a615fe561c6ab11
+  languageName: node
+  linkType: hard
+
+"axios@npm:^0.24.0":
+  version: 0.24.0
+  resolution: "axios@npm:0.24.0"
+  dependencies:
+    follow-redirects: ^1.14.4
+  checksum: 468cf496c08a6aadfb7e699bebdac02851e3043d4e7d282350804ea8900e30d368daa6e3cd4ab83b8ddb5a3b1e17a5a21ada13fc9cebd27b74828f47a4236316
   languageName: node
   linkType: hard
 
@@ -4711,12 +4720,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sonarjs@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "eslint-plugin-sonarjs@npm:0.10.0"
+"eslint-plugin-sonarjs@npm:^0.11.0":
+  version: 0.11.0
+  resolution: "eslint-plugin-sonarjs@npm:0.11.0"
   peerDependencies:
-    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-  checksum: 6ef5b2050180a612b310610d9b1f2a89508ecf41326573cd62977ad085b25a6be7e31f47eee5857fb43b4bbd1bea1454419b52545ee3cb6cb2185a1938872009
+    eslint: ^5.0.0 || ^6.0.0 || ^7.0.0|| ^8.0.0
+  checksum: ef9633e518f6d8365b7370bf48f70fb837124c68318e14146c13ffa8f4c5a747b5f776956124549f81252131ebb8c139d071b9c66e2af77889d0eada725d6d25
   languageName: node
   linkType: hard
 
@@ -5222,6 +5231,16 @@ __metadata:
     debug:
       optional: true
   checksum: 7381a55bdc6951c5c1ab73a8da99d9fa4c0496ce72dba92cd2ac2babe0e3ebde9b81c5bca889498ad95984bc773d713284ca2bb17f1b1e1416e5f6531e39a488
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.4":
+  version: 1.14.5
+  resolution: "follow-redirects@npm:1.14.5"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: f004a76b2ee3a849772c2816e30928253bf47537b0f00184d89f4966413add96a228a4d96ca8c702bc045a683c52c2ba41545c915cc1a5e33bf8fd9d07b59aee
   languageName: node
   linkType: hard
 
@@ -9942,7 +9961,7 @@ __metadata:
     eslint-plugin-prettier: ^4.0.0
     eslint-plugin-promise: ^5.1.1
     eslint-plugin-security: ^1.4.0
-    eslint-plugin-sonarjs: ^0.10.0
+    eslint-plugin-sonarjs: ^0.11.0
     eslint-plugin-standard: ^5.0.0
     jest: ^27.3.1
     jest-junit: ^13.0.0

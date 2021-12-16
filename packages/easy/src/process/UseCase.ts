@@ -16,9 +16,9 @@ export class UseCase extends Enum {
     return this.filter(u => u.scopes.some(us => isIn(us, s)));
   }
 
-  static readonly Main = new UseCase(App.Main, 'Main');
-  static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);
-  static readonly Logout = new UseCase(App.Main, 'Logout').with(Scope.Basic, Scope.Auth);
-  static readonly ForgotPassword = new UseCase(App.Main, 'Forgot password').with(Scope.Basic, Scope.Auth);
-  static readonly ChangePassword = new UseCase(App.Main, 'Change password').with(Scope.Basic, Scope.Auth);
+  // static readonly Main = new UseCase(App.Main, 'Main');
+  // static readonly Login = new UseCase(App.Main, 'Login').with(Scope.Basic, Scope.Auth);
+  // static readonly Logout = new UseCase(App.Main, 'Logout').with(Scope.Basic, Scope.Auth);
+  // static readonly ForgotPassword = new UseCase(App.Main, 'Forgot password').with(Scope.Basic, Scope.Auth);
+  // static readonly ChangePassword = new UseCase(App.Main, 'Change password').with(Scope.Basic, Scope.Auth);
 }

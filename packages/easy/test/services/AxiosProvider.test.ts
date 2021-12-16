@@ -1,4 +1,4 @@
-import { AxiosProvider, ctx, HttpStatus, HttpVerb, RequestOptions } from '../../src';
+import { AxiosProvider, ctx, EasyUri, HttpStatus, HttpVerb, RequestOptions, uri } from '../../src';
 import { DevUri } from '../ref';
 import axios, { AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
@@ -128,6 +128,24 @@ describe('AxiosProvider', () => {
       url: DevUri.Developers.toString(),
       method: HttpVerb.Get.toString(),
       headers: RequestOptions.Xml.bearer('token 42').headers,
+      data: RequestOptions.Xml.type.encode(undefined),
+    });
+  });
+
+  test('Request to external service is done without bearer', async () => {
+    class ExternalUri extends EasyUri {
+      readonly host = uri.host('www.external.com');
+    }
+    const externalUri = new ExternalUri();
+
+    jest.spyOn(ctx.request, 'jwt', 'get').mockReturnValue('token 42');
+    jest.spyOn(ctx.request, 'correlationId', 'get').mockReturnValue('4');
+    axios.request = mock.resolve({ message });
+    await provider.execute({ uri: externalUri, verb: HttpVerb.Get, options: RequestOptions.Xml });
+    expect(axios.request).toHaveBeenCalledWith({
+      url: externalUri.toString(),
+      method: HttpVerb.Get.toString(),
+      headers: RequestOptions.Xml.headers,
       data: RequestOptions.Xml.type.encode(undefined),
     });
   });

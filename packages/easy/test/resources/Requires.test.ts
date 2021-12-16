@@ -1,5 +1,6 @@
 import { meta, Scope, UseCase } from '../../src';
 import { DevResource, DevsResource } from '../ref';
+import { DevScope, DevUseCase } from '../ref/DevUseCase';
 
 describe('Requires', () => {
   test('token is required', () => {
@@ -16,7 +17,7 @@ describe('Requires', () => {
     const token: boolean | undefined = meta(new DevResource()).property('byId').get('token');
     const scope: Scope | undefined = meta(new DevResource()).property('byId').get('scope');
     expect(token).toBeTruthy();
-    expect(scope).toMatchObject(Scope.Basic);
+    expect(scope).toMatchObject(DevScope.Dev);
   });
 
   test('scope is not set', () => {
@@ -28,7 +29,7 @@ describe('Requires', () => {
     const token: boolean | undefined = meta(new DevResource()).property('update').get('token');
     const uc: UseCase | undefined = meta(new DevResource()).property('update').get('uc');
     expect(token).toBeTruthy();
-    expect(uc).toMatchObject(UseCase.ChangePassword);
+    expect(uc).toMatchObject(DevUseCase.WriteCode);
   });
 
   test('useCase is not set', () => {
