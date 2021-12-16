@@ -1,4 +1,4 @@
-import { getByPlaceholderText, getByRole, getByTestId, getByText, render } from '@testing-library/react';
+import { getByPlaceholderText, getByRole, getByTestId, getByText, getByTitle, render } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { Id } from '@thisisagile/easy';
 import { waitForRender } from './waitForRender';
@@ -16,6 +16,8 @@ export class Tester {
   atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
   byRole = (role: string): HTMLElement => getByRole(this.container, role);
   atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
+  byTitle = (title: string): HTMLElement => getByTitle(this.container, title);
+  atTitle = (title: string): ElementTester => new ElementTester(() => this.byTitle(title));
   byPlaceholder = (placeholder: string): HTMLElement => getByPlaceholderText(this.container, placeholder);
   atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
