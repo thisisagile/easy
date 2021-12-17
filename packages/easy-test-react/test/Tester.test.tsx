@@ -4,6 +4,7 @@ import { mock } from '@thisisagile/easy-test';
 const render = mock.return({ container: <div /> });
 const getByText = mock.return(<div />);
 const getByTestId = mock.return(<div />);
+const getByTitle = mock.return(<div />);
 const getByRole = mock.return(<div />);
 const getByPlaceholderText = mock.return(<div />);
 jest.mock('@testing-library/react', () => ({
@@ -11,6 +12,7 @@ jest.mock('@testing-library/react', () => ({
   render,
   getByText,
   getByTestId,
+  getByTitle,
   getByRole,
   getByPlaceholderText,
 }));
@@ -38,6 +40,13 @@ describe('Tester', () => {
     expect(getByTestId).toHaveBeenCalledWith(a, '');
   });
 
+  test('byTitle calls screen.getByTitle', () => {
+    const t = renders(a);
+    t.byTitle('');
+    expect(render).toHaveBeenCalledWith(a);
+    expect(getByTitle).toHaveBeenCalledWith(a, '');
+  });
+
   test('byRole calls screen.getByTestId', () => {
     const t = renders(a);
     t.byRole('');
@@ -56,6 +65,7 @@ describe('Tester', () => {
     const t = renders(a);
     expect(render).toHaveBeenCalledWith(a);
     expect(t.atText('')).toBeInstanceOf(ElementTester);
+    expect(t.atTitle('')).toBeInstanceOf(ElementTester);
     expect(t.atId('')).toBeInstanceOf(ElementTester);
     expect(t.submit()).toBeInstanceOf(ElementTester);
     expect(t.atRole('')).toBeInstanceOf(ElementTester);
