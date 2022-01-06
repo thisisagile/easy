@@ -319,4 +319,11 @@ describe('asList', () => {
     expect(stringMe(toList(WithId.Hoi))).toMatchText('hoi');
     expect(stringMe(toList(Dev.Naoufal))).toMatchText(Dev.Naoufal.id);
   });
+
+  test('map', () => {
+    const l = toList<Dev>(Dev.Naoufal, Dev.Rob, Dev.Wouter);
+    const m = l.map(d => d.name);
+    expect(m).toBeInstanceOf(List);
+    expect(m).toHaveLength(3);
+  })
 });
