@@ -23,7 +23,7 @@ describe('Enum', () => {
   test('byIds', () => {
     const ids = ['javascript', 'typescript', 'java'];
     const idsWithWrongOnes = ['javascript', 'typescript', 'java', 'php', 'english'];
-    const sameIds =  ['typescript', 'typescript', 'typescript'];
+    const sameIds = ['typescript', 'typescript', 'typescript'];
     expect(Language.byIds()).toHaveLength(0);
     expect(Language.byIds(ids)).toHaveLength(3);
     expect(Language.byIds(idsWithWrongOnes)).toHaveLength(3);

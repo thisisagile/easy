@@ -27,7 +27,7 @@ describe('Address', () => {
   });
 
   test('toString with extension', () => {
-    const a = new Address({...address, extension: 'Zw'})
+    const a = new Address({ ...address, extension: 'Zw' });
     expect(a).toMatchText('Kalverstraat 1 Zw, 1012 NX Amsterdam Netherlands');
   });
 });

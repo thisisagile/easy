@@ -12,7 +12,7 @@ describe('RequestOptions', () => {
     const ro = new RequestOptions(ContentType.Xml, { foo: 'bar' });
     expect(ro.type).toBe(ContentType.Xml);
     expect(ro.headers.foo).toBe('bar');
-    expect(ro.headers[HttpHeader.Correlation]).toBe("4");
+    expect(ro.headers[HttpHeader.Correlation]).toBe('4');
   });
 
   test('type matches.', () => {

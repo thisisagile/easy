@@ -4,13 +4,16 @@ import { rendersWait } from '@thisisagile/easy-test-react';
 import { If } from '../../src';
 
 describe('If', () => {
-
-  const component1 = <If condition={true}>
-    <div data-testid='found'>Hello</div>
-  </If>;
-  const component2 = <If condition={false}>
-    <div data-testid='found'>Hello</div>
-  </If>;
+  const component1 = (
+    <If condition={true}>
+      <div data-testid="found">Hello</div>
+    </If>
+  );
+  const component2 = (
+    <If condition={false}>
+      <div data-testid="found">Hello</div>
+    </If>
+  );
 
   test('renders correctly.', async () => {
     const { container } = await rendersWait(component1);

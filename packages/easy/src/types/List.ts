@@ -54,13 +54,13 @@ export class List<T = unknown> extends Array<T> {
     return this;
   };
 
-  switch = (item: T): List<T> => this.includes(item) ? this.remove(item) : this.add(item);
+  switch = (item: T): List<T> => (this.includes(item) ? this.remove(item) : this.add(item));
 
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
   toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
 
-  orElse = (...alt: ArrayLike<T>): List<T> | undefined => !isEmpty(this) ? this : (!isEmpty(...alt) ? toList<T>(...alt) : undefined);
+  orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>(...toArray<T>(...items));
@@ -68,4 +68,3 @@ export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
 export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
-

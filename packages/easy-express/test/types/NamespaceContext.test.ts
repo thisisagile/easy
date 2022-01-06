@@ -32,7 +32,7 @@ describe('NamespaceContext', () => {
       context.jwt = 'jwt';
       context.correlationId = 'correlation';
       context.lastError = 'error';
-      context.set('tenant',  '42');
+      context.set('tenant', '42');
       expect(context.token).toBe('token');
       expect(context.identity).toBe('token');
       expect(context.jwt).toBe('jwt');

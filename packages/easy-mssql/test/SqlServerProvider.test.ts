@@ -50,22 +50,22 @@ describe('SqlServerProvider', () => {
   });
 
   test('Connect is called on the pool if it is not connected or connecting', async () => {
-    Object.defineProperty(pool, 'connected', {value: false});
-    Object.defineProperty(pool, 'connecting', {value: false});
+    Object.defineProperty(pool, 'connected', { value: false });
+    Object.defineProperty(pool, 'connecting', { value: false });
     await provider.execute(query);
     expect(pool.connect).toHaveBeenCalledTimes(1);
   });
 
   test('Connect is not called on the pool if it is connecting', async () => {
-    Object.defineProperty(pool, 'connected', {value: false});
-    Object.defineProperty(pool, 'connecting', {value: true});
+    Object.defineProperty(pool, 'connected', { value: false });
+    Object.defineProperty(pool, 'connecting', { value: true });
     await provider.execute(query);
     expect(pool.connect).toHaveBeenCalledTimes(0);
   });
 
   test('Connect is not called on the pool if it is connected', async () => {
-    Object.defineProperty(pool, 'connected', {value: true});
-    Object.defineProperty(pool, 'connecting', {value: false});
+    Object.defineProperty(pool, 'connected', { value: true });
+    Object.defineProperty(pool, 'connecting', { value: false });
     await provider.execute(query);
     expect(pool.connect).toHaveBeenCalledTimes(0);
   });

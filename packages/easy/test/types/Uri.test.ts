@@ -30,7 +30,7 @@ describe('Uri', () => {
   });
 
   test('isInternal', () => {
-    expect(ExternalUri.Api.host.segment).toBe(externalHost)
+    expect(ExternalUri.Api.host.segment).toBe(externalHost);
     expect(ExternalUri.Api.isInternal).toBeFalsy();
     expect(DevUri.Developers.isInternal).toBeTruthy();
   });

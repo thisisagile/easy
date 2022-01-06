@@ -6,8 +6,7 @@ import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
 
 export class PlaywrightTester implements Tester {
-  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {
-  }
+  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {}
 
   get url(): string {
     return this.page.url();
@@ -30,7 +29,13 @@ export class PlaywrightTester implements Tester {
   };
 
   /* istanbul ignore next */
-  static async init(browserType: BrowserType, host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800): Promise<Tester> {
+  static async init(
+    browserType: BrowserType,
+    host: string = ctx.env.get('webHost', '') as string,
+    headless = true,
+    width = 1200,
+    height = 800
+  ): Promise<Tester> {
     const browser = await PlaywrightTester.launch(browserType, headless);
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });

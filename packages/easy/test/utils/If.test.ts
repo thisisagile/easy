@@ -1,7 +1,6 @@
 import { mock } from '@thisisagile/easy-test';
 import { ifDefined, ifNotEmpty, ifTrue } from '../../src';
 
-
 describe('IfDefined', () => {
   let f: jest.Mock;
   let alt: jest.Mock;
@@ -16,8 +15,8 @@ describe('IfDefined', () => {
       ifDefined(
         'defined',
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -28,8 +27,8 @@ describe('IfDefined', () => {
       ifDefined(
         undefined,
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -55,8 +54,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         [{}, {}],
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -67,8 +66,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         [],
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -79,8 +78,8 @@ describe('IfNotEmpty', () => {
       ifNotEmpty(
         '',
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -106,8 +105,8 @@ describe('IfTrue', () => {
       ifTrue(
         true,
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -117,8 +116,8 @@ describe('IfTrue', () => {
       ifTrue(
         () => true,
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('f');
     expect(f).toHaveBeenCalled();
     expect(alt).not.toHaveBeenCalled();
@@ -129,8 +128,8 @@ describe('IfTrue', () => {
       ifTrue(
         '',
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -141,8 +140,8 @@ describe('IfTrue', () => {
       ifTrue(
         () => false,
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();
@@ -153,8 +152,8 @@ describe('IfTrue', () => {
       ifTrue(
         undefined,
         () => f(),
-        () => alt(),
-      ),
+        () => alt()
+      )
     ).toBe('alt');
     expect(f).not.toHaveBeenCalled();
     expect(alt).toHaveBeenCalled();

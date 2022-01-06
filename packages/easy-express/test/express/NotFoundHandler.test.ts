@@ -12,6 +12,6 @@ describe('NotFoundHandler', () => {
 
   test('Call next with DoesNotExist error', () => {
     notFound({} as Request, {} as Response, next);
-    expect(next).toHaveBeenCalledWith(toOriginatedError(Exception.DoesNotExist))
+    expect(next).toHaveBeenCalledWith(toOriginatedError(Exception.DoesNotExist));
   });
 });

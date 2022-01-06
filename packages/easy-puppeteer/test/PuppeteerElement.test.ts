@@ -1,5 +1,5 @@
 import { mock } from '@thisisagile/easy-test';
-import { ElementHandle, JSHandle } from "puppeteer";
+import { ElementHandle, JSHandle } from 'puppeteer';
 import { PuppeteerElement } from '../src';
 
 describe('PuppeteerElement', () => {
@@ -21,7 +21,7 @@ describe('PuppeteerElement', () => {
   });
 
   test('property.', async () => {
-    const p = mock.empty<JSHandle>({jsonValue: mock.return()});
+    const p = mock.empty<JSHandle>({ jsonValue: mock.return() });
     const eh = mock.empty<ElementHandle>({ getProperty: mock.resolve(p) });
     const pe = new PuppeteerElement(Promise.resolve(eh));
     await pe.property('textContent');

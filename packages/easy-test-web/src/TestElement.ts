@@ -1,4 +1,4 @@
-import { Json } from "@thisisagile/easy";
+import { Json } from '@thisisagile/easy';
 
 export interface TestElement {
   click(): Promise<void>;

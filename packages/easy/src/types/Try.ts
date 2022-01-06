@@ -6,7 +6,6 @@ import { Get, ofGet } from './Get';
 import { Func } from './Func';
 
 abstract class Try<T = unknown> implements Validatable {
-
   is = {
     defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isDefined(prop ? prop(v) : v)),
     empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isEmpty(prop ? prop(v) : v)),
@@ -53,7 +52,6 @@ abstract class Try<T = unknown> implements Validatable {
 }
 
 class Success<T> extends Try<T> {
-
   constructor(readonly value: T) {
     super();
   }
@@ -64,11 +62,11 @@ class Success<T> extends Try<T> {
 
   get isValid(): boolean {
     return true;
-  };
+  }
 
   map<U>(f: Func<U | Try<U>, T>): Try<U> {
     return tryTo<U>(f, this.value);
-  };
+  }
 
   recover(f: Func<T | Try<T>, Error>): Try<T> {
     return this;
@@ -116,18 +114,18 @@ class Failure<T> extends Try<T> {
 
   get isValid(): boolean {
     return false;
-  };
+  }
 
   map<U>(f: Func<U | Try<U>, T>): Try<U> {
     return new Failure<U>(this.error);
-  };
+  }
 
   recover<U>(f: Func<U | Try<U>, Error>): Try<U> {
     return tryTo<U>(f, this.error);
   }
 
   recoverFrom<U>(type: Constructor<Error>, f: Func<T | Try<T>, Error>): Try<T> {
-    return tryTo(() => this.error instanceof type ? this.recover(f) : this);
+    return tryTo(() => (this.error instanceof type ? this.recover(f) : this));
   }
 
   accept(f: Func<void, T>): Try<T> {

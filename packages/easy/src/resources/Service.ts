@@ -17,7 +17,7 @@ export class Service extends Enum {
   }
 
   atPort(port: number): this {
-    return tryTo(this).accept(t => t.port = port).value;
+    return tryTo(this).accept(t => (t.port = port)).value;
   }
 
   start(message = `Service ${this.name} listening on port ${this.port} with ${this.resources.length} resources.`): void {

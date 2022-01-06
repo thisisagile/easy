@@ -8,7 +8,7 @@ import { ElementTester, Tester, renders } from '../src';
 
 describe('ElementTester', () => {
   const a = <div />;
-  const e = mock.empty<Element & {value: string}>({ value: '42' });
+  const e = mock.empty<Element & { value: string }>({ value: '42' });
   let et: ElementTester;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('ElementTester', () => {
   });
 
   test('then returns new Tester', () => {
-    const t = new ElementTester(() => e).then
+    const t = new ElementTester(() => e).then;
     expect(t).toBeInstanceOf(Tester);
     expect(t.container).toBe(e);
   });

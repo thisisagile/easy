@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -325,5 +325,5 @@ describe('asList', () => {
     const m = l.map(d => d.name);
     expect(m).toBeInstanceOf(List);
     expect(m).toHaveLength(3);
-  })
+  });
 });

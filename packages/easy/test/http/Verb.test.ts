@@ -70,7 +70,7 @@ describe('toVerbOptions', () => {
   });
 
   test('cache', () => {
-    expect(toVerbOptions().cache).toEqual(fits.with({enabled: false}))
-    expect(toVerbOptions({cache: CacheControl.OneSecond()}).cache).toEqual(fits.with({enabled: true}))
-  })
+    expect(toVerbOptions().cache).toEqual(fits.with({ enabled: false }));
+    expect(toVerbOptions({ cache: CacheControl.OneSecond() }).cache).toEqual(fits.with({ enabled: true }));
+  });
 });

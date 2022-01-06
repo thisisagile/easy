@@ -19,7 +19,7 @@ describe('MongoGateway', () => {
     p.mockReturnValue(provider);
     new MongoGateway(devCollection);
     expect(p).toHaveBeenCalled();
-  })
+  });
 
   test('All calls the provider', async () => {
     provider.all = mock.resolve(all);

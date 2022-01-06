@@ -1,9 +1,7 @@
 import { isDefined } from '../types';
 
 export class CacheControl {
-
-  private constructor(private age: number = 1, private stale?: number, readonly enabled = true) {
-  }
+  private constructor(private age: number = 1, private stale?: number, readonly enabled = true) {}
 
   static disabled = () => new CacheControl(0, 0, false);
   static OneSecond = () => new CacheControl().maxAge(1).staleWhileRevalidate(1);
@@ -27,5 +25,4 @@ export class CacheControl {
   };
 
   name = 'Cache-Control';
-
 }

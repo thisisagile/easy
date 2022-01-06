@@ -2,12 +2,14 @@ import {
   asString,
   Condition,
   Database,
-  Field, Get,
+  Field,
+  Get,
   Json,
   LogicalCondition,
   MapOptions,
   Mapper,
-  mappings, ofGet,
+  mappings,
+  ofGet,
   PropertyOptions,
   Text,
   toCondition,
@@ -35,11 +37,19 @@ export class Collection extends Mapper {
     return new MongoProvider(this);
   }
 
-  where = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('and', conditions.map(c => ofGet(c, this))).toJSON();
+  where = (...conditions: Get<Condition, this>[]): Json =>
+    new LogicalCondition(
+      'and',
+      conditions.map(c => ofGet(c, this))
+    ).toJSON();
 
   match = (condition: Get<Condition | LogicalCondition, this>): Json => ({ $match: ofGet(condition, this).toJSON() });
 
-  group = (...conditions: Get<Condition, this>[]): Json => new LogicalCondition('group', conditions.map(c => ofGet(c, this))).toJSON();
+  group = (...conditions: Get<Condition, this>[]): Json =>
+    new LogicalCondition(
+      'group',
+      conditions.map(c => ofGet(c, this))
+    ).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
