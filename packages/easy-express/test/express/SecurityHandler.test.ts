@@ -1,7 +1,7 @@
 import passport from 'passport';
-import { authError, checkScope, checkToken, checkUseCase, security } from '../../src';
+import { authError, checkLabCoat, checkScope, checkToken, checkUseCase, security } from '../../src';
 import { Request, Response } from 'express';
-import { ctx, HttpStatus } from '@thisisagile/easy';
+import { ctx, DotEnvContext, EnvContext, Environment, HttpStatus } from "@thisisagile/easy";
 import { mock } from '@thisisagile/easy-test';
 import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
@@ -10,6 +10,24 @@ describe('SecurityHandler decorators', () => {
 
   beforeEach(() => {
     cb.mockReset();
+    ctx.env = new DotEnvContext();
+  });
+
+  test.each([[undefined], [''], [Environment.Acc.id], [Environment.Prd.id]])(
+    'checkLabCoat returns an AuthError on empty and environments other than dev',
+    name => {
+      ctx.env = mock.empty<EnvContext>({ name: name as string });
+      const c = checkLabCoat();
+      c({} as Request, {} as Response, cb);
+      expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
+    }
+  );
+
+  test('checkLabCoat succeeds on dev', () => {
+    ctx.env = mock.empty<EnvContext>({ name: Environment.Dev.id as string });
+    const c = checkLabCoat();
+    c({} as Request, {} as Response, cb);
+    expect(cb).toHaveBeenCalledWith(undefined);
   });
 
   test('checkToken', () => {

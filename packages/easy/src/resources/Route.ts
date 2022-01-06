@@ -12,7 +12,7 @@ export const route =
     };
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
-export type RouteRequires = { token: boolean; scope?: Scope; uc?: UseCase };
+export type RouteRequires = { token: boolean; labCoat: boolean; scope?: Scope; uc?: UseCase };
 export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
 export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
@@ -40,6 +40,7 @@ class Router implements Routes {
         toRoute(
           this.resource[v.property],
           {
+            labCoat: v.get<boolean>('labCoat') ?? false,
             token: v.get<boolean>('token') ?? false,
             scope: v.get<Scope>('scope'),
             uc: v.get<UseCase>('uc'),
