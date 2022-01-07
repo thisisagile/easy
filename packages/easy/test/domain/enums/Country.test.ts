@@ -3,7 +3,6 @@ import { toList } from '@thisisagile/easy';
 import { Country } from '../../../src';
 
 describe('Country', () => {
-
   test('id and name matches.', () => {
     expect(Country.NL.id).toBe('NL');
     expect(Country.NL.name).toMatchText('Netherlands');

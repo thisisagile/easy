@@ -8,10 +8,7 @@ import { tryTo } from './Try';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
-const toSegment = (key?: string, {
-  segment,
-  query,
-}: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
+const toSegment = (key?: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
   key,
   segment,
   query,
@@ -51,8 +48,7 @@ export class EasyUri implements Uri {
 
   protected state: any = {};
 
-  constructor(readonly segments: Segment[] = []) {
-  }
+  constructor(readonly segments: Segment[] = []) {}
 
   get path(): string {
     return toRoute(uri.segment(''), this.resource, ...this.segments);
@@ -62,7 +58,7 @@ export class EasyUri implements Uri {
     return toRoute(this.host, this.resource, ...this.segments);
   }
 
-  get isInternal (): boolean  {
+  get isInternal(): boolean {
     return toRoute(this.host) === ctx.env.host ?? '$host';
   }
 
@@ -73,7 +69,9 @@ export class EasyUri implements Uri {
   route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
   set = (segment: Segment, value?: unknown): this => {
-    tryTo(value).is.defined().accept(value => (this.state[segment.key ?? ''] = { segment, value }));
+    tryTo(value)
+      .is.defined()
+      .accept(value => (this.state[segment.key ?? ''] = { segment, value }));
     return this;
   };
 
@@ -81,8 +79,8 @@ export class EasyUri implements Uri {
     return tryTo(() => this.props)
       .map(ps => ps.filter(p => p.segment?.segment))
       .map(ps => ps.reduce((r: string, p: Prop) => r.replace(asString(p.segment.segment), asString(p.value)), this.complete))
-      .map(route => ({route, query: this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&')}))
-      .map(({route, query}) => isNotEmpty(query) ? `${route}?${query}` : route).value;
+      .map(route => ({ route, query: this.props.mapDefined(p => (p.segment?.query ? p.segment?.query(p.value) : undefined))?.join('&') }))
+      .map(({ route, query }) => (isNotEmpty(query) ? `${route}?${query}` : route)).value;
   }
 
   id = (id?: unknown): this => this.set(EasyUri.id, id);

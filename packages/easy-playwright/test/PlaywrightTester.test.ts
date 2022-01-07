@@ -226,5 +226,4 @@ describe('PlaywrightTester', () => {
   test('host', () => {
     expect(tester.host).toBe(host);
   });
-
 });

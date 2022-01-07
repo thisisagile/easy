@@ -19,8 +19,11 @@ export class DotEnvContext implements EnvContext {
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
 
   readonly get = (key: string, alt?: string): string | undefined =>
-    tryTo(() => text(key).map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2')).snake.toString())
-      .map(k => process.env[k] ?? alt).value;
+    tryTo(() =>
+      text(key)
+        .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
+        .snake.toString()
+    ).map(k => process.env[k] ?? alt).value;
 }
 
 export type RequestContext = {

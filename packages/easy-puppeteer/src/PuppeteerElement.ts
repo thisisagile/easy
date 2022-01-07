@@ -1,6 +1,6 @@
 import { ElementHandle } from 'puppeteer';
 import { TestElement } from '@thisisagile/easy-test-web';
-import { isNotEmpty, Json } from "@thisisagile/easy";
+import { isNotEmpty, Json } from '@thisisagile/easy';
 
 export class PuppeteerElement implements TestElement {
   constructor(private readonly handle: Promise<ElementHandle | null>) {}

@@ -1,6 +1,6 @@
 import { ElementHandle } from 'playwright';
 import { TestElement } from '@thisisagile/easy-test-web';
-import { isNotEmpty, Json } from "@thisisagile/easy";
+import { isNotEmpty, Json } from '@thisisagile/easy';
 
 export class PlaywrightElement implements TestElement {
   constructor(private readonly handle: Promise<ElementHandle | null>) {}

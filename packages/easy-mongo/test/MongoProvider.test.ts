@@ -81,8 +81,8 @@ describe('MongoProvider', () => {
 
     await provider.find({ date: date });
 
-    expect(c.find).toHaveBeenCalledWith({ 'date': new DateTime(date).toDate() }, { 'limit': fits.any() });
-    expect(c.find).not.toHaveBeenCalledWith({ 'date': date }, { 'limit': fits.any() });
+    expect(c.find).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, { limit: fits.any() });
+    expect(c.find).not.toHaveBeenCalledWith({ date: date }, { limit: fits.any() });
   });
 
   test('group calls aggregate on the collection', () => {
@@ -99,8 +99,8 @@ describe('MongoProvider', () => {
 
     await provider.group([{ date: date }]);
 
-    expect(c.aggregate).toHaveBeenCalledWith([{ 'date': new DateTime(date).toDate() }]);
-    expect(c.aggregate).not.toHaveBeenCalledWith([{ 'date': date }]);
+    expect(c.aggregate).toHaveBeenCalledWith([{ date: new DateTime(date).toDate() }]);
+    expect(c.aggregate).not.toHaveBeenCalledWith([{ date: date }]);
   });
 
   test('by calls find on the collection', async () => {
@@ -155,8 +155,8 @@ describe('MongoProvider', () => {
 
     await provider.count({ date: date });
 
-    expect(c.countDocuments).toHaveBeenCalledWith({ 'date': new DateTime(date).toDate() });
-    expect(c.countDocuments).not.toHaveBeenCalledWith({ 'date': date });
+    expect(c.countDocuments).toHaveBeenCalledWith({ date: new DateTime(date).toDate() });
+    expect(c.countDocuments).not.toHaveBeenCalledWith({ date: date });
   });
 
   test('createIndex calls createIndex on the collection and creates unique indexes by default', async () => {
@@ -208,19 +208,17 @@ describe('MongoProvider', () => {
 
     await provider.createPartialIndex('date', { date: date });
 
-    expect(c.createIndex).toHaveBeenCalledWith(
-      'date', {
-        partialFilterExpression: { date: new DateTime(date).toDate() },
-        unique: true,
-        writeConcern: { w: 1 },
-      });
+    expect(c.createIndex).toHaveBeenCalledWith('date', {
+      partialFilterExpression: { date: new DateTime(date).toDate() },
+      unique: true,
+      writeConcern: { w: 1 },
+    });
 
-    expect(c.createIndex).not.toHaveBeenCalledWith(
-      'date', {
-        partialFilterExpression: { date: date },
-        unique: true,
-        writeConcern: { w: 1 },
-      });
+    expect(c.createIndex).not.toHaveBeenCalledWith('date', {
+      partialFilterExpression: { date: date },
+      unique: true,
+      writeConcern: { w: 1 },
+    });
   });
 
   test('create non unique partial index calls createIndex on the collection with filter expression', async () => {

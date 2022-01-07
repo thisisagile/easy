@@ -26,24 +26,23 @@ describe('Meta', () => {
   test('Keys works', () => {
     const keys = meta(dev).keys('constraint');
     expect(keys).toHaveLength(7);
-    expect(typeof keys).toBe(typeof (new List<Constraint>()))
-    matchProperties(keys)
+    expect(typeof keys).toBe(typeof new List<Constraint>());
+    matchProperties(keys);
   });
 
   test('Properties works', () => {
     const ps = meta(dev).properties('constraint');
     expect(ps).toHaveLength(6);
-    matchProperties(ps)
+    matchProperties(ps);
   });
 
-  const matchProperties= (constraints: List<any>): void => {
-    expect(constraints).toContainEqual(fits.with({property: "id"}));
-    expect(constraints).toContainEqual(fits.with({property: "name"}))
-    expect(constraints).toContainEqual(fits.with({property: "language"}))
-    expect(constraints).toContainEqual(fits.with({property: "level"}))
-    expect(constraints).toContainEqual(fits.with({property: "created"}))
-    expect(constraints).toContainEqual(fits.with({property: "lastModified"}))
-    expect(constraints).toContainEqual(fits.with({property: "level"}))
-  }
-
+  const matchProperties = (constraints: List<any>): void => {
+    expect(constraints).toContainEqual(fits.with({ property: 'id' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'name' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'language' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'level' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'created' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'lastModified' }));
+    expect(constraints).toContainEqual(fits.with({ property: 'level' }));
+  };
 });

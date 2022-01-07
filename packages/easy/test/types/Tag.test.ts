@@ -17,9 +17,8 @@ describe('Tag', () => {
   test('tags work', () => {
     const props = meta(tester).properties(searchable.name);
     expect(props).toHaveLength(3);
-    expect(props).toContainEqual(fits.with({property: 'first'}));
-    expect(props).toContainEqual(fits.with({property: 'second'}));
-    expect(props).toContainEqual(fits.with({property: 'third'}));
-  })
+    expect(props).toContainEqual(fits.with({ property: 'first' }));
+    expect(props).toContainEqual(fits.with({ property: 'second' }));
+    expect(props).toContainEqual(fits.with({ property: 'third' }));
+  });
 });
-

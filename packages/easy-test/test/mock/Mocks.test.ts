@@ -133,24 +133,24 @@ describe('mock', () => {
     return expect(p.version).toHaveBeenCalledWith(42);
   });
 
-  const mockExtended: Mocks & {something: () => string }= {...mock, something: () => 'yes' };
+  const mockExtended: Mocks & { something: () => string } = { ...mock, something: () => 'yes' };
 
   test('extending mock empty', () => {
     const p = mockExtended.empty<Project>({ version: mock.return() });
     p.version(42);
-    expect(mockExtended.something()).toBe('yes')
+    expect(mockExtended.something()).toBe('yes');
     return expect(p.version).toHaveBeenCalledWith(42);
   });
 
   class MockInherited extends Mocks {
-    something = () => 'yes'
+    something = () => 'yes';
   }
 
   test('inheriting mock', () => {
     const mock = new MockInherited();
     const p = mock.empty<Project>({ version: mock.return() });
     p.version(42);
-    expect(mock.something()).toBe('yes')
+    expect(mock.something()).toBe('yes');
     return expect(p.version).toHaveBeenCalledWith(42);
   });
 

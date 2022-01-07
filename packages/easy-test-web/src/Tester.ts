@@ -34,4 +34,3 @@ export const toUrl = (uc: UseCase, host?: string, id?: Id): string =>
     .map(domain => ({ domain, i: id ? `/${id}` : '' }))
     .map(({ domain, i }) => text(`${domain}/${uc.app.name}/${uc.name}${i}`))
     .map(url => url.kebab.toString()).value;
-

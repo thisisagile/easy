@@ -3,7 +3,6 @@ import { Url, url } from '../../../src';
 import validator from 'validator';
 
 describe('Url', () => {
-
   const valids = ['https://sander.com', 'https://www.sander.com', 'https://mail.sander.com'];
   const invalids = ['', 'https://', 'sander', '666://www.sander.42'];
 
@@ -18,7 +17,7 @@ describe('Url', () => {
   });
 
   test('valid urls with other options', () => {
-    expect(validator.isURL('sander.com', {require_protocol: true})).toBeFalsy();
-    expect(url('sander.com', {require_protocol: true})).not.toBeValid();
+    expect(validator.isURL('sander.com', { require_protocol: true })).toBeFalsy();
+    expect(url('sander.com', { require_protocol: true })).not.toBeValid();
   });
 });

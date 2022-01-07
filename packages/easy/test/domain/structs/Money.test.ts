@@ -35,10 +35,10 @@ describe('Money', () => {
 
   test('invalid', () => {
     expect(new Money()).not.toBeValid();
-    expect(new Money({currency: 'wrong'})).not.toBeValid();
-    expect(new Money({currency: 'wrong', value: 0})).not.toBeValid();
-    expect(new Money({value: 0})).not.toBeValid();
-    expect(new Money({currency: 'EUR', value: 0})).toBeValid();
+    expect(new Money({ currency: 'wrong' })).not.toBeValid();
+    expect(new Money({ currency: 'wrong', value: 0 })).not.toBeValid();
+    expect(new Money({ value: 0 })).not.toBeValid();
+    expect(new Money({ currency: 'EUR', value: 0 })).toBeValid();
   });
 });
 

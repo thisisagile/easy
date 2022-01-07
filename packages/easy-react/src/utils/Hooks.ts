@@ -8,11 +8,14 @@ export const useToggle = (initialState = false): [boolean, () => void] => {
 
 export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>): [E, (e: E) => E] => {
   const [state, setState] = useState<E>({ isValid: false, ...item } as E);
-  return [state, (e: E): E => {
-    setState(e);
-    return e;
-  }];
-}
+  return [
+    state,
+    (e: E): E => {
+      setState(e);
+      return e;
+    },
+  ];
+};
 
 export const useAn = useA;
 

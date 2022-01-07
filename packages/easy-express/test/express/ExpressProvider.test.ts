@@ -1,14 +1,6 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import {
-  CacheControl,
-  ContentType,
-  Exception,
-  Handler,
-  HttpStatus,
-  toVerbOptions,
-  VerbOptions,
-} from '@thisisagile/easy';
+import { CacheControl, ContentType, Exception, Handler, HttpStatus, toVerbOptions, VerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 import { ExpressProvider, ExpressVerb } from '../../src';
@@ -53,8 +45,8 @@ describe('ExpressProvider', () => {
   });
 
   test('toResponse without status, type and cache-control', () => {
-    const cc = mock.empty<CacheControl>({enabled: false})
-    const options: VerbOptions = { cache: cc};
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    const options: VerbOptions = { cache: cc };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
     provider.toResponse(res, undefined, options);
@@ -67,7 +59,7 @@ describe('ExpressProvider', () => {
 
   test('toResponse with status and type', () => {
     const result = {};
-    const cc = mock.empty<CacheControl>({enabled: false})
+    const cc = mock.empty<CacheControl>({ enabled: false });
     const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text, cache: cc };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
@@ -79,7 +71,7 @@ describe('ExpressProvider', () => {
   test('toResponse calls cache set header', () => {
     const result = {};
     const cc = mock.empty<CacheControl>({ name: 'Cache-Control', enabled: true });
-    cc.value = mock.return('max-age=1')
+    cc.value = mock.return('max-age=1');
     const options: VerbOptions = { cache: cc };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
@@ -88,8 +80,8 @@ describe('ExpressProvider', () => {
 
   test('toResponse with stream', () => {
     const buf = Buffer.from([]);
-    const cc = mock.empty<CacheControl>({enabled: false})
-    const options: VerbOptions = { type: ContentType.Stream, cache: cc};
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    const options: VerbOptions = { type: ContentType.Stream, cache: cc };
     (provider as any).json = mock.return();
     (provider as any).stream = mock.return();
     provider.toResponse(res, buf, options);
@@ -104,7 +96,7 @@ describe('ExpressProvider', () => {
       cb({
         path,
         handler: handler as AsyncHandler,
-      }),
+      })
     );
   }
 

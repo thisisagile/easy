@@ -1,21 +1,4 @@
-import {
-  ContentType,
-  del,
-  get,
-  HttpStatus,
-  isDefined,
-  List,
-  patch,
-  post,
-  put,
-  Req,
-  requires,
-  Resource,
-  route,
-  search,
-  stream,
-  toList,
-} from '../../src';
+import { ContentType, del, get, HttpStatus, isDefined, List, patch, post, put, Req, requires, Resource, route, search, stream, toList } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 import { DevScope, DevUseCase } from './DevUseCase';

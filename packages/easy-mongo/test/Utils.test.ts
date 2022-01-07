@@ -15,5 +15,5 @@ describe('Utils', () => {
 
   test('toMongoType is idempotent', () => {
     expect(toMongoType(toMongoType('2020-11-02T23:00:00.000Z'))).toBeInstanceOf(Date);
-  })
+  });
 });

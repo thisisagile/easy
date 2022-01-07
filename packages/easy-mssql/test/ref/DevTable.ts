@@ -11,7 +11,7 @@ export class DevTable extends Table {
   readonly level = this.map.column('CodingLevel', { dflt: 3, convert: convert.toNumber.fromString });
 
   constructor(options: MapOptions = { startFrom: 'scratch' }) {
-    super( options);
+    super(options);
   }
 
   get db(): Database {

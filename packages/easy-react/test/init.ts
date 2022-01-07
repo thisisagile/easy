@@ -1,4 +1,3 @@
-
 // Jest bug
 // Object.defineProperty(window, 'matchMedia', {
 //   writable: true,
@@ -14,4 +13,4 @@
 //   })),
 // });
 
-export {}
+export {};

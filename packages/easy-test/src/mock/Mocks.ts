@@ -8,7 +8,8 @@ import { HttpStatus, Response } from '../utils/Response';
 export class Mocks {
   clear = (): typeof jest => jest.clearAllMocks();
   impl = (f?: (...args: any[]) => any): Mock => jest.fn().mockImplementation(f);
-  property = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance => jest.spyOn(object, getter, 'get').mockReturnValue(value);
+  property = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
+    jest.spyOn(object, getter, 'get').mockReturnValue(value);
   reject = (value?: unknown): Mock => jest.fn().mockRejectedValue(value);
   req = {
     id: (id: Id): Req => new Req({ id }),

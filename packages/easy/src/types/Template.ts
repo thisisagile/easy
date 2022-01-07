@@ -7,8 +7,7 @@ import { tryTo } from './Try';
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
 
 class Template implements Text {
-  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {
-  }
+  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {}
 
   toString = (): string => {
     return meta(this.options)
@@ -19,7 +18,7 @@ class Template implements Text {
 
   private readonly value = (subject: any, prop: string): string =>
     tryTo(() => prop.split('.'))
-      .map(p => ([p, p.splice(1)]))
+      .map(p => [p, p.splice(1)])
       .map(([p, ps]) => ps.reduce((t: ToText, s) => (t as any)[s], text(subject[p[0]])))
       .map(p => p.toString()).value;
 
@@ -46,4 +45,3 @@ export const template = (tmpl: Text, subject: unknown, options: TemplateOptions 
     type: toName(subject),
     ...options,
   });
-
