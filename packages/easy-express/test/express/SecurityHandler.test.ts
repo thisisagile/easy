@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { authError, checkLabCoat, checkScope, checkToken, checkUseCase, security } from '../../src';
 import { Request, Response } from 'express';
-import { ctx, DotEnvContext, EnvContext, Environment, HttpStatus } from "@thisisagile/easy";
+import { ctx, DotEnvContext, EnvContext, Environment, HttpStatus } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 

@@ -2,7 +2,7 @@ import express, { Request, RequestHandler } from 'express';
 import passport from 'passport';
 import passportJwt, { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 import { authError } from './AuthError';
-import { choose, ctx, Environment, HttpStatus, Scope, UseCase } from "@thisisagile/easy";
+import { choose, ctx, Environment, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
 
 type SecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 

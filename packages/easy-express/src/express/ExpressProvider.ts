@@ -1,5 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { checkLabCoat, checkScope, checkToken, checkUseCase } from "./SecurityHandler";
+import { checkLabCoat, checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import {
   AppProvider,
   Endpoint,
