@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
+import express, { Express, NextFunction, Request, RequestHandler, Response, Router } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
 import { CacheControl, ContentType, Exception, Handler, HttpStatus, toVerbOptions, VerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
@@ -179,17 +179,17 @@ describe('ExpressProvider', () => {
     let endpoint: Endpoint = { handler: mock.empty<AsyncHandler>() };
     const res: any = { status: mock.return({ json: mock.return() }) };
 
-    mockRouterMethodOnce(router, 'delete', e => (endpoint = e));
+    mockRouterMethodOnce(router, 'post', e => (endpoint = e));
     jest.spyOn(express, 'Router').mockReturnValueOnce(router);
-    resource.delete = mock.reject(Exception.DoesNotExist);
+    resource.post = mock.reject(Exception.IsNotValid);
 
     provider.route(service, resource);
     const next = mock.resolve();
     await endpoint.handler({} as Request, res as Response, next);
 
     expect(endpoint.path).toBe(DevUri.Developer.path);
-    expect(resource.delete).toHaveBeenCalled();
+    expect(resource.post).toHaveBeenCalled();
     expect(res.status).not.toHaveBeenCalled();
-    expect(next).toHaveBeenCalledWith(fits.with({ origin: Exception.DoesNotExist }));
+    expect(next).toHaveBeenCalledWith(fits.with({ origin: Exception.IsNotValid }));
   });
 });
