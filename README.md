@@ -241,7 +241,7 @@ During the execution of a request, lots of things can go wrong. Here as some com
 
 * For starters, you might not reach the endpoint, because you've typed in the wrong URL. If this happens, and you still reach your microservice, **easy** handles this in the `NotFoundHandler`, which is plugged-in by default.
 * If you are not allowed to execute an endpoint, for instance because it is secured with one of the security decorators in **easy**, such as `@requires.useCase()`, `@requires.Scope()` or `@requires.token`, the endpoint will not execute, and you will receive a 403. In this case the middleware from the `SecurityHandler` already breaks the loop, and the code in you microservices is not executed at all.
-* All other failures are handled by the `ErrorHandler`, an can result in any custom HTTP status code, most likely a 400, or a 500. In case the caller makes a mistake, the code should come from the 400 range, in cases the microservice makes the mistake, the code comes from the 500 range.
+* All other failures are handled by the `ErrorHandler`, and can result in any custom HTTP status code, most likely a 400, or a 500. In case the caller makes a mistake, the code should come from the 400 range, in cases the microservice makes the mistake, the code comes from the 500 range.
 
 ## Utilities
 Additionally, this library contains utility classes for standardizing e.g. uri's, and ids, constructors, lists, queries, and errors. Quite often these are constructed as monads, which renders robust code.
@@ -275,6 +275,8 @@ Access to endpoints is configured using the `@requires` decorator group. If mult
       @requires.useCase(UseCase.ManageProduct)
       add = (req: Req): Promise<Product> => this.manage.add(req.body as Json);
     }
+
+The `@requires` decorator group also contains `@requires.labCoat()` this decorator can be added to endpoints you only want to be available on your development environment, for example a `delete`.
 
 To use these decorators, the generic `security` middleware must be loaded first. In most cases, it should be added to the `pre` list of handlers of a service.
 The security middleware takes an optional configuration object, which is documented [in code](packages/easy-express/src/express/SecurityHandler.ts).

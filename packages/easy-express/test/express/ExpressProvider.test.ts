@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, RequestHandler, Response, Router } from 'express';
+import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
 import { CacheControl, ContentType, Exception, Handler, HttpStatus, toVerbOptions, VerbOptions } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
