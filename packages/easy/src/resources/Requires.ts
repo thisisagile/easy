@@ -2,6 +2,12 @@ import { meta } from '../types';
 import { Scope, UseCase } from '../process';
 
 export const requires = {
+  labCoat:
+    (): PropertyDecorator =>
+    (subject: unknown, property: string | symbol): void => {
+      meta(subject).property(property).set('labCoat', true);
+    },
+
   token:
     (): PropertyDecorator =>
     (subject: unknown, property: string | symbol): void => {

@@ -1,5 +1,5 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { checkScope, checkToken, checkUseCase } from './SecurityHandler';
+import { checkLabCoat, checkScope, checkToken, checkUseCase } from './SecurityHandler';
 import {
   AppProvider,
   Endpoint,
@@ -56,6 +56,7 @@ export class ExpressProvider implements AppProvider {
 
   protected addSecurityMiddleware(requires: RouteRequires): RequestHandler[] {
     const middleware: RequestHandler[] = [];
+    if (requires.labCoat) middleware.push(checkLabCoat());
     if (requires.token) middleware.push(checkToken());
     if (requires.scope) middleware.push(checkScope(requires.scope));
     if (requires.uc) middleware.push(checkUseCase(requires.uc));

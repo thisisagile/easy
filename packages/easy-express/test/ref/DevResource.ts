@@ -1,6 +1,5 @@
 import {
   asString,
-  ContentType,
   del,
   get,
   HttpStatus,
@@ -71,7 +70,11 @@ export class DevResource implements Resource {
   @requires.token()
   upsert = (req: Req): Dev => new Dev(req.id);
 
-  @del({ onOk: HttpStatus.BadGateway, type: ContentType.Stream })
+  @post()
+  post = (req: Req): boolean => isDefined(req.id);
+
+  @del()
+  @requires.labCoat()
   delete = (req: Req): boolean => isDefined(req.id);
 
   @stream()

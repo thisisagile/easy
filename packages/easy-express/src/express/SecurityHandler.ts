@@ -2,7 +2,7 @@ import express, { Request, RequestHandler } from 'express';
 import passport from 'passport';
 import passportJwt, { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 import { authError } from './AuthError';
-import { choose, ctx, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
+import { choose, ctx, Environment, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
 
 type SecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 
@@ -27,6 +27,13 @@ export interface SecurityOptions {
     algorithms?: string[];
   };
 }
+
+export const checkLabCoat = (): RequestHandler => (req, res, next) =>
+  next(
+    choose(ctx.env.name)
+      .case(e => Environment.Dev.equals(e), undefined)
+      .else(authError(HttpStatus.Forbidden))
+  );
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
