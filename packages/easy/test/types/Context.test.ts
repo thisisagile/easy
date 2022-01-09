@@ -33,6 +33,11 @@ describe('Environment Context', () => {
     expect(ctx.env.get('doesNotExist')).toBeUndefined();
   });
 
+  test('simple get and set on request context', () => {
+    ctx.request.lastError = 'Wrong';
+    expect(ctx.request.lastError).toBe('Wrong');
+  });
+
   test('defined environment variables', () => {
     process.env.VAR_EXISTS = 'value';
     expect(ctx.env.get('varExists')).toBe('value');
@@ -49,3 +54,4 @@ describe('Other Context', () => {
     expect(ctx.other.id).toBe(42);
   });
 });
+
