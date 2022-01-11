@@ -68,10 +68,6 @@ class TestRequestContext extends BaseContext {
 
 }
 
-describe('simpler', () => {
-
-});
-
 describe('Extending contexts', () => {
 
   const ctx = new Context<DotEnvContext, TestRequestContext>({ request: new TestRequestContext() });
