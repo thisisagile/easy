@@ -34,9 +34,16 @@ describe('ElementTester', () => {
   });
 
   test('click fires click event', () => {
-    fireEvent.click = mock.return();
-    et.click();
-    expect(getByText).toHaveBeenCalledTimes(2);
+    fireEvent.click = mock.return(true);
+    expect(et.click()).toBe(et);
+    expect(getByText).toHaveBeenCalled();
+    expect(fireEvent.click).toHaveBeenCalledWith(a);
+  });
+
+  test('click fires click event but fails', () => {
+    fireEvent.click = mock.return(false);
+    expect(et.click()).not.toBeValid();
+    expect(getByText).toHaveBeenCalled();
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
 

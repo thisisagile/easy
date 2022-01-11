@@ -65,7 +65,6 @@ class TestRequestContext extends BaseContext {
   set shop(t: Id) {
     this.set('shop', t);
   }
-
 }
 
 describe('Extending contexts', () => {
