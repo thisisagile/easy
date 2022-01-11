@@ -2,6 +2,7 @@ import { Uuid } from './Uuid';
 import { text } from './Text';
 import { Identity } from './Identity';
 import { tryTo } from './Try';
+import { Construct, ofConstruct } from './Constructor';
 
 export type EnvContext = {
   readonly domain: string;
@@ -22,7 +23,7 @@ export class DotEnvContext implements EnvContext {
     tryTo(() =>
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
-        .snake.toString()
+        .snake.toString(),
     ).map(k => process.env[k] ?? alt).value;
 }
 
@@ -87,28 +88,52 @@ export class BaseContext implements RequestContext {
   public readonly create = (f: () => void): void => f();
 }
 
-export class Context {
-  constructor(protected state: any = { env: new DotEnvContext(), request: new BaseContext(), other: {} }) {}
+export type Contexts<E extends EnvContext, R extends RequestContext> = {
+  env?: E;
+  request?: R;
+  other?: any;
+}
 
-  get env(): EnvContext {
-    return this.state.env;
+export class Context<E extends EnvContext = DotEnvContext, R extends RequestContext = BaseContext> {
+  constructor(protected state: Contexts<E, R> = {}) {
+    this.state = {
+      ...({
+        env: new DotEnvContext() as E,
+        request: new BaseContext() as RequestContext as R,
+        other: {},
+      }), ...this.state,
+    };
   }
 
-  set env(env: EnvContext) {
+  get env(): E {
+    return this.state.env as E;
+  }
+
+  set env(env: E) {
     this.state.env = env;
   }
 
-  get request(): RequestContext {
-    return this.state.request;
+  get request(): R {
+    return this.state.request as R;
   }
 
-  set request(request: RequestContext) {
+  set request(request: R) {
     this.state.request = request;
   }
 
   get other(): any {
     return this.state.other;
   }
+
+  static use = <E extends EnvContext, R extends RequestContext>({
+                                                                  env,
+                                                                  request,
+                                                                  other,
+                                                                }: { env?: Construct<E>, request?: Construct<R>, other?: any }): Context<E, R> => new Context<E, R>({
+    env: env && ofConstruct(env),
+    request: request && ofConstruct(request),
+    other,
+  });
 }
 
 export const ctx = new Context();
