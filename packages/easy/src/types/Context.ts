@@ -94,7 +94,7 @@ export type Contexts<E extends EnvContext, R extends RequestContext> = {
   other?: any;
 }
 
-export class Context<E extends EnvContext = DotEnvContext, R extends RequestContext = BaseContext> {
+export class Context<E extends EnvContext, R extends RequestContext> {
   constructor(protected state: Contexts<E, R> = {}) {
     this.state = {
       ...({
