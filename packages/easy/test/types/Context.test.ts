@@ -97,14 +97,14 @@ describe('Extending contexts, part II', () => {
 
   const ctx = new Context<DotEnvContext, TestRequestContext>();
 
-  test('simple use of request context 2', () => {
-    ctx.request.lastError = 'Error2';
-    expect(ctx.request.lastError).toBe('Error2');
+  test('simple use of request context', () => {
+    ctx.request.lastError = 'Error';
+    expect(ctx.request.lastError).toBe('Error');
   });
 
-  test('simple replace of request context 2', () => {
-    ctx.request.lastError = 'Error2';
-    expect(ctx.request.lastError).toBe('Error2');
+  test('simple replace of request context', () => {
+    ctx.request.lastError = 'Error';
+    expect(ctx.request.lastError).toBe('Error');
     ctx.request.shop = 'BE';
     expect(ctx.request.shop).toBe('BE');
   });
@@ -118,13 +118,13 @@ describe('Extending contexts, part II', () => {
   });
 });
 
-describe('Extending contexts, part IV', () => {
+describe('Extending contexts, part 2', () => {
 
   const ctx = Context.use({ request: TestRequestContext });
 
   test('simple use of request context', () => {
-    ctx.request.lastError = 'Error4';
-    expect(ctx.request.lastError).toBe('Error4');
+    ctx.request.lastError = 'Error3';
+    expect(ctx.request.lastError).toBe('Error3');
   });
 
   test('simple replace of request context', () => {
