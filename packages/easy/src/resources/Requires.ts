@@ -1,30 +1,32 @@
 import { meta } from '../types';
 import { Scope, UseCase } from '../process';
 
-export const requires = {
-  labCoat:
+export class Requires {
+  readonly labCoat =
     (): PropertyDecorator =>
     (subject: unknown, property: string | symbol): void => {
       meta(subject).property(property).set('labCoat', true);
-    },
+    };
 
-  token:
+  readonly token =
     (): PropertyDecorator =>
     (subject: unknown, property: string | symbol): void => {
       meta(subject).property(property).set('token', true);
-    },
+    };
 
-  scope:
+  readonly scope =
     (scope: Scope): PropertyDecorator =>
     (subject: unknown, property: string | symbol): void => {
       meta(subject).property(property).set('token', true);
       meta(subject).property(property).set('scope', scope);
-    },
+    };
 
-  useCase:
+  readonly useCase =
     (uc: UseCase): PropertyDecorator =>
     (subject: unknown, property: string | symbol): void => {
       meta(subject).property(property).set('token', true);
       meta(subject).property(property).set('uc', uc);
-    },
-};
+    };
+}
+
+export const requires = new Requires();
