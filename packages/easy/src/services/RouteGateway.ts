@@ -7,22 +7,25 @@ export class RouteGateway extends Gateway {
     super();
   }
 
+  get(uri: Uri): Promise<List<Json>> {
+    return this.api.get(uri).then(r => r.body.data?.items ?? toList());
+  }
+
   all(): Promise<List<Json>> {
-    return this.api.get(this.route()).then(r => r.body.data?.items ?? toList());
+    return this.get(this.route());
   }
 
   byId(id: Id): Promise<Json | undefined> {
-    return this.api.get(this.routeId().id(id)).then(r => r.body.data?.items.first());
+    return this.get(this.routeId().id(id)).then(r => r.first());
   }
 
   search(q: JsonValue): Promise<List<Json>> {
-    return this.api.get(this.route().query(q)).then(r => r.body.data?.items ?? toList());
+    return this.get(this.route().query(q));
   }
 
   exists(id: Id): Promise<boolean> {
-    return this.api
-      .get(this.routeId().id(id))
-      .then(r => r.body.data?.items.length === 1)
+    return this.get(this.routeId().id(id))
+      .then(r => r.length === 1)
       .catch(r => (HttpStatus.NotFound.equals(r.status) ? false : Promise.reject(r)));
   }
 
