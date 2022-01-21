@@ -2,7 +2,7 @@ import '@thisisagile/easy-test';
 import { Address, isAddress } from '../../../src';
 
 describe('Address', () => {
-  const address = new Address({ street: 'Kalverstraat', houseNumber: '1', postalCode: '1012 NX', city: 'Amsterdam', country: 'Netherlands' });
+  const address = new Address({ street: 'Kalverstraat', houseNumber: '1', postalCode: '1012 NX', city: 'Amsterdam', country: 'NL' });
 
   test('default', () => {
     const a = new Address();
