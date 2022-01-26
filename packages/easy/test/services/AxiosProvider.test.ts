@@ -149,4 +149,13 @@ describe('AxiosProvider', () => {
       data: RequestOptions.Xml.type.encode(undefined),
     });
   });
+
+  test('Request to internal service does not overwrite authorization', async () => {
+    jest.spyOn(ctx.request, 'jwt', 'get').mockReturnValue('token 42');
+    axios.request = mock.resolve({ message });
+
+    await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, options: RequestOptions.Xml.bearer('special token') });
+
+    expect(axios.request).toHaveBeenCalledWith(fits.with({ headers: fits.with({ Authorization: 'Bearer special token' }) }));
+  });
 });
