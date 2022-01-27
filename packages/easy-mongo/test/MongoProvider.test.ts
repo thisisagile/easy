@@ -3,7 +3,7 @@ import { MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { DateTime, Exception } from '@thisisagile/easy';
+import { DateTime, Exception, toCondition } from "@thisisagile/easy";
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -125,6 +125,13 @@ describe('MongoProvider', () => {
     provider.byId = mock.resolve(Dev.Jeroen.toJSON());
     await expect(provider.update(Dev.Jeroen.toJSON())).resolves.toStrictEqual(Dev.Jeroen.toJSON());
     expect(c.updateOne).toHaveBeenCalledWith({ id: Dev.Jeroen.id }, { $set: Dev.Jeroen.toJSON() });
+  });
+
+  test('toMongoJson', async () => {
+    const q = {Id: {$eq: 42}};
+    expect(provider.toMongoJson(q)).toEqual(q);
+    expect(provider.toMongoJson(toCondition('Id', 'eq', 42))).toEqual(q);
+    expect(provider.toMongoJson(collection.id.is(42).and(collection.name.is('sander')))).toEqual({$and: [q, {Name: {$eq: 'sander'}} ]});
   });
 
   test('remove calls deleteOne on the collection', async () => {

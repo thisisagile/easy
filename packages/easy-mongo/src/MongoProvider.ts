@@ -58,9 +58,13 @@ export class MongoProvider {
       );
   }
 
-  find(query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
+  toMongoJson(query: Condition | LogicalCondition | FilterQuery<any>): Json {
+    return toMongoType(asJson(query));
+  }
+
+  find( query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
-      .then(c => c.find(toMongoType(asJson(query)), { ...options, limit: options.limit ?? 250 }))
+      .then(c => c.find(this.toMongoJson(query), { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
@@ -72,7 +76,7 @@ export class MongoProvider {
 
   byId(id: Id): Promise<Json> {
     return this.collection()
-      .then(c => c.findOne({ id: asString(id) }))
+      .then(c => c.findOne(this.toMongoJson({ id: asString(id) })))
       .then(i => omitId(i));
   }
 
@@ -82,7 +86,7 @@ export class MongoProvider {
 
   group(qs: FilterQuery<any>[]): Promise<Json[]> {
     return this.collection()
-      .then(c => c.aggregate(qs.map(q => toMongoType(asJson(q)))))
+      .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
       .then(res => res.toArray());
   }
 
@@ -96,18 +100,18 @@ export class MongoProvider {
 
   update(item: Json): Promise<Json> {
     return this.collection()
-      .then(c => c.updateOne({ id: item.id }, { $set: omitId(item) }))
+      .then(c => c.updateOne(this.toMongoJson({ id: item.id }), { $set: omitId(item) }))
       .then(() => this.byId(item.id as Id));
   }
 
   remove(id: Id): Promise<boolean> {
     return this.collection()
-      .then(c => c.deleteOne({ id }))
+      .then(c => c.deleteOne(this.toMongoJson({ id })))
       .then(d => d.result.ok === 1);
   }
 
   count(query?: Condition | LogicalCondition | FilterQuery<any>): Promise<number> {
-    return this.collection().then(c => c.countDocuments(toMongoType(asJson(query))));
+    return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {})));
   }
 
   createIndex(field: string | any, unique = true): Promise<string> {
