@@ -3,7 +3,7 @@ import { IncomingHttpHeaders } from 'http';
 import { NextFunction, Request, request, Response } from 'express';
 import { BaseContext, ctx } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
-import { languageSelector } from '../../src/express/AcceptLanguageHandler';
+import { languageSelector } from '../../src';
 
 
 class Headers implements IncomingHttpHeaders {
