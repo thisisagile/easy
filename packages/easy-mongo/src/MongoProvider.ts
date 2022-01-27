@@ -15,7 +15,7 @@ import {
   toList,
   when,
 } from '@thisisagile/easy';
-import { Collection as MongoCollection, FilterQuery, MongoClient } from 'mongodb';
+import { Collection as MongoCollection, FilterQuery as MongoFilterQuery, MongoClient } from 'mongodb';
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
 
@@ -28,6 +28,8 @@ export type FindOptions = {
   limit?: number;
   skip?: number;
 };
+
+export type FilterQuery<T> = MongoFilterQuery<T>;
 
 export class MongoProvider {
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
