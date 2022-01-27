@@ -1,4 +1,4 @@
-import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, Text, toList } from '../types';
+import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, text, Text, toList, tryTo } from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = Func<boolean | Results, any>;
@@ -42,6 +42,26 @@ export const lte = (limit: number, message?: Text): PropertyDecorator =>
 export const past = (message?: Text): PropertyDecorator => constraint(v => inPast(v), message ?? 'Value {actual} must lay in the past.');
 
 export const future = (message?: Text): PropertyDecorator => constraint(v => inFuture(v), message ?? 'Value {actual} must lay in the future.');
+
+export const minLength = (length: number, message?: Text): PropertyDecorator =>
+  constraint(
+    v =>
+      tryTo(() => v)
+        .is.defined()
+        .map(v => text(v).toString().length >= length)
+        .orElse(true) as boolean,
+    message ?? `Value {actual} must be at least '${length}' characters long.`
+  );
+
+export const maxLength = (length: number, message?: Text): PropertyDecorator =>
+  constraint(
+    v =>
+      tryTo(() => v)
+        .is.defined()
+        .map(v => text(v).toString().length <= length)
+        .orElse(true) as boolean,
+    message ?? `Value {actual} cannot be longer than '${length}' characters.`
+  );
 
 export const rule = (message?: Text): PropertyDecorator =>
   constraint(v => (isFunction(v) ? (v() as boolean | Results) : false), message ?? `Value {actual} must be true`);

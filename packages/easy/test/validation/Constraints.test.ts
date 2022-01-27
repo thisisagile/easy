@@ -5,11 +5,14 @@ import {
   future,
   gt,
   gte,
+  ifDefined,
   includes,
   inList,
   isValue,
   lt,
   lte,
+  maxLength,
+  minLength,
   notEmpty,
   optional,
   past,
@@ -21,7 +24,6 @@ import {
 } from '../../src';
 import '@thisisagile/easy-test';
 import { Age, Language } from '../ref';
-import { ifDefined } from '../../src/utils/If';
 
 describe('Constraints', () => {
   class Tester extends Struct {
@@ -34,6 +36,8 @@ describe('Constraints', () => {
     @lte(10) readonly two = this.state.one;
     @gt(4) readonly three = this.state.two;
     @gte(4) readonly four = this.state.two;
+    @minLength(5) readonly min = this.state.min;
+    @maxLength(5) readonly max = this.state.max;
     @past() readonly past = this.state.past;
     @future() readonly future = this.state.future;
     @valid() readonly language = Language.byId(this.state.language);
@@ -48,6 +52,8 @@ describe('Constraints', () => {
       future: days.tomorrow(),
       language: 'java',
       title: 'Prof.',
+      min: 'abcde',
+      max: 'abcd',
     });
     expect(validate(t)).toBeValid();
   });
@@ -55,6 +61,33 @@ describe('Constraints', () => {
   test('All constraints fail.', () => {
     const t = new Tester({ one: 42, two: 0 });
     expect(validate(t)).not.toBeValid();
+  });
+
+  test.each([
+    [1, undefined, true],
+    [1, null, true],
+    [1, '', false],
+    [1, 'a', true],
+    [1, 'ab', true],
+  ])('minLength(%i) on %s should return %s', (l, v, expected) => {
+    class Mouse extends Struct {
+      @minLength(l) readonly value = this.state.value;
+    }
+    const c = new Mouse({ value: v });
+    expect(validate(c).isValid).toBe(expected);
+  });
+  test.each([
+    [1, undefined, true],
+    [1, null, true],
+    [1, '', true],
+    [1, 'a', true],
+    [1, 'ab', false],
+  ])('maxLength(%i) on %s should return %s', (l, v, expected) => {
+    class Mouse extends Struct {
+      @maxLength(l) readonly value = this.state.value;
+    }
+    const c = new Mouse({ value: v });
+    expect(validate(c).isValid).toBe(expected);
   });
 });
 
