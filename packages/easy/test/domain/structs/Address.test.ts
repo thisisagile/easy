@@ -23,12 +23,12 @@ describe('Address', () => {
   });
 
   test('toString without extension', () => {
-    expect(address).toMatchText('Kalverstraat 1, 1012 NX Amsterdam Netherlands');
+    expect(address).toMatchText('Kalverstraat 1, 1012NX Amsterdam Netherlands');
   });
 
   test('toString with extension', () => {
     const a = new Address({ ...address, extension: 'Zw' });
-    expect(a).toMatchText('Kalverstraat 1 Zw, 1012 NX Amsterdam Netherlands');
+    expect(a).toMatchText('Kalverstraat 1 Zw, 1012NX Amsterdam Netherlands');
   });
 });
 
