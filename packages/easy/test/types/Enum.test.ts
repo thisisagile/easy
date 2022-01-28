@@ -31,6 +31,13 @@ describe('Enum', () => {
     expect(Language.byIds(ids)[0]).toBeInstanceOf(Language);
   });
 
+  test('isIn', () => {
+    expect(Language.Java.isIn()).toBeFalsy();
+    expect(Language.Java.isIn(Language.JavaScript)).toBeFalsy();
+    expect(Language.Java.isIn(Language.JavaScript, Language.TypeScript)).toBeFalsy();
+    expect(Language.Java.isIn(Language.Java, Language.TypeScript)).toBeTruthy();
+  });
+
   test('all', () => {
     expect(Language.all()).toHaveLength(4);
     expect(Language.all()[0]).toBeInstanceOf(Language);
