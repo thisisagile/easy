@@ -221,10 +221,17 @@ describe('DateTime', () => {
     expect(d2.diff(d, 'weeks')).toBe(26);
   });
 
-  test('from now from iso string.', () => {
+  test('from works.', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso);
-    expect(d.fromNow).toMatchText('a few seconds ago');
+    const other = new DateTime('2021-03-22T08:39:44.000Z');
+    expect(d.from()).toMatchText('a few seconds ago');
+    expect(d.from(other)).toMatchText('in 3 days');
+    expect(d.from('nl')).toMatchText('een paar seconden geleden');
+    expect(d.from(['zz', 'nl', 'en'])).toMatchText('een paar seconden geleden');
+    expect(d.from('de')).toMatchText('vor ein paar Sekunden');
+    expect(d.from(other, 'de')).toMatchText('in 3 Tagen');
+    expect(d.from(other, 'nl')).toMatchText('over 3 dagen');
   });
 
   test('isAfter', () => {

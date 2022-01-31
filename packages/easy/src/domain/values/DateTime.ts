@@ -1,6 +1,7 @@
-import { isDefined, tryTo, Value } from '../../types';
+import { isA, isArray, isDefined, isString, tryTo, Value } from '../../types';
 import moment, { Moment } from 'moment';
 import { ifNotEmpty } from '../../utils';
+import 'moment/min/locales';
 
 export type DateTimeUnit =
   'year' | 'years' | 'y' |
@@ -27,8 +28,20 @@ export class DateTime extends Value<string | undefined> {
     return isDefined(this.value) && this.utc.isValid();
   }
 
+  /**
+   * @deprecated Deprecated in favor for DateTime.from as that also accepts locales and another DateTime
+   */
   get fromNow(): string {
-    return this.value ? this.utc.fromNow() : '';
+    return this.from();
+  }
+
+  from(date?: DateTime): string;
+  from(locales?: string | string[]): string;
+  from(date?: DateTime, locales?: string | string[]): string;
+  from(param?: string | string[] | DateTime, other?: string | string[]): string {
+    const date: DateTime | undefined = isA<DateTime>(param) ? param : undefined;
+    const locales: string | string[] = isString(param) || isArray<string>(param) ? param : (isString(other) || isArray<string>(other) ? other : 'en');
+    return isDefined(date) ? this.utc.locale(locales).from(date.utc) : this.utc.locale(locales).fromNow();
   }
 
   protected get utc(): Moment {
