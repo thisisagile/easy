@@ -3,39 +3,46 @@ import { Dimension, UnitOfMeasurement } from '../../../src';
 
 describe('Dimension', () => {
 
-  test('dimension with out l, b, h is not valid', () => {
-    const dim = new Dimension();
-    expect(dim).not.toBeValid();
+  test('Dimension without value is not valid', () => {
+    const d = new Dimension({ uom: UnitOfMeasurement.KM });
+    const d2 = new Dimension({});
+    expect(d).not.toBeValid();
+    expect(d2).not.toBeValid();
   });
 
-  test('dimension with uom', () => {
-    const dim: Dimension = new Dimension({
-      length: 100,
-      lenghtUOM: UnitOfMeasurement.MM,
-      width: 200,
-      widthUOM: UnitOfMeasurement.CM,
-      height: 300,
-      heightUOM: UnitOfMeasurement.KM,
-    });
-    expect(dim).toBeValid();
-    // eslint-disable-next-line
-    expect(dim.length).toBe(100);
-    expect(dim.width).toBe(200);
-    expect(dim.height).toBe(300);
-    expect(dim.lengthUOM).toBe(UnitOfMeasurement.MM);
-    expect(dim.widthUOM).toBe(UnitOfMeasurement.CM);
-    expect(dim.heightUOM).toBe(UnitOfMeasurement.KM);
+  test('Dimension works', () => {
+    const d = new Dimension({ value: 100, uom: UnitOfMeasurement.KM });
+    const d2 = new Dimension({ value: 10 });
+    expect(d.value).toBe(100);
+    expect(d.uom).toBe(UnitOfMeasurement.KM);
+    expect(d2.value).toBe(10);
+    expect(d2.uom).toBe(UnitOfMeasurement.MM);
   });
 
-  test('dimension without uom', () => {
-    const dim: Dimension = new Dimension({ length: 100, width: 200, height: 300 });
-    expect(dim).toBeValid();
-    // eslint-disable-next-line
-    expect(dim.length).toBe(100);
-    expect(dim.width).toBe(200);
-    expect(dim.height).toBe(300);
-    expect(dim.lengthUOM).toBe(UnitOfMeasurement.MM);
-    expect(dim.widthUOM).toBe(UnitOfMeasurement.MM);
-    expect(dim.heightUOM).toBe(UnitOfMeasurement.MM);
+
+  test('With without uom sets it to mm', () => {
+    const d = Dimension.with(10);
+    expect(d.value).toBe(10);
+    expect(d.uom).toBe(UnitOfMeasurement.MM);
+  });
+
+  test('With works', () => {
+    const d = Dimension.with(10, UnitOfMeasurement.CM);
+    expect(d.value).toBe(10);
+    expect(d.uom).toBe(UnitOfMeasurement.CM);
+  });
+
+  test('SizeInMM works', () => {
+    const d = Dimension.with(10, UnitOfMeasurement.M);
+    expect(d.sizeInMM()).toBe(10000);
+  });
+
+  test('gte works', () => {
+    const smallDim = Dimension.with(1);
+    const bigDim = Dimension.with(1000);
+    expect(smallDim.gte(bigDim)).toBeFalsy();
+    expect(bigDim.gte(smallDim)).toBeTruthy();
+    expect(smallDim.gte(smallDim)).toBeTruthy();
+
   });
 });

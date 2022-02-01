@@ -11,12 +11,12 @@ describe('Weight', () => {
   test('Weight with UOW', () => {
     const w: Weight = new Weight({
       value: 100,
-      UOW: UnitOfWeight.KG
+      uow: UnitOfWeight.KG
     });
     expect(w).toBeValid();
     // eslint-disable-next-line
     expect(w.value).toBe(100);
-    expect(w.UOW).toBe(UnitOfWeight.KG);
+    expect(w.uow).toBe(UnitOfWeight.KG);
   });
 
   test('Weight without UOW', () => {
@@ -24,6 +24,6 @@ describe('Weight', () => {
     expect(w).toBeValid();
     // eslint-disable-next-line
     expect(w.value).toBe(200);
-    expect(w.UOW).toBe(UnitOfWeight.G);
+    expect(w.uow).toBe(UnitOfWeight.G);
   });
 });

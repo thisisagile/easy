@@ -3,11 +3,12 @@ import { required } from '../../validation';
 import { UnitOfMeasurement } from '../enums';
 
 export class Dimension extends Struct {
-  @required() readonly length: number = this.state.length;
-  readonly lengthUOM: UnitOfMeasurement = UnitOfMeasurement.byId(this.state.lengthUOM, UnitOfMeasurement.MM);
-  @required() readonly width: number = this.state.width;
-  readonly widthUOM: UnitOfMeasurement = UnitOfMeasurement.byId(this.state.widthUOM, UnitOfMeasurement.MM);
-  @required() readonly height: number = this.state.height;
-  readonly heightUOM: UnitOfMeasurement = UnitOfMeasurement.byId(this.state.heightUOM, UnitOfMeasurement.MM);
+  @required() readonly value: number = this.state.value;
+  readonly uom: UnitOfMeasurement = UnitOfMeasurement.byId(this.state.uom, UnitOfMeasurement.MM);
 
+  static with = (value: number, uom: UnitOfMeasurement = UnitOfMeasurement.MM) => new Dimension({ value, uom });
+
+  sizeInMM = (): number => this.value * this.uom.mmMultiplier;
+
+  gte = (dim: Dimension): boolean => this.sizeInMM() >= dim.sizeInMM();
 }
