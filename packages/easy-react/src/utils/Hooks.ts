@@ -1,5 +1,5 @@
 import { List, toList, Validatable } from '@thisisagile/easy';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
   const [state, setState] = useState<boolean>(initialState);
@@ -21,4 +21,13 @@ export const useAn = useA;
 
 export const useEntity = useA;
 
-export const useList = <E>(...items: E[]): [List<E>, Dispatch<SetStateAction<List<E>>>] => useState<List<E>>(toList<E>(...items));
+export const useList = <E>(...items: E[]): [List<E>, (e: List<E>) => List<E>] => {
+  const [state, setState] = useState<List<E>>(toList<E>(...items));
+  return [
+    state,
+    (e: List<E>): List<E> => {
+      setState(e);
+      return e;
+    },
+  ];
+};
