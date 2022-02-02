@@ -47,6 +47,20 @@ describe('ElementTester', () => {
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
 
+  test('mouseDown fires mousedown event', () => {
+    fireEvent.mouseDown = mock.return(true);
+    expect(et.mouseDown()).toBe(et);
+    expect(getByText).toHaveBeenCalled();
+    expect(fireEvent.mouseDown).toHaveBeenCalledWith(a);
+  });
+
+  test('mouseDown fires mouseDown event but fails', () => {
+    fireEvent.mouseDown = mock.return(false);
+    expect(et.mouseDown()).not.toBeValid();
+    expect(getByText).toHaveBeenCalled();
+    expect(fireEvent.mouseDown).toHaveBeenCalledWith(a);
+  });
+
   test('type fires value change event', () => {
     fireEvent.change = mock.return();
     const value = 'hello';

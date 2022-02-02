@@ -20,9 +20,9 @@ export class ElementTester {
     return new Tester(this.element() as HTMLElement);
   }
 
-  click = (): this | undefined => (this.element() && fireEvent.click(this.element())) ? this : undefined;
+  click = (): this | undefined => (this.element() && fireEvent.click(this.element()) ? this : undefined);
+  mouseDown = (): this | undefined => (this.element() && fireEvent.mouseDown(this.element()) ? this : undefined);
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
   wait = (): Promise<Element> => waitFor(this.element);
   waitForRemove = (): Promise<void> => waitForElementToBeRemoved(this.element);
 }
-
