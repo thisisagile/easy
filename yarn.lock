@@ -1573,7 +1573,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:*"
-    playwright: ^1.15.0
+    playwright: ^1.18.1
   languageName: unknown
   linkType: soft
 
@@ -3536,10 +3536,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^6.1.0":
-  version: 6.2.1
-  resolution: "commander@npm:6.2.1"
-  checksum: d7090410c0de6bc5c67d3ca41c41760d6d268f3c799e530aafb73b7437d1826bbf0d2a3edac33f8b57cc9887b4a986dce307fa5557e109be40eadb7c43b21742
+"commander@npm:^8.2.0":
+  version: 8.3.0
+  resolution: "commander@npm:8.3.0"
+  checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
   languageName: node
   linkType: hard
 
@@ -9095,11 +9095,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "playwright@npm:1.15.0"
+"playwright-core@npm:=1.18.1":
+  version: 1.18.1
+  resolution: "playwright-core@npm:1.18.1"
   dependencies:
-    commander: ^6.1.0
+    commander: ^8.2.0
     debug: ^4.1.1
     extract-zip: ^2.0.1
     https-proxy-agent: ^5.0.0
@@ -9110,12 +9110,25 @@ __metadata:
     proper-lockfile: ^4.1.1
     proxy-from-env: ^1.1.0
     rimraf: ^3.0.2
+    socks-proxy-agent: ^6.1.0
     stack-utils: ^2.0.3
     ws: ^7.4.6
+    yauzl: ^2.10.0
     yazl: ^2.5.1
   bin:
-    playwright: lib/cli/cli.js
-  checksum: b133b084f7192c4e2f2f6722559ed16f2502e5b0920fb4d50dc6688c4521033da98787b3b59fd60073e0556c5be785bd0c87181579ea5364f038c1b6999e0ca5
+    playwright: cli.js
+  checksum: 7b3d5a228bb0559eece28c82f6aa963a9f3cb68f56e470feb968fe414e4f0074edb9a2d9b27266f4927be31d57203cdfb739e57d5b30744d5f30800a8025b3b8
+  languageName: node
+  linkType: hard
+
+"playwright@npm:^1.18.1":
+  version: 1.18.1
+  resolution: "playwright@npm:1.18.1"
+  dependencies:
+    playwright-core: =1.18.1
+  bin:
+    playwright: cli.js
+  checksum: a50c4c3b04c0f4c2698898003b5cba8d24af0de01e13e9af754d34af4d928d5397704ab7e84a593fb614d538fe72e307f69f01971219857118cd619ee3f91c88
   languageName: node
   linkType: hard
 
@@ -10309,7 +10322,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socks@npm:^2.3.3":
+"socks-proxy-agent@npm:^6.1.0":
+  version: 6.1.1
+  resolution: "socks-proxy-agent@npm:6.1.1"
+  dependencies:
+    agent-base: ^6.0.2
+    debug: ^4.3.1
+    socks: ^2.6.1
+  checksum: 9a8a4f791bba0060315cf7291ca6f9db37d6fc280fd0860d73d8887d3efe4c22e823aa25a8d5375f6079279f8dc91b50c075345179bf832bfe3c7c26d3582e3c
+  languageName: node
+  linkType: hard
+
+"socks@npm:^2.3.3, socks@npm:^2.6.1":
   version: 2.6.1
   resolution: "socks@npm:2.6.1"
   dependencies:
