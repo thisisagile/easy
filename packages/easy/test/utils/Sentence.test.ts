@@ -13,5 +13,6 @@ describe('We', () => {
     expect(we.did.remove.an()).toMatchText('We did remove an item.');
     expect(we.did.not.find.any('items')).toMatchText('We did not find any items.');
     expect(we.did.not.find.any()).toMatchText('We did not find any items.');
+    expect(we.could.not.process.your('request')).toMatchText('We could not process your request.');
   });
 });
