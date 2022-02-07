@@ -1,6 +1,6 @@
 import playwright, { Browser, chromium, firefox, Page, webkit } from 'playwright';
 import { PlaywrightElement } from './PlaywrightElement';
-import { ctx, Id, UseCase } from '@thisisagile/easy';
+import { ctx, Id, Json, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
@@ -13,10 +13,11 @@ export class PlaywrightTester implements Tester {
   }
 
   /* istanbul ignore next */
-  static launch = (browserType: BrowserType, headless: boolean): Promise<Browser> => {
+  static launch = (browserType: BrowserType, headless: boolean, launchProps: Json): Promise<Browser> => {
     const options: playwright.LaunchOptions = {
       headless: headless,
       args: ['--no-sandbox', '--start-maximized'],
+      ...launchProps,
     };
     switch (browserType) {
       case 'Firefox':
@@ -34,9 +35,10 @@ export class PlaywrightTester implements Tester {
     host: string = ctx.env.get('webHost', '') as string,
     headless = true,
     width = 1200,
-    height = 800
+    height = 800,
+    launchProps = {}
   ): Promise<Tester> {
-    const browser = await PlaywrightTester.launch(browserType, headless);
+    const browser = await PlaywrightTester.launch(browserType, headless, launchProps);
     const page = await browser.newPage();
     await page.setViewportSize({ width, height });
     return new PlaywrightTester(host, browser, page);
