@@ -42,11 +42,11 @@ export class BaseContext implements RequestContext {
   private state: any = {};
 
   get token(): unknown {
-    return this.state.token;
+    return this.get('token');
   }
 
   set token(token: unknown) {
-    this.state.token = token;
+    this.set('token', token);
   }
 
   get identity(): Identity {
@@ -54,27 +54,27 @@ export class BaseContext implements RequestContext {
   }
 
   get jwt(): string {
-    return this.state.jwt;
+    return this.get('jwt');
   }
 
   set jwt(jwt: string) {
-    this.state.jwt = jwt;
+    this.set('jwt', jwt);
   }
 
   get correlationId(): Uuid {
-    return this.state.correlationId;
+    return this.get('correlationId');
   }
 
   set correlationId(id: Uuid) {
-    this.state.correlationId = id;
+    this.set('correlationId', id);
   }
 
   get lastError(): string | undefined {
-    return this.state.lastError;
+    return this.get('lastError');
   }
 
   set lastError(error: string | undefined) {
-    this.state.lastError = error;
+    this.set('lastError', error);
   }
 
   public get<T>(key: string): T {
