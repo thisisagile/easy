@@ -1,6 +1,5 @@
-import { BaseContext, Context, ctx, DotEnvContext } from '../../src';
+import { BaseContext, Context, ctx, DotEnvContext, Id } from '../../src';
 import { host, port } from '../../../../test/init';
-import { Id } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('Environment Context', () => {
   test('default environment context', () => {
@@ -37,6 +36,12 @@ describe('Environment Context', () => {
   test('simple get and set on request context', () => {
     ctx.request.lastError = 'Wrong';
     expect(ctx.request.lastError).toBe('Wrong');
+  });
+
+  test('token should be an any in the context', () => {
+    const c = new Context<DotEnvContext, BaseContext>({ request: new BaseContext() });
+    c.request.token = {tenant: 42};
+    expect(c.request.token.tenant).toBe(42);
   });
 
   test('defined environment variables', () => {

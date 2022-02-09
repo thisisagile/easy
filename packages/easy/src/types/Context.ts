@@ -41,11 +41,11 @@ export type RequestContext = {
 export class BaseContext implements RequestContext {
   private state: any = {};
 
-  get token(): unknown {
+  get token(): any  {
     return this.get('token');
   }
 
-  set token(token: unknown) {
+  set token(token: any) {
     this.set('token', token);
   }
 
