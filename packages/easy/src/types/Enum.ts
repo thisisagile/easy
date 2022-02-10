@@ -38,6 +38,10 @@ export abstract class Enum implements Validatable {
     return this.all<E>().filter(p, params);
   }
 
+  static first<E extends Enum>(p?: (value: E, index: number, array: E[]) => unknown, params?: unknown) : E {
+    return  this.all<E>().first(p, params);
+}
+
   equals<E extends Enum | Id>(other: E): boolean {
     return this.id === (isEnum(other) ? other.id : other);
   }
