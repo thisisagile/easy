@@ -55,8 +55,8 @@ describe('Weight', () => {
     { w: weight(0, UnitOfWeight.KG), lower: weight(0), upper: weight(0), exp: true },
     { w: weight(0, UnitOfWeight.KG), lower: weight(0), upper: weight(1), exp: true },
     { w: weight(1, UnitOfWeight.KG), lower: weight(0), upper: weight(1, UnitOfWeight.KG), exp: true },
-    { w: weight(1, UnitOfWeight.KG), lower: weight(0), upper: weight(2,  UnitOfWeight.KG), exp: true },
-    { w: weight(2, UnitOfWeight.KG), lower: weight(1), upper: weight(3,  UnitOfWeight.KG), exp: true },
+    { w: weight(1, UnitOfWeight.KG), lower: weight(0), upper: weight(2, UnitOfWeight.KG), exp: true },
+    { w: weight(2, UnitOfWeight.KG), lower: weight(1), upper: weight(3, UnitOfWeight.KG), exp: true },
     { w: weight(1), lower: weight(0), upper: weight(0), exp: false },
     { w: weight(2), lower: weight(0), upper: weight(1), exp: false },
     { w: weight(2), lower: weight(3), upper: weight(1), exp: false },
@@ -66,8 +66,16 @@ describe('Weight', () => {
     { w: weight(2, UnitOfWeight.KG), lower: weight(3), upper: weight(1), exp: false },
     { w: weight(2, UnitOfWeight.G), lower: weight(3), upper: weight(4), exp: false },
   ])('between works %s', ({ w, lower, upper, exp }) => {
-    expect( w.between(lower, upper)).toBe(exp)
+    expect(w.between(lower, upper)).toBe(exp);
   });
 
+  test('sum works', () => {
+    const heavy: Weight = new Weight({ value: 200, uow: UnitOfWeight.KG });
+    const light: Weight = new Weight({ value: 1, uow: UnitOfWeight.G });
+    expect(light.sum(heavy).value).toBe(200001);
+    expect(light.sum(heavy).uow).toBe(UnitOfWeight.G);
+    expect(heavy.sum(light).uow).toBe(UnitOfWeight.KG);
+    expect(heavy.sum(light).value).toBe(200.001);
+  });
 
 });
