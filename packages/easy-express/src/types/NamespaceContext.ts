@@ -1,7 +1,7 @@
 import { createNamespace } from 'cls-hooked';
-import { BaseContext, RequestContext } from "@thisisagile/easy";
+import { BaseRequestContext } from '@thisisagile/easy';
 
-export class NamespaceContext extends BaseContext implements RequestContext {
+export class NamespaceContext extends BaseRequestContext {
   protected readonly namespace = createNamespace('context');
 
   public get<T>(key: string): T {

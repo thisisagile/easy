@@ -2,16 +2,15 @@ import { Uuid } from './Uuid';
 import { text } from './Text';
 import { Identity } from './Identity';
 import { tryTo } from './Try';
-import { Construct, ofConstruct } from './Constructor';
 
-export type EnvContext = {
+export interface EnvContext {
   readonly domain: string;
   readonly name: string;
   readonly host: string;
   readonly port: number;
 
   get(key: string, alt?: string): string | undefined;
-};
+}
 
 export class DotEnvContext implements EnvContext {
   readonly domain = process.env.DOMAIN ?? 'easy';
@@ -23,11 +22,11 @@ export class DotEnvContext implements EnvContext {
     tryTo(() =>
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
-        .snake.toString(),
+        .snake.toString()
     ).map(k => process.env[k] ?? alt).value;
 }
 
-export type RequestContext = {
+export interface RequestContext {
   token?: any;
   identity?: Identity;
   jwt: string;
@@ -36,12 +35,12 @@ export type RequestContext = {
   get<T>(key: string): T;
   set<T>(key: string, value: T): T;
   create: (f: () => void) => void;
-};
+}
 
-export class BaseContext implements RequestContext {
+export class BaseRequestContext implements RequestContext {
   private state: any = {};
 
-  get token(): any  {
+  get token(): any {
     return this.get('token');
   }
 
@@ -88,52 +87,48 @@ export class BaseContext implements RequestContext {
   public readonly create = (f: () => void): void => f();
 }
 
-export type Contexts<E extends EnvContext, R extends RequestContext> = {
-  env?: E;
-  request?: R;
+/**
+ * @deprecated Renamed to BaseRequestContext
+ */
+export class BaseContext extends BaseRequestContext {}
+
+export interface Contexts {
+  env?: EnvContext;
+  request?: RequestContext;
   other?: any;
 }
 
-export class Context<E extends EnvContext, R extends RequestContext> {
-  constructor(protected state: Contexts<E, R> = {}) {
+export class Context {
+  constructor(protected state: Contexts = {}) {
     this.state = {
-      ...({
-        env: new DotEnvContext() as E,
-        request: new BaseContext() as RequestContext as R,
+      ...{
+        env: new DotEnvContext(),
+        request: new BaseRequestContext(),
         other: {},
-      }), ...this.state,
+      },
+      ...this.state,
     };
   }
 
-  get env(): E {
-    return this.state.env as E;
+  get env(): EnvContext {
+    return this.state.env as EnvContext;
   }
 
-  set env(env: E) {
+  set env(env: EnvContext) {
     this.state.env = env;
   }
 
-  get request(): R {
-    return this.state.request as R;
+  get request(): RequestContext {
+    return this.state.request as RequestContext;
   }
 
-  set request(request: R) {
+  set request(request: RequestContext) {
     this.state.request = request;
   }
 
   get other(): any {
     return this.state.other;
   }
-
-  static use = <E extends EnvContext, R extends RequestContext>({
-                                                                  env,
-                                                                  request,
-                                                                  other,
-                                                                }: { env?: Construct<E>, request?: Construct<R>, other?: any }): Context<E, R> => new Context<E, R>({
-    env: env && ofConstruct(env),
-    request: request && ofConstruct(request),
-    other,
-  });
 }
 
 export const ctx = new Context();
