@@ -326,4 +326,14 @@ describe('asList', () => {
     expect(m).toBeInstanceOf(List);
     expect(m).toHaveLength(3);
   });
+
+  test('sort with two', () => {
+    const list = toList([{id: 1, name: 'sander'}, {id: 2, name: 'wouter'}, {id: 1, name: 'jeroen'}, {id: 3, name: 'arnold'}]);
+    const sorted = list.asc(i => i.id || i.name);
+    expect(sorted[0].id).toBe(1);
+    expect(sorted[0].name).toBe('jeroen');
+    const sorted2 = list.desc(i => i.id || i.name);
+    expect(sorted2[0].id).toBe(3);
+    expect(sorted2[0].name).toBe('arnold');
+  });
 });
