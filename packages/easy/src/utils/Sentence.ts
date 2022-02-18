@@ -1,6 +1,6 @@
 import { Id, text, Text } from '../types';
 
-export class Sentence {
+export class Sentence implements Text {
   constructor(word: Text, pre?: Sentence, private sentence: Text[] = (pre?.sentence ?? []).concat(word)) {}
 
   toString(): string {
