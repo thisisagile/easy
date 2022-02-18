@@ -144,3 +144,4 @@ describe('json', () => {
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
 });
+
