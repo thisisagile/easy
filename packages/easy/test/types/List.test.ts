@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -255,7 +255,7 @@ describe('toList', () => {
   test('byId', () => {
     expect(toList()).toHaveLength(0);
     expect(toList(Currency.all()).byId(42)).toBeUndefined();
-    expect(toList(Currency.all()).byId(Currency.AUD.id)).toBe(Currency.AUD)
+    expect(toList(Currency.all()).byId(Currency.AUD.id)).toBe(Currency.AUD);
     const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
     expect(devs.byId(Dev.Sander.id)).toBe(Dev.Sander);
     const food = toList('hamburger', 'pizza', 'fries');
@@ -328,12 +328,29 @@ describe('asList', () => {
   });
 
   test('sort with two', () => {
-    const list = toList([{id: 1, name: 'sander'}, {id: 2, name: 'wouter'}, {id: 1, name: 'jeroen'}, {id: 3, name: 'arnold'}]);
+    const list = toList([{ id: 1, name: 'sander' }, { id: 2, name: 'wouter' }, { id: 1, name: 'jeroen' }, {
+      id: 3,
+      name: 'arnold',
+    }]);
     const sorted = list.asc(i => i.id || i.name);
     expect(sorted[0].id).toBe(1);
     expect(sorted[0].name).toBe('jeroen');
     const sorted2 = list.desc(i => i.id || i.name);
     expect(sorted2[0].id).toBe(3);
     expect(sorted2[0].name).toBe('arnold');
+  });
+
+  class Item {
+    readonly amount = 2;
+    readonly quantity = 42;
+  }
+
+  test('Sum', () => {
+    const items = toList(new Item(), new Item());
+    expect(items.sum(() => 42)).toBe(84);
+    expect(items.sum(i => i.quantity)).toBe(84);
+    expect(items.sum(i => i.quantity * i.amount)).toBe(168);
+
+    expect(toList().sum(() => 23)).toBe(0);
   });
 });
