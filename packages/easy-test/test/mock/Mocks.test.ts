@@ -24,6 +24,12 @@ describe('mock', () => {
     expect(project.version(3)).toBe(version);
   });
 
+  test('return with works', () => {
+    project.fails = mock.returnWith<Project>({ name: 'DevOps'});
+    return expect(project.fails(false)).toMatchObject({ name: 'DevOps' });
+  });
+
+
   test('resolve works', () => {
     project.fails = mock.resolve(version);
     return expect(project.fails(false)).resolves.toBe(version);
