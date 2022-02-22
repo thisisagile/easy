@@ -39,7 +39,7 @@ export class List<T = unknown> extends Array<T> {
 
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
 
-  byId = (id: Id): List<T> => this.filter(i => (i as any).id === id);
+  byId = (id: Id): T => this.first(i => (i as any).id === id);
 
   add = (...items: (T | T[])[]): this => {
     super.push(...toArray(...items));
