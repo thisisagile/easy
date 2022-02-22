@@ -39,7 +39,7 @@ export class List<T = unknown> extends Array<T> {
 
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
 
-  sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => {sum += p(i); return sum;} , 0);
+  sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => sum + p(i), 0);
 
   byId = (id: Id): T => this.first(i => (i as any).id === id);
 
