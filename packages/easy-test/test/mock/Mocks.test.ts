@@ -39,6 +39,11 @@ describe('mock', () => {
     return expect(project.fails(false)).rejects.toBe(version);
   });
 
+  test('reject with works', () => {
+    project.fails = mock.rejectWith<Project>({ name: 'DevOps'});
+    return expect(project.fails(false)).rejects.toMatchObject({ name: 'DevOps' });
+  });
+
   test('get works', () => {
     mock.property(project, 'name', version);
     expect(project.name).toBe(version);

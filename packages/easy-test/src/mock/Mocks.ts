@@ -11,6 +11,7 @@ export class Mocks {
   property = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
     jest.spyOn(object, getter, 'get').mockReturnValue(value);
   reject = (value?: unknown): Mock => jest.fn().mockRejectedValue(value);
+  rejectWith = <T = any>(props: Partial<T> = {}): Mock => jest.fn().mockRejectedValue(mock.a(props));
   req = {
     id: (id: Id): Req => new Req({ id }),
     q: (q: unknown): Req => new Req({ q }),
