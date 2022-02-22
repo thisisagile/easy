@@ -25,6 +25,8 @@ describe('mock', () => {
   });
 
   test('return with works', () => {
+    project.fails = mock.returnWith<Project>();
+    expect(project.fails(false)).toMatchObject({ });
     project.fails = mock.returnWith<Project>({ name: 'DevOps'});
     return expect(project.fails(false)).toMatchObject({ name: 'DevOps' });
   });
