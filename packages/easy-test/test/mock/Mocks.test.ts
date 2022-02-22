@@ -35,7 +35,9 @@ describe('mock', () => {
     return expect(project.fails(false)).resolves.toBe(version);
   });
 
-  test('resolve with works', () => {
+  test('resolve with works', async () => {
+    project.fails = mock.resolveWith<Project>();
+    await expect(project.fails(false)).resolves.toMatchObject({ });
     project.fails = mock.resolveWith<Project>({ name: 'DevOps'});
     return expect(project.fails(false)).resolves.toMatchObject({ name: 'DevOps' });
   });
