@@ -43,6 +43,7 @@ export class Mocks {
     }),
   };
   resolve = (value?: unknown): Mock => jest.fn().mockResolvedValue(value);
+  resolveWith = <T = any>(props: Partial<T> = {}): Mock => jest.fn().mockResolvedValue(mock.a(props));
   return = (value?: unknown): Mock => jest.fn().mockReturnValue(value);
   this = (): Mock => jest.fn().mockReturnThis();
   provider = {
