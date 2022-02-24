@@ -277,6 +277,14 @@ describe('toList', () => {
     expect(food.byId(42)).toBeUndefined();
   });
 
+  test('toList with single number N initializes list with length N', () => {
+    expect(toList(5)).toHaveLength(5);
+    expect(toList(5).first()).toBeUndefined();
+
+    expect(toList([5])).toHaveLength(5);
+    expect(toList([5]).first()).toBeUndefined();
+  });
+
   test('remove', () => {
     expect(toList().remove(Dev.Rob)).toHaveLength(0);
     expect(toList(Dev.Sander).remove(Dev.Rob)).toHaveLength(1);
