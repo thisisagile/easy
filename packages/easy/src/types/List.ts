@@ -35,6 +35,8 @@ export class List<T = unknown> extends Array<T> {
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
+  mapAsync = (f: (i: T) => Promise<T>): Promise<List<T>> => Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
+
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));

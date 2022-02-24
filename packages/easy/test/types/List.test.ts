@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, Currency, Enum, Id, isEmpty, isList, List, toList, toObject } from '../../src';
+import { asList, Currency, Enum, Id, isEmpty, isList, List, toList, toObject, reject, resolve } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -26,6 +26,21 @@ describe('List', () => {
     const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]).mapDefined(d => d.name);
     expect(devs).toBeInstanceOf(List);
     expect(devs).toHaveLength(3);
+  });
+
+
+  test('mapAsync success', async () => {
+    const hello = (d: Dev): Promise<Dev> => resolve(d);
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
+
+    await expect(devs.mapAsync(d => hello(d))).resolves.toMatchText(devs)
+  });
+
+  test('mapAsync rejects', async () => {
+    const hello = (_d: Dev): Promise<Dev> => reject('error');
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
+
+    await expect(devs.mapAsync(d => hello(d))).rejects.toBe('error')
   });
 
   test('filter', () => {
