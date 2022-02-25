@@ -1,7 +1,6 @@
-import { reject, resolve, toResults, tuple } from '../../src';
+import { reject, resolve, toResults, tuple, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
-import { Id, Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('Promise', () => {
   test('resolve', () => {
@@ -15,20 +14,40 @@ describe('Promise', () => {
   });
 });
 
-describe('tupel', () => {
-  const getName = (name: string): Promise<Json> => resolve({ name });
-  const getLastName = (lastName: string): Promise<Json> => resolve({ lastName });
-  const getId = (id: Id): Promise<Json> => resolve({ id });
+describe('tuple', () => {
 
-  const doStuff = (id: Id): Promise<Json> => {
-    return resolve(id)
-      .then(i => getId(i))
-      .then(j => tuple(j, getName('Sander'), getLastName('Hoogendoorn')))
-      .then(([id, name, lastName]) => ({ ...id, ...name, ...lastName }))
-      .then(({ id, name, lastName }) => ({ id, name, lastName }));
-  };
+  class Dev {
+    constructor(readonly name: string) {
+    }
+  }
 
-  test('tupel returns both async and sync params', () => {
-    return expect(doStuff(42)).resolves.toEqual({ id: 42, name: 'Sander', lastName: 'Hoogendoorn' });
+  class Manager {
+    constructor(readonly role: string) {
+    }
+  }
+
+  const asyncManager = (m: Manager): Promise<Manager> => resolve(new Manager(m.role + ' easy.ts'));
+
+  const join = (d: Dev, m: Manager): string => `${d.name} ${m.role}`;
+
+  test('resolve grab', async () => {
+    const d = new Dev('Sander');
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple(d, new Manager('CTO')))
+      .then(([d, m]) => join(d, m));
+
+    expect(res).toBe('Sander CTO');
   });
+
+  test('resolve async grab', async () => {
+    const d = new Dev('Sander');
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple(d, asyncManager(new Manager('CTO'))))
+      .then(([d, m]) => join(d, m));
+
+    expect(res).toBe('Sander CTO easy.ts');
+  });
+
 });

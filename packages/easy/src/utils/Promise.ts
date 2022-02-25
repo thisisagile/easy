@@ -1,5 +1,9 @@
-import { ErrorOrigin, toArray } from '../types';
+import { ErrorOrigin } from '../types';
+
+type Pro<A> = A | PromiseLike<A>;
+type Aw<A> = Awaited<A>;
 
 export const resolve = <S = unknown>(subject: S | PromiseLike<S>): Promise<S> => Promise.resolve(subject);
 export const reject = <S = never>(e: ErrorOrigin): Promise<S> => Promise.reject(e);
-export const tuple = <T>(...values: (T | PromiseLike<T>)[]): Promise<T[]> => Promise.all(toArray(values));
+
+export const tuple = <F, S>(first: Pro<F>, second: Pro<S>): Promise<[Aw<F>, Aw<S>]> => Promise.all([first, second]);
