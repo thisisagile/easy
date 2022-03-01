@@ -277,6 +277,17 @@ describe('toList', () => {
     expect(food.byId(42)).toBeUndefined();
   });
 
+  test('ById with string and number as Id works', () => {
+    const numberAsId : Id = 41;
+    const stringAsId: Id = '41';
+    expect(toList({id: numberAsId}).byId(stringAsId)).toMatchObject({id:41})
+    expect(toList({id: stringAsId}).byId(numberAsId)).toMatchObject({id:'41'})
+    expect(toList({id: '41'}).byId(numberAsId)).toMatchObject({id:'41'})
+    expect(toList({id: '41'}).byId(stringAsId)).toMatchObject({id:'41'})
+    expect(toList({id: 41}).byId(numberAsId)).toMatchObject({id:41})
+    expect(toList({id: 41}).byId(stringAsId)).toMatchObject({id:41})
+  })
+
   test('toList with single number N initializes list with length N', () => {
     expect(toList(5)).toHaveLength(5);
     expect(toList(5).first()).toBeUndefined();
