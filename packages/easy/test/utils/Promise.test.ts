@@ -90,4 +90,25 @@ describe('tuple', () => {
     expect(res).toBeInstanceOf(Manager);
   });
 
+  test('resolve sync and async array', async () => {
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple.all(d, [asyncM(ceo), asyncM(cto)]))
+      .then(([, ms]) => ms);
+
+    expect(res).toHaveLength(2);
+    expect(res[1]).toBeInstanceOf(Manager);
+  });
+
+  test('resolve sync and async spread', async () => {
+
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple.spread(d, asyncM(ceo), asyncM(cto)))
+      .then(([, ms]) => ms);
+
+    expect(res).toHaveLength(2);
+    expect(res[1]).toBeInstanceOf(Manager);
+  });
+
 });
