@@ -63,4 +63,22 @@ describe('tuple', () => {
     expect(res).toBe('CEO easy CEO easy');
   });
 
+  test('resolve sync and async triple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[3](d, asyncM(c), asyncM(c)))
+      .then(([d, m, m2]) => join(d, m, m2));
+
+    expect(res).toBe('Sander CEO easy CEO easy');
+  });
+
+  test('resolve sync and async quadruple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[4](d, asyncM(c), asyncM(c), d))
+      .then(([, , , d]) => d);
+
+    expect(res).toBeInstanceOf(Dev);
+  });
+
 });
