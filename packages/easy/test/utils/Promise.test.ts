@@ -81,4 +81,13 @@ describe('tuple', () => {
     expect(res).toBeInstanceOf(Dev);
   });
 
+  test('resolve sync and async quintuple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[5](asyncM(c), d, asyncM(c), asyncM(c), d))
+      .then(([c, , , ,]) => c);
+
+    expect(res).toBeInstanceOf(Manager);
+  });
+
 });
