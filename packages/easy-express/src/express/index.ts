@@ -1,4 +1,3 @@
-export * from './AcceptLanguageHandler'
 export * from './AuthError';
 export * from './CorrelationHandler';
 export * from './ErrorHandler';
