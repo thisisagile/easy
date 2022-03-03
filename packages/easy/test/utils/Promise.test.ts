@@ -26,25 +26,25 @@ describe('tuple', () => {
     }
   }
 
-  const asyncManager = (m: Manager): Promise<Manager> => resolve(new Manager(m.role + ' easy.ts'));
+  const asyncM = (m: Manager): Promise<Manager> => resolve(new Manager(m.role + ' easy.ts'));
 
   const join = (d: Dev, m: Manager): string => `${d.name} ${m.role}`;
 
-  test('resolve grab', async () => {
+  test('resolve tuple', async () => {
     const d = new Dev('Sander');
     const res = await when(d)
       .not.isDefined.reject()
-      .then(d => tuple(d, new Manager('CTO')))
+      .then(d => tuple[2](d, new Manager('CTO')))
       .then(([d, m]) => join(d, m));
 
     expect(res).toBe('Sander CTO');
   });
 
-  test('resolve async grab', async () => {
+  test('resolve async tuple', async () => {
     const d = new Dev('Sander');
     const res = await when(d)
       .not.isDefined.reject()
-      .then(d => tuple(d, asyncManager(new Manager('CTO'))))
+      .then(d => tuple[2](d, asyncM(new Manager('CTO'))))
       .then(([d, m]) => join(d, m));
 
     expect(res).toBe('Sander CTO easy.ts');
