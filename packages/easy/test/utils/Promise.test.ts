@@ -19,16 +19,18 @@ describe('tuple', () => {
   class Dev {
     constructor(readonly name: string) {
     }
+    toString(): string { return this.name}
   }
 
   class Manager {
     constructor(readonly role: string) {
     }
+    toString(): string { return this.role}
   }
 
   const asyncM = (m: Manager): Promise<Manager> => resolve(new Manager(m.role + ' easy.ts'));
 
-  const join = (d: Dev, m: Manager): string => `${d.name} ${m.role}`;
+  const join = (...people: (Dev | Manager)[]): string => people.map(p => p.toString()).join(' ');
 
   test('resolve tuple', async () => {
     const d = new Dev('Sander');
