@@ -1,4 +1,4 @@
-import { reject, resolve, toResults, tuple, when } from '../../src';
+import { reject, resolve, toList, toResults, tuple, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -105,7 +105,7 @@ describe('tuple', () => {
     const res = await when(d)
       .not.isDefined.reject()
       .then(d => tuple.spread(d, asyncM(ceo), asyncM(cto)))
-      .then(([, ms]) => ms);
+      .then(([, ms]) => toList(ms));
 
     expect(res).toHaveLength(2);
     expect(res[1]).toBeInstanceOf(Manager);
