@@ -137,4 +137,9 @@ describe('Custom constraints', () => {
     const res = validate(new Person({ age: 142 }));
     expect(res.results).toHaveLength(2);
   });
+
+  test('custom validation message', () => {
+    const res = validate(new Person({ age: 142 }));
+    expect(res.results[1].message).toBe("Property realAge should have value '42' instead of '142'.");
+  });
 });
