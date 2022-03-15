@@ -147,4 +147,15 @@ describe('Custom constraints', () => {
     const res = validate(new Person({ age: 142 }));
     expect(res).toFailWith("Property realAge should have value '42' instead of '142'.");
   });
+
+  const startsWithB = (): PropertyDecorator => constraint(n => n[0] === "B", "A dog's name should start with 'B', but it now is {this.name}.");
+
+  class Dog extends Struct {
+    @startsWithB() readonly name: string = this.state.name;
+  }
+
+  test('custom validation message using {this} notation', () => {
+    const res = validate(new Dog({ name: "Willem" }));
+    expect(res).toFailWith("A dog's name should start with 'B', but it now is Willem.");
+  });
 });
