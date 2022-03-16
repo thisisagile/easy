@@ -1,5 +1,6 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { isUuid, Mapper, toId } from '../../src';
+import { isUuid, json, Mapper, toId } from '../../src';
+import { asJson } from '@thisisagile/easy-test/dist/utils/Utils';
 
 describe('Mapper', () => {
   const empty = new Mapper();
@@ -58,11 +59,33 @@ describe('Mapper', () => {
   });
 
   class IgnoreMap extends Mapper {
-    readonly level = this.map.skip();
+    readonly level = this.map.ignore();
   }
 
   test('ignore should remove props', () => {
     const im = new IgnoreMap();
+    expect(im.in({ level: 3 })).toStrictEqual({});
+  });
+
+  class IgnoreFromSourceMap extends Mapper {
+    readonly level = this.map.ignore();
+
+    constructor() {
+      super({ startFrom: 'source' });
+    }
+  }
+
+  test('json', () => {
+    const l = asJson({ level: undefined });
+    expect(l).toStrictEqual({ level: undefined });
+    const s = { ...{ level: 3}, ...{ level: undefined } };
+    expect(s).toStrictEqual({level: undefined});
+    const j = json.merge({ level: 3 }, { level: undefined });
+    expect(j).toStrictEqual({ });
+  });
+
+  test('ignore should remove props also when starting from source', () => {
+    const im = new IgnoreFromSourceMap();
     expect(im.in({ level: 3 })).toStrictEqual({});
   });
 
@@ -82,8 +105,17 @@ describe('Mapper', () => {
     readonly manager = this.map.map(Manager);
   }
 
-  const original = { Name: 'Sander', Business: { Name: 'ditisagile.nl', WebSite: 'www.ditisagile.nl' }, Manager: 'Rogier', ManagerTitle: 'COO' };
-  const mapped = { name: 'Sander', company: { name: 'ditisagile.nl', site: 'www.ditisagile.nl' }, manager: { name: 'Rogier', title: 'COO' } };
+  const original = {
+    Name: 'Sander',
+    Business: { Name: 'ditisagile.nl', WebSite: 'www.ditisagile.nl' },
+    Manager: 'Rogier',
+    ManagerTitle: 'COO',
+  };
+  const mapped = {
+    name: 'Sander',
+    company: { name: 'ditisagile.nl', site: 'www.ditisagile.nl' },
+    manager: { name: 'Rogier', title: 'COO' },
+  };
 
   test('using map properties works', () => {
     const map = new MapWithSubMap({ startFrom: 'scratch' });
