@@ -72,6 +72,7 @@ export const mappings = {
     in: (): JsonValue | undefined => undefined,
     out: (): JsonValue | undefined => undefined,
   }),
+  skip: (property = ''): Mapping => mappings.ignore(property),
   func: (property: string, funcIn: Get<JsonValue | undefined, Json>, funcOut: Get<JsonValue | undefined, Json>): Mapping => ({
     property,
     in: (source: Json = {}): JsonValue | undefined => ofGet(funcIn, source),

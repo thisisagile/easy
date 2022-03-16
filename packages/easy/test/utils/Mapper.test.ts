@@ -58,7 +58,7 @@ describe('Mapper', () => {
   });
 
   class IgnoreMap extends Mapper {
-    readonly level = this.map.ignore();
+    readonly level = this.map.skip();
   }
 
   test('ignore should remove props', () => {
