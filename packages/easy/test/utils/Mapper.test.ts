@@ -1,6 +1,5 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { isUuid, json, Mapper, toId } from '../../src';
-import { asJson } from '@thisisagile/easy-test/dist/utils/Utils';
+import { isUuid, Mapper, toId } from '../../src';
 
 describe('Mapper', () => {
   const empty = new Mapper();
@@ -67,26 +66,36 @@ describe('Mapper', () => {
     expect(im.in({ level: 3 })).toStrictEqual({});
   });
 
-  class IgnoreFromSourceMap extends Mapper {
+  class FromSourceMap extends Mapper {
     readonly level = this.map.ignore();
+    readonly age = this.map.skipIn();
+    readonly name = this.map.skipOut( );
 
     constructor() {
       super({ startFrom: 'source' });
     }
   }
 
-  test('json', () => {
-    const l = asJson({ level: undefined });
-    expect(l).toStrictEqual({ level: undefined });
-    const s = { ...{ level: 3}, ...{ level: undefined } };
-    expect(s).toStrictEqual({level: undefined});
-    const j = json.merge({ level: 3 }, { level: undefined });
-    expect(j).toStrictEqual({ });
+  test('ignore should remove props also when starting from source', () => {
+    const im = new FromSourceMap();
+    expect(im.in({ level: 3 })).toStrictEqual({});
+    expect(im.out({ level: 3 })).toStrictEqual({});
   });
 
-  test('ignore should remove props also when starting from source', () => {
-    const im = new IgnoreFromSourceMap();
-    expect(im.in({ level: 3 })).toStrictEqual({});
+  test('skipIn removes property in target', () => {
+    const im = new FromSourceMap();
+    expect(im.in({ age: 23 })).toStrictEqual({});
+    expect(im.in({ age: 23, name: 'Sander' })).toStrictEqual({name: 'Sander'});
+    expect(im.in({ something: 'else' })).toStrictEqual({something: 'else'});
+    expect(im.in({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({name: 'Sander', something: 'else'});
+  });
+
+  test('skipOut removes property in target', () => {
+    const im = new FromSourceMap();
+    expect(im.out({ age: 23 })).toStrictEqual({});
+    expect(im.out({ age: 23, name: 'Sander' })).toStrictEqual({age: 23});
+    expect(im.out({ something: 'else' })).toStrictEqual({something: 'else'});
+    expect(im.out({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({age: 23, something: 'else'});
   });
 
   class Business extends Mapper {

@@ -94,6 +94,11 @@ describe('asJson', () => {
     expect(json).toMatchObject({});
   });
 
+  test('value is undefined', () => {
+    const json = asJson({ prop: undefined });
+    expect(json).toMatchObject({ prop: undefined });
+  });
+
   test('target is not Json', () => {
     const j = 'Not a Json';
     expect(asJson(j)).toMatchJson({});
@@ -143,5 +148,22 @@ describe('json', () => {
     const dev4 = json.omit(dev, 'language', 'id', 'state');
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
-});
 
+  test('merge two objects', () => {
+    const j = json.merge({ level: 3 }, { age: 23 });
+    expect(j).toStrictEqual({ level: 3, age: 23 });
+  });
+
+  test('merge entity with object', () => {
+    const j = json.merge(Dev.Wouter, {name: 'Jeroen'});
+    expect(j).toStrictEqual({ ...Dev.Wouter.toJSON(), name: 'Jeroen' });
+  });
+
+  test('merge with key with undefined value', () => {
+    const javascript = { ...{ level: 3 }, ...{ level: undefined } };
+    expect(javascript).toStrictEqual({ level: undefined });
+
+    const j = json.merge({ level: 3 }, { level: undefined });
+    expect(j).toStrictEqual({});
+  });
+});
