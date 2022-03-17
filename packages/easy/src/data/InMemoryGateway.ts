@@ -11,7 +11,7 @@ export class InMemoryGateway extends Gateway {
   }
 
   byId(id: Id): Promise<Json | undefined> {
-    return this.data.then(d => d.first(i => i.id === id)).then(d => (d ? { ...d } : undefined));
+    return this.data.then(d => d.byId(id)).then(d => (d ? { ...d } : undefined));
   }
 
   by = (key: string, value: JsonValue): Promise<List<Json>> => {

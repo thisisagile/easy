@@ -1,5 +1,5 @@
 import { Dev } from '../ref';
-import { asList, Currency, Enum, Id, isEmpty, isList, List, toList, toObject } from '../../src';
+import { asList, Currency, Enum, Id, isEmpty, isList, List, reject, resolve, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -26,6 +26,21 @@ describe('List', () => {
     const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]).mapDefined(d => d.name);
     expect(devs).toBeInstanceOf(List);
     expect(devs).toHaveLength(3);
+  });
+
+
+  test('mapAsync success', async () => {
+    const hello = (d: Dev): Promise<Dev> => resolve(d);
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
+
+    await expect(devs.mapAsync(d => hello(d))).resolves.toMatchText(devs);
+  });
+
+  test('mapAsync rejects', async () => {
+    const hello = (_d: Dev): Promise<Dev> => reject('error');
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
+
+    await expect(devs.mapAsync(d => hello(d))).rejects.toBe('error');
   });
 
   test('filter', () => {
@@ -254,12 +269,31 @@ describe('toList', () => {
 
   test('byId', () => {
     expect(toList()).toHaveLength(0);
-    expect(toList(Currency.all()).byId(42)).toHaveLength(0);
-    expect(toList(Currency.all()).byId(Currency.AUD.id)).toHaveLength(1);
+    expect(toList(Currency.all()).byId(42)).toBeUndefined();
+    expect(toList(Currency.all()).byId(Currency.AUD.id)).toBe(Currency.AUD);
     const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
-    expect(devs.byId(Dev.Sander.id)).toHaveLength(1);
+    expect(devs.byId(Dev.Sander.id)).toBe(Dev.Sander);
     const food = toList('hamburger', 'pizza', 'fries');
-    expect(food.byId(42)).toHaveLength(0);
+    expect(food.byId(42)).toBeUndefined();
+  });
+
+  test('ById with string and number as Id works', () => {
+    const numberAsId: Id = 41;
+    const stringAsId: Id = '41';
+    expect(toList({ id: numberAsId }).byId(stringAsId)).toMatchObject({ id: 41 });
+    expect(toList({ id: stringAsId }).byId(numberAsId)).toMatchObject({ id: '41' });
+    expect(toList({ id: '41' }).byId(numberAsId)).toMatchObject({ id: '41' });
+    expect(toList({ id: '41' }).byId(stringAsId)).toMatchObject({ id: '41' });
+    expect(toList({ id: 41 }).byId(numberAsId)).toMatchObject({ id: 41 });
+    expect(toList({ id: 41 }).byId(stringAsId)).toMatchObject({ id: 41 });
+  });
+
+  test('toList with single number N initializes list with length N', () => {
+    expect(toList(5)).toHaveLength(5);
+    expect(toList(5).first()).toBeUndefined();
+
+    expect(toList([5])).toHaveLength(5);
+    expect(toList([5]).first()).toBeUndefined();
   });
 
   test('remove', () => {
@@ -325,5 +359,32 @@ describe('asList', () => {
     const m = l.map(d => d.name);
     expect(m).toBeInstanceOf(List);
     expect(m).toHaveLength(3);
+  });
+
+  test('sort with two', () => {
+    const list = toList([{ id: 1, name: 'sander' }, { id: 2, name: 'wouter' }, { id: 1, name: 'jeroen' }, {
+      id: 3,
+      name: 'arnold',
+    }]);
+    const sorted = list.asc(i => i.id || i.name);
+    expect(sorted[0].id).toBe(1);
+    expect(sorted[0].name).toBe('jeroen');
+    const sorted2 = list.desc(i => i.id || i.name);
+    expect(sorted2[0].id).toBe(3);
+    expect(sorted2[0].name).toBe('arnold');
+  });
+
+  class Item {
+    readonly amount = 2;
+    readonly quantity = 42;
+  }
+
+  test('Sum', () => {
+    const items = toList(new Item(), new Item());
+    expect(items.sum(() => 42)).toBe(84);
+    expect(items.sum(i => i.quantity)).toBe(84);
+    expect(items.sum(i => i.quantity * i.amount)).toBe(168);
+
+    expect(toList().sum(() => 23)).toBe(0);
   });
 });

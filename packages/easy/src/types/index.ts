@@ -17,6 +17,7 @@ export * from './Json';
 export * from './List';
 export * from './Message';
 export * from './Meta';
+export * from './Number';
 export * from './Result';
 export * from './Results';
 export * from './Tag';

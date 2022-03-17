@@ -1,6 +1,6 @@
 import { Id, text, Text } from '../types';
 
-export class Sentence {
+export class Sentence implements Text {
   constructor(word: Text, pre?: Sentence, private sentence: Text[] = (pre?.sentence ?? []).concat(word)) {}
 
   toString(): string {
@@ -24,6 +24,7 @@ class Verb extends Sentence {
   fetch = new Topic('fetch', this);
   find = new Topic('find', this);
   like = new Topic('like', this);
+  process = new Topic('process', this);
   remove = new Topic('remove', this);
   update = new Topic('update', this);
   validate = new Topic('validate', this);

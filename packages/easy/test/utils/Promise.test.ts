@@ -1,7 +1,6 @@
-import { reject, resolve, toResults, tuple } from '../../src';
+import { reject, resolve, toList, toResults, tuple, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
-import { Id, Json } from '@thisisagile/easy-test/dist/utils/Types';
 
 describe('Promise', () => {
   test('resolve', () => {
@@ -15,20 +14,101 @@ describe('Promise', () => {
   });
 });
 
-describe('tupel', () => {
-  const getName = (name: string): Promise<Json> => resolve({ name });
-  const getLastName = (lastName: string): Promise<Json> => resolve({ lastName });
-  const getId = (id: Id): Promise<Json> => resolve({ id });
+describe('tuple', () => {
 
-  const doStuff = (id: Id): Promise<Json> => {
-    return resolve(id)
-      .then(i => getId(i))
-      .then(j => tuple(j, getName('Sander'), getLastName('Hoogendoorn')))
-      .then(([id, name, lastName]) => ({ ...id, ...name, ...lastName }))
-      .then(({ id, name, lastName }) => ({ id, name, lastName }));
-  };
+  class Dev {
+    constructor(readonly name: string) {
+    }
+    toString(): string { return this.name}
+  }
 
-  test('tupel returns both async and sync params', () => {
-    return expect(doStuff(42)).resolves.toEqual({ id: 42, name: 'Sander', lastName: 'Hoogendoorn' });
+  class Manager {
+    constructor(readonly role: string) {
+    }
+    toString(): string { return this.role}
+  }
+
+  const d = new Dev('Sander');
+  const ceo = new Manager('CEO');
+  const cto = new Manager('CTO');
+
+  const asyncM = (m: Manager): Promise<Manager> => resolve(new Manager(m.role + ' easy'));
+
+  const join = (...people: (Dev | Manager)[]): string => people.map(p => p.toString()).join(' ');
+
+  test('resolve sync tuple', async () => {
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple[2](d, cto))
+      .then(([d, m]) => join(d, m));
+
+    expect(res).toBe('Sander CTO');
   });
+
+  test('resolve sync plus async tuple', async () => {
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple[2](d, asyncM(cto)))
+      .then(([d, m]) => join(d, m));
+
+    expect(res).toBe('Sander CTO easy');
+  });
+
+  test('resolve async tuple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[2](asyncM(c), asyncM(c)))
+      .then(([m, m2]) => join(m, m2));
+
+    expect(res).toBe('CEO easy CEO easy');
+  });
+
+  test('resolve sync and async triple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[3](d, asyncM(c), asyncM(c)))
+      .then(([d, m, m2]) => join(d, m, m2));
+
+    expect(res).toBe('Sander CEO easy CEO easy');
+  });
+
+  test('resolve sync and async quadruple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[4](d, asyncM(c), asyncM(c), d))
+      .then(([, , , d]) => d);
+
+    expect(res).toBeInstanceOf(Dev);
+  });
+
+  test('resolve sync and async quintuple', async () => {
+    const res = await when(ceo)
+      .not.isDefined.reject()
+      .then(c => tuple[5](asyncM(c), d, asyncM(c), asyncM(c), d))
+      .then(([c, , , ,]) => c);
+
+    expect(res).toBeInstanceOf(Manager);
+  });
+
+  test('resolve sync and async array', async () => {
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple.all(d, [asyncM(ceo), asyncM(cto)]))
+      .then(([, ms]) => ms);
+
+    expect(res).toHaveLength(2);
+    expect(res[1]).toBeInstanceOf(Manager);
+  });
+
+  test('resolve sync and async spread', async () => {
+
+    const res = await when(d)
+      .not.isDefined.reject()
+      .then(d => tuple.spread(d, asyncM(ceo), asyncM(cto)))
+      .then(([, ms]) => toList(ms));
+
+    expect(res).toHaveLength(2);
+    expect(res[1]).toBeInstanceOf(Manager);
+  });
+
 });

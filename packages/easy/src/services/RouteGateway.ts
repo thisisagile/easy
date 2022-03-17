@@ -11,12 +11,16 @@ export class RouteGateway extends Gateway {
     return this.api.get(uri).then(r => r.body.data?.items ?? toList());
   }
 
+  getOne(uri: Uri): Promise<Json | undefined> {
+    return this.get(uri).then(r => r.first());
+  }
+
   all(): Promise<List<Json>> {
     return this.get(this.route());
   }
 
   byId(id: Id): Promise<Json | undefined> {
-    return this.get(this.routeId().id(id)).then(r => r.first());
+    return this.getOne(this.routeId().id(id));
   }
 
   search(q: JsonValue): Promise<List<Json>> {

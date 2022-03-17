@@ -1,6 +1,7 @@
 import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, toList } from '../types';
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
+import { ifNotEmpty } from './If';
 
 export type Mapping = {
   property: string;
@@ -19,34 +20,40 @@ export class Mapper extends State implements Mapping {
     super();
   }
 
+  // All properties that are a mapping
   get properties(): List<[string, Mapping]> {
     return this.get('props', () =>
       meta(this)
         .entries<Mapping>()
-        .filter(([, v]) => isMapping(v))
+        .filter(([, v]) => isMapping(v)),
     );
   }
 
+  // All names of properties (in target) that have a Mapping
   get keys(): List<string> {
     return this.get('keys', () => this.properties.map(([k]) => k));
   }
 
+  // All names of properties (in source) that are named in a Mapping
   get columns(): List<string> {
-    return this.get('columns', () => this.properties.map(([, p]) => p.property ?? ''));
+    return this.get('columns', () => this.properties.mapDefined(([, p]) => ifNotEmpty(p.property, p.property))).distinct();
   }
 
+  // All names of properties (in source) that are NOT properties in target
   private get droppedIn(): List<string> {
     return this.get('droppedIn', () => this.columns.filter(c => !this.keys.some(k => k === c)));
   }
 
+  // All names op properties (in target) that are NOT properties in source
   private get droppedOut(): List<string> {
     return this.get('droppedOut', () => this.properties.filter(([, p]) => !this.keys.some(k => k === p.property ?? '')).map(([k]) => k));
   }
 
   public in(from: Json = {}): Json {
     return json.omit(
-      this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }), this.options.startFrom === 'source' ? from : {}),
-      ...this.droppedIn
+      this.properties.reduce((a, [k, p]) => json.merge(a, { [k]: p.in({ ...a, ...from }) }),
+        this.options.startFrom === 'source' ? from : {}),
+      ...this.droppedIn,
     );
   }
 
@@ -54,9 +61,9 @@ export class Mapper extends State implements Mapping {
     return json.omit(
       this.properties.reduce(
         (a, [k, p]) => json.merge(a, isEmpty(p.property) ? p.out(to, k) : { [p.property ?? '']: p.out({ ...a, ...to }, k) }),
-        this.options.startFrom === 'source' ? to : {}
+        this.options.startFrom === 'source' ? to : {},
       ),
-      ...this.droppedOut
+      ...this.droppedOut,
     );
   }
 
@@ -70,6 +77,16 @@ export const mappings = {
   ignore: (property = ''): Mapping => ({
     property,
     in: (): JsonValue | undefined => undefined,
+    out: (): JsonValue | undefined => undefined,
+  }),
+  skipIn: (property : string): Mapping => ({
+    property,
+    in: (): JsonValue | undefined => undefined,
+    out: (source: Json = {}): JsonValue => source[property],
+  }),
+  skipOut: (property: string ): Mapping => ({
+    property,
+    in: (source: Json = {}): JsonValue => source[property],
     out: (): JsonValue | undefined => undefined,
   }),
   func: (property: string, funcIn: Get<JsonValue | undefined, Json>, funcOut: Get<JsonValue | undefined, Json>): Mapping => ({
@@ -97,7 +114,6 @@ export const mappings = {
         return { ...a, [m.property]: out ?? {} };
       }, {}),
   }),
-
   list: (mapper: Mapping, property: string): Mapping => ({
     property: property,
     in: (source: Json = {}): JsonValue =>

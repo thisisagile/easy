@@ -5,6 +5,8 @@ import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
 import { GetProperty, ofProperty } from './Get';
 import { Id } from './Id';
+import { asString } from './Text';
+
 
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
@@ -35,11 +37,15 @@ export class List<T = unknown> extends Array<T> {
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
+  mapAsync = (f: (i: T) => Promise<T>): Promise<List<T>> => Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
+
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
 
-  byId = (id: Id): List<T> => this.filter(i => (i as any).id === id);
+  sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => sum + p(i), 0);
+
+  byId = (id: Id): T => this.first(i => asString((i as any).id) === asString(id));
 
   add = (...items: (T | T[])[]): this => {
     super.push(...toArray(...items));
@@ -67,4 +73,5 @@ export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
-export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
+// export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
+export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));

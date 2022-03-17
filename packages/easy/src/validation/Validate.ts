@@ -36,8 +36,8 @@ const validators = (subject: unknown): List<Validator> =>
 
 const runValidator = (v: Validator, subject?: unknown): Results =>
   tryTo(() => (subject as any)[v.property])
-    .map(actual => v.constraint(actual))
-    .map(res => (isResults(res) ? res : !res ? asResults(subject, v.text, v) : toResults()))
+    .map(actual => [actual, v.constraint(actual)])
+    .map(([actual, res]) => (isResults(res) ? res : !res ? asResults(subject, v.text, { ...v, actual }) : toResults()))
     .recover(e => asResults(subject, asString(e))).value;
 
 const constraints = (subject?: unknown): Results =>

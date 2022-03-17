@@ -9,7 +9,7 @@ export const isJson = (subject?: unknown): subject is { toJSON: () => Json } => 
 
 export const json = {
   parse: (subject: unknown): Json => JSON.parse(JSON.stringify(subject ?? {})),
-  merge: (...subjects: unknown[]): Json => subjects.map(s => json.parse(s)).reduce((js, j) => ({ ...js, ...j }), {}),
+  merge: (...subjects: unknown[]): Json => json.parse(subjects.map(s => asJson(s, s => json.parse(s))).reduce((js, j) => ({ ...js, ...j }), {})),
   omit: (subject: unknown, ...keys: string[]): Json =>
     keys.reduce((js, k) => {
       delete js[k];
@@ -19,4 +19,4 @@ export const json = {
 
 export const toJson = json.merge;
 
-export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt));
+export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt, j));

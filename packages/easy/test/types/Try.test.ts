@@ -1,6 +1,7 @@
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 import { asString, isConstructor, tryTo } from '../../src';
+import { mock } from '@thisisagile/easy-test';
 
 describe('Try', () => {
   const devToId = (d: Dev): string => asString(d.id);
@@ -248,6 +249,22 @@ describe('Try', () => {
         .filter(() => false)
         .orElse(Dev.Wouter)
     ).toBe(Dev.Wouter);
+  });
+
+  // orGet
+
+  test('or function is called', () => {
+    const func = mock.return(3);
+    const res = tryTo(() => 6).filter(b => b !== 6).orElse(func);
+    expect(res).toBe(3);
+    expect(func).toHaveBeenCalled();
+  });
+
+  test('or function is never called', () => {
+    const func = mock.return(3);
+    const res = tryTo(() => 6).filter(b => b === 6).orElse(func);
+    expect(res).toBe(6);
+    expect(func).not.toHaveBeenCalled();
   });
 
   // orThrow
