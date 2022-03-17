@@ -100,7 +100,7 @@ export class MongoProvider {
       .then(i => omitId(i.ops[0]));
   }
 
-  protected safeAdd(o: Json) {
+  safeAdd(o: Json) {
     return omitId(o);
   }
 
