@@ -68,8 +68,8 @@ describe('Mapper', () => {
 
   class FromSourceMap extends Mapper {
     readonly level = this.map.ignore();
-    readonly age = this.map.skipIn();
-    readonly name = this.map.skipOut( );
+    readonly age = this.map.skipIn('age');
+    readonly name = this.map.skipOut('name');
 
     constructor() {
       super({ startFrom: 'source' });
@@ -92,7 +92,7 @@ describe('Mapper', () => {
 
   test('skipOut removes property in target', () => {
     const im = new FromSourceMap();
-    expect(im.out({ age: 23 })).toStrictEqual({});
+    expect(im.out({ name: 'Sander' })).toStrictEqual({});
     expect(im.out({ age: 23, name: 'Sander' })).toStrictEqual({age: 23});
     expect(im.out({ something: 'else' })).toStrictEqual({something: 'else'});
     expect(im.out({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({age: 23, something: 'else'});

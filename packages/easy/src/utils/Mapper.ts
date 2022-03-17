@@ -79,14 +79,14 @@ export const mappings = {
     in: (): JsonValue | undefined => undefined,
     out: (): JsonValue | undefined => undefined,
   }),
-  skipIn: (property = ''): Mapping => ({
+  skipIn: (property : string): Mapping => ({
     property,
     in: (): JsonValue | undefined => undefined,
     out: (source: Json = {}): JsonValue => source[property],
   }),
-  skipOut: (property = ''): Mapping => ({
+  skipOut: (property: string ): Mapping => ({
     property,
-    in: (source: Json = {}, key = ''): JsonValue => source[key],
+    in: (source: Json = {}): JsonValue => source[property],
     out: (): JsonValue | undefined => undefined,
   }),
   func: (property: string, funcIn: Get<JsonValue | undefined, Json>, funcOut: Get<JsonValue | undefined, Json>): Mapping => ({
