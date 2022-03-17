@@ -3,7 +3,7 @@ import { MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { DateTime, Exception, toCondition } from "@thisisagile/easy";
+import { DateTime, Exception, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -119,6 +119,14 @@ describe('MongoProvider', () => {
     expect(c.insertOne).toHaveBeenCalledWith(devData.jeroen);
   });
 
+  test('add sanitizes input / output', async () => {
+    const d = { _id: '1', name: 'test' };
+    c.insertOne = mock.resolve({ ops: [d] });
+    provider.collection = mock.resolve(c);
+    await expect(provider.add(d)).resolves.toStrictEqual({ name: 'test' });
+    expect(c.insertOne).toHaveBeenCalledWith({ name: 'test' });
+  });
+
   test('update calls updateOne on the collection and the byId to return the modified item', async () => {
     c.updateOne = mock.resolve();
     provider.collection = mock.resolve(c);
@@ -127,11 +135,11 @@ describe('MongoProvider', () => {
     expect(c.updateOne).toHaveBeenCalledWith({ id: Dev.Jeroen.id }, { $set: Dev.Jeroen.toJSON() });
   });
 
-  test('toMongoJson', async () => {
-    const q = {Id: {$eq: 42}};
+  test('toMongoJson', () => {
+    const q = { Id: { $eq: 42 } };
     expect(provider.toMongoJson(q)).toEqual(q);
     expect(provider.toMongoJson(toCondition('Id', 'eq', 42))).toEqual(q);
-    expect(provider.toMongoJson(collection.id.is(42).and(collection.name.is('sander')))).toEqual({$and: [q, {Name: {$eq: 'sander'}} ]});
+    expect(provider.toMongoJson(collection.id.is(42).and(collection.name.is('sander')))).toEqual({ $and: [q, { Name: { $eq: 'sander' } }] });
   });
 
   test('remove calls deleteOne on the collection', async () => {

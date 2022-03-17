@@ -64,7 +64,7 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
-  find( query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
+  find(query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
       .then(c => c.find(this.toMongoJson(query), { ...options, limit: options.limit ?? 250 }))
       .then(res => res.toArray())
@@ -96,8 +96,12 @@ export class MongoProvider {
 
   add(o: Json): Promise<Json> {
     return this.collection()
-      .then(c => c.insertOne(omitId(o)))
+      .then(c => c.insertOne(this.safeAdd(o)))
       .then(i => omitId(i.ops[0]));
+  }
+
+  protected safeAdd(o: Json) {
+    return omitId(o);
   }
 
   update(item: Json): Promise<Json> {
