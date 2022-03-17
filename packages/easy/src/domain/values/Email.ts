@@ -17,6 +17,4 @@ export class Email extends Value {
 
 export const email = (email?: unknown): Email => new Email(email);
 
-export const isEmail = (email?: unknown): boolean => {
-  return !isEmpty(email) && validator.isEmail(asString(email));
-};
+export const isEmail = (e?: unknown): boolean => !isEmpty(e) && validator.isEmail(asString(e));
