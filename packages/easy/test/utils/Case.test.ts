@@ -1,4 +1,4 @@
-import { choose, isEmpty } from '../../src';
+import { choose, isEmpty, isObject, isString } from '../../src';
 import { Dev } from '../ref';
 
 describe('Case', () => {
@@ -49,5 +49,17 @@ describe('Case', () => {
     expect(which('an')).toMatchObject(Dev.Naoufal);
     expect(which('San')).toMatchObject(Dev.Naoufal);
     expect(which('Kim')).toMatchObject(Dev.Wouter);
+  });
+
+  const typeIt = (a: unknown): string =>
+    choose<string>(a)
+      .type(isString, 'A string')
+      .type(isObject, 'An object')
+      .else('None');
+
+  test('Testing type', () => {
+    expect(typeIt(undefined)).toBe('None');
+    expect(typeIt('hoi')).toBe('A string');
+    expect(typeIt(Dev.Naoufal)).toBe('An object');
   });
 });
