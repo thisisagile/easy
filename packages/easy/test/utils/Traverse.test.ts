@@ -7,6 +7,10 @@ describe('traverse', () => {
     expect(traverse(undefined, '')).toBeUndefined();
   });
 
+  test('traverse with undefined property', () => {
+    expect(traverse(Dev.Jeroen, undefined as unknown as string)).toBeUndefined();
+  });
+
   test('traverse with empty property', () => {
     expect(traverse(Dev.Jeroen, '')).toBeUndefined();
   });
