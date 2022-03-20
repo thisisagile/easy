@@ -48,8 +48,8 @@ describe('View', () => {
     expect(isInOut({})).toBeFalsy();
     expect(isInOut({ in: {} })).toBeFalsy();
     expect(isInOut({ out: {} })).toBeFalsy();
-    expect(isInOut({ in: () => '' })).toBeTruthy();
-    expect(isInOut({ in: v })).toBeTruthy();
+    expect(isInOut({ in: () => '' })).toBeFalsy();
+    expect(isInOut({ in: v })).toBeFalsy();
     expect(isInOut({ in: v, col: 'name' })).toBeTruthy();
   });
 
@@ -89,5 +89,10 @@ describe('View', () => {
   test('toViewers with an InOut, but only in', () => {
     const vs = toViewers({ first: { in: a => a.Name.First } });
     expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  });
+
+  test('toViewers with an InOut, with col and in', () => {
+    const vs = toViewers({ first: { col: 'Company.Name', in: a => a.toUpperCase() } });
+    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toBe('DITISAGILE');
   });
 });
