@@ -1,4 +1,5 @@
 import { asJson, isFunction, isObject, meta, tryTo } from '../types';
+import { traverse } from './Traverse';
 
 type Func<T = unknown> = (a: any) => T;
 
@@ -11,7 +12,7 @@ export type Viewer = { in?: { key: string, f?: Func }};
 export const toViewers = (views: Views): Viewer[] =>
   meta(views)
     .entries()
-    .map(([key, v]) => ({in: {key, f: a => a[v as string]}}));
+    .map(([key, v]) => ({in: {key, f: a => traverse(a, v as string)}}));
 
 export class View {
   constructor(views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {

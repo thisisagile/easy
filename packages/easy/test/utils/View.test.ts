@@ -57,11 +57,18 @@ describe('View', () => {
     expect(toViewers({})).toHaveLength(0);
   });
 
-  test('toViewers simple column', () => {
+  test('toViewers string column', () => {
     const vs = toViewers({ first: 'FirstName' });
     expect(vs).toHaveLength(1);
     expect(vs[0]?.in?.key).toBe('first');
     expect(vs[0]?.in?.f && vs[0].in.f({ FirstName: 'Sander' })).toBe('Sander');
+  });
+
+  test('toViewers string column with dot notation', () => {
+    const vs = toViewers({ first: 'Name.First' });
+    expect(vs).toHaveLength(1);
+    expect(vs[0]?.in?.key).toBe('first');
+    expect(vs[0]?.in?.f && vs[0].in.f({ Name: {First: 'Sander' } })).toBe('Sander');
   });
 
 });
