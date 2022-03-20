@@ -22,14 +22,22 @@ describe('View', () => {
     expect(v.from).toBe('source');
   });
 
-  const persons = view({
-    first: 'FirstName'
-  }, 'source');
 
   test('construct with actual view', () => {
+    const persons = view({ first: 'FirstName' });
     expect(persons.views).toHaveLength(0);
-    expect(persons.from).toBe('source');
+    expect(persons.from).toBe('scratch');
   });
 
+  test('from scratch and from source', () => {
+    const source = {
+      FirstName: 'Sander',
+      LastName: 'H',
+    };
+    const fromScratch = view({}, 'scratch');
+    const fromSource = view({}, 'source');
+    expect(fromScratch.in(source)).toStrictEqual({});
+    expect(fromSource.in(source)).toStrictEqual(source);
+  });
 
 });
