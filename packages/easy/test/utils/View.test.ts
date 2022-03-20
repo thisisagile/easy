@@ -91,8 +91,20 @@ describe('View', () => {
     expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
   });
 
-  test('toViewers with an InOut, with col and in', () => {
+  test('toViewers with an InOut, with col and function in', () => {
     const vs = toViewers({ first: { col: 'Company.Name', in: a => a.toUpperCase() } });
     expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toBe('DITISAGILE');
+  });
+
+  test('toViewers with an InOut, with col and view in', () => {
+    const v = view({name: 'Name'});
+    const vs = toViewers({ first: { col: 'Company', in: v } });
+    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toStrictEqual({name: "ditisagile"});
+  });
+
+  test('toViewers with an InOut, with col and extra view in', () => {
+    const v = view({name: {col: 'Name', in: a => a.toUpperCase()}});
+    const vs = toViewers({ first: { col: 'Company', in: v } });
+    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toStrictEqual({name: "DITISAGILE"});
   });
 });
