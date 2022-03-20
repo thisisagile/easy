@@ -68,17 +68,21 @@ describe('View', () => {
 
   test('toViewers string column with dot notation', () => {
     const vs = toViewers({ first: 'Name.First' });
-    expect(call(vs[0]?.in?.f, { Name: {First: 'Sander' } })).toBe('Sander');
+    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
   });
 
   test('toViewers string column with function', () => {
     const vs = toViewers({ first: a => a.Name.First.toUpperCase() });
-    expect(call(vs[0]?.in?.f, { Name: {First: 'Sander' } })).toBe('SANDER');
+    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('SANDER');
   });
 
   test('toViewers string column with array function', () => {
     const vs = toViewers({ scopes: a => a.Scopes.map((s: string) => s.toUpperCase()) });
-    expect(call(vs[0]?.in?.f, { Scopes: ['tech', 'support', 'hr'] })).toStrictEqual(['TECH', 'SUPPORT', 'HR'] );
+    expect(call(vs[0]?.in?.f, { Scopes: ['tech', 'support', 'hr'] })).toStrictEqual(['TECH', 'SUPPORT', 'HR']);
   });
 
+  test('toViewers with an InOut', () => {
+    const vs = toViewers({ first: { col: 'Name.First' } });
+    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  });
 });
