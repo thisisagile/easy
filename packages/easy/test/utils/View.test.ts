@@ -22,4 +22,14 @@ describe('View', () => {
     expect(v.from).toBe('source');
   });
 
+  const persons = view({
+    first: 'FirstName'
+  }, 'source');
+
+  test('construct with actual view', () => {
+    expect(persons.views).toHaveLength(0);
+    expect(persons.from).toBe('source');
+  });
+
+
 });
