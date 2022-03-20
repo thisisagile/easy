@@ -5,3 +5,5 @@ export class View {
   constructor(readonly views: Viewer[] = [], readonly from: 'scratch' | 'source' = 'scratch') {
   }
 }
+
+export const view = (map: unknown, from?: 'scratch' | 'source'): View => new View([], from);
