@@ -1,5 +1,6 @@
-import { asJson, isFunction, isObject, meta, tryTo } from '../types';
+import { asJson, isFunction, isObject, isString, meta, tryTo } from '../types';
 import { traverse } from './Traverse';
+import { choose } from './Case';
 
 type Func<T = unknown> = (a: any) => T;
 
@@ -9,10 +10,16 @@ export const isInOut = (v: unknown): v is InOut => isObject(v) && (isFunction(v.
 export type Views = { [key: string]: string | Func | InOut };
 export type Viewer = { in?: { key: string, f?: Func }};
 
+const toViewer = (key: string, value: unknown): Viewer =>
+  choose<Viewer>(value)
+    .type(isString, s => toViewer(key, (a: any) => traverse(a, s)))
+    .type(isFunction, f => toViewer(key, { in: { key, f } }))
+    .else(m => m as Viewer);
+
 export const toViewers = (views: Views): Viewer[] =>
   meta(views)
     .entries()
-    .map(([key, v]) => ({in: {key, f: a => traverse(a, v as string)}}));
+    .map(([k, v]) => toViewer(k, v));
 
 export class View {
   constructor(views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
