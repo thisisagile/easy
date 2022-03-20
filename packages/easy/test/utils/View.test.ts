@@ -7,26 +7,26 @@ describe('View', () => {
 
   test('construct default view', () => {
     const v = new View();
-    expect(v.views).toHaveLength(0);
+    expect(v.viewers).toHaveLength(0);
     expect(v.startsFrom).toBe('scratch');
   });
 
   test('construct non-default view', () => {
-    const v = new View([{}], 'source');
-    expect(v.views).toHaveLength(1);
+    const v = new View({}, 'source');
+    expect(v.viewers).toHaveLength(0);
     expect(v.startsFrom).toBe('source');
   });
 
   test('construct from view()', () => {
     const v = view({}, 'source');
-    expect(v.views).toHaveLength(0);
+    expect(v.viewers).toHaveLength(0);
     expect(v.startsFrom).toBe('source');
   });
 
 
   test('construct with actual view', () => {
     const persons = view({ first: 'FirstName' });
-    expect(persons.views).toHaveLength(0);
+    expect(persons.viewers).toHaveLength(0);
     expect(persons.startsFrom).toBe('scratch');
   });
 
