@@ -6,6 +6,8 @@ type Func<T = unknown> = (a: any) => T;
 
 export type InOut = { in?: Func | View, col?: string };
 export const isInOut = (v: unknown): v is InOut => isObject(v) && (isDefined(v.col) || isFunction(v.in) || v.in instanceof View);
+export const isColOnly = (v: unknown): v is InOut => isObject(v) && isDefined(v.col) && !isDefined(v.in);
+export const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) && isFunction(v.in);
 
 export type Views = { [key: string]: string | Func | InOut };
 export type Viewer = { in?: { key: string, f?: Func } };
@@ -15,12 +17,16 @@ const toFunc = (a: unknown, key: string, io: InOut): Func =>
     .case(i => isDefined(i.col) && !isDefined(i.in), (i: InOut) => (a: any) => traverse(a, i.col))
     .else(() => undefined);
 
-const toViewer = (key: string, value: unknown): Viewer =>
-  choose<Viewer>(value)
+const toViewer = (key: string, value: unknown): Viewer => {
+  console.log(key, value);
+  return choose<Viewer>(value)
     .type(isString, s => toViewer(key, (a: any) => traverse(a, s)))
+    .type(isColOnly, io => toViewer(key, io.col))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
-    .type(isInOut, io => toViewer(key, (a: any) => toFunc(a, key, io)(a)))
+    .type(isInOnly, io => toViewer(key, { in: { key, f: io.in } }))
+    // .type(isInOut, io => toViewer(key, (a: any) => toFunc(a, key, io)(a)))
     .else(m => m as Viewer);
+};
 
 export const toViewers = (views: Views): Viewer[] =>
   meta(views)

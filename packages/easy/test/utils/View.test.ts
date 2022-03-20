@@ -81,8 +81,13 @@ describe('View', () => {
     expect(call(vs[0]?.in?.f, { Scopes: ['tech', 'support', 'hr'] })).toStrictEqual(['TECH', 'SUPPORT', 'HR']);
   });
 
-  test('toViewers with an InOut', () => {
+  test('toViewers with an InOut, but only col', () => {
     const vs = toViewers({ first: { col: 'Name.First' } });
+    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  });
+
+  test('toViewers with an InOut, but only in', () => {
+    const vs = toViewers({ first: { in: a => a.Name.First } });
     expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
   });
 });
