@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { View, view } from '../../src';
+import { isInOut, View, view } from '../../src';
 
 
 describe('View', () => {
@@ -39,5 +39,18 @@ describe('View', () => {
     expect(fromScratch.in(source)).toStrictEqual({});
     expect(fromSource.in(source)).toStrictEqual(source);
   });
+
+  test('isInOut', () => {
+    const v = view({});
+    expect(isInOut(undefined)).toBeFalsy();
+    expect(isInOut({})).toBeFalsy();
+    expect(isInOut({in: {}})).toBeFalsy();
+    expect(isInOut({out: {}})).toBeFalsy();
+    expect(isInOut({in: () => ''})).toBeTruthy();
+    expect(isInOut({out: () => ''})).toBeTruthy();
+    expect(isInOut({in: v})).toBeTruthy();
+    expect(isInOut({out: v})).toBeTruthy();
+    expect(isInOut({in: v, out: v, col: 'name'})).toBeTruthy();
+  })
 
 });
