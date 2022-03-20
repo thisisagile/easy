@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { isInOut, View, view } from '../../src';
+import { isInOut, toViewers, View, view } from '../../src';
 import { Dev } from '../ref';
 
 
@@ -26,7 +26,7 @@ describe('View', () => {
 
   test('construct with actual view', () => {
     const persons = view({ first: 'FirstName' });
-    expect(persons.viewers).toHaveLength(0);
+    expect(persons.viewers).toHaveLength(1);
     expect(persons.startsFrom).toBe('scratch');
   });
 
@@ -46,11 +46,22 @@ describe('View', () => {
     const v = view({});
     expect(isInOut(undefined)).toBeFalsy();
     expect(isInOut({})).toBeFalsy();
-    expect(isInOut({in: {}})).toBeFalsy();
-    expect(isInOut({out: {}})).toBeFalsy();
-    expect(isInOut({in: () => ''})).toBeTruthy();
-    expect(isInOut({in: v})).toBeTruthy();
-    expect(isInOut({in: v, col: 'name'})).toBeTruthy();
-  })
+    expect(isInOut({ in: {} })).toBeFalsy();
+    expect(isInOut({ out: {} })).toBeFalsy();
+    expect(isInOut({ in: () => '' })).toBeTruthy();
+    expect(isInOut({ in: v })).toBeTruthy();
+    expect(isInOut({ in: v, col: 'name' })).toBeTruthy();
+  });
+
+  test('toViewers empty', () => {
+    expect(toViewers({})).toHaveLength(0);
+  });
+
+  test('toViewers simple column', () => {
+    const vs = toViewers({ first: 'FirstName' });
+    expect(vs).toHaveLength(1);
+    expect(vs[0]?.in?.key).toBe('first');
+    expect(vs[0]?.in?.f && vs[0].in.f({ FirstName: 'Sander' })).toBe('Sander');
+  });
 
 });
