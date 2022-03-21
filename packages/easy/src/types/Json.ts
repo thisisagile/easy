@@ -1,5 +1,5 @@
 import { isA } from './IsA';
-import { isObject } from './Is';
+import { isDefined, isObject } from './Is';
 import { Get, ofGet } from './Get';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
@@ -15,6 +15,7 @@ export const json = {
       delete js[k];
       return js;
     }, json.parse(subject)),
+  add: (subject: Json, key: string, value?: unknown): Json => isDefined(value) ? ({ ...subject, ...{ [key]: value as Json } }) : subject,
 };
 
 export const toJson = json.merge;
