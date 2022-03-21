@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { isInOut, toViewers, View, view } from '../../src';
+import { toViewers, View, view } from '../../src';
 import { Dev } from '../ref';
 
 
@@ -42,69 +42,56 @@ describe('View', () => {
     expect(fromSource.from(Dev.Wouter)).toStrictEqual(Dev.Wouter.toJSON());
   });
 
-  test('isInOut', () => {
-    const v = view({});
-    expect(isInOut(undefined)).toBeFalsy();
-    expect(isInOut({})).toBeFalsy();
-    expect(isInOut({ in: {} })).toBeFalsy();
-    expect(isInOut({ out: {} })).toBeFalsy();
-    expect(isInOut({ in: () => '' })).toBeFalsy();
-    expect(isInOut({ in: v })).toBeFalsy();
-    expect(isInOut({ in: v, col: 'name' })).toBeTruthy();
-  });
-
   test('toViewers empty', () => {
     expect(toViewers({})).toHaveLength(0);
   });
 
-  const call = (f?: (a: any) => unknown, a?: any): unknown => f && f(a);
-
-  test('toViewers string column', () => {
-    const vs = toViewers({ first: 'FirstName' });
-    expect(vs).toHaveLength(1);
-    expect(vs[0]?.in?.key).toBe('first');
-    expect(call(vs[0]?.in?.f, { FirstName: 'Sander' })).toBe('Sander');
+  test('view string column', () => {
+    const v = view({ first: 'FirstName' });
+    expect(v.viewers).toHaveLength(1);
+    expect(v.viewers[0]?.in?.key).toBe('first');
+    expect(v.from({ FirstName: 'Sander' })).toStrictEqual({ first: 'Sander' });
   });
 
-  test('toViewers string column with dot notation', () => {
-    const vs = toViewers({ first: 'Name.First' });
-    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  test('view string column with dot notation', () => {
+    const v = view({ first: 'Name.FirstName' });
+    expect(v.from({ Name: { FirstName: 'Sander' } })).toStrictEqual({ first: 'Sander' });
   });
 
-  test('toViewers string column with function', () => {
-    const vs = toViewers({ first: a => a.Name.First.toUpperCase() });
-    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('SANDER');
+  test('view string column with function', () => {
+    const v = view({ first: a => a.Name.First.toUpperCase() });
+    expect(v.from({ Name: { First: 'Sander' } })).toStrictEqual({ first: 'SANDER' });
   });
 
-  test('toViewers string column with array function', () => {
-    const vs = toViewers({ scopes: a => a.Scopes.map((s: string) => s.toUpperCase()) });
-    expect(call(vs[0]?.in?.f, { Scopes: ['tech', 'support', 'hr'] })).toStrictEqual(['TECH', 'SUPPORT', 'HR']);
+  test('view string column with array function', () => {
+    const v = view({ scopes: a => a.Scopes.map((s: string) => s.toUpperCase()) });
+    expect(v.from({ Scopes: ['tech', 'support', 'hr'] })).toStrictEqual({ scopes: ['TECH', 'SUPPORT', 'HR'] });
   });
 
-  test('toViewers with an InOut, but only col', () => {
-    const vs = toViewers({ first: { col: 'Name.First' } });
-    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  test('view with an InOut, but only col', () => {
+    const v = view({ first: { col: 'Name.First' } });
+    expect(v.from({ Name: { First: 'Sander' } })).toStrictEqual({ first: 'Sander' });
   });
 
-  test('toViewers with an InOut, but only in', () => {
-    const vs = toViewers({ first: { in: a => a.Name.First } });
-    expect(call(vs[0]?.in?.f, { Name: { First: 'Sander' } })).toBe('Sander');
+  test('view with an InOut, but only in', () => {
+    const v = view({ first: { in: a => a.Name.First } });
+    expect(v.from({ Name: { First: 'Sander' } })).toStrictEqual({ first: 'Sander' });
   });
 
-  test('toViewers with an InOut, with col and function in', () => {
-    const vs = toViewers({ first: { col: 'Company.Name', in: a => a.toUpperCase() } });
-    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toBe('DITISAGILE');
+  test('view with an InOut, with col and function in', () => {
+    const v = view({ first: { col: 'Company.Name', in: a => a.toUpperCase() } });
+    expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: 'DITISAGILE' });
   });
 
-  test('toViewers with an InOut, with col and view in', () => {
-    const v = view({name: 'Name'});
-    const vs = toViewers({ first: { col: 'Company', in: v } });
-    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toStrictEqual({name: "ditisagile"});
+  test('view with an InOut, with col and view in', () => {
+    const v2 = view({ name: 'Name' });
+    const v = view({ first: { col: 'Company', in: v2 } });
+    expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'ditisagile' } });
   });
 
-  test('toViewers with an InOut, with col and extra view in', () => {
-    const v = view({name: {col: 'Name', in: a => a.toUpperCase()}});
-    const vs = toViewers({ first: { col: 'Company', in: v } });
-    expect(call(vs[0]?.in?.f, { Company: { Name: 'ditisagile' } })).toStrictEqual({name: "DITISAGILE"});
+  test('view with an InOut, with col and view in with col and function', () => {
+    const v2 = view({ name: { col: 'Name', in: a => a.toUpperCase() } });
+    const v = view({ first: { col: 'Company', in: v2 } });
+    expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
 });

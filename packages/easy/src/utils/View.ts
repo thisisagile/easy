@@ -5,26 +5,26 @@ import { choose } from './Case';
 type Func<T = unknown> = (a: any) => T;
 
 export type InOut = { in?: Func | View, col?: string };
-export const isInOut = (v: unknown): v is InOut => isObject(v) && isDefined(v.col) && (isFunction(v.in) || v.in instanceof View);
 export const isColOnly = (v: unknown): v is InOut => isObject(v) && isDefined(v.col) && !isDefined(v.in);
 export const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) && isFunction(v.in);
+export const isInOutWithFunction = (v: unknown): v is { col: string, in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
+export const isInOutWithView = (v: unknown): v is { col: string, in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
 export type Views = { [key: string]: string | Func | InOut };
 export type Viewer = { in?: { key: string, f?: Func } };
 
-const toFunc = (a: unknown, key: string, io: InOut): Func =>
-  choose<Func, InOut>(io)
-    .case(i => isDefined(i.col) && !isDefined(i.in), (i: InOut) => (a: any) => traverse(a, i.col))
-    .else(() => undefined);
-
-const toViewer = (key: string, value: unknown): Viewer =>
-  choose<Viewer>(value)
+const toViewer = (key: string, value: unknown): Viewer => {
+  const k = key;
+  const v = value;
+  return choose<Viewer>(value)
     .type(isString, s => toViewer(key, (a: any) => traverse(a, s)))
     .type(isColOnly, io => toViewer(key, io.col))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
     .type(isInOnly, io => toViewer(key, { in: { key, f: io.in } }))
-    .type(isInOut, io => toViewer(key, (a: any) => io?.in && (io.in instanceof View ? io.in.from(traverse(a, io.col)) : io.in(traverse(a, io.col)))))
+    .type(isInOutWithFunction, io => toViewer(key, { in: { key, f: (a: any) => io.in(traverse(a, io.col)) }}))
+    .type(isInOutWithView, io => toViewer(key, { in: { key, f: (a: any) => io.in.from(traverse(a, io.col)) }}))
     .else(m => m as Viewer);
+};
 
 export const toViewers = (views: Views): Viewer[] =>
   meta(views)
