@@ -11,6 +11,7 @@ import {
   mappings,
   ofGet,
   PropertyOptions,
+  SortCondition,
   Text,
   toCondition,
   toUuid,
@@ -54,6 +55,12 @@ export class Collection extends Mapper {
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
   search = (key: Text): Field => this.map.field(asString(key));
+
+  sort = (...conditions: SortCondition[]): Json =>
+    conditions.reduce((cs: any, c) => {
+      cs[c.key] = c.value;
+      return cs;
+    }, {});
 
   out(to: Json = {}): Json {
     return toMongoType(super.out(to));
