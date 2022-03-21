@@ -37,7 +37,7 @@ export class View {
 
   reduce = (i: any): any => this.viewers.reduce((a: any, v) => json.add(a, v.in.key, v.in.f(i)), this.startsFrom === 'scratch' ? {} : i);
 
-  from = (source: unknown): Json[] | Json => tryTo(asJson(source)).map(s => isArray(s) ? s.map(i => this.reduce(i)) : this.reduce(s)).value;
+  from = (source: unknown): Json[] | Json => isArray(source) ? source.map(s => this.reduce(asJson(s))): this.reduce(asJson(source));
 }
 
 export const view = (views: Views, startsFrom?: 'scratch' | 'source'): View => new View(views, startsFrom);

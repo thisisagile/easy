@@ -2,7 +2,6 @@ import '@thisisagile/easy-test';
 import { View, view } from '../../src';
 import { Dev } from '../ref';
 
-
 describe('View', () => {
 
   test('construct default view', () => {
@@ -107,22 +106,25 @@ describe('View', () => {
 
   test('view with an InOut, with col and view in on an array', () => {
     const divisions = view({ name: { col: 'Name', in: a => a.toUpperCase() } });
-    const company = view({ name: 'Company.Name', divisions: {col: 'Company.Divisions', in: divisions }});
+    const company = view({ name: 'Company.Name', divisions: { col: 'Company.Divisions', in: divisions } });
     expect(company.from({
       Company: {
         Name: 'ditisagile',
-        Divisions: [{ Name: 'Tech' }, { Name: 'Support'}, {Name: 'HR'}],
+        Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
       },
     })).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
   test('with one entity', () => {
-    const devs = view({name: 'name', language: {col: 'language', in: l => l.toUpperCase() }});
-    expect(devs.from(Dev.Rob)).toStrictEqual({ name: 'Rob', language: 'TYPESCRIPT'});
-  })
+    const devs = view({ name: 'name', language: { col: 'language', in: l => l.toUpperCase() } });
+    expect(devs.from(Dev.Rob)).toStrictEqual({ name: 'Rob', language: 'TYPESCRIPT' });
+  });
 
   test('with multiple entity', () => {
-    const devs = view({name: 'name', language: {col: 'language', in: l => l.toUpperCase() }});
-    expect(devs.from([Dev.Rob, Dev.Jeroen])).toStrictEqual([{ name: 'Rob', language: 'TYPESCRIPT'}, { name: 'Jeroen', language: 'TYPESCRIPT'}]);
-  })
+    const devs = view({ name: 'name', language: { col: 'language', in: l => l.toUpperCase() } });
+    expect(devs.from([Dev.Rob, Dev.Jeroen])).toStrictEqual([{ name: 'Rob', language: 'TYPESCRIPT' }, {
+      name: 'Jeroen',
+      language: 'TYPESCRIPT',
+    }]);
+  });
 });
