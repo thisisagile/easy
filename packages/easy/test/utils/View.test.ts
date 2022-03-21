@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { toViewers, View, view } from '../../src';
+import { View, view } from '../../src';
 import { Dev } from '../ref';
 
 
@@ -43,7 +43,7 @@ describe('View', () => {
   });
 
   test('toViewers empty', () => {
-    expect(toViewers({})).toHaveLength(0);
+    expect(view({}).viewers).toHaveLength(0);
   });
 
   test('view string column', () => {
@@ -115,4 +115,14 @@ describe('View', () => {
       },
     })).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
+
+  test('with one entity', () => {
+    const devs = view({name: 'name', language: {col: 'language', in: l => l.toUpperCase() }});
+    expect(devs.from(Dev.Rob)).toStrictEqual({ name: 'Rob', language: 'TYPESCRIPT'});
+  })
+
+  test('with multiple entity', () => {
+    const devs = view({name: 'name', language: {col: 'language', in: l => l.toUpperCase() }});
+    expect(devs.from([Dev.Rob, Dev.Jeroen])).toStrictEqual([{ name: 'Rob', language: 'TYPESCRIPT'}, { name: 'Jeroen', language: 'TYPESCRIPT'}]);
+  })
 });
