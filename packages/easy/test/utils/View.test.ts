@@ -94,4 +94,6 @@ describe('View', () => {
     const v = view({ first: { col: 'Company', in: v2 } });
     expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
+
+
 });

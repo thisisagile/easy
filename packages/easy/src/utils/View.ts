@@ -13,16 +13,18 @@ export const isInOutWithView = (v: unknown): v is { col: string, in: View } => i
 export type Views = { [key: string]: string | Func | InOut };
 export type Viewer = { in?: { key: string, f?: Func } };
 
+const toFunc = (a: any, col: string, f: Func = a => a): Func => a => f(traverse(a, col));
+
 const toViewer = (key: string, value: unknown): Viewer => {
   const k = key;
   const v = value;
   return choose<Viewer>(value)
-    .type(isString, s => toViewer(key, (a: any) => traverse(a, s)))
+    .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
     .type(isColOnly, io => toViewer(key, io.col))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
     .type(isInOnly, io => toViewer(key, { in: { key, f: io.in } }))
-    .type(isInOutWithFunction, io => toViewer(key, { in: { key, f: (a: any) => io.in(traverse(a, io.col)) }}))
-    .type(isInOutWithView, io => toViewer(key, { in: { key, f: (a: any) => io.in.from(traverse(a, io.col)) }}))
+    .type(isInOutWithFunction, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in)(a) }}))
+    .type(isInOutWithView, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in.from)(a) }}))
     .else(m => m as Viewer);
 };
 
