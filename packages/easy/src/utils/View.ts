@@ -1,4 +1,4 @@
-import { asJson, isDefined, isFunction, isObject, isString, meta, tryTo } from '../types';
+import { asJson, isArray, isDefined, isFunction, isObject, isString, meta, tryTo } from '../types';
 import { traverse } from './Traverse';
 import { choose } from './Case';
 
@@ -13,7 +13,10 @@ export const isInOutWithView = (v: unknown): v is { col: string, in: View } => i
 export type Views = { [key: string]: string | Func | InOut };
 export type Viewer = { in?: { key: string, f?: Func } };
 
-const toFunc = (a: any, col: string, f: Func = a => a): Func => a => f(traverse(a, col));
+const toFunc = (a: any, col: string, f: Func = a => a): Func =>
+  tryTo(traverse(a, col))
+    .map(v => isArray(v) ? () => v.map(i => f(i)):  (a: any) => f(traverse(a, col)))
+    .value;
 
 const toViewer = (key: string, value: unknown): Viewer => {
   const k = key;
@@ -23,8 +26,8 @@ const toViewer = (key: string, value: unknown): Viewer => {
     .type(isColOnly, io => toViewer(key, io.col))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
     .type(isInOnly, io => toViewer(key, { in: { key, f: io.in } }))
-    .type(isInOutWithFunction, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in)(a) }}))
-    .type(isInOutWithView, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in.from)(a) }}))
+    .type(isInOutWithFunction, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in)(a) } }))
+    .type(isInOutWithView, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in.from)(a) } }))
     .else(m => m as Viewer);
 };
 

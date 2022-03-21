@@ -79,8 +79,8 @@ describe('View', () => {
   });
 
   test('view with an InOut, with col and function in', () => {
-    const v = view({ first: { col: 'Company.Name', in: a => a.toUpperCase() } });
-    expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: 'DITISAGILE' });
+    const v = view({ first: { col: 'Company.Title', in: a => a.toUpperCase() } });
+    expect(v.from({ Company: { Title: 'ditisagile' } })).toStrictEqual({ first: 'DITISAGILE' });
   });
 
   test('view with an InOut, with col and view in', () => {
@@ -95,5 +95,24 @@ describe('View', () => {
     expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
 
+  test('view with an InOut, with col and function in on an array', () => {
+    const v = view({ name: 'Company.Name', divisions: { col: 'Company.Divisions', in: a => a.toUpperCase() } });
+    expect(v.from({
+      Company: {
+        Name: 'ditisagile',
+        Divisions: ['Tech', 'Support', 'HR'],
+      },
+    })).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
+  });
 
+  test('view with an InOut, with col and view in on an array', () => {
+    const divisions = view({ name: { col: 'Name', in: a => a.toUpperCase() } });
+    const company = view({ name: 'Company.Name', divisions: {col: 'Company.Divisions', in: divisions }});
+    expect(company.from({
+      Company: {
+        Name: 'ditisagile',
+        Divisions: [{ Name: 'Tech' }, { Name: 'Support'}, {Name: 'HR'}],
+      },
+    })).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
+  });
 });
