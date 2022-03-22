@@ -33,6 +33,10 @@ export class Found<T, V> extends Case<T, V> {
     return this;
   }
 
+  type<U>(pred: (v: unknown) => v is U, out: Get<T, U>): Case<T, V> {
+   return this;
+  }
+
   else(alt: Get<T, V>): T {
     return this.outcome;
   }
