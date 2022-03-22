@@ -38,9 +38,7 @@ export const rest = {
         p => isResult(p) || isError(p),
         p => rest.toError(status ?? HttpStatus.BadRequest, [p])
       )
-      .case(
-        p => isResults(p),
-        p => rest.toError(status ?? HttpStatus.BadRequest, p.results)
+      .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results)
       )
       .case(
         p => isResponse(p),
