@@ -46,13 +46,15 @@ const toViewers = (views: Views): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View {
-  constructor(views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
+  constructor(private views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
   }
 
   from = (source: unknown): Json => isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source));
 
   private reduce = (i: any): any => this.viewers.reduce((a: any, v) => json.set(a, v.in.key, v.in.f(i)), this.startsFrom === 'scratch' ? {} : i);
+
+  get fromSource(): View { return new View(this.views, 'source', this.viewers); }
 }
 
 export const skip = () => undefined;
-export const view = (views: Views, startsFrom?: 'scratch' | 'source'): View => new View(views, startsFrom);
+export const view = (views: Views): View => new View(views);

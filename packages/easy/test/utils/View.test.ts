@@ -17,7 +17,7 @@ describe('View', () => {
   });
 
   test('construct from view()', () => {
-    const v = view({}, 'source');
+    const v = view({}).fromSource;
     expect(v.viewers).toHaveLength(0);
     expect(v.startsFrom).toBe('source');
   });
@@ -34,8 +34,8 @@ describe('View', () => {
       FirstName: 'Sander',
       LastName: 'H',
     };
-    const fromScratch = view({}, 'scratch');
-    const fromSource = view({}, 'source');
+    const fromScratch = view({});
+    const fromSource = view({}).fromSource;
     expect(fromScratch.from(source)).toStrictEqual({});
     expect(fromSource.from(source)).toStrictEqual(source);
     expect(fromSource.from(Dev.Wouter)).toStrictEqual(Dev.Wouter.toJSON());
@@ -53,7 +53,7 @@ describe('View', () => {
   });
 
   test('view string column same name source and target', () => {
-    const v = view({ first: 'first', last: undefined }, 'source');
+    const v = view({ first: 'first', last: undefined }).fromSource;
     expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander' });
   });
 
@@ -85,6 +85,11 @@ describe('View', () => {
   test('view with an InOut, with col and function in', () => {
     const v = view({ first: { col: 'Company.Title', in: a => a.toUpperCase() } });
     expect(v.from({ Company: { Title: 'ditisagile' } })).toStrictEqual({ first: 'DITISAGILE' });
+  });
+
+  test('view with an InOut, with no col (so default) and function in', () => {
+    const v = view({ title: { in: a => a.title.toUpperCase() } });
+    expect(v.from({ title: 'ditisagile' })).toStrictEqual({ title: 'DITISAGILE' });
   });
 
   test('view with an InOut, with col and view in', () => {
