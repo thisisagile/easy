@@ -6,7 +6,7 @@ export const isUndefined = (v?: unknown): v is never => v === undefined || v ===
 
 export const isEmpty = (o?: unknown): boolean => o === '' || o === null || o === undefined || (isArray(o) && o.length === 0);
 
-export const isNotEmpty = (o?: unknown): boolean => o !== '' && o !== null && o !== undefined && (!isArray(o) || o.length > 0);
+export const isNotEmpty = <T = unknown>(o?: unknown): o is NonNullable<T> => o !== '' && o !== null && o !== undefined && (!isArray(o) || o.length > 0);
 
 export const isString = (o?: unknown): o is string => o instanceof String || typeof o === 'string';
 
