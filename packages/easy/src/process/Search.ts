@@ -13,10 +13,7 @@ export class Search<T extends Struct> {
 
   search = (query: JsonValue): Promise<List<T>> =>
     choose<Promise<List<T>>, JsonValue>(query)
-      .case(
-        q => isNotEmpty(q),
-        q => this.repo.search(q)
-      )
+      .type<JsonValue>(isNotEmpty, q => this.repo.search(q))
       .else(resolve(toList<T>()));
 
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);
