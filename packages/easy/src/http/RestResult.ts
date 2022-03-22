@@ -1,4 +1,16 @@
-import { isDefined, isError, isResult, isResults, Json, List, Result, toList, toResult } from '../types';
+import {
+  Id,
+  isDefined,
+  isError,
+  isResult,
+  isResults,
+  isUndefined,
+  Json,
+  List,
+  Result,
+  toList,
+  toResult,
+} from '../types';
 import { choose } from '../utils';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
@@ -26,31 +38,18 @@ export const rest = {
   }),
   to: (payload?: any | any[], status?: HttpStatus): RestResult =>
     choose<RestResult, any>(payload)
-      .case(
-        p => !isDefined(p),
-        p => p
-      )
-      .case(
-        p => isHttpStatus(p),
-        p => rest.toError(p ?? status ?? HttpStatus.InternalServerError, [toResult(p.name)])
-      )
-      .case(
-        p => isResult(p) || isError(p),
-        p => rest.toError(status ?? HttpStatus.BadRequest, [p])
-      )
-      .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results)
-      )
-      .case(
-        p => isResponse(p),
-        p => rest.toError(status ?? HttpStatus.byId(p.body.error?.code), p.body.error?.errors)
-      )
+      .type(isUndefined, p => p)
+      .type(isHttpStatus, h => rest.toError(h ?? status ?? HttpStatus.InternalServerError, [toResult(h.name)]))
+      .type(isResult, r => rest.toError(status ?? HttpStatus.BadRequest, [r]))
+      .type(isError, e => rest.toError(status ?? HttpStatus.BadRequest, [e]))
+      .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results))
+      .type(isResponse, r => rest.toError(status ?? HttpStatus.byId(r.body.error?.code as Id), r.body.error?.errors))
       .case(
         p => p.error && p.error.errors,
-        p => rest.toError(status ?? HttpStatus.byId(p.error.code, HttpStatus.BadRequest), p.error.errors)
-      )
+        p => rest.toError(status ?? HttpStatus.byId(p.error.code, HttpStatus.BadRequest), p.error.errors))
       .case(
         p => p.data && p.data.items,
-        p => rest.toData(status ?? HttpStatus.byId(p.data.code, HttpStatus.Ok), p.data.items)
+        p => rest.toData(status ?? HttpStatus.byId(p.data.code, HttpStatus.Ok), p.data.items),
       )
       .else(p => rest.toData(status ?? HttpStatus.Ok, toList(p))),
 };
