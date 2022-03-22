@@ -20,6 +20,9 @@ export type RestResult = {
   error?: { code: number; message: string; errorCount: number; errors: List<Result> };
 };
 
+const hasErrors = (a: any): a is { error: { code: number, errors: List<Result> } } => isDefined(a?.error?.errors);
+const hasItems = (a: any): a is { data: { code: number, items: List<Json> } } => isDefined(a?.data.items);
+
 export const rest = {
   toData: (status: HttpStatus, items: Json[] = []): RestResult => ({
     data: {
@@ -44,13 +47,8 @@ export const rest = {
       .type(isError, e => rest.toError(status ?? HttpStatus.BadRequest, [e]))
       .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results))
       .type(isResponse, r => rest.toError(status ?? HttpStatus.byId(r.body.error?.code as Id), r.body.error?.errors))
-      .case(
-        p => p.error && p.error.errors,
-        p => rest.toError(status ?? HttpStatus.byId(p.error.code, HttpStatus.BadRequest), p.error.errors))
-      .case(
-        p => p.data && p.data.items,
-        p => rest.toData(status ?? HttpStatus.byId(p.data.code, HttpStatus.Ok), p.data.items),
-      )
+      .type(hasErrors, e => rest.toError(status ?? HttpStatus.byId(e.error.code, HttpStatus.BadRequest), e.error.errors))
+      .type(hasItems, d => rest.toData(status ?? HttpStatus.byId(d.data.code, HttpStatus.Ok), d.data.items))
       .else(p => rest.toData(status ?? HttpStatus.Ok, toList(p))),
 };
 
