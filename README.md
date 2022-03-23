@@ -66,10 +66,10 @@ All classes that inherit from `Record` or `Entity` will have an internal object 
 An example of an entity is the `Movie` class below. Here the content of the object comes from an external service (called OMDb), and is mapped to the actual properties of the `Movie` class.
 
     export class Movie extends Entity {
-        @required() readonly id: Id = this.state.imdbID;
-        @required() readonly title: string = this.state.Title;
-        @required() readonly year: number = this.state.Year;
-        readonly poster: string = this.state.Poster;
+        @required() readonly id = this.state.imdbID as Id;
+        @required() readonly title = this.state.Title as string;
+        @required() readonly year = this.state.Year as number;
+        readonly poster = this.state.Poster as string;
         
         update = (add?: Json): Movie => new Movie(this.toJSON(add));
     }
