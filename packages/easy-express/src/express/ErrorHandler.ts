@@ -47,10 +47,8 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
       o => isResults(o),
       (o: Results) => toResponse(options?.onError ?? HttpStatus.BadRequest, o.results)
     )
-    .case(
       // Underlying service fails
-      o => isResponse(o),
-      (o: Response) => toResponse(HttpStatus.InternalServerError, o.body.error?.errors)
+    .type(isResponse, r => toResponse(HttpStatus.InternalServerError, r.body.error?.errors)
     )
     .case(
       o => isException(o),
