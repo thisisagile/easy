@@ -5,12 +5,12 @@ import { Country } from '../enums';
 import { postalCode } from '../values';
 
 export class Address extends Struct {
-  @required() readonly street: string = this.state.street;
-  @required() readonly houseNumber: string = this.state.houseNumber;
-  readonly extension: string = this.state.extension;
+  @required() readonly street = this.state.street as string;
+  @required() readonly houseNumber = this.state.houseNumber as string;
+  readonly extension = this.state.extension as string;
   @valid() readonly postalCode = postalCode(this.state.postalCode, this.state.country);
-  @required() readonly city: string = this.state.city;
-  @required() readonly country: Country = Country.byId<Country>(this.state.country);
+  @required() readonly city = this.state.city as string;
+  @required() readonly country = Country.byId<Country>(this.state.country);
 
   toString(): string {
     return text(this.street, '')
