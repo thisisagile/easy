@@ -36,11 +36,8 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
       o => Exception.DoesNotExist.equals(o),
       (o: Exception) => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.reason ?? o.message)]),
     )
-    .case(
       // This service breaks with an error
-      o => isError(o),
-      (o: Error) => toResponse(HttpStatus.InternalServerError, [toResult(o.message)]),
-    )
+    .type(isError, e => toResponse(HttpStatus.InternalServerError, [toResult(e.message)]))
     // This service fails
     .type(isResults, r => toResponse(options?.onError ?? HttpStatus.BadRequest, r.results))
     // Underlying service fails
