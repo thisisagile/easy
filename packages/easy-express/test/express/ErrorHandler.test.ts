@@ -161,4 +161,13 @@ describe('ErrorHandler', () => {
     error(new Error('Server Error'), req, res, next);
     expect(ctx.request.lastError).toBe('Server Error');
   });
+
+  test('Recover from Errors thrown in error', () => {
+    const r = ctx.request;
+    ctx.request = undefined as any;
+    error(new Error('Server Error'), req, res, next);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.InternalServerError, 1, HttpStatus.InternalServerError.name));
+    ctx.request = r;
+  });
 });

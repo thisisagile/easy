@@ -68,5 +68,10 @@ export const error = (e: Error, req: express.Request, res: express.Response, _ne
   tryTo(() => toOriginatedError(e))
     .map(oe => toBody(oe))
     .accept(r => (ctx.request.lastError = r.status.isServerError ? r.body.error?.errors[0]?.message : undefined))
-    .accept(r => res.status(r.status.status).json(r.body));
+    .accept(r => res.status(r.status.status).json(r.body))
+    .recover(o =>
+    {
+      console.error('ErrorHandler:', o);
+     return  res.status(HttpStatus.InternalServerError.status).json(toResponse(HttpStatus.InternalServerError, [toResult(HttpStatus.InternalServerError.name)]).body) as any
+    });
 };
