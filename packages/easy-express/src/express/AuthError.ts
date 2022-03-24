@@ -12,4 +12,4 @@ export class AuthError extends Error {
 
 export const authError = (status: HttpStatus): AuthError => new AuthError(status);
 
-export const isAuthError = (e?: unknown): boolean => isError(e) && e.name === 'AuthenticationError';
+export const isAuthError = (e?: unknown): e is AuthError => isError(e) && e.name === 'AuthenticationError';
