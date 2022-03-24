@@ -1,4 +1,4 @@
-import { isDefined, isEmpty } from './Is';
+import { isDefined, isEmpty, isNotEmpty } from './Is';
 import { toName } from './Constructor';
 import { template } from './Template';
 import { isFunc } from './Func';
@@ -13,7 +13,8 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
 export class ToText implements Text {
-  constructor(readonly subject: string) {}
+  constructor(readonly subject: string) {
+  }
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -24,7 +25,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' ')
+        .join(' '),
     );
   }
 
@@ -69,7 +70,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join('')
+        .join(''),
     );
   }
 
@@ -77,15 +78,15 @@ export class ToText implements Text {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
 
+  get isEmpty(): boolean {
+    return isEmpty(this.toString());
+  }
+
   parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
 
   equals = this.is;
-
-  get isEmpty(): boolean {
-    return isEmpty(this.toString());
-  }
 
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 
@@ -103,7 +104,7 @@ export class ToText implements Text {
 
   replace = (search: Text, replace: Text): ToText => this.map(s => replaceAll(s, search, replace));
 
-  add = (add?: unknown, separator = ''): ToText => this.map(s => (isDefined(add) ? `${s}${separator}${text(add)}` : s));
+  add = (add?: unknown, separator = ''): ToText => this.map(s => (isNotEmpty(add) ? `${s}${separator}${text(add)}` : s));
 
   toString(): string {
     return this.subject;
