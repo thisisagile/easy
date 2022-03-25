@@ -3,7 +3,6 @@ import { View, view } from '../../src';
 import { Dev } from '../ref';
 
 describe('View', () => {
-
   test('construct default view', () => {
     const v = new View();
     expect(v.viewers).toHaveLength(0);
@@ -21,7 +20,6 @@ describe('View', () => {
     expect(v.viewers).toHaveLength(0);
     expect(v.startsFrom).toBe('source');
   });
-
 
   test('construct with actual view', () => {
     const persons = view({ first: 'FirstName' });
@@ -106,23 +104,27 @@ describe('View', () => {
 
   test('view with an InOut, with col and function in on an array', () => {
     const v = view({ name: 'Company.Name', divisions: { col: 'Company.Divisions', in: a => a.toUpperCase() } });
-    expect(v.from({
-      Company: {
-        Name: 'ditisagile',
-        Divisions: ['Tech', 'Support', 'HR'],
-      },
-    })).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
+    expect(
+      v.from({
+        Company: {
+          Name: 'ditisagile',
+          Divisions: ['Tech', 'Support', 'HR'],
+        },
+      })
+    ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
   test('view with an InOut, with col and view in on an array', () => {
     const divisions = view({ name: { col: 'Name', in: a => a.toUpperCase() } });
     const company = view({ name: 'Company.Name', divisions: { col: 'Company.Divisions', in: divisions } });
-    expect(company.from({
-      Company: {
-        Name: 'ditisagile',
-        Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
-      },
-    })).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
+    expect(
+      company.from({
+        Company: {
+          Name: 'ditisagile',
+          Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
+        },
+      })
+    ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
   test('with one entity', () => {
@@ -132,9 +134,12 @@ describe('View', () => {
 
   test('with multiple entity', () => {
     const devs = view({ name: 'name', language: { col: 'language', in: l => l.toUpperCase() } });
-    expect(devs.from([Dev.Rob, Dev.Jeroen])).toStrictEqual([{ name: 'Rob', language: 'TYPESCRIPT' }, {
-      name: 'Jeroen',
-      language: 'TYPESCRIPT',
-    }]);
+    expect(devs.from([Dev.Rob, Dev.Jeroen])).toStrictEqual([
+      { name: 'Rob', language: 'TYPESCRIPT' },
+      {
+        name: 'Jeroen',
+        language: 'TYPESCRIPT',
+      },
+    ]);
   });
 });

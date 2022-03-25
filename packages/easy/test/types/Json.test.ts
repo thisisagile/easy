@@ -155,7 +155,7 @@ describe('json', () => {
   });
 
   test('merge entity with object', () => {
-    const j = json.merge(Dev.Wouter, {name: 'Jeroen'});
+    const j = json.merge(Dev.Wouter, { name: 'Jeroen' });
     expect(j).toStrictEqual({ ...Dev.Wouter.toJSON(), name: 'Jeroen' });
   });
 
@@ -171,19 +171,19 @@ describe('json', () => {
     expect(json.set({})).toStrictEqual({});
     expect(json.set({}, '')).toStrictEqual({});
     expect(json.set({}, 'name')).toStrictEqual({});
-    expect(json.set({}, 'name', 'Sander')).toStrictEqual({name: 'Sander'});
-    expect(json.set({}, 'name', {first: 'Sander'})).toStrictEqual({name: { first: 'Sander'}});
-    expect(json.set({name: { first: 'Sander'}}, 'name', {first: 'Jeroen'})).toStrictEqual({name: { first: 'Jeroen'}});
-    expect(json.set({name: { first: 'Sander'}}, 'name')).toStrictEqual({});
-  })
+    expect(json.set({}, 'name', 'Sander')).toStrictEqual({ name: 'Sander' });
+    expect(json.set({}, 'name', { first: 'Sander' })).toStrictEqual({ name: { first: 'Sander' } });
+    expect(json.set({ name: { first: 'Sander' } }, 'name', { first: 'Jeroen' })).toStrictEqual({ name: { first: 'Jeroen' } });
+    expect(json.set({ name: { first: 'Sander' } }, 'name')).toStrictEqual({});
+  });
 
   test('any', () => {
     const a = any({});
     expect(a.set('').value).toStrictEqual({});
     expect(a.set('name').value).toStrictEqual({});
-    expect(a.set('name', 'Sander').value).toStrictEqual({name: 'Sander'});
-    expect(a.set('name', {first: 'Sander'}).value).toStrictEqual({name: { first: 'Sander'}});
-    expect(any({name: { first: 'Sander'}}).set('name', {first: 'Jeroen'}).value).toStrictEqual({name: { first: 'Jeroen'}});
-    expect(any({name: { first: 'Sander'}}).set('name').value).toStrictEqual({});
-  })
+    expect(a.set('name', 'Sander').value).toStrictEqual({ name: 'Sander' });
+    expect(a.set('name', { first: 'Sander' }).value).toStrictEqual({ name: { first: 'Sander' } });
+    expect(any({ name: { first: 'Sander' } }).set('name', { first: 'Jeroen' }).value).toStrictEqual({ name: { first: 'Jeroen' } });
+    expect(any({ name: { first: 'Sander' } }).set('name').value).toStrictEqual({});
+  });
 });

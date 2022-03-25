@@ -27,22 +27,24 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
 });
 
 const toBody = ({ origin, options }: OriginatedError): Response => {
-  return choose<Response, any>(origin)
-    .type(isAuthError, ae => toResponse(toHttpStatus(ae.status), [toResult(ae.message)]))
-    .case(
-      o => Exception.DoesNotExist.equals(o),
-      (o: Exception) => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.reason ?? o.message)]),
-    )
-    // This service breaks with an error
-    .type(isError, e => toResponse(HttpStatus.InternalServerError, [toResult(e.message)]))
-    // This service fails
-    .type(isResults, r => toResponse(options?.onError ?? HttpStatus.BadRequest, r.results))
-    // Underlying service fails
-    .type(isResponse, r => toResponse(HttpStatus.InternalServerError, r.body.error?.errors))
-    .type(isException, e => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(e.reason ?? e.message)]))
-    // This service fails with a string
-    .type(isText, t => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(asString(t))]))
-    .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]));
+  return (
+    choose<Response, any>(origin)
+      .type(isAuthError, ae => toResponse(toHttpStatus(ae.status), [toResult(ae.message)]))
+      .case(
+        o => Exception.DoesNotExist.equals(o),
+        (o: Exception) => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.reason ?? o.message)])
+      )
+      // This service breaks with an error
+      .type(isError, e => toResponse(HttpStatus.InternalServerError, [toResult(e.message)]))
+      // This service fails
+      .type(isResults, r => toResponse(options?.onError ?? HttpStatus.BadRequest, r.results))
+      // Underlying service fails
+      .type(isResponse, r => toResponse(HttpStatus.InternalServerError, r.body.error?.errors))
+      .type(isException, e => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(e.reason ?? e.message)]))
+      // This service fails with a string
+      .type(isText, t => toResponse(options?.onError ?? HttpStatus.BadRequest, [toResult(asString(t))]))
+      .else(() => toResponse(HttpStatus.InternalServerError, [toResult('Unknown error')]))
+  );
 };
 
 export const error = (e: Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
@@ -52,6 +54,8 @@ export const error = (e: Error, req: express.Request, res: express.Response, _ne
     .accept(r => res.status(r.status.status).json(r.body))
     .recover(o => {
       console.error('ErrorHandler:', o);
-      return res.status(HttpStatus.InternalServerError.status).json(toResponse(HttpStatus.InternalServerError, [toResult(HttpStatus.InternalServerError.name)]).body) as any;
+      return res
+        .status(HttpStatus.InternalServerError.status)
+        .json(toResponse(HttpStatus.InternalServerError, [toResult(HttpStatus.InternalServerError.name)]).body) as any;
     });
 };

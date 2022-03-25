@@ -34,7 +34,7 @@ export class Found<T, V> extends Case<T, V> {
   }
 
   type<U>(pred: (v: unknown) => v is U, out: Get<T, U>): Case<T, V> {
-   return this;
+    return this;
   }
 
   else(alt: Get<T, V>): T {

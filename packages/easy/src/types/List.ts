@@ -7,7 +7,6 @@ import { GetProperty, ofProperty } from './Get';
 import { Id } from './Id';
 import { asString } from './Text';
 
-
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
 

@@ -13,8 +13,7 @@ export class Address extends Struct {
   @required() readonly country = Country.byId<Country>(this.state.country);
 
   toString(): string {
-    return text(this.street).with(' ', this.houseNumber, this.extension)
-      .with(', ', text(this.postalCode).with(' ', this.city, this.country?.name)).toString();
+    return text(this.street).with(' ', this.houseNumber, this.extension).with(', ', text(this.postalCode).with(' ', this.city, this.country?.name)).toString();
   }
 }
 

@@ -73,7 +73,6 @@ describe('Enum', () => {
     expect(MoreLanguage.first()).toBe(MoreLanguage.Delphi);
   });
 
-
   test('toString', () => {
     expect(Language.Java).toMatchText('java');
     expect(MoreLanguage.Delphi).toMatchText('delphi');

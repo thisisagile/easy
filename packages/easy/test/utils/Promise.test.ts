@@ -15,17 +15,18 @@ describe('Promise', () => {
 });
 
 describe('tuple', () => {
-
   class Dev {
-    constructor(readonly name: string) {
+    constructor(readonly name: string) {}
+    toString(): string {
+      return this.name;
     }
-    toString(): string { return this.name}
   }
 
   class Manager {
-    constructor(readonly role: string) {
+    constructor(readonly role: string) {}
+    toString(): string {
+      return this.role;
     }
-    toString(): string { return this.role}
   }
 
   const d = new Dev('Sander');
@@ -101,7 +102,6 @@ describe('tuple', () => {
   });
 
   test('resolve sync and async spread', async () => {
-
     const res = await when(d)
       .not.isDefined.reject()
       .then(d => tuple.spread(d, asyncM(ceo), asyncM(cto)))
@@ -110,5 +110,4 @@ describe('tuple', () => {
     expect(res).toHaveLength(2);
     expect(res[1]).toBeInstanceOf(Manager);
   });
-
 });

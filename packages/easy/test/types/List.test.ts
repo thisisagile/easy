@@ -18,7 +18,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -27,7 +27,6 @@ describe('List', () => {
     expect(devs).toBeInstanceOf(List);
     expect(devs).toHaveLength(3);
   });
-
 
   test('mapAsync success', async () => {
     const hello = (d: Dev): Promise<Dev> => resolve(d);
@@ -362,10 +361,15 @@ describe('asList', () => {
   });
 
   test('sort with two', () => {
-    const list = toList([{ id: 1, name: 'sander' }, { id: 2, name: 'wouter' }, { id: 1, name: 'jeroen' }, {
-      id: 3,
-      name: 'arnold',
-    }]);
+    const list = toList([
+      { id: 1, name: 'sander' },
+      { id: 2, name: 'wouter' },
+      { id: 1, name: 'jeroen' },
+      {
+        id: 3,
+        name: 'arnold',
+      },
+    ]);
     const sorted = list.asc(i => i.id || i.name);
     expect(sorted[0].id).toBe(1);
     expect(sorted[0].name).toBe('jeroen');

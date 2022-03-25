@@ -1,5 +1,5 @@
 import { Property } from '../utils';
-import { Condition, SortCondition, toCondition } from "./Condition";
+import { Condition, SortCondition, toCondition } from './Condition';
 import { toArray } from '../types';
 
 export class Field extends Property {
@@ -21,9 +21,9 @@ export class Field extends Property {
 
   lessEqual = (value: unknown): Condition => this.condition('lte', value);
 
-  asc = (): SortCondition => new SortCondition(this.property, -1)
+  asc = (): SortCondition => new SortCondition(this.property, -1);
 
-  desc = (): SortCondition => new SortCondition(this.property, 1)
+  desc = (): SortCondition => new SortCondition(this.property, 1);
 
   protected condition = (operator: string, value: unknown): Condition => toCondition(this.property, operator, value, this.options?.convert);
 }

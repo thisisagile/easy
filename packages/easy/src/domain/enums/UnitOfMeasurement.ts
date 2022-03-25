@@ -10,5 +10,4 @@ export class UnitOfMeasurement extends Enum {
   constructor(name: string, id: string, readonly mmMultiplier: number) {
     super(name, id);
   }
-
 }

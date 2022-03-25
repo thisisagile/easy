@@ -1,18 +1,4 @@
-import {
-  asList,
-  Entity,
-  Enum,
-  includes,
-  isValue,
-  List,
-  required,
-  rule,
-  Struct,
-  toList,
-  valid,
-  validate,
-  Value,
-} from '../../src';
+import { asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 import { Exception } from '@thisisagile/easy';
@@ -77,8 +63,7 @@ class BrandProductPrices extends Struct {
 }
 
 class Extra {
-  constructor(readonly name: string) {
-  }
+  constructor(readonly name: string) {}
 }
 
 class Email extends Value<string> {
@@ -138,8 +123,8 @@ describe('validate', () => {
           price: 42,
           type: 'bulb',
           brand: { name: 'Philips', site: 'philips' },
-        }),
-      ),
+        })
+      )
     ).toHaveLength(3);
     expect(
       validate(
@@ -149,8 +134,8 @@ describe('validate', () => {
           name: 'Hue',
           type: 'bulb',
           brand: { name: 'Philips', site: 'philips' },
-        }),
-      ),
+        })
+      )
     ).toHaveLength(2);
     expect(
       validate(
@@ -160,8 +145,8 @@ describe('validate', () => {
           name: 'Hue',
           type: 'bulb',
           brand: { name: 'Philips', site: 'www.philips.io' },
-        }),
-      ),
+        })
+      )
     ).toBeValid();
   });
 
@@ -193,13 +178,17 @@ describe('validate', () => {
             { purchase: 10, sales: 20 },
             { purchase: 30, sales: 40 },
           ],
-        }),
-      ),
+        })
+      )
     ).toBeValid();
-    expect(validate(new BrandProductPrices({
-      brand: 'Dell',
-      productPrices: [{ id: 42 }, { id: 43 }],
-    }))).not.toBeValid();
+    expect(
+      validate(
+        new BrandProductPrices({
+          brand: 'Dell',
+          productPrices: [{ id: 42 }, { id: 43 }],
+        })
+      )
+    ).not.toBeValid();
     expect(validate(new BrandProductPrices({ brand: 'Dell', productPrices: [{}] }))).not.toBeValid();
     expect(validate(new BrandProductPrices({ productPrices: [{}] }))).not.toBeValid();
     expect(validate(new BrandProductPrices({ brand: 'Dell' }))).not.toBeValid();

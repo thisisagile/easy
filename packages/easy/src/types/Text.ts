@@ -14,8 +14,7 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
 export class ToText implements Text {
-  constructor(readonly subject: string) {
-  }
+  constructor(readonly subject: string) {}
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -26,7 +25,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' '),
+        .join(' ')
     );
   }
 
@@ -71,7 +70,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join(''),
+        .join('')
     );
   }
 
@@ -107,7 +106,13 @@ export class ToText implements Text {
 
   add = (add?: unknown, separator = ''): ToText => this.map(s => (isNotEmpty(add) ? `${s}${separator}${text(add)}` : s));
 
-  with = (separator: string, ...other: unknown[]): ToText => this.map(s => toList(s).add(...other.map(u => text(u).toString())).filter(s => isNotEmpty(s)).join(separator));
+  with = (separator: string, ...other: unknown[]): ToText =>
+    this.map(s =>
+      toList(s)
+        .add(...other.map(u => text(u).toString()))
+        .filter(s => isNotEmpty(s))
+        .join(separator)
+    );
 
   toString(): string {
     return this.subject;

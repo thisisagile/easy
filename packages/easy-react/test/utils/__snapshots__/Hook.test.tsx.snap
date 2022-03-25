@@ -2,7 +2,7 @@
 
 exports[`Hooks component with useEntity hook renders correctly. 1`] = `
 <div>
-   Amsterdam
+  Amsterdam
 </div>
 `;
 
