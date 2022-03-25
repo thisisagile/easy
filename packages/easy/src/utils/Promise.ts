@@ -15,3 +15,7 @@ export const tuple = {
   spread: <F, S>(first: Pro<F>, ...second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(toArray(second))]),
 };
 
+export const tuple2 = tuple[2];
+export const tuple3 = tuple[3];
+export const tuple4 = tuple[4];
+export const tuple5 = tuple[5];

@@ -1,4 +1,4 @@
-import { reject, resolve, toList, toResults, tuple, when } from '../../src';
+import { reject, resolve, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -57,7 +57,7 @@ describe('tuple', () => {
   test('resolve async tuple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[2](asyncM(c), asyncM(c)))
+      .then(c => tuple2(asyncM(c), asyncM(c)))
       .then(([m, m2]) => join(m, m2));
 
     expect(res).toBe('CEO easy CEO easy');
@@ -66,7 +66,7 @@ describe('tuple', () => {
   test('resolve sync and async triple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[3](d, asyncM(c), asyncM(c)))
+      .then(c => tuple3(d, asyncM(c), asyncM(c)))
       .then(([d, m, m2]) => join(d, m, m2));
 
     expect(res).toBe('Sander CEO easy CEO easy');
@@ -75,7 +75,7 @@ describe('tuple', () => {
   test('resolve sync and async quadruple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[4](d, asyncM(c), asyncM(c), d))
+      .then(c => tuple4(d, asyncM(c), asyncM(c), d))
       .then(([, , , d]) => d);
 
     expect(res).toBeInstanceOf(Dev);
@@ -84,7 +84,7 @@ describe('tuple', () => {
   test('resolve sync and async quintuple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[5](asyncM(c), d, asyncM(c), asyncM(c), d))
+      .then(c => tuple5(asyncM(c), d, asyncM(c), asyncM(c), d))
       .then(([c, , , ,]) => c);
 
     expect(res).toBeInstanceOf(Manager);

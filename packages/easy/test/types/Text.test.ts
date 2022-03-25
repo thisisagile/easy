@@ -1,5 +1,6 @@
-import { asString, isText, replaceAll, Text } from '../../src';
+import { asString, isText, replaceAll, Text, text } from '../../src';
 import { Dev } from '../ref';
+import '@thisisagile/easy-test';
 
 describe('isText', () => {
   const has = { toString: 3 };
@@ -38,5 +39,16 @@ describe('isText', () => {
     expect(replaceAll('Hello hello', 'ello')).toBe('H h');
     expect(replaceAll(Dev.Naoufal, 'Na', 'Ja')).toBe('Jaoufal');
     expect(replaceAll(Dev.Naoufal, Dev.Naoufal, Dev.Jeroen)).toBe(Dev.Jeroen.name);
+  });
+
+  test('with', () => {
+    expect(text().with('')).toMatchText('');
+    expect(text('First').with('')).toMatchText('First');
+    expect(text('First').with('s')).toMatchText('First');
+    expect(text('First').with('', 'Second')).toMatchText('FirstSecond');
+    expect(text('First').with('-', 'Second')).toMatchText('First-Second');
+    expect(text('First').with('-', 'Second', 'Third')).toMatchText('First-Second-Third');
+    expect(text(Dev.Rob).with('-', Dev.Jeroen, Dev.Sander)).toMatchText('Rob-Jeroen-Sander');
+    expect(text(Dev.Rob).with('-', '', Dev.Sander)).toMatchText('Rob-Sander');
   });
 });
