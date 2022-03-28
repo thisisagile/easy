@@ -48,14 +48,11 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
 };
 
 export const error = (e: Error, req: express.Request, res: express.Response, _next: express.NextFunction): void => {
+  let response: Response;
   tryTo(() => toOriginatedError(e))
     .map(oe => toBody(oe))
+    .accept(r => (response = r))
     .accept(r => (ctx.request.lastError = r.status.isServerError ? r.body.error?.errors[0]?.message : undefined))
-    .accept(r => res.status(r.status.status).json(r.body))
-    .recover(o => {
-      console.error('ErrorHandler:', o);
-      return res
-        .status(HttpStatus.InternalServerError.status)
-        .json(toResponse(HttpStatus.InternalServerError, [toResult(HttpStatus.InternalServerError.name)]).body) as any;
-    });
+    .recover(() => response)
+    .accept(r => res.status(r.status.status).json(r.body));
 };
