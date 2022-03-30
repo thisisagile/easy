@@ -1,12 +1,6 @@
 import CustomMatcherResult = jest.CustomMatcherResult;
 import { Id, Tester, UseCase } from '../utils/Types';
-import { isDefined } from '../utils/Utils';
 import { match } from './Match';
-
-const toUrl = (uc: UseCase, id?: Id): string => {
-  const i = isDefined(id) ? `/${id}` : '';
-  return `/${uc.app.id}/${uc.id}${i}`;
-};
 
 export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherResult => {
   return match<Tester>(tester as Tester)
@@ -14,8 +8,16 @@ export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherRes
     .undefined(t => t.url, 'Tester does not contain a URL')
     .undefined(() => uc, 'Use case is undefined')
     .not(
-      t => t.url.includes(toUrl(uc as UseCase, id)),
-      t => `We expected the tester to be at: '${toUrl(uc as UseCase, id)}', but it is at: '${t?.url}' instead.`
+      t => t.url.includes(`/${uc?.app.id}`),
+      t => `We expected the tester to be at app '${uc?.app.id}', but it is at '${t?.url}' instead.`,
+    )
+    .not(
+      t => t.url.includes(`/${uc?.id}`),
+      t => `We expected the tester to be at use case '${uc?.id}', but it is at '${t?.url}' instead.`,
+    )
+    .not(
+      t => t.url.includes(id ? `/${id}` : ''),
+      t => `We expected the path to contain '/42', but it is '${t?.url}' instead.`,
     )
     .else(t => `The tester is at '${t?.url}'`);
 };
