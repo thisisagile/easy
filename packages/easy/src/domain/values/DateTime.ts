@@ -4,20 +4,42 @@ import { ifNotEmpty } from '../../utils';
 import 'moment/min/locales';
 
 export type DateTimeUnit =
-  'year' | 'years' | 'y' |
-  'quarter' | 'quarters' | 'Q' |
-  'month' | 'months' | 'M' |
-  'week' | 'weeks' | 'w' |
-  'day' | 'days' | 'd' |
-  'hour' | 'hours' | 'h' |
-  'minute' | 'minutes' | 'm' |
-  'second' | 'seconds' | 's' |
-  'millisecond' | 'milliseconds' | 'ms';
-
+  | 'year'
+  | 'years'
+  | 'y'
+  | 'quarter'
+  | 'quarters'
+  | 'Q'
+  | 'month'
+  | 'months'
+  | 'M'
+  | 'week'
+  | 'weeks'
+  | 'w'
+  | 'day'
+  | 'days'
+  | 'd'
+  | 'hour'
+  | 'hours'
+  | 'h'
+  | 'minute'
+  | 'minutes'
+  | 'm'
+  | 'second'
+  | 'seconds'
+  | 's'
+  | 'millisecond'
+  | 'milliseconds'
+  | 'ms';
 
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
-    super(tryTo(value).is.defined().map(v => moment.utc(v, format, true).toISOString()).orElse());
+    super(
+      tryTo(value)
+        .is.defined()
+        .map(v => moment.utc(v, format, true).toISOString())
+        .orElse()
+    );
   }
 
   static get now(): DateTime {
@@ -40,7 +62,7 @@ export class DateTime extends Value<string | undefined> {
   from(date?: DateTime, locales?: string | string[]): string;
   from(param?: string | string[] | DateTime, other?: string | string[]): string {
     const date: DateTime | undefined = isA<DateTime>(param) ? param : undefined;
-    const locales: string | string[] = isString(param) || isArray<string>(param) ? param : (isString(other) || isArray<string>(other) ? other : 'en');
+    const locales: string | string[] = isString(param) || isArray<string>(param) ? param : isString(other) || isArray<string>(other) ? other : 'en';
     return isDefined(date) ? this.utc.locale(locales).from(date.utc) : this.utc.locale(locales).fromNow();
   }
 

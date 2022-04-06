@@ -267,5 +267,5 @@ describe('isUndefined', () => {
     expect(isUndefined(null)).toBeTruthy();
     expect(isUndefined('null')).toBeFalsy();
     expect(isUndefined({})).toBeFalsy();
-  })
-})
+  });
+});

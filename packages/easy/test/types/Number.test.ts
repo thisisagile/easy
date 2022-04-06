@@ -1,14 +1,12 @@
 import { asNumber } from '../../src';
 
 describe('asNumber', () => {
-
   class Thing {
-    constructor(private some: string) {
-    }
+    constructor(private some: string) {}
 
     toString() {
       return this.some;
-    };
+    }
   }
 
   test('works', () => {
@@ -28,5 +26,4 @@ describe('asNumber', () => {
     expect(asNumber('h42', () => 43)).toBe(43);
     expect(asNumber(new Thing('no'), () => 44)).toBe(44);
   });
-
 });

@@ -51,11 +51,7 @@ describe('Case', () => {
     expect(which('Kim')).toMatchObject(Dev.Wouter);
   });
 
-  const typeIt = (a: unknown): string =>
-    choose<string>(a)
-      .type(isString, 'A string')
-      .type(isObject, 'An object')
-      .else('None');
+  const typeIt = (a: unknown): string => choose<string>(a).type(isString, 'A string').type(isObject, 'An object').else('None');
 
   test('Testing type', () => {
     expect(typeIt(undefined)).toBe('None');

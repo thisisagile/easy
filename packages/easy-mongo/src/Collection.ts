@@ -8,6 +8,7 @@ import {
   LogicalCondition,
   MapOptions,
   Mapper,
+  Mapping,
   mappings,
   ofGet,
   PropertyOptions,
@@ -24,7 +25,7 @@ export class Collection extends Mapper {
     ...mappings,
     field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
-  readonly id = this.map.field('id', { dflt: toUuid });
+  readonly id = this.map.field('id', { dflt: toUuid }) as Mapping;
 
   constructor(options: MapOptions = { startFrom: 'source' }) {
     super(options);

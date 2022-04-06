@@ -85,17 +85,17 @@ describe('Mapper', () => {
   test('skipIn removes property in target', () => {
     const im = new FromSourceMap();
     expect(im.in({ age: 23 })).toStrictEqual({});
-    expect(im.in({ age: 23, name: 'Sander' })).toStrictEqual({name: 'Sander'});
-    expect(im.in({ something: 'else' })).toStrictEqual({something: 'else'});
-    expect(im.in({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({name: 'Sander', something: 'else'});
+    expect(im.in({ age: 23, name: 'Sander' })).toStrictEqual({ name: 'Sander' });
+    expect(im.in({ something: 'else' })).toStrictEqual({ something: 'else' });
+    expect(im.in({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({ name: 'Sander', something: 'else' });
   });
 
   test('skipOut removes property in target', () => {
     const im = new FromSourceMap();
     expect(im.out({ name: 'Sander' })).toStrictEqual({});
-    expect(im.out({ age: 23, name: 'Sander' })).toStrictEqual({age: 23});
-    expect(im.out({ something: 'else' })).toStrictEqual({something: 'else'});
-    expect(im.out({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({age: 23, something: 'else'});
+    expect(im.out({ age: 23, name: 'Sander' })).toStrictEqual({ age: 23 });
+    expect(im.out({ something: 'else' })).toStrictEqual({ something: 'else' });
+    expect(im.out({ age: 23, name: 'Sander', something: 'else' })).toStrictEqual({ age: 23, something: 'else' });
   });
 
   class Business extends Mapper {

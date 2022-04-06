@@ -4,5 +4,6 @@ import { required } from '../validation';
 
 export abstract class Child extends Struct {
   @required() readonly id: Id = this.state.id ?? toId();
-  protected merge = (a: Json): Json => json.parse({ ...this, ...a, id: this.id });
+
+  protected merge = (a: unknown): Json => json.merge(this, a, { id: this.id });
 }

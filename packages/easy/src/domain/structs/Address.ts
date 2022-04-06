@@ -1,4 +1,4 @@
-import { isEmpty, isNotEmpty, text } from '../../types';
+import { isEmpty, text } from '../../types';
 import { Struct } from '../Struct';
 import { required, valid } from '../../validation';
 import { Country } from '../enums';
@@ -13,13 +13,7 @@ export class Address extends Struct {
   @required() readonly country = Country.byId<Country>(this.state.country);
 
   toString(): string {
-    return text(this.street, '')
-      .add(this.houseNumber, ' ')
-      .add(this.extension, ' ')
-      .add(isNotEmpty(this.postalCode?.value) ? this.postalCode : undefined, ', ')
-      .add(this.city, ' ')
-      .add(this.country?.name, ' ')
-      .toString();
+    return text(this.street).with(' ', this.houseNumber, this.extension).with(', ', text(this.postalCode).with(' ', this.city, this.country?.name)).toString();
   }
 }
 

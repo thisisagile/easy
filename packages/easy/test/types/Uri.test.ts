@@ -76,7 +76,7 @@ describe('Uri', () => {
   });
 
   test('toString returns full route with query', () => {
-    expect(DevUri.Developers.query('yes').language('Java').toString()).toStrictEqual(`${host}/dev/developers?q=yes&language=Java`);
-    expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toStrictEqual(`${host}/dev/developers/42?q=yes&language=C`);
+    expect(DevUri.Developers.query('yes').language('Java').toString()).toBe(`${host}/dev/developers?q=yes&language=Java`);
+    expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe(`${host}/dev/developers/42?q=yes&language=C`);
   });
 });

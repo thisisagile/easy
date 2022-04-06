@@ -14,7 +14,8 @@ export const json = {
     delete (subject as any)[key];
     return subject as Json;
   },
-  set: (subject: unknown, key = '', value?: unknown): Json => isEmpty(key) ? subject : (isDefined(value) ? { ...(subject as any), ...{ [key]: value as Json } } : json.delete(subject, key)),
+  set: (subject: unknown, key = '', value?: unknown): Json =>
+    isEmpty(key) ? subject : isDefined(value) ? { ...(subject as any), ...{ [key]: value as Json } } : json.delete(subject, key),
   omit: (subject: unknown, ...keys: string[]): Json => keys.reduce((js, k) => json.delete(js, k), json.parse(subject)),
 };
 
@@ -23,8 +24,7 @@ export const toJson = json.merge;
 export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt, j));
 
 class Any {
-  constructor(readonly value: unknown = {}) {
-  }
+  constructor(readonly value: unknown = {}) {}
 
   delete = (key: string): Any => new Any(json.delete(this.value, key));
   set = (key: string, value?: unknown): Any => new Any(json.set(this.value, key, value));

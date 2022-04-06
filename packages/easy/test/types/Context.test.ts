@@ -40,7 +40,7 @@ describe('Environment Context', () => {
 
   test('token should be an any in the context', () => {
     const c = new Context({ request: new BaseRequestContext() });
-    c.request.token = {tenant: 42};
+    c.request.token = { tenant: 42 };
     expect(c.request.token.tenant).toBe(42);
   });
 

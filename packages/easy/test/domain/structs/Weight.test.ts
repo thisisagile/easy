@@ -2,7 +2,6 @@ import '@thisisagile/easy-test';
 import { UnitOfWeight, Weight, weight } from '../../../src';
 
 describe('Weight', () => {
-
   test('Weight with value is not valid', () => {
     const dim = new Weight();
     expect(dim).not.toBeValid();
@@ -77,5 +76,4 @@ describe('Weight', () => {
     expect(heavy.sum(light).uow).toBe(UnitOfWeight.KG);
     expect(heavy.sum(light).value).toBe(200.001);
   });
-
 });

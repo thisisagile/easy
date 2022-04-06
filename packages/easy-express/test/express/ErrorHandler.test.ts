@@ -167,7 +167,7 @@ describe('ErrorHandler', () => {
     ctx.request = undefined as any;
     error(new Error('Server Error'), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.InternalServerError, 1, HttpStatus.InternalServerError.name));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.InternalServerError, 1, 'Server Error'));
     ctx.request = r;
   });
 });
