@@ -68,8 +68,7 @@ export class List<T = unknown> extends Array<T> {
   orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
 }
 
-export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> =>
-  new List<T>().concat(...toArray<T>(...items)) as List<T>;
+export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().concat(...toArray<T>(...items)) as List<T>;
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
