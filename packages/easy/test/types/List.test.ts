@@ -106,6 +106,13 @@ describe('List', () => {
     expect(devs.add(toList(Dev.Naoufal, Dev.Jeroen))).toHaveLength(4);
   });
 
+  test('remove', () => {
+    const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
+    expect(devs.remove(Dev.RobC)).toHaveLength(2);
+    expect(devs[1]).toMatchObject(Dev.Wouter);
+    expect(devs.remove(Dev.Rob)).toHaveLength(2);
+  });
+
   test('toJSON', () => {
     const json = toList(Dev.Sander, Dev.Wouter).toJSON();
     expect(json).not.toBeInstanceOf(List);
@@ -358,6 +365,18 @@ describe('asList', () => {
     const m = l.map(d => d.name);
     expect(m).toBeInstanceOf(List);
     expect(m).toHaveLength(3);
+  });
+
+  test('toList(number) => [number]', () => {
+    const l = toList<Id>([2])
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe(2)
+  });
+
+  test('map returns [number]', () => {
+    const entities = toList<Dev>(Dev.RobC);
+    expect(entities.map(e => e.id)).toHaveLength(1);
+    expect(entities.map(e => e.id)[0]).toBe(6);
   });
 
   test('sort with two', () => {
