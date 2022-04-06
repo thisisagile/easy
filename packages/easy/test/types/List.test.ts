@@ -164,6 +164,7 @@ describe('isList', () => {
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
       [Dev.Rob.id]: Dev.Rob,
+      [Dev.RobC.id]: Dev.RobC,
     });
   });
 });
@@ -294,14 +295,6 @@ describe('toList', () => {
     expect(toList({ id: 41 }).byId(stringAsId)).toMatchObject({ id: 41 });
   });
 
-  test('toList with single number N initializes list with length N', () => {
-    expect(toList(5)).toHaveLength(5);
-    expect(toList(5).first()).toBeUndefined();
-
-    expect(toList([5])).toHaveLength(5);
-    expect(toList([5]).first()).toBeUndefined();
-  });
-
   test('remove', () => {
     expect(toList().remove(Dev.Rob)).toHaveLength(0);
     expect(toList(Dev.Sander).remove(Dev.Rob)).toHaveLength(1);
@@ -368,9 +361,9 @@ describe('asList', () => {
   });
 
   test('toList(number) => [number]', () => {
-    const l = toList<Id>([2])
+    const l = toList<Id>([2]);
     expect(l).toHaveLength(1);
-    expect(l[0]).toBe(2)
+    expect(l[0]).toBe(2);
   });
 
   test('map returns [number]', () => {
