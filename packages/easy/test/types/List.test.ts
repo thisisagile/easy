@@ -164,6 +164,7 @@ describe('isList', () => {
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
       [Dev.Rob.id]: Dev.Rob,
+      [Dev.RobC.id]: Dev.RobC
     });
   });
 });
@@ -292,14 +293,6 @@ describe('toList', () => {
     expect(toList({ id: '41' }).byId(stringAsId)).toMatchObject({ id: '41' });
     expect(toList({ id: 41 }).byId(numberAsId)).toMatchObject({ id: 41 });
     expect(toList({ id: 41 }).byId(stringAsId)).toMatchObject({ id: 41 });
-  });
-
-  test('toList with single number N initializes list with length N', () => {
-    expect(toList(5)).toHaveLength(5);
-    expect(toList(5).first()).toBeUndefined();
-
-    expect(toList([5])).toHaveLength(5);
-    expect(toList([5]).first()).toBeUndefined();
   });
 
   test('remove', () => {
