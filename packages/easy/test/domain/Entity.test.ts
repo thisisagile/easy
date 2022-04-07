@@ -1,4 +1,4 @@
-import { Entity, isUuid, required, DateTime } from '../../src';
+import { DateTime, Entity, isUuid, required } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
@@ -41,6 +41,7 @@ describe('Entity', () => {
       language: 'TypeScript',
       created: { by: { id: 0, user: 'easy' }, when: Dev.Sander.created.when.value },
       lastModified: { by: { id: 0, user: 'easy' }, when: Dev.Sander.lastModified.when.value },
+      certificates: [{ id: 42, name: 'Certified scrum master' }],
     });
   });
 

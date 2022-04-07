@@ -1,4 +1,4 @@
-import { Dev } from '../ref';
+import { Certificate, Dev } from '../ref';
 import { asList, Currency, Enum, Id, isEmpty, isList, List, reject, resolve, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
@@ -18,8 +18,15 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
+  });
+
+  test('flatMap', () => {
+    const certificates = devs.flatMap(d => d.certificates);
+    expect(certificates).toBeInstanceOf(List);
+    expect(certificates).toHaveLength(6);
+    expect(certificates.toJSON()).toMatchJson([Certificate.ScrumMaster,Certificate.ScrumMaster, Certificate.Flow,Certificate.ScrumMaster, Certificate.MSP])
   });
 
   test('mapDefined', () => {
@@ -164,7 +171,7 @@ describe('isList', () => {
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
       [Dev.Rob.id]: Dev.Rob,
-      [Dev.RobC.id]: Dev.RobC
+      [Dev.RobC.id]: Dev.RobC,
     });
   });
 });
@@ -361,9 +368,9 @@ describe('asList', () => {
   });
 
   test('toList(number) => [number]', () => {
-    const l = toList<Id>([2])
+    const l = toList<Id>([2]);
     expect(l).toHaveLength(1);
-    expect(l[0]).toBe(2)
+    expect(l[0]).toBe(2);
   });
 
   test('map returns [number]', () => {
