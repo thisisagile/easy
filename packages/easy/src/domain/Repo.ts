@@ -35,7 +35,6 @@ export class Repo<T extends Struct> {
   }
 
   add(json: Json): Promise<T> {
-
     return this.extend(new this.ctor(json))
       .then(i => when(i).not.isValid.reject())
       .then(i => this.validate(i))
