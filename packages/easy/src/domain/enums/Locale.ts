@@ -569,7 +569,7 @@ export class Locale extends Enum {
     super(name, id);
   }
 
-  equals<E extends Enum | Id>(other: E): boolean {
+  equals<E extends Enum>(other: E | Id): other is E {
     return text(other).lower.trim.equals(this.lower);
   }
 }

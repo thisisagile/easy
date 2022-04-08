@@ -37,7 +37,7 @@ export abstract class Enum implements Validatable {
     return this.first((e => e.equals(id))) ?? ofGet(alt);
   }
 
-  equals<E extends Enum | Id>(other: E): boolean {
+  equals<E extends Enum>(other: E | Id): other is E {
     return this.id === (isEnum(other) ? other.id : other);
   }
 
