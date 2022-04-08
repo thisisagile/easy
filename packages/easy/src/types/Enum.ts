@@ -27,10 +27,12 @@ export abstract class Enum implements Validatable {
       .first((e: unknown) => isEnum(e) && e.equals(id)) ?? ofGet(alt);
   }
 
-  static byIds<T extends Enum>(ids?: Id[]): List<T> {
-    return meta(this)
-      .values<T>()
-      .filter((e: unknown) => isEnum(e) && ids?.some(i => e.equals(i)));
+  static byIds<E extends Enum>(ids?: Id[]): List<E> {
+    return this.all<E>().filter(e => ids?.some(i => e.equals(i)));
+    //
+    // meta(this)
+    //   .values<T>()
+    //   .filter((e: unknown) => isEnum(e) && ids?.some(i => e.equals(i)));
   }
 
   static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
