@@ -34,12 +34,8 @@ export abstract class Enum implements Validatable {
   }
 
   static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return meta(this)
-      .values<E>()
-      .first((e: unknown) => isEnum(e) && e.equals(id)) ?? ofGet(alt);
+    return this.first((e => e.equals(id))) ?? ofGet(alt);
   }
-
-
 
   equals<E extends Enum | Id>(other: E): boolean {
     return this.id === (isEnum(other) ? other.id : other);
