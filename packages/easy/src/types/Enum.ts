@@ -21,20 +21,6 @@ export abstract class Enum implements Validatable {
       .filter((e: unknown) => isEnum(e));
   }
 
-  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return meta(this)
-      .values<E>()
-      .first((e: unknown) => isEnum(e) && e.equals(id)) ?? ofGet(alt);
-  }
-
-  static byIds<E extends Enum>(ids?: Id[]): List<E> {
-    return this.all<E>().filter(e => ids?.some(i => e.equals(i)));
-    //
-    // meta(this)
-    //   .values<T>()
-    //   .filter((e: unknown) => isEnum(e) && ids?.some(i => e.equals(i)));
-  }
-
   static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
     return this.all<E>().filter(p, params);
   }
@@ -42,6 +28,18 @@ export abstract class Enum implements Validatable {
   static first<E extends Enum>(p?: (value: E, index: number, array: E[]) => unknown, params?: unknown): E {
     return this.all<E>().first(p, params);
   }
+
+  static byIds<E extends Enum>(ids?: Id[]): List<E> {
+    return this.filter(e => ids?.some(i => e.equals(i)));
+  }
+
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
+    return meta(this)
+      .values<E>()
+      .first((e: unknown) => isEnum(e) && e.equals(id)) ?? ofGet(alt);
+  }
+
+
 
   equals<E extends Enum | Id>(other: E): boolean {
     return this.id === (isEnum(other) ? other.id : other);
