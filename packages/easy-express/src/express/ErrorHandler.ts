@@ -4,8 +4,8 @@ import {
   asString,
   choose,
   ctx,
-  Exception,
   HttpStatus,
+  isDoesNotExist,
   isError,
   isException,
   isResponse,
@@ -30,10 +30,7 @@ const toBody = ({ origin, options }: OriginatedError): Response => {
   return (
     choose<Response, any>(origin)
       .type(isAuthError, ae => toResponse(toHttpStatus(ae.status), [toResult(ae.message)]))
-      .case(
-        o => Exception.DoesNotExist.equals(o),
-        (o: Exception) => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(o.reason ?? o.message)])
-      )
+      .type(isDoesNotExist, e => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(e.reason ?? e.message)]))
       // This service breaks with an error
       .type(isError, e => toResponse(HttpStatus.InternalServerError, [toResult(e.message)]))
       // This service fails
