@@ -1,8 +1,20 @@
-import { asJson, isArray, isDefined, isFunction, isObject, isString, isUndefined, Json, json, meta, tryTo } from '../types';
+import {
+  asJson,
+  isArray,
+  isDefined,
+  isFunction,
+  isObject,
+  isString,
+  isUndefined,
+  Json,
+  json,
+  meta,
+  tryTo,
+} from '../types';
 import { traverse } from './Traverse';
 import { choose } from './Case';
 
-type Func<T = unknown> = (a: any) => T;
+type Func<T = unknown> = (a: any, key?: string) => T;
 
 export type InOut = { in?: Func | View; col?: string };
 
@@ -34,16 +46,25 @@ const toViewers = (views: Views): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View {
-  constructor(private views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {}
-
-  from = (source: unknown): Json => (isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source)));
-
-  private reduce = (i: any): any => this.viewers.reduce((a: any, v) => json.set(a, v.in.key, v.in.f(i)), this.startsFrom === 'scratch' ? {} : i);
+  constructor(private views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
+  }
 
   get fromSource(): View {
     return new View(this.views, 'source', this.viewers);
   }
+
+  from = (source: unknown): Json => (isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source)));
+
+  private reduce = (i: any): any => this.viewers.reduce((a: any, v) => json.set(a, v.in.key, v.in.f(i, v.in.key)), this.startsFrom === 'scratch' ? {} : i);
 }
 
 export const skip = () => undefined;
 export const view = (views: Views): View => new View(views);
+
+export const views = {
+  ignore: () => undefined,
+  keep: (a: unknown, key?: string) => traverse(a, key),
+  keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
+  or: (key: string, alt = '') => (a: unknown) => traverse(a, key) ?? alt,
+  value: (value: unknown) => () => value,
+};

@@ -1,6 +1,8 @@
 import '@thisisagile/easy-test';
-import { View, view } from '../../src';
+import { View, view, views }  from '../../src';
 import { Dev } from '../ref';
+
+const { ignore, or, keep, keepOr, value } = views;
 
 describe('View', () => {
   test('construct default view', () => {
@@ -110,7 +112,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -123,7 +125,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
@@ -141,5 +143,28 @@ describe('View', () => {
         language: 'TYPESCRIPT',
       },
     ]);
+  });
+
+  // Using views
+
+  test('views or', () => {
+    const v = view({ first: or('Name.First'), last: keepOr('H') });
+    expect(v.from({ Name: { First: 'Sander' }, last: 'Hoog' })).toStrictEqual({ first: 'Sander', last: 'Hoog' });
+    expect(v.from({ Name: { First: 'Sander' } })).toStrictEqual({ first: 'Sander', last: 'H' });
+  });
+
+  test('views ignore', () => {
+    const v = view({ Name: ignore });
+    expect(v.from({ Name: { First: 'Sander' } })).toStrictEqual({});
+  });
+
+  test('views value', () => {
+    const v = view({ First: value(42) });
+    expect(v.from({})).toStrictEqual({ First: 42 });
+  });
+
+  test('views keep', () => {
+    const v = view({ First: keep });
+    expect(v.from({ First: 'Sander' })).toStrictEqual({ First: 'Sander' });
   });
 });
