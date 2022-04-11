@@ -26,3 +26,4 @@ export class Exception extends Enum {
 }
 
 export const isException = (e?: unknown, t?: Text): e is Exception => e instanceof Exception && (isDefined(t) ? e.equals(asString(t)) : true);
+export const isDoesNotExist = (e?: unknown): e is Exception => e instanceof Exception && Exception.DoesNotExist.equals(e);
