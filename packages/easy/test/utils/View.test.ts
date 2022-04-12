@@ -57,6 +57,11 @@ describe('View', () => {
     expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander' });
   });
 
+  test('view with number', () => {
+    const v = view({ first: 'first', age: 42 }).fromSource;
+    expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander', age: 42, last: "H" });
+  });
+
   test('view string column with dot notation', () => {
     const v = view({ first: 'Name.FirstName' });
     expect(v.from({ Name: { FirstName: 'Sander' } })).toStrictEqual({ first: 'Sander' });

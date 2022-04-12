@@ -1,4 +1,16 @@
-import { asJson, isArray, isDefined, isFunction, isObject, isString, isUndefined, Json, json, meta, tryTo } from '../types';
+import {
+  asJson,
+  isArray,
+  isDefined,
+  isFunction, isNumber,
+  isObject,
+  isString,
+  isUndefined,
+  Json,
+  json,
+  meta,
+  tryTo,
+} from '../types';
 import { traverse } from './Traverse';
 import { choose } from './Case';
 
@@ -11,7 +23,7 @@ const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) &&
 const isColAndFunction = (v: unknown): v is { col: string; in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
 const isColAndView = (v: unknown): v is { col: string; in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
-type Views = { [key: string]: string | Func | InOut | undefined };
+type Views = { [key: string]: string | Func | InOut | number | undefined };
 type Viewer = { in: { key: string; f: Func } };
 
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>
@@ -20,6 +32,7 @@ const toFunc = (a: any, col: string, f: Func = a => a): Func =>
 const toViewer = (key: string, value: unknown): Viewer =>
   choose<Viewer>(value)
     .type(isUndefined, () => toViewer(key, () => undefined))
+    .type(isNumber, n => toViewer(key, () => n))
     .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
     .type(isColOnly, io => toViewer(key, io.col))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
@@ -52,9 +65,6 @@ export const views = {
   ignore: () => undefined,
   keep: (a: unknown, key?: string) => traverse(a, key),
   keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
-  or:
-    (key: string, alt = '') =>
-    (a: unknown) =>
-      traverse(a, key) ?? alt,
+  or: (key: string, alt = '') => (a: unknown) => traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
 };
