@@ -1492,16 +1492,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:12.1.2":
-  version: 12.1.2
-  resolution: "@testing-library/react@npm:12.1.2"
+"@testing-library/react@npm:12.1.5":
+  version: 12.1.5
+  resolution: "@testing-library/react@npm:12.1.5"
   dependencies:
     "@babel/runtime": ^7.12.5
     "@testing-library/dom": ^8.0.0
+    "@types/react-dom": <18.0.0
   peerDependencies:
-    react: "*"
-    react-dom: "*"
-  checksum: 70b0f7f27c83fe1a33e7df01b1e64850fbab4050c403848d611d852cadaa25ccde58518773002ae569a1350b2282c2ccbcbe5eb6af8b29ab377ab2a8ab573b3b
+    react: <18.0.0
+    react-dom: <18.0.0
+  checksum: 4abd0490405e709a7df584a0db604e508a4612398bb1326e8fa32dd9393b15badc826dcf6d2f7525437886d507871f719f127b9860ed69ddd204d1fa834f576a
   languageName: node
   linkType: hard
 
@@ -1596,7 +1597,7 @@ __metadata:
   dependencies:
     "@testing-library/dom": 8.13.0
     "@testing-library/jest-dom": 5.16.2
-    "@testing-library/react": 12.1.2
+    "@testing-library/react": 12.1.5
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@types/react": 17.0.37
@@ -2019,6 +2020,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:<18.0.0":
+  version: 17.0.15
+  resolution: "@types/react-dom@npm:17.0.15"
+  dependencies:
+    "@types/react": ^17
+  checksum: 7b90372bd7207d3860e1043ebfe10fd21fbd9ec3417a29593ca14359774830c888ba4ebb25cf0510628607496f8d35b09d23d329ea709b9311f5866185c5fd67
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:17.0.37":
   version: 17.0.37
   resolution: "@types/react@npm:17.0.37"
@@ -2027,6 +2037,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: e68b0d59aa69577fc6a6d654b25d5d8408625498f4c483f160b557fac21e840f6e8807cbde93e9f039949b6d624a019b1990d18499c1d65aecf3605c25e30242
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^17":
+  version: 17.0.44
+  resolution: "@types/react@npm:17.0.44"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: ebee02778ca08f954c316dc907802264e0121c87b8fa2e7e0156ab0ef2a1b0a09d968c016a3600ec4c9a17dc09b4274f292d9b15a1a5369bb7e4072def82808f
   languageName: node
   linkType: hard
 
