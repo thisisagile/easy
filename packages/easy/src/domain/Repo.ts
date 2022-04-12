@@ -1,13 +1,12 @@
-import { Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, List, toJson } from '../types';
+import { asList, Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, List, toJson } from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
-  }
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
 
-  create = (item: T | Json): T => isValidatable(item) ? item : new this.ctor(item);
+  create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
   all(): Promise<List<T>> {
     return this.gateway.all().then(js => js.map(j => new this.ctor(j)));
@@ -18,6 +17,10 @@ export class Repo<T extends Struct> {
       .byId(id)
       .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j));
+  }
+
+  byIds(...ids: Id[]): Promise<List<T>> {
+    return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
   byKey(key: Key): Promise<List<T>> {

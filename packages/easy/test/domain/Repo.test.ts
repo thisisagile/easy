@@ -1,6 +1,6 @@
 import { Dev, DevRepo, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, Json, RouteGateway, toList, toResults } from '../../src';
+import { Exception, Json, RouteGateway, toList, toResults, Id } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Repo', () => {
@@ -43,6 +43,13 @@ describe('Repo', () => {
     const res = await repo.by('level', '42');
     expect(res).toMatchJson(list);
     expect(gateway.by).toHaveBeenCalledWith('level', '42');
+  });
+
+  test('byIds triggers gateway', async () => {
+    gateway.byIds = mock.resolve(devs);
+    const res = await repo.byIds(3, 1, 2);
+    expect(gateway.byIds).toHaveBeenCalledWith(fits.with([3, 1, 2]));
+    expect(res).toBeArrayOfWithLength(Dev, devs.length);
   });
 
   test('byKey triggers the byId', async () => {

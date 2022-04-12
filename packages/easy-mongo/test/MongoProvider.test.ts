@@ -134,7 +134,7 @@ describe('MongoProvider', () => {
     expect(c.updateOne).toHaveBeenCalledWith({ id: Dev.Jeroen.id }, { $set: Dev.Jeroen.toJSON() });
   });
 
-  test('toMongoJson', async () => {
+  test('toMongoJson', () => {
     const q = { Id: { $eq: 42 } };
     expect(provider.toMongoJson(q)).toEqual(q);
     expect(provider.toMongoJson(toCondition('Id', 'eq', 42))).toEqual(q);

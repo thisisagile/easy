@@ -9,15 +9,15 @@ export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherRes
     .undefined(() => uc, 'Use case is undefined')
     .not(
       t => t.url.includes(`/${uc?.app.id}`),
-      t => `We expected the tester to be at app '${uc?.app.id}', but it is at '${t?.url}' instead.`,
+      t => `We expected the tester to be at app '${uc?.app.id}', but it is at '${t?.url}' instead.`
     )
     .not(
       t => t.url.includes(`/${uc?.id}`),
-      t => `We expected the tester to be at use case '${uc?.id}', but it is at '${t?.url}' instead.`,
+      t => `We expected the tester to be at use case '${uc?.id}', but it is at '${t?.url}' instead.`
     )
     .not(
       t => t.url.includes(id ? `/${id}` : ''),
-      t => `We expected the path to contain '/42', but it is '${t?.url}' instead.`,
+      t => `We expected the path to contain '/42', but it is '${t?.url}' instead.`
     )
     .else(t => `The tester is at '${t?.url}'`);
 };

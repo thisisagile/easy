@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { View, view, views }  from '../../src';
+import { View, view, views } from '../../src';
 import { Dev } from '../ref';
 
 const { ignore, or, keep, keepOr, value } = views;
@@ -112,7 +112,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -125,7 +125,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 

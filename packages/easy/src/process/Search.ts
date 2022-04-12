@@ -9,6 +9,8 @@ export class Search<T extends Struct> {
 
   byId = (id: Id): Promise<T> => this.repo.byId(id);
 
+  byIds = (...ids: Id[]): Promise<List<T>> => this.repo.byIds(...ids);
+
   byKey = (key: Key): Promise<List<T>> => this.repo.byKey(key);
 
   search = (query: JsonValue): Promise<List<T>> =>

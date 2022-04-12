@@ -8,8 +8,7 @@ import { JsonValue } from './Json';
 import { Get, ofGet } from './Get';
 
 export abstract class Enum implements Validatable {
-  protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {
-  }
+  protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
 
   get isValid(): boolean {
     return isDefined(this.id);
@@ -34,7 +33,7 @@ export abstract class Enum implements Validatable {
   }
 
   static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return this.first((e => e.equals(id))) ?? ofGet(alt);
+    return this.first(e => e.equals(id)) ?? ofGet(alt);
   }
 
   equals<E extends Enum>(other: E | Id): other is E {

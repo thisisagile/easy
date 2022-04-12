@@ -34,7 +34,8 @@ export class List<T = unknown> extends Array<T> {
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => toList<U>(super.map(f, params));
 
-  flatMap = <U, This = unknown>(f: (this: This, value: T, index: number, array: T[]) => (ReadonlyArray<U> | U), params?: This): List<U> => toList<U>(super.flatMap(f, params));
+  flatMap = <U, This = unknown>(f: (this: This, value: T, index: number, array: T[]) => ReadonlyArray<U> | U, params?: This): List<U> =>
+    toList<U>(super.flatMap(f, params));
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
