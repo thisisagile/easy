@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@testing-library/dom": "8.13.0",
-    "@testing-library/jest-dom": "5.16.2",
+    "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "12.1.2",
     "@thisisagile/easy": "workspace:*",
     "@types/react": "17.0.37",
