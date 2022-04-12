@@ -1,6 +1,6 @@
 import {
   asJson,
-  isArray,
+  isArray, isBoolean,
   isDefined,
   isFunction, isNumber,
   isObject,
@@ -23,7 +23,7 @@ const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) &&
 const isColAndFunction = (v: unknown): v is { col: string; in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
 const isColAndView = (v: unknown): v is { col: string; in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
-type Views = { [key: string]: string | Func | InOut | number | undefined };
+type Views = { [key: string]: string | Func | InOut | number | boolean | undefined };
 type Viewer = { in: { key: string; f: Func } };
 
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>
@@ -32,6 +32,7 @@ const toFunc = (a: any, col: string, f: Func = a => a): Func =>
 const toViewer = (key: string, value: unknown): Viewer =>
   choose<Viewer>(value)
     .type(isUndefined, () => toViewer(key, () => undefined))
+    .type(isBoolean, b => toViewer(key, () => b))
     .type(isNumber, n => toViewer(key, () => n))
     .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
     .type(isColOnly, io => toViewer(key, io.col))

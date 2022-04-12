@@ -57,9 +57,14 @@ describe('View', () => {
     expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander' });
   });
 
-  test('view with number', () => {
+  test('view with number constant', () => {
     const v = view({ first: 'first', age: 42 }).fromSource;
-    expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander', age: 42, last: "H" });
+    expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander', age: 42, last: 'H' });
+  });
+
+  test('view with boolean constant', () => {
+    const v = view({ first: 'first', contract: false }).fromSource;
+    expect(v.from({ first: 'Sander', last: 'H' })).toStrictEqual({ first: 'Sander', last: 'H', contract: false });
   });
 
   test('view string column with dot notation', () => {
