@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 4
+  version: 6
   cacheKey: 8
 
 "@ampproject/remapping@npm:^2.1.0":
@@ -263,7 +263,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.14.6, @babel/core@npm:^7.1.0, @babel/core@npm:^7.7.2":
+"@babel/core@npm:^7.1.0, @babel/core@npm:^7.7.2":
   version: 7.14.6
   resolution: "@babel/core@npm:7.14.6"
   dependencies:
@@ -286,7 +286,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.17.9, @babel/core@npm:^7.12.3, @babel/core@npm:^7.8.0":
+"@babel/core@npm:^7.12.3, @babel/core@npm:^7.8.0":
   version: 7.17.9
   resolution: "@babel/core@npm:7.17.9"
   dependencies:
@@ -1221,84 +1221,84 @@ __metadata:
 "@next/swc-android-arm-eabi@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-android-arm-eabi@npm:12.1.5"
-  checksum: 3c7dcad21dfc8049f98539fd5d62ead93735ee5dd7115fa6f8d36a147858d8451b656e77f39b79d12c77a118567c0c4c849ea0257533e1dae025110650e4ba98
+  conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
 "@next/swc-android-arm64@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-android-arm64@npm:12.1.5"
-  checksum: 5d47320db7c26875ce94b792b9cbeee49f78875f90fb4755409c9485779a393692a914061c4484fd28140d68622fb23b999012aa0373859d49f385796912c863
+  conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
 "@next/swc-darwin-arm64@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-darwin-arm64@npm:12.1.5"
-  checksum: 912cad11dec78b118f3c64dec5ce4d2203558236e6214817848c1b939d881ede029a3beb4abb081177677113d4faea673eaaf1c8aa84217dc8da59acb397c439
+  conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
 "@next/swc-darwin-x64@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-darwin-x64@npm:12.1.5"
-  checksum: 2992c74402a212512419db5b1afe4d65012b37122ab5401ecba2fac36216f7a70365942fb0a86b81838e4937fc3a4f2430f31b084536fdbd739d0320d5d44a29
+  conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
 "@next/swc-linux-arm-gnueabihf@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-linux-arm-gnueabihf@npm:12.1.5"
-  checksum: f2c834950e08314cc1274de83242ac90721318ddabc55b5fc9500a992a5f1c62c617c7cf152418ed7c062cac22728f62d2d89e8b6b0e6799b03bc6c8d0daa31d
+  conditions: os=linux & cpu=arm
   languageName: node
   linkType: hard
 
 "@next/swc-linux-arm64-gnu@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-linux-arm64-gnu@npm:12.1.5"
-  checksum: 3e421adc11dc70c7c4a3fd49618f7e4b8ea0adac1c3442ba0fbbd1536ae1ee18377e388040f674c91eaacee1ac24cd37eac9ca139030a51f275386e380d3a2c5
+  conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
 "@next/swc-linux-arm64-musl@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-linux-arm64-musl@npm:12.1.5"
-  checksum: a5d79599f88eb2479e9c1861c676c1c91860eaa990ce59c90805711034d05106d7ba59776e0c6c0f60922e026221a379c66f3caea4cede93849ca222f01aa8c3
+  conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
 "@next/swc-linux-x64-gnu@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-linux-x64-gnu@npm:12.1.5"
-  checksum: 25d79ce86ee62b3a2e83c37fec30a8bf6d3342faeeb2d0f6e4c6b96265ef95a81061bc0ee1d18113f0a092d15f797db146d51990425604f04746a37de8ca0c4d
+  conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
 "@next/swc-linux-x64-musl@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-linux-x64-musl@npm:12.1.5"
-  checksum: fef770f8e4b92eed14880eeacd6a251b81663118efb0ef6d508fc5a58db99ecc37a46279f7c1c8dc4039bed8866fec85cffc39d8ae586b0050a28adeff6d2bbc
+  conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
 "@next/swc-win32-arm64-msvc@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-win32-arm64-msvc@npm:12.1.5"
-  checksum: 53ddbcab8a5c6c5d8b2e85c17353016662bd7945efecc1364027bbc1296a8786e65911b7df7b08e448f2e971fdd28260afe7200e12364405409df81f65b53e0e
+  conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
 "@next/swc-win32-ia32-msvc@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-win32-ia32-msvc@npm:12.1.5"
-  checksum: 1daf70d4804cf24ab0ffc6e44257f0b63943a6466c3fb428d247dce681f4b64ed6e79197cdff6a6b8d60a38cd1deae68b8ad4323ca4c4028c90a2b0cc7efb435
+  conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
 "@next/swc-win32-x64-msvc@npm:12.1.5":
   version: 12.1.5
   resolution: "@next/swc-win32-x64-msvc@npm:12.1.5"
-  checksum: aa670335e0ce90a558aa2c5cf2f2ee729a88431d62509e176530cbe2b4095c12acca1695f2742a7811d6ffcf3b097904a7e840d4bf3b11baefab5798a607f4b7
+  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -4489,7 +4489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.13.0, eslint@npm:^8.13.0":
+"eslint@npm:^8.13.0":
   version: 8.13.0
   resolution: "eslint@npm:8.13.0"
   dependencies:
@@ -4982,15 +4982,16 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 97ade64e75091afee5265e6956cb72ba34db7819b4c3e94c431d4be2b19b8bb7a2d4116da417950c3425f17c8fe693d25e20212cac583ac1521ad066b77ae31f
+  conditions: os=darwin
   languageName: node
   linkType: hard
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=1cc4b2"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
   dependencies:
     node-gyp: latest
-  checksum: 78db9daf1f6526a49cefee3917cc988f62dc7f25b5dd80ad6de4ffc4af7f0cab7491ac737626ff53e482a111bc53aac9e411fe3602458eca36f6a003ecf69c16
+  conditions: os=darwin
   languageName: node
   linkType: hard
 
@@ -6509,7 +6510,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-resolve@npm:27.5.1, jest-resolve@npm:^27.5.1":
+"jest-resolve@npm:^27.5.1":
   version: 27.5.1
   resolution: "jest-resolve@npm:27.5.1"
   dependencies:
@@ -9094,11 +9095,11 @@ __metadata:
 
 "resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>":
   version: 1.20.0
-  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=00b1ff"
+  resolution: "resolve@patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=07638b"
   dependencies:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
-  checksum: bed00be983cd20a8af0e7840664f655c4b269786dbd9595c5f156cd9d8a0050e65cdbbbdafc30ee9b6245b230c78a2c8ab6447a52545b582f476c29adb188cc5
+  checksum: a0dd7d16a8e47af23afa9386df2dff10e3e0debb2c7299a42e581d9d9b04d7ad5d2c53f24f1e043f7b3c250cbdc71150063e53d0b6559683d37f790b7c8c3cd5
   languageName: node
   linkType: hard
 
@@ -10359,11 +10360,11 @@ __metadata:
 
 "typescript@patch:typescript@~4.6.3#~builtin<compat/typescript>":
   version: 4.6.3
-  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=32657b"
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 59346df396432a7dc69f86776acadbe61d1f1faf8bbecf6dadc3bd95d2a70808a40a65dc17699b8aec74902edca2d49aa7373bb61443705d7c3e56dd2757d5c3
+  checksum: 6bf45caf847062420592e711bc9c28bf5f9a9a7fa8245343b81493e4ededae33f1774009d1234d911422d1646a2c839f44e1a23ecb111b40a60ac2ea4c1482a8
   languageName: node
   linkType: hard
 
