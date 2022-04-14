@@ -17,6 +17,10 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
+  byIds(...ids: Id[]): Promise<List<Json>> {
+    return reject(Exception.IsNotImplemented);
+  }
+
   search(q: JsonValue): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented);
   }

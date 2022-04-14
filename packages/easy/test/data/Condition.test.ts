@@ -1,4 +1,4 @@
-import { Condition, DateTime, Field } from '../../src';
+import { Condition, SortCondition, DateTime, Field } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Condition', () => {
@@ -58,5 +58,19 @@ describe('Condition', () => {
   test('toJson', () => {
     const d = new DateTime('2021-05-03T10:31:24.000Z');
     expect(field.greaterEqual(d)).toMatchJson({ name: { $gte: '2021-05-03T10:31:24.000Z' } });
+  });
+});
+
+describe('SortCondition', () => {
+  const field = new Field('age');
+
+  test('condition', () => {
+    const c = new SortCondition(field.property, 42);
+    expect(c.toJSON()).toMatchJson({ age: 42 });
+  });
+
+  test('empty operator, used in find options see mongo docs', () => {
+    const c = new SortCondition(field.property, 42);
+    expect(c.operator).toBe('');
   });
 });

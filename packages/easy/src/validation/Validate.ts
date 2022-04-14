@@ -1,10 +1,9 @@
 import {
   asString,
-  Enum,
   isArray,
-  isDefined,
   isEnum,
   isResults,
+  isUndefined,
   isValidatable,
   isValue,
   List,
@@ -18,7 +17,6 @@ import {
   toResult,
   toResults,
   tryTo,
-  Value,
 } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
@@ -46,27 +44,12 @@ const constraints = (subject?: unknown): Results =>
     .map(res => res.reduce((rs, r) => rs.add(...r.results), toResults())).value;
 
 export const validate = (subject?: unknown): Results =>
-  choose<Results, any>(subject)
-    .case(
-      s => !isDefined(s),
-      s => asResults(s, 'Subject is not defined.')
-    )
-    .case(
-      s => isEnum(s),
-      (e: Enum) => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.'))
-    )
-    .case(
-      s => isArray(s),
-      (e: []) => e.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults())
-    )
-    .case(
-      s => isValue(s),
-      (v: Value) => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.'))
-    )
-    .case(
-      s => isValidatable(s),
-      v => constraints(v)
-    )
+  choose<Results>(subject)
+    .type(isUndefined, u => asResults(u, 'Subject is not defined.'))
+    .type(isEnum, e => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')))
+    .type(isValue, v => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')))
+    .type(isArray, a => a.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()))
+    .type(isValidatable, v => constraints(v))
     .else(toResults());
 
 export const validateReject = <T>(subject: T): Promise<T> => when(subject).not.isValid.reject();

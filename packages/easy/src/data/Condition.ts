@@ -20,5 +20,15 @@ export class LogicalCondition {
   }
 }
 
+export class SortCondition extends Condition {
+  constructor(readonly key: string, readonly value: number) {
+    super(key, '', value);
+  }
+
+  toJSON(): Json {
+    return { [this.key]: this.value };
+  }
+}
+
 export const toCondition = (field: string, operator: string, value: unknown, conv: Convert = convert.default): Condition =>
   new Condition(field, operator, conv.from(value) as JsonValue);

@@ -255,14 +255,18 @@ describe('Try', () => {
 
   test('or function is called', () => {
     const func = mock.return(3);
-    const res = tryTo(() => 6).filter(b => b !== 6).orElse(func);
+    const res = tryTo(() => 6)
+      .filter(b => b !== 6)
+      .orElse(func);
     expect(res).toBe(3);
     expect(func).toHaveBeenCalled();
   });
 
   test('or function is never called', () => {
     const func = mock.return(3);
-    const res = tryTo(() => 6).filter(b => b === 6).orElse(func);
+    const res = tryTo(() => 6)
+      .filter(b => b === 6)
+      .orElse(func);
     expect(res).toBe(6);
     expect(func).not.toHaveBeenCalled();
   });

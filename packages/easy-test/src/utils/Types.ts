@@ -2,7 +2,7 @@ import { asString, isFunction } from './Utils';
 
 export type Constructor<T> = { new (...args: any[]): T };
 
-export type Message<P extends unknown> = Text | ((...params: P[]) => Text);
+export type Message<P> = Text | ((...params: P[]) => Text);
 
 export const toMessage = <P>(g: Message<P>, ...params: P[]): string => asString(isFunction(g) ? g(...params) : g);
 

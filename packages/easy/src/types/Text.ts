@@ -1,8 +1,9 @@
-import { isDefined, isEmpty } from './Is';
+import { isDefined, isEmpty, isNotEmpty } from './Is';
 import { toName } from './Constructor';
 import { template } from './Template';
 import { isFunc } from './Func';
 import { Get, ofGet } from './Get';
+import { toList } from './List';
 
 export type Text = { toString(): string };
 
@@ -77,15 +78,15 @@ export class ToText implements Text {
     return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
   }
 
+  get isEmpty(): boolean {
+    return isEmpty(this.toString());
+  }
+
   parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
 
   equals = this.is;
-
-  get isEmpty(): boolean {
-    return isEmpty(this.toString());
-  }
 
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 
@@ -103,7 +104,15 @@ export class ToText implements Text {
 
   replace = (search: Text, replace: Text): ToText => this.map(s => replaceAll(s, search, replace));
 
-  add = (add?: unknown, separator = ''): ToText => this.map(s => (isDefined(add) ? `${s}${separator}${text(add)}` : s));
+  add = (add?: unknown, separator = ''): ToText => this.map(s => (isNotEmpty(add) ? `${s}${separator}${text(add)}` : s));
+
+  with = (separator: string, ...other: unknown[]): ToText =>
+    this.map(s =>
+      toList(s)
+        .add(...other.map(u => text(u).toString()))
+        .filter(s => isNotEmpty(s))
+        .join(separator)
+    );
 
   toString(): string {
     return this.subject;

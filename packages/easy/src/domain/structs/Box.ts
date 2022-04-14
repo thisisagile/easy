@@ -22,10 +22,6 @@ export class Box extends Struct {
 
   fits = (contents: Box, qty = 1): boolean => {
     const stackedContent = contents.stack(qty);
-    return this.lowestDim.gte( stackedContent.lowestDim) &&
-      this.medianDim.gte(stackedContent.medianDim) &&
-      this.maxDim.gte( stackedContent.maxDim);
+    return this.lowestDim.gte(stackedContent.lowestDim) && this.medianDim.gte(stackedContent.medianDim) && this.maxDim.gte(stackedContent.maxDim);
   };
-
-
 }

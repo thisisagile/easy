@@ -26,11 +26,10 @@ describe('mock', () => {
 
   test('return with works', () => {
     project.fails = mock.returnWith<Project>();
-    expect(project.fails(false)).toMatchObject({ });
-    project.fails = mock.returnWith<Project>({ name: 'DevOps'});
+    expect(project.fails(false)).toMatchObject({});
+    project.fails = mock.returnWith<Project>({ name: 'DevOps' });
     return expect(project.fails(false)).toMatchObject({ name: 'DevOps' });
   });
-
 
   test('resolve works', () => {
     project.fails = mock.resolve(version);
@@ -39,20 +38,20 @@ describe('mock', () => {
 
   test('resolve with works', async () => {
     project.fails = mock.resolveWith<Project>();
-    await expect(project.fails(false)).resolves.toMatchObject({ });
-    project.fails = mock.resolveWith<Project>({ name: 'DevOps'});
+    await expect(project.fails(false)).resolves.toMatchObject({});
+    project.fails = mock.resolveWith<Project>({ name: 'DevOps' });
     return expect(project.fails(false)).resolves.toMatchObject({ name: 'DevOps' });
   });
 
   test('reject works', async () => {
     project.fails = mock.rejectWith<Project>();
-    await expect(project.fails(false)).rejects.toMatchObject({ });
+    await expect(project.fails(false)).rejects.toMatchObject({});
     project.fails = mock.reject(version);
     return expect(project.fails(false)).rejects.toBe(version);
   });
 
   test('reject with works', () => {
-    project.fails = mock.rejectWith<Project>({ name: 'DevOps'});
+    project.fails = mock.rejectWith<Project>({ name: 'DevOps' });
     return expect(project.fails(false)).rejects.toMatchObject({ name: 'DevOps' });
   });
 

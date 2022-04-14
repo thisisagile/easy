@@ -8,9 +8,11 @@ import {
   LogicalCondition,
   MapOptions,
   Mapper,
+  Mapping,
   mappings,
   ofGet,
   PropertyOptions,
+  SortCondition,
   Text,
   toCondition,
   toUuid,
@@ -23,7 +25,7 @@ export class Collection extends Mapper {
     ...mappings,
     field: <T = unknown>(name: string, options?: PropertyOptions<T>): Field => new Field(name, options),
   };
-  readonly id = this.map.field('id', { dflt: toUuid });
+  readonly id = this.map.field('id', { dflt: toUuid }) as Mapping;
 
   constructor(options: MapOptions = { startFrom: 'source' }) {
     super(options);
@@ -54,6 +56,12 @@ export class Collection extends Mapper {
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
   search = (key: Text): Field => this.map.field(asString(key));
+
+  sort = (...conditions: SortCondition[]): Json =>
+    conditions.reduce((cs: any, c) => {
+      cs[c.key] = c.value;
+      return cs;
+    }, {});
 
   out(to: Json = {}): Json {
     return toMongoType(super.out(to));

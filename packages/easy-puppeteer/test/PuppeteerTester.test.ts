@@ -249,18 +249,14 @@ describe('PuppeteerTester', () => {
   }, 10000);
 });
 
-
-
 describe('PuppeteerElement', () => {
   test('click', async () => {
-
     const eh = mock.empty<ElementHandle>();
-    eh.click = mock.return()
+    eh.click = mock.return();
 
-    const pe = new PuppeteerElement(Promise.resolve(eh))
-    await pe.click()
+    const pe = new PuppeteerElement(Promise.resolve(eh));
+    await pe.click();
 
-    expect(eh.click).toHaveBeenCalledTimes(1)
+    expect(eh.click).toHaveBeenCalledTimes(1);
   });
-
-})
+});

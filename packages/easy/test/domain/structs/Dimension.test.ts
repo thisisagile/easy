@@ -2,7 +2,6 @@ import '@thisisagile/easy-test';
 import { Dimension, UnitOfMeasurement } from '../../../src';
 
 describe('Dimension', () => {
-
   test('Dimension without value is not valid', () => {
     const d = new Dimension({ uom: UnitOfMeasurement.KM });
     const d2 = new Dimension({});
@@ -18,7 +17,6 @@ describe('Dimension', () => {
     expect(d2.value).toBe(10);
     expect(d2.uom).toBe(UnitOfMeasurement.MM);
   });
-
 
   test('With without uom sets it to mm', () => {
     const d = Dimension.with(10);
@@ -43,6 +41,5 @@ describe('Dimension', () => {
     expect(smallDim.gte(bigDim)).toBeFalsy();
     expect(bigDim.gte(smallDim)).toBeTruthy();
     expect(smallDim.gte(smallDim)).toBeTruthy();
-
   });
 });

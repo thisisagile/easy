@@ -1,4 +1,4 @@
-import { Dev } from '../ref';
+import { Certificate, Dev } from '../ref';
 import { asList, Currency, Enum, Id, isEmpty, isList, List, reject, resolve, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
@@ -18,8 +18,15 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
+  });
+
+  test('flatMap', () => {
+    const certificates = devs.flatMap(d => d.certificates);
+    expect(certificates).toBeInstanceOf(List);
+    expect(certificates).toHaveLength(6);
+    expect(certificates.toJSON()).toMatchJson([Certificate.ScrumMaster, Certificate.ScrumMaster, Certificate.Flow, Certificate.ScrumMaster, Certificate.MSP]);
   });
 
   test('mapDefined', () => {
@@ -27,7 +34,6 @@ describe('List', () => {
     expect(devs).toBeInstanceOf(List);
     expect(devs).toHaveLength(3);
   });
-
 
   test('mapAsync success', async () => {
     const hello = (d: Dev): Promise<Dev> => resolve(d);
@@ -107,6 +113,13 @@ describe('List', () => {
     expect(devs.add(toList(Dev.Naoufal, Dev.Jeroen))).toHaveLength(4);
   });
 
+  test('remove', () => {
+    const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
+    expect(devs.remove(Dev.RobC)).toHaveLength(2);
+    expect(devs[1]).toMatchObject(Dev.Wouter);
+    expect(devs.remove(Dev.Rob)).toHaveLength(2);
+  });
+
   test('toJSON', () => {
     const json = toList(Dev.Sander, Dev.Wouter).toJSON();
     expect(json).not.toBeInstanceOf(List);
@@ -158,6 +171,7 @@ describe('isList', () => {
       [Dev.Sander.id]: Dev.Sander,
       [Dev.Jeroen.id]: Dev.Jeroen,
       [Dev.Rob.id]: Dev.Rob,
+      [Dev.RobC.id]: Dev.RobC,
     });
   });
 });
@@ -288,14 +302,6 @@ describe('toList', () => {
     expect(toList({ id: 41 }).byId(stringAsId)).toMatchObject({ id: 41 });
   });
 
-  test('toList with single number N initializes list with length N', () => {
-    expect(toList(5)).toHaveLength(5);
-    expect(toList(5).first()).toBeUndefined();
-
-    expect(toList([5])).toHaveLength(5);
-    expect(toList([5]).first()).toBeUndefined();
-  });
-
   test('remove', () => {
     expect(toList().remove(Dev.Rob)).toHaveLength(0);
     expect(toList(Dev.Sander).remove(Dev.Rob)).toHaveLength(1);
@@ -361,11 +367,28 @@ describe('asList', () => {
     expect(m).toHaveLength(3);
   });
 
+  test('toList(number) => [number]', () => {
+    const l = toList<Id>([2]);
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe(2);
+  });
+
+  test('map returns [number]', () => {
+    const entities = toList<Dev>(Dev.RobC);
+    expect(entities.map(e => e.id)).toHaveLength(1);
+    expect(entities.map(e => e.id)[0]).toBe(6);
+  });
+
   test('sort with two', () => {
-    const list = toList([{ id: 1, name: 'sander' }, { id: 2, name: 'wouter' }, { id: 1, name: 'jeroen' }, {
-      id: 3,
-      name: 'arnold',
-    }]);
+    const list = toList([
+      { id: 1, name: 'sander' },
+      { id: 2, name: 'wouter' },
+      { id: 1, name: 'jeroen' },
+      {
+        id: 3,
+        name: 'arnold',
+      },
+    ]);
     const sorted = list.asc(i => i.id || i.name);
     expect(sorted[0].id).toBe(1);
     expect(sorted[0].name).toBe('jeroen');

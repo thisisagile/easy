@@ -1,4 +1,4 @@
-import { reject, resolve, toList, toResults, tuple, when } from '../../src';
+import { reject, resolve, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -15,17 +15,18 @@ describe('Promise', () => {
 });
 
 describe('tuple', () => {
-
   class Dev {
-    constructor(readonly name: string) {
+    constructor(readonly name: string) {}
+    toString(): string {
+      return this.name;
     }
-    toString(): string { return this.name}
   }
 
   class Manager {
-    constructor(readonly role: string) {
+    constructor(readonly role: string) {}
+    toString(): string {
+      return this.role;
     }
-    toString(): string { return this.role}
   }
 
   const d = new Dev('Sander');
@@ -57,7 +58,7 @@ describe('tuple', () => {
   test('resolve async tuple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[2](asyncM(c), asyncM(c)))
+      .then(c => tuple2(asyncM(c), asyncM(c)))
       .then(([m, m2]) => join(m, m2));
 
     expect(res).toBe('CEO easy CEO easy');
@@ -66,7 +67,7 @@ describe('tuple', () => {
   test('resolve sync and async triple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[3](d, asyncM(c), asyncM(c)))
+      .then(c => tuple3(d, asyncM(c), asyncM(c)))
       .then(([d, m, m2]) => join(d, m, m2));
 
     expect(res).toBe('Sander CEO easy CEO easy');
@@ -75,7 +76,7 @@ describe('tuple', () => {
   test('resolve sync and async quadruple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[4](d, asyncM(c), asyncM(c), d))
+      .then(c => tuple4(d, asyncM(c), asyncM(c), d))
       .then(([, , , d]) => d);
 
     expect(res).toBeInstanceOf(Dev);
@@ -84,7 +85,7 @@ describe('tuple', () => {
   test('resolve sync and async quintuple', async () => {
     const res = await when(ceo)
       .not.isDefined.reject()
-      .then(c => tuple[5](asyncM(c), d, asyncM(c), asyncM(c), d))
+      .then(c => tuple5(asyncM(c), d, asyncM(c), asyncM(c), d))
       .then(([c, , , ,]) => c);
 
     expect(res).toBeInstanceOf(Manager);
@@ -101,7 +102,6 @@ describe('tuple', () => {
   });
 
   test('resolve sync and async spread', async () => {
-
     const res = await when(d)
       .not.isDefined.reject()
       .then(d => tuple.spread(d, asyncM(ceo), asyncM(cto)))
@@ -110,5 +110,4 @@ describe('tuple', () => {
     expect(res).toHaveLength(2);
     expect(res[1]).toBeInstanceOf(Manager);
   });
-
 });

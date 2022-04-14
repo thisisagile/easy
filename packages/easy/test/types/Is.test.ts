@@ -3,6 +3,7 @@ import {
   isArray,
   isBoolean,
   isDefined,
+  isUndefined,
   isEmpty,
   isEmptyObject,
   isInstance,
@@ -256,5 +257,15 @@ describe('isIntersecting', () => {
     expect(isIntersecting(['a', 'b'], ['a', 'c'])).toBeTruthy();
     expect(isIntersecting(['a', 'b'], ['b', 'c'])).toBeTruthy();
     expect(isIntersecting(['a', 'b', 'c'], ['b'])).toBeTruthy();
+  });
+});
+
+describe('isUndefined', () => {
+  test('Check', () => {
+    expect(isUndefined()).toBeTruthy();
+    expect(isUndefined(undefined)).toBeTruthy();
+    expect(isUndefined(null)).toBeTruthy();
+    expect(isUndefined('null')).toBeFalsy();
+    expect(isUndefined({})).toBeFalsy();
   });
 });

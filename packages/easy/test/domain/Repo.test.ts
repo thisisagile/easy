@@ -11,7 +11,7 @@ describe('Repo', () => {
   beforeEach(() => {
     gateway = new RouteGateway(
       () => DevUri.Developers,
-      () => DevUri.Developer
+      () => DevUri.Developer,
     );
     repo = new DevRepo(gateway);
   });
@@ -43,6 +43,13 @@ describe('Repo', () => {
     const res = await repo.by('level', '42');
     expect(res).toMatchJson(list);
     expect(gateway.by).toHaveBeenCalledWith('level', '42');
+  });
+
+  test('byIds triggers gateway', async () => {
+    gateway.byIds = mock.resolve(devs);
+    const res = await repo.byIds(3, 1, 2);
+    expect(gateway.byIds).toHaveBeenCalledWith(3, 1, 2);
+    expect(res).toBeArrayOfWithLength(Dev, devs.length);
   });
 
   test('byKey triggers the byId', async () => {
@@ -95,6 +102,18 @@ describe('Repo', () => {
     gateway.add = mock.resolve(Dev.Jeroen.toJSON());
     await expect(repo.add(Dev.Jeroen.toJSON())).resolves.toBeValid();
     return expect(gateway.add).toHaveBeenCalled();
+  });
+
+  test('add invalid entity does trigger gateway', async () => {
+    gateway.add = mock.resolve();
+    await expect(repo.add(Dev.Invalid)).rejects.not.toBeValid();
+    return expect(gateway.add).not.toHaveBeenCalled();
+  });
+
+  test('add valid entity does trigger gateway', async () => {
+    gateway.add = mock.resolve(Dev.Jeroen.toJSON());
+    await expect(repo.add(Dev.Jeroen)).resolves.toBeValid();
+    return expect(gateway.add).toHaveBeenCalledWith(Dev.Jeroen.toJSON());
   });
 
   test('update where object is not found does not trigger gateway', async () => {

@@ -7,7 +7,6 @@ import { GetProperty, ofProperty } from './Get';
 import { Id } from './Id';
 import { asString } from './Text';
 
-
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
 
@@ -34,6 +33,9 @@ export class List<T = unknown> extends Array<T> {
     }, new Array<Json>());
 
   map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => toList<U>(super.map(f, params));
+
+  flatMap = <U, This = unknown>(f: (this: This, value: T, index: number, array: T[]) => ReadonlyArray<U> | U, params?: This): List<U> =>
+    toList<U>(super.flatMap(f, params));
 
   mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
 
@@ -69,7 +71,7 @@ export class List<T = unknown> extends Array<T> {
   orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
 }
 
-export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>(...toArray<T>(...items));
+export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 

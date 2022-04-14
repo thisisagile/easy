@@ -3,15 +3,15 @@ import { MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { DateTime, Exception, toCondition } from "@thisisagile/easy";
+import { DateTime, Exception, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
   let db: Db;
   const c = {} as Collection;
-  const cursor = {} as Cursor;
+  const cursor = mock.a<Cursor>({ toArray: mock.return([]) });
   let provider: MongoProvider;
-  const collection = new DevCollection();
+  const devs = new DevCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
 
@@ -21,7 +21,7 @@ describe('MongoProvider', () => {
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
-    provider = new MongoProvider(collection, Promise.resolve(client));
+    provider = new MongoProvider(devs, Promise.resolve(client));
   });
 
   test('all calls find', async () => {
@@ -63,7 +63,7 @@ describe('MongoProvider', () => {
     c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
     await provider.find({});
-    expect(c.find).toHaveBeenCalledWith({}, { limit: 250 });
+    expect(c.find).toHaveBeenCalledWith({}, { limit: 250, sort: {} });
   });
 
   test('find with with only skip keeps limit', async () => {
@@ -71,7 +71,7 @@ describe('MongoProvider', () => {
     c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
     await provider.find({}, { skip: 3 });
-    expect(c.find).toHaveBeenCalledWith({}, { skip: 3, limit: 250 });
+    expect(c.find).toHaveBeenCalledWith({}, fits.json({ skip: 3, limit: 250 }));
   });
 
   test('find calls toMongoType on queries, to correct dates', async () => {
@@ -81,8 +81,15 @@ describe('MongoProvider', () => {
 
     await provider.find({ date: date });
 
-    expect(c.find).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, { limit: fits.any() });
-    expect(c.find).not.toHaveBeenCalledWith({ date: date }, { limit: fits.any() });
+    expect(c.find).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, expect.anything());
+    expect(c.find).not.toHaveBeenCalledWith({ date: date }, expect.anything());
+  });
+
+  test('find with sort options', async () => {
+    c.find = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    await provider.find(devs.where(devs.name.is('Jeroen')), { limit: 2, sort: [devs.name.desc(), devs.language.asc()] });
+    expect(c.find).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, { limit: 2, sort: { Name: 1, Language: -1 } });
   });
 
   test('group calls aggregate on the collection', () => {
@@ -109,7 +116,7 @@ describe('MongoProvider', () => {
     provider.collection = mock.resolve(c);
     const res = await provider.by('level', 1);
     expect(res.last()).toMatchObject(devData.wouter);
-    expect(c.find).toHaveBeenCalledWith({ level: '1' }, { limit: 250 });
+    expect(c.find).toHaveBeenCalledWith({ level: '1' }, expect.anything());
   });
 
   test('add calls insertOne on the collection', async () => {
@@ -127,11 +134,11 @@ describe('MongoProvider', () => {
     expect(c.updateOne).toHaveBeenCalledWith({ id: Dev.Jeroen.id }, { $set: Dev.Jeroen.toJSON() });
   });
 
-  test('toMongoJson', async () => {
-    const q = {Id: {$eq: 42}};
+  test('toMongoJson', () => {
+    const q = { Id: { $eq: 42 } };
     expect(provider.toMongoJson(q)).toEqual(q);
     expect(provider.toMongoJson(toCondition('Id', 'eq', 42))).toEqual(q);
-    expect(provider.toMongoJson(collection.id.is(42).and(collection.name.is('sander')))).toEqual({$and: [q, {Name: {$eq: 'sander'}} ]});
+    expect(provider.toMongoJson(devs.id.is(42).and(devs.name.is('sander')))).toEqual({ $and: [q, { Name: { $eq: 'sander' } }] });
   });
 
   test('remove calls deleteOne on the collection', async () => {
@@ -183,7 +190,7 @@ describe('MongoProvider', () => {
   test('create text indexes on the collection', async () => {
     c.createIndex = mock.resolve('Language_text_Name_text');
     provider.collection = mock.resolve(c);
-    await expect(provider.createTextIndexes(collection.language, collection.name)).resolves.toBe('Language_text_Name_text');
+    await expect(provider.createTextIndexes(devs.language, devs.name)).resolves.toBe('Language_text_Name_text');
     expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' });
   });
 
@@ -201,9 +208,9 @@ describe('MongoProvider', () => {
   test('createPartialIndex calls createIndex on the collection with condition and creates unique indexes by default', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
-    await expect(provider.createPartialIndex('name', collection.name.exists(true))).resolves.toBe('_index');
+    await expect(provider.createPartialIndex('name', devs.name.exists(true))).resolves.toBe('_index');
     expect(c.createIndex).toHaveBeenCalledWith('name', {
-      partialFilterExpression: collection.name.exists(true).toJSON(),
+      partialFilterExpression: devs.name.exists(true).toJSON(),
       unique: true,
       writeConcern: { w: 1 },
     });
@@ -240,27 +247,27 @@ describe('MongoProvider', () => {
   });
 
   test('first time connect to the mongo cluster', async () => {
-    provider = new MongoProvider(collection);
+    provider = new MongoProvider(devs);
     MongoProvider.connect = mock.resolve(client);
     const coll = await provider.collection();
-    expect(MongoProvider.connect).toHaveBeenCalledWith(collection.db);
+    expect(MongoProvider.connect).toHaveBeenCalledWith(devs.db);
     expect(coll.collectionName).toBe('devCollection');
   });
 
   test('first time connect fails set client to undefined', async () => {
-    provider = new MongoProvider(collection);
+    provider = new MongoProvider(devs);
     MongoProvider.connect = mock.reject(Exception.IsNotValid);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.connect).toHaveBeenNthCalledWith(1, collection.db);
-    expect(MongoProvider.connect).toHaveBeenNthCalledWith(2, collection.db);
+    expect(MongoProvider.connect).toHaveBeenNthCalledWith(1, devs.db);
+    expect(MongoProvider.connect).toHaveBeenNthCalledWith(2, devs.db);
   });
 
   test('reconnect if not connected anymore', async () => {
     client.isConnected = mock.return(false);
     MongoProvider.connect = mock.resolve(client);
     const coll = await provider.collection();
-    expect(MongoProvider.connect).toHaveBeenCalledWith(collection.db);
+    expect(MongoProvider.connect).toHaveBeenCalledWith(devs.db);
     expect(coll.collectionName).toBe('devCollection');
   });
 
@@ -272,10 +279,10 @@ describe('MongoProvider', () => {
   });
 
   test('reject if db getter throws exception', async () => {
-    jest.spyOn(collection, 'db', 'get').mockImplementation(() => {
+    jest.spyOn(devs, 'db', 'get').mockImplementation(() => {
       throw Exception.IsNotImplemented;
     });
-    provider = new MongoProvider(collection);
+    provider = new MongoProvider(devs);
     const db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);

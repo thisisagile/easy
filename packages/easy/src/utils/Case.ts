@@ -11,6 +11,14 @@ class Case<T, V = unknown> {
       .or(this);
   }
 
+  type<U>(pred: (v: unknown) => v is U, out: Get<T, U>): Case<T, V> {
+    return tryTo(pred, this.value)
+      .is.true()
+      .map(() => ofGet<T, U>(out, this.value as unknown as U))
+      .map(res => new Found(this.value, res) as Case<T, V>)
+      .or(this);
+  }
+
   else(alt: Get<T, V>): T {
     return ofGet(alt, this.value);
   }
@@ -22,6 +30,10 @@ export class Found<T, V> extends Case<T, V> {
   }
 
   case(pred: Predicate<V>, out: Get<T, V>): this {
+    return this;
+  }
+
+  type<U>(pred: (v: unknown) => v is U, out: Get<T, U>): Case<T, V> {
     return this;
   }
 

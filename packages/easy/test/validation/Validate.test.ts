@@ -1,4 +1,4 @@
-import { asList, Entity, Enum, includes, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
+import { asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 import { Exception } from '@thisisagile/easy';
@@ -94,6 +94,7 @@ describe('validate', () => {
 
   test('value', () => {
     expect(validate(new Email('sander@ditisagile.nl'))).toBeValid();
+    expect(isValue(new Email(''))).toBeTruthy();
     expect(validate(new Email(''))).not.toBeValid();
   });
 
@@ -180,7 +181,14 @@ describe('validate', () => {
         })
       )
     ).toBeValid();
-    expect(validate(new BrandProductPrices({ brand: 'Dell', productPrices: [{ id: 42 }, { id: 43 }] }))).not.toBeValid();
+    expect(
+      validate(
+        new BrandProductPrices({
+          brand: 'Dell',
+          productPrices: [{ id: 42 }, { id: 43 }],
+        })
+      )
+    ).not.toBeValid();
     expect(validate(new BrandProductPrices({ brand: 'Dell', productPrices: [{}] }))).not.toBeValid();
     expect(validate(new BrandProductPrices({ productPrices: [{}] }))).not.toBeValid();
     expect(validate(new BrandProductPrices({ brand: 'Dell' }))).not.toBeValid();

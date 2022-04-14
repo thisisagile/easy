@@ -64,7 +64,7 @@ describe('TableGateway', () => {
 
   test('add fails', async () => {
     provider.query = mock.resolve(toList());
-    await expect(target.add(Dev.Jeroen.toJSON())).rejects.toEqual(`Could not add items with id ${Dev.Jeroen.id}`);
+    await expect(target.add(Dev.Jeroen.toJSON())).rejects.toBe(`Could not add items with id ${Dev.Jeroen.id}`);
     expect(provider.query).toBeQueriedWith(table.insert(Dev.Jeroen.toJSON()));
   });
 
@@ -82,7 +82,7 @@ describe('TableGateway', () => {
 
   test('update fails', async () => {
     provider.query = mock.resolve(toList());
-    await expect(target.update(Dev.Jeroen.toJSON())).rejects.toEqual(`Could not update item with id ${Dev.Jeroen.id}`);
+    await expect(target.update(Dev.Jeroen.toJSON())).rejects.toBe(`Could not update item with id ${Dev.Jeroen.id}`);
     expect(provider.query).toBeQueriedWith(table.update(Dev.Jeroen.toJSON()).where(table.id.is(Dev.Jeroen.id)));
   });
 });

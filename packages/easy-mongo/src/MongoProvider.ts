@@ -12,6 +12,7 @@ import {
   List,
   LogicalCondition,
   reject,
+  SortCondition,
   toList,
   when,
 } from '@thisisagile/easy';
@@ -27,6 +28,7 @@ const omitId = (j: Json): Json => {
 export type FindOptions = {
   limit?: number;
   skip?: number;
+  sort?: SortCondition[];
 };
 
 export type FilterQuery<T> = MongoFilterQuery<T>;
@@ -64,9 +66,9 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
-  find( query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
+  find(query: Condition | LogicalCondition | FilterQuery<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
     return this.collection()
-      .then(c => c.find(this.toMongoJson(query), { ...options, limit: options.limit ?? 250 }))
+      .then(c => c.find(this.toMongoJson(query), { ...options, limit: options.limit ?? 250, sort: this.coll.sort(...(options.sort ?? [])) as any }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
