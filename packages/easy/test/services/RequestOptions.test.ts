@@ -37,6 +37,11 @@ describe('RequestOptions', () => {
     expect(options.headers['Accept']).toBe(ContentType.Xml.id);
   });
 
+  test('apiKey()', () => {
+    const k = '12324';
+    expect(RequestOptions.Json.apiKey(k).headers.apiKey).toBe(k);
+  });
+
   test('bearer()', () => {
     const jwt = '12324';
     const options = RequestOptions.Json.bearer(jwt);

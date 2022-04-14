@@ -34,6 +34,11 @@ export class RequestOptions extends Enum {
     return this;
   };
 
+  apiKey = (apiKey: string): this => {
+    this.headers.apiKey = apiKey;
+    return this;
+  };
+
   accept = (type: ContentType): this => {
     this.headers.Accept = type.id;
     return this;
