@@ -7,5 +7,6 @@ export type Request = {
   verb: HttpVerb;
   body?: unknown;
   transform?: (r: any) => any;
+  transformError?: (r: any) => any;
   options?: RequestOptions;
 };

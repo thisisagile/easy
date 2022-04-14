@@ -38,7 +38,7 @@ describe('AxiosProvider', () => {
       fits.with({
         url: DevUri.Developers.toString(),
         method: HttpVerb.Get.id,
-      })
+      }),
     );
     expect(r.body.data?.items).toHaveLength(1);
   });
@@ -61,7 +61,7 @@ describe('AxiosProvider', () => {
       provider.execute({
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
-      })
+      }),
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
@@ -71,7 +71,7 @@ describe('AxiosProvider', () => {
       provider.execute({
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
-      })
+      }),
     ).rejects.toEqual(
       fits.with({
         body: {
@@ -84,7 +84,7 @@ describe('AxiosProvider', () => {
         },
         headers: undefined,
         status: undefined,
-      })
+      }),
     );
   });
 
@@ -94,7 +94,7 @@ describe('AxiosProvider', () => {
       provider.execute({
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
-      })
+      }),
     ).rejects.toMatchObject(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
@@ -104,7 +104,7 @@ describe('AxiosProvider', () => {
       provider.execute({
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
-      })
+      }),
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
@@ -115,8 +115,32 @@ describe('AxiosProvider', () => {
         uri: DevUri.Developers,
         verb: HttpVerb.Get,
         transform: r => r.dev,
-      })
+      }),
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
+  });
+
+  test('Get with reject and transform error', async () => {
+    axios.request = mock.reject({ message });
+    let res: any;
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      transform: r => r.dev,
+      transformError: () => ({ message: 'This is not right' }),
+    }).catch(r => res = r);
+    expect(res.body.error.errors[0].message).toBe('This is not right');
+  });
+
+  test('Get with reject and transform some external error', async () => {
+    axios.request = mock.reject({ exception: 'Some external exception' });
+    let res: any;
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      transform: r => r.dev,
+      transformError: e => ({ message: e.exception }),
+    }).catch(r => res = r);
+    expect(res.body.error.errors[0].message).toBe('Some external exception');
   });
 
   test('Request with headers and bearer', async () => {
@@ -136,6 +160,7 @@ describe('AxiosProvider', () => {
     class ExternalUri extends EasyUri {
       readonly host = uri.host('www.external.com');
     }
+
     const externalUri = new ExternalUri();
 
     jest.spyOn(ctx.request, 'jwt', 'get').mockReturnValue('token 42');
@@ -154,7 +179,11 @@ describe('AxiosProvider', () => {
     jest.spyOn(ctx.request, 'jwt', 'get').mockReturnValue('token 42');
     axios.request = mock.resolve({ message });
 
-    await provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, options: RequestOptions.Xml.bearer('special token') });
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      options: RequestOptions.Xml.bearer('special token'),
+    });
 
     expect(axios.request).toHaveBeenCalledWith(fits.with({ headers: fits.with({ Authorization: 'Bearer special token' }) }));
   });

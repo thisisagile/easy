@@ -15,7 +15,7 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
     .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 
 export class AxiosProvider implements RequestProvider {
-  execute = ({ uri, verb, body, transform = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
+  execute = ({ uri, verb, body, transform = (r: any) => r, transformError = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
     axios
       .request({
         url: uri.toString(),
@@ -24,5 +24,5 @@ export class AxiosProvider implements RequestProvider {
         data: options.type.encode(body),
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))
-      .catch(e => Promise.reject(asResponse(uri, verb, e)));
+      .catch(e => Promise.reject(asResponse(uri, verb, transformError(e))));
 }
