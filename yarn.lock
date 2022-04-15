@@ -1647,7 +1647,6 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/mongodb": ^4.0.6
     mongodb: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -1996,15 +1995,6 @@ __metadata:
   version: 1.2.2
   resolution: "@types/minimist@npm:1.2.2"
   checksum: b8da83c66eb4aac0440e64674b19564d9d86c80ae273144db9681e5eeff66f238ade9515f5006ffbfa955ceff8b89ad2bd8ec577d7caee74ba101431fb07045d
-  languageName: node
-  linkType: hard
-
-"@types/mongodb@npm:^4.0.6":
-  version: 4.0.6
-  resolution: "@types/mongodb@npm:4.0.6"
-  dependencies:
-    mongodb: "*"
-  checksum: b0f138120920965b14f30f92d64979a8c6cce0dee195d028255441a3c9b42a5ed531ddbdfcdee04bf2021a007dc16467dd5d13e2158c16ada254b29d29569e1d
   languageName: node
   linkType: hard
 
@@ -7553,7 +7543,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:*, mongodb@npm:^4.5.0":
+"mongodb@npm:^4.5.0":
   version: 4.5.0
   resolution: "mongodb@npm:4.5.0"
   dependencies:
