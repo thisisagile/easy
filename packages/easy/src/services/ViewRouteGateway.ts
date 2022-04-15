@@ -1,7 +1,8 @@
 import { Api } from './Api';
-import { Func, Id, Json, JsonValue, List, Uri } from '../types';
+import { Func, Json, List, Uri } from '../types';
 import { view } from '../utils';
 import { RouteGateway } from './RouteGateway';
+import { RequestOptions } from '../http';
 
 export class ViewRouteGateway extends RouteGateway {
   constructor(
@@ -16,16 +17,12 @@ export class ViewRouteGateway extends RouteGateway {
     super(route, routeId, api);
   }
 
-  all(): Promise<List<Json>> {
-    return super.all().then(is => is.map(i => this.views.in.from(i)));
+  get(uri: Uri, options?: RequestOptions): Promise<List<Json>> {
+    return super.get(uri, options).then(is => is.map(i => this.views.in.from(i)));
   }
 
-  byId(id: Id): Promise<Json | undefined> {
-    return super.byId(id).then(i => this.views.in.from(i));
-  }
-
-  search(q: JsonValue): Promise<List<Json>> {
-    return super.search(q).then(is => is.map(i => this.views.in.from(i)));
+  getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
+    return super.get(uri, options).then(i => this.views.in.from(i));
   }
 
   add(item: Json): Promise<Json> {
