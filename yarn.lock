@@ -1500,17 +1500,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it/conventional-changelog@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "@release-it/conventional-changelog@npm:4.2.2"
+"@release-it/conventional-changelog@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "@release-it/conventional-changelog@npm:4.3.0"
   dependencies:
     concat-stream: ^2.0.0
     conventional-changelog: ^3.1.25
     conventional-recommended-bump: ^6.1.0
-    prepend-file: ^2.0.0
   peerDependencies:
     release-it: ^14.12.1
-  checksum: 4b4c809577200331185adcfc11f73ca73277fed853bc8d35743c81aa156809e4344ed60d3958b0a845d845e7a786e63ba62bcdabdb31f5c151c16c9234170476
+  checksum: 57823757b4f6262551c1fa219cb8319aadec46f835192dbd619ef61e1a64321f43367a78d4d16f95a700056676a725d72d81f8b407693dc41d5ddf32decd6b1b
   languageName: node
   linkType: hard
 
@@ -5304,7 +5303,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6":
+"graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.2.4, graceful-fs@npm:^4.2.6":
   version: 4.2.6
   resolution: "graceful-fs@npm:4.2.6"
   checksum: 792e64aafda05a151289f83eaa16aff34ef259658cefd65393883d959409f5a2389b0ec9ebf28f3d21f1b0ddc8f594a1162ae9b18e2b507a6799a70706ec573d
@@ -8491,16 +8490,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prepend-file@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "prepend-file@npm:2.0.0"
-  dependencies:
-    path-exists: ^4.0.0
-    temp-write: ^4.0.0
-  checksum: 411ee756cc60d6e16c2fe9878a1744384a02a63374b04c8a782137472a2de60c830b38976b5a8889f8e81a8bfd89a743787f7baea4e50792cd0f2c58f14975ba
-  languageName: node
-  linkType: hard
-
 "prepend-http@npm:^2.0.0":
   version: 2.0.0
   resolution: "prepend-http@npm:2.0.0"
@@ -9171,7 +9160,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@release-it/conventional-changelog": ^4.2.2
+    "@release-it/conventional-changelog": ^4.3.0
     "@tsconfig/node14": ^1.0.1
     "@types/jest": ^27.4.1
     "@types/node": ^17.0.24
@@ -10010,26 +9999,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temp-dir@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "temp-dir@npm:1.0.0"
-  checksum: cb2b58ddfb12efa83e939091386ad73b425c9a8487ea0095fe4653192a40d49184a771a1beba99045fbd011e389fd563122d79f54f82be86a55620667e08a6b2
-  languageName: node
-  linkType: hard
-
-"temp-write@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "temp-write@npm:4.0.0"
-  dependencies:
-    graceful-fs: ^4.1.15
-    is-stream: ^2.0.0
-    make-dir: ^3.0.0
-    temp-dir: ^1.0.0
-    uuid: ^3.3.2
-  checksum: 4f94187662968b7cc9d88d7f8eeecc9e7317e26d640d2f90e833151e1049702ec6c63512d095b8bd69c09735eb5b5bfba9bb37dbed3bf2fe8b01076ffa161338
-  languageName: node
-  linkType: hard
-
 "terminal-link@npm:^2.0.0":
   version: 2.1.1
   resolution: "terminal-link@npm:2.1.1"
@@ -10530,15 +10499,6 @@ typescript@~4.6.3:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^3.3.2":
-  version: 3.4.0
-  resolution: "uuid@npm:3.4.0"
-  bin:
-    uuid: ./bin/uuid
-  checksum: 58de2feed61c59060b40f8203c0e4ed7fd6f99d42534a499f1741218a1dd0c129f4aa1de797bcf822c8ea5da7e4137aa3673431a96dae729047f7aca7b27866f
   languageName: node
   linkType: hard
 
