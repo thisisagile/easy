@@ -1,4 +1,4 @@
-import { Collection, Cursor, Db, MongoClient } from 'mongodb';
+import { AbstractCursor, Collection, Db, MongoClient } from 'mongodb';
 import { MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
@@ -9,15 +9,14 @@ describe('MongoProvider', () => {
   let client: MongoClient;
   let db: Db;
   const c = {} as Collection;
-  const cursor = mock.a<Cursor>({ toArray: mock.return([]) });
+  const cursor = mock.a<AbstractCursor>({ toArray: mock.return([]) });
   let provider: MongoProvider;
   const devs = new DevCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
 
   beforeEach(() => {
-    client = mock.empty<MongoClient>();
-    client.isConnected = mock.return(true);
+    client = mock.empty<MongoClient>({ connect: mock.impl(() => client) });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
@@ -142,16 +141,23 @@ describe('MongoProvider', () => {
   });
 
   test('remove calls deleteOne on the collection', async () => {
-    c.deleteOne = mock.resolve({ result: { ok: 1 } });
+    c.deleteOne = mock.resolve({ acknowledged: true });
     provider.collection = mock.resolve(c);
     await expect(provider.remove(42)).resolves.toBeTruthy();
     expect(c.deleteOne).toHaveBeenCalledWith({ id: 42 });
   });
 
   test('remove calls deleteOne on the collection with id as string', async () => {
-    c.deleteOne = mock.resolve({ result: { ok: 1 } });
+    c.deleteOne = mock.resolve({ acknowledged: true });
     provider.collection = mock.resolve(c);
     await expect(provider.remove('42')).resolves.toBeTruthy();
+    expect(c.deleteOne).toHaveBeenCalledWith({ id: '42' });
+  });
+
+  test('remove calls deleteOne and rejects when deleteOne does not acknowledges', async () => {
+    c.deleteOne = mock.resolve({ acknowledged: false });
+    provider.collection = mock.resolve(c);
+    await expect(provider.remove('42')).resolves.toBeFalsy();
     expect(c.deleteOne).toHaveBeenCalledWith({ id: '42' });
   });
 
@@ -248,34 +254,30 @@ describe('MongoProvider', () => {
 
   test('first time connect to the mongo cluster', async () => {
     provider = new MongoProvider(devs);
-    MongoProvider.connect = mock.resolve(client);
+    MongoProvider.client = mock.resolve(client);
     const coll = await provider.collection();
-    expect(MongoProvider.connect).toHaveBeenCalledWith(devs.db);
+    expect(MongoProvider.client).toHaveBeenCalledWith(devs.db);
+    expect(MongoProvider.client).toHaveBeenCalledWith(devs.db);
+    expect(client.connect).toHaveBeenCalledTimes(1);
     expect(coll.collectionName).toBe('devCollection');
   });
 
   test('first time connect fails set client to undefined', async () => {
     provider = new MongoProvider(devs);
-    MongoProvider.connect = mock.reject(Exception.IsNotValid);
+    MongoProvider.client = mock.reject(Exception.IsNotValid);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.connect).toHaveBeenNthCalledWith(1, devs.db);
-    expect(MongoProvider.connect).toHaveBeenNthCalledWith(2, devs.db);
+    expect(MongoProvider.client).toHaveBeenNthCalledWith(1, devs.db);
+    expect(MongoProvider.client).toHaveBeenNthCalledWith(2, devs.db);
+    expect(client.connect).not.toHaveBeenCalled();
   });
 
-  test('reconnect if not connected anymore', async () => {
-    client.isConnected = mock.return(false);
-    MongoProvider.connect = mock.resolve(client);
-    const coll = await provider.collection();
-    expect(MongoProvider.connect).toHaveBeenCalledWith(devs.db);
-    expect(coll.collectionName).toBe('devCollection');
-  });
-
-  test('do not reconnect if not connected anymore', async () => {
-    MongoProvider.connect = mock.resolve(client);
-    const coll = await provider.collection();
-    expect(MongoProvider.connect).not.toHaveBeenCalled();
-    expect(coll.collectionName).toBe('devCollection');
+  // https://github.com/mongodb/node-mongodb-native/blob/3dba3ae5dbe584ff441e59c78c8b5905ebb23cd4/src/operations/connect.ts#L18
+  test('connect is a no-op operation when already connected', async () => {
+    MongoProvider.client = mock.resolve(client);
+    await expect(provider.collection()).resolves.toBeDefined();
+    await expect(provider.collection()).resolves.toBeDefined();
+    expect(client.connect).toHaveBeenCalledTimes(2);
   });
 
   test('reject if db getter throws exception', async () => {
@@ -286,8 +288,8 @@ describe('MongoProvider', () => {
     const db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
-    MongoProvider.connect = mock.resolve(client);
+    MongoProvider.client = mock.resolve(client);
     await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.connect).not.toHaveBeenCalled();
+    expect(MongoProvider.client).not.toHaveBeenCalled();
   });
 });
