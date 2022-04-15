@@ -22,7 +22,7 @@ export class ViewRouteGateway extends RouteGateway {
   }
 
   getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
-    return super.get(uri, options).then(i => this.views.in.from(i));
+    return super.get(uri, options).then(is => is.first()).then(i => this.views.in.from(i));
   }
 
   add(item: Json): Promise<Json> {
