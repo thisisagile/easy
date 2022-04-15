@@ -1,16 +1,4 @@
-import {
-  asJson,
-  isArray, isBoolean,
-  isDefined,
-  isFunction, isNumber,
-  isObject,
-  isString,
-  isUndefined,
-  Json,
-  json,
-  meta,
-  tryTo,
-} from '../types';
+import { asJson, isArray, isBoolean, isDefined, isFunction, isNumber, isObject, isString, isUndefined, Json, json, meta, tryTo } from '../types';
 import { traverse } from './Traverse';
 import { choose } from './Case';
 
@@ -66,6 +54,9 @@ export const views = {
   ignore: () => undefined,
   keep: (a: unknown, key?: string) => traverse(a, key),
   keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
-  or: (key: string, alt = '') => (a: unknown) => traverse(a, key) ?? alt,
+  or:
+    (key: string, alt = '') =>
+    (a: unknown) =>
+      traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
 };

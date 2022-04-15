@@ -1,18 +1,18 @@
 import { Api } from './Api';
 import { Func, Gateway, Id, Json, JsonValue, List, toList, Uri } from '../types';
-import { HttpStatus } from '../http';
+import { HttpStatus, RequestOptions } from '../http';
 
 export class RouteGateway extends Gateway {
   constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {
     super();
   }
 
-  get(uri: Uri): Promise<List<Json>> {
-    return this.api.get(uri).then(r => r.body.data?.items ?? toList());
+  get(uri: Uri, options?: RequestOptions): Promise<List<Json>> {
+    return this.api.get(uri, options).then(r => r.body.data?.items ?? toList());
   }
 
-  getOne(uri: Uri): Promise<Json | undefined> {
-    return this.get(uri).then(r => r.first());
+  getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
+    return this.get(uri, options).then(r => r.first());
   }
 
   all(): Promise<List<Json>> {

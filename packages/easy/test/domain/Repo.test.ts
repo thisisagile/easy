@@ -11,7 +11,7 @@ describe('Repo', () => {
   beforeEach(() => {
     gateway = new RouteGateway(
       () => DevUri.Developers,
-      () => DevUri.Developer,
+      () => DevUri.Developer
     );
     repo = new DevRepo(gateway);
   });

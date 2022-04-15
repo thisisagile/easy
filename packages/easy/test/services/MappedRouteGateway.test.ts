@@ -23,7 +23,7 @@ describe('MappedRouteGateway', () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     map.in = mock.impl(a => a);
     const res = await gateway.all();
-    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri));
+    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
     expect(map.in).toHaveBeenCalledTimes(devs.length);
     expect(res).toHaveLength(devs.length);
   });
@@ -32,7 +32,7 @@ describe('MappedRouteGateway', () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     map.in = mock.impl(a => a);
     const res = await gateway.byId(42);
-    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri));
+    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
     expect(map.in).toHaveBeenCalledTimes(1);
     expect(res).toMatchObject(devs[0]);
   });
