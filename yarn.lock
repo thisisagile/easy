@@ -1669,7 +1669,7 @@ __metadata:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:*"
-    playwright: ^1.21.0
+    playwright: ^1.21.1
   languageName: unknown
   linkType: soft
 
@@ -8389,9 +8389,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.21.0":
-  version: 1.21.0
-  resolution: "playwright-core@npm:1.21.0"
+"playwright-core@npm:1.21.1":
+  version: 1.21.1
+  resolution: "playwright-core@npm:1.21.1"
   dependencies:
     colors: 1.4.0
     commander: 8.3.0
@@ -8413,18 +8413,18 @@ __metadata:
     yazl: 2.5.1
   bin:
     playwright: cli.js
-  checksum: 9221b65a4a10d9df93f59ff9ac788382f6e8b25e7a68bd2f46ad9178b6d94055704f6ad9aa5885a1648dec0ff01f6611d1eced519a0a834615c6924944058fdf
+  checksum: 9de58d5f1358aaa696196324ba38db96a7241f874977a1bf680deb87879632d3acac72719061cf941a5050e53e2ac12c30e5482b7f5cc47c439a098a6d99d722
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.21.0":
-  version: 1.21.0
-  resolution: "playwright@npm:1.21.0"
+"playwright@npm:^1.21.1":
+  version: 1.21.1
+  resolution: "playwright@npm:1.21.1"
   dependencies:
-    playwright-core: 1.21.0
+    playwright-core: 1.21.1
   bin:
     playwright: cli.js
-  checksum: 15b1587fe6b9029e14af2d209279b9fea0027c1d311be9ab3d87b769baedda03009abcd5984a5b6b5d5c718895384437d52df8246aac901cc8cd9b45acda25db
+  checksum: daba932ee60b36fb0aba7053e801686dd145a88064f85df8a121c283d954b3322e837f1d52310d813e9001f9c8e9aa2e5b93ead08f9ceab2ab248a2a26011059
   languageName: node
   linkType: hard
 
