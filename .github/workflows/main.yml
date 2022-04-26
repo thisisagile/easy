@@ -20,7 +20,7 @@ jobs:
       - name: Test
         run: yarn test-sonarqube
       - name: Archive test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: test-reports
           path: |
