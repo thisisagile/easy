@@ -12,6 +12,16 @@ exports[`Hooks component with useList hook renders correctly. 1`] = `
 </div>
 `;
 
+exports[`Hooks component with useToggle hook renders correctly as default value is false. 1`] = `
+<div>
+  <div
+    id="42"
+  >
+    true
+  </div>
+</div>
+`;
+
 exports[`Hooks component with useToggle hook renders correctly. 1`] = `
 <div>
   <div

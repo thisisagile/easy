@@ -44,8 +44,8 @@
     "@thisisagile/easy": "workspace:*",
     "next": "^12.1.5",
     "next-transpile-modules": "^9.0.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "sass": "^1.50.0"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "sass": "^1.51.0"
   }
 }

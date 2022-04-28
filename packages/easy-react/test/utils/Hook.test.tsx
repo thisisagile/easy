@@ -3,7 +3,6 @@ import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
 import { useEntity, useList, useToggle } from '../../src';
 import { Address, toList } from '@thisisagile/easy';
-import { queryByText } from '@testing-library/react';
 
 const city = 'Amsterdam';
 
@@ -37,22 +36,21 @@ const ListHook = () => {
 };
 
 describe('Hooks', () => {
-  test('component with useToggle hook renders correctly.', async () => {
-    const { container } = await rendersWait(<ToggleHook />);
+  test('component with useToggle hook renders correctly as default value is false.', async () => {
+    const { container, byText } = await rendersWait(<ToggleHook />);
     expect(container).toMatchSnapshot();
-    expect(queryByText(container, 'true')).toBeDefined();
-    expect(queryByText(container, 'false')).toBeNull();
+    expect(byText('true')).toBeDefined();
   });
 
   test('component with useEntity hook renders correctly.', async () => {
-    const { container } = await rendersWait(<EntityHook />);
+    const { container, byText } = await rendersWait(<EntityHook />);
     expect(container).toMatchSnapshot();
-    expect(queryByText(container, city)).toBeDefined();
+    expect(byText(city)).toBeDefined();
   });
 
   test('component with useList hook renders correctly.', async () => {
-    const { container } = await rendersWait(<ListHook />);
+    const { container, byText } = await rendersWait(<ListHook />);
     expect(container).toMatchSnapshot();
-    expect(queryByText(container, city)).toBeDefined();
+    expect(byText(city)).toBeDefined();
   });
 });
