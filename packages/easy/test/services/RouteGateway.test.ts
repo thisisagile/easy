@@ -22,6 +22,17 @@ describe('RouteGateway', () => {
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
+  test('get calls api correctly', async () => {
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
+    await expect(gateway.get(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
+    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), {});
+  });
+
+  test('get calls api correctly with an empty body', async () => {
+    api.get = mock.resolve({body: {}});
+    await expect(gateway.get(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(0);
+  });
+
   test('byId calls api correctly', async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     await expect(gateway.byId(42)).resolves.toMatchObject(devs[0]);
@@ -66,6 +77,11 @@ describe('RouteGateway', () => {
     expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body);
   });
 
+  test('add calls api correctly with an empty body', async () => {
+    api.post = mock.resolve({body: {}});
+    await expect(gateway.add({})).resolves.toMatchObject({});
+  });
+
   test('update calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.patch = mock.resolve(toResponse(HttpStatus.Ok, body));
@@ -73,11 +89,21 @@ describe('RouteGateway', () => {
     expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body);
   });
 
+  test('update calls api correctly with an empty body', async () => {
+    api.patch = mock.resolve({body: {}});
+    await expect(gateway.update({})).resolves.toMatchObject({});
+  });
+
   test('upsert calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.put = mock.resolve(toResponse(HttpStatus.Ok, body));
     await expect(gateway.upsert(body)).resolves.toMatchObject(body);
     expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body);
+  });
+
+  test('upsert calls api correctly with an empty body', async () => {
+    api.patch = mock.resolve({body: {}});
+    await expect(gateway.update({})).resolves.toMatchObject({});
   });
 
   test('delete calls api correctly', async () => {
