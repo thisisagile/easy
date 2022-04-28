@@ -21,13 +21,3 @@ exports[`Hooks component with useToggle hook renders correctly as default value 
   </div>
 </div>
 `;
-
-exports[`Hooks component with useToggle hook renders correctly. 1`] = `
-<div>
-  <div
-    id="42"
-  >
-    true
-  </div>
-</div>
-`;
