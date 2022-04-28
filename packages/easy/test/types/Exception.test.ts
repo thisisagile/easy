@@ -1,5 +1,6 @@
 import { Exception, isException } from '../../src';
 import { Dev, Language } from '../ref';
+import '@thisisagile/easy-test';
 
 describe('Exception', () => {
   const message = 'This is wrong';
@@ -43,4 +44,8 @@ describe('Exception', () => {
     expect(Exception.DoesNotExist.because('Bad parameters').id).toBe(Exception.DoesNotExist.id);
     expect(Exception.DoesNotExist.because('Bad haircut').equals(Exception.DoesNotExist)).toBeTruthy();
   });
+
+  test('environment variable is not found', () => {
+    expect(Exception.EnvironmentVariableNotFound('Hoi').message).toBe('Environment variable HOI could not be found.');
+  })
 });
