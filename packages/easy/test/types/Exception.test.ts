@@ -1,4 +1,4 @@
-import { Exception, isException } from '../../src';
+import { Exception, isDoesNotExist, isException } from '../../src';
 import { Dev, Language } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -47,5 +47,14 @@ describe('Exception', () => {
 
   test('environment variable is not found', () => {
     expect(Exception.EnvironmentVariableNotFound('Hoi').message).toBe('Environment variable HOI could not be found.');
+  })
+
+  test('is an Exception.DoesNotExist', () => {
+    expect(isDoesNotExist()).toBeFalsy();
+    expect(isDoesNotExist({})).toBeFalsy();
+    expect(isDoesNotExist(Dev.Naoufal)).toBeFalsy();
+    expect(isDoesNotExist(Exception.IsNotImplemented)).toBeFalsy();
+    expect(isDoesNotExist(Exception.DoesNotExist)).toBeTruthy();
+    expect(isDoesNotExist(Exception.DoesNotExist.because('Not sure'))).toBeTruthy();
   })
 });
