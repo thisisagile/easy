@@ -29,7 +29,7 @@ describe('RouteGateway', () => {
   });
 
   test('get calls api correctly with an empty body', async () => {
-    api.get = mock.resolve({body: {}});
+    api.get = mock.resolve({ body: {} });
     await expect(gateway.get(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(0);
   });
 
@@ -78,7 +78,7 @@ describe('RouteGateway', () => {
   });
 
   test('add calls api correctly with an empty body', async () => {
-    api.post = mock.resolve({body: {}});
+    api.post = mock.resolve({ body: {} });
     await expect(gateway.add({})).resolves.toMatchObject({});
   });
 
@@ -90,7 +90,7 @@ describe('RouteGateway', () => {
   });
 
   test('update calls api correctly with an empty body', async () => {
-    api.patch = mock.resolve({body: {}});
+    api.patch = mock.resolve({ body: {} });
     await expect(gateway.update({})).resolves.toMatchObject({});
   });
 
@@ -102,7 +102,7 @@ describe('RouteGateway', () => {
   });
 
   test('upsert calls api correctly with an empty body', async () => {
-    api.patch = mock.resolve({body: {}});
+    api.patch = mock.resolve({ body: {} });
     await expect(gateway.update({})).resolves.toMatchObject({});
   });
 

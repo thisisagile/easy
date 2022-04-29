@@ -47,7 +47,7 @@ describe('Exception', () => {
 
   test('environment variable is not found', () => {
     expect(Exception.EnvironmentVariableNotFound('Hoi').message).toBe('Environment variable HOI could not be found.');
-  })
+  });
 
   test('is an Exception.DoesNotExist', () => {
     expect(isDoesNotExist()).toBeFalsy();
@@ -56,5 +56,5 @@ describe('Exception', () => {
     expect(isDoesNotExist(Exception.IsNotImplemented)).toBeFalsy();
     expect(isDoesNotExist(Exception.DoesNotExist)).toBeTruthy();
     expect(isDoesNotExist(Exception.DoesNotExist.because('Not sure'))).toBeTruthy();
-  })
+  });
 });

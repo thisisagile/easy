@@ -2,11 +2,10 @@ import '@thisisagile/easy-test';
 import { Exception, Gateway } from '../../src';
 
 describe('Gateway', () => {
-
   let gateway: Gateway;
 
   beforeEach(() => {
-    gateway = new class extends Gateway {}
+    gateway = new (class extends Gateway {})();
   });
 
   test('all', () => {
@@ -44,5 +43,4 @@ describe('Gateway', () => {
   test('remove', () => {
     return expect(gateway.remove(42)).rejects.toBe(Exception.IsNotImplemented);
   });
-
 });

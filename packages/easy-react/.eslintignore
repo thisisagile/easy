@@ -1,5 +1,6 @@
 .eslintrc.js
 release.config.js
+next.config.js
 node_modules
 dist
 libs

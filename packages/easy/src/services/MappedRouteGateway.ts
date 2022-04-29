@@ -14,7 +14,10 @@ export class MappedRouteGateway extends RouteGateway {
   }
 
   getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
-    return super.get(uri, options).then(is => is.first()).then(i => this.map.in(i));
+    return super
+      .get(uri, options)
+      .then(is => is.first())
+      .then(i => this.map.in(i));
   }
 
   add(item: Json): Promise<Json> {

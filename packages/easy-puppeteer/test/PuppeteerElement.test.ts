@@ -3,8 +3,6 @@ import { ElementHandle, JSHandle } from 'puppeteer';
 import { PuppeteerElement } from '../src';
 
 describe('PuppeteerElement', () => {
-  beforeEach(() => {});
-
   test('click.', async () => {
     const eh = mock.empty<ElementHandle>({ click: mock.return() });
     const pe = new PuppeteerElement(Promise.resolve(eh));
