@@ -2,7 +2,7 @@ import express, { Request, RequestHandler } from 'express';
 import passport from 'passport';
 import passportJwt, { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 import { authError } from './AuthError';
-import { choose, ctx, Environment, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
+import { ctx, Environment, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
 
 type SecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 
@@ -29,38 +29,26 @@ export interface SecurityOptions {
 }
 
 export const checkLabCoat = (): RequestHandler => (req, res, next) =>
-  next(
-    choose(ctx.env.name)
-      .case(e => Environment.Dev.equals(e), undefined)
-      .else(authError(HttpStatus.Forbidden))
-  );
+  next(Environment.Dev.equals(ctx.env.name) ? undefined : authError(HttpStatus.Forbidden));
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
 export const checkScope =
   (scope: Scope): RequestHandler =>
-  (req, res, next) =>
-    next(
-      choose(scope.id)
-        .case(s => (req.user as any)?.scopes.includes(s), undefined)
-        .else(authError(HttpStatus.Forbidden))
-    );
+    (req, res, next) =>
+      next((req.user as any)?.scopes?.includes(scope.id) ? undefined : authError(HttpStatus.Forbidden));
 
 export const checkUseCase =
   (uc: UseCase): RequestHandler =>
-  (req, res, next) =>
-    next(
-      choose(uc.id)
-        .case(u => (req.user as any)?.usecases.includes(u), undefined)
-        .else(authError(HttpStatus.Forbidden))
-    );
+    (req, res, next) =>
+      next((req.user as any)?.usecases?.includes(uc.id) ? undefined : authError(HttpStatus.Forbidden));
 
 const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrKeyProvider | undefined =>
   p
     ? (request, rawJwtToken, done) =>
-        p(request, rawJwtToken)
-          .then(t => done(null, t))
-          .catch(e => done(e))
+      p(request, rawJwtToken)
+        .then(t => done(null, t))
+        .catch(e => done(e))
     : undefined;
 
 export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: express.Request, res: express.Response, next: express.NextFunction) => void) => {

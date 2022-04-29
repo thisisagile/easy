@@ -44,8 +44,8 @@ const constraints = (subject?: unknown): Results =>
     .map(res => res.reduce((rs, r) => rs.add(...r.results), toResults())).value;
 
 export const validate = (subject?: unknown): Results =>
-  choose<Results>(subject)
-    .type(isUndefined, u => asResults(u, 'Subject is not defined.'))
+  choose(subject)
+    .type(isUndefined, () => toResults( 'Subject is not defined.'))
     .type(isEnum, e => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')))
     .type(isValue, v => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')))
     .type(isArray, a => a.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()))

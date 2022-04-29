@@ -18,7 +18,7 @@ const toFunc = (a: any, col: string, f: Func = a => a): Func =>
   tryTo(traverse(a, col)).map(v => (isArray(v) ? () => v.map(i => f(i)) : (a: any) => f(traverse(a, col)))).value;
 
 const toViewer = (key: string, value: unknown): Viewer =>
-  choose<Viewer>(value)
+  choose(value)
     .type(isUndefined, () => toViewer(key, () => undefined))
     .type(isBoolean, b => toViewer(key, () => b))
     .type(isNumber, n => toViewer(key, () => n))

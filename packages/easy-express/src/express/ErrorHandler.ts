@@ -28,7 +28,7 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
 
 const toBody = ({ origin, options }: OriginatedError): Response => {
   return (
-    choose<Response, any>(origin)
+    choose(origin)
       .type(isAuthError, ae => toResponse(toHttpStatus(ae.status), [toResult(ae.message)]))
       .type(isDoesNotExist, e => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(e.reason ?? e.message)]))
       // This service breaks with an error

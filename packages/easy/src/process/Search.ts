@@ -14,8 +14,8 @@ export class Search<T extends Struct> {
   byKey = (key: Key): Promise<List<T>> => this.repo.byKey(key);
 
   search = (query: JsonValue): Promise<List<T>> =>
-    choose<Promise<List<T>>, JsonValue>(query)
-      .type<JsonValue>(isNotEmpty, q => this.repo.search(q))
+    choose(query)
+      .case(isNotEmpty, q => this.repo.search(q))
       .else(resolve(toList<T>()));
 
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);

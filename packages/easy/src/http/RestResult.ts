@@ -28,8 +28,8 @@ export const rest = {
     },
   }),
   to: (payload?: any | any[], status?: HttpStatus): RestResult =>
-    choose<RestResult, any>(payload)
-      .type(isUndefined, p => p)
+    choose(payload)
+      .type(isUndefined, () => undefined as unknown as RestResult)
       .type(isHttpStatus, h => rest.toError(h ?? status ?? HttpStatus.InternalServerError, [toResult(h.name)]))
       .type(isResult, r => rest.toError(status ?? HttpStatus.BadRequest, [r]))
       .type(isError, e => rest.toError(status ?? HttpStatus.BadRequest, [e]))
