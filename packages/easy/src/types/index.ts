@@ -14,6 +14,7 @@ export * from './Identity';
 export * from './Is';
 export * from './IsA';
 export * from './IsDate';
+export * from './IsEqual';
 export * from './Json';
 export * from './List';
 export * from './Message';
