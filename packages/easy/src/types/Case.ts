@@ -1,4 +1,4 @@
-import { Func, Get, ofGet, Predicate, tryTo } from '../types';
+import { Func, Get, ofGet, Predicate, tryTo } from './index';
 
 class CaseBuilder<V> {
   constructor(readonly v: V) {

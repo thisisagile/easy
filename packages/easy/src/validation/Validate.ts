@@ -1,5 +1,5 @@
 import {
-  asString,
+  asString, choose,
   isArray,
   isEnum,
   isResults,
@@ -20,7 +20,6 @@ import {
 } from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
-import { choose } from '../utils';
 
 export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: Text };
 

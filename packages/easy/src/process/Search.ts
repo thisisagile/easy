@@ -1,6 +1,6 @@
 import { Repo, Struct } from '../domain';
-import { Id, isNotEmpty, JsonValue, Key, List, toList } from '../types';
-import { choose, resolve } from '../utils';
+import { choose, Id, isNotEmpty, JsonValue, Key, List, toList } from '../types';
+import { resolve } from '../utils';
 
 export class Search<T extends Struct> {
   constructor(protected repo: Repo<T>) {}

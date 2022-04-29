@@ -1,7 +1,6 @@
 import { Struct } from './Struct';
-import { ctx, Id, isDefined, Json } from '../types';
+import { choose, ctx, Id, isDefined, Json } from '../types';
 import { required, valid } from '../validation';
-import { choose } from '../utils';
 import { DateTime } from './values';
 
 export class Audit extends Struct {

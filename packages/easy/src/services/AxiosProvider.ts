@@ -9,8 +9,7 @@ import {
   Response,
   toResponse,
 } from '../http';
-import { ctx, isDefined, isEmpty, toResult, Uri } from '../types';
-import { choose } from '../utils';
+import { choose, ctx, isDefined, isEmpty, toResult, Uri } from '../types';
 
 const isResponse = (a: unknown): a is { response: AxiosResponse } => isDefined((a as any)?.response);
 const isRequest = (a: unknown): a is { request: any } => isDefined((a as any)?.request);
