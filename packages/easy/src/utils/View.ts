@@ -1,4 +1,19 @@
-import { asJson, isArray, isBoolean, isDefined, isFunction, isNumber, isObject, isString, isUndefined, Json, json, meta, tryTo } from '../types';
+import {
+  asJson,
+  isArray,
+  isBoolean,
+  isDefined,
+  isEqual,
+  isFunction,
+  isNumber,
+  isObject,
+  isString,
+  isUndefined,
+  Json,
+  json,
+  meta,
+  tryTo,
+} from '../types';
 import { traverse } from './Traverse';
 import { choose } from '../types';
 
@@ -43,6 +58,8 @@ export class View {
   }
 
   from = (source: unknown): Json => (isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source)));
+
+  same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
   private reduce = (i: any): any => this.viewers.reduce((a: any, v) => json.set(a, v.in.key, v.in.f(i, v.in.key)), this.startsFrom === 'scratch' ? {} : i);
 }
