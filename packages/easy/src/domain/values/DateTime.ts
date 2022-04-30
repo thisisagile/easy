@@ -104,3 +104,5 @@ export class DateTime extends Value<string | undefined> {
     return this.isValid ? this.utc.toDate() : undefined;
   }
 }
+
+export const isDateTime = (dt?: unknown): dt is DateTime => isDefined(dt) && dt instanceof DateTime;

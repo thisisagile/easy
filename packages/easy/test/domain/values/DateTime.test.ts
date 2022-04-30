@@ -1,4 +1,4 @@
-import { DateTime, DateTimeUnit } from '../../../src';
+import { DateTime, DateTimeUnit, isDateTime } from '../../../src';
 import '@thisisagile/easy-test';
 import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
@@ -276,4 +276,11 @@ describe('DateTime', () => {
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
   });
+
+  test('isDateTime', () => {
+    expect(isDateTime()).toBeFalsy();
+    expect(isDateTime({})).toBeFalsy();
+    expect(isDateTime(new DateTime(iso))).toBeTruthy();
+
+  })
 });
