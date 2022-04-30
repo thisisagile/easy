@@ -1,5 +1,6 @@
-import { Struct, required } from '../../src';
+import { Struct, required, isStruct } from '../../src';
 import '@thisisagile/easy-test';
+import { Dev } from '../ref';
 
 describe('Struct', () => {
   class Address extends Struct {
@@ -26,4 +27,10 @@ describe('Struct', () => {
   test('toJson', () => {
     expect(new Address({ city: 'Amsterdam' }).toJSON()).toStrictEqual({ city: 'Amsterdam' });
   });
+
+  test('isStruct', () => {
+    expect(isStruct()).toBeFalsy();
+    expect(isStruct({})).toBeFalsy();
+    expect(isStruct(Dev.Rob)).toBeTruthy();
+  })
 });

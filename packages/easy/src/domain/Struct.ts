@@ -1,4 +1,4 @@
-import { json, Json, Validatable } from '../types';
+import { isDefined, json, Json, Validatable } from '../types';
 import { validate } from '../validation';
 
 export abstract class Struct implements Validatable {
@@ -20,3 +20,5 @@ export abstract class Struct implements Validatable {
 
   protected merge = (a: unknown): Json => json.merge(this, a);
 }
+
+export const isStruct = (s?: unknown): s is Struct => isDefined(s) && s instanceof Struct;
