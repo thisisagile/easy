@@ -26,6 +26,10 @@ export class List<T = unknown> extends Array<T> {
 
   overlaps = (...items: ArrayLike<T>): boolean => toList<T>(...items).some(i => this.some(t => i === t));
 
+  diff = (items: ArrayLike<T>): List<T> => this.filter(i => !items.includes(i));
+
+  interSect = (items: ArrayLike<T>): List<T> => this.filter(i => items.includes(i));
+
   toJSON = (): Json[] =>
     this.reduce((a, i) => {
       a.push(json.parse(i));

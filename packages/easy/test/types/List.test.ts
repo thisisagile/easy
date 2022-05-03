@@ -4,6 +4,7 @@ import '@thisisagile/easy-test';
 
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+  const managers = toList([Dev.Jeroen, Dev.Naoufal, Dev.Rob]);
 
   test('asc and desc', () => {
     expect(devs.asc('name').last()).toMatchObject(Dev.Wouter);
@@ -137,6 +138,26 @@ describe('List', () => {
     expect(toList().orElse(Dev.Rob, Dev.Jeroen)).toHaveLength(2);
     expect(toList().orElse([Dev.Rob, Dev.Jeroen])).toHaveLength(2);
     expect(toList().orElse(toList(Dev.Rob, Dev.Jeroen))).toHaveLength(2);
+  });
+
+  test('diff', () => {
+    expect(toList().diff(toList())).toMatchJson(toList());
+    expect(toList({ id: 42 }).diff(toList())).toMatchJson(toList({ id: 42 }));
+    expect(toList().diff(toList({ id: 42 }))).toMatchJson(toList());
+    const proletarians = devs.diff(managers);
+    expect(proletarians).toHaveLength(2);
+    expect(proletarians).toContain(Dev.Sander);
+    expect(proletarians).toContain(Dev.Wouter);
+  });
+
+  test('interSect', () => {
+    expect(toList().interSect(toList())).toMatchJson(toList());
+    expect(toList({ id: 42 }).interSect(toList())).toMatchJson(toList());
+    expect(toList().interSect(toList({ id: 42 }))).toMatchJson(toList());
+    const devManagers = devs.interSect(managers);
+    expect(devManagers).toHaveLength(2);
+    expect(devManagers).toContain(Dev.Naoufal);
+    expect(devManagers).toContain(Dev.Jeroen);
   });
 });
 
