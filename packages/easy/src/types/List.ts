@@ -28,7 +28,13 @@ export class List<T = unknown> extends Array<T> {
 
   diff = (items: ArrayLike<T>): List<T> => this.filter(i => !items.includes(i));
 
+  diffByKey = (items: ArrayLike<T>, key = 'id'): List<T> =>
+    this.filter((i: any) => !items.some((ii: any) => Object.keys(i).includes(key) && Object.keys(ii).includes(key) && ii[key] === i[key]));
+
   interSect = (items: ArrayLike<T>): List<T> => this.filter(i => items.includes(i));
+
+  interSectByKey = (items: ArrayLike<T>, key = 'id'): List<T> =>
+    this.filter((i: any) => items.some((ii: any) => Object.keys(i).includes(key) && Object.keys(ii).includes(key) && ii[key] === i[key]));
 
   toJSON = (): Json[] =>
     this.reduce((a, i) => {

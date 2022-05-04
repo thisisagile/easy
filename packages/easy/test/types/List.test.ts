@@ -5,6 +5,24 @@ import '@thisisagile/easy-test';
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
   const managers = toList([Dev.Jeroen, Dev.Naoufal, Dev.Rob]);
+  const johnAndJane = toList(
+    { id: 1, name: 'John', age: undefined, weight: 99 },
+    {
+      id: 2,
+      name: 'Jane',
+      age: undefined,
+      weight: 95,
+    }
+  );
+  const jackAndJill = toList(
+    { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
+    {
+      id: 2,
+      name: 'Jill',
+      age: undefined,
+      weight: undefined as unknown as number,
+    }
+  );
 
   test('asc and desc', () => {
     expect(devs.asc('name').last()).toMatchObject(Dev.Wouter);
@@ -141,6 +159,7 @@ describe('List', () => {
   });
 
   test('diff', () => {
+    expect(toList(1, 2, 3, 4).diff([4, 5, 6])).toMatchJson(toList([1, 2, 3]));
     expect(toList().diff(toList())).toMatchJson(toList());
     expect(toList({ id: 42 }).diff(toList())).toMatchJson(toList({ id: 42 }));
     expect(toList().diff(toList({ id: 42 }))).toMatchJson(toList());
@@ -148,6 +167,16 @@ describe('List', () => {
     expect(proletarians).toHaveLength(2);
     expect(proletarians).toContain(Dev.Sander);
     expect(proletarians).toContain(Dev.Wouter);
+  });
+
+  test('diff by key', () => {
+    expect(devs.diffByKey(managers, 'name')).toHaveLength(2);
+    expect(johnAndJane.diffByKey(jackAndJill)).toHaveLength(0);
+    expect(johnAndJane.diffByKey(jackAndJill, 'id')).toHaveLength(0);
+    expect(johnAndJane.diffByKey(jackAndJill, 'name')).toHaveLength(2);
+    expect(johnAndJane.diffByKey(jackAndJill, 'unknown')).toHaveLength(2);
+    expect(johnAndJane.diffByKey(jackAndJill, 'age')).toHaveLength(0);
+    expect(johnAndJane.diffByKey(jackAndJill, 'weight')).toHaveLength(2);
   });
 
   test('interSect', () => {
@@ -158,6 +187,20 @@ describe('List', () => {
     expect(devManagers).toHaveLength(2);
     expect(devManagers).toContain(Dev.Naoufal);
     expect(devManagers).toContain(Dev.Jeroen);
+  });
+
+  test('interSect by key', () => {
+    const devManagers = devs.interSectByKey(managers, 'name');
+    expect(devManagers).toHaveLength(2);
+    expect(devManagers).toContain(Dev.Naoufal);
+    expect(devManagers).toContain(Dev.Jeroen);
+
+    expect(johnAndJane.interSectByKey(jackAndJill)).toHaveLength(2);
+    expect(johnAndJane.interSectByKey(jackAndJill, 'id')).toHaveLength(2);
+    expect(johnAndJane.interSectByKey(jackAndJill, 'name')).toHaveLength(0);
+    expect(johnAndJane.interSectByKey(jackAndJill, 'unknown')).toHaveLength(0);
+    expect(johnAndJane.interSectByKey(jackAndJill, 'age')).toHaveLength(2);
+    expect(johnAndJane.interSectByKey(jackAndJill, 'weight')).toHaveLength(0);
   });
 });
 
