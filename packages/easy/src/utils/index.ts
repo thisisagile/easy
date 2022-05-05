@@ -10,3 +10,4 @@ export * from './State';
 export * from './Sentence';
 export * from './Traverse';
 export * from './View';
+export * from './Wait';
