@@ -16,7 +16,7 @@ import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
 
 export type RestResult = {
-  data?: { code: number; items: List<Json>; itemCount: number };
+  data?: { code: number; items: List<Json>; itemCount: number; totalItems?: number };
   error?: { code: number; message: string; errorCount: number; errors: List<Result> };
 };
 
