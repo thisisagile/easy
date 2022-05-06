@@ -25,7 +25,7 @@ export * from './Results';
 export * from './Tag';
 export * from './Template';
 export * from './Text';
-export * from './TotalList';
+export * from './PageList';
 export * from './Try';
 export * from './Uri';
 export * from './Uuid';
