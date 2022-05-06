@@ -1,14 +1,27 @@
-import { asList, Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, List, toJson } from '../types';
+import {
+  asList,
+  Constructor,
+  Exception,
+  Gateway,
+  Id,
+  isValidatable,
+  Json,
+  JsonValue,
+  Key,
+  toJson,
+  TotalledList,
+} from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
+  }
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
-  all(): Promise<List<T>> {
+  all(): Promise<TotalledList<T>> {
     return this.gateway.all().then(js => js.map(j => new this.ctor(j)));
   }
 
@@ -19,19 +32,19 @@ export class Repo<T extends Struct> {
       .then(j => new this.ctor(j));
   }
 
-  byIds(...ids: Id[]): Promise<List<T>> {
+  byIds(...ids: Id[]): Promise<TotalledList<T>> {
     return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
-  byKey(key: Key): Promise<List<T>> {
+  byKey(key: Key): Promise<TotalledList<T>> {
     return this.gateway.by('key', key).then(js => js.map(j => new this.ctor(j)));
   }
 
-  by(key: keyof T, value: JsonValue): Promise<List<T>> {
+  by(key: keyof T, value: JsonValue): Promise<TotalledList<T>> {
     return this.gateway.by(key.toString(), value).then(js => js.map(j => new this.ctor(j)));
   }
 
-  search(q: JsonValue): Promise<List<T>> {
+  search(q: JsonValue): Promise<TotalledList<T>> {
     return this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
   }
 
