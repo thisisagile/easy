@@ -8,6 +8,14 @@ const data = {
     itemCount: 3,
   },
 };
+const dataWithTotal = {
+  data: {
+    code: HttpStatus.Created.status,
+    items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()],
+    itemCount: 3,
+    totalItems: 42
+  },
+};
 const item = Dev.Wouter.toJSON();
 const items = toList([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
 const payload = [
@@ -66,6 +74,20 @@ describe('rest.to', () => {
     expect(r.data?.code).toBe(data.data.code);
     expect(r.data?.itemCount).toBe(data.data.items.length);
     expect(r.data?.items.first()).toMatchObject(items.first());
+  });
+
+  test('From data with items and no totalItems', () => {
+    const r = rest.to(data);
+    expect(isRestResult(r)).toBeTruthy();
+    expect(r.data?.code).toBe(data.data.code);
+    expect(r.data?.totalItems).toBeUndefined();
+  });
+
+  test('From data with items and totalItems', () => {
+    const r = rest.to(dataWithTotal);
+    expect(isRestResult(r)).toBeTruthy();
+    expect(r.data?.code).toBe(data.data.code);
+    expect(r.data?.totalItems).toBe(dataWithTotal.data.totalItems);
   });
 
   test('From data without code', () => {
