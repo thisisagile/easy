@@ -1,5 +1,5 @@
 import { Api } from './Api';
-import { Func, Gateway, Id, Json, JsonValue, TotalledList, toTotalledList, Uri } from '../types';
+import { Func, Gateway, Id, Json, JsonValue, TotalList, toTotalList, Uri } from '../types';
 import { HttpStatus, RequestOptions } from '../http';
 
 export class RouteGateway extends Gateway {
@@ -7,15 +7,15 @@ export class RouteGateway extends Gateway {
     super();
   }
 
-  get(uri: Uri, options?: RequestOptions): Promise<TotalledList<Json>> {
-    return this.api.get(uri, options).then(r => toTotalledList<Json>(r.body.data?.items, r.body.data?.totalItems));
+  get(uri: Uri, options?: RequestOptions): Promise<TotalList<Json>> {
+    return this.api.get(uri, options).then(r => toTotalList<Json>(r.body.data?.items, r.body.data?.totalItems));
   }
 
   getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
     return this.get(uri, options).then(r => r.first());
   }
 
-  all(): Promise<TotalledList<Json>> {
+  all(): Promise<TotalList<Json>> {
     return this.get(this.route());
   }
 
@@ -23,7 +23,7 @@ export class RouteGateway extends Gateway {
     return this.getOne(this.routeId().id(id));
   }
 
-  search(q: JsonValue): Promise<TotalledList<Json>> {
+  search(q: JsonValue): Promise<TotalList<Json>> {
     return this.get(this.route().query(q));
   }
 

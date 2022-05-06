@@ -9,7 +9,7 @@ import {
   JsonValue,
   Key,
   toJson,
-  TotalledList,
+  TotalList,
 } from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
@@ -21,7 +21,7 @@ export class Repo<T extends Struct> {
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
-  all(): Promise<TotalledList<T>> {
+  all(): Promise<TotalList<T>> {
     return this.gateway.all().then(js => js.map(j => new this.ctor(j)));
   }
 
@@ -32,19 +32,19 @@ export class Repo<T extends Struct> {
       .then(j => new this.ctor(j));
   }
 
-  byIds(...ids: Id[]): Promise<TotalledList<T>> {
+  byIds(...ids: Id[]): Promise<TotalList<T>> {
     return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
-  byKey(key: Key): Promise<TotalledList<T>> {
+  byKey(key: Key): Promise<TotalList<T>> {
     return this.gateway.by('key', key).then(js => js.map(j => new this.ctor(j)));
   }
 
-  by(key: keyof T, value: JsonValue): Promise<TotalledList<T>> {
+  by(key: keyof T, value: JsonValue): Promise<TotalList<T>> {
     return this.gateway.by(key.toString(), value).then(js => js.map(j => new this.ctor(j)));
   }
 
-  search(q: JsonValue): Promise<TotalledList<T>> {
+  search(q: JsonValue): Promise<TotalList<T>> {
     return this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
   }
 

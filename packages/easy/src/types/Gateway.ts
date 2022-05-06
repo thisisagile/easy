@@ -2,10 +2,10 @@ import { Json, JsonValue } from './Json';
 import { Id } from './Id';
 import { Exception } from './Exception';
 import { reject } from '../utils';
-import { TotalledList } from './TotalledList';
+import { TotalList } from './TotalList';
 
 export abstract class Gateway {
-  all(): Promise<TotalledList<Json>> {
+  all(): Promise<TotalList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -13,15 +13,15 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
-  by(key: string, value: JsonValue): Promise<TotalledList<Json>> {
+  by(key: string, value: JsonValue): Promise<TotalList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byIds(...ids: Id[]): Promise<TotalledList<Json>> {
+  byIds(...ids: Id[]): Promise<TotalList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  search(q: JsonValue): Promise<TotalledList<Json>> {
+  search(q: JsonValue): Promise<TotalList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
