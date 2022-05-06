@@ -1,10 +1,8 @@
-import { List } from './List';
+import { TotalledList } from './List';
 import { Json, JsonValue } from './Json';
 import { Id } from './Id';
 import { Exception } from './Exception';
 import { reject } from '../utils';
-
-export type TotalledList<T> = List<T> & {total?: number};
 
 export abstract class Gateway {
   all(): Promise<TotalledList<Json>> {
