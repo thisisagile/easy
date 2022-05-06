@@ -171,36 +171,32 @@ describe('List', () => {
 
   test('diff by key', () => {
     expect(devs.diffByKey(managers, 'name')).toHaveLength(2);
-    expect(johnAndJane.diffByKey(jackAndJill)).toHaveLength(0);
     expect(johnAndJane.diffByKey(jackAndJill, 'id')).toHaveLength(0);
     expect(johnAndJane.diffByKey(jackAndJill, 'name')).toHaveLength(2);
-    expect(johnAndJane.diffByKey(jackAndJill, 'unknown')).toHaveLength(2);
     expect(johnAndJane.diffByKey(jackAndJill, 'age')).toHaveLength(0);
     expect(johnAndJane.diffByKey(jackAndJill, 'weight')).toHaveLength(2);
   });
 
   test('interSect', () => {
-    expect(toList().interSect(toList())).toMatchJson(toList());
-    expect(toList({ id: 42 }).interSect(toList())).toMatchJson(toList());
-    expect(toList().interSect(toList({ id: 42 }))).toMatchJson(toList());
-    const devManagers = devs.interSect(managers);
+    expect(toList().intersect(toList())).toMatchJson(toList());
+    expect(toList({ id: 42 }).intersect(toList())).toMatchJson(toList());
+    expect(toList().intersect(toList({ id: 42 }))).toMatchJson(toList());
+    const devManagers = devs.intersect(managers);
     expect(devManagers).toHaveLength(2);
     expect(devManagers).toContain(Dev.Naoufal);
     expect(devManagers).toContain(Dev.Jeroen);
   });
 
   test('interSect by key', () => {
-    const devManagers = devs.interSectByKey(managers, 'name');
+    const devManagers = devs.intersectByKey(managers, 'name');
     expect(devManagers).toHaveLength(2);
     expect(devManagers).toContain(Dev.Naoufal);
     expect(devManagers).toContain(Dev.Jeroen);
 
-    expect(johnAndJane.interSectByKey(jackAndJill)).toHaveLength(2);
-    expect(johnAndJane.interSectByKey(jackAndJill, 'id')).toHaveLength(2);
-    expect(johnAndJane.interSectByKey(jackAndJill, 'name')).toHaveLength(0);
-    expect(johnAndJane.interSectByKey(jackAndJill, 'unknown')).toHaveLength(0);
-    expect(johnAndJane.interSectByKey(jackAndJill, 'age')).toHaveLength(2);
-    expect(johnAndJane.interSectByKey(jackAndJill, 'weight')).toHaveLength(0);
+    expect(johnAndJane.intersectByKey(jackAndJill, 'id')).toHaveLength(2);
+    expect(johnAndJane.intersectByKey(jackAndJill, 'name')).toHaveLength(0);
+    expect(johnAndJane.intersectByKey(jackAndJill, 'age')).toHaveLength(2);
+    expect(johnAndJane.intersectByKey(jackAndJill, 'weight')).toHaveLength(0);
   });
 });
 

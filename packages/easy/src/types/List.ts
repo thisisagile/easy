@@ -26,15 +26,14 @@ export class List<T = unknown> extends Array<T> {
 
   overlaps = (...items: ArrayLike<T>): boolean => toList<T>(...items).some(i => this.some(t => i === t));
 
-  diff = (items: ArrayLike<T>): List<T> => this.filter(i => !items.includes(i));
+  diff = (others: ArrayLike<T>): List<T> => this.filter(i => !others.includes(i));
 
-  diffByKey = (items: ArrayLike<T>, key = 'id'): List<T> =>
-    this.filter((i: any) => !items.some((ii: any) => Object.keys(i).includes(key) && Object.keys(ii).includes(key) && ii[key] === i[key]));
+  diffByKey = (others: ArrayLike<T>, key: keyof T): List<T> =>
+    this.filter((i: any) => !others.some((o: any) => o[key] === i[key]));
 
-  interSect = (items: ArrayLike<T>): List<T> => this.filter(i => items.includes(i));
+  intersect = (others: ArrayLike<T>): List<T> => this.filter(i => others.includes(i));
 
-  interSectByKey = (items: ArrayLike<T>, key = 'id'): List<T> =>
-    this.filter((i: any) => items.some((ii: any) => Object.keys(i).includes(key) && Object.keys(ii).includes(key) && ii[key] === i[key]));
+  intersectByKey = (others: ArrayLike<T>, key: keyof T): List<T> => this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
 
   toJSON = (): Json[] =>
     this.reduce((a, i) => {
