@@ -87,4 +87,3 @@ export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(
 export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
 
 
-export type TotalledList<T> = List<T> & {total?: number};
