@@ -2,10 +2,11 @@ import { Json, JsonValue } from './Json';
 import { Id } from './Id';
 import { Exception } from './Exception';
 import { reject } from '../utils';
-import { PageList } from './PageList';
+import { PageList, PageOptions } from './PageList';
 
 export abstract class Gateway {
-  all(): Promise<PageList<Json>> {
+
+  all(options?: PageOptions): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -13,15 +14,15 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
-  by(key: string, value: JsonValue): Promise<PageList<Json>> {
+  by(_key: string, _value: JsonValue, _options?: PageOptions): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byIds(...ids: Id[]): Promise<PageList<Json>> {
+  byIds(..._ids: Id[]): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  search(q: JsonValue): Promise<PageList<Json>> {
+  search(q: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
