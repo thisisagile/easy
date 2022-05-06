@@ -84,7 +84,7 @@ export class ExpressProvider implements AppProvider {
     if (HttpStatus.NoContent.equals(options.onOk)) {
       res.send();
     } else {
-      res.json(rest.toData(options.onOk, toList<any>(result)));
+      res.json(rest.toData(options.onOk, toList<any>(result), (result as any)?.total));
     }
   }
 
