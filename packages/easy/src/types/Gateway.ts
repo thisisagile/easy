@@ -7,7 +7,7 @@ import { reject } from '../utils';
 export type TotalledList<T> = List<T> & {total?: number};
 
 export abstract class Gateway {
-  all(): Promise<List<Json>> {
+  all(): Promise<TotalledList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -15,15 +15,15 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
-  by(key: string, value: JsonValue): Promise<List<Json>> {
+  by(key: string, value: JsonValue): Promise<TotalledList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byIds(...ids: Id[]): Promise<List<Json>> {
+  byIds(...ids: Id[]): Promise<TotalledList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  search(q: JsonValue): Promise<List<Json>> {
+  search(q: JsonValue): Promise<TotalledList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
