@@ -2,7 +2,7 @@ import express, { Request, RequestHandler } from 'express';
 import passport from 'passport';
 import passportJwt, { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 import { authError } from './AuthError';
-import { ctx, Environment, HttpStatus, Scope, UseCase } from '@thisisagile/easy';
+import { ctx, Environment, HttpStatus, ifFalse, Scope, UseCase } from '@thisisagile/easy';
 
 type SecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 
@@ -29,19 +29,19 @@ export interface SecurityOptions {
 }
 
 export const checkLabCoat = (): RequestHandler => (req, res, next) =>
-  next(Environment.Dev.equals(ctx.env.name) ? undefined : authError(HttpStatus.Forbidden));
+  next(ifFalse(Environment.Dev.equals(ctx.env.name), authError(HttpStatus.Forbidden)));
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
 export const checkScope =
   (scope: Scope): RequestHandler =>
     (req, res, next) =>
-      next((req.user as any)?.scopes?.includes(scope.id) ? undefined : authError(HttpStatus.Forbidden));
+      next(ifFalse((req.user as any)?.scopes?.includes(scope.id), authError(HttpStatus.Forbidden)));
 
 export const checkUseCase =
   (uc: UseCase): RequestHandler =>
     (req, res, next) =>
-      next((req.user as any)?.usecases?.includes(uc.id) ? undefined : authError(HttpStatus.Forbidden));
+      next(ifFalse((req.user as any)?.usecases?.includes(uc.id), authError(HttpStatus.Forbidden)));
 
 const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrKeyProvider | undefined =>
   p
