@@ -22,6 +22,13 @@ describe('RouteGateway', () => {
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
+  test('all calls api correctly with totalItems', async () => {
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 }}));
+    const all = await gateway.all();
+    expect(all).toHaveLength(devs.length);
+    expect(all.total).toBe(42);
+  });
+
   test('get calls api correctly', async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
     await expect(gateway.get(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
