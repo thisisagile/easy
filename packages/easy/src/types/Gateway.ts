@@ -4,6 +4,8 @@ import { Id } from './Id';
 import { Exception } from './Exception';
 import { reject } from '../utils';
 
+export type TotalledList<T> = List<T> & {total?: number};
+
 export abstract class Gateway {
   all(): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented);
