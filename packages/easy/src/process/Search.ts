@@ -1,19 +1,20 @@
 import { Repo, Struct } from '../domain';
-import { choose, Id, isNotEmpty, JsonValue, Key, List, toList } from '../types';
+import { choose, Id, isNotEmpty, JsonValue, Key, toList, TotalledList } from '../types';
 import { resolve } from '../utils';
 
 export class Search<T extends Struct> {
-  constructor(protected repo: Repo<T>) {}
+  constructor(protected repo: Repo<T>) {
+  }
 
-  all = (): Promise<List<T>> => this.repo.all();
+  all = (): Promise<TotalledList<T>> => this.repo.all();
 
   byId = (id: Id): Promise<T> => this.repo.byId(id);
 
-  byIds = (...ids: Id[]): Promise<List<T>> => this.repo.byIds(...ids);
+  byIds = (...ids: Id[]): Promise<TotalledList<T>> => this.repo.byIds(...ids);
 
-  byKey = (key: Key): Promise<List<T>> => this.repo.byKey(key);
+  byKey = (key: Key): Promise<TotalledList<T>> => this.repo.byKey(key);
 
-  search = (query: JsonValue): Promise<List<T>> =>
+  search = (query: JsonValue): Promise<TotalledList<T>> =>
     choose(query)
       .case(isNotEmpty, q => this.repo.search(q))
       .else(resolve(toList<T>()));
