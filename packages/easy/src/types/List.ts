@@ -84,5 +84,4 @@ export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
-// export const asList = <T>(c: Constructor<T>, items: unknown[] = []): List<T> => toList<T>(items.map(i => new c(i)));
 export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
