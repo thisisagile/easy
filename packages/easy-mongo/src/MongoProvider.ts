@@ -7,10 +7,12 @@ import {
   Field,
   Id,
   isDefined,
+  json,
   Json,
   JsonValue,
-  List,
   LogicalCondition,
+  PageList,
+  PageOptions,
   reject,
   SortCondition,
   toList,
@@ -25,21 +27,23 @@ const omitId = (j: Json): Json => {
   return j;
 };
 
-export type FindOptions = {
-  limit?: number;
-  skip?: number;
-  sort?: SortCondition[];
-};
+export type FindOptions = PageOptions & { sort?: SortCondition[] };
 
 export type Filter<T> = MongoFilter<T>;
 
 export class MongoProvider {
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
+  }
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
       .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
-      .then(u => new MongoClient(u, { auth: { username: asString(db.options?.user), password: asString(db.options?.password) } }));
+      .then(u => new MongoClient(u, {
+        auth: {
+          username: asString(db.options?.user),
+          password: asString(db.options?.password),
+        },
+      }));
   }
 
   cluster(): Promise<MongoClient> {
@@ -55,15 +59,17 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
-  find(query: Condition | LogicalCondition | Filter<any>, options: FindOptions = { limit: 250 }): Promise<List<Json>> {
+  find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
+    let opts = json.merge({ take: 250 }, options);
+    opts = json.merge(opts, { limit: opts.take, sort: this.coll.sort(...(options?.sort ?? [])) as any });
     return this.collection()
-      .then(c => c.find(this.toMongoJson(query), { ...options, limit: options.limit ?? 250, sort: this.coll.sort(...(options.sort ?? [])) as any }))
+      .then(c => c.find(this.toMongoJson(query), { ...json.omit(opts, 'take') }))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
   }
 
-  all(options?: FindOptions): Promise<List<Json>> {
+  all(options?: FindOptions): Promise<PageList<Json>> {
     return this.find({}, options);
   }
 
@@ -73,7 +79,7 @@ export class MongoProvider {
       .then(i => omitId(i as Json));
   }
 
-  by(key: string, value: JsonValue, options?: FindOptions): Promise<List<Json>> {
+  by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.find({ [key]: asString(value) }, options);
   }
 
@@ -112,7 +118,11 @@ export class MongoProvider {
   }
 
   createPartialIndex(field: string | any, filter: Condition | LogicalCondition | Filter<any>, unique = true): Promise<string> {
-    return this.collection().then(c => c.createIndex(field, { partialFilterExpression: toMongoType(asJson(filter)), unique, writeConcern: { w: 1 } }));
+    return this.collection().then(c => c.createIndex(field, {
+      partialFilterExpression: toMongoType(asJson(filter)),
+      unique,
+      writeConcern: { w: 1 },
+    }));
   }
 
   createTextIndexes(...fields: Field[]): Promise<string> {

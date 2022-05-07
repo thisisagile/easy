@@ -18,7 +18,7 @@ export class MongoGateway implements Gateway {
   }
 
   all(options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.all().then(l => l.map(j => this.collection.in(j)));
+    return this.provider.all(options).then(l => l.map(j => this.collection.in(j)));
   }
 
   byId(id: Id): Promise<Json | undefined> {
@@ -26,7 +26,7 @@ export class MongoGateway implements Gateway {
   }
 
   by(key: string, value: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.by(key, value).then(l => l.map(j => this.collection.in(j)));
+    return this.provider.by(key, value, options).then(l => l.map(j => this.collection.in(j)));
   }
 
   byIds(...ids: Id[]): Promise<PageList<Json>> {
@@ -34,11 +34,11 @@ export class MongoGateway implements Gateway {
   }
 
   find(q: JsonValue | Condition | LogicalCondition, options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.find(asJson(q)).then(l => l.map(j => this.collection.in(j)));
+    return this.provider.find(asJson(q), options).then(l => l.map(j => this.collection.in(j)));
   }
 
   search(q: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
-    return this.find(this.collection.google(q));
+    return this.find(this.collection.google(q), options);
   }
 
   exists(id: Id): Promise<boolean> {
