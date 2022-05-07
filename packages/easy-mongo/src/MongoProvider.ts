@@ -14,8 +14,9 @@ import {
   PageList,
   PageOptions,
   reject,
+  resolve,
   SortCondition,
-  toList, tryTo,
+  toList, tuple2,
   when,
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, Filter as MongoFilter, MongoClient } from 'mongodb';
@@ -60,11 +61,11 @@ export class MongoProvider {
   }
 
   find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
-    const opts = tryTo(() => json.merge({ take: 250 }, options))
-      .map(o => json.merge(o, { limit: o.take, sort: this.coll.sort(...(options?.sort ?? [])) }))
-      .map(o => json.omit(o, 'take')).value;
-    return this.collection()
-      .then(c => c.find(this.toMongoJson(query), opts))
+    return resolve(json.merge({ take: 250 }, options))
+      .then(o => json.merge(o, { limit: o.take, sort: this.coll.sort(...(options?.sort ?? [])) }))
+      .then(o => json.omit(o, 'take'))
+      .then(o => tuple2(this.collection(), o))
+      .then(([c, o]) => c.find(this.toMongoJson(query), o))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
       .then(res => toList(res));
