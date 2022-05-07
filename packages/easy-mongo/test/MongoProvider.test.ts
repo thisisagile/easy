@@ -92,10 +92,10 @@ describe('MongoProvider', () => {
   });
 
   test('group calls aggregate on the collection', () => {
-    cursor.toArray = mock.resolve(devData);
+    cursor.toArray = mock.resolve([devData.jeroen, devData.wouter, devData.naoufal]);
     c.aggregate = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
-    return expect(provider.group([{ id: '42' }])).resolves.toBe(devData);
+    return expect(provider.group([{ id: '42' }])).resolves.toHaveLength(3);
   });
 
   test('group calls toMongoType on queries, to correct dates', async () => {

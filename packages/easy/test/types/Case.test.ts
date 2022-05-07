@@ -4,29 +4,48 @@ import { Dev } from '../ref';
 describe('Case', () => {
   const which = (name: string) =>
     choose(name)
-      .case(n => isEmpty(n), () => Dev.Jeroen)
-      .case(n => n?.includes('an'), () => Dev.Naoufal)
-      .case(n => n?.includes('San'), () => Dev.Sander)
+      .case(
+        n => isEmpty(n),
+        () => Dev.Jeroen
+      )
+      .case(
+        n => n?.includes('an'),
+        () => Dev.Naoufal
+      )
+      .case(
+        n => n?.includes('San'),
+        () => Dev.Sander
+      )
       .else(Dev.Wouter);
 
   test('Simple true', () => {
-    const out = choose('').case(true, () => Dev.Wouter).else(Dev.Naoufal);
+    const out = choose('')
+      .case(true, () => Dev.Wouter)
+      .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('Simple false', () => {
-    const out = choose('').case(false, () => Dev.Wouter).else(Dev.Naoufal);
+    const out = choose('')
+      .case(false, () => Dev.Wouter)
+      .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('Double true, should find first', () => {
-    const out = choose('').case(true, () => Dev.Wouter).case(true, () => Dev.Sander).else(Dev.Naoufal);
+    const out = choose('')
+      .case(true, () => Dev.Wouter)
+      .case(true, () => Dev.Sander)
+      .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('Double true with predicate, should find first', () => {
     const out = choose('sander')
-      .case(s => s.includes('and'), () => Dev.Sander)
+      .case(
+        s => s.includes('and'),
+        () => Dev.Sander
+      )
       .case(true, () => Dev.Wouter)
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);

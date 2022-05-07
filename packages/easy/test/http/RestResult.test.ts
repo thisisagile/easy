@@ -13,7 +13,7 @@ const dataWithTotal = {
     code: HttpStatus.Created.status,
     items: [Dev.Wouter.toJSON(), Dev.Naoufal.toJSON(), Dev.Sander.toJSON()],
     itemCount: 3,
-    totalItems: 42
+    totalItems: 42,
   },
 };
 const item = Dev.Wouter.toJSON();

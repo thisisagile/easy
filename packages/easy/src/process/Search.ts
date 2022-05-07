@@ -3,8 +3,7 @@ import { choose, Id, isNotEmpty, JsonValue, Key, toList, PageList } from '../typ
 import { resolve } from '../utils';
 
 export class Search<T extends Struct> {
-  constructor(protected repo: Repo<T>) {
-  }
+  constructor(protected repo: Repo<T>) {}
 
   all = (): Promise<PageList<T>> => this.repo.all();
 

@@ -19,7 +19,7 @@ export const isTrue = (o?: unknown): boolean => (isFunction(o) ? isTrue(o()) : i
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
 
-export const isObject = (o?: unknown): o is Record<string, unknown> => o != null && (typeof o === 'object') && !isArray(o);
+export const isObject = (o?: unknown): o is Record<string, unknown> => o != null && typeof o === 'object' && !isArray(o);
 
 export const isEmptyObject = (o?: unknown): boolean => isObject(o) && Object.getOwnPropertyNames(o).length === 0;
 

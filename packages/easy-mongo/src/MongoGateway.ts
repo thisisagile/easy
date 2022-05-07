@@ -1,21 +1,9 @@
 import { MongoProvider } from './MongoProvider';
-import {
-  asJson,
-  Condition,
-  Field,
-  Gateway,
-  Id,
-  ifDefined,
-  isDefined,
-  Json,
-  JsonValue,
-  LogicalCondition, PageList, PageOptions,
-} from '@thisisagile/easy';
+import { asJson, Condition, Field, Gateway, Id, ifDefined, isDefined, Json, JsonValue, LogicalCondition, PageList, PageOptions } from '@thisisagile/easy';
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
-  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {
-  }
+  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
   all(options?: PageOptions): Promise<PageList<Json>> {
     return this.provider.all(options).then(l => l.map(j => this.collection.in(j)));

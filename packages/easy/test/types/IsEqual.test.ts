@@ -41,7 +41,7 @@ describe('IsEqual', () => {
     [[], 3, false],
     [[3], 3, false],
     [[], {}, false],
-    [[], {length: 0}, false],
+    [[], { length: 0 }, false],
     [[], Dev.Sander, false],
     [[], [], true],
     [[1], [], false],

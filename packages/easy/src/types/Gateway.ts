@@ -5,7 +5,6 @@ import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 
 export abstract class Gateway {
-
   all(options?: PageOptions): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }

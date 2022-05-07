@@ -28,27 +28,26 @@ export interface SecurityOptions {
   };
 }
 
-export const checkLabCoat = (): RequestHandler => (req, res, next) =>
-  next(ifFalse(Environment.Dev.equals(ctx.env.name), authError(HttpStatus.Forbidden)));
+export const checkLabCoat = (): RequestHandler => (req, res, next) => next(ifFalse(Environment.Dev.equals(ctx.env.name), authError(HttpStatus.Forbidden)));
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
 export const checkScope =
   (scope: Scope): RequestHandler =>
-    (req, res, next) =>
-      next(ifFalse((req.user as any)?.scopes?.includes(scope.id), authError(HttpStatus.Forbidden)));
+  (req, res, next) =>
+    next(ifFalse((req.user as any)?.scopes?.includes(scope.id), authError(HttpStatus.Forbidden)));
 
 export const checkUseCase =
   (uc: UseCase): RequestHandler =>
-    (req, res, next) =>
-      next(ifFalse((req.user as any)?.usecases?.includes(uc.id), authError(HttpStatus.Forbidden)));
+  (req, res, next) =>
+    next(ifFalse((req.user as any)?.usecases?.includes(uc.id), authError(HttpStatus.Forbidden)));
 
 const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrKeyProvider | undefined =>
   p
     ? (request, rawJwtToken, done) =>
-      p(request, rawJwtToken)
-        .then(t => done(null, t))
-        .catch(e => done(e))
+        p(request, rawJwtToken)
+          .then(t => done(null, t))
+          .catch(e => done(e))
     : undefined;
 
 export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: express.Request, res: express.Response, next: express.NextFunction) => void) => {

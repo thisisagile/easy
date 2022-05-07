@@ -1,23 +1,10 @@
-import {
-  asList,
-  Constructor,
-  Exception,
-  Gateway,
-  Id,
-  isValidatable,
-  Json,
-  JsonValue,
-  Key,
-  toJson,
-  PageList,
-} from '../types';
+import { asList, Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, toJson, PageList } from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
-  }
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 

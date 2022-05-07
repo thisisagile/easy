@@ -32,5 +32,5 @@ describe('Struct', () => {
     expect(isStruct()).toBeFalsy();
     expect(isStruct({})).toBeFalsy();
     expect(isStruct(Dev.Rob)).toBeTruthy();
-  })
+  });
 });

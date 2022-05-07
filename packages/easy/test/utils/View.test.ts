@@ -157,10 +157,10 @@ describe('View', () => {
 
   test('same', () => {
     const devs = view({ id: 'id', name: 'name', language: 'language' });
-    expect(devs.same(Dev.Naoufal, {name: 'Naoufal'})).toBeFalsy();
+    expect(devs.same(Dev.Naoufal, { name: 'Naoufal' })).toBeFalsy();
     expect(devs.same(Dev.Naoufal, Dev.Jeroen)).toBeFalsy();
     expect(devs.same(Dev.Jeroen, Dev.Jeroen)).toBeTruthy();
-  })
+  });
 
   // Using views
 

@@ -1,8 +1,7 @@
 import { Func, Get, ofGet, Predicate, tryTo } from './index';
 
 class CaseBuilder<V> {
-  constructor(readonly v: V) {
-  }
+  constructor(readonly v: V) {}
 
   case<T>(pred: Predicate<V>, out: Func<T, V>): Case<T, V> {
     return new Case<T, V>(this.v).case(pred, out);

@@ -105,4 +105,3 @@ describe('MongoGateway', () => {
     expect(provider.update).toHaveBeenCalledWith({ ...devData.jeroen, Language: 'TypeScript' });
   });
 });
-

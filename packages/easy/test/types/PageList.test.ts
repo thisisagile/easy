@@ -3,7 +3,6 @@ import { toPageList } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
-
   test('toPageList empty', () => {
     const pl = toPageList();
     expect(pl).toBeDefined();
@@ -52,5 +51,3 @@ describe('PageList', () => {
     expect(pl.total).toBe(42);
   });
 });
-
-

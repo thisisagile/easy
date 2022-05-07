@@ -1,17 +1,4 @@
-import {
-  choose,
-  Id,
-  isDefined,
-  isError,
-  isResult,
-  isResults,
-  isUndefined,
-  Json,
-  List,
-  Result,
-  toList,
-  toResult,
-} from '../types';
+import { choose, Id, isDefined, isError, isResult, isResults, isUndefined, Json, List, Result, toList, toResult } from '../types';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
 
@@ -21,7 +8,7 @@ export type RestResult = {
 };
 
 const hasErrors = (a: any): a is { error: { code: number; errors: List<Result> } } => isDefined(a?.error?.errors);
-const hasItems = (a: any): a is { data: { code: number; items: List<Json>, totalItems?: number } } => isDefined(a?.data.items);
+const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number } } => isDefined(a?.data.items);
 
 export const rest = {
   toData: (status: HttpStatus, items: Json[] = [], totalItems?: number): RestResult => ({
@@ -29,7 +16,7 @@ export const rest = {
       code: status.status,
       items: toList(items),
       itemCount: items.length,
-      totalItems
+      totalItems,
     },
   }),
   toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({

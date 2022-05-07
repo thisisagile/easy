@@ -16,7 +16,8 @@ import {
   reject,
   resolve,
   SortCondition,
-  toList, tuple2,
+  toPageList,
+  tuple2,
   when,
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, Filter as MongoFilter, MongoClient } from 'mongodb';
@@ -33,18 +34,20 @@ export type FindOptions = PageOptions & { sort?: SortCondition[] };
 export type Filter<T> = MongoFilter<T>;
 
 export class MongoProvider {
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
-  }
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
       .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
-      .then(u => new MongoClient(u, {
-        auth: {
-          username: asString(db.options?.user),
-          password: asString(db.options?.password),
-        },
-      }));
+      .then(
+        u =>
+          new MongoClient(u, {
+            auth: {
+              username: asString(db.options?.user),
+              password: asString(db.options?.password),
+            },
+          })
+      );
   }
 
   cluster(): Promise<MongoClient> {
@@ -68,7 +71,7 @@ export class MongoProvider {
       .then(([c, o]) => c.find(this.toMongoJson(query), o))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
-      .then(res => toList(res));
+      .then(res => toPageList(res));
   }
 
   all(options?: FindOptions): Promise<PageList<Json>> {
@@ -85,10 +88,11 @@ export class MongoProvider {
     return this.find({ [key]: asString(value) }, options);
   }
 
-  group(qs: Filter<any>[]): Promise<Json[]> {
+  group(qs: Filter<any>[]): Promise<PageList<Json>> {
     return this.collection()
       .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
-      .then(res => res.toArray());
+      .then(res => res.toArray())
+      .then(res => toPageList(res));
   }
 
   aggregate = this.group;
@@ -120,11 +124,13 @@ export class MongoProvider {
   }
 
   createPartialIndex(field: string | any, filter: Condition | LogicalCondition | Filter<any>, unique = true): Promise<string> {
-    return this.collection().then(c => c.createIndex(field, {
-      partialFilterExpression: toMongoType(asJson(filter)),
-      unique,
-      writeConcern: { w: 1 },
-    }));
+    return this.collection().then(c =>
+      c.createIndex(field, {
+        partialFilterExpression: toMongoType(asJson(filter)),
+        unique,
+        writeConcern: { w: 1 },
+      })
+    );
   }
 
   createTextIndexes(...fields: Field[]): Promise<string> {

@@ -281,6 +281,5 @@ describe('DateTime', () => {
     expect(isDateTime()).toBeFalsy();
     expect(isDateTime({})).toBeFalsy();
     expect(isDateTime(new DateTime(iso))).toBeTruthy();
-
-  })
+  });
 });
