@@ -1,4 +1,4 @@
-import { any, asJson, isJson, json, toJson } from '../../src';
+import { any, asJson, isJson, json, PageOptions, toJson } from '../../src';
 import { Dev, DevsResource } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -9,7 +9,7 @@ describe('isJson', () => {
         toJSON: () => {
           'Kim';
         },
-      })
+      }),
     ).toBeTruthy();
     expect(isJson(Dev.Sander)).toBeTruthy();
   });
@@ -165,6 +165,19 @@ describe('json', () => {
 
     const j = json.merge({ level: 3 }, { level: undefined });
     expect(j).toStrictEqual({});
+  });
+
+  const usingDefaults = (options?: PageOptions): number => {
+    const o = json.defaults(options, { take: 5 });
+    return o.take;
+  };
+
+  test('defaults with a specific type', () => {
+    expect(usingDefaults()).toBe(5);
+    expect(usingDefaults({ take: 5 })).toBe(5);
+    expect(usingDefaults({ take: 10 })).toBe(10);
+    expect(usingDefaults({ skip: 10 })).toBe(5);
+    expect(usingDefaults({ skip: 10, take: 15 })).toBe(15);
   });
 
   test('set', () => {

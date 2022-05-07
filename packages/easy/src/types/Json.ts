@@ -17,6 +17,7 @@ export const json = {
   set: (subject: unknown, key = '', value?: unknown): Json =>
     isEmpty(key) ? subject : isDefined(value) ? { ...(subject as any), ...{ [key]: value as Json } } : json.delete(subject, key),
   omit: (subject: unknown, ...keys: string[]): Json => keys.reduce((js, k) => json.delete(js, k), json.parse(subject)),
+  defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T
 };
 
 export const toJson = json.merge;
