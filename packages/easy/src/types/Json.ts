@@ -8,27 +8,28 @@ export type Json = { [key: string]: JsonValue };
 export const isJson = (subject?: unknown): subject is { toJSON: () => Json } => isA<{ toJSON: () => Json }>(subject, 'toJSON');
 
 export const json = {
-  parse: (subject: unknown): Json => JSON.parse(JSON.stringify(subject ?? {})),
+  parse: <T extends Json = Json>(subject: unknown): T => JSON.parse(JSON.stringify(subject ?? {})),
   merge: (...subjects: unknown[]): Json => json.parse(subjects.map(s => asJson(s, s => json.parse(s))).reduce((js, j) => ({ ...js, ...j }), {})),
-  delete: (subject: unknown, key: string): Json => {
+  delete: <T extends Json = Json>(subject: T, key: string): T => {
     delete (subject as any)[key];
-    return subject as Json;
+    return subject;
   },
-  set: (subject: unknown, key = '', value?: unknown): Json =>
+  set: <T extends Json = Json>(subject: T, key = '', value?: unknown): T =>
     isEmpty(key) ? subject : isDefined(value) ? { ...(subject as any), ...{ [key]: value as Json } } : json.delete(subject, key),
-  omit: (subject: unknown, ...keys: string[]): Json => keys.reduce((js, k) => json.delete(js, k), json.parse(subject)),
-  defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T
+  omit: <T extends Json = Json>(subject: unknown, ...keys: string[]): T => keys.reduce((js, k) => json.delete(js, k), json.parse<T>(subject)),
+  defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T,
 };
 
 export const toJson = json.merge;
 
 export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt, j));
 
-class Any {
-  constructor(readonly value: unknown = {}) {}
-
-  delete = (key: string): Any => new Any(json.delete(this.value, key));
-  set = (key: string, value?: unknown): Any => new Any(json.set(this.value, key, value));
+class Any<T extends Json> {
+  constructor(readonly value: T) {}
+  merge = (...subjects: T[]): Any<T> => any<T>(json.merge(this.value, ...subjects) as T);
+  delete = (key: keyof T): Any<T> => any<T>(json.delete<T>(this.value, key as string));
+  omit = (...keys: (keyof T)[]): Any<T> => any<T>(json.omit<T>(this.value, ...keys as string[]));
+  set = (key: keyof T, value?: unknown): Any<T> => any<T>(json.set(this.value, key as string, value));
 }
 
-export const any = (value: unknown): Any => new Any(value);
+export const any = <T extends Json = Json>(value: T): Any<T> => new Any<T>(value);

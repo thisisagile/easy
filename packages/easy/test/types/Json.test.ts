@@ -9,7 +9,7 @@ describe('isJson', () => {
         toJSON: () => {
           'Kim';
         },
-      }),
+      })
     ).toBeTruthy();
     expect(isJson(Dev.Sander)).toBeTruthy();
   });
@@ -191,12 +191,17 @@ describe('json', () => {
   });
 
   test('any', () => {
-    const a = any({});
-    expect(a.set('').value).toStrictEqual({});
+    const a = any({name: 'Sander'});
     expect(a.set('name').value).toStrictEqual({});
     expect(a.set('name', 'Sander').value).toStrictEqual({ name: 'Sander' });
     expect(a.set('name', { first: 'Sander' }).value).toStrictEqual({ name: { first: 'Sander' } });
     expect(any({ name: { first: 'Sander' } }).set('name', { first: 'Jeroen' }).value).toStrictEqual({ name: { first: 'Jeroen' } });
     expect(any({ name: { first: 'Sander' } }).set('name').value).toStrictEqual({});
   });
+
+  test('chaining any', () => {
+    const opts: PageOptions = {total: 10, take: 5};
+    const a = any(opts).delete('take').set('take', 42).merge({skip: 12});
+    expect(a).toMatchObject({total: 10, take: 42, skip: 12});
+  })
 });
