@@ -28,7 +28,7 @@ class Any<T extends Json> {
   constructor(readonly value: T) {}
   merge = (...subjects: T[]): Any<T> => any<T>(json.merge(this.value, ...subjects) as T);
   delete = (key: keyof T): Any<T> => any<T>(json.delete<T>(this.value, key as string));
-  omit = (...keys: (keyof T)[]): Any<T> => any<T>(json.omit<T>(this.value, ...keys as string[]));
+  omit = (...keys: (keyof T)[]): Any<T> => any<T>(json.omit<T>(this.value, ...(keys as string[])));
   set = (key: keyof T, value?: unknown): Any<T> => any<T>(json.set(this.value, key as string, value));
 }
 
