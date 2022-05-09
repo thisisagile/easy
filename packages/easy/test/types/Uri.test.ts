@@ -80,11 +80,19 @@ describe('Uri', () => {
     expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe(`${host}/dev/developers/42?q=yes&language=C`);
   });
 
-  test('Route live offer with startIndex and itemsPerPage queries', () => {
+  test('Route with empty startIndex and itemsPerPage queries', () => {
+    expect(DevUri.Developers.startIndex().itemsPerPage()).toMatchRoute(`${host}/dev/developers`);
+  });
+
+  test('Route with undefined startIndex and itemsPerPage queries', () => {
+    expect(DevUri.Developers.startIndex(undefined).itemsPerPage(undefined)).toMatchRoute(`${host}/dev/developers`);
+  });
+
+  test('Route with startIndex and itemsPerPage queries', () => {
     expect(DevUri.Developers.startIndex(20).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?startIndex=20&itemsPerPage=10`);
   });
 
-  test('Route offer with startIndex and itemsPerPage queries', () => {
+  test('Route with q and startIndex and itemsPerPage queries', () => {
     expect(DevUri.Developers.query('test').startIndex(0).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?q=test&startIndex=0&itemsPerPage=10`);
   });
 
