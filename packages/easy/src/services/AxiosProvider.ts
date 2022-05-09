@@ -1,4 +1,4 @@
-import axiosClient, { AxiosError, AxiosInstance, AxiosResponse, Method } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse, Method } from 'axios';
 import { HttpStatus, HttpVerb, isRestResult, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
 import { choose, ctx, isDefined, isEmpty, toResult, Uri } from '../types';
 
@@ -14,10 +14,10 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
     .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 
 export class AxiosProvider implements RequestProvider {
-  constructor(private readonly axios: AxiosInstance = axiosClient) {}
+  constructor(readonly a: AxiosInstance = axios) {}
 
   execute = ({ uri, verb, body, transform = (r: any) => r, transformError = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
-    this.axios
+    this.a
       .request({
         url: uri.toString(),
         method: verb.toString() as Method,
