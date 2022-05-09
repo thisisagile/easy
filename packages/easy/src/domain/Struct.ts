@@ -2,14 +2,15 @@ import { isDefined, json, Json, Validatable } from '../types';
 import { validate } from '../validation';
 
 export abstract class Struct implements Validatable {
-  constructor(protected readonly state: any = {}) {}
+  constructor(protected readonly state: any = {}) {
+  }
 
   get isValid(): boolean {
     return validate(this).isValid;
   }
 
   toJSON(): Json {
-    return json.omit({ ...this }, 'state');
+    return json.delete(json.parse({ ...this }), 'state');
   }
 
   toString(): string {

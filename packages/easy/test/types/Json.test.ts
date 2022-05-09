@@ -129,8 +129,8 @@ describe('asJson', () => {
 describe('json', () => {
   const dev = { id: 2, name: 'Naoufal', level: 3, language: 'TypeScript' };
 
-  test('omit undefined should return what?', () => {
-    const empty = json.omit(undefined, 'language');
+  test('omit empty should return what?', () => {
+    const empty = json.omit({}, 'language');
     expect(empty).toStrictEqual({});
   });
 
@@ -201,7 +201,6 @@ describe('json', () => {
 
   test('chaining any', () => {
     const opts: PageOptions = { total: 10, take: 5 };
-    const a = any(opts).delete('take').set('take', 42).merge({ skip: 12 }).value;
-    expect(a).toMatchJson({ total: 10, take: 42, skip: 12 });
+    expect(any(opts).delete('take').set('take', 42).merge({ skip: 12 }).value).toMatchJson({ total: 10, take: 42, skip: 12 });
   });
 });
