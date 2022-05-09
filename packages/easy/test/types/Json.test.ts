@@ -201,7 +201,7 @@ describe('json', () => {
 
   test('chaining any', () => {
     const opts: PageOptions = { total: 10, take: 5 };
-    const a = any(opts).delete('take').set('take', 42).merge({ skip: 12 });
-    expect(a).toMatchObject({ total: 10, take: 42, skip: 12 });
+    const a = any(opts).delete('take').set('take', 42).merge({ skip: 12 }).value;
+    expect(a).toMatchJson({ total: 10, take: 42, skip: 12 });
   });
 });
