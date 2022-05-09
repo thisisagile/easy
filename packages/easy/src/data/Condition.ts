@@ -1,4 +1,4 @@
-import { json, Json, JsonValue } from '../types';
+import { json, Json, JsonValue, Sort } from '../types';
 import { convert, Convert } from '../utils';
 
 export class Condition {
@@ -20,8 +20,8 @@ export class LogicalCondition {
   }
 }
 
-export class SortCondition extends Condition {
-  constructor(readonly key: string, readonly value: number) {
+export class SortCondition extends Condition implements Sort {
+  constructor(readonly key: string, readonly value: -1 | 1) {
     super(key, '', value);
   }
 

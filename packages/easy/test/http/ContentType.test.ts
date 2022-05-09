@@ -3,7 +3,7 @@ import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('ContentType', () => {
-  const j = json.omit(Dev.Wouter, 'created', 'lastModified');
+  const j = json.omit(Dev.Wouter.toJSON(), 'created', 'lastModified');
 
   test('Json encode.', () => {
     const expected = { id: 4, name: 'Wouter', language: 'TypeScript', level: 3 };

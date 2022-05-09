@@ -65,12 +65,12 @@ describe('SortCondition', () => {
   const field = new Field('age');
 
   test('condition', () => {
-    const c = new SortCondition(field.property, 42);
-    expect(c.toJSON()).toMatchJson({ age: 42 });
+    const c = new SortCondition(field.property, 1);
+    expect(c.toJSON()).toMatchJson({ age: 1 });
   });
 
   test('empty operator, used in find options see mongo docs', () => {
-    const c = new SortCondition(field.property, 42);
+    const c = new SortCondition(field.property, -1);
     expect(c.operator).toBe('');
   });
 });

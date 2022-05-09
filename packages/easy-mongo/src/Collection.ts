@@ -12,7 +12,7 @@ import {
   mappings,
   ofGet,
   PropertyOptions,
-  SortCondition,
+  Sort,
   Text,
   toCondition,
   toUuid,
@@ -42,7 +42,7 @@ export class Collection extends Mapper {
   where = (...conditions: Get<Condition, this>[]): Json =>
     new LogicalCondition(
       'and',
-      conditions.map(c => ofGet(c, this))
+      conditions.map(c => ofGet(c, this)),
     ).toJSON();
 
   match = (condition: Get<Condition | LogicalCondition, this>): Json => ({ $match: ofGet(condition, this).toJSON() });
@@ -50,14 +50,14 @@ export class Collection extends Mapper {
   group = (...conditions: Get<Condition, this>[]): Json =>
     new LogicalCondition(
       'group',
-      conditions.map(c => ofGet(c, this))
+      conditions.map(c => ofGet(c, this)),
     ).toJSON();
 
   google = (value: unknown): Condition => toCondition('$text', 'search', value);
 
   search = (key: Text): Field => this.map.field(asString(key));
 
-  sort = (...conditions: SortCondition[]): Json =>
+  sort = (...conditions: Sort[]): Json =>
     conditions.reduce((cs: any, c) => {
       cs[c.key] = c.value;
       return cs;

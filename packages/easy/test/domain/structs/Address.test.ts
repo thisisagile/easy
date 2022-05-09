@@ -2,7 +2,13 @@ import '@thisisagile/easy-test';
 import { Address, isAddress, json } from '../../../src';
 
 describe('Address', () => {
-  const address = new Address({ street: 'Kalverstraat', houseNumber: '1', postalCode: '1012 NX', city: 'Amsterdam', country: 'NL' });
+  const address = new Address({
+    street: 'Kalverstraat',
+    houseNumber: '1',
+    postalCode: '1012 NX',
+    city: 'Amsterdam',
+    country: 'NL',
+  });
 
   test('default', () => {
     const a = new Address();
@@ -32,7 +38,7 @@ describe('Address', () => {
   });
 
   test('toString with extension adn without postalCode', () => {
-    const a = new Address({ ...json.omit(address, 'postalCode'), extension: 'Zw' });
+    const a = new Address({ ...json.omit(address.toJSON(), 'postalCode'), extension: 'Zw' });
     expect(a).toMatchText('Kalverstraat 1 Zw, Amsterdam Netherlands');
   });
 });

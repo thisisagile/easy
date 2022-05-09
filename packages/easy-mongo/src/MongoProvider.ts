@@ -7,20 +7,16 @@ import {
   Field,
   Id,
   isDefined,
-  json,
   Json,
   JsonValue,
   LogicalCondition,
   PageList,
   PageOptions,
   reject,
-  resolve,
-  SortCondition,
   toPageList,
-  tuple2,
   when,
 } from '@thisisagile/easy';
-import { Collection as MongoCollection, Filter as MongoFilter, MongoClient } from 'mongodb';
+import { Collection as MongoCollection, Filter as MongoFilter, FindOptions, MongoClient } from 'mongodb';
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
 
@@ -29,12 +25,24 @@ const omitId = (j: Json): Json => {
   return j;
 };
 
-export type FindOptions = PageOptions & { sort?: SortCondition[] };
+
+const toFindOptions = (coll: Collection, po?: PageOptions): FindOptions & { total: boolean } => ({
+  limit: po?.take ?? 250,
+  skip: po?.skip,
+  sort: coll.sort(...(po?.sorts ?? [])) as any,
+  total: isDefined(po?.skip) || isDefined(po?.take),
+});
+
 
 export type Filter<T> = MongoFilter<T>;
 
+
 export class MongoProvider {
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
+  aggregate = this.group;
+
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
+  }
+
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
@@ -46,9 +54,10 @@ export class MongoProvider {
               username: asString(db.options?.user),
               password: asString(db.options?.password),
             },
-          })
+          }),
       );
   }
+
 
   cluster(): Promise<MongoClient> {
     return Promise.resolve()
@@ -63,18 +72,15 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
-  find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
-    return resolve(json.merge({ take: 250 }, options))
-      .then(o => json.merge(o, { limit: o.take, sort: this.coll.sort(...(options?.sort ?? [])) }))
-      .then(o => json.omit(o, 'take'))
-      .then(o => tuple2(this.collection(), o))
-      .then(([c, o]) => c.find(this.toMongoJson(query), o))
+  find(query: Condition | LogicalCondition | Filter<any>, options?: PageOptions): Promise<PageList<Json>> {
+    return this.collection()
+      .then(c => c.find(this.toMongoJson(query), toFindOptions(this.coll, options)))
       .then(res => res.toArray())
       .then(res => res.map(i => omitId(i)))
-      .then(res => toPageList(res));
+      .then(res => toPageList(res, options));
   }
 
-  all(options?: FindOptions): Promise<PageList<Json>> {
+  all(options?: PageOptions): Promise<PageList<Json>> {
     return this.find({}, options);
   }
 
@@ -84,7 +90,7 @@ export class MongoProvider {
       .then(i => omitId(i as Json));
   }
 
-  by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
+  by(key: string, value: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
     return this.find({ [key]: asString(value) }, options);
   }
 
@@ -92,10 +98,8 @@ export class MongoProvider {
     return this.collection()
       .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
       .then(res => res.toArray())
-      .then(res => toPageList(res));
+      .then(res => toPageList( res ));
   }
-
-  aggregate = this.group;
 
   add(item: Json): Promise<Json> {
     return this.collection()
@@ -129,7 +133,7 @@ export class MongoProvider {
         partialFilterExpression: toMongoType(asJson(filter)),
         unique,
         writeConcern: { w: 1 },
-      })
+      }),
     );
   }
 

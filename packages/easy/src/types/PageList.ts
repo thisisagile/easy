@@ -1,11 +1,13 @@
 import { List, toList } from './List';
 import { json } from './Json';
 
-export type PageOptions = { take?: number; skip?: number; total?: number };
+export type Sort = { key: string, value: -1 | 1 };
 
-export type PageList<T> = List<T> & PageOptions;
+export type PageOptions = { take?: number, skip?: number, sorts?: Sort[] };
 
-export const toPageList = <T>(items?: T[], options?: PageOptions): PageList<T> => {
+export type PageList<T> = List<T> & PageOptions & { total?: number };
+
+export const toPageList = <T>( items?: T[], options?: PageOptions & { total?: number }): PageList<T> => {
   const o = json.defaults(options, { take: 250, skip: 0 });
   const list = toList<T>(...(items ?? [])) as any;
   list.take = o.take;
