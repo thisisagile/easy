@@ -30,6 +30,10 @@ class Any<T extends Json> {
   delete = (key: keyof T): Any<T> => any<T>(json.delete<T>(this.value, key as string));
   omit = (...keys: (keyof T)[]): Any<T> => any<T>(json.omit<T>(this.value, ...(keys as string[])));
   set = (key: keyof T, value?: unknown): Any<T> => any<T>(json.set(this.value, key as string, value));
+
+  toJSON(): Json {
+    return this.value;
+  }
 }
 
 export const any = <T extends Json = Json>(value: T): Any<T> => new Any<T>(value);

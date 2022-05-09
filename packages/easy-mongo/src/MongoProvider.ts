@@ -25,7 +25,6 @@ const omitId = (j: Json): Json => {
   return j;
 };
 
-
 const toFindOptions = (coll: Collection, po?: PageOptions): FindOptions & { total: boolean } => ({
   limit: po?.take ?? 250,
   skip: po?.skip,
@@ -33,16 +32,13 @@ const toFindOptions = (coll: Collection, po?: PageOptions): FindOptions & { tota
   total: isDefined(po?.skip) || isDefined(po?.take),
 });
 
-
 export type Filter<T> = MongoFilter<T>;
-
 
 export class MongoProvider {
   aggregate = this.group;
 
   constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
   }
-
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
@@ -57,7 +53,6 @@ export class MongoProvider {
           }),
       );
   }
-
 
   cluster(): Promise<MongoClient> {
     return Promise.resolve()
