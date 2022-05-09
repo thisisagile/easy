@@ -79,4 +79,13 @@ describe('Uri', () => {
     expect(DevUri.Developers.query('yes').language('Java').toString()).toBe(`${host}/dev/developers?q=yes&language=Java`);
     expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe(`${host}/dev/developers/42?q=yes&language=C`);
   });
+
+  test('Route live offer with startIndex and itemsPerPage queries', () => {
+    expect(DevUri.Developers.startIndex(20).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?startIndex=20&itemsPerPage=10`);
+  });
+
+  test('Route offer with startIndex and itemsPerPage queries', () => {
+    expect(DevUri.Developers.query('test').startIndex(0).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?q=test&startIndex=0&itemsPerPage=10`);
+  });
+
 });

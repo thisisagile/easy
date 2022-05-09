@@ -42,6 +42,8 @@ export type Uri = {
 export class EasyUri implements Uri {
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
+  static readonly startIndex = uri.query('startIndex');
+  static readonly itemsPerPage = uri.query('itemsPerPage');
 
   readonly host = uri.host();
   readonly resource = uri.resource(this);
@@ -85,4 +87,7 @@ export class EasyUri implements Uri {
 
   id = (id?: unknown): this => this.set(EasyUri.id, id);
   query = (q?: unknown): this => this.set(EasyUri.query, q);
+
+  startIndex = (si?: unknown): this => this.set(EasyUri.startIndex, si);
+  itemsPerPage = (ipp?: unknown): this => this.set(EasyUri.itemsPerPage, ipp);
 }
