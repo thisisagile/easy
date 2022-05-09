@@ -87,7 +87,7 @@ describe('MongoProvider', () => {
   test('find with sort options', async () => {
     c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
-    await provider.find(devs.where(devs.name.is('Jeroen')), { take: 2, sorts: [devs.name.desc(), devs.language.asc()] });
+    await provider.find(devs.where(devs.name.is('Jeroen')), { take: 2, sort: [devs.name.desc(), devs.language.asc()] });
     expect(c.find).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, { limit: 2, sort: { Name: 1, Language: -1 }, skip: undefined, total: true });
   });
 

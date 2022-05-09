@@ -6,7 +6,7 @@ import {
   Exception,
   Field,
   Id,
-  isDefined,
+  isDefined, json,
   Json,
   JsonValue,
   LogicalCondition,
@@ -20,15 +20,17 @@ import { Collection as MongoCollection, Filter as MongoFilter, FindOptions, Mong
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
 
-const omitId = (j: Json): Json => {
-  if (isDefined(j)) delete j._id;
-  return j;
-};
+const omitId = (j: Json): Json => json.delete(j, '_id');
+//
+// {
+//   if (isDefined(j)) delete j._id;
+//   return j;
+// };
 
 const toFindOptions = (coll: Collection, po?: PageOptions): FindOptions & { total: boolean } => ({
   limit: po?.take ?? 250,
   skip: po?.skip,
-  sort: coll.sort(...(po?.sorts ?? [])) as any,
+  sort: coll.sort(...(po?.sort ?? [])) as any,
   total: isDefined(po?.skip) || isDefined(po?.take),
 });
 
