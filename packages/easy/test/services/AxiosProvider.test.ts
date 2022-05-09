@@ -1,6 +1,6 @@
 import { AxiosProvider, ctx, EasyUri, HttpStatus, HttpVerb, RequestOptions, uri } from '../../src';
 import { DevUri } from '../ref';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('AxiosProvider', () => {
@@ -191,4 +191,14 @@ describe('AxiosProvider', () => {
 
     expect(axios.request).toHaveBeenCalledWith(fits.with({ headers: fits.with({ Authorization: 'Bearer special token' }) }));
   });
+  
+  test('axios could be replaced or extended', async ()=>{
+    const mockedAxios = mock.a<AxiosInstance>({request: mock.resolve({message})})
+    provider = new AxiosProvider(mockedAxios);
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+    });
+    expect(mockedAxios.request).toHaveBeenCalled();
+  })
 });
