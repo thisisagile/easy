@@ -1,6 +1,7 @@
 import { isA } from './IsA';
 import { isDefined, isEmpty, isObject } from './Is';
 import { Get, ofGet } from './Get';
+import { ifDefined } from '../utils';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };
@@ -11,7 +12,7 @@ export const json = {
   parse: <T extends Json = Json>(subject: unknown): T => JSON.parse(JSON.stringify(subject ?? {})),
   merge: (...subjects: unknown[]): Json => json.parse(subjects.map(s => asJson(s, s => json.parse(s))).reduce((js, j) => ({ ...js, ...j }), {})),
   delete: <T extends Json = Json>(subject: T, key: string): T => {
-    delete (subject as any)[key];
+    ifDefined(subject, () => delete (subject as any)[key])
     return subject;
   },
   set: <T extends Json = Json>(subject: T, key = '', value?: unknown): T =>

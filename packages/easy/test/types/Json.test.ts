@@ -9,7 +9,7 @@ describe('isJson', () => {
         toJSON: () => {
           'Kim';
         },
-      })
+      }),
     ).toBeTruthy();
     expect(isJson(Dev.Sander)).toBeTruthy();
   });
@@ -204,5 +204,17 @@ describe('json', () => {
     const a = any(opts).delete('take').set('take', 42).merge({ skip: 12 }).value;
     expect(a).toMatchObject({ take: 42, skip: 12 });
     expect(a).toMatchJson({ take: 42, skip: 12 });
+  });
+
+  test('delete does not fail on undefined', () => {
+    expect(json.delete(undefined as unknown as any, 'take')).toBeUndefined();
+  });
+
+  test('delete deletes', () => {
+    expect(json.delete({ skip: 1, take: 5 }, 'take')).toMatchObject({ skip: 1 });
+  });
+
+  test('delete works with non existing key', () => {
+    expect(json.delete({ skip: 1, take: 5 }, 'page')).toMatchObject({ skip: 1, take: 5 });
   });
 });
