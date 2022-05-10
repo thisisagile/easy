@@ -26,13 +26,13 @@ describe('Search', () => {
   test('byKey works', async () => {
     repo.byKey = mock.resolve(devs);
     await expect(select.byKey(42)).resolves.toStrictEqual(devs);
-    expect(repo.byKey).toHaveBeenCalledWith(42);
+    expect(repo.byKey).toHaveBeenCalledWith(42, undefined);
   });
 
   test('search works', async () => {
     repo.search = mock.resolve(devs);
     await expect(select.search(42)).resolves.toStrictEqual(devs);
-    expect(repo.search).toHaveBeenCalledWith(42);
+    expect(repo.search).toHaveBeenCalledWith(42, undefined);
   });
 
   test('search undefined returns empty list', async () => {

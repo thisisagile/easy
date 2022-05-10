@@ -42,7 +42,7 @@ describe('Repo', () => {
     gateway.by = mock.resolve(list);
     const res = await repo.by('level', '42');
     expect(res).toMatchJson(list);
-    expect(gateway.by).toHaveBeenCalledWith('level', '42');
+    expect(gateway.by).toHaveBeenCalledWith('level', '42', undefined);
   });
 
   test('byIds triggers gateway', async () => {
@@ -57,13 +57,13 @@ describe('Repo', () => {
     gateway.by = mock.resolve(list);
     const res = await repo.byKey(42);
     expect(res).toMatchJson(list);
-    expect(gateway.by).toHaveBeenCalledWith('key', 42);
+    expect(gateway.by).toHaveBeenCalledWith('key', 42, undefined);
   });
 
   test('search triggers gateway', async () => {
     gateway.search = mock.resolve(devs);
     const ds = await repo.search('Kim');
-    expect(gateway.search).toHaveBeenCalledWith('Kim');
+    expect(gateway.search).toHaveBeenCalledWith('Kim', undefined);
     expect(ds).toBeArrayOfWithLength(Dev, devs.length);
   });
 

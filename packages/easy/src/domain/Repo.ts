@@ -1,15 +1,29 @@
-import { asList, Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, toJson, PageList } from '../types';
+import {
+  asList,
+  Constructor,
+  Exception,
+  Gateway,
+  Id,
+  isValidatable,
+  Json,
+  JsonValue,
+  Key,
+  PageList,
+  PageOptions,
+  toJson,
+} from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
 export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
+  }
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
-  all(): Promise<PageList<T>> {
-    return this.gateway.all().then(js => js.map(j => new this.ctor(j)));
+  all(options?: PageOptions): Promise<PageList<T>> {
+    return this.gateway.all(options).then(js => js.map(j => new this.ctor(j)));
   }
 
   byId(id: Id): Promise<T> {
@@ -23,16 +37,16 @@ export class Repo<T extends Struct> {
     return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
-  byKey(key: Key): Promise<PageList<T>> {
-    return this.gateway.by('key', key).then(js => js.map(j => new this.ctor(j)));
+  byKey(key: Key, options?: PageOptions): Promise<PageList<T>> {
+    return this.gateway.by('key', key, options).then(js => js.map(j => new this.ctor(j)));
   }
 
-  by(key: keyof T, value: JsonValue): Promise<PageList<T>> {
-    return this.gateway.by(key.toString(), value).then(js => js.map(j => new this.ctor(j)));
+  by(key: keyof T, value: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+    return this.gateway.by(key.toString(), value, options).then(js => js.map(j => new this.ctor(j)));
   }
 
-  search(q: JsonValue): Promise<PageList<T>> {
-    return this.gateway.search(q).then(js => js.map(j => new this.ctor(j)));
+  search(q: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+    return this.gateway.search(q, options).then(js => js.map(j => new this.ctor(j)));
   }
 
   exists(id: Id): Promise<boolean> {
