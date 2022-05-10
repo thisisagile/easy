@@ -81,19 +81,19 @@ describe('Uri', () => {
   });
 
   test('Route with empty startIndex and itemsPerPage queries', () => {
-    expect(DevUri.Developers.startIndex().itemsPerPage()).toMatchRoute(`${host}/dev/developers`);
+    expect(DevUri.Developers.skip().take()).toMatchRoute(`${host}/dev/developers`);
   });
 
   test('Route with undefined startIndex and itemsPerPage queries', () => {
-    expect(DevUri.Developers.startIndex(undefined).itemsPerPage(undefined)).toMatchRoute(`${host}/dev/developers`);
+    expect(DevUri.Developers.skip(undefined).take(undefined)).toMatchRoute(`${host}/dev/developers`);
   });
 
-  test('Route with startIndex and itemsPerPage queries', () => {
-    expect(DevUri.Developers.startIndex(20).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?startIndex=20&itemsPerPage=10`);
+  test('Route with skip and take queries', () => {
+    expect(DevUri.Developers.skip(20).take(10)).toMatchRoute(`${host}/dev/developers?skip=20&take=10`);
   });
 
-  test('Route with q and startIndex and itemsPerPage queries', () => {
-    expect(DevUri.Developers.query('test').startIndex(0).itemsPerPage(10)).toMatchRoute(`${host}/dev/developers?q=test&startIndex=0&itemsPerPage=10`);
+  test('Route with q and skip and take queries', () => {
+    expect(DevUri.Developers.query('test').skip(0).take(10)).toMatchRoute(`${host}/dev/developers?q=test&skip=0&take=10`);
   });
 
 });

@@ -33,8 +33,8 @@ const toRoute = (...segments: Segment[]): string =>
 export type Uri = {
   id: (id?: unknown) => Uri;
   query: (q?: unknown) => Uri;
-  startIndex: (index?: number) => Uri;
-  itemsPerPage: (items?: number) => Uri;
+  skip: (n?: number) => Uri;
+  take: (n?: number) => Uri;
   path: string;
   route: (resource: string) => string;
   isInternal: boolean;
@@ -44,8 +44,8 @@ export type Uri = {
 export class EasyUri implements Uri {
   static readonly id = uri.path('id');
   static readonly query = uri.query('q');
-  static readonly startIndex = uri.query('startIndex');
-  static readonly itemsPerPage = uri.query('itemsPerPage');
+  static readonly skip = uri.query('skip');
+  static readonly take = uri.query('take');
 
   readonly host = uri.host();
   readonly resource = uri.resource(this);
@@ -90,6 +90,6 @@ export class EasyUri implements Uri {
   id = (id?: unknown): this => this.set(EasyUri.id, id);
   query = (q?: unknown): this => this.set(EasyUri.query, q);
 
-  startIndex = (index?: number): this => this.set(EasyUri.startIndex, index);
-  itemsPerPage = (items?: number): this => this.set(EasyUri.itemsPerPage, items);
+  skip = (index?: number): this => this.set(EasyUri.skip, index);
+  take = (items?: number): this => this.set(EasyUri.take, items);
 }
