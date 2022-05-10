@@ -1,4 +1,4 @@
-import { ctx, Enum, isNotEmpty, Text, toUuid } from '../types';
+import { ctx, Enum, isNotEmpty, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -23,11 +23,16 @@ export class RequestOptions extends Enum {
     return new RequestOptions(ContentType.Xml);
   }
 
-  constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}) {
+  constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
     super(type.name);
     this.headers['Content-Type'] = type.id;
     this.headers[HttpHeader.Correlation] = ctx.request.correlationId ?? toUuid();
   }
+
+  page = (options: PageOptions): this => {
+    this.pageOptions = options;
+    return this;
+  };
 
   authorization = (auth: string): this => {
     this.headers.Authorization = auth;

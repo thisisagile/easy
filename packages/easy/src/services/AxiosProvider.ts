@@ -14,10 +14,10 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
     .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 
 export class AxiosProvider implements RequestProvider {
-  constructor(readonly a: AxiosInstance = axios) {}
+  constructor(readonly ai: AxiosInstance = axios) {}
 
   execute = ({ uri, verb, body, transform = (r: any) => r, transformError = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
-    this.a
+    this.ai
       .request({
         url: uri.toString(),
         method: verb.toString() as Method,
