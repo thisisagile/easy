@@ -1603,7 +1603,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    mongodb: ^4.5.0
+    mongodb: ^4.6.0
   languageName: unknown
   linkType: soft
 
@@ -3021,12 +3021,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bson@npm:^4.6.2":
-  version: 4.6.2
-  resolution: "bson@npm:4.6.2"
+"bson@npm:^4.6.3":
+  version: 4.6.3
+  resolution: "bson@npm:4.6.3"
   dependencies:
     buffer: ^5.6.0
-  checksum: f4072d059ad9a46dd92451da5efb278d98f7b23fe6de0ee8dd1f9f05e005189156509b11deeba655befdf9434cffd283bfc35bcf75d2123c1fdf9b723ce8a98d
+  checksum: da99222fc14842ce3e693c8bcda5592b43816795c312c57cff8ee11172965e757c4227543234f8fa3469d621e213d86cdd8f8759d6c67a64b971416f850f833c
   languageName: node
   linkType: hard
 
@@ -7679,11 +7679,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "mongodb@npm:4.5.0"
+"mongodb@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "mongodb@npm:4.6.0"
   dependencies:
-    bson: ^4.6.2
+    bson: ^4.6.3
     denque: ^2.0.1
     mongodb-connection-string-url: ^2.5.2
     saslprep: ^1.0.3
@@ -7691,7 +7691,7 @@ __metadata:
   dependenciesMeta:
     saslprep:
       optional: true
-  checksum: 423974a663c90e6673226a9ad691e8b445ecd43fc4e9e424343644b20c35188bd3d6692dcc2798022cc6b5c6f4391b54747c7543134b46f93cb3da428e5f9246
+  checksum: aa2a584fdb4e7f73b73b5f4019916e4f9cdba6e0aa81448eade44a5ff4e5d771ad62cd252f012b7a211eb80f6f88fba446c6ad8f0eb898ba56cf447719161540
   languageName: node
   linkType: hard
 
