@@ -1,5 +1,5 @@
 import { PageOptions, Uri } from '../types';
-import { HttpVerb, RequestOptions, RequestProvider, Response } from '../http';
+import { HttpVerb, RequestOptions, RequestProvider, Response, toPageOptions } from '../http';
 import { AxiosProvider } from './AxiosProvider';
 
 export class Api {
@@ -8,7 +8,7 @@ export class Api {
 
   get(uri: Uri, options?: RequestOptions | PageOptions, transform?: (r: any) => any, transformError = (r: any) => r): Promise<Response> {
     return this.provider.execute({
-      uri: (options instanceof RequestOptions) ? uri.skip(options.pageOptions?.skip).take(options.pageOptions?.take) : uri.skip(options?.skip).take(options?.take),
+      uri: uri.skip(toPageOptions(options)?.skip).take(toPageOptions(options)?.take),
       verb: HttpVerb.Get,
       transform,
       transformError,

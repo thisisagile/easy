@@ -22,9 +22,16 @@ describe('RouteGateway', () => {
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
-  test('all calls api correctly with totalItems', async () => {
+  test('all calls api correctly without totalItems', async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 } }));
     const all = await gateway.all();
+    expect(all).toHaveLength(devs.length);
+    expect(all.total).toBeUndefined();
+  });
+
+  test('all calls api correctly with totalItems', async () => {
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 } }));
+    const all = await gateway.all({skip: 1, take: 5});
     expect(all).toHaveLength(devs.length);
     expect(all.total).toBe(42);
   });
