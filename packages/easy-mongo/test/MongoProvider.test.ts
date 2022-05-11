@@ -62,15 +62,38 @@ describe('MongoProvider', () => {
     c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
     await provider.find({});
-    expect(c.find).toHaveBeenCalledWith({}, { limit: 250, sort: {}, skip: undefined, total:false });
+    expect(c.find).toHaveBeenCalledWith({}, { limit: 250, sort: {}, skip: undefined, total: false });
   });
 
   test('find with with only skip keeps limit', async () => {
     cursor.toArray = mock.resolve([]);
     c.find = mock.resolve(cursor);
+    c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find({}, { skip: 3 });
     expect(c.find).toHaveBeenCalledWith({}, fits.json({ skip: 3, limit: 250 }));
+  });
+
+  test('find without options doesnt call count', async () => {
+    cursor.toArray = mock.resolve([]);
+    c.find = mock.resolve(cursor);
+    c.count = mock.resolve(42);
+    provider.collection = mock.resolve(c);
+    const r = await provider.find({});
+    expect(c.count).not.toHaveBeenCalled();
+    expect(r.total).toBeUndefined();
+  });
+
+  test('find with options calls count', async () => {
+    c.find = mock.resolve(cursor);
+    c.count = mock.resolve(42);
+    provider.collection = mock.resolve(c);
+    const r = await provider.find(devs.where(devs.name.is('Jeroen')), {
+      take: 2,
+      sort: [devs.name.desc(), devs.language.asc()],
+    });
+    expect(c.count).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] });
+    expect(r.total).toBe(42);
   });
 
   test('find calls toMongoType on queries, to correct dates', async () => {
@@ -86,9 +109,15 @@ describe('MongoProvider', () => {
 
   test('find with sort options', async () => {
     c.find = mock.resolve(cursor);
+    c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find(devs.where(devs.name.is('Jeroen')), { take: 2, sort: [devs.name.desc(), devs.language.asc()] });
-    expect(c.find).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, { limit: 2, sort: { Name: 1, Language: -1 }, skip: undefined, total: true });
+    expect(c.find).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, {
+      limit: 2,
+      sort: { Name: 1, Language: -1 },
+      skip: undefined,
+      total: true,
+    });
   });
 
   test('group calls aggregate on the collection', () => {

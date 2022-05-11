@@ -6,7 +6,9 @@ import {
   Exception,
   Field,
   Id,
-  isDefined, json,
+  ifTrue,
+  isDefined,
+  json,
   Json,
   JsonValue,
   LogicalCondition,
@@ -14,6 +16,8 @@ import {
   PageOptions,
   reject,
   toPageList,
+  tuple2,
+  tuple3,
   when,
 } from '@thisisagile/easy';
 import { Collection as MongoCollection, Filter as MongoFilter, FindOptions, MongoClient } from 'mongodb';
@@ -65,11 +69,11 @@ export class MongoProvider {
   }
 
   find(query: Condition | LogicalCondition | Filter<any>, options?: PageOptions): Promise<PageList<Json>> {
-    return this.collection()
-      .then(c => c.find(this.toMongoJson(query), toFindOptions(this.coll, options)))
-      .then(res => res.toArray())
-      .then(res => res.map(i => omitId(i)))
-      .then(res => toPageList(res, options));
+    return tuple3(this.collection(), this.toMongoJson(query), toFindOptions(this.coll, options))
+      .then(([c, q, o]) => tuple2(c.find(q, o), ifTrue(o.total, () => c.count(q))))
+      .then(([res, total]) => tuple2(res.toArray(), total))
+      .then(([res, total]) => tuple2(res.map(i => omitId(i)), total))
+      .then(([res, total]) => toPageList(res, options && { total }));
   }
 
   all(options?: PageOptions): Promise<PageList<Json>> {
@@ -90,7 +94,7 @@ export class MongoProvider {
     return this.collection()
       .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
       .then(res => res.toArray())
-      .then(res => toPageList( res ));
+      .then(res => toPageList(res));
   }
 
   add(item: Json): Promise<Json> {
