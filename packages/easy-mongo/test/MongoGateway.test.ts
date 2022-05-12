@@ -1,12 +1,13 @@
 import { fits, mock } from '@thisisagile/easy-test';
 import { MongoGateway, MongoProvider } from '../src';
 import { collData, DevCollection, devData } from './ref/DevCollection';
+import { toList, toPageList } from '@thisisagile/easy';
 
 describe('MongoGateway', () => {
   let provider!: MongoProvider;
   let gateway!: MongoGateway;
   const all = [devData.naoufal, devData.wouter, devData.jeroen, devData.sander];
-  const allColl = [collData.naoufal, collData.wouter, collData.jeroen, collData.sander];
+  const allColl = toList([collData.naoufal, collData.wouter, collData.jeroen, collData.sander]);
   const devCollection = new DevCollection();
 
   beforeEach(() => {
@@ -23,8 +24,14 @@ describe('MongoGateway', () => {
 
   test('All calls the provider', async () => {
     provider.all = mock.resolve(all);
-    await expect(gateway.all()).resolves.toStrictEqual(allColl);
+    await expect(gateway.all()).resolves.toMatchJson(toList(allColl));
     expect(provider.all).toHaveBeenCalled();
+  });
+
+  test('All returns PagedList', async () => {
+    provider.all = mock.resolve(toPageList(all, { total: 100 }));
+    const res = await gateway.all();
+    expect(res.total).toBe(100);
   });
 
   test('byId calls the provider', async () => {
@@ -35,7 +42,7 @@ describe('MongoGateway', () => {
 
   test('byIds calls the provider', async () => {
     provider.find = mock.resolve(all);
-    await expect(gateway.byIds(56, 54)).resolves.toStrictEqual(allColl);
+    await expect(gateway.byIds(56, 54)).resolves.toMatchJson(toList(allColl));
     expect(provider.find).toHaveBeenCalledWith(fits.with({ Id: { $in: [56, 54] } }), undefined);
   });
 
@@ -47,31 +54,31 @@ describe('MongoGateway', () => {
 
   test('by calls the provider', async () => {
     provider.by = mock.resolve([devData.naoufal]);
-    await expect(gateway.by('id', 42)).resolves.toStrictEqual([collData.naoufal]);
+    await expect(gateway.by('id', 42)).resolves.toMatchJson(toList(collData.naoufal));
     expect(provider.by).toHaveBeenCalledWith('id', 42, undefined);
   });
 
   test('find calls provider', async () => {
     provider.find = mock.resolve(all);
-    await expect(gateway.find({ id: { $eq: 42 } })).resolves.toStrictEqual(allColl);
+    await expect(gateway.find({ id: { $eq: 42 } })).resolves.toMatchJson(allColl);
     expect(provider.find).toHaveBeenCalledWith(fits.with({ id: { $eq: 42 } }), undefined);
   });
 
   test('find calls provider with a collection', async () => {
     provider.find = mock.resolve(all);
-    await expect(gateway.find(devCollection.name.is('Naoufal'))).resolves.toStrictEqual(allColl);
+    await expect(gateway.find(devCollection.name.is('Naoufal'))).resolves.toMatchJson(allColl);
     expect(provider.find).toHaveBeenCalledWith(fits.with({ Name: { $eq: 'Naoufal' } }), undefined);
   });
 
   test('google calls provider with a collection', async () => {
     provider.find = mock.resolve(all);
-    await expect(gateway.find(devCollection.google('Naoufal'))).resolves.toStrictEqual(allColl);
+    await expect(gateway.find(devCollection.google('Naoufal'))).resolves.toMatchJson(allColl);
     expect(provider.find).toHaveBeenCalledWith(fits.with({ $text: { $search: 'Naoufal' } }), undefined);
   });
 
   test('google search calls provider with a collection', async () => {
     provider.find = mock.resolve([devData.naoufal]);
-    await expect(gateway.search('Naoufal')).resolves.toStrictEqual([collData.naoufal]);
+    await expect(gateway.search('Naoufal')).resolves.toMatchJson(toList(collData.naoufal));
     expect(provider.find).toHaveBeenCalledWith(fits.with({ $text: { $search: 'Naoufal' } }), undefined);
   });
 

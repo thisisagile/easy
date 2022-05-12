@@ -50,4 +50,11 @@ describe('PageList', () => {
     expect(pl).toHaveLength(Dev.All.length);
     expect(pl.total).toBe(42);
   });
+
+  test('toPageList works with PageList as input', () => {
+    const pl = toPageList(Dev.All, { total: 42 });
+    const pl2 = toPageList(pl, pl);
+    expect(pl2).toHaveLength(Dev.All.length);
+    expect(pl2.total).toBe(42);
+  });
 });
