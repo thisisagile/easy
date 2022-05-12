@@ -1,5 +1,4 @@
-import { defined, Entity, gt, Id, Json, lt, required, Struct, toList } from '../../src';
-import { asList } from '../../dist';
+import { defined, Entity, gt, Id, Json, lt, required, Struct, toList, asList } from '../../src';
 
 export class Certificate extends Struct {
   static readonly ScrumMaster = new Certificate({ id: 42, name: 'Certified scrum master' });
