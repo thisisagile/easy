@@ -11,7 +11,7 @@ export class Retry<T = any> {
       .then(() =>
         this.subject().catch(async e => {
           await wait(this.interval);
-          return retry(this.subject, this.times - 1, this.interval, e);
+          return new Retry<T>(this.subject, this.times - 1, this.interval, e).run();
         })
       );
 }
