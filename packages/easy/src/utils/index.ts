@@ -4,7 +4,7 @@ export * from './Log';
 export * from './Mapper';
 export * from './Promise';
 export * from './Property';
-export * from './Retry';
+export * from './Rerun';
 export * from './State';
 export * from './Sentence';
 export * from './Traverse';
