@@ -1,4 +1,5 @@
-import { ContentType, ctx, HttpHeader, RequestOptions } from '../../src';
+import { ContentType, ctx, HttpHeader, isRequestOptions, RequestOptions } from '../../src';
+import { Dev } from '../ref';
 
 describe('RequestOptions', () => {
   let options: RequestOptions;
@@ -56,5 +57,14 @@ describe('RequestOptions', () => {
   test('authorization())', () => {
     options.authorization('Hello');
     expect(options.headers.Authorization).toBe('Hello');
+  });
+});
+
+describe('isRequestOptions', () => {
+  test('is and is not', () => {
+    expect(isRequestOptions()).toBeFalsy();
+    expect(isRequestOptions({})).toBeFalsy();
+    expect(isRequestOptions(Dev.Jeroen)).toBeFalsy();
+    expect(isRequestOptions(RequestOptions.Json)).toBeTruthy();
   });
 });

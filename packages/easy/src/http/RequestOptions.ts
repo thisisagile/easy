@@ -1,4 +1,4 @@
-import { ctx, Enum, isNotEmpty, PageOptions, Text, toUuid } from '../types';
+import { ctx, Enum, isDefined, isNotEmpty, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -60,3 +60,5 @@ export class RequestOptions extends Enum {
     return this.authorization(`Basic ${basicAuth}`);
   };
 }
+
+export const isRequestOptions = (o?: unknown): o is RequestOptions => isDefined(o) && o instanceof RequestOptions;
