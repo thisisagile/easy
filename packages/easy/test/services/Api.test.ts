@@ -47,6 +47,13 @@ describe('Api', () => {
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Json) }));
   });
 
+  test('checking options', async () => {
+    api2.options = mock.return(RequestOptions.Form);
+    await api2.get(DevUri.Developers);
+    expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Form) }));
+    expect(api2.options).toHaveBeenCalledWith(HttpVerb.Get, undefined);
+  });
+
   test('get works with request options', async () => {
     await api2.get(DevUri.Developers, RequestOptions.Form);
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Form) }));
