@@ -1,6 +1,5 @@
-import { equals } from 'expect/build/jasmineUtils';
-import { iterableEquality, subsetEquality } from 'expect/build/utils';
 import { asString } from './Utils';
+import { equals, iterableEquality, subsetEquality } from "@jest/expect-utils";
 
 export const eq = {
   exact: (a?: unknown, b?: unknown): boolean => equals(a, b, []),

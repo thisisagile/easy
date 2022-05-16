@@ -38,6 +38,7 @@
     "@thisisagile/easy-test-react": "workspace:*",
     "@types/copyfiles": "^2",
     "copyfiles": "^2.4.1",
+    "jest-environment-jsdom": "^28.1.0",
     "jest-transform-stub": "^2.0.0"
   },
   "dependencies": {

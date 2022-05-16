@@ -1,6 +1,6 @@
 import { asJson, asString } from '../utils/Utils';
 import { eq } from '../utils/Eq';
-import { AsymmetricMatcher } from 'expect/build/asymmetricMatchers';
+import { AsymmetricMatcher } from 'expect';
 
 class ObjectContainingText extends AsymmetricMatcher<string> {
   asymmetricMatch(other: any) {
