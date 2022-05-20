@@ -1,7 +1,8 @@
 import { Id, Json, JsonValue, Text } from './Types';
 
 export class Req {
-  constructor(readonly state: any = {}) {}
+  constructor(readonly state: any = {}) {
+  }
 
   get id(): Id {
     return this.state.id ?? this.path.id;
@@ -10,6 +11,15 @@ export class Req {
   get q(): JsonValue {
     return this.state.q ?? this.query.q;
   }
+
+  get skip(): number | undefined {
+    return this.state?.query.skip;
+  }
+
+  get take(): number | undefined {
+    return this.state?.query.take;
+  }
+
 
   get path(): Json {
     return this.state?.path ?? {};
