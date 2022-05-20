@@ -3,6 +3,7 @@ import { DevUri } from '../ref';
 
 describe('Req', () => {
   const req = { params: { id: 42, name: 'Naoufal' }, query: { q: 43, language: 'TypeScript' }, body: {} };
+  const reqPaged = { params: { id: 42, name: 'Jeroen' }, query: { q: 43, language: 'TypeScript', skip: 15, take: 5 }, body: {} };
   const params = { params: { id: 42, name: 'Naoufal' } };
 
   test('matches', () => {
@@ -28,6 +29,19 @@ describe('Req', () => {
       id: 42,
       query: { q: 43, language: 'TypeScript' },
       q: 43,
+      body: {},
+    });
+  });
+
+  test('toReqPaged from full object', () => {
+    const r = toReq(reqPaged);
+    expect(r).toMatchObject({
+      path: { id: 42, name: 'Jeroen' },
+      id: 42,
+      query: { q: 43, language: 'TypeScript' },
+      q: 43,
+      skip: 15,
+      take: 5,
       body: {},
     });
   });

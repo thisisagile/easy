@@ -1,6 +1,6 @@
-import { Id, Json, JsonValue, Text } from '../types';
+import { asNumber, Id, Json, JsonValue, PageOptions, Text } from '../types';
 
-export class Req {
+export class Req implements Omit<PageOptions, 'sort'> {
   constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: unknown) {}
 
   get id(): Id {
@@ -9,6 +9,14 @@ export class Req {
 
   get q(): JsonValue {
     return this.get('q');
+  }
+
+  get skip(): number | undefined {
+    return asNumber(this.get('skip'));
+  }
+
+  get take(): number | undefined {
+    return asNumber(this.get('take'));
   }
 
   get = (key: Text): any => this.path[key.toString()] ?? this.query[key.toString()];
