@@ -1,5 +1,6 @@
 import {
   asList,
+  asPageList,
   Constructor,
   Exception,
   Gateway,
@@ -8,6 +9,7 @@ import {
   Json,
   JsonValue,
   Key,
+  List,
   PageList,
   PageOptions,
   toJson,
@@ -23,7 +25,7 @@ export class Repo<T extends Struct> {
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
   all(options?: PageOptions): Promise<PageList<T>> {
-    return this.gateway.all(options).then(js => js.map(j => new this.ctor(j)));
+    return this.gateway.all(options).then(js => asPageList(this.ctor, js));
   }
 
   byId(id: Id): Promise<T> {
@@ -33,20 +35,20 @@ export class Repo<T extends Struct> {
       .then(j => new this.ctor(j));
   }
 
-  byIds(...ids: Id[]): Promise<PageList<T>> {
+  byIds(...ids: Id[]): Promise<List<T>> {
     return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
   byKey(key: Key, options?: PageOptions): Promise<PageList<T>> {
-    return this.gateway.by('key', key, options).then(js => js.map(j => new this.ctor(j)));
+    return this.gateway.by('key', key, options).then(js => asPageList(this.ctor, js));
   }
 
   by(key: keyof T, value: JsonValue, options?: PageOptions): Promise<PageList<T>> {
-    return this.gateway.by(key.toString(), value, options).then(js => js.map(j => new this.ctor(j)));
+    return this.gateway.by(key.toString(), value, options).then(js => asPageList(this.ctor, js));
   }
 
   search(q: JsonValue, options?: PageOptions): Promise<PageList<T>> {
-    return this.gateway.search(q, options).then(js => js.map(j => new this.ctor(j)));
+    return this.gateway.search(q, options).then(js => asPageList(this.ctor, js));
   }
 
   exists(id: Id): Promise<boolean> {
