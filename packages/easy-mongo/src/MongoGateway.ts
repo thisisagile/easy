@@ -1,6 +1,7 @@
 import { MongoProvider } from './MongoProvider';
 import {
   asJson,
+  asPageList,
   Condition,
   Field,
   Gateway,
@@ -9,10 +10,10 @@ import {
   isDefined,
   Json,
   JsonValue,
+  List,
   LogicalCondition,
   PageList,
   PageOptions,
-  toPageList,
 } from '@thisisagile/easy';
 import { Collection } from './Collection';
 
@@ -21,7 +22,7 @@ export class MongoGateway implements Gateway {
   }
 
   all(options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.all(options).then(pl => toPageList(pl.map(j => this.collection.in(j)), pl),
+    return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js),
     );
   }
 
@@ -30,20 +31,15 @@ export class MongoGateway implements Gateway {
   }
 
   by(key: string, value: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.by(key, value, options).then(pl =>
-      toPageList(
-        pl.map(j => this.collection.in(j)),
-        pl,
-      ),
-    );
+    return this.provider.by(key, value, options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
-  byIds(...ids: Id[]): Promise<PageList<Json>> {
+  byIds(...ids: Id[]): Promise<List<Json>> {
     return this.find((this.collection.id as Field).isIn(...ids));
   }
 
   find(q: JsonValue | Condition | LogicalCondition, options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.find(asJson(q), options).then(pl => toPageList(pl.map(j => this.collection.in(j)), pl),
+    return this.provider.find(asJson(q), options).then(js => asPageList(j => this.collection.in(j), js),
     );
   }
 
