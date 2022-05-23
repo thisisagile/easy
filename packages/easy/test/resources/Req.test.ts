@@ -53,6 +53,8 @@ describe('Req', () => {
       id: 42,
       q: undefined,
       body: undefined,
+      skip: undefined,
+      take: undefined,
     });
   });
 });

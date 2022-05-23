@@ -1,9 +1,8 @@
 import { Id, Json, JsonValue, Text } from './Types';
-import { asNumber } from '@thisisagile/easy';
+import { asNumber, ifDefined } from '@thisisagile/easy';
 
 export class Req {
-  constructor(readonly state: any = {}) {
-  }
+  constructor(readonly state: any = {}) {}
 
   get id(): Id {
     return this.state.id ?? this.path.id;
@@ -13,8 +12,8 @@ export class Req {
     return this.state.q ?? this.query.q;
   }
 
-  readonly skip = asNumber(this.state?.query?.skip);
-  readonly take = asNumber(this.state?.query?.take);
+  readonly skip = ifDefined(this.query?.skip, asNumber(this.query?.skip));
+  readonly take = ifDefined(this.query?.take, asNumber(this.query?.take));
 
   get path(): Json {
     return this.state?.path ?? {};

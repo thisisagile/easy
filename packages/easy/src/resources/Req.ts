@@ -1,4 +1,5 @@
 import { asNumber, Id, Json, JsonValue, PageOptions, Text } from '../types';
+import { ifDefined } from '../utils';
 
 export class Req implements Omit<PageOptions, 'sort'> {
   constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: unknown) {}
@@ -11,8 +12,8 @@ export class Req implements Omit<PageOptions, 'sort'> {
     return this.get('q');
   }
 
-  readonly skip = asNumber(this.query?.skip);
-  readonly take = asNumber(this.query?.take);
+  readonly skip = ifDefined(this.query?.skip, asNumber(this.query?.skip));
+  readonly take = ifDefined(this.query?.take, asNumber(this.query?.take));
 
   get = (key: Text): any => this.path[key.toString()] ?? this.query[key.toString()];
 }
