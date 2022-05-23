@@ -3,6 +3,7 @@ import { Id } from './Id';
 import { Exception } from './Exception';
 import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
+import { List } from './List';
 
 export abstract class Gateway {
   all(options?: PageOptions): Promise<PageList<Json>> {
@@ -17,7 +18,7 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
-  byIds(..._ids: Id[]): Promise<PageList<Json>> {
+  byIds(..._ids: Id[]): Promise<List<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
