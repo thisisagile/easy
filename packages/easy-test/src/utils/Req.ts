@@ -1,4 +1,5 @@
 import { Id, Json, JsonValue, Text } from './Types';
+import { asNumber } from '@thisisagile/easy';
 
 export class Req {
   constructor(readonly state: any = {}) {
@@ -12,14 +13,8 @@ export class Req {
     return this.state.q ?? this.query.q;
   }
 
-  get skip(): number | undefined {
-    return this.state?.query.skip;
-  }
-
-  get take(): number | undefined {
-    return this.state?.query.take;
-  }
-
+  readonly skip = asNumber(this.state?.query?.skip);
+  readonly take = asNumber(this.state?.query?.take);
 
   get path(): Json {
     return this.state?.path ?? {};

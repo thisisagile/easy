@@ -11,13 +11,8 @@ export class Req implements Omit<PageOptions, 'sort'> {
     return this.get('q');
   }
 
-  get skip(): number | undefined {
-    return asNumber(this.get('skip'));
-  }
-
-  get take(): number | undefined {
-    return asNumber(this.get('take'));
-  }
+  readonly skip = asNumber(this.query?.skip);
+  readonly take = asNumber(this.query?.take);
 
   get = (key: Text): any => this.path[key.toString()] ?? this.query[key.toString()];
 }
