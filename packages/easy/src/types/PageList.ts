@@ -1,4 +1,5 @@
 import { List, toList } from './List';
+import { Construct, ofConstruct } from './Constructor';
 
 export type Sort = { key: string; value: -1 | 1 };
 
@@ -13,3 +14,5 @@ export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> &
   list.total = options?.total;
   return list;
 };
+
+export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> => toPageList<T>(items.map(i => ofConstruct(c, i)), items);
