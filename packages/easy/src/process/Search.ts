@@ -1,6 +1,7 @@
 import { Repo, Struct } from '../domain';
 import { choose, Id, isNotEmpty, JsonValue, Key, toList, PageList, PageOptions } from '../types';
 import { resolve } from '../utils';
+import { Req } from '../resources';
 
 
 export class Search<T extends Struct> {
@@ -13,6 +14,8 @@ export class Search<T extends Struct> {
   byIds = (...ids: Id[]): Promise<PageList<T>> => this.repo.byIds(...ids);
 
   byKey = (key: Key,options?: PageOptions): Promise<PageList<T>> => this.repo.byKey(key, options);
+
+  query = ({query, skip, take}: Req): Promise<PageList<T>> => this.search(query, {skip, take});
 
   search = (query: JsonValue, options?: PageOptions): Promise<PageList<T>> =>
     choose(query)
