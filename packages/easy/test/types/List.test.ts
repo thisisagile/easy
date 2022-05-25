@@ -12,7 +12,7 @@ describe('List', () => {
       name: 'Jane',
       age: undefined,
       weight: 95,
-    }
+    },
   );
   const jackAndJill = toList(
     { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
@@ -21,7 +21,7 @@ describe('List', () => {
       name: 'Jill',
       age: undefined,
       weight: undefined as unknown as number,
-    }
+    },
   );
 
   test('asc and desc', () => {
@@ -37,7 +37,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
