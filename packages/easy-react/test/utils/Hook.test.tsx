@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
-import { useEntity, useList, useToggle } from '../../src';
+import { useEntity, useList, usePageList, useToggle } from '../../src';
 import { Address, toList } from '@thisisagile/easy';
 
 const city = 'Amsterdam';
@@ -35,6 +35,15 @@ const ListHook = () => {
   return <>{`${list.first()}`}</>;
 };
 
+const PageListHook = () => {
+  const [list, setList] = usePageList<Address>();
+
+  useEffect(() => {
+    setList(toList<Address>(new Address({ city })));
+  }, []);
+  return <>{`${list.first()}`}</>;
+};
+
 describe('Hooks', () => {
   test('component with useToggle hook renders correctly as default value is false.', async () => {
     const { container, byText } = await rendersWait(<ToggleHook />);
@@ -50,6 +59,12 @@ describe('Hooks', () => {
 
   test('component with useList hook renders correctly.', async () => {
     const { container, byText } = await rendersWait(<ListHook />);
+    expect(container).toMatchSnapshot();
+    expect(byText(city)).toBeDefined();
+  });
+
+  test('component with usePageList hook renders correctly.', async () => {
+    const { container, byText } = await rendersWait(<PageListHook />);
     expect(container).toMatchSnapshot();
     expect(byText(city)).toBeDefined();
   });

@@ -1,4 +1,4 @@
-import { List, toList, Validatable } from '@thisisagile/easy';
+import { List, PageList, toList, toPageList, Validatable } from '@thisisagile/easy';
 import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
@@ -27,6 +27,17 @@ export const useList = <E>(...items: E[]): [List<E>, (e: List<E>) => List<E>] =>
     state,
     (e: List<E>): List<E> => {
       setState(e);
+      return e;
+    },
+  ];
+};
+
+export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => PageList<E>] => {
+  const [pages, setPages] = useState<List<E>>(toPageList<E>(items));
+  return [
+    pages,
+    (e: List<E>): PageList<E> => {
+      setPages(e);
       return e;
     },
   ];
