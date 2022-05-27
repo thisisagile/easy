@@ -30,6 +30,12 @@ exports[`Hooks component with usePageList hook renders correctly. 1`] = `
 </div>
 `;
 
+exports[`Hooks component with usePaging hook renders correctly. 1`] = `
+<div>
+  Amsterdam
+</div>
+`;
+
 exports[`Hooks component with useToggle hook renders correctly as default value is false. 1`] = `
 <div>
   <div

@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
-import { useEntity, useGet, useGetList, useList, usePageList, useToggle } from '../../src';
-import { Address, resolve, toList } from '@thisisagile/easy';
+import { useEntity, useGet, useGetList, useList, usePageList, usePaging, useToggle } from '../../src';
+import { Address, resolve, toList, toPageList } from '@thisisagile/easy';
 
 const city = 'Amsterdam';
 
@@ -53,6 +53,15 @@ const PageListHook = () => {
   return <>{`${list.first()}`}</>;
 };
 
+const PagingHook = () => {
+  const [addresses, next] = usePaging(() => resolve(toPageList([new Address({ city })])));
+
+  useEffect(() => {
+    void next();
+  }, []);
+  return <>{`${addresses.first()}`}</>;
+};
+
 const GetListHook = () => {
   const [addresses, getAddresses] = useGetList(() => resolve(toList(new Address({ city }))));
 
@@ -95,6 +104,12 @@ describe('Hooks', () => {
 
   test('component with usePageList hook renders correctly.', async () => {
     const { container, byText } = await rendersWait(<PageListHook />);
+    expect(container).toMatchSnapshot();
+    expect(byText(city)).toBeDefined();
+  });
+
+  test('component with usePaging hook renders correctly.', async () => {
+    const { container, byText } = await rendersWait(<PagingHook />);
     expect(container).toMatchSnapshot();
     expect(byText(city)).toBeDefined();
   });

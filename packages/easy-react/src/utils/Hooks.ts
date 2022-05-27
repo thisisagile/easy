@@ -1,4 +1,4 @@
-import { List, PageList, toList, toPageList, Validatable } from '@thisisagile/easy';
+import { List, PageList, PageOptions, toList, toPageList, Validatable } from '@thisisagile/easy';
 import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
@@ -41,6 +41,18 @@ export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => Pag
       return e;
     },
   ];
+};
+
+export const usePaging = <E>(f: (options?: PageOptions) => Promise<PageList<E>>, options?: PageOptions): [PageList<E>, (options?: PageOptions) => Promise<PageList<E>>, boolean, number, number] => {
+  const [list, setList] = usePageList<E>();
+  const [skip, setSkip] = useState(options?.skip ?? 0);
+  const [take] = useState(options?.take ?? 5);
+  const next = (options: PageOptions = { skip, take }) =>
+    f(options).then(items => {
+      setSkip(skip + take);
+      return setList(toPageList(list.add(items), items));
+    });
+  return [list, next, list.length < (list?.total ?? 0), skip, take];
 };
 
 export const useGet = <E>(f: () => Promise<E>): [E, () => Promise<E>] => {
