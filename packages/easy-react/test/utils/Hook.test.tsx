@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
-import { useEntity, useList, usePageList, useToggle } from '../../src';
-import { Address, toList } from '@thisisagile/easy';
+import { useEntity, useGet, useList, usePageList, useToggle } from '../../src';
+import { Address, resolve, toList } from '@thisisagile/easy';
 
 const city = 'Amsterdam';
 
@@ -22,6 +22,15 @@ const EntityHook = () => {
 
   useEffect(() => {
     setAddress(new Address({ city }));
+  }, []);
+  return <>{`${address}`}</>;
+};
+
+const GetHook = () => {
+  const [address, getAddress] = useGet(() => resolve(new Address({city})));
+
+  useEffect(() => {
+    void getAddress();
   }, []);
   return <>{`${address}`}</>;
 };
@@ -53,6 +62,12 @@ describe('Hooks', () => {
 
   test('component with useEntity hook renders correctly.', async () => {
     const { container, byText } = await rendersWait(<EntityHook />);
+    expect(container).toMatchSnapshot();
+    expect(byText(city)).toBeDefined();
+  });
+
+  test('component with useGet hook renders correctly.', async () => {
+    const { container, byText } = await rendersWait(<GetHook />);
     expect(container).toMatchSnapshot();
     expect(byText(city)).toBeDefined();
   });

@@ -6,6 +6,12 @@ exports[`Hooks component with useEntity hook renders correctly. 1`] = `
 </div>
 `;
 
+exports[`Hooks component with useGet hook renders correctly. 1`] = `
+<div>
+  Amsterdam
+</div>
+`;
+
 exports[`Hooks component with useList hook renders correctly. 1`] = `
 <div>
   Amsterdam
