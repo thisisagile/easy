@@ -33,7 +33,7 @@ export const useList = <E>(...items: E[]): [List<E>, (e: List<E>) => List<E>] =>
 };
 
 export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => PageList<E>] => {
-  const [pages, setPages] = useState<List<E>>(toPageList<E>(items));
+  const [pages, setPages] = useState<PageList<E>>(toPageList<E>(items));
   return [
     pages,
     (e: List<E>): PageList<E> => {
