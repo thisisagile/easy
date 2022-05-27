@@ -43,8 +43,8 @@ export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => Pag
   ];
 };
 
-export const useGet = <E>(f: () => Promise<E>): [E | undefined, () => Promise<E>] => {
-  const [item, setItem] = useState<E>();
+export const useGet = <E>(f: () => Promise<E>): [E, () => Promise<E>] => {
+  const [item, setItem] = useState({} as E);
   const getter = () =>
     f().then(i => {
       setItem(i);
