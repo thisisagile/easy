@@ -48,3 +48,9 @@ export const useGet = <E>(f: () => Promise<E>): [E | undefined, () => Promise<E>
   const getter = () => f().then(i => { setItem(i); return i; });
   return [item, getter];
 };
+
+export const useGetList = <E>(f: () => Promise<PageList<E>>): [PageList<E>, () => Promise<PageList<E>>] => {
+  const [list, setList] = usePageList<E>();
+  const getter = () => f().then(l => { setList(l); return l; });
+  return [list, getter];
+};
