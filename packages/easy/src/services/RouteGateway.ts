@@ -8,9 +8,7 @@ export class RouteGateway extends Gateway {
   }
 
   get(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
-    return this.api.get(uri, options).then(r => toPageList<Json>(r.body.data?.items,
-      toPageOptions(options) && { total: r.body.data?.totalItems },
-    ));
+    return this.api.get(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
   }
 
   getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {

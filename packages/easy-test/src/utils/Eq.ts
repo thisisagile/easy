@@ -1,5 +1,5 @@
 import { asString } from './Utils';
-import { equals, iterableEquality, subsetEquality } from "@jest/expect-utils";
+import { equals, iterableEquality, subsetEquality } from '@jest/expect-utils';
 
 export const eq = {
   exact: (a?: unknown, b?: unknown): boolean => equals(a, b, []),

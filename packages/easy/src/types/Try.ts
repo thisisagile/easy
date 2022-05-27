@@ -6,7 +6,6 @@ import { Get, ofGet } from './Get';
 import { Func } from './Func';
 
 abstract class Try<T = unknown> implements Validatable {
-
   is = {
     defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isDefined(prop ? prop(v) : v)),
     empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isEmpty(prop ? prop(v) : v)),

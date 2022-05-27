@@ -2,7 +2,8 @@ import { ctx, Enum, isDefined, isNotEmpty, PageOptions, Text, toUuid } from '../
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
-export const toPageOptions = (options?: RequestOptions | PageOptions): PageOptions | undefined => options instanceof RequestOptions ? options.pageOptions : options;
+export const toPageOptions = (options?: RequestOptions | PageOptions): PageOptions | undefined =>
+  options instanceof RequestOptions ? options.pageOptions : options;
 
 export class RequestOptions extends Enum {
   static get Form(): RequestOptions {

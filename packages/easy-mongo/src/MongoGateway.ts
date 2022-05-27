@@ -18,12 +18,10 @@ import {
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
-  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {
-  }
+  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
   all(options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js),
-    );
+    return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
   byId(id: Id): Promise<Json | undefined> {
@@ -39,8 +37,7 @@ export class MongoGateway implements Gateway {
   }
 
   find(q: JsonValue | Condition | LogicalCondition, options?: PageOptions): Promise<PageList<Json>> {
-    return this.provider.find(asJson(q), options).then(js => asPageList(j => this.collection.in(j), js),
-    );
+    return this.provider.find(asJson(q), options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
   search(q: JsonValue, options?: PageOptions): Promise<PageList<Json>> {

@@ -31,7 +31,7 @@ describe('RouteGateway', () => {
 
   test('all calls api correctly with totalItems', async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 } }));
-    const all = await gateway.all({skip: 1, take: 5});
+    const all = await gateway.all({ skip: 1, take: 5 });
     expect(all).toHaveLength(devs.length);
     expect(all.total).toBe(42);
   });

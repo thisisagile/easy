@@ -9,7 +9,7 @@ describe('isJson', () => {
         toJSON: () => {
           'Kim';
         },
-      }),
+      })
     ).toBeTruthy();
     expect(isJson(Dev.Sander)).toBeTruthy();
   });

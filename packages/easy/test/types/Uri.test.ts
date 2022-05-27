@@ -95,5 +95,4 @@ describe('Uri', () => {
   test('Route with q and skip and take queries', () => {
     expect(DevUri.Developers.query('test').skip(0).take(10)).toMatchRoute(`${host}/dev/developers?q=test&skip=0&take=10`);
   });
-
 });

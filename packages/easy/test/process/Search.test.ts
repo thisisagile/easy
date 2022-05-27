@@ -37,8 +37,8 @@ describe('Search', () => {
 
   test('query works', async () => {
     repo.search = mock.resolve(devs);
-    await expect(select.query(mock.req.query({ id: 42, skip: 0, take: 4}))).resolves.toStrictEqual(devs);
-    expect(repo.search).toHaveBeenCalledWith({ id: 42, skip: 0, take: 4}, {skip: 0, take: 4});
+    await expect(select.query(mock.req.query({ id: 42, skip: 0, take: 4 }))).resolves.toStrictEqual(devs);
+    expect(repo.search).toHaveBeenCalledWith({ id: 42, skip: 0, take: 4 }, { skip: 0, take: 4 });
   });
 
   test('search undefined returns empty list', async () => {

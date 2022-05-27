@@ -12,7 +12,7 @@ export const json = {
   parse: <T extends Json = Json>(subject: unknown): T => JSON.parse(JSON.stringify(subject ?? {})),
   merge: (...subjects: unknown[]): Json => json.parse(subjects.map(s => asJson(s, s => json.parse(s))).reduce((js, j) => ({ ...js, ...j }), {})),
   delete: <T extends Json = Json>(subject: T, key: string): T => {
-    ifDefined(subject, () => delete (subject as any)[key])
+    ifDefined(subject, () => delete (subject as any)[key]);
     return subject;
   },
   set: <T extends Json = Json>(subject: T, key = '', value?: unknown): T =>

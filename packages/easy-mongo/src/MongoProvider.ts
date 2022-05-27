@@ -38,8 +38,7 @@ export type Filter<T> = MongoFilter<T>;
 export class MongoProvider {
   aggregate = this.group;
 
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {
-  }
+  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
@@ -51,7 +50,7 @@ export class MongoProvider {
               username: asString(db.options?.user),
               password: asString(db.options?.password),
             },
-          }),
+          })
       );
   }
 
@@ -70,9 +69,19 @@ export class MongoProvider {
 
   find(query: Condition | LogicalCondition | Filter<any>, options?: PageOptions): Promise<PageList<Json>> {
     return tuple3(this.collection(), this.toMongoJson(query), toFindOptions(this.coll, options))
-      .then(([c, q, o]) => tuple2(c.find(q, o), ifTrue(o.total, () => c.count(q))))
+      .then(([c, q, o]) =>
+        tuple2(
+          c.find(q, o),
+          ifTrue(o.total, () => c.count(q))
+        )
+      )
       .then(([res, total]) => tuple2(res.toArray(), total))
-      .then(([res, total]) => tuple2(res.map(i => omitId(i)), total))
+      .then(([res, total]) =>
+        tuple2(
+          res.map(i => omitId(i)),
+          total
+        )
+      )
       .then(([res, total]) => toPageList(res, options && { total }));
   }
 
@@ -129,7 +138,7 @@ export class MongoProvider {
         partialFilterExpression: toMongoType(asJson(filter)),
         unique,
         writeConcern: { w: 1 },
-      }),
+      })
     );
   }
 
