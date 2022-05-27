@@ -77,4 +77,61 @@ describe('Case', () => {
     expect(typeIt('hoi')).toBe('A string');
     expect(typeIt(Dev.Naoufal)).toBe('An object');
   });
+
+  // is.defined
+
+  const first = 'Sander';
+  const last = 'Hoogendoorn';
+
+  test('is.defined', () => {
+    const out = choose({ first })
+      .is.defined(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.defined invalid, then valid', () => {
+    const out = choose({ last, name: undefined })
+      .is.defined(
+        d => d.name,
+        () => Dev.Wouter
+      )
+      .is.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.defined valid, second is not valid', () => {
+    const out = choose({ last, first })
+      .is.defined(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('case is false, then is.defined is valid', () => {
+    const out = choose({ last, first })
+      .case(
+        d => d.first === 'Rob',
+        () => Dev.Rob
+      )
+      .if.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
 });

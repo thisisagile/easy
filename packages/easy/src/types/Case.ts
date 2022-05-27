@@ -1,4 +1,4 @@
-import { Func, Get, ofGet, Predicate, tryTo } from './index';
+import { Func, Get, isDefined, ofGet, Predicate, tryTo } from './index';
 
 class CaseBuilder<V> {
   constructor(readonly v: V) {}
@@ -10,6 +10,12 @@ class CaseBuilder<V> {
   type<T, U = unknown>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
     return new Case<T, V>(this.v).type<U>(guard, out);
   }
+
+  is = {
+    defined: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isDefined(prop(this.v)), out),
+  };
+
+  if = this.is;
 }
 
 class Case<T, V = unknown> {
@@ -31,6 +37,12 @@ class Case<T, V = unknown> {
       .or(this);
   }
 
+  is = {
+    defined: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isDefined(prop(this.value)), out),
+  };
+
+  if = this.is;
+
   else(alt: Get<T, V>): T {
     return ofGet<T, V>(alt, this.value);
   }
@@ -48,6 +60,12 @@ class Found<T, V> extends Case<T, V> {
   type<U>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
     return this;
   }
+
+  is = {
+    defined: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
+  };
+
+  if = this.is;
 
   else(alt: Get<T, V>): T {
     return this.outcome;
