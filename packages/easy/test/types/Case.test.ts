@@ -134,4 +134,58 @@ describe('Case', () => {
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
+
+  // is.not.defined
+
+  test('is.not.defined', () => {
+    const out = choose({ first: undefined })
+      .is.not.defined(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.not.defined invalid, then valid', () => {
+    const out = choose({ last: undefined, first })
+      .is.not.defined(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .is.not.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.not.defined valid, second is not valid', () => {
+    const out = choose({ last, first })
+      .is.not.defined(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.not.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
+  test('case is false, then is.not.defined is valid', () => {
+    const out = choose({ last: undefined, first })
+      .case(
+        d => d.first === 'Rob',
+        () => Dev.Rob
+      )
+      .if.not.defined(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
 });
