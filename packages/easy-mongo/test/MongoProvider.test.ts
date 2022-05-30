@@ -16,6 +16,7 @@ describe('MongoProvider', () => {
   const date = '2023-09-22T12:30:00.000+00:00';
 
   beforeEach(() => {
+    c.find = mock.resolve({ toArray: () => [] });
     client = mock.empty<MongoClient>({ connect: mock.impl(() => client) });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
@@ -43,10 +44,16 @@ describe('MongoProvider', () => {
     return expect(findOne).toHaveBeenCalledWith({ id: '42' });
   });
 
-  test('mongoIds are removed from the found items', () => {
-    const devJeroen = { ...devData.jeroen, _id: 42 };
-    provider.collection = mock.resolve({ findOne: mock.resolve(devJeroen) });
-    return expect(provider.byId(42)).resolves.toStrictEqual(devData.jeroen);
+  test('mongoIds are by default in the projection.', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find({});
+    expect(c.find).toHaveBeenCalledWith(expect.anything(), fits.json({ projection: { _id: 0 } }));
+  });
+
+  test('add projection to mongo query.', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find({}, { projection: { id: 1, _id: 1 } });
+    expect(c.find).toHaveBeenCalledWith(expect.anything(), fits.json({ projection: { _id: 1, id: 1 } }));
   });
 
   test('find calls find on the collection', async () => {
@@ -58,16 +65,12 @@ describe('MongoProvider', () => {
   });
 
   test('find with undefined calls find on the collection with default options', async () => {
-    cursor.toArray = mock.resolve([]);
-    c.find = mock.resolve(cursor);
     provider.collection = mock.resolve(c);
     await provider.find({});
-    expect(c.find).toHaveBeenCalledWith({}, { limit: 250, sort: {}, skip: undefined, total: false });
+    expect(c.find).toHaveBeenCalledWith(expect.anything(), { limit: 250, sort: {}, skip: undefined, total: false, projection: { _id: 0 } });
   });
 
   test('find with with only skip keeps limit', async () => {
-    cursor.toArray = mock.resolve([]);
-    c.find = mock.resolve(cursor);
     c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find({}, { skip: 3 });
@@ -75,8 +78,6 @@ describe('MongoProvider', () => {
   });
 
   test('find without options doesnt call count', async () => {
-    cursor.toArray = mock.resolve([]);
-    c.find = mock.resolve(cursor);
     c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     const r = await provider.find({});
@@ -85,7 +86,6 @@ describe('MongoProvider', () => {
   });
 
   test('find with options calls count', async () => {
-    c.find = mock.resolve(cursor);
     c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     const r = await provider.find(devs.where(devs.name.is('Jeroen')), {
@@ -98,8 +98,6 @@ describe('MongoProvider', () => {
 
   test('find calls toMongoType on queries, to correct dates', async () => {
     provider.collection = mock.resolve(c);
-    cursor.toArray = mock.resolve([]);
-    c.find = mock.resolve(cursor);
 
     await provider.find({ date: date });
 
@@ -108,18 +106,17 @@ describe('MongoProvider', () => {
   });
 
   test('find with sort options', async () => {
-    c.find = mock.resolve(cursor);
     c.count = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find(devs.where(devs.name.is('Jeroen')), { take: 2, sort: [devs.name.desc(), devs.language.asc()] });
     expect(c.find).toHaveBeenCalledWith(
       { $and: [{ Name: { $eq: 'Jeroen' } }] },
-      {
+      fits.json({
         limit: 2,
         sort: { Name: 1, Language: -1 },
         skip: undefined,
         total: true,
-      }
+      })
     );
   });
 
@@ -132,8 +129,7 @@ describe('MongoProvider', () => {
 
   test('group calls toMongoType on queries, to correct dates', async () => {
     provider.collection = mock.resolve(c);
-    cursor.toArray = mock.resolve([]);
-    c.aggregate = mock.resolve(cursor);
+    c.aggregate = mock.resolve({ toArray: () => [] });
 
     await provider.group([{ date: date }]);
 

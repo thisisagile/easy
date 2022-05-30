@@ -1,26 +1,11 @@
-import { MongoProvider } from './MongoProvider';
-import {
-  asJson,
-  asPageList,
-  Condition,
-  Field,
-  Gateway,
-  Id,
-  ifDefined,
-  isDefined,
-  Json,
-  JsonValue,
-  List,
-  LogicalCondition,
-  PageList,
-  PageOptions,
-} from '@thisisagile/easy';
+import { FindOptions, MongoProvider } from './MongoProvider';
+import { asJson, asPageList, Condition, Field, Gateway, Id, ifDefined, isDefined, Json, JsonValue, List, LogicalCondition, PageList } from '@thisisagile/easy';
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
-  all(options?: PageOptions): Promise<PageList<Json>> {
+  all(options?: FindOptions): Promise<PageList<Json>> {
     return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
@@ -28,7 +13,7 @@ export class MongoGateway implements Gateway {
     return this.provider.byId(id).then(j => ifDefined(j, this.collection.in(j)));
   }
 
-  by(key: string, value: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
+  by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.provider.by(key, value, options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
@@ -36,11 +21,11 @@ export class MongoGateway implements Gateway {
     return this.find((this.collection.id as Field).isIn(...ids));
   }
 
-  find(q: JsonValue | Condition | LogicalCondition, options?: PageOptions): Promise<PageList<Json>> {
+  find(q: JsonValue | Condition | LogicalCondition, options?: FindOptions): Promise<PageList<Json>> {
     return this.provider.find(asJson(q), options).then(js => asPageList(j => this.collection.in(j), js));
   }
 
-  search(q: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
+  search(q: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.find(this.collection.google(q), options);
   }
 

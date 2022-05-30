@@ -20,17 +20,20 @@ import {
   tuple3,
   when,
 } from '@thisisagile/easy';
-import { Collection as MongoCollection, Filter as MongoFilter, FindOptions, MongoClient } from 'mongodb';
+import { Collection as MongoCollection, Filter as MongoFilter, FindOptions as MongoFindOptions, MongoClient } from 'mongodb';
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
 
 const omitId = (j: Json): Json => json.delete(j, '_id');
 
-const toFindOptions = (coll: Collection, po?: PageOptions): FindOptions & { total: boolean } => ({
-  limit: po?.take ?? 250,
-  skip: po?.skip,
-  sort: coll.sort(...(po?.sort ?? [])) as any,
-  total: isDefined(po?.skip) || isDefined(po?.take),
+export type FindOptions = PageOptions & { projection?: Record<string, 0 | 1> };
+
+const toFindOptions = (coll: Collection, options?: FindOptions): MongoFindOptions & { total: boolean } => ({
+  limit: options?.take ?? 250,
+  skip: options?.skip,
+  sort: coll.sort(...(options?.sort ?? [])) as any,
+  total: isDefined(options?.skip) || isDefined(options?.take),
+  projection: { _id: 0, ...options?.projection },
 });
 
 export type Filter<T> = MongoFilter<T>;
@@ -67,7 +70,7 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
-  find(query: Condition | LogicalCondition | Filter<any>, options?: PageOptions): Promise<PageList<Json>> {
+  find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
     return tuple3(this.collection(), this.toMongoJson(query), toFindOptions(this.coll, options))
       .then(([c, q, o]) =>
         tuple2(
@@ -76,26 +79,19 @@ export class MongoProvider {
         )
       )
       .then(([res, total]) => tuple2(res.toArray(), total))
-      .then(([res, total]) =>
-        tuple2(
-          res.map(i => omitId(i)),
-          total
-        )
-      )
-      .then(([res, total]) => toPageList(res, options && { total }));
+      .then(([res, total]) => toPageList(res as Json[], options && { total }));
   }
 
-  all(options?: PageOptions): Promise<PageList<Json>> {
+  all(options?: FindOptions): Promise<PageList<Json>> {
     return this.find({}, options);
   }
 
   byId(id: Id): Promise<Json> {
     return this.collection()
-      .then(c => c.findOne(this.toMongoJson({ id: asString(id) })))
-      .then(i => omitId(i as Json));
+      .then(c => c.findOne(this.toMongoJson({ id: asString(id) })) as Promise<Json>)
   }
 
-  by(key: string, value: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
+  by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.find({ [key]: asString(value) }, options);
   }
 
