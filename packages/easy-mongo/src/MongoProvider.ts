@@ -86,9 +86,8 @@ export class MongoProvider {
     return this.find({}, options);
   }
 
-  byId(id: Id): Promise<Json> {
-    return this.collection()
-      .then(c => c.findOne(this.toMongoJson({ id: asString(id) })) as Promise<Json>)
+  byId(id: Id, options?: FindOptions): Promise<Json> {
+    return this.collection().then(c => c.findOne(this.toMongoJson({ id: asString(id) }), toFindOptions(this.coll, options)) as Promise<Json>);
   }
 
   by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {

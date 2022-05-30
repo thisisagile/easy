@@ -41,7 +41,14 @@ describe('MongoProvider', () => {
     const findOne = mock.resolve(devData.jeroen);
     provider.collection = mock.resolve({ findOne });
     await expect(provider.byId('42')).resolves.toStrictEqual(devData.jeroen);
-    return expect(findOne).toHaveBeenCalledWith({ id: '42' });
+    return expect(findOne).toHaveBeenCalledWith({ id: '42' }, expect.anything());
+  });
+
+  test('byId calls findOne and adds _id to the projection by default', async () => {
+    const findOne = mock.resolve(devData.jeroen);
+    provider.collection = mock.resolve({ findOne });
+    await expect(provider.byId('42')).resolves.toStrictEqual(devData.jeroen);
+    return expect(findOne).toHaveBeenCalledWith({ id: '42' }, fits.json({ projection: { _id: 0 } }));
   });
 
   test('mongoIds are by default in the projection.', async () => {
