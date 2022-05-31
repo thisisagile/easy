@@ -26,7 +26,8 @@ import { toMongoType } from './Utils';
 
 const omitId = (j: Json): Json => json.delete(j, '_id');
 
-export type FindOptions = PageOptions & { projection?: Record<string, 0 | 1> };
+export type Projection = Record<string, 0 | 1>;
+export type FindOptions = PageOptions & { projection?: Projection };
 
 const toFindOptions = (coll: Collection, options?: FindOptions): MongoFindOptions & { total: boolean } => ({
   limit: options?.take ?? 250,
