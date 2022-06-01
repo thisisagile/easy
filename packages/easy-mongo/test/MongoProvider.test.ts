@@ -78,28 +78,28 @@ describe('MongoProvider', () => {
   });
 
   test('find with with only skip keeps limit', async () => {
-    c.count = mock.resolve(42);
+    c.countDocuments = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find({}, { skip: 3 });
     expect(c.find).toHaveBeenCalledWith({}, fits.json({ skip: 3, limit: 250 }));
   });
 
   test('find without options doesnt call count', async () => {
-    c.count = mock.resolve(42);
+    c.countDocuments = mock.resolve(42);
     provider.collection = mock.resolve(c);
     const r = await provider.find({});
-    expect(c.count).not.toHaveBeenCalled();
+    expect(c.countDocuments).not.toHaveBeenCalled();
     expect(r.total).toBeUndefined();
   });
 
   test('find with options calls count', async () => {
-    c.count = mock.resolve(42);
+    c.countDocuments = mock.resolve(42);
     provider.collection = mock.resolve(c);
     const r = await provider.find(devs.where(devs.name.is('Jeroen')), {
       take: 2,
       sort: [devs.name.desc(), devs.language.asc()],
     });
-    expect(c.count).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] });
+    expect(c.countDocuments).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] });
     expect(r.total).toBe(42);
   });
 
@@ -113,7 +113,7 @@ describe('MongoProvider', () => {
   });
 
   test('find with sort options', async () => {
-    c.count = mock.resolve(42);
+    c.countDocuments = mock.resolve(42);
     provider.collection = mock.resolve(c);
     await provider.find(devs.where(devs.name.is('Jeroen')), { take: 2, sort: [devs.name.desc(), devs.language.asc()] });
     expect(c.find).toHaveBeenCalledWith(
