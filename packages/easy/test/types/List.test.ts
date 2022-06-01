@@ -462,12 +462,19 @@ describe('asList', () => {
     readonly quantity = 42;
   }
 
-  test('Sum', () => {
+  test('sum', () => {
     const items = toList(new Item(), new Item());
     expect(items.sum(() => 42)).toBe(84);
     expect(items.sum(i => i.quantity)).toBe(84);
     expect(items.sum(i => i.quantity * i.amount)).toBe(168);
 
     expect(toList().sum(() => 23)).toBe(0);
+  });
+
+  test('firstItem', () => {
+    const list = toList<{ id?: number; age?: number; name?: string }>({ name: 'sander' }, { name: 'wouter' }, { id: 1, name: 'jeroen' });
+    expect(list.firstValue(i => i.name)).toBe('sander');
+    expect(list.firstValue(i => i.id)).toBe(1);
+    expect(list.firstValue(i => i.age, 42)).toBe(42);
   });
 });

@@ -3,9 +3,10 @@ import { Constructor } from './Constructor';
 import { json, Json } from './Json';
 import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
-import { GetProperty, ofProperty } from './Get';
+import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import { Id } from './Id';
 import { asString } from './Text';
+import { tryTo } from './Try';
 
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
@@ -13,6 +14,8 @@ export class List<T = unknown> extends Array<T> {
   desc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
 
   first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.find(p, params) : this[0]) as T;
+
+  firstValue = <V>(f: (t: T) => V, alt?: Get<V, T>): V | undefined => tryTo(() => this.first(t => !!f(t))).map(i => (i ? f(i) : ofGet(alt, i))).value;
 
   isFirst = (value: T): boolean => value === this.first();
 
