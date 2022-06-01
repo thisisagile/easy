@@ -1,4 +1,4 @@
-import { asString, isText, replaceAll, Text, text } from '../../src';
+import { asString, isText, kebab, replaceAll, Text, text } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -52,3 +52,18 @@ describe('isText', () => {
     expect(text(Dev.Rob).with('-', '', Dev.Sander)).toMatchText('Rob-Sander');
   });
 });
+
+describe('kebab', () => {
+  test('kebabify', () => {
+    expect(kebab('')).toBe('');
+    expect(kebab('a')).toBe('a');
+    expect(kebab('a.b')).toBe('a-b');
+    expect(kebab('a@b')).toBe('a-b');
+    expect(kebab('a-b')).toBe('a-b');
+    expect(kebab('a--b')).toBe('a-b');
+    expect(kebab('a------b')).toBe('a-b');
+    expect(kebab('a---,&---b')).toBe('a-b');
+    expect(kebab('héél')).toBe('h-l');
+  })
+})
+
