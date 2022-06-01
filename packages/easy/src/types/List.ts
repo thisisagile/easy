@@ -12,7 +12,7 @@ export class List<T = unknown> extends Array<T> {
 
   desc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
 
-  first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).first() : this[0]);
+  first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.find(p, params) : this[0]) as T;
 
   isFirst = (value: T): boolean => value === this.first();
 
