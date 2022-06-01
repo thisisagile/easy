@@ -88,9 +88,9 @@ export class DateTime extends Value<string | undefined> {
 
   diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
 
-  startOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.startOf(unit).toISOString());
+  startOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.utc.startOf(unit).toISOString());
 
-  endOf = (unit: DateTimeUnit): DateTime => new DateTime(this.utc.endOf(unit).toISOString());
+  endOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.utc.endOf(unit).toISOString());
 
   toString(): string {
     return this.value ?? '';

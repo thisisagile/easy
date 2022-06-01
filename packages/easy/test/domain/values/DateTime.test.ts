@@ -122,6 +122,12 @@ describe('DateTime', () => {
     us.forEach(ut => expect(res.endOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)));
   });
 
+  test('startOf and endOf using defaults', () => {
+    const res = new DateTime('2021-10-15T01:23:58.123Z');
+    expect(res.startOf()).toMatchText(new DateTime('2021-10-15T00:00:00.000Z'));
+    expect(res.endOf()).toMatchText(new DateTime('2021-10-15T23:59:59.999Z'));
+  });
+
   test.each([
     [date.iso, 'foo'],
     ['bar', formats.ddmmyyyy],
