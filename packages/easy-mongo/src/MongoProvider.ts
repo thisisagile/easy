@@ -78,7 +78,7 @@ export class MongoProvider {
       .then(([c, q, o]) =>
         tuple2(
           c.find(q, o),
-          ifTrue(o.total, () => c.count(q))
+          ifTrue(o.total, () => c.countDocuments(q))
         )
       )
       .then(([res, total]) => tuple2(res.toArray(), total))
