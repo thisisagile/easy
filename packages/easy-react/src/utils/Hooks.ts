@@ -43,7 +43,10 @@ export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => Pag
   ];
 };
 
-export const usePaging = <E>(f: (options?: PageOptions) => Promise<PageList<E>>, options?: PageOptions): [PageList<E>, (options?: PageOptions) => Promise<PageList<E>>, boolean, number, number] => {
+export const usePaging = <E>(
+  f: (options?: PageOptions) => Promise<PageList<E>>,
+  options?: PageOptions
+): [PageList<E>, (options?: PageOptions) => Promise<PageList<E>>, boolean, number, number] => {
   const [list, setList] = usePageList<E>();
   const [skip, setSkip] = useState(options?.skip ?? 0);
   const [take] = useState(options?.take ?? 5);

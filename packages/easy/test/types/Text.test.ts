@@ -64,6 +64,5 @@ describe('kebab', () => {
     expect(kebab('a------b')).toBe('a-b');
     expect(kebab('a---,&---b')).toBe('a-b');
     expect(kebab('héél')).toBe('h-l');
-  })
-})
-
+  });
+});

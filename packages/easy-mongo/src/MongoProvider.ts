@@ -29,14 +29,6 @@ const omitId = (j: Json): Json => json.delete(j, '_id');
 export type Projection = Record<string, 0 | 1>;
 export type FindOptions = PageOptions & { projection?: Projection };
 
-const toFindOptions = (coll: Collection, options?: FindOptions): MongoFindOptions & { total: boolean } => ({
-  limit: options?.take ?? 250,
-  skip: options?.skip,
-  sort: coll.sort(...(options?.sort ?? [])) as any,
-  total: isDefined(options?.skip) || isDefined(options?.take),
-  projection: { _id: 0, ...options?.projection },
-});
-
 export type Filter<T> = MongoFilter<T>;
 
 export class MongoProvider {
@@ -71,8 +63,18 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
+  protected toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
+    return {
+      limit: options?.take ?? 250,
+      skip: options?.skip,
+      sort: this.coll.sort(...(options?.sort ?? [])) as any,
+      total: isDefined(options?.skip) || isDefined(options?.take),
+      projection: { _id: 0, ...options?.projection },
+    };
+  }
+
   find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
-    return tuple3(this.collection(), this.toMongoJson(query), toFindOptions(this.coll, options))
+    return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(options))
       .then(([c, q, o]) =>
         tuple2(
           c.find(q, o),
@@ -88,7 +90,7 @@ export class MongoProvider {
   }
 
   byId(id: Id, options?: FindOptions): Promise<Json> {
-    return this.collection().then(c => c.findOne(this.toMongoJson({ id: asString(id) }), toFindOptions(this.coll, options)) as Promise<Json>);
+    return this.collection().then(c => c.findOne(this.toMongoJson({ id: asString(id) }), this.toFindOptions(options)) as Promise<Json>);
   }
 
   by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {

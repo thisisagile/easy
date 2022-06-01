@@ -15,8 +15,8 @@ class CaseBuilder<V> {
     defined: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isDefined(prop(this.v)), out),
     not: {
       defined: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!isDefined(prop(this.v)), out),
-    }
-  }
+    },
+  };
 
   if = this.is;
 }
@@ -44,7 +44,7 @@ class Case<T, V = unknown> {
     defined: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isDefined(prop(this.value)), out),
     not: {
       defined: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!isDefined(prop(this.value)), out),
-    }
+    },
   };
 
   if = this.is;
@@ -71,7 +71,7 @@ class Found<T, V> extends Case<T, V> {
     defined: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
     not: {
       defined: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
-    }
+    },
   };
 
   if = this.is;

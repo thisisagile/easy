@@ -13,7 +13,11 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
-export const kebab = (s: string): string => s.replace(/[^a-z0-9]/gi, '-').replace(/-+/gi, '-').toLowerCase();
+export const kebab = (s: string): string =>
+  s
+    .replace(/[^a-z0-9]/gi, '-')
+    .replace(/-+/gi, '-')
+    .toLowerCase();
 
 export class ToText implements Text {
   constructor(readonly subject: string) {}
