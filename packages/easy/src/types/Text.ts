@@ -15,8 +15,9 @@ export const replaceAll = (origin: Text, search: Text, replace: Text = ''): stri
 
 export const kebab = (s: string): string =>
   s
-    .replace(/[^a-z0-9]/gi, '-')
-    .replace(/-+/gi, '-')
+    .replace(/[^a-z\d]+/gi, '-')
+    .replace(/-$/, '')
+    .replace(/^-/, '')
     .toLowerCase();
 
 export class ToText implements Text {
@@ -53,6 +54,10 @@ export class ToText implements Text {
 
   get kebab(): ToText {
     return this.lower.replace(' ', '-');
+  }
+
+  get strictKebab(): ToText {
+    return this.map(s => s.replace(/[^a-z\d]+/gi, ' ').trim()).kebab;
   }
 
   get snake(): ToText {

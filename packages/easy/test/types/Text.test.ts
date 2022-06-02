@@ -54,15 +54,21 @@ describe('isText', () => {
 });
 
 describe('kebab', () => {
-  test('kebabify', () => {
-    expect(kebab('')).toBe('');
-    expect(kebab('a')).toBe('a');
-    expect(kebab('a.b')).toBe('a-b');
-    expect(kebab('a@b')).toBe('a-b');
-    expect(kebab('a-b')).toBe('a-b');
-    expect(kebab('a--b')).toBe('a-b');
-    expect(kebab('a------b')).toBe('a-b');
-    expect(kebab('a---,&---b')).toBe('a-b');
-    expect(kebab('héél')).toBe('h-l');
+  const cases = [
+    ['', ''],
+    ['a', 'a'],
+    ['a.b', 'a-b'],
+    ['a@b', 'a-b'],
+    ['a-b', 'a-b'],
+    ['a--b', 'a-b'],
+    ['a------b', 'a-b'],
+    ['a---,&---b', 'a-b'],
+    ['héél', 'h-l'],
+    ['{{hallo}}', 'hallo'],
+    ['---hallo---', 'hallo'],
+  ];
+  test.each(cases)('to kebab "%s"', (t, exp) => {
+    expect(text(t).strictKebab).toMatchText(exp);
+    expect(kebab(t)).toBe(exp);
   });
 });
