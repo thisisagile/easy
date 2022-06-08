@@ -1,4 +1,4 @@
-import { Api, HttpStatus, RequestOptions, RouteGateway, toList, toResponse } from '../../src';
+import { Api, EasyUri, HttpStatus, RequestOptions, RouteGateway, toList, toResponse, uri } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
@@ -89,6 +89,20 @@ describe('RouteGateway', () => {
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
     await expect(gateway.post(DevUri.Developers, body)).resolves.toMatchObject(body);
     expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body);
+  });
+
+  test('post calls api correctly with different Uri', async () => {
+    class StatsUri extends EasyUri {
+      static readonly stats = uri.segment('stats');
+      static get Stats(): StatsUri {
+        return new StatsUri([StatsUri.stats]);
+      }
+    }
+
+    const body = Dev.Sander.toJSON();
+    api.post = mock.resolve(toResponse(HttpStatus.Created, body));
+    await expect(gateway.post(StatsUri.Stats)).resolves.toBeDefined();
+    expect(api.post).toHaveBeenCalledWith(fits.type(StatsUri), undefined);
   });
 
   test('add calls api without Uri correctly', async () => {

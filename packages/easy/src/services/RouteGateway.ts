@@ -37,8 +37,8 @@ export class RouteGateway extends Gateway {
     return this.post(this.route(), item);
   }
 
-  post(uri: Uri, item: Json): Promise<Json> {
-    return this.api.post(this.route(), item).then(r => r.body.data?.items.first() ?? {});
+  post(uri: Uri, body?: Json): Promise<Json> {
+    return this.api.post(uri, body).then(r => r.body.data?.items.first() ?? {});
   }
 
   update(item: Json): Promise<Json> {
