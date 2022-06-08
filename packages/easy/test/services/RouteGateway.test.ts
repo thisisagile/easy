@@ -84,7 +84,14 @@ describe('RouteGateway', () => {
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
-  test('add calls api correctly', async () => {
+  test('post calls api correctly', async () => {
+    const body = Dev.Sander.toJSON();
+    api.post = mock.resolve(toResponse(HttpStatus.Created, body));
+    await expect(gateway.post(DevUri.Developers, body)).resolves.toMatchObject(body);
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body);
+  });
+
+  test('add calls api without Uri correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
     await expect(gateway.add(body)).resolves.toMatchObject(body);
