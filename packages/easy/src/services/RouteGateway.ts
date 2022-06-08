@@ -50,11 +50,11 @@ export class RouteGateway extends Gateway {
   }
 
   upsert(item: Json): Promise<Json> {
-    return this.api.put(this.routeId().id(item.id), item).then(r => r.body.data?.items.first() ?? {});
+    return this.put(this.routeId().id(item.id), item);
   }
 
-  put(item: Json): Promise<Json> {
-    return this.api.put(this.routeId().id(item.id), item).then(r => r.body.data?.items.first() ?? {});
+  put(uri: Uri, item: Json): Promise<Json> {
+    return this.api.put(uri, item).then(r => r.body.data?.items.first() ?? {});
   }
 
   remove(id: Id): Promise<boolean> {

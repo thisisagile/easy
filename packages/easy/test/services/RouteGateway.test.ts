@@ -143,6 +143,13 @@ describe('RouteGateway', () => {
     expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body);
   });
 
+  test('put calls api correctly', async () => {
+    const body = Dev.Sander.toJSON();
+    api.put = mock.resolve(toResponse(HttpStatus.Ok, body));
+    await expect(gateway.put(DevUri.Developer.id(42), body)).resolves.toMatchObject(body);
+    expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body);
+  });
+
   test('upsert calls api correctly with an empty body', async () => {
     api.patch = mock.resolve({ body: {} });
     await expect(gateway.update({})).resolves.toMatchObject({});
