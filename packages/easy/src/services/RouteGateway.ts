@@ -58,6 +58,10 @@ export class RouteGateway extends Gateway {
   }
 
   remove(id: Id): Promise<boolean> {
-    return this.api.delete(this.routeId().id(id)).then(() => true);
+    return this.delete(this.routeId().id(id));
+  }
+
+  delete(uri: Uri): Promise<boolean> {
+    return this.api.delete(uri).then(() => true);
   }
 }

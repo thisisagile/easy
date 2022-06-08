@@ -155,9 +155,15 @@ describe('RouteGateway', () => {
     await expect(gateway.update({})).resolves.toMatchObject({});
   });
 
-  test('delete calls api correctly', async () => {
+  test('remove calls api correctly', async () => {
     api.delete = mock.resolve(toResponse(HttpStatus.NoContent));
     await gateway.remove(42);
+    expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri));
+  });
+
+  test('delete calls api correctly', async () => {
+    api.delete = mock.resolve(toResponse(HttpStatus.NoContent));
+    await gateway.delete(DevUri.Developer.id(42));
     expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri));
   });
 
