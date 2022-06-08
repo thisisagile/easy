@@ -46,10 +46,14 @@ export class RouteGateway extends Gateway {
   }
 
   patch(uri: Uri, item: Json): Promise<Json> {
-    return this.api.patch(this.routeId().id(item.id), item).then(r => r.body.data?.items.first() ?? {});
+    return this.api.patch(uri, item).then(r => r.body.data?.items.first() ?? {});
   }
 
   upsert(item: Json): Promise<Json> {
+    return this.api.put(this.routeId().id(item.id), item).then(r => r.body.data?.items.first() ?? {});
+  }
+
+  put(item: Json): Promise<Json> {
     return this.api.put(this.routeId().id(item.id), item).then(r => r.body.data?.items.first() ?? {});
   }
 
