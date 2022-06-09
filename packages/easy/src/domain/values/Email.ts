@@ -3,7 +3,7 @@ import validator from 'validator';
 
 export class Email extends Value {
   constructor(email?: unknown) {
-    super(asString(email));
+    super(asString(email).trim().toLowerCase());
   }
 
   get isValid(): boolean {

@@ -27,6 +27,23 @@ describe('Email', () => {
     expect(email({})).not.toBeValid();
   });
 
+  test('trims spaces on construction', () => {
+    const valid = 'sander@gmail.com';
+    expect(email('sander@gmail.com ')).toBeValid();
+    expect(email('sander@gmail.com ').value).toStrictEqual(valid);
+    expect(email(' sander@gmail.com').value).toStrictEqual(valid);
+    expect(email(' sander@gmail.com ').value).toStrictEqual(valid);
+    expect(email(' sander@gmail.com ')).toBeValid();
+    expect(email(' sander@gmail .com ').value).not.toBeValid();
+  });
+
+  test('to lower case on construction', () => {
+    const valid = 'naoufal@gmail.com';
+    expect(email('Naoufal@gmail.com ')).toBeValid();
+    expect(email('Naoufal@gmail.com ').value).toStrictEqual(valid);
+    expect(email('naOufAl@gmaIL.com').value).toStrictEqual(valid);
+  });
+
   test('name', () => {
     expect(email('kim@gmail.com').name).toBe('Kim');
     expect(email('kim.holland@gmail.com').name).toBe('Kim Holland');
