@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { toPageList } from '../../src';
+import { isPageList, toList, toPageList } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
@@ -56,5 +56,14 @@ describe('PageList', () => {
     const pl2 = toPageList(pl, pl);
     expect(pl2).toHaveLength(Dev.All.length);
     expect(pl2.total).toBe(42);
+  });
+
+  test('isPageList', () => {
+    const l = toList([]);
+    const pl = toPageList([], { take: 5, skip: 1, total: 42 });
+
+    expect(isPageList([])).toBeFalsy();
+    expect(isPageList(l)).toBeFalsy();
+    expect(isPageList(pl)).toBeTruthy();
   });
 });
