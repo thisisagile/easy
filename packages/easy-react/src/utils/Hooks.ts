@@ -1,4 +1,4 @@
-import { List, PageList, PageOptions, toList, toPageList, Validatable } from '@thisisagile/easy';
+import { isPageList, List, PageList, PageOptions, toList, toPageList, Validatable } from '@thisisagile/easy';
 import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
@@ -68,12 +68,8 @@ export const useGet = <E>(f: () => Promise<E>): [E, () => Promise<E>] => {
   return [item, getter];
 };
 
-export const useGetList = <E>(f: () => Promise<PageList<E>>): [PageList<E>, () => Promise<PageList<E>>] => {
+export const useGetList = <E>(f: () => Promise<List<E> | List<never>>): [List<E>, () => Promise<PageList<E> | List<never>>] => {
   const [list, setList] = usePageList<E>();
-  const getter = () =>
-    f().then(l => {
-      setList(l);
-      return l;
-    });
+  const getter = () => f().then(l => setList(isPageList(l) ? l : toPageList(l, { total: l.length })));
   return [list, getter];
 };
