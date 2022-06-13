@@ -16,7 +16,7 @@ describe('MongoProvider', () => {
   const date = '2023-09-22T12:30:00.000+00:00';
 
   beforeEach(() => {
-    c.find = mock.resolve({ toArray: () => [] });
+    c.find = mock.resolve({ toArray: () => Promise.resolve([]) });
     client = mock.empty<MongoClient>({ connect: mock.impl(() => client) });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
@@ -136,7 +136,7 @@ describe('MongoProvider', () => {
 
   test('group calls toMongoType on queries, to correct dates', async () => {
     provider.collection = mock.resolve(c);
-    c.aggregate = mock.resolve({ toArray: () => [] });
+    c.aggregate = mock.resolve({ toArray: () => Promise.resolve([]) });
 
     await provider.group([{ date: date }]);
 

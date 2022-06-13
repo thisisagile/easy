@@ -20,7 +20,15 @@ import {
   tuple3,
   when,
 } from '@thisisagile/easy';
-import { Collection as MongoCollection, Filter as MongoFilter, FindOptions as MongoFindOptions, MongoClient } from 'mongodb';
+import {
+  AggregationCursor,
+  Collection as MongoCollection,
+  Document,
+  Filter as MongoFilter,
+  FindCursor,
+  FindOptions as MongoFindOptions,
+  MongoClient,
+} from 'mongodb';
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
 
@@ -73,6 +81,13 @@ export class MongoProvider {
     };
   }
 
+  protected toArray(
+    cursor: FindCursor<Document> | AggregationCursor<Document>,
+    options?: { take?: number; skip?: number; total?: number }
+  ): Promise<PageList<Json>> {
+    return cursor.toArray().then(r => toPageList<Json>(r, options));
+  }
+
   find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
     return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(options))
       .then(([c, q, o]) =>
@@ -81,8 +96,7 @@ export class MongoProvider {
           ifTrue(o.total, () => c.countDocuments(q))
         )
       )
-      .then(([res, total]) => tuple2(res.toArray(), total))
-      .then(([res, total]) => toPageList(res as Json[], options && { total }));
+      .then(([res, total]) => this.toArray(res, options && { total }));
   }
 
   all(options?: FindOptions): Promise<PageList<Json>> {
@@ -100,8 +114,7 @@ export class MongoProvider {
   group(qs: Filter<any>[]): Promise<PageList<Json>> {
     return this.collection()
       .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
-      .then(res => res.toArray())
-      .then(res => toPageList(res));
+      .then(res => this.toArray(res));
   }
 
   add(item: Json): Promise<Json> {
