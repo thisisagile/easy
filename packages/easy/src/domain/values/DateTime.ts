@@ -1,53 +1,27 @@
-import { isA, isArray, isDefined, isString, tryTo, Value } from '../../types';
-import moment, { Moment } from 'moment';
-import { ifNotEmpty } from '../../utils';
-import 'moment/min/locales';
+import { choose, isA, isDate, isDefined, isNumber, isString, JsonValue, Value } from '../../types';
+import { DateTime as LuxonDateTime, DateTimeUnit as LuxonDateTimeUnit, Settings } from 'luxon';
 
-export type DateTimeUnit =
-  | 'year'
-  | 'years'
-  | 'y'
-  | 'quarter'
-  | 'quarters'
-  | 'Q'
-  | 'month'
-  | 'months'
-  | 'M'
-  | 'week'
-  | 'weeks'
-  | 'w'
-  | 'day'
-  | 'days'
-  | 'd'
-  | 'hour'
-  | 'hours'
-  | 'h'
-  | 'minute'
-  | 'minutes'
-  | 'm'
-  | 'second'
-  | 'seconds'
-  | 's'
-  | 'millisecond'
-  | 'milliseconds'
-  | 'ms';
+Settings.defaultZone = 'utc';
+
+export type DateTimeUnit = LuxonDateTimeUnit;
 
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
     super(
-      tryTo(value)
-        .is.defined()
-        .map(v => moment.utc(v, format, true).toISOString())
-        .orElse()
+      choose(value)
+        .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })).toISO())
+        .type(isNumber, v => LuxonDateTime.fromMillis(v).toISO())
+        .type(isDate, v => LuxonDateTime.fromJSDate(v).toISO())
+        .else(undefined as unknown as string)
     );
   }
 
   static get now(): DateTime {
-    return new DateTime(moment.utc().toISOString());
+    return new DateTime(LuxonDateTime.utc().toISO());
   }
 
   get isValid(): boolean {
-    return isDefined(this.value) && this.utc.isValid();
+    return isDefined(this.value) && this.utc.isValid;
   }
 
   /**
@@ -58,50 +32,60 @@ export class DateTime extends Value<string | undefined> {
   }
 
   from(date?: DateTime): string;
-  from(locales?: string | string[]): string;
-  from(date?: DateTime, locales?: string | string[]): string;
-  from(param?: string | string[] | DateTime, other?: string | string[]): string {
+  from(locale?: string): string;
+  from(date?: DateTime, locale?: string): string;
+  from(param?: string | DateTime, other?: string): string {
     const date: DateTime | undefined = isA<DateTime>(param) ? param : undefined;
-    const locales: string | string[] = isString(param) || isArray<string>(param) ? param : isString(other) || isArray<string>(other) ? other : 'en';
-    return isDefined(date) ? this.utc.locale(locales).from(date.utc) : this.utc.locale(locales).fromNow();
+    const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
+    return isDefined(date) ? (this.utc.setLocale(locale).toRelative({ base: date.utc }) as string) : (this.utc.setLocale(locale).toRelative() as string);
   }
 
-  protected get utc(): Moment {
-    return moment.utc(this.value);
+  protected get utc(): LuxonDateTime {
+    return this.luxon.setZone('utc');
+  }
+
+  protected get luxon(): LuxonDateTime {
+    return LuxonDateTime.fromISO(this.value as string, { setZone: true });
   }
 
   isAfter(dt: DateTime): boolean {
-    return this.utc.isAfter(moment.utc(dt.value));
+    return this.utc > dt.utc;
   }
 
   isBefore(dt: DateTime): boolean {
-    return this.utc.isBefore(moment.utc(dt.value));
+    return this.utc < dt.utc;
   }
 
   equals(dt: DateTime): boolean {
-    return this.utc.isSame(moment.utc(dt.value));
+    return this.utc.hasSame(dt.utc, 'millisecond');
   }
 
-  add = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.add(n, unit).toISOString());
+  add = (n: number, unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.plus({ [unit]: n }).toISO());
 
-  subtract = (n: number, unit: DateTimeUnit = 'days'): DateTime => new DateTime(this.utc.subtract(n, unit).toISOString());
+  subtract = (n: number, unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.minus({ [unit]: n }).toISO());
 
-  diff = (other: DateTime, unit: DateTimeUnit = 'days'): number => this.utc.diff(other.utc, unit);
+  diff = (other: DateTime, unit: DateTimeUnit = 'day'): number => Math.floor(this.utc.diff(other.utc).as(unit));
 
-  startOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.utc.startOf(unit).toISOString());
+  startOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.startOf(unit).toISO());
 
-  endOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.utc.endOf(unit).toISOString());
+  endOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.endOf(unit).toISO());
+
+  withZone = (zone: string): DateTime => new DateTime(this.utc.setZone(zone).toISO());
 
   toString(): string {
     return this.value ?? '';
   }
 
-  toLocale = (locales: string | string[] = 'nl-NL', format = 'L'): string => this.utc.locale(locales).format(format);
+  toJSON(): JsonValue {
+    return this.utc.toISO() as unknown as JsonValue;
+  }
 
-  toFull = (...locales: string[]): string => this.toLocale(ifNotEmpty(locales, locales), 'LL');
+  toLocale = (locale = 'nl-NL', format = 'D'): string => this.luxon.setLocale(locale).toFormat(format);
+
+  toFull = (locale?: string): string => this.toLocale(locale, 'DDD');
 
   toDate(): Date | undefined {
-    return this.isValid ? this.utc.toDate() : undefined;
+    return this.isValid ? this.utc.toJSDate() : undefined;
   }
 }
 

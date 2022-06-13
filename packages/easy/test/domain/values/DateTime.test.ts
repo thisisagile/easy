@@ -4,6 +4,7 @@ import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
 
 const iso = '2021-03-25T08:39:44.000Z';
+const new_york = '2021-03-25T04:39:44.000-04:00';
 
 const date = {
   iso: '2021-03-25T08:39:44.000Z',
@@ -11,14 +12,14 @@ const date = {
   ams: '2021-03-25T09:39:44+01:00',
 };
 const formats = {
-  ddmmyyyy: 'DD/MM/YYYY',
-  yyyymmdd: 'YYYY-DD-MM',
-  yyyyddmm: 'YYYY-MM-DD',
-  yyyymmddthhmm: 'YYYY-MM-DD[T]hh:mm',
-  yyyymmddhhmmss: 'YYYY-MM-DD hh:mm:ss',
-  ddmmyyyyhhmmss: 'DD/MM/YYYY hh:mm:ss',
-  yyyymmddthhmmss: 'YYYY-MM-DD[T]hh:mm:ss',
-  yyyymmddthhmmsssssz: 'YYYY-MM-DD[T]hh:mm:ss.SSSZ',
+  ddmmyyyy: 'dd/MM/yyyy',
+  yyyymmdd: 'yyyy-dd-MM',
+  yyyyddmm: 'yyyy-MM-dd',
+  yyyymmddthhmm: "yyyy-MM-dd'T'hh:mm",
+  yyyymmddhhmmss: 'yyyy-MM-dd hh:mm:ss',
+  ddmmyyyyhhmmss: 'dd/MM/yyyy hh:mm:ss',
+  yyyymmddthhmmss: "yyyy-MM-dd'T'hh:mm:ss",
+  yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
 };
 
 describe('DateTime', () => {
@@ -57,7 +58,7 @@ describe('DateTime', () => {
     expect(new DateTime('2021-11-11')).toMatchText('2021-11-11T00:00:00.000Z');
     expect(new DateTime('2021-11-11T01:00')).toMatchText('2021-11-11T01:00:00.000Z');
     expect(new DateTime('2021-11-11T01:23:11')).toMatchText('2021-11-11T01:23:11.000Z');
-    expect(new DateTime('2021-11-11T01:00:00.000+0100')).toMatchText('2021-11-11T00:00:00.000Z');
+    expect(new DateTime('2021-11-11T01:00:00.000+0100').toJSON()).toMatchText('2021-11-11T00:00:00.000Z');
   });
 
   test('construct from iso date is valid.', () => {
@@ -75,16 +76,16 @@ describe('DateTime', () => {
 
   test.each([
     ['2021-11-10', formats.yyyymmdd, '2021-10-11T00:00:00.000Z'],
-    ['2021-10-11', formats.yyyyddmm, '2021-10-11T00:00:00.000Z'],
+    ['2022-10-11', formats.yyyyddmm, '2022-10-11T00:00:00.000Z'],
     ['2021-10-11T01:23', formats.yyyymmddthhmm, '2021-10-11T01:23:00.000Z'],
     ['2021-10-11T01:23:11', formats.yyyymmddthhmmss, '2021-10-11T01:23:11.000Z'],
-    ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmsssssz, '2021-10-11T00:23:59.123Z'],
+    ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmssssszzz, '2021-10-11T00:23:59.123Z'],
     ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
-    ['Wed Dec 24 09:15:00 -0800 2014', 'ddd MMM DD hh:mm:ss ZZ YYYY', '2014-12-24T17:15:00.000Z'],
+    ['Wed Dec 24 09:15:00 -0800 2014', 'EEE MMM dd hh:mm:ss ZZZ yyyy', '2014-12-24T17:15:00.000Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
     const res = new DateTime(s, f);
     expect(res).toBeValid();
-    expect(res).toMatchText(new DateTime(e));
+    expect(res.toJSON()).toMatchText(new DateTime(e));
   });
 
   test.each([
@@ -97,30 +98,57 @@ describe('DateTime', () => {
   });
 
   test.each([
-    [['year', 'years', 'y'], '2021-01-01T00:00:00.000Z'],
-    [['month', 'months', 'M'], '2021-10-01T00:00:00.000Z'],
-    [['week', 'weeks', 'w'], '2021-10-10T00:00:00.000Z'],
-    [['day', 'days', 'd'], '2021-10-16T00:00:00.000Z'],
-    [['hour', 'hours', 'h'], '2021-10-16T01:00:00.000Z'],
-    [['minute', 'minutes', 'm'], '2021-10-16T01:23:00.000Z'],
-    [['second', 'seconds', 's'], '2021-10-16T01:23:58.000Z'],
-  ])('startOf with unit: %s should return %s', (us, e) => {
+    ['year', '2021-01-01T00:00:00.000Z'],
+    ['month', '2021-10-01T00:00:00.000Z'],
+    ['week', '2021-10-11T00:00:00.000Z'],
+    ['day', '2021-10-16T00:00:00.000Z'],
+    ['hour', '2021-10-16T01:00:00.000Z'],
+    ['minute', '2021-10-16T01:23:00.000Z'],
+    ['second', '2021-10-16T01:23:58.000Z'],
+  ])('startOf with unit: %s should return %s', (ut, e) => {
     const res = new DateTime('2021-10-16T01:23:58.123Z');
-    us.forEach(ut => expect(res.startOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)));
+   expect(res.startOf(ut as DateTimeUnit).toJSON()).toMatchText(new DateTime(e));
   });
 
   test.each([
-    [['year', 'years', 'y'], '2021-12-31T23:59:59.999Z'],
-    [['month', 'months', 'M'], '2021-10-31T23:59:59.999Z'],
-    [['week', 'weeks', 'w'], '2021-10-16T23:59:59.999Z'],
-    [['day', 'days', 'd'], '2021-10-15T23:59:59.999Z'],
-    [['hour', 'hours', 'h'], '2021-10-15T01:59:59.999Z'],
-    [['minute', 'minutes', 'm'], '2021-10-15T01:23:59.999Z'],
-    [['second', 'seconds', 's'], '2021-10-15T01:23:58.999Z'],
-  ])('endOf with unit: %s should return %s', (us, e) => {
-    const res = new DateTime('2021-10-15T01:23:58.123Z');
-    us.forEach(ut => expect(res.endOf(ut as DateTimeUnit)).toMatchText(new DateTime(e)));
+    ['year', '2020-12-31T22:00:00.000Z'],
+    ['month', '2021-09-30T22:00:00.000Z'],
+    ['week', '2021-10-10T22:00:00.000Z'],
+    ['day', '2021-10-15T22:00:00.000Z'],
+    ['hour', '2021-10-15T23:00:00.000Z'],
+    ['minute', '2021-10-15T23:23:00.000Z'],
+    ['second', '2021-10-15T23:23:58.000Z'],
+  ])('zone aware startOf with unit: %s should return %s', (ut, e) => {
+    const res = new DateTime('2021-10-16T01:23:58.123+02:00');
+    expect(res.startOf(ut as DateTimeUnit).toJSON()).toMatchText(e);
   });
+
+  test.each([
+    ['year', '2021-12-31T23:59:59.999Z'],
+    ['month', '2021-10-31T23:59:59.999Z'],
+    ['week', '2021-10-17T23:59:59.999Z'],
+    ['day', '2021-10-15T23:59:59.999Z'],
+    ['hour', '2021-10-15T01:59:59.999Z'],
+    ['minute', '2021-10-15T01:23:59.999Z'],
+    ['second', '2021-10-15T01:23:58.999Z'],
+  ])('endOf with unit: %s should return %s', (ut, e) => {
+    const res = new DateTime('2021-10-15T01:23:58.123Z');
+    expect(res.endOf(ut as DateTimeUnit).toJSON()).toMatchText(new DateTime(e));
+  });
+
+  test.each([
+    ['year', '2021-12-31T21:59:59.999Z'],
+    ['month', '2021-10-31T21:59:59.999Z'],
+    ['week', '2021-10-17T21:59:59.999Z'],
+    ['day', '2021-10-15T21:59:59.999Z'],
+    ['hour', '2021-10-14T23:59:59.999Z'],
+    ['minute', '2021-10-14T23:23:59.999Z'],
+    ['second', '2021-10-14T23:23:58.999Z'],
+  ])('zone aware endOf with unit: %s should return %s', (ut, e) => {
+    const res = new DateTime('2021-10-15T01:23:58.123+02:00');
+    expect(res.endOf(ut as DateTimeUnit).toJSON()).toMatchText(e);
+  });
+
 
   test('startOf and endOf using defaults', () => {
     const res = new DateTime('2021-10-15T01:23:58.123Z');
@@ -186,7 +214,7 @@ describe('DateTime', () => {
 
   test('add other unit', () => {
     Date.now = mock.return(date.epoch);
-    const d = new DateTime(iso).add(5, 'years');
+    const d = new DateTime(iso).add(5, 'year');
     expect(d).toMatchText('2026-03-25T08:39:44.000Z');
   });
 
@@ -204,7 +232,7 @@ describe('DateTime', () => {
 
   test('subtract other unit', () => {
     Date.now = mock.return(date.epoch);
-    const d = new DateTime(iso).subtract(5, 'years');
+    const d = new DateTime(iso).subtract(5, 'year');
     expect(d).toMatchText('2016-03-25T08:39:44.000Z');
   });
 
@@ -223,19 +251,18 @@ describe('DateTime', () => {
 
   test('diff other unit', () => {
     const d = new DateTime(iso);
-    const d2 = d.add(6, 'months');
-    expect(d2.diff(d, 'weeks')).toBe(26);
+    const d2 = d.add(6, 'month');
+    expect(d2.diff(d, 'week')).toBe(26);
   });
 
   test('from works.', () => {
-    Date.now = mock.return(date.epoch);
+    Date.now = mock.return(date.epoch + 7000);
     const d = new DateTime(iso);
     const other = new DateTime('2021-03-22T08:39:44.000Z');
-    expect(d.from()).toMatchText('a few seconds ago');
+    expect(d.from()).toMatchText('7 seconds ago');
     expect(d.from(other)).toMatchText('in 3 days');
-    expect(d.from('nl')).toMatchText('een paar seconden geleden');
-    expect(d.from(['zz', 'nl', 'en'])).toMatchText('een paar seconden geleden');
-    expect(d.from('de')).toMatchText('vor ein paar Sekunden');
+    expect(d.from('nl')).toMatchText('7 seconden geleden');
+    expect(d.from('de')).toMatchText('vor 7 Sekunden');
     expect(d.from(other, 'de')).toMatchText('in 3 Tagen');
     expect(d.from(other, 'nl')).toMatchText('over 3 dagen');
   });
@@ -270,9 +297,9 @@ describe('DateTime', () => {
 
   test('toLocale', () => {
     const dt = new DateTime(iso);
-    expect(dt.toLocale()).toMatchText('25-03-2021');
-    expect(dt.toLocale('de-DE')).toMatchText('25.03.2021');
-    expect(dt.toLocale('de-DE', 'LLLL')).toMatchText('Donnerstag, 25. März 2021 08:39');
+    expect(dt.toLocale()).toMatchText('25-3-2021');
+    expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
+    expect(dt.toLocale('de-DE', 'ffff')).toMatchText('Donnerstag, 25. März 2021, 08:39 Koordinierte Weltzeit');
   });
 
   test('toFull', () => {
@@ -287,5 +314,22 @@ describe('DateTime', () => {
     expect(isDateTime()).toBeFalsy();
     expect(isDateTime({})).toBeFalsy();
     expect(isDateTime(new DateTime(iso))).toBeTruthy();
+  });
+
+  test('withZone changes zone', () => {
+    const d = new DateTime(iso).withZone('America/New_York');
+    expect(d).toMatchText(new_york);
+    expect(d.toJSON()).toMatchText(iso);
+    expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021, 4:39 AM GMT-04:00');
+  });
+
+  test('toString keeps zone', () => {
+    expect(new DateTime(new_york).toString()).toMatchText(new_york);
+    expect(new DateTime(iso).toString()).toMatchText(iso);
+  });
+
+  test('toJSON always in UTC', () => {
+    expect(new DateTime(new_york).toJSON()).toMatchText(iso);
+    expect(new DateTime(iso).toJSON()).toMatchText(iso);
   });
 });
