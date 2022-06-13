@@ -1,6 +1,5 @@
 import { DateTime, DateTimeUnit, isDateTime } from '../../../src';
 import '@thisisagile/easy-test';
-import moment from 'moment';
 import { mock } from '@thisisagile/easy-test';
 
 const iso = '2021-03-25T08:39:44.000Z';
@@ -23,11 +22,6 @@ const formats = {
 };
 
 describe('DateTime', () => {
-  test('moment decided to mark undefined as a valid date.', () => {
-    const res = moment(undefined, true);
-    expect(res).toBeTruthy();
-  });
-
   test('construct from undefined is not valid and value is undefined.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
