@@ -29,3 +29,5 @@ export type Query = Text;
 export type UseCase = { app: { id: Text }; id: Text };
 
 export type Tester = { url: string };
+
+export type CreateMutable<T> = { -readonly [P in keyof T]: T[P] };
