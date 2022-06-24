@@ -1730,7 +1730,7 @@ __metadata:
     "@testing-library/react": ^13.3.0
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/react": ^18.0.12
+    "@types/react": ^18.0.14
     jest-environment-jsdom: ^28.1.0
     react: ^18.1.0
     react-dom: ^18.1.0
@@ -2188,7 +2188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^18.0.12":
+"@types/react@npm:^18.0.14":
   version: 18.0.14
   resolution: "@types/react@npm:18.0.14"
   dependencies:
