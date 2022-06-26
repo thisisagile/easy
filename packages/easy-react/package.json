@@ -38,15 +38,15 @@
     "@thisisagile/easy-test-react": "workspace:*",
     "@types/copyfiles": "^2",
     "copyfiles": "^2.4.1",
-    "jest-environment-jsdom": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.1",
     "jest-transform-stub": "^2.0.0"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "next": "^12.1.6",
     "next-transpile-modules": "^9.0.0",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "sass": "^1.52.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.53.0"
   }
 }

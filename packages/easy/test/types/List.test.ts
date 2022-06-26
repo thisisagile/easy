@@ -12,7 +12,7 @@ describe('List', () => {
       name: 'Jane',
       age: undefined,
       weight: 95,
-    }
+    },
   );
   const jackAndJill = toList(
     { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
@@ -21,7 +21,7 @@ describe('List', () => {
       name: 'Jill',
       age: undefined,
       weight: undefined as unknown as number,
-    }
+    },
   );
 
   test('asc and desc', () => {
@@ -37,7 +37,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -472,9 +472,32 @@ describe('asList', () => {
   });
 
   test('firstItem', () => {
-    const list = toList<{ id?: number; age?: number; name?: string }>({ name: 'sander' }, { name: 'wouter' }, { id: 1, name: 'jeroen' });
+    const list = toList<{ id?: number; age?: number; name?: string }>({ name: 'sander' }, { name: 'wouter' }, {
+      id: 1,
+      name: 'jeroen',
+    });
     expect(list.firstValue(i => i.name)).toBe('sander');
     expect(list.firstValue(i => i.id)).toBe(1);
     expect(list.firstValue(i => i.age, 42)).toBe(42);
   });
+
+  const listToArray = <T>(ts: T[]): T[] => ts;
+
+  test('list to Array', () => {
+    const devs = Dev.All;
+    expect(listToArray(devs)).toHaveLength(Dev.All.length);
+  });
+
+  test('toObject works', () => {
+    const devs = Dev.All;
+    const a = devs.toObject('name');
+    expect(a['Jeroen']).toMatchObject(Dev.Jeroen);
+  });
+
+  test('toObject works on Json', () => {
+    const devs = toList(Dev.All.toJSON());
+    const a = devs.toObject('name');
+    expect(a['Jeroen']).toMatchJson(Dev.Jeroen);
+  });
+
 });
