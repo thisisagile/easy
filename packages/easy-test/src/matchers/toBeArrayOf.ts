@@ -1,8 +1,8 @@
 import CustomMatcherResult = jest.CustomMatcherResult;
-import { Constructor } from '../utils/Types';
+import { Constructor as Ctor } from '../utils/Types';
 import { match } from './Match';
 
-export const toBeArrayOf = <T>(items: unknown, ctor: Constructor<T>): CustomMatcherResult =>
+export const toBeArrayOf = <T>(items: unknown, ctor: Ctor<T>): CustomMatcherResult =>
   match<[]>(items as [])
     .undefined(it => it, 'Subject is undefined.')
     .not(it => it instanceof Array, 'Subject is not an array.')
@@ -17,7 +17,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R, T> {
-      toBeArrayOf<Z>(ctor: Constructor<Z>): R;
+      toBeArrayOf<Z>(ctor: Ctor<Z>): R;
     }
   }
 }

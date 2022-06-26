@@ -1,8 +1,8 @@
 import CustomMatcherResult = jest.CustomMatcherResult;
-import { Constructor } from '../utils/Types';
+import { Constructor as Ctor } from '../utils/Types';
 import { match } from './Match';
 
-export const toBeArrayOfWithLength = <T>(items: unknown, ctor: Constructor<T>, length: number): CustomMatcherResult =>
+export const toBeArrayOfWithLength = <T>(items: unknown, ctor: Ctor<T>, length: number): CustomMatcherResult =>
   match<[]>(items as [])
     .undefined(it => it, 'Subject is undefined.')
     .not(it => it instanceof Array, 'Subject is not an array.')
@@ -21,7 +21,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     interface Matchers<R, T> {
-      toBeArrayOfWithLength<Z>(ctor: Constructor<Z>, length: number): R;
+      toBeArrayOfWithLength<Z>(ctor: Ctor<Z>, length: number): R;
     }
   }
 }
