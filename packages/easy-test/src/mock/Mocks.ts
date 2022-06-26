@@ -1,6 +1,7 @@
 import NonFunctionPropertyNames = jest.NonFunctionPropertyNames;
 import SpyInstance = jest.SpyInstance;
 import Mock = jest.Mock;
+import PropertyAccessors = jest.PropertyAccessors;
 import { Id, Json } from '../utils/Types';
 import { Req } from '../utils/Req';
 import { HttpStatus, Response } from '../utils/Response';
@@ -9,7 +10,7 @@ export class Mocks {
   clear = (): typeof jest => jest.clearAllMocks();
   impl = (f?: (...args: any[]) => any): Mock => jest.fn().mockImplementation(f);
   property = <T, P extends NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): SpyInstance =>
-    jest.spyOn(object, getter, 'get').mockReturnValue(value);
+    jest.spyOn(object, getter, 'get' as PropertyAccessors<P, T>).mockReturnValue(value as (void & T[P]));
   reject = (value?: unknown): Mock => jest.fn().mockRejectedValue(value);
   rejectWith = <T = any>(props: Partial<T> = {}): Mock => jest.fn().mockRejectedValue(mock.a(props));
   req = {

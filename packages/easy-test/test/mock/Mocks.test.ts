@@ -99,7 +99,14 @@ describe('mock', () => {
 
   test('response with errors works', () => {
     const resp = mock.resp.errors({ id: 400 } as HttpStatus, 'error', [{ timeout: 'occurred' }]);
-    expect(resp.body).toStrictEqual({ error: { code: 400, message: 'error', errorCount: 1, errors: [{ timeout: 'occurred' }] } });
+    expect(resp.body).toStrictEqual({
+      error: {
+        code: 400,
+        message: 'error',
+        errorCount: 1,
+        errors: [{ timeout: 'occurred' }],
+      },
+    });
   });
 
   test('response with 0 errors works', () => {
