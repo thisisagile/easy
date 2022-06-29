@@ -7,7 +7,7 @@ export class Box extends Struct {
   @required() readonly w: Dimension = new Dimension(this.state.w);
   @required() readonly h: Dimension = new Dimension(this.state.h);
 
-  private sorted: Dimension[] = [this.l, this.w, this.h].sort((n1, n2) => n1.sizeInMM() - n2.sizeInMM());
+  private readonly sorted: Dimension[] = [this.l, this.w, this.h].sort((n1, n2) => n1.sizeInMM() - n2.sizeInMM());
   lowestDim: Dimension = this.sorted[0];
   medianDim: Dimension = this.sorted[1];
   maxDim: Dimension = this.sorted[2];

@@ -5,52 +5,52 @@ export interface UrlOptions {
   /**
    * @default ['http','https','ftp']
    */
-  protocols?: string[] | undefined;
+  protocols?: string[];
   /**
    * @default true
    */
-  require_tld?: boolean | undefined;
+  require_tld?: boolean;
   /**
    * @default false
    */
-  require_protocol?: boolean | undefined;
+  require_protocol?: boolean;
   /**
    * @default true
    */
-  require_host?: boolean | undefined;
+  require_host?: boolean;
   /**
    * if set as true isURL will check if port is present in the URL
    * @default false
    */
-  require_port?: boolean | undefined;
+  require_port?: boolean;
   /**
    * @default true
    */
-  require_valid_protocol?: boolean | undefined;
+  require_valid_protocol?: boolean;
   /**
    * @default false
    */
-  allow_underscores?: boolean | undefined;
+  allow_underscores?: boolean;
   /**
    * @default false
    */
-  host_whitelist?: Array<string | RegExp> | undefined;
+  host_whitelist?: Array<string | RegExp>;
   /**
    * @default false
    */
-  host_blacklist?: Array<string | RegExp> | undefined;
+  host_blacklist?: Array<string | RegExp>;
   /**
    * @default false
    */
-  allow_trailing_dot?: boolean | undefined;
+  allow_trailing_dot?: boolean;
   /**
    * @default false
    */
-  allow_protocol_relative_urls?: boolean | undefined;
+  allow_protocol_relative_urls?: boolean;
   /**
    * @default false
    */
-  disallow_auth?: boolean | undefined;
+  disallow_auth?: boolean;
 }
 
 export class Url extends Value {

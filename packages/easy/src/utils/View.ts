@@ -1,6 +1,21 @@
-import { asJson, isArray, isBoolean, isDefined, isEqual, isFunction, isNumber, isObject, isString, isUndefined, Json, json, meta, tryTo } from '../types';
+import {
+  asJson,
+  choose,
+  isArray,
+  isBoolean,
+  isDefined,
+  isEqual,
+  isFunction,
+  isNumber,
+  isObject,
+  isString,
+  isUndefined,
+  Json,
+  json,
+  meta,
+  tryTo,
+} from '../types';
 import { traverse } from './Traverse';
-import { choose } from '../types';
 
 type Func<T = unknown> = (a: any, key?: string) => T;
 
