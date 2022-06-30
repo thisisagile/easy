@@ -36,8 +36,8 @@ const omitId = (j: Json): Json => json.delete(j, '_id');
 
 export type Projection = Record<string, 0 | 1>;
 export type FindOptions = PageOptions & { projection?: Projection };
-
 export type Filter<T> = MongoFilter<T>;
+export type Query = Condition | LogicalCondition | Filter<any>;
 
 export class MongoProvider {
   aggregate = this.group;
@@ -67,7 +67,7 @@ export class MongoProvider {
       });
   }
 
-  toMongoJson(query: Condition | LogicalCondition | Filter<any>): Json {
+  toMongoJson(query: Query): Json {
     return toMongoType(asJson(query));
   }
 
@@ -88,7 +88,7 @@ export class MongoProvider {
     return cursor.toArray().then(r => toPageList<Json>(r, options));
   }
 
-  find(query: Condition | LogicalCondition | Filter<any>, options?: FindOptions): Promise<PageList<Json>> {
+  find(query: Query, options?: FindOptions): Promise<PageList<Json>> {
     return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(options))
       .then(([c, q, o]) =>
         tuple2(
@@ -135,7 +135,7 @@ export class MongoProvider {
       .then(d => d.acknowledged);
   }
 
-  count(query?: Condition | LogicalCondition | Filter<any>): Promise<number> {
+  count(query?: Query): Promise<number> {
     return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {})));
   }
 
@@ -143,7 +143,7 @@ export class MongoProvider {
     return this.collection().then(c => c.createIndex(field, { unique, writeConcern: { w: 1 } }));
   }
 
-  createPartialIndex(field: string | any, filter: Condition | LogicalCondition | Filter<any>, unique = true): Promise<string> {
+  createPartialIndex(field: string | any, filter: Query, unique = true): Promise<string> {
     return this.collection().then(c =>
       c.createIndex(field, {
         partialFilterExpression: toMongoType(asJson(filter)),
