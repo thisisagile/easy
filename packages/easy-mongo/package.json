@@ -34,7 +34,7 @@
     "@thisisagile/easy-test": "workspace:*"
   },
   "dependencies": {
-    "@thisisagile/easy": "workspace:*",
+    "@thisisagile/easy": "workspace:^",
     "mongodb": "^4.7.0"
   }
 }

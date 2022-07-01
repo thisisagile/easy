@@ -37,8 +37,8 @@
     "@thisisagile/easy-test": "workspace:*"
   },
   "dependencies": {
-    "@thisisagile/easy": "workspace:*",
-    "@thisisagile/easy-test-web": "workspace:*",
+    "@thisisagile/easy": "workspace:^",
+    "@thisisagile/easy-test-web": "workspace:^",
     "puppeteer": "^15.1.1"
   }
 }
