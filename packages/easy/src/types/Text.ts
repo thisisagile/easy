@@ -4,6 +4,7 @@ import { template } from './Template';
 import { isFunc } from './Func';
 import { Get, ofGet } from './Get';
 import { toList } from './List';
+import { JsonValue } from './Json';
 
 export type Text = { toString(): string };
 
@@ -128,6 +129,11 @@ export class ToText implements Text {
   toString(): string {
     return this.subject;
   }
+
+  toJSON(): JsonValue {
+    return this.subject;
+  }
+
 }
 
 export const text = (subject?: unknown, alt = ''): ToText => {

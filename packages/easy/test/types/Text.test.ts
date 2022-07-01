@@ -1,4 +1,4 @@
-import { asString, isText, kebab, replaceAll, Text, text } from '../../src';
+import { asString, isText, kebab, replaceAll, Text, text, toJson } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -51,6 +51,12 @@ describe('isText', () => {
     expect(text(Dev.Rob).with('-', Dev.Jeroen, Dev.Sander)).toMatchText('Rob-Jeroen-Sander');
     expect(text(Dev.Rob).with('-', '', Dev.Sander)).toMatchText('Rob-Sander');
   });
+
+  test('toJSON', () => {
+    const name = text('Sander');
+    const dev = {name };
+    expect(toJson(dev)).toMatchObject({name: 'Sander'})
+  })
 });
 
 describe('kebab', () => {
