@@ -1655,7 +1655,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-express@workspace:packages/easy-express"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.13
@@ -1678,7 +1678,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-mongo@workspace:packages/easy-mongo"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     mongodb: ^4.7.0
   languageName: unknown
@@ -1688,7 +1688,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-mssql@workspace:packages/easy-mssql"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/mssql": ^8.0.2
     mssql: ^8.1.2
@@ -1699,9 +1699,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-playwright@workspace:packages/easy-playwright"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@thisisagile/easy-test-web": "workspace:*"
+    "@thisisagile/easy-test-web": "workspace:^"
     playwright: ^1.22.2
   languageName: unknown
   linkType: soft
@@ -1710,9 +1710,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-puppeteer@workspace:packages/easy-puppeteer"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@thisisagile/easy-test-web": "workspace:*"
+    "@thisisagile/easy-test-web": "workspace:^"
     puppeteer: ^15.1.1
   languageName: unknown
   linkType: soft
@@ -1721,7 +1721,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-react@workspace:packages/easy-react"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-react": "workspace:*"
     "@types/copyfiles": ^2
@@ -1743,7 +1743,7 @@ __metadata:
     "@testing-library/dom": ^8.14.0
     "@testing-library/jest-dom": ^5.16.4
     "@testing-library/react": ^13.3.0
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/react": ^18.0.14
     jest-environment-jsdom: ^28.1.1
@@ -1753,11 +1753,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thisisagile/easy-test-web@workspace:*, @thisisagile/easy-test-web@workspace:packages/easy-test-web":
+"@thisisagile/easy-test-web@workspace:^, @thisisagile/easy-test-web@workspace:packages/easy-test-web":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-web@workspace:packages/easy-test-web"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1777,7 +1777,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thisisagile/easy@workspace:*, @thisisagile/easy@workspace:packages/easy":
+"@thisisagile/easy@workspace:^, @thisisagile/easy@workspace:packages/easy":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
