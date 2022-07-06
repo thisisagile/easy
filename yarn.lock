@@ -1400,7 +1400,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/mssql": ^8.0.2
+    "@types/mssql": ^8.0.3
     mssql: ^8.1.2
   languageName: unknown
   linkType: soft
@@ -1761,14 +1761,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mssql@npm:^8.0.2":
-  version: 8.0.2
-  resolution: "@types/mssql@npm:8.0.2"
+"@types/mssql@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@types/mssql@npm:8.0.3"
   dependencies:
     "@types/node": "*"
     "@types/tedious": "*"
     tarn: ^3.0.1
-  checksum: 8d077a342150f7308f30503c2ed7c87dce8ea5ebea32b4a83990fd54540cee9c8eb352a9d908d7109ef94f20df6bcae30e1661062d12f37fcefd2fff077ad833
+  checksum: f7cd24d1f049c71d3628f7ca36a84ed9e0282c741287a9fb5c09304dfdf04315b9ae7b6f63ce9cc24295669df6b80d6345a593bfb4fa402459dc7fa001351382
   languageName: node
   linkType: hard
 
