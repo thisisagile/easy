@@ -11,3 +11,10 @@ export const toObject = <T>(key: keyof T, ...items: ArrayLike<T>): Json =>
     o[i[key]] = i;
     return o;
   }, {});
+
+export const array = {
+  merge: (first: any[] = [], second: any[] = [], firstKey = 'id', secondKey = 'id'): any[] => first.map(f => ({
+    ...f,
+    ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey])
+  })),
+};
