@@ -28,43 +28,43 @@ describe('DateTime', () => {
     expect(res).not.toBeValid();
   });
 
-  test('construct from empty string is not valid.', () => {
+  test('from empty string is not valid.', () => {
     const res = new DateTime('');
     expect(res).not.toBeValid();
   });
 
-  test('construct from invalid string is not valid.', () => {
+  test('from invalid string is not valid.', () => {
     expect(new DateTime('2021-5-5')).not.toBeValid();
     expect(new DateTime('invalid')).not.toBeValid();
   });
 
-  test('construct from epoch 0 is valid.', () => {
+  test('from epoch 0 is valid.', () => {
     const res = new DateTime(0);
     expect(res).toBeValid();
   });
 
-  test('construct from Date.now is valid.', () => {
+  test('from Date.now is valid.', () => {
     const res = new DateTime(Date.now());
     expect(res).toBeValid();
   });
 
-  test('construct from date string', () => {
+  test('from date string', () => {
     expect(new DateTime('2021-11-11')).toMatchText('2021-11-11T00:00:00.000Z');
     expect(new DateTime('2021-11-11T01:00')).toMatchText('2021-11-11T01:00:00.000Z');
     expect(new DateTime('2021-11-11T01:23:11')).toMatchText('2021-11-11T01:23:11.000Z');
     expect(new DateTime('2021-11-11T01:00:00.000+0100').toJSON()).toMatchText('2021-11-11T00:00:00.000Z');
   });
 
-  test('construct from iso date is valid.', () => {
+  test('from iso date is valid.', () => {
     const res = new DateTime(date.iso);
     expect(res).toBeValid();
   });
 
-  test('construct from epoch is valid.', () => {
+  test('from epoch is valid.', () => {
     expect(new DateTime(date.epoch)).toBeValid();
   });
 
-  test('construct from Date is valid.', () => {
+  test('from Date is valid.', () => {
     expect(new DateTime(new Date(date.epoch))).toBeValid();
   });
 
@@ -302,6 +302,13 @@ describe('DateTime', () => {
     expect(dt.toFull('nl-NL')).toMatchText('25 maart 2021');
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
     expect(dt.toFull('de-DE')).toMatchText('25. März 2021');
+  });
+
+  test('toFormat', () => {
+    const dt = new DateTime(iso);
+    expect(dt.toFormat(formats.ddmmyyyy)).toBe('25/03/2021');
+    expect(dt.toFormat(formats.yyyymmddthhmmss)).toBe('2021-03-25T08:39:44');
+    expect(dt.toFormat(formats.yyyyddmm)).toBe('2021-03-25');
   });
 
   test('isDateTime', () => {
