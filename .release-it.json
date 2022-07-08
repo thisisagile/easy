@@ -4,6 +4,7 @@
   "github": { "release": true },
   "plugins": {
     "@release-it/conventional-changelog": { "preset": "angular" },
+    "./scripts/release-it-workspace-fix.js": {},
     "release-it-yarn-workspaces": true
   }
 }
