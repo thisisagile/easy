@@ -1413,7 +1413,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:^"
-    puppeteer: ^15.1.1
+    puppeteer: ^15.5.0
   languageName: unknown
   linkType: soft
 
@@ -3786,10 +3786,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devtools-protocol@npm:0.0.1011705":
-  version: 0.0.1011705
-  resolution: "devtools-protocol@npm:0.0.1011705"
-  checksum: 2e97d2eda45bbdfd549b3e2fdb441b8803387cacebdb7eb186bd06a24beb65cda116ea0163b6895da2edb7ac85ce8602bb4e961c99849ff3a43eab24fb70b300
+"devtools-protocol@npm:0.0.1019158":
+  version: 0.0.1019158
+  resolution: "devtools-protocol@npm:0.0.1019158"
+  checksum: 3b40771d231597dea5d502e708ac1ea1225214d4e007e12f7f82fb1966b76d9980665481f8495df444e3632d86b0361e2625502b5ef918884a4ed7fe57518723
   languageName: node
   linkType: hard
 
@@ -8263,13 +8263,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"puppeteer@npm:^15.1.1":
-  version: 15.1.1
-  resolution: "puppeteer@npm:15.1.1"
+"puppeteer@npm:^15.5.0":
+  version: 15.5.0
+  resolution: "puppeteer@npm:15.5.0"
   dependencies:
     cross-fetch: 3.1.5
     debug: 4.3.4
-    devtools-protocol: 0.0.1011705
+    devtools-protocol: 0.0.1019158
     extract-zip: 2.0.1
     https-proxy-agent: 5.0.1
     pkg-dir: 4.2.0
@@ -8279,7 +8279,7 @@ __metadata:
     tar-fs: 2.1.1
     unbzip2-stream: 1.4.3
     ws: 8.8.0
-  checksum: 4e892f94f54828bb2fdd7d07353dc05d436519085cdf065c99ec089b9f3d6578a6aaa9ca13dca87a865a2a69dcb6576da75149a224a0bb4b72c9c125ad85dda0
+  checksum: 2bc9e230b397f6b0c42eb5ba4e9179879b3d52f64d767a0bffbb266ecd5f8268ee982fd643c09362e29248e8f9566607c128bf7f60ec625b7605c9e609871788
   languageName: node
   linkType: hard
 
