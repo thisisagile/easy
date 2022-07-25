@@ -1530,13 +1530,13 @@ __metadata:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.8
-    "@types/luxon": 2.4.0
+    "@types/luxon": 3.0.0
     "@types/uuid": ^8.3.4
     "@types/validator": ^13.7.4
     axios: ^0.27.2
     form-urlencoded: ^6.0.6
     jsonwebtoken: ^8.5.1
-    luxon: ^2.5.0
+    luxon: ^3.0.1
     reflect-metadata: ^0.1.13
     uuid: ^8.3.2
     validator: ^13.7.0
@@ -1769,10 +1769,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:2.4.0":
-  version: 2.4.0
-  resolution: "@types/luxon@npm:2.4.0"
-  checksum: eeb16a1bfe5440464c1a9635700d103cd18d3cd8da6063a1938478e435cfba6ab8e893aa80c95a407e541187c1e997c3e4481322726bc1258551cb8606d0e5ad
+"@types/luxon@npm:3.0.0":
+  version: 3.0.0
+  resolution: "@types/luxon@npm:3.0.0"
+  checksum: 7738d3f4b91097a8139eca966ab53c6b40bb417b2cc2014c3bbd0aee033d6ff54af14c62046c2eb042434923b6bf796874f24b2af90e07ef422e6d841463d4b2
   languageName: node
   linkType: hard
 
@@ -6917,10 +6917,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "luxon@npm:2.5.0"
-  checksum: 2fccce6bbdfc8f13c5a8c148ff045ab3b10f4f80cac28dd92575588fffce9b2d7197096d7fedcc61a6245b59f4233507797f530e63f22b9ae4c425dff2909ae3
+"luxon@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "luxon@npm:3.0.1"
+  checksum: aa966eb919bf95b1bd819cda784d1f6f66e3fb65bd9ec7bf68b6a978eeb4e3e14f7e2275021b473f93b15b6b7ba2e5a30471e53add3929a7e695fcfd6dd40ec8
   languageName: node
   linkType: hard
 
