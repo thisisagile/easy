@@ -1413,7 +1413,7 @@ __metadata:
     "@types/validator": ^13.7.4
     cls-hooked: ^4.2.2
     express: ^4.18.1
-    form-urlencoded: ^6.0.6
+    form-urlencoded: ^6.1.0
     jsonwebtoken: ^8.5.1
     passport: ^0.6.0
     passport-jwt: ^4.0.0
@@ -1534,7 +1534,7 @@ __metadata:
     "@types/uuid": ^8.3.4
     "@types/validator": ^13.7.4
     axios: ^0.27.2
-    form-urlencoded: ^6.0.6
+    form-urlencoded: ^6.1.0
     jsonwebtoken: ^8.5.1
     luxon: ^3.0.1
     reflect-metadata: ^0.1.13
@@ -4722,10 +4722,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-urlencoded@npm:*, form-urlencoded@npm:^6.0.6":
+"form-urlencoded@npm:*":
   version: 6.0.6
   resolution: "form-urlencoded@npm:6.0.6"
   checksum: ede8c4d93d9d64e36ad3a691b6e41b95eb43c2d380dae0e9e2fbf80ea0efb030b0633d7bd562d3b6033cbf8f4be9d84fbdc3a6cc3b6aef5b900891b2e3ebe172
+  languageName: node
+  linkType: hard
+
+"form-urlencoded@npm:^6.1.0":
+  version: 6.1.0
+  resolution: "form-urlencoded@npm:6.1.0"
+  checksum: 5a4ba432903e45d7554e3810df7f86cbc197c92eae56b98b8902d801a03e6cce6cd70843ff5ca0479776308baef77c68ab6484f7f4af219500ed057089e63c29
   languageName: node
   linkType: hard
 
