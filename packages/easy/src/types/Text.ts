@@ -87,7 +87,7 @@ export class ToText implements Text {
   }
 
   get trim(): ToText {
-    return this.map(s => s.replace(/ |-|,|_|#|/g, ''));
+    return this.map(s => s.replace(/ |-|,|_|#/g, ''));
   }
 
   get isEmpty(): boolean {
