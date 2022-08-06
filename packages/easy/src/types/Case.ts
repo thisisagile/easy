@@ -1,4 +1,5 @@
 import { Func, Get, isDefined, isEmpty, ofGet, Predicate, tryTo } from './index';
+import { validate } from '../validation';
 
 class CaseBuilder<V> {
   constructor(readonly v: V) {}
@@ -14,9 +15,11 @@ class CaseBuilder<V> {
   is = {
     defined: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isDefined(prop(this.v)), out),
     empty: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isEmpty(prop(this.v)), out),
+    valid: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(validate(prop(this.v)).isValid, out),
     not: {
       defined: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!isDefined(prop(this.v)), out),
       empty: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!isEmpty(prop(this.v)), out),
+      valid: <T>(prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!validate(prop(this.v)).isValid, out),
     },
   };
 
@@ -45,9 +48,11 @@ class Case<T, V = unknown> {
   is = {
     defined: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isDefined(prop(this.value)), out),
     empty: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isEmpty(prop(this.value)), out),
+    valid: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(validate(prop(this.value)).isValid, out),
     not: {
       defined: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!isDefined(prop(this.value)), out),
       empty: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!isEmpty(prop(this.value)), out),
+      valid: (prop: Func<unknown, V>, out: Func<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!validate(prop(this.value)).isValid, out),
     },
   };
 
@@ -74,9 +79,11 @@ class Found<T, V> extends Case<T, V> {
   is = {
     defined: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
     empty: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
+    valid: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
     not: {
       defined: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
       empty: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
+      valid: (_prop: Func<unknown, V>, _out: Func<T, V>): Case<T, V> => this,
     },
   };
 

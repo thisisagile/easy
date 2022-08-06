@@ -306,3 +306,118 @@ describe('Check is.empty', () => {
   });
 });
 
+
+describe('Check is.valid', () => {
+
+  // is.valid
+
+  const first = Dev.Sander;
+  const last = Dev.Rob;
+
+  test('is.empty', () => {
+    const out = choose({ first })
+      .is.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.valid invalid, then valid', () => {
+    const out = choose({ last, first })
+      .is.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .is.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.valid valid, second is not valid', () => {
+    const out = choose({ last: Dev.Wouter, first: Dev.Invalid })
+      .is.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('case is false, then is.valid is valid', () => {
+    const out = choose({ last, first })
+      .case(
+        d => d.first === Dev.Jeroen,
+        () => Dev.Rob
+      )
+      .if.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+// is.not.empty
+
+  test('is.not.valid', () => {
+    const out = choose({ first: Dev.Invalid })
+      .is.not.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.not.valid invalid, then valid', () => {
+    const out = choose({ last: Dev.Invalid, first })
+      .is.not.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .is.not.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.not.valid valid, second is not valid', () => {
+    const out = choose({ last, first })
+      .is.not.valid(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.not.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
+  test('case is false, then is.not.valid is valid', () => {
+    const out = choose({ last: Dev.Invalid, first })
+      .case(
+        d => d.first === Dev.Jeroen,
+        () => Dev.Rob
+      )
+      .if.not.valid(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+});
+
