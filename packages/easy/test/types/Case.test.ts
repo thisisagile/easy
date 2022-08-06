@@ -77,7 +77,9 @@ describe('Case', () => {
     expect(typeIt('hoi')).toBe('A string');
     expect(typeIt(Dev.Naoufal)).toBe('An object');
   });
+});
 
+describe('Check is.defined', () => {
   // is.defined
 
   const first = 'Sander';
@@ -189,3 +191,118 @@ describe('Case', () => {
     expect(out).toMatchObject(Dev.Sander);
   });
 });
+
+describe('Check is.empty', () => {
+
+  // is.empty
+
+  const first = 'Sander';
+  const last = 'Hoogendoorn';
+
+  test('is.empty', () => {
+    const out = choose({ first: '' })
+      .is.empty(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.empty invalid, then valid', () => {
+    const out = choose({ last, name: '' })
+      .is.empty(
+        d => d.name,
+        () => Dev.Wouter
+      )
+      .is.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.empty valid, second is not valid', () => {
+    const out = choose({ last: '', first })
+      .is.empty(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('case is false, then is.empty is valid', () => {
+    const out = choose({ last: '', first })
+      .case(
+        d => d.first === 'Rob',
+        () => Dev.Rob
+      )
+      .if.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+// is.not.empty
+
+  test('is.not.empty', () => {
+    const out = choose({ first })
+      .is.not.empty(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('is.not.empty invalid, then valid', () => {
+    const out = choose({ last, first: '' })
+      .is.not.empty(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .is.not.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.not.empty valid, second is not valid', () => {
+    const out = choose({ last: '', first: '' })
+      .is.not.empty(
+        d => d.first,
+        () => Dev.Wouter
+      )
+      .if.not.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
+  test('case is false, then is.not.empty is valid', () => {
+    const out = choose({ last, first })
+      .case(
+        d => d.first === 'Rob',
+        () => Dev.Rob
+      )
+      .if.not.empty(
+        d => d.last,
+        () => Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+});
+
