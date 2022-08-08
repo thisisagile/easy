@@ -4,7 +4,7 @@ import { validate } from '../validation';
 class CaseBuilder<V> {
   constructor(readonly v: V) {}
 
-  case<T>(pred: Predicate<V>, out: Func<T, V>): Case<T, V> {
+  case<T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
     return new Case<T, V>(this.v).case(pred, out);
   }
 
@@ -29,10 +29,10 @@ class CaseBuilder<V> {
 class Case<T, V = unknown> {
   constructor(protected value: V, protected outcome?: T) {}
 
-  case(pred: Predicate<V>, out: Func<T, V>): Case<T, V> {
+  case(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
     return tryTo(pred, this.value)
       .is.true()
-      .map(() => out(this.value))
+      .map(() => ofGet(out, this.value))
       .map(res => new Found(this.value, res) as Case<T, V>)
       .or(this);
   }
@@ -68,7 +68,7 @@ class Found<T, V> extends Case<T, V> {
     super(value, outcome);
   }
 
-  case(pred: Predicate<V>, out: Func<T, V>): this {
+  case(pred: Predicate<V>, out: Get<T, V>): this {
     return this;
   }
 

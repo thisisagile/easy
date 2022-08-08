@@ -1,26 +1,34 @@
-import { choose, isEmpty, isHttpStatus, isObject, isString } from '../../src';
+import { choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
 import { Dev } from '../ref';
+import { asString } from '@thisisagile/easy-test/dist/utils/Utils';
 
 describe('Case', () => {
   const which = (name: string) =>
     choose(name)
       .case(
         n => isEmpty(n),
-        () => Dev.Jeroen
+        () => Dev.Jeroen,
       )
       .case(
         n => n?.includes('an'),
-        () => Dev.Naoufal
+        () => Dev.Naoufal,
       )
       .case(
         n => n?.includes('San'),
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Wouter);
 
   test('Simple true', () => {
     const out = choose('')
       .case(true, () => Dev.Wouter)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Wouter);
+  });
+
+  test('Simple true with value', () => {
+    const out = choose('')
+      .case(true, Dev.Wouter)
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
@@ -44,7 +52,7 @@ describe('Case', () => {
     const out = choose('sander')
       .case(
         s => s.includes('and'),
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .case(true, () => Dev.Wouter)
       .else(Dev.Naoufal);
@@ -77,61 +85,73 @@ describe('Case', () => {
     expect(typeIt('hoi')).toBe('A string');
     expect(typeIt(Dev.Naoufal)).toBe('An object');
   });
-});
 
-describe('Check is.defined', () => {
+  const fullyTyped = (a: unknown): string =>
+    choose(a)
+      .type(isString, s => s)
+      .type(isObject, o => asString(o))
+      .type(isHttpStatus, h => h.name)
+      .else('None');
+
+  test('Fully typed', () => {
+    expect(fullyTyped(undefined)).toBe('None');
+    expect(fullyTyped('hoi')).toBe('hoi');
+    expect(fullyTyped(HttpStatus.Accepted)).toBe('202');
+    expect(fullyTyped(Dev.Naoufal)).toBe(Dev.Naoufal.name);
+  });
+
   // is.defined
 
-  const first = 'Sander';
-  const last = 'Hoogendoorn';
+  const sander = 'Sander';
+  const hoogendoorn = 'Hoogendoorn';
 
   test('is.defined', () => {
-    const out = choose({ first })
+    const out = choose({ first: sander })
       .is.defined(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.defined invalid, then valid', () => {
-    const out = choose({ last, name: undefined })
+    const out = choose({ last: hoogendoorn, name: undefined })
       .is.defined(
         d => d.name,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.defined valid, second is not valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: hoogendoorn, first: sander })
       .is.defined(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('case is false, then is.defined is valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: hoogendoorn, first: sander })
       .case(
         d => d.first === 'Rob',
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
@@ -143,109 +163,103 @@ describe('Check is.defined', () => {
     const out = choose({ first: undefined })
       .is.not.defined(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.not.defined invalid, then valid', () => {
-    const out = choose({ last: undefined, first })
+    const out = choose({ last: undefined, first: sander })
       .is.not.defined(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.not.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.not.defined valid, second is not valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: hoogendoorn, first: sander })
       .is.not.defined(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.not.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('case is false, then is.not.defined is valid', () => {
-    const out = choose({ last: undefined, first })
+    const out = choose({ last: undefined, first: sander })
       .case(
         d => d.first === 'Rob',
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.not.defined(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
-});
-
-describe('Check is.empty', () => {
 
   // is.empty
-
-  const first = 'Sander';
-  const last = 'Hoogendoorn';
 
   test('is.empty', () => {
     const out = choose({ first: '' })
       .is.empty(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.empty invalid, then valid', () => {
-    const out = choose({ last, name: '' })
+    const out = choose({ last: hoogendoorn, name: '' })
       .is.empty(
         d => d.name,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.empty valid, second is not valid', () => {
-    const out = choose({ last: '', first })
+    const out = choose({ last: '', first: sander })
       .is.empty(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('case is false, then is.empty is valid', () => {
-    const out = choose({ last: '', first })
+    const out = choose({ last: '', first: sander })
       .case(
         d => d.first === 'Rob',
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
@@ -254,24 +268,24 @@ describe('Check is.empty', () => {
 // is.not.empty
 
   test('is.not.empty', () => {
-    const out = choose({ first })
+    const out = choose({ first: sander })
       .is.not.empty(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.not.empty invalid, then valid', () => {
-    const out = choose({ last, first: '' })
+    const out = choose({ last: hoogendoorn, first: '' })
       .is.not.empty(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.not.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
@@ -281,58 +295,54 @@ describe('Check is.empty', () => {
     const out = choose({ last: '', first: '' })
       .is.not.empty(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.not.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('case is false, then is.not.empty is valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: hoogendoorn, first: sander })
       .case(
         d => d.first === 'Rob',
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.not.empty(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
-});
-
-
-describe('Check is.valid', () => {
 
   // is.valid
 
-  const first = Dev.Sander;
-  const last = Dev.Rob;
+  const robc = Dev.RobC;
+  const rob = Dev.Rob;
 
-  test('is.empty', () => {
-    const out = choose({ first })
+  test('is.valid', () => {
+    const out = choose({ first: robc })
       .is.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.valid invalid, then valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: rob, first: robc })
       .is.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
@@ -342,25 +352,25 @@ describe('Check is.valid', () => {
     const out = choose({ last: Dev.Wouter, first: Dev.Invalid })
       .is.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('case is false, then is.valid is valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: rob, first: robc })
       .case(
         d => d.first === Dev.Jeroen,
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
@@ -372,49 +382,63 @@ describe('Check is.valid', () => {
     const out = choose({ first: Dev.Invalid })
       .is.not.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Wouter);
   });
 
   test('is.not.valid invalid, then valid', () => {
-    const out = choose({ last: Dev.Invalid, first })
+    const out = choose({ last: Dev.Invalid, first: robc })
       .is.not.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .is.not.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.not.valid valid, second is not valid', () => {
-    const out = choose({ last, first })
+    const out = choose({ last: rob, first: robc })
       .is.not.valid(
         d => d.first,
-        () => Dev.Wouter
+        () => Dev.Wouter,
       )
       .if.not.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('case is false, then is.not.valid is valid', () => {
-    const out = choose({ last: Dev.Invalid, first })
+    const out = choose({ last: Dev.Invalid, first: robc })
       .case(
         d => d.first === Dev.Jeroen,
-        () => Dev.Rob
+        () => Dev.Rob,
       )
       .if.not.valid(
         d => d.last,
-        () => Dev.Sander
+        () => Dev.Sander,
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('case is false, then is.not.valid is valid also with values (instead of lambdas)', () => {
+    const out = choose({ last: Dev.Invalid, first: robc })
+      .case(
+        d => d.first === Dev.Jeroen,
+        Dev.Rob,
+      )
+      .if.not.valid(
+        d => d.last,
+        () => Dev.Sander,
       )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
