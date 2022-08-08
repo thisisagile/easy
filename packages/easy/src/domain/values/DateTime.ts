@@ -80,7 +80,7 @@ export class DateTime extends Value<string | undefined> {
     return this.utc.toISO() as unknown as JsonValue;
   }
 
-  toFormat = (format: string): string => this.luxon.toFormat( format);
+  toFormat = (format: string): string => this.luxon.toFormat(format);
 
   toLocale = (locale = 'nl-NL', format = 'D'): string => this.luxon.setLocale(locale).toFormat(format);
 

@@ -1,6 +1,8 @@
 import { email, Email, isEmail } from '../../../src';
 import '@thisisagile/easy-test';
 
+const mail = 'wouter@gmail.com';
+
 describe('isEmail', () => {
   test('invalid', () => {
     expect(isEmail()).toBeFalsy();
@@ -11,7 +13,7 @@ describe('isEmail', () => {
   });
 
   test('valid', () => {
-    expect(isEmail('sander@gmail.com')).toBeTruthy();
+    expect(isEmail(mail)).toBeTruthy();
   });
 });
 
@@ -22,17 +24,16 @@ describe('Email', () => {
   });
 
   test('valid', () => {
-    expect(email('sander@gmail.com')).toBeValid();
+    expect(email(mail)).toBeValid();
     expect(email(42)).not.toBeValid();
     expect(email({})).not.toBeValid();
   });
 
   test('trims spaces on construction', () => {
-    const valid = 'sander@gmail.com';
-    expect(email('sander@gmail.com ')).toBeValid();
-    expect(email('sander@gmail.com ').value).toStrictEqual(valid);
-    expect(email(' sander@gmail.com').value).toStrictEqual(valid);
-    expect(email(' sander@gmail.com ').value).toStrictEqual(valid);
+    expect(email('kim@gmail.com  ')).toBeValid();
+    expect(email('rob@gmail.com ').value).toBe('rob@gmail.com');
+    expect(email(' jeroen@gmail.com').value).toBe('jeroen@gmail.com');
+    expect(email(' wouter@gmail.com ').value).toStrictEqual(mail);
     expect(email(' sander@gmail.com ')).toBeValid();
     expect(email(' sander@gmail .com ').value).not.toBeValid();
   });

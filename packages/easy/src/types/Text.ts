@@ -133,7 +133,6 @@ export class ToText implements Text {
   toJSON(): JsonValue {
     return this.subject;
   }
-
 }
 
 export const text = (subject?: unknown, alt = ''): ToText => {

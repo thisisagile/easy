@@ -66,28 +66,37 @@ describe('toObject', () => {
 });
 
 describe('array', () => {
+  const first = [
+    { id: 3, first: 'Sander' },
+    { id: 4, first: 'Jeroen' },
+    { id: 5, last: 'Wouter' },
+  ];
+  const second = [
+    { id: 3, last: 'H' },
+    { id: 4, last: 'P' },
+    { id: 5, last: 'B' },
+  ];
+  const third = [
+    { key: 3, last: 'H' },
+    { key: 4, last: 'P' },
+    { key: 5, last: 'B' },
+  ];
 
-  const first = [{ id: 3, first: 'Sander' }, { id: 4, first: 'Jeroen' }, { id: 5, last: 'Wouter' }];
-  const second = [{ id: 3, last: 'H' }, { id: 4, last: 'P' }, { id: 5, last: 'B' }];
-  const third = [{ key: 3, last: 'H' }, { key: 4, last: 'P' }, { key: 5, last: 'B' }];
-
-  test.each(
-    [
-      ['undefined arrays', undefined, undefined, '', '', 0, {}],
-      ['1st array undefined', undefined, [], '', '', 0, {}],
-      ['2nd array undefined', [], undefined, '', '', 0, {}],
-      ['2nd array empty', first, [], '', '', first.length, first[0]],
-      ['2nd array misses key', first, [{last: 'Ho'}], '', '', first.length, first[0]],
-      ['arrays dont have the right ids', first, [{id: 42, last: 'Ho'}], 'wrong', 'wrong', first.length, first[0]],
-      ['2nd array matches with default 1st key', first, second, undefined, 'id', first.length, { id: 3, first: 'Sander', last: 'H' }],
-      ['2nd array matches with default 2nd key', first, second, 'id', undefined, first.length, { id: 3, first: 'Sander', last: 'H' }],
-      ['2nd array matches with two default keys', first, second, undefined, undefined, first.length, { id: 3, first: 'Sander', last: 'H' }],
-      ['2nd array matches with keys id', first, second, 'id', 'id', first.length, { id: 3, first: 'Sander', last: 'H' }],
-      ['2nd array with non-existing key', first, second, '', 'last', first.length, first[0]],
-      ['2nd array matches', first, [{id: 3, last: 'Ho'}], 'id', 'id', first.length, { id: 3, first: 'Sander', last: 'Ho' }],
-      ['2nd array matches on another key', first, [{key: 3, last: 'Ho'}], 'id', 'key', first.length, { id: 3, first: 'Sander', last: 'Ho' }],
-    ],
-  )('Matching arrays with %s', (name, f, s, kf, ks, l, e) => {
+  test.each([
+    ['undefined arrays', undefined, undefined, '', '', 0, {}],
+    ['1st array undefined', undefined, [], '', '', 0, {}],
+    ['2nd array undefined', [], undefined, '', '', 0, {}],
+    ['2nd array empty', first, [], '', '', first.length, first[0]],
+    ['2nd array misses key', first, [{ last: 'Ho' }], '', '', first.length, first[0]],
+    ['arrays dont have the right ids', first, [{ id: 42, last: 'Ho' }], 'wrong', 'wrong', first.length, first[0]],
+    ['2nd array matches with default 1st key', first, second, undefined, 'id', first.length, { id: 3, first: 'Sander', last: 'H' }],
+    ['2nd array matches with default 2nd key', first, second, 'id', undefined, first.length, { id: 3, first: 'Sander', last: 'H' }],
+    ['2nd array matches with two default keys', first, second, undefined, undefined, first.length, { id: 3, first: 'Sander', last: 'H' }],
+    ['2nd array matches with keys id', first, second, 'id', 'id', first.length, { id: 3, first: 'Sander', last: 'H' }],
+    ['2nd array with non-existing key', first, second, '', 'last', first.length, first[0]],
+    ['2nd array matches', first, [{ id: 3, last: 'Ho' }], 'id', 'id', first.length, { id: 3, first: 'Sander', last: 'Ho' }],
+    ['2nd array matches on another key', first, [{ key: 3, last: 'Ho' }], 'id', 'key', first.length, { id: 3, first: 'Sander', last: 'Ho' }],
+  ])('Matching arrays with %s', (name, f, s, kf, ks, l, e) => {
     const m = array.merge(f, s, kf, ks);
     expect(m).toHaveLength(l);
     expect(m[0] ?? {}).toMatchObject(e as any);
@@ -97,11 +106,11 @@ describe('array', () => {
     const m = array.merge(first, second);
     expect(m).toHaveLength(first.length);
     expect(m[2].last).toBe(second[2].last);
-  })
+  });
 
   test('final check with different keys', () => {
     const m = array.merge(first, third, 'id', 'key');
     expect(m).toHaveLength(first.length);
     expect(m[2].last).toBe(second[2].last);
-  })
+  });
 });

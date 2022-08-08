@@ -23,4 +23,3 @@ export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): Page
     items.map(i => ofConstruct(c, i)),
     items
   );
-

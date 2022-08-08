@@ -30,7 +30,7 @@ describe('Results', () => {
   });
 
   test('Create with an array of a single result', () => {
-    const errors = [r]
+    const errors = [r];
     const rs = toResults(errors);
     expect(rs).toHaveLength(1);
     expect(rs).not.toBeValid();
@@ -39,7 +39,7 @@ describe('Results', () => {
 
   test('Create with an array of multiple results', () => {
     const rr: Result = toResult('and this also went wrong.', 'dev');
-    const errors = [r, rr]
+    const errors = [r, rr];
     const rs = toResults(errors);
     expect(rs).toHaveLength(2);
     expect(rs).not.toBeValid();

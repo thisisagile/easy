@@ -13,8 +13,9 @@ export const toObject = <T>(key: keyof T, ...items: ArrayLike<T>): Json =>
   }, {});
 
 export const array = {
-  merge: (first: any[] = [], second: any[] = [], firstKey = 'id', secondKey = 'id'): any[] => first.map(f => ({
-    ...f,
-    ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey])
-  })),
+  merge: (first: any[] = [], second: any[] = [], firstKey = 'id', secondKey = 'id'): any[] =>
+    first.map(f => ({
+      ...f,
+      ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey]),
+    })),
 };

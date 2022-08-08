@@ -26,8 +26,7 @@ export const toJson = json.merge;
 export const asJson = (j?: unknown, alt: Get<Json> = {}): Json => (isJson(j) ? j.toJSON() : isObject(j) ? (j as Json) : ofGet(alt, j));
 
 class Any<T extends Json> {
-  constructor(readonly value: T) {
-  }
+  constructor(readonly value: T) {}
 
   merge = (...subjects: T[]): Any<T> => any<T>(json.merge(this.value, ...subjects) as T);
   delete = (key: keyof T): Any<T> => any<T>(json.delete<T>(this.value, key as string));

@@ -101,7 +101,7 @@ describe('DateTime', () => {
     ['second', '2021-10-16T01:23:58.000Z'],
   ])('startOf with unit: %s should return %s', (ut, e) => {
     const res = new DateTime('2021-10-16T01:23:58.123Z');
-   expect(res.startOf(ut as DateTimeUnit).toJSON()).toMatchText(new DateTime(e));
+    expect(res.startOf(ut as DateTimeUnit).toJSON()).toMatchText(new DateTime(e));
   });
 
   test.each([
@@ -142,7 +142,6 @@ describe('DateTime', () => {
     const res = new DateTime('2021-10-15T01:23:58.123+02:00');
     expect(res.endOf(ut as DateTimeUnit).toJSON()).toMatchText(e);
   });
-
 
   test('startOf and endOf using defaults', () => {
     const res = new DateTime('2021-10-15T01:23:58.123Z');

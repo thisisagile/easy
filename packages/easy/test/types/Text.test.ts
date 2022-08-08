@@ -54,9 +54,9 @@ describe('isText', () => {
 
   test('toJSON', () => {
     const name = text('Sander');
-    const dev = {name };
-    expect(toJson(dev)).toMatchObject({name: 'Sander'})
-  })
+    const dev = { name };
+    expect(toJson(dev)).toMatchObject({ name: 'Sander' });
+  });
 });
 
 describe('kebab', () => {
