@@ -289,6 +289,20 @@ describe('Case', () => {
     expect(out).toMatchObject(Dev.Sander);
   });
 
+  test('is.not.empty invalid, then valid, but with objects', () => {
+    const out = choose({ last: hoogendoorn, first: '' })
+      .is.not.empty(
+        d => d.first,
+        Dev.Wouter
+      )
+      .is.not.empty(
+        d => d.last,
+        Dev.Sander
+      )
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
   test('is.not.empty valid, second is not valid', () => {
     const out = choose({ last: '', first: '' })
       .is.not.empty(
