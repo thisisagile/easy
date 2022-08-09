@@ -1,10 +1,11 @@
 import { Repo, Struct } from '../domain';
-import { choose, Id, isNotEmpty, JsonValue, Key, toList, PageList, PageOptions } from '../types';
+import { choose, Id, JsonValue, Key, PageList, PageOptions, toList } from '../types';
 import { resolve } from '../utils';
 import { Req } from '../resources';
 
 export class Search<T extends Struct> {
-  constructor(protected repo: Repo<T>) {}
+  constructor(protected repo: Repo<T>) {
+  }
 
   all = (options?: PageOptions): Promise<PageList<T>> => this.repo.all(options);
 
@@ -18,7 +19,7 @@ export class Search<T extends Struct> {
 
   search = (query: JsonValue, options?: PageOptions): Promise<PageList<T>> =>
     choose(query)
-      .case(isNotEmpty, q => this.repo.search(q, options))
+      .is.not.empty(q => q, q => this.repo.search(q, options))
       .else(resolve(toList<T>()));
 
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);
