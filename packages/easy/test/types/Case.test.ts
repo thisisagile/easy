@@ -1,6 +1,7 @@
 import { choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
 import { Dev } from '../ref';
 import { asString } from '@thisisagile/easy-test/dist/utils/Utils';
+import { mock } from '@thisisagile/easy-test';
 
 describe('Case', () => {
   const which = (name: string) =>
@@ -452,4 +453,58 @@ describe('Case', () => {
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
+
+  // equals
+
+  test('equals found', () => {
+    const out = choose(Dev.Naoufal)
+      .equals(Dev.Naoufal, 'Yes')
+      .else('Nope');
+    expect(out).toBe('Yes');
+  });
+
+  test('equals found in second', () => {
+    const out = choose(Dev.Naoufal)
+      .equals(Dev.Wouter, 'No')
+      .equals(Dev.Naoufal, 'Yes')
+      .else('Nope');
+    expect(out).toBe('Yes');
+  });
+
+  test('equals found in second, and out function not called', () => {
+    const no = mock.return('No');
+    const yes = mock.return('Yes');
+    const out = choose(Dev.Naoufal)
+      .equals(Dev.Wouter, no)
+      .equals(Dev.Naoufal, yes)
+      .else('Nope');
+    expect(out).toBe('Yes');
+    expect(no).not.toHaveBeenCalled();
+    expect(yes).toHaveBeenCalled();
+  });
+
+  test('equals not found', () => {
+    const out = choose(Dev.Naoufal)
+      .equals(Dev.Wouter, 'Yes')
+      .else('Nope');
+    expect(out).toBe('Nope');
+  });
+
+  test('equals found in mix', () => {
+    const out = choose(Dev.Naoufal)
+      .case(d => d.name === 'Wouter', 'Nah')
+      .equals(Dev.Naoufal, 'Yes')
+      .else('Nope');
+    expect(out).toBe('Yes');
+  });
+
+  test('equals not found in mix', () => {
+    const out = choose(Dev.Naoufal)
+      .case(d => d.name === 'Wouter', 'Nah')
+      .equals(Dev.Wouter, 'Yes')
+      .else('Nope');
+    expect(out).toBe('Nope');
+  });
+
+
 });

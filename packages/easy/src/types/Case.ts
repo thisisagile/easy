@@ -12,6 +12,10 @@ class CaseBuilder<V> {
     return new Case<T, V>(this.v).type<U>(guard, out);
   }
 
+  equals<T>(value: V, out: Get<T, V>): Case<T, V> {
+    return new Case<T, V>(this.v).equals(value, out);
+  }
+
   is = {
     defined: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isDefined(prop(this.v)), out),
     empty: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isEmpty(prop(this.v)), out),
@@ -45,6 +49,10 @@ class Case<T, V = unknown> {
       .or(this);
   }
 
+  equals(value: V, out: Get<T, V>): Case<T, V> {
+    return this.case(this.value === value, out);
+  }
+
   is = {
     defined: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isDefined(prop(this.value)), out),
     empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isEmpty(prop(this.value)), out),
@@ -73,6 +81,10 @@ class Found<T, V> extends Case<T, V> {
   }
 
   type<U>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
+    return this;
+  }
+
+  equals(value: V, out: Get<T, V>): Case<T, V> {
     return this;
   }
 
