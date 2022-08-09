@@ -1,4 +1,4 @@
-import { choose, Id, isDefined, isError, isResult, isResults, isUndefined, Json, List, Result, toList, toResult } from '../types';
+import { choose, Id, isDefined, isError, isResult, isResults, Json, List, Result, toList, toResult } from '../types';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
 
@@ -29,7 +29,7 @@ export const rest = {
   }),
   to: (payload?: any | any[], status?: HttpStatus): RestResult =>
     choose(payload)
-      .type(isUndefined, () => undefined as unknown as RestResult)
+      .is.not.defined(p => p, undefined as unknown as RestResult)
       .type(isHttpStatus, h => rest.toError(h ?? status ?? HttpStatus.InternalServerError, [toResult(h.name)]))
       .type(isResult, r => rest.toError(status ?? HttpStatus.BadRequest, [r]))
       .type(isError, e => rest.toError(status ?? HttpStatus.BadRequest, [e]))
