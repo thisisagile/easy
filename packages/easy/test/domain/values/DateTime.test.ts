@@ -248,6 +248,19 @@ describe('DateTime', () => {
     expect(d2.diff(d, 'week')).toBe(26);
   });
 
+  test('diff with options', () => {
+    const d = new DateTime(iso);
+    const d2 = d.add(2.4, 'day');
+    const d3 = d.add(2.6, 'day');
+    expect(d2.diff(d, 'day', { rounding: 'round' })).toBe(2);
+    expect(d2.diff(d, 'day', { rounding: 'ceil' })).toBe(3);
+    expect(d2.diff(d, 'day', { rounding: 'floor' })).toBe(2);
+    expect(d3.diff(d, 'day', { rounding: 'round' })).toBe(3);
+    expect(d3.diff(d, 'day', { rounding: 'ceil' })).toBe(3);
+    expect(d3.diff(d, 'day', { rounding: 'floor' })).toBe(2);
+    expect(d3.diff(d, 'day')).toBe(2);
+  });
+
   test('from works.', () => {
     Date.now = mock.return(date.epoch + 7000);
     const d = new DateTime(iso);

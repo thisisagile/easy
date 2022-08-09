@@ -4,6 +4,9 @@ import { DateTime as LuxonDateTime, DateTimeUnit as LuxonDateTimeUnit, Settings 
 Settings.defaultZone = 'utc';
 
 export type DateTimeUnit = LuxonDateTimeUnit;
+export type DiffOptions = {
+  rounding: 'floor' | 'ceil' | 'round';
+};
 
 export class DateTime extends Value<string | undefined> {
   constructor(value?: string | number | Date, format?: string) {
@@ -64,7 +67,7 @@ export class DateTime extends Value<string | undefined> {
 
   subtract = (n: number, unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.minus({ [unit]: n }).toISO());
 
-  diff = (other: DateTime, unit: DateTimeUnit = 'day'): number => Math.floor(this.utc.diff(other.utc).as(unit));
+  diff = (other: DateTime, unit: DateTimeUnit = 'day', opts?: DiffOptions): number => Math[opts?.rounding ?? 'floor'](this.utc.diff(other.utc).as(unit));
 
   startOf = (unit: DateTimeUnit = 'day'): DateTime => new DateTime(this.luxon.startOf(unit).toISO());
 
