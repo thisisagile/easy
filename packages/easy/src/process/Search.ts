@@ -20,7 +20,7 @@ export class Search<T extends Struct> {
   search = (query: JsonValue, options?: PageOptions): Promise<PageList<T>> =>
     choose(query)
       .is.not.empty(q => q, q => this.repo.search(q, options))
-      .else(resolve(toList<T>()));
+      .else(() => resolve(toList<T>()));
 
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);
 }

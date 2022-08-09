@@ -10,7 +10,7 @@ export class Audit extends Struct {
   constructor(json?: Json) {
     super(
       choose(json)
-        .is.defined(j => j, (j: unknown) => j)
+        .is.defined(j => j, j => j)
         .else({ by: ctx.request?.identity ?? { id: 0, user: 'easy' }, when: DateTime.now.toJSON() }),
     );
   }

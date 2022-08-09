@@ -9,7 +9,6 @@ import {
   isNumber,
   isObject,
   isString,
-  isUndefined,
   Json,
   json,
   meta,
@@ -34,7 +33,7 @@ const toFunc = (a: any, col: string, f: Func = a => a): Func =>
 
 const toViewer = (key: string, value: unknown): Viewer =>
   choose(value)
-    .type(isUndefined, () => toViewer(key, () => undefined))
+    .is.not.defined(v => v, () => toViewer(key, () => undefined))
     .type(isBoolean, b => toViewer(key, () => b))
     .type(isNumber, n => toViewer(key, () => n))
     .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
@@ -51,7 +50,8 @@ const toViewers = (views: Views): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View {
-  constructor(private views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {}
+  constructor(private views: Views = {}, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
+  }
 
   get fromSource(): View {
     return new View(this.views, 'source', this.viewers);
@@ -74,7 +74,7 @@ export const views = {
   keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
   or:
     (key: string, alt = '') =>
-    (a: unknown) =>
-      traverse(a, key) ?? alt,
+      (a: unknown) =>
+        traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
 };
