@@ -1426,7 +1426,7 @@ __metadata:
     "@types/passport": ^1.0.9
     "@types/passport-jwt": ^3.0.6
     "@types/uuid": ^8.3.4
-    "@types/validator": ^13.7.4
+    "@types/validator": ^13.7.5
     cls-hooked: ^4.2.2
     express: ^4.18.1
     form-urlencoded: ^6.1.0
@@ -1548,7 +1548,7 @@ __metadata:
     "@types/jsonwebtoken": ^8.5.8
     "@types/luxon": 3.0.0
     "@types/uuid": ^8.3.4
-    "@types/validator": ^13.7.4
+    "@types/validator": ^13.7.5
     axios: ^0.27.2
     form-urlencoded: ^6.1.0
     jsonwebtoken: ^8.5.1
@@ -2025,10 +2025,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:^13.7.4":
-  version: 13.7.4
-  resolution: "@types/validator@npm:13.7.4"
-  checksum: 718e72d86c897861bc7f35e7918e0305d4efa5891ffdce6a8b77dbdc6fd10a70c2c6851f716a7f75ab2b0c12b5534f74e6d6b1040ac6eb8ab40d918c022283e5
+"@types/validator@npm:^13.7.5":
+  version: 13.7.5
+  resolution: "@types/validator@npm:13.7.5"
+  checksum: cc143351a23aef713b5d6b6794314b6b8b8332511cf44070c3358559b43267217b01c85eab0965c6104ffea362124a949187f348c67ff94ab0ee9966af6d3728
   languageName: node
   linkType: hard
 
