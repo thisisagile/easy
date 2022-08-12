@@ -4,7 +4,7 @@ import { isA } from './IsA';
 
 export type Sort = { key: string; value: -1 | 1 };
 
-export type FilterValue = { label: string, value: unknown };
+export type FilterValue = { label: string, value: any };
 export type Filter = { label: string, field: string, values: FilterValue[] };
 
 export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; filter?: Filter[] };
