@@ -5,13 +5,15 @@ import {
   Endpoint,
   Handler,
   HttpStatus,
-  isEmpty, PageList,
+  isEmpty,
+  PageList,
   Resource,
   rest,
   Route,
   RouteRequires,
   routes,
   Service,
+  toJson,
   toList,
   toOriginatedError,
   toReq,
@@ -41,7 +43,7 @@ export class ExpressProvider implements AppProvider {
         route.route(service.name),
         ...this.addSecurityMiddleware(requires),
         ...middleware,
-        this.handle(endpoint, verb.options)
+        this.handle(endpoint, verb.options),
       );
     });
 
@@ -65,10 +67,10 @@ export class ExpressProvider implements AppProvider {
 
   protected handle =
     (endpoint: Endpoint, options?: VerbOptions): RequestHandler =>
-    (req: Request, res: Response, next: NextFunction) =>
-      endpoint(toReq(req))
-        .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
-        .catch(error => next(toOriginatedError(error, options)));
+      (req: Request, res: Response, next: NextFunction) =>
+        endpoint(toReq(req))
+          .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
+          .catch(error => next(toOriginatedError(error, options)));
 
   protected toResponse(res: Response, result: unknown, options: Required<VerbOptions>): void {
     res.status(options.onOk.status);
@@ -84,7 +86,7 @@ export class ExpressProvider implements AppProvider {
     if (HttpStatus.NoContent.equals(options.onOk)) {
       res.send();
     } else {
-      res.json(rest.toData(options.onOk, toList<any>(result), (result as PageList<any>)?.total, (result as PageList<any>)?.filters));
+      res.json(rest.toData(options.onOk, toList<any>(result), (result as PageList<any>)?.total, toJson({ filters: (result as PageList<any>)?.filters })));
     }
   }
 
