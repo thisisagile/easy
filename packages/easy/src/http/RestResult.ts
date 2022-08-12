@@ -3,7 +3,7 @@ import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
 
 export type RestResult = {
-  data?: { code: number; items: List<Json>; itemCount: number; totalItems?: number };
+  data?: { code: number; items: List<Json>; itemCount: number; totalItems?: number; meta?: List<Json> };
   error?: { code: number; message: string; errorCount: number; errors: List<Result> };
 };
 
@@ -11,12 +11,13 @@ const hasErrors = (a: any): a is { error: { code: number; errors: List<Result> }
 const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number } } => isDefined(a?.data.items);
 
 export const rest = {
-  toData: (status: HttpStatus, items: Json[] = [], totalItems?: number): RestResult => ({
+  toData: (status: HttpStatus, items: Json[] = [], totalItems?: number, meta?: Json[]): RestResult => ({
     data: {
       code: status.status,
       items: toList(items),
       itemCount: items.length,
       totalItems,
+      meta: meta ? toList(meta) : undefined,
     },
   }),
   toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({

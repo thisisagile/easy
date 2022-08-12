@@ -7,16 +7,17 @@ export type Sort = { key: string; value: -1 | 1 };
 export type FilterValue = { label: string, value: any };
 export type Filter = { label: string, field: string, values: FilterValue[] };
 
-export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; filter?: Filter[] };
-export type PageList<T> = List<T> & Omit<PageOptions, 'sort' | 'filter'> & { total?: number };
+export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; filters?: Filter[] };
+export type PageList<T> = List<T> & Omit<PageOptions, 'sort'> & { total?: number };
 
 export const isPageList = <T>(l?: T[]): l is PageList<T> => isList<T>(l) && isA(l, 'total');
 
-export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort' | 'filter'> & { total?: number }): PageList<T> => {
-  const list = toList<T>(...(items ?? [])) as any;
+export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> & { total?: number }): PageList<T> => {
+  const list = toList<T>(...(items ?? [])) as PageList<T>;
   list.take = options?.take ?? 250;
   list.skip = options?.skip ?? 0;
   list.total = options?.total;
+  list.filters = options?.filters;
   return list;
 };
 

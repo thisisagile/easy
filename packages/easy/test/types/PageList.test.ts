@@ -58,6 +58,18 @@ describe('PageList', () => {
     expect(pl2.total).toBe(42);
   });
 
+  test('toPageList list and filters', () => {
+    const pl = toPageList(Dev.All, {
+      total: 42,
+      filters: [{ field: 'cat', label: 'category', values: [{ label: 'Wonen', value: '1233-123-13' }] }],
+    });
+    expect(pl.filters).toBeDefined();
+    expect(pl.filters).toHaveLength(1);
+    expect(pl.filters?.[0].field).toBe('cat');
+    expect(pl.filters?.[0].label).toBe('category');
+    expect(pl.filters?.[0].values).toHaveLength(1);
+  });
+
   test('isPageList', () => {
     const l = toList([]);
     const pl = toPageList([], { take: 5, skip: 1, total: 42 });

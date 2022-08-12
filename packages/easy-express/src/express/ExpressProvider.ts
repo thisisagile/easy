@@ -5,7 +5,7 @@ import {
   Endpoint,
   Handler,
   HttpStatus,
-  isEmpty,
+  isEmpty, PageList,
   Resource,
   rest,
   Route,
@@ -84,7 +84,7 @@ export class ExpressProvider implements AppProvider {
     if (HttpStatus.NoContent.equals(options.onOk)) {
       res.send();
     } else {
-      res.json(rest.toData(options.onOk, toList<any>(result), (result as any)?.total));
+      res.json(rest.toData(options.onOk, toList<any>(result), (result as PageList<any>)?.total, (result as PageList<any>)?.filters));
     }
   }
 
