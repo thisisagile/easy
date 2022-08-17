@@ -15,4 +15,8 @@ export class Property<T = unknown> implements Mapping {
 
   in = (source: Json = {}): JsonValue => this.options?.convert?.to(source[this.property] ?? ofGet(this.options?.dflt));
   out = (source: Json = {}, key = ''): JsonValue => this.options?.convert?.from(source[key]);
+
+  toString() {
+    return this.property;
+  }
 }

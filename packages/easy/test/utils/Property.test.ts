@@ -1,3 +1,4 @@
+import '@thisisagile/easy-test';
 import { convert, Property } from '../../src';
 
 describe('Property', () => {
@@ -19,5 +20,10 @@ describe('Property', () => {
   test('Prop with default and converter', () => {
     const p = new Property('Id', { dflt: 3, convert: convert.toNumber.fromString });
     expect(p).toMatchObject({ property: 'Id', options: { dflt: 3, convert: convert.toNumber.fromString } });
+  });
+
+  test('toString', () => {
+    const p = new Property('Id');
+    expect(p).toMatchText('Id');
   });
 });
