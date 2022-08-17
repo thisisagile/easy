@@ -1,20 +1,27 @@
 import {
   asJson,
   asString,
+  choose,
   Condition,
   Database,
   Exception,
   Field,
   Id,
   ifTrue,
+  isArray,
   isDefined,
+  isField,
+  isSortCondition,
   json,
   Json,
   JsonValue,
   LogicalCondition,
+  OneOrMore,
   PageList,
   PageOptions,
   reject,
+  Sort,
+  toArray,
   toPageList,
   tuple2,
   tuple3,
@@ -23,10 +30,12 @@ import {
 import {
   AggregationCursor,
   Collection as MongoCollection,
+  CreateIndexesOptions,
   Document,
   Filter as MongoFilter,
   FindCursor,
   FindOptions as MongoFindOptions,
+  IndexSpecification,
   MongoClient,
 } from 'mongodb';
 import { Collection } from './Collection';
@@ -38,6 +47,15 @@ export type Projection = Record<string, 0 | 1>;
 export type FindOptions = PageOptions & { projection?: Projection };
 export type Filter<T> = MongoFilter<T>;
 export type Query = Condition | LogicalCondition | Filter<any>;
+
+export type IndexOptions = {
+  unique?: boolean;
+  filter?: Query;
+  languageOverride?: string;
+  languageDefault?: string;
+};
+
+export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
   aggregate = this.group;
@@ -78,6 +96,24 @@ export class MongoProvider {
       sort: this.coll.sort(...(options?.sort ?? [])) as any,
       total: isDefined(options?.skip) || isDefined(options?.take),
       projection: { _id: 0, ...options?.projection },
+    };
+  }
+
+  protected toIndexSpecification(index: Indexes): IndexSpecification {
+    return choose(index)
+      .type(isField, f => f.property as IndexSpecification)
+      .type(isSortCondition, s => s.toJSON() as IndexSpecification)
+      .type(isArray, aa => aa.map(a => this.toIndexSpecification(a)) as IndexSpecification)
+      .else(i => i as IndexSpecification);
+  }
+
+  protected toCreateIndexesOptions(options?: IndexOptions): CreateIndexesOptions {
+    return {
+      unique: options?.unique ?? true,
+      language_override: options?.languageOverride,
+      default_language: options?.languageDefault,
+      partialFilterExpression: options?.filter ? toMongoType(asJson(options?.filter)) : undefined,
+      writeConcern: { w: 1 },
     };
   }
 
@@ -139,23 +175,17 @@ export class MongoProvider {
     return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {})));
   }
 
-  createIndex(field: string | any, unique = true): Promise<string> {
-    return this.collection().then(c => c.createIndex(field, { unique, writeConcern: { w: 1 } }));
+  createIndex(indexes: Indexes, options?: IndexOptions): Promise<string> {
+    return this.collection().then(c => c.createIndex(this.toIndexSpecification(indexes), this.toCreateIndexesOptions(options)));
   }
 
-  createPartialIndex(field: string | any, filter: Query, unique = true): Promise<string> {
-    return this.collection().then(c =>
-      c.createIndex(field, {
-        partialFilterExpression: toMongoType(asJson(filter)),
-        unique,
-        writeConcern: { w: 1 },
-      })
-    );
+  createPartialIndex(indexes: Indexes, filter: Query, options?: Omit<IndexOptions, 'filter'>): Promise<string> {
+    return this.createIndex(indexes, { ...options, filter });
   }
 
-  createTextIndexes(...fields: Field[]): Promise<string> {
-    const indexes = fields.reduce((i, f) => ({ ...i, [f.property]: 'text' }), {});
-    return this.collection().then(c => c.createIndex(indexes));
+  createTextIndex(indexes: OneOrMore<Field | string>, options?: IndexOptions): Promise<string> {
+    const ii = toArray(indexes).reduce((i, f) => ({ ...i, [asString(f)]: 'text' }), {});
+    return this.createIndex(ii, options);
   }
 
   collection(): Promise<MongoCollection> {

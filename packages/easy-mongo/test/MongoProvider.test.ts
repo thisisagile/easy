@@ -1,9 +1,9 @@
-import { AbstractCursor, Collection, Db, MongoClient } from 'mongodb';
-import { MongoProvider } from '../src';
+import { AbstractCursor, Collection, CreateIndexesOptions, Db, IndexSpecification, MongoClient } from 'mongodb';
+import { Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { DateTime, Exception, toCondition } from '@thisisagile/easy';
+import { DateTime, Exception, Field, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -214,77 +214,84 @@ describe('MongoProvider', () => {
     expect(c.countDocuments).not.toHaveBeenCalledWith({ date: date });
   });
 
-  test('createIndex calls createIndex on the collection and creates unique indexes by default', async () => {
+  class TestMongoProvider extends MongoProvider {
+    toIndexSpecification(index: Indexes): IndexSpecification {
+      return super.toIndexSpecification(index);
+    }
+
+    toCreateIndexesOptions(options?: IndexOptions): CreateIndexesOptions {
+      return super.toCreateIndexesOptions(options);
+    }
+  }
+
+  test.each([
+    ['with undefined', undefined as unknown as string, undefined],
+    ['with string', 'name', 'name'],
+    ['with string array', ['name', 'id'], ['name', 'id']],
+    ['with field', new Field('name'), 'name'],
+    ['with field array', [new Field('name'), new Field('id')], ['name', 'id']],
+    ['with sorted field', new Field('name').asc(), { name: -1 }],
+    ['with sorted field array', [new Field('name').asc(), new Field('id').desc()], [{ name: -1 }, { id: 1 }]],
+    ['with empty object', {}, {}],
+    ['with object', { name: 1 } as Record<string, 1 | -1>, { name: 1 }],
+    ['with object array', [{ name: 1 }, { id: -1 }] as Record<string, 1 | -1>[], [{ name: 1 }, { id: -1 }]],
+  ])('IndexSpecification %s', (name, s, expected) => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    expect(p.toIndexSpecification(s)).toStrictEqual(expected);
+  });
+
+  test.each([
+    ['with undefined', undefined, {}],
+    ['defaults unique', {}, { unique: true }],
+    ['with unique', { unique: false }, { unique: false }],
+    ['with default language', { languageDefault: 'en' }, { default_language: 'en' }],
+    ['with override language', { languageOverride: 'en' }, { language_override: 'en' }],
+    ['with filter', { filter: devs.name.isIn('john').toJSON() }, { partialFilterExpression: { Name: { $in: ['john'] } } }],
+    ['with filter undefined', { filter: undefined }, {}],
+    ['with condition', { filter: devs.name.exists(true) }, { partialFilterExpression: { Name: { $exists: true } } }],
+  ])('CreateIndexesOptions %s', (name, o, expected) => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    expect(p.toCreateIndexesOptions(o)).toMatchJson(fits.json({ ...expected, writeConcern: { w: 1 } }));
+  });
+
+  test('CreateIndexesOptions uses the correct dates', () => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    expect(p.toCreateIndexesOptions({ filter: { date } })).toMatchJson(fits.json({ partialFilterExpression: { date: new DateTime(date).toDate() } }));
+  });
+
+  test('create index calls createIndex on the collection', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name')).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: true, writeConcern: { w: 1 } });
+    expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: true, writeConcern: { w: 1 } }));
   });
 
-  test('create non unique index calls createIndex on the collection', async () => {
+  test('create index with options', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
-    await expect(provider.createIndex('name', false)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', { unique: false, writeConcern: { w: 1 } });
+    await expect(provider.createIndex('name', { unique: false })).resolves.toBe('_index');
+    expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: false }));
   });
 
-  test('create text indexes on the collection', async () => {
+  test('create text index on the collection', async () => {
     c.createIndex = mock.resolve('Language_text_Name_text');
     provider.collection = mock.resolve(c);
-    await expect(provider.createTextIndexes(devs.language, devs.name)).resolves.toBe('Language_text_Name_text');
-    expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' });
+    await expect(provider.createTextIndex([devs.language, devs.name])).resolves.toBe('Language_text_Name_text');
+    expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' }, expect.anything());
   });
 
-  test('createPartialIndex calls createIndex on the collection with filter expression and creates unique indexes by default', async () => {
-    c.createIndex = mock.resolve('_index');
-    provider.collection = mock.resolve(c);
-    await expect(provider.createPartialIndex('name', filter)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', {
-      partialFilterExpression: filter,
-      unique: true,
-      writeConcern: { w: 1 },
-    });
+  test('createPartialIndex with filter', async () => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    p.createIndex = mock.resolve('_index');
+    await expect(p.createPartialIndex('name', filter, { unique: false })).resolves.toBe('_index');
+    expect(p.createIndex).toHaveBeenCalledWith('name', { filter, unique: false });
   });
 
-  test('createPartialIndex calls createIndex on the collection with condition and creates unique indexes by default', async () => {
-    c.createIndex = mock.resolve('_index');
-    provider.collection = mock.resolve(c);
-    await expect(provider.createPartialIndex('name', devs.name.exists(true))).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', {
-      partialFilterExpression: devs.name.exists(true).toJSON(),
-      unique: true,
-      writeConcern: { w: 1 },
-    });
-  });
-
-  test('createPartialIndex calls toMongoType on filter, to correct dates', async () => {
-    c.createIndex = mock.resolve('_index');
-    provider.collection = mock.resolve(c);
-
-    await provider.createPartialIndex('date', { date: date });
-
-    expect(c.createIndex).toHaveBeenCalledWith('date', {
-      partialFilterExpression: { date: new DateTime(date).toDate() },
-      unique: true,
-      writeConcern: { w: 1 },
-    });
-
-    expect(c.createIndex).not.toHaveBeenCalledWith('date', {
-      partialFilterExpression: { date: date },
-      unique: true,
-      writeConcern: { w: 1 },
-    });
-  });
-
-  test('create non unique partial index calls createIndex on the collection with filter expression', async () => {
-    c.createIndex = mock.resolve('_index');
-    provider.collection = mock.resolve(c);
-    await expect(provider.createPartialIndex('name', filter, false)).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', {
-      partialFilterExpression: filter,
-      unique: false,
-      writeConcern: { w: 1 },
-    });
+  test('createPartialIndex with condition', async () => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    p.createIndex = mock.resolve('_index');
+    await expect(p.createPartialIndex('name', devs.name.exists(true))).resolves.toBe('_index');
+    expect(p.createIndex).toHaveBeenCalledWith('name', { filter: fits.json(devs.name.exists(true).toJSON()) });
   });
 
   test('first time connect to the mongo cluster', async () => {
