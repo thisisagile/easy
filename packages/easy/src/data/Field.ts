@@ -1,6 +1,6 @@
-import { Property } from '../utils';
-import { Condition, SortCondition, toCondition } from './Condition';
-import { toArray } from '../types';
+import { Property } from "../utils";
+import { Condition, SortCondition, toCondition } from "./Condition";
+import { isDefined, toArray } from "../types";
 
 export class Field extends Property {
   is = (value: unknown): Condition => this.condition('eq', value);
@@ -27,3 +27,5 @@ export class Field extends Property {
 
   protected condition = (operator: string, value: unknown): Condition => toCondition(this.property, operator, value, this.options?.convert);
 }
+
+export const isField = (f?: unknown): f is Field => isDefined(f) && f instanceof Field;

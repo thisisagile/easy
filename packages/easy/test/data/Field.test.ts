@@ -1,5 +1,6 @@
-import { Field, SortCondition } from '../../src';
+import { Field, SortCondition, isField } from '../../src';
 import '@thisisagile/easy-test';
+import { Dev } from "../ref";
 
 describe('Field', () => {
   const field = new Field('name');
@@ -16,5 +17,11 @@ describe('Field', () => {
   test('desc field', () => {
     expect(field.desc()).toBeInstanceOf(SortCondition);
     expect(field.desc().toJSON()).toStrictEqual({ name: 1 });
+  });
+
+  test('isField', () => {
+    expect(isField()).toBeFalsy();
+    expect(isField(Dev.Jeroen)).toBeFalsy();
+    expect(isField(field)).toBeTruthy();
   });
 });
