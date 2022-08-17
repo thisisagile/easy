@@ -1,4 +1,4 @@
-import { Condition, SortCondition, DateTime, Field } from '../../src';
+import { Condition, SortCondition, DateTime, Field, isSortCondition } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Condition', () => {
@@ -72,5 +72,11 @@ describe('SortCondition', () => {
   test('empty operator, used in find options see mongo docs', () => {
     const c = new SortCondition(field.property, -1);
     expect(c.operator).toBe('');
+  });
+
+  test('isSortCondition', () => {
+    const c = new SortCondition(field.property, -1);
+    expect(isSortCondition(c)).toBeTruthy();
+    expect(isSortCondition(new Condition('abc', 'eq', 'john'))).toBeFalsy();
   });
 });
