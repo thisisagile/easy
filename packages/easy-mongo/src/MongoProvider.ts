@@ -110,9 +110,9 @@ export class MongoProvider {
   protected toCreateIndexesOptions(options?: IndexOptions): CreateIndexesOptions {
     return {
       unique: options?.unique ?? true,
-      language_override: options?.languageOverride,
-      default_language: options?.languageDefault,
-      partialFilterExpression: options?.filter ? toMongoType(asJson(options?.filter)) : undefined,
+      ...(options?.languageOverride && { language_override: options.languageOverride }),
+      ...(options?.languageDefault && { default_language: options.languageDefault }),
+      ...(options?.filter && { partialFilterExpression: toMongoType(asJson(options.filter)) }),
       writeConcern: { w: 1 },
     };
   }
