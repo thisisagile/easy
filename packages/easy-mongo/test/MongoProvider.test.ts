@@ -259,25 +259,32 @@ describe('MongoProvider', () => {
     expect(p.toCreateIndexesOptions({ filter: { date } })).toMatchJson(fits.json({ partialFilterExpression: { date: new DateTime(date).toDate() } }));
   });
 
-  test('create index calls createIndex on the collection', async () => {
+  test('createIndex calls createIndex on the collection', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name')).resolves.toBe('_index');
     expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: true, writeConcern: { w: 1 } }));
   });
 
-  test('create index with options', async () => {
+  test('createIndex with options', async () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name', { unique: false })).resolves.toBe('_index');
     expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: false }));
   });
 
-  test('create text index on the collection', async () => {
+  test('createTextIndex on the collection', async () => {
     c.createIndex = mock.resolve('Language_text_Name_text');
     provider.collection = mock.resolve(c);
     await expect(provider.createTextIndex([devs.language, devs.name])).resolves.toBe('Language_text_Name_text');
     expect(c.createIndex).toHaveBeenCalledWith({ Language: 'text', Name: 'text' }, expect.anything());
+  });
+
+  test('createTextIndex is default non unique', async () => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    p.createIndex = mock.resolve('_index');
+    await expect(p.createTextIndex('name')).resolves.toBe('_index');
+    expect(p.createIndex).toHaveBeenCalledWith({name: 'text'}, { unique: false });
   });
 
   test('createPartialIndex with filter', async () => {

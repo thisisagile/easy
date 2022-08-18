@@ -185,7 +185,7 @@ export class MongoProvider {
 
   createTextIndex(indexes: OneOrMore<Field | string>, options?: IndexOptions): Promise<string> {
     const ii = toArray(indexes).reduce((i, f) => ({ ...i, [asString(f)]: 'text' }), {});
-    return this.createIndex(ii, options);
+    return this.createIndex(ii, { unique: false, ...options });
   }
 
   collection(): Promise<MongoCollection> {
