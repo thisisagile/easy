@@ -1436,8 +1436,8 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/mssql": ^8.0.3
-    mssql: ^8.1.3
+    "@types/mssql": ^8.1.1
+    mssql: ^8.1.4
   languageName: unknown
   linkType: soft
 
@@ -1797,14 +1797,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mssql@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "@types/mssql@npm:8.0.3"
+"@types/mssql@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "@types/mssql@npm:8.1.1"
   dependencies:
     "@types/node": "*"
     "@types/tedious": "*"
     tarn: ^3.0.1
-  checksum: f7cd24d1f049c71d3628f7ca36a84ed9e0282c741287a9fb5c09304dfdf04315b9ae7b6f63ce9cc24295669df6b80d6345a593bfb4fa402459dc7fa001351382
+  checksum: 17400575bbb1bff6d77a82fe6039c79167316eb458c89755856ebecb585542e24846dc2325a9e049ca242216fbed3a52cb2c065019c955d0254bb45b6a09d98a
   languageName: node
   linkType: hard
 
@@ -7285,9 +7285,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mssql@npm:^8.1.3":
-  version: 8.1.3
-  resolution: "mssql@npm:8.1.3"
+"mssql@npm:^8.1.4":
+  version: 8.1.4
+  resolution: "mssql@npm:8.1.4"
   dependencies:
     "@tediousjs/connection-string": ^0.3.0
     commander: ^9.1.0
@@ -7297,7 +7297,7 @@ __metadata:
     tedious: ^14.0.0
   bin:
     mssql: bin/mssql
-  checksum: cdf6827b758d2f71762dc7204c623ef8807bab60d075d8c3a6bfca9259224e794d499e02cff2cd12e7b3c1a70d056a422fa0d17630bf6441272724128e55f728
+  checksum: b70f490243d190a1dc118adaa9eab74b9d80f08e5258a69aded2564d649ce9a5de64c8f440c0b99601b30eb8cd413ed7c42e94fe8c99fee323295d9e0beb7080
   languageName: node
   linkType: hard
 
