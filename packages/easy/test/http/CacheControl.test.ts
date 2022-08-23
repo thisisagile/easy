@@ -15,6 +15,8 @@ describe('CacheControl', () => {
     expect(CacheControl.OneSecond().value()).toBe('max-age=1, stale-while-revalidate=1');
     expect(CacheControl.fiveSeconds().value()).toBe('max-age=5, stale-while-revalidate=5');
     expect(CacheControl.tenSeconds().value()).toBe('max-age=10, stale-while-revalidate=10');
+    expect(CacheControl.thirtySeconds().value()).toBe('max-age=30, stale-while-revalidate=30');
+    expect(CacheControl.sixtySeconds().value()).toBe('max-age=60, stale-while-revalidate=60');
     expect(CacheControl.disabled().value()).toBe('');
   });
 

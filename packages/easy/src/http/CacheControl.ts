@@ -7,6 +7,8 @@ export class CacheControl {
   static OneSecond = () => new CacheControl().maxAge(1).staleWhileRevalidate(1);
   static fiveSeconds = () => new CacheControl().maxAge(5).staleWhileRevalidate(5);
   static tenSeconds = () => new CacheControl().maxAge(10).staleWhileRevalidate(10);
+  static thirtySeconds = () => new CacheControl().maxAge(30).staleWhileRevalidate(30);
+  static sixtySeconds = () => new CacheControl().maxAge(60).staleWhileRevalidate(60);
   static custom = (maxAge: number, staleWhileRevalidate?: number) => new CacheControl().maxAge(maxAge).staleWhileRevalidate(staleWhileRevalidate);
 
   maxAge = (a: number): this => {
