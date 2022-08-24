@@ -30,6 +30,11 @@ describe('Meta', () => {
     matchProperties(keys);
   });
 
+  test('Values works', () => {
+    const values = meta(dev).values();
+    expect(values).toHaveLength(12);
+  });
+
   test('Properties works', () => {
     const ps = meta(dev).properties('constraint');
     expect(ps).toHaveLength(6);
