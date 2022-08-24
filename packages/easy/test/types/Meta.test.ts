@@ -35,6 +35,11 @@ describe('Meta', () => {
     expect(values).toHaveLength(12);
   });
 
+  test('Entries works', () => {
+    const values = meta(dev).entries();
+    expect(values).toHaveLength(12);
+  });
+
   test('Properties works', () => {
     const ps = meta(dev).properties('constraint');
     expect(ps).toHaveLength(6);
