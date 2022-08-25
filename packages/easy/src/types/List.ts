@@ -82,7 +82,7 @@ export class List<T = unknown> extends Array<T> {
   toObjectList = (key: keyof T): Record<string | number | symbol, List<T>> =>
     this.reduce((a, t) => {
       const k = t[key] as unknown as (string | number | symbol);
-      a[k] = a[k] ? a[k] : toList();
+      a[k] = a[k] ?? toList();
       a[k].push(t);
       return a;
     }, {} as Record<string | number | symbol, List<T>>);
