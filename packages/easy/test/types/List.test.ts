@@ -200,6 +200,39 @@ describe('List', () => {
   });
 });
 
+describe('List.weave', () => {
+  let list: List<number>;
+
+  beforeEach(() => {
+    list = toList(1, 2, 3);
+  });
+
+  test('weave does not crash if interval is a fraction or < 1', () => {
+    expect(list.weave([10], -42)).toBeDefined();
+    expect(list.weave([10], -1)).toBeDefined();
+    expect(list.weave([10], 0)).toBeDefined();
+    expect(list.weave([10], 0.5)).toBeDefined();
+    expect(list.weave([10], 1.5)).toBeDefined();
+    expect(list.weave([10], Math.PI)).toBeDefined();
+  });
+
+  test('weave does not insert items beyond array length', () => {
+    expect(list.weave([5], list.length + 1)).toMatchJson(toList([1, 2, 3]));
+  });
+
+  test('weave inserts items after "interval" elements', () => {
+    expect(list.weave([10], 2)).toMatchJson(toList(1, 2, 10, 3));
+  });
+
+  test('weave inserts items from a list sequentially', () => {
+    expect(list.weave([11, 12, 13], 1)).toMatchJson(toList(1, 11, 2, 12, 3, 13));
+  });
+
+  test('weave Stops inserting when out of items', () => {
+    expect(toList([1, 2, 3, 4, 5, 6]).weave([21, 42], 1)).toMatchJson(toList(1, 21, 2, 42, 3, 4, 5, 6));
+  });
+});
+
 describe('isList', () => {
   test('Is false', () => {
     expect(isList()).toBeFalsy();

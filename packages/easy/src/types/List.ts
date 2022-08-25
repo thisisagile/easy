@@ -80,6 +80,13 @@ export class List<T = unknown> extends Array<T> {
   toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
 
   orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
+
+  weave = (insertFrom: T[], interval: number): this => {
+    for (let i = interval, n = 0; i <= this.length && n < insertFrom.length; i += interval + 1) {
+      this.splice(i, 0, insertFrom[n++]);
+    }
+    return this;
+  };
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
