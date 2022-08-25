@@ -36,7 +36,7 @@ describe('Meta', () => {
   });
 
   test('Entries works', () => {
-    const values = meta(dev).entries();
+    const values = meta(dev).entries<string>();
     expect(values).toHaveLength(12);
   });
 

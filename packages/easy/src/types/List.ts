@@ -77,7 +77,7 @@ export class List<T = unknown> extends Array<T> {
 
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
-  toObject = (key: keyof T): Json => toObjectArray<T>(key, this);
+  toObject = (key: keyof T): Record<string | number | symbol, T> => toObjectArray<T>(key, this);
 
   orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
 
