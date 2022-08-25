@@ -79,6 +79,14 @@ export class List<T = unknown> extends Array<T> {
 
   toObject = (key: keyof T): Record<string | number | symbol, T> => toObjectArray<T>(key, this);
 
+  toObjectList = (key: keyof T): Record<string | number | symbol, List<T>> =>
+    this.reduce((a, t) => {
+      const k = t[key] as unknown as (string | number | symbol);
+      a[k] = a[k] ? a[k] : toList();
+      a[k].push(t);
+      return a;
+    }, {} as Record<string | number | symbol, List<T>>);
+
   orElse = (...alt: ArrayLike<T>): List<T> | undefined => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
 
   weave = (insertFrom: T[], interval: number): this => {

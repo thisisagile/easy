@@ -536,4 +536,13 @@ describe('asList', () => {
     const a = devs.toObject('name');
     expect(a['Jeroen']).toMatchJson(Dev.Jeroen);
   });
+
+  test('toObjectList works on Json', () => {
+    const devs = toList(Dev.Jeroen, Dev.Sander, Dev.Jeroen, Dev.Rob, Dev.Sander, Dev.Jeroen);
+    const a = devs.toObjectList('id');
+    expect(a[Dev.Jeroen.id]).toHaveLength(3);
+    expect(a[Dev.Sander.id]).toHaveLength(2);
+    expect(a[Dev.Rob.id]).toHaveLength(1);
+    expect(a[Dev.Wouter.id]).toBeUndefined();
+  });
 });
