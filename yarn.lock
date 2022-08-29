@@ -1459,7 +1459,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-web": "workspace:^"
-    puppeteer: ^15.5.0
+    puppeteer: ^16.2.0
   languageName: unknown
   linkType: soft
 
@@ -8112,7 +8112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pkg-dir@npm:4.2.0, pkg-dir@npm:^4.2.0":
+"pkg-dir@npm:^4.2.0":
   version: 4.2.0
   resolution: "pkg-dir@npm:4.2.0"
   dependencies:
@@ -8350,23 +8350,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"puppeteer@npm:^15.5.0":
-  version: 15.5.0
-  resolution: "puppeteer@npm:15.5.0"
+"puppeteer@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "puppeteer@npm:16.2.0"
   dependencies:
     cross-fetch: 3.1.5
     debug: 4.3.4
     devtools-protocol: 0.0.1019158
     extract-zip: 2.0.1
     https-proxy-agent: 5.0.1
-    pkg-dir: 4.2.0
     progress: 2.0.3
     proxy-from-env: 1.1.0
     rimraf: 3.0.2
     tar-fs: 2.1.1
     unbzip2-stream: 1.4.3
-    ws: 8.8.0
-  checksum: 2bc9e230b397f6b0c42eb5ba4e9179879b3d52f64d767a0bffbb266ecd5f8268ee982fd643c09362e29248e8f9566607c128bf7f60ec625b7605c9e609871788
+    ws: 8.8.1
+  checksum: b0f96f27e48e421410800b2a61ba8d45b3d4f60295a0d5189dfa0c442eedeea4b936cfe2c7cf00ba92057b9f42a1f000e5d843d0288137b0f76800a57ccbafdc
   languageName: node
   linkType: hard
 
@@ -10419,7 +10418,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:8.8.0, ws@npm:^8.2.3":
+"ws@npm:8.8.1":
+  version: 8.8.1
+  resolution: "ws@npm:8.8.1"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ^5.0.2
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 2152cf862cae0693f3775bc688a6afb2e989d19d626d215e70f5fcd8eb55b1c3b0d3a6a4052905ec320e2d7734e20aeedbf9744496d62f15a26ad79cf4cf7dae
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.2.3":
   version: 8.8.0
   resolution: "ws@npm:8.8.0"
   peerDependencies:
