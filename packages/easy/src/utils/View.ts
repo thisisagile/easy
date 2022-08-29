@@ -1,6 +1,6 @@
 import {
   asJson,
-  choose,
+  choose, Constructor,
   isArray,
   isBoolean,
   isDefined,
@@ -77,4 +77,5 @@ export const views = {
       (a: unknown) =>
         traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
+  to: <T>(ctor: Constructor<T>) => (a: unknown) => new ctor(a)
 };

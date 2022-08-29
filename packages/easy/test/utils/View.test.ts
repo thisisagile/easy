@@ -1,8 +1,8 @@
 import '@thisisagile/easy-test';
-import { View, view, views } from '../../src';
+import { Email, Money, View, view, views } from '../../src';
 import { Dev } from '../ref';
 
-const { ignore, or, keep, keepOr, value } = views;
+const { ignore, or, keep, keepOr, value, to } = views;
 
 describe('View', () => {
   test('construct default view', () => {
@@ -183,5 +183,16 @@ describe('View', () => {
   test('views keep', () => {
     const v = view({ First: keep });
     expect(v.from({ First: 'Sander' })).toStrictEqual({ First: 'Sander' });
+  });
+
+  test('views to simple', () => {
+    const v = view({ email: to(Email) });
+    expect(v.from({ email: 'sander@ibood.com' }).email).toBeInstanceOf(Email);
+  });
+
+  test('views to composite', () => {
+    const v = view({ turnover: to(Money) });
+    const c = v.from({ turnover: {currency: 'EUR', amount: 42 } });
+    expect(c.turnover).toBeInstanceOf(Money);
   });
 });
