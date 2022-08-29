@@ -1,5 +1,5 @@
 import { PuppeteerElement } from './PuppeteerElement';
-import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteer, { Browser, ElementHandle, Page } from "puppeteer";
 import { ctx, Id, Json, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 
@@ -72,6 +72,6 @@ export class PuppeteerTester implements Tester {
 
   private byXPath(q: string): TestElement {
     const h = this.page.waitForXPath(`${q}`);
-    return new PuppeteerElement(h);
+    return new PuppeteerElement(h as Promise<ElementHandle<Element>>);
   }
 }
