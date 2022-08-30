@@ -39,6 +39,6 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-test-web": "workspace:^",
-    "playwright": "^1.25.0"
+    "playwright": "^1.25.1"
   }
 }
