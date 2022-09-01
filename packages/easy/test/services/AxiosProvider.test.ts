@@ -201,4 +201,16 @@ describe('AxiosProvider', () => {
     });
     expect(mockedAxios.request).toHaveBeenCalled();
   });
+
+  test('Pass requestOptions.maxRedirects to axios', async () => {
+    axios.request = mock.resolve({ message });
+
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      options: RequestOptions.Xml.maxRedirects(42),
+    });
+
+    expect(axios.request).toHaveBeenCalledWith(fits.with({ maxRedirects: 42 }));
+  })
 });

@@ -26,6 +26,8 @@ export class RequestOptions extends Enum {
     return new RequestOptions(ContentType.Xml);
   }
 
+  public requestOptions: { maxRedirects?: number } = {};
+
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
     super(type.name);
     this.headers['Content-Type'] = type.id;
@@ -59,6 +61,11 @@ export class RequestOptions extends Enum {
   basic = (username: Text, password: Text): this => {
     const basicAuth = Buffer.from(`${username}:${password}`, 'utf8').toString('base64');
     return this.authorization(`Basic ${basicAuth}`);
+  };
+
+  maxRedirects = (max?: number): this => {
+    this.requestOptions.maxRedirects = max;
+    return this;
   };
 }
 
