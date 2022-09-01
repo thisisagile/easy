@@ -23,7 +23,9 @@ export class AxiosProvider implements RequestProvider {
         method: verb.toString() as Method,
         headers: uri.isInternal && isEmpty(options.headers.Authorization) ? options.bearer(ctx.request.jwt).headers : options.headers,
         data: options.type.encode(body),
+
         maxRedirects: options.requestOptions.maxRedirects,
+        validateStatus: options.requestOptions.validateStatus,
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))
       .catch(e => Promise.reject(asResponse(uri, verb, transformError(e))));

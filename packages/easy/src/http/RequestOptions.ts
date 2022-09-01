@@ -26,7 +26,7 @@ export class RequestOptions extends Enum {
     return new RequestOptions(ContentType.Xml);
   }
 
-  public requestOptions: { maxRedirects?: number } = {};
+  public requestOptions: { maxRedirects?: number, validateStatus?: (status: number) => boolean } = {};
 
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
     super(type.name);
@@ -65,6 +65,11 @@ export class RequestOptions extends Enum {
 
   maxRedirects = (max?: number): this => {
     this.requestOptions.maxRedirects = max;
+    return this;
+  };
+
+  validateStatus = (validate?: (status: number) => boolean): this => {
+    this.requestOptions.validateStatus = validate;
     return this;
   };
 }

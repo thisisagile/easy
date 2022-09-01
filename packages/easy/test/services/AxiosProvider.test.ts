@@ -212,5 +212,18 @@ describe('AxiosProvider', () => {
     });
 
     expect(axios.request).toHaveBeenCalledWith(fits.with({ maxRedirects: 42 }));
-  })
+  });
+
+  test('Pass requestOptions.validateStatus to axios', async () => {
+    axios.request = mock.resolve({ message });
+    const validate = Symbol() as unknown as () => boolean;
+
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      options: RequestOptions.Xml.validateStatus(validate),
+    });
+
+    expect(axios.request).toHaveBeenCalledWith(fits.with({ validateStatus: validate }));
+  });
 });
