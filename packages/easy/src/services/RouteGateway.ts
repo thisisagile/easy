@@ -33,12 +33,16 @@ export class RouteGateway extends Gateway {
       .catch(r => (HttpStatus.NotFound.equals(r.status) ? false : Promise.reject(r)));
   }
 
+  post(uri: Uri, item?: Json): Promise<Json> {
+    return this.api.post(uri, item).then(r => r.body.data?.items.first() ?? {});
+  }
+
   add(item: Json): Promise<Json> {
     return this.post(this.route(), item);
   }
 
-  post(uri: Uri, item?: Json): Promise<Json> {
-    return this.api.post(uri, item).then(r => r.body.data?.items.first() ?? {});
+  filter(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
+    return this.api.post(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
   }
 
   update(item: Json): Promise<Json> {
