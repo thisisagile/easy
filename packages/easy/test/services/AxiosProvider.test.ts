@@ -225,5 +225,18 @@ describe('AxiosProvider', () => {
     });
 
     expect(axios.request).toHaveBeenCalledWith(fits.with({ validateStatus: validate }));
+    expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).toContain('validateStatus');
+  });
+
+  test('Don\'t pass requestOptions.validateStatus to axios if undefined', async () => {
+    axios.request = mock.resolve({ message });
+
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      options: RequestOptions.Xml.validateStatus(undefined),
+    });
+
+    expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).not.toContain('validateStatus');
   });
 });

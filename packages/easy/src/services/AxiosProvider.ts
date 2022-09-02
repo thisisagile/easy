@@ -25,7 +25,7 @@ export class AxiosProvider implements RequestProvider {
         data: options.type.encode(body),
 
         maxRedirects: options.requestOptions.maxRedirects,
-        validateStatus: options.requestOptions.validateStatus,
+        ...(options.requestOptions.validateStatus && { validateStatus: options.requestOptions.validateStatus }),
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))
       .catch(e => Promise.reject(asResponse(uri, verb, transformError(e))));
