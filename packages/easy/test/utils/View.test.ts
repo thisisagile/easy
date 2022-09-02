@@ -195,4 +195,5 @@ describe('View', () => {
     const c = v.from({ turnover: {currency: 'EUR', amount: 42 } });
     expect(c.turnover).toBeInstanceOf(Money);
   });
+
 });

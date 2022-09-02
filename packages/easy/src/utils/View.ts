@@ -77,5 +77,5 @@ export const views = {
       (a: unknown) =>
         traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
-  to: <T>(ctor: Constructor<T>) => (a: unknown) => new ctor(a)
+  to: <T>(ctor: Constructor<T>) => (a: unknown) => new ctor(a),
 };
