@@ -14,11 +14,11 @@ const formats = {
   ddmmyyyy: 'dd/MM/yyyy',
   yyyymmdd: 'yyyy-dd-MM',
   yyyyddmm: 'yyyy-MM-dd',
-  yyyymmddthhmm: "yyyy-MM-dd'T'hh:mm",
+  yyyymmddthhmm: 'yyyy-MM-dd\'T\'hh:mm',
   yyyymmddhhmmss: 'yyyy-MM-dd hh:mm:ss',
   ddmmyyyyhhmmss: 'dd/MM/yyyy hh:mm:ss',
-  yyyymmddthhmmss: "yyyy-MM-dd'T'hh:mm:ss",
-  yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
+  yyyymmddthhmmss: 'yyyy-MM-dd\'T\'hh:mm:ss',
+  yyyymmddthhmmssssszzz: 'yyyy-MM-dd\'T\'hh:mm:ss.SSSZZZ',
 };
 
 describe('DateTime', () => {
