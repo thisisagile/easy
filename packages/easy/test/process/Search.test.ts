@@ -35,6 +35,12 @@ describe('Search', () => {
     expect(repo.search).toHaveBeenCalledWith(42, undefined);
   });
 
+  test('filter works', async () => {
+    repo.filter = mock.resolve(devs);
+    await expect(select.filter({filters: []})).resolves.toStrictEqual(devs);
+    expect(repo.filter).toHaveBeenCalledWith({filters: []});
+  });
+
   test('query works', async () => {
     repo.search = mock.resolve(devs);
     await expect(select.query(mock.req.query({ id: 42, skip: 0, take: 4 }))).resolves.toStrictEqual(devs);

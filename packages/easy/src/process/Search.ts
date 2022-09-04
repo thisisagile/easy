@@ -22,5 +22,7 @@ export class Search<T extends Struct> {
       .is.not.empty(q => q, q => this.repo.search(q, options))
       .else(() => resolve(toList<T>()));
 
+  filter = (options?: PageOptions): Promise<PageList<T>> => this.repo.filter(options);
+
   exists = (id: Id): Promise<boolean> => this.repo.exists(id);
 }
