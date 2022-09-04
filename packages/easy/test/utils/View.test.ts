@@ -122,7 +122,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -135,7 +135,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
@@ -192,8 +192,49 @@ describe('View', () => {
 
   test('views to composite', () => {
     const v = view({ turnover: to(Money) });
-    const c = v.from({ turnover: {currency: 'EUR', amount: 42 } });
+    const c = v.from({ turnover: { currency: 'EUR', amount: 42 } });
     expect(c.turnover).toBeInstanceOf(Money);
+  });
+
+  test('views simple constructor', () => {
+    const v = view({ email: Email });
+    const c = v.from({ email: 'wouter@gmail.com' });
+    expect(c.email).toBeInstanceOf(Email);
+    expect((c as any).email.value).toBe('wouter@gmail.com');
+  });
+
+  test('views constructor', () => {
+    const v = view({ turnover: Money });
+    const c = v.from({ turnover: { currency: 'EUR', value: 42 } });
+    expect(c.turnover).toBeInstanceOf(Money);
+    expect((c.turnover as any).value).toBe(42);
+  });
+
+  const emails = ['sam@gmail.com', 'boet@gmail.com', 'spijk@gmail.com'];
+
+  test('views simple constructor with array', () => {
+    const v = view({ emails: Email });
+    const c = v.from({ emails });
+    expect(c.emails).toHaveLength(3);
+    expect((c as any).emails[0]).toBeInstanceOf(Email);
+    expect((c as any).emails[0].value).toBe(emails[0]);
+  });
+
+  test('views simple constructor with array in other field', () => {
+    const v = view({ email: { col: 'emails', in: e => new Email(e) } });
+    const c = v.from({ emails });
+    expect(c.email).toHaveLength(3);
+    expect((c as any).email[0]).toBeInstanceOf(Email);
+    expect((c as any).email[0].value).toBe(emails[0]);
+  });
+
+  test('views simple constructor with array and function', () => {
+    const v = view({ name: a => a.name.toUpperCase(), emails: Email });
+    const c = v.from({ emails, name: 'King' });
+    expect(c.emails).toHaveLength(3);
+    expect((c as any).emails[0]).toBeInstanceOf(Email);
+    expect((c as any).emails[0].value).toBe(emails[0]);
+    expect(c.name).toBe('KING');
   });
 
 });
