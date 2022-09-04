@@ -35,6 +35,10 @@ export class Repo<T extends Struct> {
     return this.gateway.search(q, options).then(js => asPageList(this.ctor, js));
   }
 
+  filter(options?: PageOptions): Promise<PageList<T>> {
+    return this.gateway.filter(options).then(js => asPageList(this.ctor, js));
+  }
+
   exists(id: Id): Promise<boolean> {
     return this.gateway.exists(id);
   }

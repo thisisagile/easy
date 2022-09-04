@@ -67,6 +67,13 @@ describe('Repo', () => {
     expect(ds).toBeArrayOfWithLength(Dev, devs.length);
   });
 
+  test('filter triggers gateway', async () => {
+    gateway.filter = mock.resolve(devs);
+    const ds = await repo.filter({filters: []});
+    expect(gateway.filter).toHaveBeenCalledWith({filters: []});
+    expect(ds).toBeArrayOfWithLength(Dev, devs.length);
+  });
+
   test('exists triggers gateway', async () => {
     gateway.exists = mock.resolve(true);
     const r = await repo.exists(42);
