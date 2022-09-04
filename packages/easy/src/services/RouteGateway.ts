@@ -37,12 +37,16 @@ export class RouteGateway extends Gateway {
     return this.api.post(uri, item).then(r => r.body.data?.items.first() ?? {});
   }
 
+  postSearch(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
+    return this.api.post(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
+  }
+
   add(item: Json): Promise<Json> {
     return this.post(this.route(), item);
   }
 
-  filter(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
-    return this.api.post(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
+  filter(options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
+    return this.postSearch(this.route(), options);
   }
 
   update(item: Json): Promise<Json> {

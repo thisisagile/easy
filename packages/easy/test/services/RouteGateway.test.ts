@@ -105,9 +105,15 @@ describe('RouteGateway', () => {
     expect(api.post).toHaveBeenCalledWith(fits.type(StatsUri), undefined);
   });
 
+  test('postSearch calls api correctly', async () => {
+    api.post = mock.resolve(toResponse(HttpStatus.Created, devs));
+    await expect(gateway.postSearch(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), {});
+  });
+
   test('filter calls api correctly', async () => {
     api.post = mock.resolve(toResponse(HttpStatus.Created, devs));
-    await expect(gateway.filter(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
+    await expect(gateway.filter(mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
     expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), {});
   });
 

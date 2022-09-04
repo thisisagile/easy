@@ -1,9 +1,23 @@
 import { FindOptions, MongoProvider } from './MongoProvider';
-import { asJson, asPageList, Condition, Field, Gateway, Id, ifDefined, isDefined, Json, JsonValue, List, LogicalCondition, PageList } from '@thisisagile/easy';
+import {
+  asJson,
+  asPageList,
+  Condition,
+  Gateway,
+  Id,
+  ifDefined,
+  isDefined,
+  Json,
+  JsonValue,
+  List,
+  LogicalCondition,
+  PageList,
+} from '@thisisagile/easy';
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway {
-  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
+  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {
+  }
 
   all(options?: FindOptions): Promise<PageList<Json>> {
     return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js));
@@ -18,7 +32,7 @@ export class MongoGateway implements Gateway {
   }
 
   byIds(...ids: Id[]): Promise<List<Json>> {
-    return this.find((this.collection.id as Field).isIn(...ids));
+    return this.find((this.collection.id).isIn(...ids));
   }
 
   find(q: JsonValue | Condition | LogicalCondition, options?: FindOptions): Promise<PageList<Json>> {
@@ -27,6 +41,10 @@ export class MongoGateway implements Gateway {
 
   search(q: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.find(this.collection.google(q), options);
+  }
+
+  filter(options?: FindOptions): Promise<PageList<Json>> {
+    return this.all(options);
   }
 
   exists(id: Id): Promise<boolean> {

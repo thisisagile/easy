@@ -26,6 +26,10 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
+  filter(options?: PageOptions): Promise<PageList<Json>> {
+    return reject(Exception.IsNotImplemented);
+  }
+
   exists(id: Id): Promise<boolean> {
     return reject(Exception.IsNotImplemented);
   }
