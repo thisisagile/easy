@@ -1,5 +1,5 @@
-import { AbstractCursor, Collection, CreateIndexesOptions, Db, IndexSpecification, MongoClient } from 'mongodb';
-import { Indexes, IndexOptions, MongoProvider } from '../src';
+import { AbstractCursor, Collection, CreateIndexesOptions, Db, FindOptions as MongoFindOptions, IndexSpecification, MongoClient } from 'mongodb';
+import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
@@ -74,7 +74,7 @@ describe('MongoProvider', () => {
   test('find with undefined calls find on the collection with default options', async () => {
     provider.collection = mock.resolve(c);
     await provider.find({});
-    expect(c.find).toHaveBeenCalledWith(expect.anything(), { limit: 250, sort: {}, skip: undefined, total: false, projection: { _id: 0 } });
+    expect(c.find).toHaveBeenCalledWith(expect.anything(), { limit: 250, total: false, projection: { _id: 0 } });
   });
 
   test('find with with only skip keeps limit', async () => {
@@ -121,7 +121,6 @@ describe('MongoProvider', () => {
       fits.json({
         limit: 2,
         sort: { Name: 1, Language: -1 },
-        skip: undefined,
         total: true,
       })
     );
@@ -222,6 +221,10 @@ describe('MongoProvider', () => {
     toCreateIndexesOptions(options?: IndexOptions): CreateIndexesOptions {
       return super.toCreateIndexesOptions(options);
     }
+
+    toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
+      return super.toFindOptions(options);
+    }
   }
 
   test.each([
@@ -284,7 +287,7 @@ describe('MongoProvider', () => {
     const p = new TestMongoProvider(devs, Promise.resolve(client));
     p.createIndex = mock.resolve('_index');
     await expect(p.createTextIndex('name')).resolves.toBe('_index');
-    expect(p.createIndex).toHaveBeenCalledWith({name: 'text'}, { unique: false });
+    expect(p.createIndex).toHaveBeenCalledWith({ name: 'text' }, { unique: false });
   });
 
   test('createPartialIndex with filter', async () => {
@@ -299,6 +302,18 @@ describe('MongoProvider', () => {
     p.createIndex = mock.resolve('_index');
     await expect(p.createPartialIndex('name', devs.name.exists(true))).resolves.toBe('_index');
     expect(p.createIndex).toHaveBeenCalledWith('name', { filter: fits.json(devs.name.exists(true).toJSON()) });
+  });
+
+  test.each([
+    ['with undefined', undefined as unknown as FindOptions, { limit: 250, total: false, projection: { _id: 0 } }],
+    ['with custom take', { take: 300 } as FindOptions, { limit: 300, total: true, projection: { _id: 0 } }],
+    ['with custom take and skip', { take: 300, skip: 300 } as FindOptions, { limit: 300, skip: 300, total: true, projection: { _id: 0 } }],
+    ['with sort', { sort: [{ key: 'id', value: 1 }] } as FindOptions, { limit: 250, total: false, sort: { id: 1 }, projection: { _id: 0 } }],
+    ['with custom projection', { projection: { id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1 } }],
+    ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1, _id: 1 } }],
+  ])('toFindOptions %s', (name, s, expected) => {
+    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    expect(p.toFindOptions(s)).toStrictEqual(expected);
   });
 
   test('first time connect to the mongo cluster', async () => {

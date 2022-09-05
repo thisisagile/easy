@@ -92,10 +92,10 @@ export class MongoProvider {
   protected toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
     return {
       limit: options?.take ?? 250,
-      skip: options?.skip,
-      sort: this.coll.sort(...(options?.sort ?? [])) as any,
+      ...(options?.skip && { skip: options?.skip }),
+      ...(options?.sort && { sort: this.coll.sort(...options?.sort) as any }),
       total: isDefined(options?.skip) || isDefined(options?.take),
-      projection: { _id: 0, ...options?.projection },
+      projection: options?.projection ?? { _id: 0 },
     };
   }
 
