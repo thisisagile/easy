@@ -1,5 +1,5 @@
 import { PuppeteerElement } from './PuppeteerElement';
-import puppeteer, { Browser, ElementHandle, Page } from "puppeteer";
+import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
 import { ctx, Id, Json, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 

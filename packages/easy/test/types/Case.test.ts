@@ -292,14 +292,8 @@ describe('Case', () => {
 
   test('is.not.empty invalid, then valid, but with objects', () => {
     const out = choose({ last: hoogendoorn, first: '' })
-      .is.not.empty(
-        d => d.first,
-        Dev.Wouter
-      )
-      .is.not.empty(
-        d => d.last,
-        Dev.Sander
-      )
+      .is.not.empty(d => d.first, Dev.Wouter)
+      .is.not.empty(d => d.last, Dev.Sander)
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
@@ -457,36 +451,26 @@ describe('Case', () => {
   // equals
 
   test('equals found', () => {
-    const out = choose(Dev.Naoufal)
-      .equals(Dev.Naoufal, 'Yes')
-      .else('Nope');
+    const out = choose(Dev.Naoufal).equals(Dev.Naoufal, 'Yes').else('Nope');
     expect(out).toBe('Yes');
   });
 
   test('equals found in second', () => {
-    const out = choose(Dev.Naoufal)
-      .equals(Dev.Wouter, 'No')
-      .equals(Dev.Naoufal, 'Yes')
-      .else('Nope');
+    const out = choose(Dev.Naoufal).equals(Dev.Wouter, 'No').equals(Dev.Naoufal, 'Yes').else('Nope');
     expect(out).toBe('Yes');
   });
 
   test('equals found in second, and out function not called', () => {
     const no = mock.return('No');
     const yes = mock.return('Yes');
-    const out = choose(Dev.Naoufal)
-      .equals(Dev.Wouter, no)
-      .equals(Dev.Naoufal, yes)
-      .else('Nope');
+    const out = choose(Dev.Naoufal).equals(Dev.Wouter, no).equals(Dev.Naoufal, yes).else('Nope');
     expect(out).toBe('Yes');
     expect(no).not.toHaveBeenCalled();
     expect(yes).toHaveBeenCalled();
   });
 
   test('equals not found', () => {
-    const out = choose(Dev.Naoufal)
-      .equals(Dev.Wouter, 'Yes')
-      .else('Nope');
+    const out = choose(Dev.Naoufal).equals(Dev.Wouter, 'Yes').else('Nope');
     expect(out).toBe('Nope');
   });
 
@@ -505,6 +489,4 @@ describe('Case', () => {
       .else('Nope');
     expect(out).toBe('Nope');
   });
-
-
 });

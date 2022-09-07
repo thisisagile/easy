@@ -4,8 +4,8 @@ import { isA } from './IsA';
 
 export type Sort = { key: string; value: -1 | 1 };
 
-export type FilterValue = { label?: string, value: any };
-export type Filter = { label?: string, field: string, values: FilterValue[] };
+export type FilterValue = { label?: string; value: any };
+export type Filter = { label?: string; field: string; values: FilterValue[] };
 
 export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; filters?: Filter[] };
 export type PageList<T> = List<T> & Omit<PageOptions, 'sort'> & { total?: number };
@@ -24,5 +24,5 @@ export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> &
 export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> =>
   toPageList<T>(
     items.map(i => ofConstruct(c, i)),
-    items,
+    items
   );

@@ -26,7 +26,7 @@ export class RequestOptions extends Enum {
     return new RequestOptions(ContentType.Xml);
   }
 
-  public requestOptions: { maxRedirects?: number, validateStatus?: (status: number) => boolean } = {};
+  public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean } = {};
 
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
     super(type.name);

@@ -4,7 +4,6 @@ import {
   Constructor,
   isArray,
   isBoolean,
-  isConstructor,
   isDefined,
   isEqual,
   isFunction,
@@ -27,23 +26,25 @@ const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) &&
 const isColAndFunction = (v: unknown): v is { col: string; in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
 const isColAndView = (v: unknown): v is { col: string; in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
-type Views = { [key: string]: string | Func | InOut | number | boolean | undefined | Constructor };
+type Views = { [key: string]: string | Func | InOut | number | boolean | undefined };
 type Viewer = { in: { key: string; f: Func } };
 
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>
-  tryTo(traverse(a, col)).map(v => (isArray(v) ? () => v.map(i => f(i)) : (a: any) => f(traverse(a, col)))).value;
+  tryTo(traverse(a, col)).map(v => (isArray(v) ? () => v.map(i => f(i, col)) : (a: any) => f(traverse(a, col)))).value;
 
-const toCtor = (c: Constructor): Func => (a: any, key?: string) =>
-  tryTo(traverse(a, key)).map(v => isArray(v) ? v.map(i => new c(i)) : new c(traverse(a, key))).value;
+// const toCtor = (c: Constructor): Func => (a: any, key?: string) =>
+//   tryTo(traverse(a, key)).map(v => isArray(v) ? v.map(i => new c(i)) : new c(traverse(a, key))).value;
 
 const toViewer = (key: string, value: unknown): Viewer =>
   choose(value)
-    .is.not.defined(v => v, () => toViewer(key, () => undefined))
+    .is.not.defined(
+    v => v,
+    () => toViewer(key, () => undefined),
+  )
     .type(isBoolean, b => toViewer(key, () => b))
     .type(isNumber, n => toViewer(key, () => n))
     .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
     .type(isColOnly, io => toViewer(key, io.col))
-    .type(isConstructor, c => toViewer(key, toCtor(c)))
     .type(isFunction, f => toViewer(key, { in: { key, f } }))
     .type(isInOnly, io => toViewer(key, { in: { key, f: io.in } }))
     .type(isColAndFunction, io => toViewer(key, { in: { key, f: (a: any) => toFunc(a, io.col, io.in)(a) } }))
@@ -83,5 +84,8 @@ export const views = {
       (a: unknown) =>
         traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
-  to: <T>(ctor: Constructor<T>) => (a: unknown) => new ctor(a),
+  to:
+    <T>(ctor: Constructor<T>) =>
+      (a: unknown, key?: string) =>
+        new ctor(traverse(a, key)),
 };

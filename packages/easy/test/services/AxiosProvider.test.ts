@@ -228,7 +228,7 @@ describe('AxiosProvider', () => {
     expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).toContain('validateStatus');
   });
 
-  test('Don\'t pass requestOptions.validateStatus to axios if undefined', async () => {
+  test("Don't pass requestOptions.validateStatus to axios if undefined", async () => {
     axios.request = mock.resolve({ message });
 
     await provider.execute({

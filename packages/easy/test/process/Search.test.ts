@@ -37,8 +37,8 @@ describe('Search', () => {
 
   test('filter works', async () => {
     repo.filter = mock.resolve(devs);
-    await expect(select.filter({filters: []})).resolves.toStrictEqual(devs);
-    expect(repo.filter).toHaveBeenCalledWith({filters: []});
+    await expect(select.filter({ filters: [] })).resolves.toStrictEqual(devs);
+    expect(repo.filter).toHaveBeenCalledWith({ filters: [] });
   });
 
   test('query works', async () => {

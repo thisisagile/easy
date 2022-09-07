@@ -17,7 +17,7 @@ export const rest = {
       items: toList(items),
       itemCount: items.length,
       totalItems,
-      meta ,
+      meta,
     },
   }),
   toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({

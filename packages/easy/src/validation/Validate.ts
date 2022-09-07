@@ -44,7 +44,10 @@ const constraints = (subject?: unknown): Results =>
 
 export const validate = (subject?: unknown): Results =>
   choose(subject)
-    .is.not.defined(s => s, () => toResults('Subject is not defined.'))
+    .is.not.defined(
+      s => s,
+      () => toResults('Subject is not defined.')
+    )
     .type(isEnum, e => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')))
     .type(isValue, v => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')))
     .type(isArray, a => a.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()))

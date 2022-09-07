@@ -1,6 +1,6 @@
 import { Field, SortCondition, isField } from '../../src';
 import '@thisisagile/easy-test';
-import { Dev } from "../ref";
+import { Dev } from '../ref';
 
 describe('Field', () => {
   const field = new Field('name');

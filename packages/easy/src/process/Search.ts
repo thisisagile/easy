@@ -4,8 +4,7 @@ import { resolve } from '../utils';
 import { Req } from '../resources';
 
 export class Search<T extends Struct> {
-  constructor(protected repo: Repo<T>) {
-  }
+  constructor(protected repo: Repo<T>) {}
 
   all = (options?: PageOptions): Promise<PageList<T>> => this.repo.all(options);
 
@@ -19,7 +18,10 @@ export class Search<T extends Struct> {
 
   search = (query: JsonValue, options?: PageOptions): Promise<PageList<T>> =>
     choose(query)
-      .is.not.empty(q => q, q => this.repo.search(q, options))
+      .is.not.empty(
+        q => q,
+        q => this.repo.search(q, options)
+      )
       .else(() => resolve(toList<T>()));
 
   filter = (options?: PageOptions): Promise<PageList<T>> => this.repo.filter(options);
