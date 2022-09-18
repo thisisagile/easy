@@ -40,8 +40,8 @@ export abstract class Enum implements Validatable {
     return this.id === (isEnum(other) ? other.id : other);
   }
 
-  isIn<E extends Enum>(...items: E[]): boolean {
-    return items.some(i => i.equals(this));
+  isIn<E extends Enum>(...items: E[] | Id[]): boolean {
+    return items.some(i => this.equals(i));
   }
 
   toJSON(): JsonValue {
