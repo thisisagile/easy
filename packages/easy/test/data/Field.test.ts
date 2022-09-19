@@ -11,12 +11,12 @@ describe('Field', () => {
 
   test('asc field', () => {
     expect(field.asc()).toBeInstanceOf(SortCondition);
-    expect(field.asc().toJSON()).toStrictEqual({ name: -1 });
+    expect(field.asc().toJSON()).toStrictEqual({ name: 1 });
   });
 
   test('desc field', () => {
     expect(field.desc()).toBeInstanceOf(SortCondition);
-    expect(field.desc().toJSON()).toStrictEqual({ name: 1 });
+    expect(field.desc().toJSON()).toStrictEqual({ name: -1 });
   });
 
   test('isField', () => {
