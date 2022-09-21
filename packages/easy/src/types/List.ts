@@ -73,6 +73,14 @@ export class List<T = unknown> extends Array<T> {
     return this;
   };
 
+  replace = (key: keyof T, item: T): List<T> => {
+    tryTo(() => item[key])
+      .map(k => this.findIndex(i => i[key] === k))
+      .filter(i => i > -1)
+      .map(i => this[i] = item);
+    return this;
+  };
+
   switch = (item: T): List<T> => (this.includes(item) ? this.remove(item) : this.add(item));
 
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());

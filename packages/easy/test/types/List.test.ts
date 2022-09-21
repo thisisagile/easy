@@ -132,11 +132,30 @@ describe('List', () => {
     expect(devs.add(toList(Dev.Naoufal, Dev.Jeroen))).toHaveLength(4);
   });
 
-  test('remove', () => {
+  test('replace undefined', () => {
     const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
-    expect(devs.remove(Dev.RobC)).toHaveLength(2);
-    expect(devs[1]).toMatchObject(Dev.Wouter);
-    expect(devs.remove(Dev.Rob)).toHaveLength(2);
+    expect(devs.replace('id', undefined as unknown as Dev)).toHaveLength(3);
+    expect(devs[0]).toMatchObject(Dev.Sander);
+  });
+
+  test('replace empty object', () => {
+    const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
+    expect(devs.replace('id', {} as unknown as Dev)).toHaveLength(3);
+    expect(devs[0]).toBe(Dev.Sander);
+  });
+
+  test('replace works when id matches', () => {
+    const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
+    expect(devs.replace('id', {id: Dev.Sander.id} as unknown as Dev)).toHaveLength(3);
+    expect(devs[0]).not.toBeInstanceOf(Dev);
+    expect(devs[0].name).toBeUndefined();
+  });
+
+  test('replace', () => {
+    const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
+    expect(devs.replace('id', new Dev({id: Dev.Sander.id, name: 'Boet', language: "Typescript", level: 0}))).toHaveLength(3);
+    expect(devs[0]).not.toMatchObject(Dev.Sander);
+    expect(devs[0].name).toBe('Boet');
   });
 
   test('toJSON', () => {
