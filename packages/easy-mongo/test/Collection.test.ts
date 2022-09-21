@@ -102,6 +102,6 @@ describe('Collection', () => {
 
   test('sort', () => {
     const test = new TestCollection();
-    expect(test.sort(test.name.asc(), test.language.desc())).toStrictEqual({ Language: 1, name: -1 });
+    expect(test.sort(test.name.asc(), test.language.desc())).toStrictEqual({ Language: -1, name: 1 });
   });
 });

@@ -120,7 +120,7 @@ describe('MongoProvider', () => {
       { $and: [{ Name: { $eq: 'Jeroen' } }] },
       fits.json({
         limit: 2,
-        sort: { Name: 1, Language: -1 },
+        sort: { Name: -1, Language: 1 },
         total: true,
       })
     );
@@ -233,8 +233,8 @@ describe('MongoProvider', () => {
     ['with string array', ['name', 'id'], ['name', 'id']],
     ['with field', new Field('name'), 'name'],
     ['with field array', [new Field('name'), new Field('id')], ['name', 'id']],
-    ['with sorted field', new Field('name').asc(), { name: -1 }],
-    ['with sorted field array', [new Field('name').asc(), new Field('id').desc()], [{ name: -1 }, { id: 1 }]],
+    ['with sorted field', new Field('name').asc(), { name: 1 }],
+    ['with sorted field array', [new Field('name').asc(), new Field('id').desc()], [{ name: 1 }, { id: -1 }]],
     ['with empty object', {}, {}],
     ['with object', { name: 1 } as Record<string, 1 | -1>, { name: 1 }],
     ['with object array', [{ name: 1 }, { id: -1 }] as Record<string, 1 | -1>[], [{ name: 1 }, { id: -1 }]],
