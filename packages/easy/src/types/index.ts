@@ -27,6 +27,7 @@ export * from './Template';
 export * from './Text';
 export * from './PageList';
 export * from './Try';
+export * from './Types';
 export * from './Uri';
 export * from './Uuid';
 export * from './Validatable';
