@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { isPageList, toList, toPageList } from '../../src';
+import { isPageList, toFilter, toList, toPageList } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
@@ -77,5 +77,9 @@ describe('PageList', () => {
     expect(isPageList([])).toBeFalsy();
     expect(isPageList(l)).toBeFalsy();
     expect(isPageList(pl)).toBeTruthy();
+  });
+
+  test('toFilter', () => {
+    expect(toFilter('start', 42)).toMatchJson({ field: 'start', values: [{ value: 42 }] });
   });
 });
