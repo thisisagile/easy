@@ -32,9 +32,6 @@ type Viewer = { in: { key: string; f: Func } };
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>
   tryTo(traverse(a, col)).map(v => (isArray(v) ? () => v.map(i => f(i, col)) : (a: any) => f(traverse(a, col)))).value;
 
-// const toCtor = (c: Constructor): Func => (a: any, key?: string) =>
-//   tryTo(traverse(a, key)).map(v => isArray(v) ? v.map(i => new c(i)) : new c(traverse(a, key))).value;
-
 const toViewer = (key: string, value: unknown): Viewer =>
   choose(value)
     .is.not.defined(
