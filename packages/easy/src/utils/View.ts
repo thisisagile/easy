@@ -26,7 +26,7 @@ const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) &&
 const isColAndFunction = (v: unknown): v is { col: string; in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
 const isColAndView = (v: unknown): v is { col: string; in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
-type Views = Record<string, string | Func | InOut | number | boolean | undefined>;
+type Views<T = Json> = Record<keyof T, string | Func | InOut | number | boolean | undefined>;
 type Viewer = { in: { key: string; f: Func } };
 
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>

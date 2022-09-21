@@ -219,4 +219,10 @@ describe('View', () => {
     expect((c as any).email[0]).toBeInstanceOf(Email);
     expect((c as any).email[0].value).toBe(emails[0]);
   });
+
+  // type Student = {id: number, name: string, loan: number };
+  //
+  // test('typed views', () => {
+  //
+  // })
 });
