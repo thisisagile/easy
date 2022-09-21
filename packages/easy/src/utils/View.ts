@@ -57,11 +57,11 @@ export class View<V = Json> {
   constructor(private views: Views<V> = {} as Views<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
   }
 
-  get fromSource(): View {
+  get fromSource(): View<V> {
     return new View(this.views, 'source', this.viewers);
   }
 
-  from = <T = unknown>(source: T | T[]): T extends [] ? Json[] : Json =>
+  from = <T = unknown>(source: T | T[]): T extends [] ? V[] : V =>
     isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source));
 
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
