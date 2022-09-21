@@ -13,6 +13,7 @@ import {
   Json,
   json,
   meta,
+  DontInfer,
   tryTo,
 } from '../types';
 import { traverse } from './Traverse';
@@ -26,7 +27,7 @@ const isInOnly = (v: unknown): v is InOut => isObject(v) && !isDefined(v.col) &&
 const isColAndFunction = (v: unknown): v is { col: string; in: Func } => isObject(v) && isDefined(v.col) && isFunction(v.in);
 const isColAndView = (v: unknown): v is { col: string; in: View } => isObject(v) && isDefined(v.col) && v.in instanceof View;
 
-type Views<V = Json> = Record<keyof V, string | Func | InOut | number | boolean | undefined>;
+type Views<V = Json> = Partial<Record<keyof V, string | Func | InOut | number | boolean | undefined>>;
 type Viewer = { in: { key: string; f: Func } };
 
 const toFunc = (a: any, col: string, f: Func = a => a): Func =>
@@ -70,10 +71,11 @@ export class View<V = Json> {
 }
 
 export const skip = () => undefined;
-export const view = (views: Views): View => new View(views);
+export const view = <V = Json>(views: Views<DontInfer<V>>): View<V> => new View<V>(views);
 
 export const views = {
   ignore: () => undefined,
+  skip: () => undefined,
   keep: (a: unknown, key?: string) => traverse(a, key),
   keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
   or:
