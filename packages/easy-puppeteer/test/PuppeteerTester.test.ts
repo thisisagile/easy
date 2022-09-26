@@ -17,7 +17,7 @@ describe('PuppeteerTester', () => {
     page = mock.empty<Page>();
     tester = new PuppeteerTester(host, browser, page);
     app = mock.empty<App>({ name: 'shops' });
-    uc = mock.empty<UseCase>({ app: app, name: 'find shop' });
+    uc = mock.empty<UseCase>({ app, id: 'find-shop' });
   });
 
   test.each([

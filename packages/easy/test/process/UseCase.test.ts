@@ -42,7 +42,7 @@ describe('UseCase', () => {
     expect(admin).toContain(DevUseCase.CreateSpreadSheet);
 
     const basic = DevUseCase.byScopes(DevScope.Dev);
-    expect(basic).toHaveLength(4);
+    expect(basic).toHaveLength(5);
     expect(basic).toContain(DevUseCase.BuildCode);
     expect(basic).toContain(DevUseCase.WriteCode);
     expect(basic).toContain(DevUseCase.ReleaseCode);

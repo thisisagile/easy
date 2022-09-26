@@ -32,5 +32,5 @@ export interface Tester {
 export const toUrl = (uc: UseCase, host?: string, id?: Id): string =>
   tryTo(() => host)
     .map(domain => ({ domain, i: id ? `/${id}` : '' }))
-    .map(({ domain, i }) => text(`${domain}/${uc.app.name}/${uc.name}${i}`))
+    .map(({ domain, i }) => text(`${domain}/${uc.app}/${uc}${i}`))
     .map(url => url.kebab.toString()).value;

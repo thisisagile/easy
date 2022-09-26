@@ -5,17 +5,17 @@ describe('Tester', () => {
   const host = 'http://localhost:9999';
 
   test('toUrl works', () => {
-    const uc = DevUseCase.WriteCode;
-    expect(toUrl(uc)).toMatch('/main/write-code');
+    const uc = DevUseCase.ReviewCode;
+    expect(toUrl(uc)).toMatch('/main/review');
   });
 
   test('toUrl with host works', () => {
-    const uc = DevUseCase.WriteCode;
-    expect(toUrl(uc, host)).toMatch('http://localhost:9999/main/write-code');
+    const uc = DevUseCase.ReviewCode;
+    expect(toUrl(uc, host)).toMatch('http://localhost:9999/main/review');
   });
 
   test('toUrl with id works', () => {
-    const uc = DevUseCase.WriteCode;
-    expect(toUrl(uc, '', 42)).toMatch('/main/write-code/42');
+    const uc = DevUseCase.ReviewCode;
+    expect(toUrl(uc, '', 42)).toMatch('/main/review/42');
   });
 });
