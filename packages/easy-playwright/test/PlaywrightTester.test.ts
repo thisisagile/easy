@@ -1,14 +1,13 @@
-import { App, UseCase } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, Page, Response } from 'playwright';
 import { PlaywrightElement, PlaywrightTester } from '../src';
+import { DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
 describe('PlaywrightTester', () => {
   let tester: PlaywrightTester;
   let browser: Browser;
   let page: Page;
-  let app: App;
-  let uc: UseCase;
+  const uc = DevUseCase.ReleaseCode;
   const host = 'http://localhost:8080';
   const testUrl = 'http://localhost/shops';
 
@@ -16,8 +15,6 @@ describe('PlaywrightTester', () => {
     browser = mock.empty<Browser>();
     page = mock.empty<Page>();
     tester = new PlaywrightTester(host, browser, page);
-    app = mock.empty<App>({ name: 'shops' });
-    uc = mock.empty<UseCase>({ app, id: 'find-shop' });
   });
 
   test.each([
@@ -159,7 +156,7 @@ describe('PlaywrightTester', () => {
     page.goto = mock.resolve(r);
 
     await expect(tester.goto(uc)).resolves.toBeTruthy();
-    expect(page.goto).toHaveBeenCalledWith('http://localhost:8080/shops/find-shop');
+    expect(page.goto).toHaveBeenCalledWith('http://localhost:8080/main/release-code');
   });
 
   test('goto with id resolves ok response', async () => {
@@ -169,7 +166,7 @@ describe('PlaywrightTester', () => {
     page.goto = mock.resolve(r);
 
     await expect(tester.goto(uc, 1)).resolves.toBeTruthy();
-    expect(page.goto).toHaveBeenCalledWith('http://localhost:8080/shops/find-shop/1');
+    expect(page.goto).toHaveBeenCalledWith('http://localhost:8080/main/release-code/1');
   });
 
   test('goto resolves not ok response', async () => {
