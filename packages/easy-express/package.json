@@ -38,7 +38,7 @@
     "@types/passport": "^1.0.11",
     "@types/passport-jwt": "^3.0.6",
     "@types/uuid": "^8.3.4",
-    "@types/validator": "^13.7.6"
+    "@types/validator": "^13.7.7"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
