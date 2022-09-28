@@ -564,4 +564,11 @@ describe('asList', () => {
     expect(a[Dev.Rob.id]).toHaveLength(1);
     expect(a[Dev.Wouter.id]).toBeUndefined();
   });
+
+  test('slice', () => {
+    const devs = toList(Dev.Jeroen, Dev.Sander, Dev.Jeroen, Dev.Rob, Dev.Sander, Dev.Jeroen);
+    const devs2 = devs.slice(0, 2);
+    expect(isList(devs2)).toBeTruthy();
+    expect(devs2).toHaveLength(2);
+  });
 });

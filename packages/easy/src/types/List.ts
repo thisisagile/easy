@@ -103,6 +103,10 @@ export class List<T = unknown> extends Array<T> {
     }
     return this;
   };
+
+  slice(start?: number, end?: number): List<T> {
+    return toList(super.slice(start, end));
+  }
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
