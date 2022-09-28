@@ -10,11 +10,13 @@ const getByPlaceholderText = mock.return(<div />);
 jest.mock('@testing-library/react', () => ({
   ...jest.requireActual('@testing-library/react'),
   render,
-  getByText,
-  getByTestId,
-  getByTitle,
-  getByRole,
-  getByPlaceholderText,
+  screen: {
+    getByText,
+    getByTestId,
+    getByTitle,
+    getByRole,
+    getByPlaceholderText,
+  }
 }));
 import { ElementTester, renders, Tester } from '../src';
 
@@ -30,35 +32,35 @@ describe('Tester', () => {
     const t = renders(a);
     t.byText('');
     expect(render).toHaveBeenCalledWith(a);
-    expect(getByText).toHaveBeenCalledWith(a, '');
+    expect(getByText).toHaveBeenCalledWith('');
   });
 
   test('byId calls screen.getByTestId', () => {
     const t = renders(a);
     t.byId('');
     expect(render).toHaveBeenCalledWith(a);
-    expect(getByTestId).toHaveBeenCalledWith(a, '');
+    expect(getByTestId).toHaveBeenCalledWith('');
   });
 
   test('byTitle calls screen.getByTitle', () => {
     const t = renders(a);
     t.byTitle('');
     expect(render).toHaveBeenCalledWith(a);
-    expect(getByTitle).toHaveBeenCalledWith(a, '');
+    expect(getByTitle).toHaveBeenCalledWith('');
   });
 
   test('byRole calls screen.getByTestId', () => {
     const t = renders(a);
     t.byRole('');
     expect(render).toHaveBeenCalledWith(a);
-    expect(getByRole).toHaveBeenCalledWith(a, '');
+    expect(getByRole).toHaveBeenCalledWith('');
   });
 
   test('byPlaceholder calls screen.getByTestId', () => {
     const t = renders(a);
     t.byPlaceholder('');
     expect(render).toHaveBeenCalledWith(a);
-    expect(getByPlaceholderText).toHaveBeenCalledWith(a, '');
+    expect(getByPlaceholderText).toHaveBeenCalledWith('');
   });
 
   test('at returns ElementTester', () => {
