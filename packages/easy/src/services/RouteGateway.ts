@@ -1,5 +1,5 @@
 import { Api } from './Api';
-import { Func, Gateway, Id, Json, JsonValue, PageList, PageOptions, toPageList, Uri } from '../types';
+import { Filter, Func, Gateway, Id, Json, JsonValue, PageList, PageOptions, toPageList, Uri } from '../types';
 import { HttpStatus, RequestOptions, toPageOptions } from '../http';
 
 export class RouteGateway extends Gateway {
@@ -8,7 +8,10 @@ export class RouteGateway extends Gateway {
   }
 
   get(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
-    return this.api.get(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
+    return this.api.get(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && {
+      total: r.body.data?.totalItems,
+      filters: r.body.data?.meta?.filters as Filter[],
+    }));
   }
 
   getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
