@@ -41,7 +41,10 @@ export class RouteGateway extends Gateway {
   }
 
   postSearch(uri: Uri, options?: RequestOptions | PageOptions): Promise<PageList<Json>> {
-    return this.api.post(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && { total: r.body.data?.totalItems }));
+    return this.api.post(uri, options).then(r => toPageList<Json>(r.body.data?.items, toPageOptions(options) && {
+      total: r.body.data?.totalItems,
+      filters: r.body.data?.meta?.filters as Filter[],
+    }));
   }
 
   add(item: Json): Promise<Json> {
