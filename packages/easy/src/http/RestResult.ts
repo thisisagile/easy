@@ -8,7 +8,7 @@ export type RestResult = {
 };
 
 const hasErrors = (a: any): a is { error: { code: number; errors: List<Result> } } => isDefined(a?.error?.errors);
-const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number } } => isDefined(a?.data.items);
+const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number; meta?: Json; } } => isDefined(a?.data.items);
 
 export const rest = {
   toData: (status: HttpStatus, items: Json[] = [], totalItems?: number, meta?: Json): RestResult => ({
@@ -37,7 +37,7 @@ export const rest = {
       .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results))
       .type(isResponse, r => rest.toError(status ?? HttpStatus.byId(r.body.error?.code as Id), r.body.error?.errors))
       .type(hasErrors, e => rest.toError(status ?? HttpStatus.byId(e.error.code, HttpStatus.BadRequest), e.error.errors))
-      .type(hasItems, d => rest.toData(status ?? HttpStatus.byId(d.data.code, HttpStatus.Ok), d.data.items, d.data.totalItems))
+      .type(hasItems, d => rest.toData(status ?? HttpStatus.byId(d.data.code, HttpStatus.Ok), d.data.items, d.data.totalItems, d.data.meta))
       .else(p => rest.toData(status ?? HttpStatus.Ok, toList(p))),
 };
 

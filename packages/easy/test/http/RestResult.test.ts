@@ -16,6 +16,29 @@ const dataWithTotal = {
     totalItems: 42,
   },
 };
+const dataWithMeta = {
+  data: {
+    ...dataWithTotal.data,
+    meta: {
+      filters: [
+        {
+          field: 'languages',
+          label: 'Programming Languages',
+          values: [
+            {
+              value: 'Java',
+              count: 50000,
+            },
+            {
+              value: 'Typescript',
+              count: 10000000,
+            },
+          ],
+        },
+      ],
+    },
+  },
+};
 const item = Dev.Wouter.toJSON();
 const items = toList([Dev.Wouter.toJSON(), Dev.Sander.toJSON(), Dev.Jeroen.toJSON()]);
 const payload = [
@@ -88,6 +111,13 @@ describe('rest.to', () => {
     expect(isRestResult(r)).toBeTruthy();
     expect(r.data?.code).toBe(data.data.code);
     expect(r.data?.totalItems).toBe(dataWithTotal.data.totalItems);
+  });
+
+  test('From data with items and meta', () => {
+    const r = rest.to(dataWithMeta);
+    expect(isRestResult(r)).toBeTruthy();
+    expect(r.data?.code).toBe(data.data.code);
+    expect(r.data?.meta).toBe(dataWithMeta.data.meta);
   });
 
   test('From data without code', () => {
