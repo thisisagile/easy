@@ -1,5 +1,5 @@
+import { asNumber, ifDefined } from './Utils';
 import { Id, Json, JsonValue, Text } from './Types';
-import { asNumber, ifDefined } from '@thisisagile/easy';
 
 export class Req {
   constructor(readonly state: any = {}) {}
