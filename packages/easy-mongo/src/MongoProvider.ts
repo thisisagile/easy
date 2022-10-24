@@ -67,11 +67,14 @@ export class MongoProvider {
       .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
       .then(
         u =>
-          new MongoClient(u, {
+          MongoClient.connect(u, {
             auth: {
               username: asString(db.options?.user),
               password: asString(db.options?.password),
             },
+            ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
+            ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
+            ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
           })
       );
   }
@@ -190,7 +193,6 @@ export class MongoProvider {
 
   collection(): Promise<MongoCollection> {
     return this.cluster()
-      .then(c => c.connect())
       .then(c => c.db(this.coll.db.name))
       .then(db => db.collection(asString(this.coll)));
   }

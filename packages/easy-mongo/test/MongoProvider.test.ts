@@ -3,7 +3,7 @@ import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { DateTime, Exception, Field, toCondition } from '@thisisagile/easy';
+import { Database, DateTime, DefaultProvider, Exception, Field, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -22,6 +22,19 @@ describe('MongoProvider', () => {
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
     provider = new MongoProvider(devs, Promise.resolve(client));
+  });
+
+  test('client calls MongoClient connect', async () => {
+    const spy = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
+    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'hi' }))).resolves.toBe(client);
+    expect(spy).toHaveBeenCalledWith('hi', { auth: { password: '', username: '' } });
+  });
+
+
+  test('client passes the options to the Mongo client', async () => {
+    const spy = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
+    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'hi', maxPoolSize: 20 }))).resolves.toBe(client);
+    expect(spy).toHaveBeenCalledWith('hi', { auth: { password: '', username: '' }, maxPoolSize: 20,});
   });
 
   test('all calls find', async () => {
@@ -316,16 +329,6 @@ describe('MongoProvider', () => {
     expect(p.toFindOptions(s)).toStrictEqual(expected);
   });
 
-  test('first time connect to the mongo cluster', async () => {
-    provider = new MongoProvider(devs);
-    MongoProvider.client = mock.resolve(client);
-    const coll = await provider.collection();
-    expect(MongoProvider.client).toHaveBeenCalledWith(devs.db);
-    expect(MongoProvider.client).toHaveBeenCalledWith(devs.db);
-    expect(client.connect).toHaveBeenCalledTimes(1);
-    expect(coll.collectionName).toBe('devCollection');
-  });
-
   test('first time connect fails set client to undefined', async () => {
     provider = new MongoProvider(devs);
     MongoProvider.client = mock.reject(Exception.IsNotValid);
@@ -334,14 +337,6 @@ describe('MongoProvider', () => {
     expect(MongoProvider.client).toHaveBeenNthCalledWith(1, devs.db);
     expect(MongoProvider.client).toHaveBeenNthCalledWith(2, devs.db);
     expect(client.connect).not.toHaveBeenCalled();
-  });
-
-  // https://github.com/mongodb/node-mongodb-native/blob/3dba3ae5dbe584ff441e59c78c8b5905ebb23cd4/src/operations/connect.ts#L18
-  test('connect is a no-op operation when already connected', async () => {
-    MongoProvider.client = mock.resolve(client);
-    await expect(provider.collection()).resolves.toBeDefined();
-    await expect(provider.collection()).resolves.toBeDefined();
-    expect(client.connect).toHaveBeenCalledTimes(2);
   });
 
   test('reject if db getter throws exception', async () => {

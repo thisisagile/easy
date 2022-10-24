@@ -8,6 +8,9 @@ export type DatabaseOptions = {
   port?: number;
   cluster?: string;
   connectionString?: string;
+  maxPoolSize?: number;
+  minPoolSize?: number;
+  maxIdleTimeMS?: number;
 };
 
 export class DefaultProvider implements DataProvider {}
