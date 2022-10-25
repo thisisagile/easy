@@ -53,8 +53,8 @@ describe('MongoProvider', () => {
 
   test('client passes the options to the Mongo client', async () => {
     (MongoProvider as any).clients = {};
-    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr', maxPoolSize: 20 }))).resolves.toEqual(client);
-    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' }, maxPoolSize: 20 });
+    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr', maxPoolSize: 20, minPoolSize: 15, maxIdleTimeMS: 42 }))).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' }, maxPoolSize: 20, minPoolSize: 15, maxIdleTimeMS: 42 });
   });
 
   test('all calls find', async () => {
