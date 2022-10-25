@@ -1615,7 +1615,7 @@ __metadata:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^8.5.9
-    "@types/luxon": 3.0.1
+    "@types/luxon": 3.0.2
     "@types/uuid": ^8.3.4
     "@types/validator": ^13.7.7
     axios: ^0.27.2
@@ -1884,10 +1884,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:3.0.1":
-  version: 3.0.1
-  resolution: "@types/luxon@npm:3.0.1"
-  checksum: a81444f9b474ea9b3063ab4cc68b917a2634e38b4e229f86c78c35023a32bf5e8d1044d7c229c011291662c976cb6c4cf109dc3d2077c571790a31779a554178
+"@types/luxon@npm:3.0.2":
+  version: 3.0.2
+  resolution: "@types/luxon@npm:3.0.2"
+  checksum: e47e199c5d70ce16e4eff54b21fdf385065f1134774109b40c36dba8b5fd29a732b763125e93863d6070dd22ba6a3f18dbdd368cf3748aae9f24bb335c5c210d
   languageName: node
   linkType: hard
 
