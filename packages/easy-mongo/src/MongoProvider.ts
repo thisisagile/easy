@@ -59,23 +59,25 @@ export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
   aggregate = this.group;
+  protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
 
-  constructor(readonly coll: Collection, private client?: Promise<MongoClient>) {}
+  constructor(readonly coll: Collection, protected client?: Promise<MongoClient>) {}
 
   static client(db: Database): Promise<MongoClient> {
     return when(db.options?.cluster)
       .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
       .then(
         u =>
-          MongoClient.connect(u, {
-            auth: {
-              username: asString(db.options?.user),
-              password: asString(db.options?.password),
-            },
-            ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
-            ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
-            ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
-          })
+          (MongoProvider.clients[u] = MongoProvider.clients[u] ??
+            MongoClient.connect(u, {
+              auth: {
+                username: asString(db.options?.user),
+                password: asString(db.options?.password),
+              },
+              ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
+              ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
+              ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
+            }))
       );
   }
 

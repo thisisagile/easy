@@ -14,6 +14,7 @@ describe('MongoProvider', () => {
   const devs = new DevCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
+  let connect: any;
 
   beforeEach(() => {
     c.find = mock.resolve({ toArray: () => Promise.resolve([]) });
@@ -22,19 +23,38 @@ describe('MongoProvider', () => {
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
     provider = new MongoProvider(devs, Promise.resolve(client));
+    connect = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   test('client calls MongoClient connect', async () => {
-    const spy = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
-    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'hi' }))).resolves.toBe(client);
-    expect(spy).toHaveBeenCalledWith('hi', { auth: { password: '', username: '' } });
+    (MongoProvider as any).clients = {};
+    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' } });
   });
 
+  test('client calls MongoClient connect once per cluster', async () => {
+    (MongoProvider as any).clients = {};
+    await expect(MongoProvider.client(new Database('db1', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr2' }))).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledTimes(2);
+  });
+
+  test('client calls MongoClient connect once for same cluster', async () => {
+    (MongoProvider as any).clients = {};
+    await expect(MongoProvider.client(new Database('db1', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledTimes(1);
+  });
 
   test('client passes the options to the Mongo client', async () => {
-    const spy = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
-    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'hi', maxPoolSize: 20 }))).resolves.toBe(client);
-    expect(spy).toHaveBeenCalledWith('hi', { auth: { password: '', username: '' }, maxPoolSize: 20,});
+    (MongoProvider as any).clients = {};
+    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr', maxPoolSize: 20 }))).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' }, maxPoolSize: 20 });
   });
 
   test('all calls find', async () => {
