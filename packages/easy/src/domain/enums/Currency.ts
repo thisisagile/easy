@@ -126,4 +126,6 @@ export class Currency extends Enum {
   static readonly ZWL = new Currency('ZWL', 'Zimbabwean Dollar', 0, 'ZWL$');
 
   amount = (amount = 0): Money => money(this, amount);
+
+  get zero(): Money { return this.amount(); }
 }

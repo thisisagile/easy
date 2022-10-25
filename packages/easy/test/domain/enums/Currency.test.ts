@@ -9,4 +9,8 @@ describe('Currency', () => {
     expect(m.value).toBe(42);
     expect(m.currency.id).toBe('AUD');
   });
+
+  test('Zero function', () => {
+    expect(Currency.EUR.zero.value).toBe(0);
+  });
 });
