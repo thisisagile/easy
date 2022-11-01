@@ -1,7 +1,10 @@
-import { asString, EasyUri, uri, Uri } from '../../src';
+import { asString, ctx, EasyUri, EnvContext, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
+
+import { mock } from '@thisisagile/easy-test';
+import { DotEnvContext } from '@thisisagile/easy';
 
 const externalHost = 'https://www.external.com';
 class ExternalUri extends EasyUri {
@@ -15,6 +18,10 @@ class ExternalUri extends EasyUri {
 
 describe('Uri', () => {
   const withHost = `${host}/dev/developers`;
+
+  beforeEach(() => {
+    ctx.env = new DotEnvContext();
+  });
 
   test('Host with context.', () => {
     expect(uri.host().segment).toBe(host);
@@ -31,6 +38,12 @@ describe('Uri', () => {
 
   test('isInternal', () => {
     expect(ExternalUri.Api.host.segment).toBe(externalHost);
+    expect(ExternalUri.Api.isInternal).toBeFalsy();
+    expect(DevUri.Developers.isInternal).toBeTruthy();
+  });
+
+  test('isInternal works on default host', () => {
+    ctx.env = mock.empty<EnvContext>({ host: undefined });
     expect(ExternalUri.Api.isInternal).toBeFalsy();
     expect(DevUri.Developers.isInternal).toBeTruthy();
   });
