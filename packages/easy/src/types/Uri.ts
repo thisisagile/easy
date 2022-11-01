@@ -63,7 +63,6 @@ export class EasyUri implements Uri {
   }
 
   get isInternal(): boolean {
-    console.log(ctx.env.host)
     return toRoute(this.host) === (ctx.env.host ?? '$host');
   }
 
