@@ -1,4 +1,4 @@
-import { getByPlaceholderText, getByRole, getByTestId, getByText, getByTitle, render } from '@testing-library/react';
+import { getByPlaceholderText, getByRole, getByTestId, getByText, getByTitle, render, screen } from '@testing-library/react';
 import { ReactElement } from 'react';
 import { Id } from '@thisisagile/easy';
 import { waitForRender } from './waitForRender';
@@ -10,15 +10,15 @@ export class Tester {
   static render = (component: ReactElement): Promise<Tester> => waitForRender(component).then(c => new Tester(c.container));
   static renderSync = (component: ReactElement): Tester => new Tester(render(component).container);
 
-  byText = (text: string): HTMLElement => getByText(this.container, text);
+  byText = (text: string): HTMLElement => screen.getByText(text);
   atText = (text: string): ElementTester => new ElementTester(() => this.byText(text));
-  byId = (id: Id): HTMLElement => getByTestId(this.container, id.toString());
+  byId = (id: Id): HTMLElement => screen.getByTestId(id.toString());
   atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
-  byRole = (role: string): HTMLElement => getByRole(this.container, role);
+  byRole = (role: string): HTMLElement => screen.getByRole(role);
   atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
-  byTitle = (title: string): HTMLElement => getByTitle(this.container, title);
+  byTitle = (title: string): HTMLElement => screen.getByTitle(title);
   atTitle = (title: string): ElementTester => new ElementTester(() => this.byTitle(title));
-  byPlaceholder = (placeholder: string): HTMLElement => getByPlaceholderText(this.container, placeholder);
+  byPlaceholder = (placeholder: string): HTMLElement => screen.getByPlaceholderText( placeholder);
   atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
 }
