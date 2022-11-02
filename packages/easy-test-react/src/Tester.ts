@@ -13,7 +13,7 @@ export class Tester {
 
     byText = (text: string, index?: number): HTMLElement => index ? screen.getAllByText(text)[0] : screen.getByText(text);
     atText = (text: string): ElementTester => new ElementTester(() => this.byText(text));
-    byId = (id: Id): HTMLElement => screen.getByTestId(id.toString());
+    byId = (id: Id, index?: number): HTMLElement => index ? screen.getAllByTestId(id.toString())[0] : screen.getByTestId(id.toString());
     atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
     byRole = (role: string): HTMLElement => screen.getByRole(role);
     atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
