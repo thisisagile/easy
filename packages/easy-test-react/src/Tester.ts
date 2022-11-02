@@ -11,11 +11,11 @@ export class Tester {
     static render = (component: ReactElement): Promise<Tester> => waitForRender(component).then(c => new Tester(c.container));
     static renderSync = (component: ReactElement): Tester => new Tester(render(component).container);
 
-    byText = (text: string, index?: number): HTMLElement => index ? screen.getAllByText(text)[0] : screen.getByText(text);
+    byText = (text: string, index?: number): HTMLElement => index ? screen.getAllByText(text)[index] : screen.getByText(text);
     atText = (text: string): ElementTester => new ElementTester(() => this.byText(text));
-    byId = (id: Id, index?: number): HTMLElement => index ? screen.getAllByTestId(id.toString())[0] : screen.getByTestId(id.toString());
+    byId = (id: Id, index?: number): HTMLElement => index ? screen.getAllByTestId(id.toString())[index] : screen.getByTestId(id.toString());
     atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
-    byRole = (role: string): HTMLElement => screen.getByRole(role);
+    byRole = (role: string, index?: number): HTMLElement => index ? screen.getAllByRole(role)[index] : screen.getByRole(role);
     atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
     byTitle = (title: string): HTMLElement => screen.getByTitle(title);
     atTitle = (title: string): ElementTester => new ElementTester(() => this.byTitle(title));
