@@ -19,7 +19,7 @@ export class Tester {
     atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
     byTitle = (title: string, index?: number): HTMLElement => index ? screen.getAllByTitle(title)[index] : screen.getByTitle(title);
     atTitle = (title: string): ElementTester => new ElementTester(() => this.byTitle(title));
-    byPlaceholder = (placeholder: string): HTMLElement => screen.getByPlaceholderText(placeholder);
+    byPlaceholder = (placeholder: string, index?: number): HTMLElement => index ? screen.getAllByPlaceholderText(placeholder)[index] : screen.getByPlaceholderText(placeholder);
     atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
     submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
 }
