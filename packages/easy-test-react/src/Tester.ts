@@ -17,7 +17,7 @@ export class Tester {
     atId = (id: Id): ElementTester => new ElementTester(() => this.byId(id));
     byRole = (role: string, index?: number): HTMLElement => index ? screen.getAllByRole(role)[index] : screen.getByRole(role);
     atRole = (role: string): ElementTester => new ElementTester(() => this.byRole(role));
-    byTitle = (title: string): HTMLElement => screen.getByTitle(title);
+    byTitle = (title: string, index?: number): HTMLElement => index ? screen.getAllByTitle(title)[index] : screen.getByTitle(title);
     atTitle = (title: string): ElementTester => new ElementTester(() => this.byTitle(title));
     byPlaceholder = (placeholder: string): HTMLElement => screen.getByPlaceholderText(placeholder);
     atPlaceholder = (placeholder: string): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder));
