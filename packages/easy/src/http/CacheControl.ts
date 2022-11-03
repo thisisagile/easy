@@ -26,8 +26,8 @@ export class CacheControl {
     return this;
   };
 
-  readonly sharedMaxAge = (a?: number): this => {
-    this._sharedMaxAge = a;
+  readonly sharedMaxAge = (ca?: CacheAge): this => {
+    this._sharedMaxAge = ca ? cacheAge.toSeconds(ca) : ca;
     return this;
   };
 
