@@ -26,6 +26,7 @@ describe('CacheControl', () => {
   });
 
   test('directives', () => {
+    expect(CacheControl.custom().maxAge(42).value()).toBe('max-age=42');
     expect(CacheControl.custom().sharedMaxAge(42).value()).toBe('s-maxage=42');
     expect(CacheControl.custom().noCache(true).value()).toBe('no-cache');
     expect(CacheControl.custom().mustRevalidate(true).value()).toBe('must-revalidate');
