@@ -1,4 +1,5 @@
 import { isDefined } from '../types';
+import {cacheAge, CacheAge} from "./CacheAge";
 
 export class CacheControl {
   protected constructor(readonly enabled = true) {}
@@ -18,10 +19,10 @@ export class CacheControl {
   static tenSeconds = () => new CacheControl().maxAge(10).staleWhileRevalidate(10);
   static thirtySeconds = () => new CacheControl().maxAge(30).staleWhileRevalidate(30);
   static sixtySeconds = () => new CacheControl().maxAge(60).staleWhileRevalidate(60);
-  static custom = (maxAge?: number, staleWhileRevalidate?: number) => new CacheControl().maxAge(maxAge).staleWhileRevalidate(staleWhileRevalidate);
+  static custom = (maxAge?: CacheAge, staleWhileRevalidate?: number) => new CacheControl().maxAge(maxAge).staleWhileRevalidate(staleWhileRevalidate);
 
-  readonly maxAge = (a?: number): this => {
-    this._maxAge = a;
+  readonly maxAge = (ca?: CacheAge): this => {
+    this._maxAge = ca ? cacheAge.toSeconds(ca) : ca;
     return this;
   };
 
