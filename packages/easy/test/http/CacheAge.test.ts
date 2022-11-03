@@ -1,7 +1,9 @@
-import {asNumber, CacheAge, toMilliseconds, toSeconds} from '../../src';
+import {asNumber, cacheAge, CacheAge} from '../../src';
 import '@thisisagile/easy-test';
 
 describe('CacheAge', () => {
+
+    const {toMilliseconds, toSeconds} = cacheAge;
 
     test('toMilliseconds works', () => {
         expect(asNumber('10ms')).toBe(10);
