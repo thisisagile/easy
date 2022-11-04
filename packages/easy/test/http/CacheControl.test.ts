@@ -27,12 +27,16 @@ describe('CacheControl', () => {
 
   test('directives', () => {
     expect(CacheControl.custom().maxAge(42).value()).toBe('max-age=42');
+    expect(CacheControl.custom().maxAge().value()).toBe('');
     expect(CacheControl.custom().sharedMaxAge(42).value()).toBe('s-maxage=42');
+    expect(CacheControl.custom().sharedMaxAge().value()).toBe('');
     expect(CacheControl.custom().noCache(true).value()).toBe('no-cache');
     expect(CacheControl.custom().mustRevalidate(true).value()).toBe('must-revalidate');
     expect(CacheControl.custom().private(true).value()).toBe('private');
     expect(CacheControl.custom().public(true).value()).toBe('public');
     expect(CacheControl.custom().immutable(true).value()).toBe('immutable');
+    expect(CacheControl.custom().staleWhileRevalidate(42).value()).toBe('stale-while-revalidate=42');
+    expect(CacheControl.custom().staleWhileRevalidate().value()).toBe('');
   });
 
   test('default value is empty', () => {
