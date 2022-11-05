@@ -11,3 +11,8 @@ export const isConstructor = <T>(c?: unknown): c is Constructor<T> => (isDefined
 export const ofConstruct = <T>(c: Construct<T>, ...args: unknown[]): T => (isConstructor<T>(c) ? new c(...args) : isFunc<T, unknown>(c) ? c(...args) : c);
 
 export const toName = (subject?: unknown, postfix = ''): string => (subject as any)?.constructor?.name?.replace(postfix, '').toLowerCase() ?? '';
+
+export const on = <T>(t: T, f: (t: T) => unknown): T => {
+    f(t);
+    return t;
+};
