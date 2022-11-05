@@ -5,7 +5,7 @@ import {ifDefined} from "../utils";
 export class CacheControl {
     name = 'Cache-Control';
 
-    protected constructor(readonly enabled = true, private directives: Record<string, boolean | number | undefined> = {}) {
+    protected constructor(readonly enabled = true, private directives: Record<string, boolean | CacheAge | undefined> = {}) {
     }
 
     static disabled = () => new CacheControl(false);
@@ -22,9 +22,9 @@ export class CacheControl {
 
     static custom = (maxAge?: CacheAge, staleWhileRevalidate?: CacheAge) => new CacheControl().maxAge(maxAge).staleWhileRevalidate(staleWhileRevalidate);
 
-    readonly maxAge = (ca?: CacheAge): this => on(this, t => t.directives['max-age'] = ca && cacheAge.toSeconds(ca));
+    readonly maxAge = (ca?: CacheAge): this => on(this, t => t.directives['max-age'] = ca);
 
-    readonly sharedMaxAge = (ca?: CacheAge): this => on(this, t=> t.directives['s-maxage'] = ca && cacheAge.toSeconds(ca));
+    readonly sharedMaxAge = (ca?: CacheAge): this => on(this, t=> t.directives['s-maxage'] = ca);
 
     readonly noCache = (a?: boolean): this => on(this, t => t.directives['no-cache'] = a);
 
@@ -36,11 +36,11 @@ export class CacheControl {
 
     readonly immutable = (a?: boolean): this => on(this, t => t.directives['immutable'] = a);
 
-    readonly staleWhileRevalidate = (ca?: CacheAge): this => on(this, t => t.directives['stale-while-revalidate'] = ca && cacheAge.toSeconds(ca));
+    readonly staleWhileRevalidate = (ca?: CacheAge): this => on(this, t => t.directives['stale-while-revalidate'] = ca);
 
     value = (): string => this.toString();
 
     toString(): string {
-        return meta(this.directives).entries().mapDefined(([k, v]) => ifDefined(v, isNumber(v) ? `${k}=${v}` : k)).join(',');
+        return meta(this.directives).entries().mapDefined(([k, v]) => ifDefined(v, isNumber(v) ? `${k}=${cacheAge.toSeconds(v)}` : k)).join(',');
     }
 }
