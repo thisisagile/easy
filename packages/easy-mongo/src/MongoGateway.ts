@@ -2,7 +2,7 @@ import { FindOptions, MongoProvider } from './MongoProvider';
 import { asJson, asPageList, Condition, Gateway, Id, ifDefined, isDefined, Json, JsonValue, List, LogicalCondition, PageList } from '@thisisagile/easy';
 import { Collection } from './Collection';
 
-export class MongoGateway implements Gateway {
+export class MongoGateway implements Gateway<FindOptions> {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
   all(options?: FindOptions): Promise<PageList<Json>> {
