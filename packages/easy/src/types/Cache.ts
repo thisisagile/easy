@@ -10,4 +10,3 @@ export type CacheOptions = {
     expiresIn?: CacheAge;
     store?: Construct<Store>;
 };
-
