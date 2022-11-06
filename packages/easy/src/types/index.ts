@@ -1,5 +1,6 @@
 export * from './Array';
 export * from './Builder';
+export * from './CacheAge';
 export * from './Case';
 export * from './Constructor';
 export * from './Context';

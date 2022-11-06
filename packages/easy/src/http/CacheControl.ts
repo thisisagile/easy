@@ -1,5 +1,4 @@
-import {isNumber, meta, on} from '../types';
-import {cacheAge, CacheAge} from "./CacheAge";
+import {cacheAge, CacheAge, isNumber, meta, on} from '../types';
 import {ifDefined} from "../utils";
 
 export class CacheControl {
@@ -24,7 +23,7 @@ export class CacheControl {
 
     readonly maxAge = (ca?: CacheAge): this => on(this, t => t.directives['max-age'] = ca);
 
-    readonly sharedMaxAge = (ca?: CacheAge): this => on(this, t=> t.directives['s-maxage'] = ca);
+    readonly sharedMaxAge = (ca?: CacheAge): this => on(this, t => t.directives['s-maxage'] = ca);
 
     readonly noCache = (a?: boolean): this => on(this, t => t.directives['no-cache'] = a);
 

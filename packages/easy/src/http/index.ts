@@ -1,4 +1,3 @@
-export * from './CacheAge';
 export * from './CacheControl';
 export * from './ContentType';
 export * from './HttpHeader';

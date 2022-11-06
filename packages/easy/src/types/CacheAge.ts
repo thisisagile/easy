@@ -1,4 +1,4 @@
-import {asNumber, asString, choose} from "../types";
+import {asNumber, asString, choose} from "./index";
 
 export type CacheAge = `${number}${'ms' | 's' | 'm' | 'h' | 'd'}` | number;
 
