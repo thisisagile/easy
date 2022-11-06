@@ -4,17 +4,21 @@ import { Exception } from './Exception';
 import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
+import {CacheOptions} from "./Cache";
 
-export abstract class Gateway {
-  all(options?: PageOptions): Promise<PageList<Json>> {
+
+export type FetchOptions = PageOptions & CacheOptions;
+
+export abstract class Gateway<Options = FetchOptions> {
+  all(options?: Options): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byId(id: Id): Promise<Json | undefined> {
+  byId(id: Id, options?: Options): Promise<Json | undefined> {
     return reject(Exception.IsNotImplemented);
   }
 
-  by(_key: string, _value: JsonValue, _options?: PageOptions): Promise<PageList<Json>> {
+  by(_key: string, _value: JsonValue, _options?: Options): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -22,27 +26,27 @@ export abstract class Gateway {
     return reject(Exception.IsNotImplemented);
   }
 
-  search(q: JsonValue, options?: PageOptions): Promise<PageList<Json>> {
+  search(q: JsonValue, options?: Options): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  filter(options?: PageOptions): Promise<PageList<Json>> {
+  filter(options?: Options): Promise<PageList<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  exists(id: Id): Promise<boolean> {
+  exists(id: Id, options?: Options): Promise<boolean> {
     return reject(Exception.IsNotImplemented);
   }
 
-  add(item: Json): Promise<Json> {
+  add(item: Json, options?: Options): Promise<Json> {
     return reject(Exception.IsNotImplemented);
   }
 
-  update(item: Json): Promise<Json> {
+  update(item: Json, options?: Options): Promise<Json> {
     return reject(Exception.IsNotImplemented);
   }
 
-  remove(id: Id): Promise<boolean> {
+  remove(id: Id, options?: Options): Promise<boolean> {
     return reject(Exception.IsNotImplemented);
   }
 }
