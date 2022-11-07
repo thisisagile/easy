@@ -36,9 +36,9 @@ const toFunc = (a: any, col: string, f: Func = a => a): Func =>
 const toViewer = (key: string, value: unknown): Viewer =>
   choose(value)
     .is.not.defined(
-    v => v,
-    () => toViewer(key, () => undefined),
-  )
+      v => v,
+      () => toViewer(key, () => undefined)
+    )
     .type(isBoolean, b => toViewer(key, () => b))
     .type(isNumber, n => toViewer(key, () => n))
     .type(isString, s => toViewer(key, (a: any) => toFunc(a, s)(a)))
@@ -55,15 +55,13 @@ const toViewers = (views: Views): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View<V = Json> {
-  constructor(private views: Views<V> = {} as Views<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
-  }
+  constructor(private views: Views<V> = {} as Views<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {}
 
   get fromSource(): View<V> {
     return new View(this.views, 'source', this.viewers);
   }
 
-  from = <T = unknown>(source: T | T[]): T extends [] ? V[] : V =>
-    isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source));
+  from = <T = unknown>(source: T | T[]): T extends [] ? V[] : V => (isArray(source) ? source.map(s => this.reduce(asJson(s))) : this.reduce(asJson(source)));
 
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
@@ -80,11 +78,11 @@ export const views = {
   keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
   or:
     (key: string, alt = '') =>
-      (a: unknown) =>
-        traverse(a, key) ?? alt,
+    (a: unknown) =>
+      traverse(a, key) ?? alt,
   value: (value: unknown) => () => value,
   to:
     <T>(ctor: Constructor<T>) =>
-      (a: unknown, key?: string) =>
-        new ctor(traverse(a, key)),
+    (a: unknown, key?: string) =>
+      new ctor(traverse(a, key)),
 };

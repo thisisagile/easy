@@ -77,7 +77,7 @@ export class List<T = unknown> extends Array<T> {
     tryTo(() => item[key])
       .map(k => this.findIndex(i => i[key] === k))
       .filter(i => i > -1)
-      .map(i => this[i] = item);
+      .map(i => (this[i] = item));
     return this;
   };
 

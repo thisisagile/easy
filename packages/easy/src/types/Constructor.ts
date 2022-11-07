@@ -13,6 +13,6 @@ export const ofConstruct = <T>(c: Construct<T>, ...args: unknown[]): T => (isCon
 export const toName = (subject?: unknown, postfix = ''): string => (subject as any)?.constructor?.name?.replace(postfix, '').toLowerCase() ?? '';
 
 export const on = <T>(t: T, f: (t: T) => unknown): T => {
-    f(t);
-    return t;
+  f(t);
+  return t;
 };

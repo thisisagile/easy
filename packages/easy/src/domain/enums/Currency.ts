@@ -127,5 +127,7 @@ export class Currency extends Enum {
 
   amount = (amount = 0): Money => money(this, amount);
 
-  get zero(): Money { return this.amount(); }
+  get zero(): Money {
+    return this.amount();
+  }
 }

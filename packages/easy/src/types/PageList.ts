@@ -2,7 +2,7 @@ import { isList, List, toList } from './List';
 import { Construct, ofConstruct } from './Constructor';
 import { isA } from './IsA';
 
-export type Sort =  { key: string; value: -1 | 1 };
+export type Sort = { key: string; value: -1 | 1 };
 
 export type FilterValue = { label?: string; value: any };
 export type Filter = { label?: string; field: string; values: FilterValue[] };
@@ -26,5 +26,5 @@ export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> &
 export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> =>
   toPageList<T>(
     items.map(i => ofConstruct(c, i)),
-    items,
+    items
   );

@@ -16,7 +16,7 @@ jest.mock('@testing-library/react', () => ({
     getByTitle,
     getByRole,
     getByPlaceholderText,
-  }
+  },
 }));
 import { ElementTester, renders, Tester } from '../src';
 

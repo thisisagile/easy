@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import {isConstructor, ofConstruct, on, text, toName} from '../../src';
+import { isConstructor, ofConstruct, on, text, toName } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
@@ -12,7 +12,7 @@ describe('toName', () => {
 class Tester {
   constructor(public name = 'Jeroen', readonly level = 3) {}
 
-  rename = (n: string) => this.name = n;
+  rename = (n: string) => (this.name = n);
 }
 
 describe('isConstructor', () => {
@@ -78,12 +78,10 @@ describe('ofConstruct', () => {
 });
 
 describe('on', () => {
-
   test('check on', () => {
     const tester = new Tester();
     const t2 = on(tester, t => t.rename('Rob'));
     expect(tester).toStrictEqual(t2);
     expect(t2.name).toBe('Rob');
   });
-
 });

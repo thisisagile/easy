@@ -1,7 +1,7 @@
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, HTTPResponse, Page, Target } from 'puppeteer';
 import { PuppeteerElement, PuppeteerTester } from '../src';
-import { DevUseCase } from "@thisisagile/easy/test/ref/DevUseCase";
+import { DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
 describe('PuppeteerTester', () => {
   let tester: PuppeteerTester;

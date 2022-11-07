@@ -4,8 +4,7 @@ import { Exception } from './Exception';
 import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
-import {CacheOptions} from "./Cache";
-
+import { CacheOptions } from './Cache';
 
 export type FetchOptions = PageOptions & CacheOptions;
 

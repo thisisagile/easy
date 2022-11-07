@@ -8,7 +8,7 @@ export type RestResult = {
 };
 
 const hasErrors = (a: any): a is { error: { code: number; errors: List<Result> } } => isDefined(a?.error?.errors);
-const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number; meta?: Json; } } => isDefined(a?.data.items);
+const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number; meta?: Json } } => isDefined(a?.data.items);
 
 export const rest = {
   toData: (status: HttpStatus, items: Json[] = [], totalItems?: number, meta?: Json): RestResult => ({

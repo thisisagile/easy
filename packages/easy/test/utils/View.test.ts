@@ -122,7 +122,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -135,7 +135,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
@@ -220,7 +220,7 @@ describe('View', () => {
     expect((c as any).email[0].value).toBe(emails[0]);
   });
 
-  type Student = { id: number, name: string, loan: number };
+  type Student = { id: number; name: string; loan: number };
 
   test('typed views', () => {
     const toStudent = view<Student>({

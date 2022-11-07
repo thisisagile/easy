@@ -1,22 +1,9 @@
-import {
-  Exception,
-  Gateway,
-  Id,
-  Json,
-  JsonValue,
-  Key,
-  List,
-  PageList,
-  PageOptions,
-  toList,
-  toPageList,
-} from '../types';
+import { Exception, Gateway, Id, Json, JsonValue, Key, List, PageList, PageOptions, toList, toPageList } from '../types';
 import { when } from '../validation';
 import { reject, resolve, View } from '../utils';
 
 export class Typo<T> {
-  constructor(protected view: View, private readonly gateway: Gateway) {
-  }
+  constructor(protected view: View, private readonly gateway: Gateway) {}
 
   create = (j: Json): T => this.view.from(j) as unknown as T;
 
