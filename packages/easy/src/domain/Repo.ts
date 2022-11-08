@@ -2,9 +2,12 @@ import { asList, asPageList, Constructor, Exception, Gateway, Id, isValidatable,
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
+import { Repository } from './Repository';
 
-export class Repo<T extends Struct> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {}
+export class Repo<T extends Struct> extends Repository<T> {
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
+    super();
+  }
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
