@@ -1,14 +1,14 @@
-import { Repo, Struct } from '../domain';
 import { choose, Id, JsonValue, Key, PageList, PageOptions, toList } from '../types';
 import { resolve } from '../utils';
 import { Req } from '../resources';
+import { Repository } from "../domain";
 
-export class Search<T extends Struct> {
-  constructor(protected repo: Repo<T>) {}
+export class Search<T> {
+  constructor(protected repo: Repository<T>) {}
 
   all = (options?: PageOptions): Promise<PageList<T>> => this.repo.all(options);
 
-  byId = (id: Id): Promise<T> => this.repo.byId(id);
+  byId = (id: Id): Promise<T | undefined> => this.repo.byId(id);
 
   byIds = (...ids: Id[]): Promise<PageList<T>> => this.repo.byIds(...ids);
 
