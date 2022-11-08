@@ -6,3 +6,5 @@ export * from './Child';
 export * from './Entity';
 export * from './Struct';
 export * from './Repo';
+export * from './Repository';
+export * from './Typo';
