@@ -53,7 +53,7 @@ describe('MappedRouteGateway', () => {
     api.patch = mock.resolve(toResponse(HttpStatus.Ok, body));
     const res = await gateway.update(body);
     expect(map.out).toHaveBeenCalledTimes(1);
-    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
     expect(res).toMatchObject(body);
   });
 });

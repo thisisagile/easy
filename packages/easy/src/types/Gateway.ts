@@ -4,9 +4,8 @@ import { Exception } from './Exception';
 import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
-import { CacheOptions } from './Cache';
 
-export type FetchOptions = PageOptions & CacheOptions;
+export type FetchOptions = PageOptions;
 
 export abstract class Gateway<Options = FetchOptions> {
   all(options?: Options): Promise<PageList<Json>> {

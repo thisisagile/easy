@@ -42,7 +42,7 @@ export class RouteGateway extends Gateway<RouteOptions> {
   }
 
   add(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.post(this.route(), item);
+    return this.post(this.route(), item, options);
   }
 
   filter(options?: RouteOptions): Promise<PageList<Json>> {
@@ -50,19 +50,19 @@ export class RouteGateway extends Gateway<RouteOptions> {
   }
 
   update(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.patch(this.routeId().id(item.id), item);
+    return this.patch(this.routeId().id(item.id), item, options);
   }
 
   upsert(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.put(this.routeId().id(item.id), item);
+    return this.put(this.routeId().id(item.id), item, options);
   }
 
   remove(id: Id, options?: RouteOptions): Promise<boolean> {
-    return this.delete(this.routeId().id(id));
+    return this.delete(this.routeId().id(id), options);
   }
 
-  post(uri: Uri, item?: Json): Promise<Json> {
-    return this.api.post(uri, item).then(r => r.body.data?.items.first() ?? {});
+  post(uri: Uri, item?: Json, options?: RouteOptions): Promise<Json> {
+    return this.api.post(uri, item, options).then(r => r.body.data?.items.first() ?? {});
   }
 
   postSearch(uri: Uri, options?: RequestOptions | FetchOptions): Promise<PageList<Json>> {
@@ -77,15 +77,15 @@ export class RouteGateway extends Gateway<RouteOptions> {
     );
   }
 
-  patch(uri: Uri, item: Json): Promise<Json> {
-    return this.api.patch(uri, item).then(r => r.body.data?.items.first() ?? {});
+  patch(uri: Uri, item: Json, options?: RouteOptions): Promise<Json> {
+    return this.api.patch(uri, item, options).then(r => r.body.data?.items.first() ?? {});
   }
 
-  put(uri: Uri, item: Json): Promise<Json> {
-    return this.api.put(uri, item).then(r => r.body.data?.items.first() ?? {});
+  put(uri: Uri, item: Json, options?: RouteOptions): Promise<Json> {
+    return this.api.put(uri, item, options).then(r => r.body.data?.items.first() ?? {});
   }
 
   delete(uri: Uri, options?: RouteOptions): Promise<boolean> {
-    return this.api.delete(uri).then(() => true);
+    return this.api.delete(uri, options).then(() => true);
   }
 }

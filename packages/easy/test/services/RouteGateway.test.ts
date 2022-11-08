@@ -1,4 +1,4 @@
-import { Api, EasyUri, HttpStatus, RequestOptions, RouteGateway, toList, toResponse, uri } from '../../src';
+import { Api, cache, EasyUri, Func, HttpStatus, Request, RequestOptions, Response, RouteGateway, Store, toList, toResponse, uri } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
@@ -133,14 +133,14 @@ describe('RouteGateway', () => {
     const body = Dev.Sander.toJSON();
     api.patch = mock.resolve(toResponse(HttpStatus.Ok, body));
     await expect(gateway.update(body)).resolves.toMatchObject(body);
-    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('patch calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.patch = mock.resolve(toResponse(HttpStatus.Ok, body));
     await expect(gateway.patch(DevUri.Developer.id(42), body)).resolves.toMatchObject(body);
-    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.patch).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('update calls api correctly with an empty body', async () => {
@@ -152,14 +152,14 @@ describe('RouteGateway', () => {
     const body = Dev.Sander.toJSON();
     api.put = mock.resolve(toResponse(HttpStatus.Ok, body));
     await expect(gateway.upsert(body)).resolves.toMatchObject(body);
-    expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('put calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.put = mock.resolve(toResponse(HttpStatus.Ok, body));
     await expect(gateway.put(DevUri.Developer.id(42), body)).resolves.toMatchObject(body);
-    expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.put).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('upsert calls api correctly with an empty body', async () => {
@@ -170,13 +170,13 @@ describe('RouteGateway', () => {
   test('remove calls api correctly', async () => {
     api.delete = mock.resolve(toResponse(HttpStatus.NoContent));
     await gateway.remove(42);
-    expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri));
+    expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
   test('delete calls api correctly', async () => {
     api.delete = mock.resolve(toResponse(HttpStatus.NoContent));
     await gateway.delete(DevUri.Developer.id(42));
-    expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri));
+    expect(api.delete).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
   test('pass options into get call', async () => {
@@ -190,4 +190,21 @@ describe('RouteGateway', () => {
     await gateway.getOne(DevUri.Developer.id(42), RequestOptions.Text);
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), fits.type(RequestOptions));
   });
+
+  class TestStore implements Store<Response, Request> {
+    execute(req: Request, f: Func<Promise<Response>, Request>): Promise<Response> {
+      return f(req);
+    }
+  }
+
+  @cache({ expiresIn: '1d', store: TestStore })
+  class TestGateway extends RouteGateway {
+    constructor(api: Api) {
+      super(
+        () => DevUri.Developers,
+        () => DevUri.Developer,
+        api
+      );
+    }
+  }
 });
