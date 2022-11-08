@@ -1,9 +1,12 @@
 import { Exception, Gateway, Id, Json, JsonValue, Key, List, PageList, PageOptions, toList, toPageList } from '../types';
 import { when } from '../validation';
-import { reject, resolve, View } from '../utils';
+import { View } from '../utils';
+import { Repository } from './Repository';
 
-export class Typo<T> {
-  constructor(protected view: View, private readonly gateway: Gateway) {}
+export class Typo<T> extends Repository<T> {
+  constructor(protected view: View, private readonly gateway: Gateway) {
+    super();
+  }
 
   create = (j: Json): T => this.view.from(j) as unknown as T;
 
@@ -40,29 +43,5 @@ export class Typo<T> {
 
   exists(id: Id): Promise<boolean> {
     return this.gateway.exists(id);
-  }
-
-  add(_t: T | Json): Promise<T> {
-    return reject(Exception.IsNotImplemented);
-  }
-
-  update(_id: Id, _json: Json): Promise<T> {
-    return reject(Exception.IsNotImplemented);
-  }
-
-  remove(_id: Id): Promise<boolean> {
-    return reject(Exception.IsNotImplemented);
-  }
-
-  extend(item: T): Promise<T> {
-    return resolve(item);
-  }
-
-  validate(item: T): Promise<T> {
-    return resolve(item);
-  }
-
-  upsert(_id: Id, _item: Json): Promise<T> {
-    return reject(Exception.IsNotImplemented);
   }
 }
