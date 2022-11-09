@@ -2,7 +2,7 @@ import { asList, asPageList, Constructor, Exception, Gateway, Id, isValidatable,
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
-import { Repository } from './Repository';
+import { Repository } from '../types';
 
 export class Repo<T extends Struct> extends Repository<T> {
   constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {

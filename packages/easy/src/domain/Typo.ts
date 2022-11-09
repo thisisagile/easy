@@ -1,7 +1,7 @@
 import { Exception, Gateway, Id, Json, JsonValue, Key, List, PageList, PageOptions, toList, toPageList } from '../types';
 import { when } from '../validation';
 import { View } from '../utils';
-import { Repository } from './Repository';
+import { Repository } from '../types';
 
 export class Typo<T> extends Repository<T> {
   constructor(protected view: View, private readonly gateway: Gateway) {

@@ -1,7 +1,7 @@
 import { choose, Id, JsonValue, Key, PageList, PageOptions, toList } from '../types';
 import { resolve } from '../utils';
 import { Req } from '../resources';
-import { Repository } from "../domain";
+import { Repository } from '../types';
 
 export class Search<T> {
   constructor(protected repo: Repository<T>) {}

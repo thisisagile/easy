@@ -1,4 +1,4 @@
-import { Exception, Id, Json, JsonValue, Key, List, PageList, PageOptions } from '../types';
+import { Exception, Id, Json, JsonValue, Key, List, PageList, PageOptions } from './index';
 import { reject } from '../utils';
 
 export class Repository<T> {
