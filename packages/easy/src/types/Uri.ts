@@ -8,19 +8,19 @@ import { tryTo } from './Try';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
-const toSegment = (key?: string, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
-  key,
+const toSegment = (key?: Text, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
+  key: asString(key),
   segment,
   query,
-  toString: () => key ?? '',
+  toString: () => asString(key),
 });
 
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
-  segment: (key?: string): Segment => toSegment(key, { segment: key }),
-  path: (key: string): Segment => toSegment(key, { segment: `:${key}` }),
-  query: (key: string): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
+  segment: (key?: Text): Segment => toSegment(key, { segment: asString(key) }),
+  path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
+  query: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
 };
 
 type Prop = { segment: Segment; value: any };
