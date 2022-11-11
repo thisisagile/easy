@@ -7,6 +7,7 @@ import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import { Id } from './Id';
 import { asString } from './Text';
 import { tryTo } from './Try';
+import { meta } from './Meta';
 
 export class List<T = unknown> extends Array<T> {
   asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
@@ -107,6 +108,8 @@ export class List<T = unknown> extends Array<T> {
   slice(start?: number, end?: number): List<T> {
     return toList(super.slice(start, end));
   }
+
+  dedupe = (key: keyof T): List<T> => meta(this.toObject(key)).values();
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);

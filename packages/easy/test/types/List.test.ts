@@ -250,6 +250,13 @@ describe('List.weave', () => {
   test('weave Stops inserting when out of items', () => {
     expect(toList([1, 2, 3, 4, 5, 6]).weave([21, 42], 1)).toMatchJson(toList(1, 21, 2, 42, 3, 4, 5, 6));
   });
+
+  test('dedupe', () => {
+    expect(toList<Dev>().dedupe('id')).toHaveLength(0);
+    expect(toList(Dev.Rob).dedupe('id')).toHaveLength(1);
+    expect(toList(Dev.Rob, Dev.Rob).dedupe('id')).toHaveLength(1);
+    expect(toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Rob, Dev.Wouter).dedupe('id')).toHaveLength(4);
+  });
 });
 
 describe('isList', () => {
