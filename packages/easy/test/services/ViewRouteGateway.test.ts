@@ -40,7 +40,7 @@ describe('ViewRouteGateway', () => {
     api.post = mock.resolve(toResponse(HttpStatus.Ok, body));
     const res = await gateway.add(body);
     expect(views.out.from).toHaveBeenCalledTimes(1);
-    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), {});
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), {}, undefined);
     expect(res).toMatchObject(body);
   });
 

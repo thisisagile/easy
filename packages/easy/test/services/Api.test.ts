@@ -87,8 +87,24 @@ describe('Api', () => {
     await api2.put(DevUri.Developer, body);
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Put, body }));
   });
+
   test('delete works', async () => {
     await api2.delete(DevUri.Developer);
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Delete }));
   });
 });
+
+// describe('types and validation', () => {
+//   const str = () => 'hi';
+//   const obj = <C>(c: Constructor<C>): C => new c();
+//
+//   const dev = { name: str(), language: str(), email: obj(Email) };
+//   type Dev = typeof dev;
+//
+//   test('create type', () => {
+//     const e: Dev = {};
+//     const d: Dev = { name: 'Jan', language: 'NL' };
+//     expect(d.name).toBe('Jan');
+//   });
+// });
+//

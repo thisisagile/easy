@@ -88,7 +88,7 @@ describe('RouteGateway', () => {
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
     await expect(gateway.post(DevUri.Developers, body)).resolves.toMatchObject(body);
-    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('post calls api correctly with different Uri', async () => {
@@ -101,8 +101,8 @@ describe('RouteGateway', () => {
 
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
-    await expect(gateway.post(StatsUri.Stats)).resolves.toBeDefined();
-    expect(api.post).toHaveBeenCalledWith(fits.type(StatsUri), undefined);
+    await expect(gateway.post(StatsUri.Stats, {})).resolves.toBeDefined();
+    expect(api.post).toHaveBeenCalledWith(fits.type(StatsUri), {}, undefined);
   });
 
   test('postSearch calls api correctly', async () => {
@@ -121,7 +121,7 @@ describe('RouteGateway', () => {
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
     await expect(gateway.add(body)).resolves.toMatchObject(body);
-    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body);
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), body, undefined);
   });
 
   test('add calls api correctly with an empty body', async () => {
