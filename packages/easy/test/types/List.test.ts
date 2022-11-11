@@ -252,10 +252,10 @@ describe('List.weave', () => {
   });
 
   test('dedupe', () => {
-    expect(toList<Dev>().dedupe('id')).toHaveLength(0);
-    expect(toList(Dev.Rob).dedupe('id')).toHaveLength(1);
-    expect(toList(Dev.Rob, Dev.Rob).dedupe('id')).toHaveLength(1);
-    expect(toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Rob, Dev.Wouter).dedupe('id')).toHaveLength(4);
+    expect(toList<Dev>().distinctByKey('id')).toHaveLength(0);
+    expect(toList(Dev.Rob).distinctByKey('id')).toHaveLength(1);
+    expect(toList(Dev.Rob, Dev.Rob).distinctByKey('id')).toHaveLength(1);
+    expect(toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Rob, Dev.Wouter).distinctByKey('id')).toHaveLength(4);
   });
 });
 

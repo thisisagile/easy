@@ -55,6 +55,8 @@ export class List<T = unknown> extends Array<T> {
 
   distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
 
+  distinctByKey = (key: keyof T): List<T> => meta(this.toObject(key)).values();
+
   filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
 
   sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => sum + p(i), 0);
@@ -108,8 +110,6 @@ export class List<T = unknown> extends Array<T> {
   slice(start?: number, end?: number): List<T> {
     return toList(super.slice(start, end));
   }
-
-  dedupe = (key: keyof T): List<T> => meta(this.toObject(key)).values();
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
