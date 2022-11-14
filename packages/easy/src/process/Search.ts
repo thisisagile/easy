@@ -8,7 +8,7 @@ export class Search<T> {
 
   all = (options?: PageOptions): Promise<PageList<T>> => this.repo.all(options);
 
-  byId = (id: Id): Promise<T | undefined> => this.repo.byId(id);
+  byId = (id: Id): Promise<T> => this.repo.byId(id);
 
   byIds = (...ids: Id[]): Promise<PageList<T>> => this.repo.byIds(...ids);
 
