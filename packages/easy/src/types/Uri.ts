@@ -9,7 +9,7 @@ import { tryTo } from './Try';
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
 const toSegment = (key?: Text, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
-  key: asString(key),
+  key: key as string,
   segment,
   query,
   toString: () => asString(key),
@@ -18,7 +18,7 @@ const toSegment = (key?: Text, { segment, query }: { segment?: string; query?: (
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
-  segment: (key?: Text): Segment => toSegment(key, { segment: asString(key) }),
+  segment: (key?: Text): Segment => toSegment(key, { segment: key as string }),
   path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
 };

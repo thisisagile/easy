@@ -10,6 +10,7 @@ const externalHost = 'https://www.external.com';
 class ExternalUri extends EasyUri {
   readonly host = uri.host(externalHost);
   static readonly api = uri.segment('api');
+  readonly resource = uri.segment();
 
   static get Api(): ExternalUri {
     return new ExternalUri([ExternalUri.api]);
@@ -91,6 +92,10 @@ describe('Uri', () => {
   test('toString returns full route with query', () => {
     expect(DevUri.Developers.query('yes').language('Java').toString()).toBe(`${host}/dev/developers?q=yes&language=Java`);
     expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe(`${host}/dev/developers/42?q=yes&language=C`);
+  });
+
+  test('toString with an undefined resource', () => {
+    expect(ExternalUri.Api).toMatchText(`https://www.external.com/api`)
   });
 
   test('Route with empty startIndex and itemsPerPage queries', () => {
