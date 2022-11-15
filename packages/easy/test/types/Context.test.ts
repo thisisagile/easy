@@ -22,6 +22,12 @@ describe('Environment Context', () => {
     expect(c.env.name).toBe('prd');
   });
 
+  test('app name from environment context', () => {
+    process.env.APP = 'movie';
+    const c = new Context();
+    expect(c.env.app).toBe('movie');
+  });
+
   test('invalid env port results in default port', () => {
     delete process.env.PORT;
     const c = new Context();

@@ -8,6 +8,7 @@ export interface EnvContext {
   readonly name: string;
   readonly host: string;
   readonly port: number;
+  readonly app: string;
 
   get(key: string, alt?: string): string | undefined;
 }
@@ -17,6 +18,7 @@ export class DotEnvContext implements EnvContext {
   readonly name = process.env.ENVIRONMENT_NAME ?? '';
   readonly host = process.env.HOST ?? '';
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
+  readonly app = process.env.APP ?? '';
 
   readonly get = (key: string, alt?: string): string | undefined =>
     tryTo(() =>
