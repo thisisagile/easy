@@ -92,19 +92,21 @@ describe('Api', () => {
     await api2.delete(DevUri.Developer);
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ uri: fits.type(DevUri), verb: HttpVerb.Delete }));
   });
-});
 
-// describe('types and validation', () => {
-//   const str = () => 'hi';
-//   const obj = <C>(c: Constructor<C>): C => new c();
-//
-//   const dev = { name: str(), language: str(), email: obj(Email) };
-//   type Dev = typeof dev;
-//
-//   test('create type', () => {
-//     const e: Dev = {};
-//     const d: Dev = { name: 'Jan', language: 'NL' };
-//     expect(d.name).toBe('Jan');
-//   });
-// });
-//
+  test('post without options', async () => {
+    await api2.post(DevUri.Developer);
+    expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Json) }));
+  });
+
+  test('post with requestOptions', async () => {
+    const o = RequestOptions.Text;
+    await api2.post(DevUri.Developer, undefined, o);
+    expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: o }));
+  });
+
+  test('post with fetchOption', async () => {
+    await api2.post(DevUri.Developer, undefined, { skip: 0, take: 5 });
+    expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Json) }));
+  });
+
+});
