@@ -1,4 +1,4 @@
-import { ctx, Enum, isDefined, isNotEmpty, PageOptions, Text, toUuid } from '../types';
+import { ctx, Enum, Id, isDefined, isNotEmpty, on, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -6,6 +6,14 @@ export const toPageOptions = (options?: RequestOptions | PageOptions): PageOptio
   options instanceof RequestOptions ? options.pageOptions : options;
 
 export class RequestOptions extends Enum {
+  public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean } = {};
+
+  constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
+    super(type.name);
+    this.headers['Content-Type'] = type.id;
+    this.headers[HttpHeader.Correlation] = ctx.request.correlationId ?? toUuid();
+  }
+
   static get Form(): RequestOptions {
     return new RequestOptions(ContentType.Form);
   }
@@ -26,33 +34,21 @@ export class RequestOptions extends Enum {
     return new RequestOptions(ContentType.Xml);
   }
 
-  public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean } = {};
-
-  constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
-    super(type.name);
-    this.headers['Content-Type'] = type.id;
-    this.headers[HttpHeader.Correlation] = ctx.request.correlationId ?? toUuid();
-  }
-
   page = (options: PageOptions): this => {
     this.pageOptions = options;
     return this;
   };
 
-  authorization = (auth: string): this => {
-    this.headers.Authorization = auth;
-    return this;
-  };
+  authorization = (auth: string): this => this.setHeader('Authorization', auth);
 
-  apiKey = (apiKey: string): this => {
-    this.headers.apiKey = apiKey;
-    return this;
-  };
+  apiKey = (apiKey: string): this => this.setHeader('apiKey', apiKey);
 
-  accept = (type: ContentType): this => {
-    this.headers.Accept = type.id;
-    return this;
-  };
+  setHeader = (key: string, value: Id | boolean): this => on(this, t => t.headers[key]= value)
+
+  setHeaderUnlessPresent = (key: string, value?: Id | boolean): this =>
+    value ? this.setHeader(key, this.headers[key] ?? value) : this;
+
+  accept = (type: ContentType): this => this.setHeader('Accept', type.id)
 
   bearer = (jwt: Text): this => {
     return isNotEmpty(jwt) ? this.authorization(`Bearer ${jwt}`) : this;
