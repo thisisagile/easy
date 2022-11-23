@@ -16,6 +16,7 @@ export class Dev extends Entity {
   static readonly Sander = new Dev({ id: 3, name: 'Sander', level: 3, certificates: [Certificate.ScrumMaster] });
   static readonly Wouter = new Dev({ id: 4, name: 'Wouter', level: 3 });
   static readonly Rob = new Dev({ id: 5, name: 'Rob', level: 3 });
+  static readonly Eugen = new Dev({ id: 6, name: 'Eugen', level: 3 });
   static readonly RobC = new Dev({ id: 6, name: 'RobC', level: 3 });
   static readonly All = toList(Dev.Sander, Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Rob, Dev.RobC);
 
