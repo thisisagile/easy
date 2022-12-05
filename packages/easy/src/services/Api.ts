@@ -64,7 +64,9 @@ export class Api {
     return options instanceof RequestOptions ? options : RequestOptions.Json;
   }
 
-  execute = (req: Request): Promise<Response> => (this.store ? this.store.execute(req, () => this.provider.execute(req)) : this.provider.execute(req));
+  execute(req: Request): Promise<Response> {
+    return this.store ? this.store.execute(req, () => this.provider.execute(req)) : this.provider.execute(req);
+  }
 }
 
 export const api: Api = new Api();
