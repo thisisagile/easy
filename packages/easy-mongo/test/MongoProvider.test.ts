@@ -3,7 +3,7 @@ import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { Database, DateTime, DefaultProvider, Exception, Field, toCondition } from '@thisisagile/easy';
+import { Database, DateTime, DefaultProvider, Exception, Field, Id, JsonValue, toCondition } from "@thisisagile/easy";
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -184,7 +184,28 @@ describe('MongoProvider', () => {
     provider.collection = mock.resolve(c);
     const res = await provider.by('level', 1);
     expect(res.last()).toMatchObject(devData.wouter);
-    expect(c.find).toHaveBeenCalledWith({ level: '1' }, expect.anything());
+    expect(c.find).toHaveBeenCalledWith({ level: 1 }, expect.anything());
+  });
+
+  test.each([
+    [1, 1],
+    ['42', '42'],
+    [true, true],
+    [{ id: 42 }, { id: 42 }],
+  ])('by does not convert the value to a string. This is done in the past see before 06-12-2022', async (value: JsonValue, exp: any) => {
+    provider.find = mock.resolve();
+    await provider.by('level', value, {});
+    expect(provider.find).toHaveBeenCalledWith({ level: exp }, expect.anything());
+  });
+
+  test.each([
+    [1, 1],
+    ['42', '42'],
+  ])('byId does not convert the value to a string. This is done in the past see before 06-12-2022', async (value: Id, exp: any) => {
+    c.findOne = mock.resolve();
+    provider.collection = mock.resolve(c);
+    await provider.byId(value)
+    expect(c.findOne).toHaveBeenCalledWith({ id: exp }, expect.anything());
   });
 
   test('add calls insertOne on the collection', async () => {
