@@ -111,11 +111,11 @@ export class MongoProvider {
   }
 
   byId(id: Id, options?: FindOptions): Promise<Json> {
-    return this.collection().then(c => c.findOne(this.toMongoJson({ id: asString(id) }), this.toFindOptions(options)) as Promise<Json>);
+    return this.collection().then(c => c.findOne(this.toMongoJson({ id: id }), this.toFindOptions(options)) as Promise<Json>);
   }
 
   by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
-    return this.find({ [key]: asString(value) }, options);
+    return this.find({ [key]: value }, options);
   }
 
   group(qs: Filter<any>[]): Promise<PageList<Json>> {
