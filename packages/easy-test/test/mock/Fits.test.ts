@@ -45,7 +45,7 @@ describe('match', () => {
     expect('Sander').toEqual(fits.textExact(new Dev('Sander')));
     expect('Sander').not.toEqual(fits.textExact(new Dev('Jeroen')));
     expect(sh).not.toEqual(fits.textExact('Hoogendoorn'));
-    expect(sh).not.toEqual(fits.textExact('De Vries'));
+    expect(sh).not.toEqual(fits.textExact('van Wilgen'));
   });
 
   const complete = '$host/$resource/devs';
