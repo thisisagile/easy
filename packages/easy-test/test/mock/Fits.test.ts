@@ -1,4 +1,4 @@
-import { fits } from '../../src';
+import { fits, ObjectContainingJson, ObjectContainingText, ObjectContainingTextExact } from '../../src';
 
 class Dev {
   constructor(readonly name: string) {}
@@ -65,5 +65,22 @@ describe('match', () => {
     expect({ name: 'Sander' }).not.toEqual(fits.json({ name: 'Sander', role: 'CTO' }));
     expect(new Dev('Sander')).toEqual(fits.json({ name: 'Sander' }));
     expect(new Dev('Sander')).not.toEqual(fits.json(new Dev('Sander')));
+  });
+
+  test('toString on AsymmetricMatchers', () => {
+    let m = new ObjectContainingText('', true);
+    expect(m.toString()).toBe('StringNotContaining');
+    m = new ObjectContainingText('', false);
+    expect(m.toString()).toBe('StringContaining');
+
+    m = new ObjectContainingTextExact('', true);
+    expect(m.toString()).toBe('StringNotContaining');
+    m = new ObjectContainingTextExact('', false);
+    expect(m.toString()).toBe('StringContaining');
+
+    m = new ObjectContainingJson('', true);
+    expect(m.toString()).toBe('ObjectNotContaining');
+    m = new ObjectContainingJson('', false);
+    expect(m.toString()).toBe('ObjectContaining');
   });
 });

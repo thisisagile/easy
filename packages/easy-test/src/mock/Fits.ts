@@ -3,7 +3,7 @@ import { eq } from '../utils/Eq';
 import { AsymmetricMatcher } from 'expect';
 import { Uri } from '../utils/Types';
 
-class ObjectContainingText extends AsymmetricMatcher<string> {
+export class ObjectContainingText extends AsymmetricMatcher<string> {
   asymmetricMatch(other: any) {
     return asString(other).includes(asString(this.sample));
   }
@@ -13,7 +13,7 @@ class ObjectContainingText extends AsymmetricMatcher<string> {
   }
 }
 
-class ObjectContainingTextExact extends AsymmetricMatcher<string> {
+export class ObjectContainingTextExact extends AsymmetricMatcher<string> {
   asymmetricMatch(other: any) {
     return asString(other) === asString(this.sample);
   }
@@ -23,7 +23,7 @@ class ObjectContainingTextExact extends AsymmetricMatcher<string> {
   }
 }
 
-class ObjectContainingJson extends AsymmetricMatcher<any> {
+export class ObjectContainingJson extends AsymmetricMatcher<any> {
   asymmetricMatch(other: any) {
     return eq.subset(asJson(other), asJson(this.sample));
   }
