@@ -9,6 +9,8 @@ class Dev {
 class Manager {}
 
 describe('match', () => {
+  const sh = 'Sander Hoogendoorn';
+
   test('any', () => {
     expect({}).toMatchObject(fits.any());
   });
@@ -33,8 +35,26 @@ describe('match', () => {
     expect(new Dev('Sander')).toEqual(fits.text(new Dev('Sander')));
     expect('Sander').toEqual(fits.text(new Dev('Sander')));
     expect('Sander').not.toEqual(fits.text(new Dev('Jeroen')));
-    expect('Sander Hoogendoorn').toEqual(fits.text('Hoogendoorn'));
-    expect('Sander Hoogendoorn').not.toEqual(fits.text('De Vries'));
+    expect(sh).toEqual(fits.text('Hoogendoorn'));
+    expect(sh).not.toEqual(fits.text('De Vries'));
+  });
+
+  test('textExact', () => {
+    expect(new Dev('Sander')).toEqual(fits.textExact('Sander'));
+    expect(new Dev('Sander')).toEqual(fits.textExact(new Dev('Sander')));
+    expect('Sander').toEqual(fits.textExact(new Dev('Sander')));
+    expect('Sander').not.toEqual(fits.textExact(new Dev('Jeroen')));
+    expect(sh).not.toEqual(fits.textExact('Hoogendoorn'));
+    expect(sh).not.toEqual(fits.textExact('De Vries'));
+  });
+
+  const complete = '$host/$resource/devs';
+  const uri = { route: '/devs', complete, toString: () => complete };
+
+  test('uri', () => {
+    expect(uri).not.toEqual(fits.uri('$host/$resource'));
+    expect(uri).not.toEqual(fits.uri('$host/$resource/managers'));
+    expect(uri).toEqual(fits.uri(complete));
   });
 
   test('json', () => {

@@ -1,10 +1,21 @@
 import { asJson, asString } from '../utils/Utils';
 import { eq } from '../utils/Eq';
 import { AsymmetricMatcher } from 'expect';
+import { Uri } from '../utils/Types';
 
 class ObjectContainingText extends AsymmetricMatcher<string> {
   asymmetricMatch(other: any) {
     return asString(other).includes(asString(this.sample));
+  }
+
+  toString() {
+    return `String${this.inverse ? 'Not' : ''}Containing`;
+  }
+}
+
+class ObjectContainingTextExact extends AsymmetricMatcher<string> {
+  asymmetricMatch(other: any) {
+    return asString(other) === asString(this.sample);
   }
 
   toString() {
@@ -27,5 +38,7 @@ export const fits = {
   type: (type?: unknown): any => expect.any(type),
   with: (o: unknown): any => expect.objectContaining(o),
   text: (s: any): any => new ObjectContainingText(s),
+  textExact: (s: any): any => new ObjectContainingTextExact(s),
+  uri: (u: Uri): any => fits.textExact(u),
   json: (s: any): any => new ObjectContainingJson(s),
 };
