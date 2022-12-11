@@ -14,3 +14,4 @@ export * from './toMatchRoute';
 export * from './toMatchText';
 export * from './toPassMatcher';
 export * from './toBeQueriedWith';
+export * from './toBeRoutedTo';
