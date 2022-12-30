@@ -43,12 +43,11 @@ export class RequestOptions extends Enum {
 
   apiKey = (apiKey: string): this => this.setHeader('apiKey', apiKey);
 
-  setHeader = (key: string, value: Id | boolean): this => on(this, t => t.headers[key]= value)
+  setHeader = (key: string, value: Id | boolean): this => on(this, t => (t.headers[key] = value));
 
-  setHeaderUnlessPresent = (key: string, value?: Id | boolean): this =>
-    value ? this.setHeader(key, this.headers[key] ?? value) : this;
+  setHeaderUnlessPresent = (key: string, value?: Id | boolean): this => (value ? this.setHeader(key, this.headers[key] ?? value) : this);
 
-  accept = (type: ContentType): this => this.setHeader('Accept', type.id)
+  accept = (type: ContentType): this => this.setHeader('Accept', type.id);
 
   bearer = (jwt: Text): this => {
     return isNotEmpty(jwt) ? this.authorization(`Bearer ${jwt}`) : this;

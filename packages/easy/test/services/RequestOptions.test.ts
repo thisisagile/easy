@@ -45,28 +45,28 @@ describe('RequestOptions', () => {
 
   test('set header', () => {
     const opts = RequestOptions.Json;
-    expect(opts.setHeader('api', '').headers['api']).toBe('')
-    expect(opts.setHeader('api', 'value').headers['api']).toBe('value')
-    expect(opts.setHeader('api', true).headers['api']).toBe(true)
-    expect(opts.setHeader('api', false).headers['api']).toBe(false)
-    expect(opts.setHeader('api', 123).headers['api']).toBe(123)
-    expect(opts.setHeader('Api', 42).headers['Api']).toBe(42)
+    expect(opts.setHeader('api', '').headers['api']).toBe('');
+    expect(opts.setHeader('api', 'value').headers['api']).toBe('value');
+    expect(opts.setHeader('api', true).headers['api']).toBe(true);
+    expect(opts.setHeader('api', false).headers['api']).toBe(false);
+    expect(opts.setHeader('api', 123).headers['api']).toBe(123);
+    expect(opts.setHeader('Api', 42).headers['Api']).toBe(42);
   });
 
   test('set header unless present with undefined value', () => {
     const opts = RequestOptions.Json;
-    expect(opts.setHeaderUnlessPresent('api').headers['api']).toBeUndefined()
+    expect(opts.setHeaderUnlessPresent('api').headers['api']).toBeUndefined();
   });
 
   test('setHeaderUnlessPresent dont overwrite existing head set header', () => {
     const opts = RequestOptions.Json;
-    opts.headers['api'] = 'present'
-    expect(opts.setHeaderUnlessPresent('api','new value').headers['api']).toBe('present')
+    opts.headers['api'] = 'present';
+    expect(opts.setHeaderUnlessPresent('api', 'new value').headers['api']).toBe('present');
   });
 
   test('setHeaderUnlessPresent set header', () => {
     const opts = RequestOptions.Json;
-    expect(opts.setHeaderUnlessPresent('api','new value').headers['api']).toBe('new value')
+    expect(opts.setHeaderUnlessPresent('api', 'new value').headers['api']).toBe('new value');
   });
 
   test('bearer()', () => {
