@@ -108,5 +108,4 @@ describe('Api', () => {
     await api2.post(DevUri.Developer, undefined, { skip: 0, take: 5 });
     expect(provider2.execute).toHaveBeenCalledWith(fits.with({ options: fits.json(RequestOptions.Json) }));
   });
-
 });
