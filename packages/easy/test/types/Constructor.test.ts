@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { isConstructor, ofConstruct, on, text, toName } from '../../src';
+import { ifA, isConstructor, ofConstruct, on, text, toName } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
@@ -83,5 +83,23 @@ describe('on', () => {
     const t2 = on(tester, t => t.rename('Rob'));
     expect(tester).toStrictEqual(t2);
     expect(t2.name).toBe('Rob');
+  });
+});
+
+describe('ifA', () => {
+  test('as', () => {
+    expect(ifA(Dev)).toBeFalsy();
+    expect(ifA(Dev, undefined)).toBeFalsy();
+    expect(ifA(Dev, undefined)).toBeFalsy();
+    expect(ifA(Dev, true)).toBeFalsy();
+    expect(ifA(Dev, false)).toBeFalsy();
+    expect(ifA(Dev, {})).toBeFalsy();
+    expect(ifA(Dev, Dev.Naoufal as unknown as Dev)).toBeInstanceOf(Dev);
+    expect(ifA(Dev, Dev.Rob)).toBeInstanceOf(Dev);
+    expect(ifA(Dev, undefined, undefined)).toBeFalsy();
+    expect(ifA(Dev, undefined, true)).toBeUndefined();
+    expect(ifA(Dev, undefined, false)).toBeUndefined();
+    expect(ifA(Dev, undefined, {})).toBeUndefined();
+    expect(ifA(Dev, undefined, Dev.Eugen)).toBeInstanceOf(Dev);
   });
 });
