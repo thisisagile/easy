@@ -95,7 +95,7 @@ describe('Uri', () => {
   });
 
   test('toString with an undefined resource', () => {
-    expect(ExternalUri.Api).toMatchText(`https://www.external.com/api`)
+    expect(ExternalUri.Api).toMatchText(`https://www.external.com/api`);
   });
 
   test('Route with empty startIndex and itemsPerPage queries', () => {
