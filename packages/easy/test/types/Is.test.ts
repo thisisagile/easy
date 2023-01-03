@@ -3,19 +3,18 @@ import {
   isArray,
   isBoolean,
   isDefined,
-  isUndefined,
   isEmpty,
   isEmptyObject,
+  isIn,
   isInstance,
+  isIntersecting,
   isIsoDateString,
   isNotEmpty,
   isNumber,
   isObject,
-  isPrimitive,
   isString,
-  isIn,
-  isIntersecting,
   isTrue,
+  isUndefined,
 } from '../../src';
 import { Dev } from '../ref';
 
@@ -175,21 +174,6 @@ describe('isInstance', () => {
     expect(isInstance(Tester, Dev.Jeroen)).toBeFalsy();
     expect(isInstance(Dev, new Ux())).toBeTruthy();
     expect(isInstance(Ux, Dev.Wouter)).toBeFalsy();
-  });
-});
-
-describe('isPrimitive', () => {
-  test('Check', () => {
-    expect(isPrimitive()).toBeTruthy();
-    expect(isPrimitive(null)).toBeTruthy();
-    expect(isPrimitive('')).toBeTruthy();
-    expect(isPrimitive({})).toBeFalsy();
-    expect(isPrimitive(123)).toBeTruthy();
-    expect(isPrimitive(false)).toBeTruthy();
-    expect(isPrimitive(Dev)).toBeFalsy();
-    expect(isPrimitive(Dev.Wouter)).toBeFalsy();
-    expect(isPrimitive(() => true)).toBeFalsy();
-    expect(isPrimitive([])).toBeFalsy();
   });
 });
 

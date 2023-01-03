@@ -33,6 +33,4 @@ export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) 
 
 export const isIntersecting = (o?: unknown[], values?: unknown[]): boolean => isArray(o) && isArray(values) && o.some(ov => isIn(ov, values));
 
-export const isPrimitive = (o?: unknown): boolean => !isObject(o) && !isFunction(o) && !isArray(o);
-
 export const isError = (e: unknown): e is Error => isDefined(e) && e instanceof Error;
