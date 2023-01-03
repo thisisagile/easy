@@ -21,6 +21,7 @@ export * from './Json';
 export * from './List';
 export * from './Message';
 export * from './Meta';
+export * from './Nullish';
 export * from './Number';
 export * from './Primitive';
 export * from './Repository';
