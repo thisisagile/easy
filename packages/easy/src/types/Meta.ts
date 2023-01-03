@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { List, toList } from './List';
 import { isDefined } from './Is';
+import { on } from './Constructor';
 
 class ClassMeta {
   constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
@@ -14,6 +15,8 @@ class ClassMeta {
 
   entries = <T = unknown>(): List<[key: string, value: T]> =>
     toList([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<[any, T]>;
+
+  parse = (p: (v: unknown) => unknown, initial: any = {}): any => this.entries().reduce((a, [key, value]) => on(a, a => (a[key] = p(value))), initial);
 
   properties = (key?: string): List<PropertyMeta> =>
     toList([...Object.getOwnPropertyNames(this.subject), ...Object.getOwnPropertyNames(Object.getPrototypeOf(this.subject))])

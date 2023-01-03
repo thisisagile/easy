@@ -46,6 +46,16 @@ describe('Meta', () => {
     matchProperties(ps);
   });
 
+  test('Parse works', () => {
+    const a = meta({ name: 'Sander', language: 'Typescript' }).parse(v => `${v} Yes`);
+    expect(a).toStrictEqual({ name: 'Sander Yes', language: 'Typescript Yes' });
+  });
+
+  test('Parse works with initial', () => {
+    const a = meta({ name: 'Sander', language: 'Typescript' }).parse(() => 1, { last: 'Hoogendoorn' });
+    expect(a).toStrictEqual({ name: 1, language: 1, last: 'Hoogendoorn' });
+  });
+
   const matchProperties = (constraints: List<any>): void => {
     expect(constraints).toContainEqual(fits.with({ property: 'id' }));
     expect(constraints).toContainEqual(fits.with({ property: 'name' }));
