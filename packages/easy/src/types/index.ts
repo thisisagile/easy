@@ -8,6 +8,7 @@ export * from './Context';
 export * from './Enum';
 export * from './ErrorOrigin';
 export * from './Exception';
+export * from './Falsy';
 export * from './Func';
 export * from './Gateway';
 export * from './Get';
