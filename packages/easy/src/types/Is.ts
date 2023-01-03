@@ -15,7 +15,7 @@ export const isIsoDateString = (o?: unknown): o is string =>
 
 export const isBoolean = (o?: unknown): o is boolean => isDefined(o) && typeof o === 'boolean';
 
-export const isTrue = (o?: unknown): boolean => (isFunction(o) ? isTrue(o()) : isBoolean(o) ? o : !!o);
+export const isTrue = (o?: unknown): o is true => (isFunction(o) ? isTrue(o()) : isBoolean(o) ? o : !!o);
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
 
