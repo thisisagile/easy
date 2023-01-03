@@ -1,6 +1,7 @@
 import { Get } from './Get';
 import { isFunc } from './Func';
-import { isDefined, isPrimitive } from './Is';
+import { isDefined } from './Is';
+import { isPrimitive } from './Primitive';
 
 export type Constructor<T = unknown> = { new (...args: any[]): T };
 
