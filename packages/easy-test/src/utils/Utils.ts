@@ -1,6 +1,6 @@
-import { Construct, Get, isNumber, ofConstruct, ofGet, tryTo } from '@thisisagile/easy';
+import { Construct, Get, isNullish, isNumber, ofConstruct, ofGet, tryTo } from '@thisisagile/easy';
 
-export const isDefined = (o?: unknown): boolean => o !== undefined && o !== null;
+export const isDefined = (o?: unknown): boolean => !isNullish(o);
 export const ifDefined = <T>(o: unknown, f: Construct<T>, alt?: Construct<T>): T | undefined => (isDefined(o) ? ofConstruct(f, o) : ofConstruct(alt, o));
 
 export const isFunction = (o?: unknown): o is (...params: unknown[]) => unknown => isDefined(o) && typeof o === 'function';
