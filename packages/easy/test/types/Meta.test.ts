@@ -52,8 +52,13 @@ describe('Meta', () => {
   });
 
   test('Parse works with initial', () => {
-    const a = meta({ name: 'Sander', language: 'Typescript' }).parse(() => 1, { last: 'Hoogendoorn' });
+    const a = meta({ name: 'Sander', language: 'Typescript' }).parse(() => 1, { initial: { last: 'Hoogendoorn' } });
     expect(a).toStrictEqual({ name: 1, language: 1, last: 'Hoogendoorn' });
+  });
+
+  test('Parse works with skipUndefined', () => {
+    const a = meta({ name: 'Sander', language: undefined }).parse(v => v, { skipUndefined: true });
+    expect(a).toStrictEqual({ name: 'Sander' });
   });
 
   const matchProperties = (constraints: List<any>): void => {
