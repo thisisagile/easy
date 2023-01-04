@@ -89,6 +89,11 @@ describe('IfNotEmpty', () => {
     expect(ifNotEmpty([], () => f())).toBeUndefined();
     expect(f).not.toHaveBeenCalled();
   });
+
+  test('return value tested if f is not given.', () => {
+    expect(ifNotEmpty([])).toBeUndefined();
+    expect(ifNotEmpty({ name: 'Sander' })).toStrictEqual({ name: 'Sander' });
+  });
 });
 
 describe('IfTrue', () => {
