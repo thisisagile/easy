@@ -94,6 +94,10 @@ describe('Uri', () => {
     expect(DevUri.Developer.id(42).query('yes').language('C').toString()).toBe(`${host}/dev/developers/42?q=yes&language=C`);
   });
 
+  test('returning with "boolean" query params', () => {
+    expect(DevUri.Developers.query('yes').certified().language('Java').toString()).toBe(`${host}/dev/developers?q=yes&certified&language=Java`);
+  });
+
   test('toString with an undefined resource', () => {
     expect(ExternalUri.Api).toMatchText(`https://www.external.com/api`);
   });

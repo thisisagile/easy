@@ -4,6 +4,7 @@ export class DevUri extends EasyUri {
   static readonly devs = uri.segment('developers');
   static readonly language = uri.query('language');
   static readonly level = uri.query('level');
+  static readonly certified = uri.boolean('certified');
 
   static get Developers(): DevUri {
     return new DevUri([DevUri.devs]);
@@ -14,4 +15,5 @@ export class DevUri extends EasyUri {
 
   language = (f?: string): this => this.set(DevUri.language, f);
   level = (l: number): this => this.set(DevUri.level, l);
+  certified = (): this => this.set(DevUri.certified, '');
 }

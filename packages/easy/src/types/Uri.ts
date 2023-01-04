@@ -21,6 +21,7 @@ export const uri = {
   segment: (key?: Text): Segment => toSegment(key, { segment: key as string }),
   path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
+  boolean: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}` : '') }),
 };
 
 type Prop = { segment: Segment; value: any };
