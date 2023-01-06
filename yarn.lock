@@ -2192,7 +2192,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    mongodb: ^4.11.0
+    mongodb: ^4.13.0
   languageName: unknown
   linkType: soft
 
@@ -4516,13 +4516,6 @@ __metadata:
   version: 1.0.0
   resolution: "delegates@npm:1.0.0"
   checksum: a51744d9b53c164ba9c0492471a1a2ffa0b6727451bdc89e31627fdf4adda9d51277cfcbfb20f0a6f08ccb3c436f341df3e92631a3440226d93a8971724771fd
-  languageName: node
-  linkType: hard
-
-"denque@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "denque@npm:2.1.0"
-  checksum: 1d4ae1d05e59ac3a3481e7b478293f4b4c813819342273f3d5b826c7ffa9753c520919ba264f377e09108d24ec6cf0ec0ac729a5686cbb8f32d797126c5dae74
   languageName: node
   linkType: hard
 
@@ -8083,13 +8076,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^4.11.0":
-  version: 4.11.0
-  resolution: "mongodb@npm:4.11.0"
+"mongodb@npm:^4.13.0":
+  version: 4.13.0
+  resolution: "mongodb@npm:4.13.0"
   dependencies:
     "@aws-sdk/credential-providers": ^3.186.0
     bson: ^4.7.0
-    denque: ^2.1.0
     mongodb-connection-string-url: ^2.5.4
     saslprep: ^1.0.3
     socks: ^2.7.1
@@ -8098,7 +8090,7 @@ __metadata:
       optional: true
     saslprep:
       optional: true
-  checksum: 3080c2f58dc712ca6d0a34b0f4101c3ca66fbf86360b2a5ea2b64a9f757b4a0d7b77851688657fc3240ac748ddcd69c21ec2f7c785f10cb7d41e00e863f415ec
+  checksum: 4c30eed40f639ac64069623cf7a4954e98eab81b91d61df90e7813dd2a745259cdc698f3b60bd7f37c123242b7eb0aaae6ee4e29ff2e48f5d13f187931d51f36
   languageName: node
   linkType: hard
 
