@@ -15,5 +15,5 @@ export class DevUri extends EasyUri {
 
   language = (f?: string): this => this.set(DevUri.language, f);
   level = (l: number): this => this.set(DevUri.level, l);
-  certified = (): this => this.set(DevUri.certified, '');
+  certified = (): this => this.set(DevUri.certified, true);
 }

@@ -1,4 +1,4 @@
-import { isDefined, isNotEmpty } from './Is';
+import { isDefined, isNotEmpty, isTrue } from "./Is";
 import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
@@ -21,7 +21,7 @@ export const uri = {
   segment: (key?: Text): Segment => toSegment(key, { segment: key as string }),
   path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
-  boolean: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}` : '') }),
+  boolean: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isTrue(value) ? `${key}` : '') }),
 };
 
 type Prop = { segment: Segment; value: any };
