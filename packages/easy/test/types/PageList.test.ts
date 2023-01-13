@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { isPageList, toFilter, toList, toPageList } from '../../src';
+import { isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
@@ -61,11 +61,12 @@ describe('PageList', () => {
   test('toPageList list and filters', () => {
     const pl = toPageList(Dev.All, {
       total: 42,
-      filters: [{ field: 'cat', label: 'category', values: [{ label: 'Wonen', value: '1233-123-13' }] }],
+      filters: [{ field: 'offer.items.cat', shortField: 'cat', label: 'category', values: [{ label: 'Wonen', value: '1233-123-13' }] }],
     });
     expect(pl.filters).toBeDefined();
     expect(pl.filters).toHaveLength(1);
-    expect(pl.filters?.[0].field).toBe('cat');
+    expect(pl.filters?.[0].field).toBe('offer.items.cat');
+    expect(pl.filters?.[0].shortField).toBe('cat');
     expect(pl.filters?.[0].label).toBe('category');
     expect(pl.filters?.[0].values).toHaveLength(1);
   });
@@ -80,6 +81,10 @@ describe('PageList', () => {
   });
 
   test('toFilter', () => {
-    expect(toFilter('start', 42)).toMatchJson({ field: 'start', values: [{ value: 42 }] });
+    expect(toFilter('start', 42)).toMatchJson({ field: 'start', shortField: 'start', values: [{ value: 42 }] });
+  });
+
+  test('toShortFilter', () => {
+    expect(toShortFilter('start', 'end', 42)).toMatchJson({ field: 'start', shortField: 'end', values: [{ value: 42 }] });
   });
 });
