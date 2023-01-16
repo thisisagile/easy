@@ -12,6 +12,7 @@ import {
   ofGet,
   PropertyOptions,
   Sort,
+  SortDirection,
   Text,
   toCondition,
   toUuid,
@@ -56,7 +57,7 @@ export class Collection extends Mapper {
 
   search = (key: Text): Field => this.map.field(asString(key));
 
-  sort = (...conditions: Sort[]): Json =>
+  sort = (...conditions: Sort[]): Record<string, SortDirection> =>
     conditions.reduce((cs: any, c) => {
       cs[c.key] = c.value;
       return cs;

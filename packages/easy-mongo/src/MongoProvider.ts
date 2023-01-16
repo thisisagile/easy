@@ -169,7 +169,7 @@ export class MongoProvider {
     return {
       limit: options?.take ?? 250,
       ...(options?.skip && { skip: options?.skip }),
-      ...(options?.sort && { sort: this.coll.sort(...(options?.sort ?? {})) as any }),
+      ...(options?.sorts && { sort: options?.sorts } || options?.sort && { sort: this.coll.sort(...options?.sort ?? []) }),
       total: isDefined(options?.skip) || isDefined(options?.take),
       projection: options?.projection ?? { _id: 0 },
     };

@@ -3,7 +3,18 @@ import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { Database, DateTime, DefaultProvider, Exception, Field, Id, JsonValue, toCondition } from "@thisisagile/easy";
+import {
+  asc,
+  Database,
+  DateTime,
+  DefaultProvider,
+  desc,
+  Exception,
+  Field,
+  Id,
+  JsonValue,
+  toCondition
+} from "@thisisagile/easy";
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -284,7 +295,7 @@ describe('MongoProvider', () => {
   }
 
   test.each([
-    ['with undefined', undefined as unknown as string, undefined],
+    ['with undefined as unknown as string', undefined as unknown as string, undefined],
     ['with string', 'name', 'name'],
     ['with string array', ['name', 'id'], ['name', 'id']],
     ['with field', new Field('name'), 'name'],
@@ -370,6 +381,18 @@ describe('MongoProvider', () => {
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs, Promise.resolve(client));
     expect(p.toFindOptions(s)).toStrictEqual(expected);
+  });
+
+  test('find with sort', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find(devs.where(devs.name.is('Jeroen')), { sort: [devs.name.desc(), devs.language.asc()] });
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({sort: {Name: -1, Language: 1}}));
+  });
+
+  test('find with sorts', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find(devs.where(devs.name.is('Jeroen')), {sorts: {Name: desc, Language: asc}});
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({sort: {Name: -1, Language: 1}}));
   });
 
   test('first time connect fails set client to undefined', async () => {
