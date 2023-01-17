@@ -8,7 +8,7 @@ import { tryTo } from './Try';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
-const toSegment = (key?: Text, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
+export const toSegment = (key?: Text, { segment, query }: { segment?: string; query?: (value: unknown) => string } = {}): Segment => ({
   key: key as string,
   segment,
   query,
