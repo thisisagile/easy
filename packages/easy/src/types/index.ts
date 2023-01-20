@@ -34,6 +34,7 @@ export * from './Tag';
 export * from './Template';
 export * from './Text';
 export * from './Try';
+export * from './TypeGuard';
 export * from './Types';
 export * from './Uri';
 export * from './Uuid';
