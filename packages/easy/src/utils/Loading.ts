@@ -1,3 +1,3 @@
-import { isEmpty, isEmptyObject, toArray } from '../types';
+import { isNotPresent } from '../types';
 
-export const isLoading = (...targets: unknown[]): boolean => toArray(targets).some(t => isEmpty(t) || isEmptyObject(t));
+export const isLoading = (...targets: unknown[]): boolean => isNotPresent(...targets);
