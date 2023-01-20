@@ -34,3 +34,15 @@ export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) 
 export const isIntersecting = (o?: unknown[], values?: unknown[]): boolean => isArray(o) && isArray(values) && o.some(ov => isIn(ov, values));
 
 export const isError = (e: unknown): e is Error => isDefined(e) && e instanceof Error;
+
+export const isNotPresent = (...os: unknown[]): boolean =>
+  os.some(
+    o =>
+      o === null ||
+      o === undefined ||
+      o === '' ||
+      (o instanceof Array && o.length === 0) ||
+      (typeof o === 'object' && Object.getOwnPropertyNames(o).length === 0)
+  );
+
+export const isPresent = (...os: unknown[]): boolean => !isNotPresent(...os);

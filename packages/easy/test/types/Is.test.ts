@@ -10,8 +10,10 @@ import {
   isIntersecting,
   isIsoDateString,
   isNotEmpty,
+  isNotPresent,
   isNumber,
   isObject,
+  isPresent,
   isString,
   isTrue,
   isUndefined,
@@ -251,5 +253,42 @@ describe('isUndefined', () => {
     expect(isUndefined(null)).toBeTruthy();
     expect(isUndefined('null')).toBeFalsy();
     expect(isUndefined({})).toBeFalsy();
+  });
+});
+
+describe('isPresent', () => {
+  const isTrue: [string, unknown, boolean][] = [
+    ['undefined is not', undefined, false],
+    ['null is not', null, false],
+    ['empty string is not', '', false],
+    ['empty object is not', {}, false],
+    ['empty array is not', [], false],
+    ['zero is', 0, true],
+    ['a number is', 42, true],
+    ['false is', false, true],
+    ['true is', false, true],
+    ['a string is', 'false', true],
+    ['an object is', { valid: 'false' }, true],
+    ['an entity is', Dev.Wouter, true],
+    ['an array is', ['', ''], true],
+  ];
+
+  test.each(isTrue)('%s present', (name: string, o: unknown, out: boolean) => {
+    expect(isPresent(o)).toBe(out);
+  });
+  test('spreads that are present', () => {
+    expect(isNotPresent(undefined, undefined)).toBeTruthy();
+    expect(isNotPresent('undefined', undefined)).toBeTruthy();
+    expect(isNotPresent(Dev.Eugen, undefined)).toBeTruthy();
+    expect(isNotPresent([], undefined)).toBeTruthy();
+    expect(isNotPresent([], [])).toBeTruthy();
+  });
+
+  test('spreads that are not present', () => {
+    expect(isNotPresent('undefined', 'undefined')).toBeFalsy();
+    expect(isNotPresent('undefined', Dev.Rob)).toBeFalsy();
+    expect(isNotPresent(Dev.Eugen, Dev.Jeroen)).toBeFalsy();
+    expect(isNotPresent([Dev.Eugen], Dev.Jeroen)).toBeFalsy();
+    expect(isNotPresent([Dev.Eugen], [Dev.Jeroen])).toBeFalsy();
   });
 });
