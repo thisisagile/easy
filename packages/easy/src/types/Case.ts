@@ -1,4 +1,4 @@
-import { Func, Get, isDefined, isEmpty, ofGet, Predicate, tryTo } from './index';
+import { Func, Get, isDefined, isEmpty, ofGet, Predicate, tryTo, TypeGuard } from './index';
 import { validate } from '../validation';
 
 class CaseBuilder<V> {
@@ -8,7 +8,7 @@ class CaseBuilder<V> {
     return new Case<T, V>(this.v).case(pred, out);
   }
 
-  type<T, U = unknown>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
+  type<T, U = unknown>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> {
     return new Case<T, V>(this.v).type<U>(guard, out);
   }
 
@@ -41,7 +41,7 @@ class Case<T, V = unknown> {
       .or(this);
   }
 
-  type<U>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
+  type<U>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> {
     return tryTo(guard, this.value)
       .is.true()
       .map(() => out(this.value as unknown as U))
@@ -80,7 +80,7 @@ class Found<T, V> extends Case<T, V> {
     return this;
   }
 
-  type<U>(guard: (u: unknown) => u is U, out: Func<T, U>): Case<T, V> {
+  type<U>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> {
     return this;
   }
 
