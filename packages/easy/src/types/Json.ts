@@ -2,11 +2,13 @@ import { isA } from './IsA';
 import { isDefined, isEmpty, isObject } from './Is';
 import { Get, ofGet } from './Get';
 import { ifDefined } from '../utils';
+import { TypeGuard } from './TypeGuard';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };
 
-export const isJson = (subject?: unknown): subject is { toJSON: () => Json } => isA<{ toJSON: () => Json }>(subject, 'toJSON');
+export const isJson: TypeGuard<{ toJSON: () => Json }> = (subject?: unknown): subject is { toJSON: () => Json } =>
+  isA<{ toJSON: () => Json }>(subject, 'toJSON');
 
 export const json = {
   parse: <T extends Json = Json>(subject: unknown): T => JSON.parse(JSON.stringify(subject ?? {})),

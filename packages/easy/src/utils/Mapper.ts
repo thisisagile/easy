@@ -1,4 +1,4 @@
-import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, toList } from '../types';
+import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, toList, TypeGuard } from '../types';
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
 import { ifNotEmpty } from './If';
@@ -8,7 +8,7 @@ export type Mapping = {
   in: (source?: Json, key?: string) => JsonValue | undefined;
   out: (source?: Json, key?: string) => JsonValue | undefined;
 };
-export const isMapping = (m?: unknown): m is Mapping => isA<Mapping>(m, 'in', 'out');
+export const isMapping: TypeGuard<Mapping> = (m?: unknown): m is Mapping => isA<Mapping>(m, 'in', 'out');
 
 export type MapStartFrom = 'scratch' | 'source';
 export type MapOptions = { startFrom: MapStartFrom };

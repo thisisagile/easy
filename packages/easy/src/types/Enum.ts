@@ -6,6 +6,7 @@ import { isDefined } from './Is';
 import { Validatable } from './Validatable';
 import { JsonValue } from './Json';
 import { Get, ofGet } from './Get';
+import { TypeGuard } from './TypeGuard';
 
 export abstract class Enum implements Validatable {
   protected constructor(readonly name: string, readonly id: Id = name.toLowerCase(), readonly code: string = id.toString()) {}
@@ -53,4 +54,4 @@ export abstract class Enum implements Validatable {
   }
 }
 
-export const isEnum = (e?: unknown): e is Enum => isDefined(e) && e instanceof Enum && isAn<Enum>(e, 'name', 'id', 'code');
+export const isEnum: TypeGuard<Enum> = (e?: unknown): e is Enum => isDefined(e) && e instanceof Enum && isAn<Enum>(e, 'name', 'id', 'code');

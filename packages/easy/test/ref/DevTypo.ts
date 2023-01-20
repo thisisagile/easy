@@ -1,4 +1,4 @@
-import { asString, isA, RouteGateway, Typo, View, view, views } from '../../src';
+import { asString, isA, RouteGateway, TypeGuard, Typo, View, view, views } from '../../src';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 
@@ -6,7 +6,7 @@ const { keep } = views;
 
 export type DevType = { name: string; level: string; certificates: [] };
 
-export const isDevType = (d?: unknown): d is DevType => isA<DevType>(d, 'name', 'level', 'certificates');
+export const isDevType: TypeGuard<DevType> = (d?: unknown): d is DevType => isA<DevType>(d, 'name', 'level', 'certificates');
 
 export const developers = view<DevType>({
   name: keep,
