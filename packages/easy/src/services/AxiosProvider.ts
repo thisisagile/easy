@@ -1,6 +1,15 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, Method } from 'axios';
-import { HttpStatus, HttpVerb, isRestResult, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
-import { choose, ctx, isDefined, isEmpty, toResult, Uri } from '../types';
+import {
+  HttpStatus,
+  HttpVerb,
+  isRestResult,
+  Request,
+  RequestOptions,
+  RequestProvider,
+  Response,
+  toResponse
+} from '../http';
+import { cacheAge, choose, ctx, isDefined, isEmpty, toResult, Uri } from '../types';
 
 const isResponse = (a: unknown): a is { response: AxiosResponse } => isDefined((a as any)?.response);
 const isRequest = (a: unknown): a is { request: any } => isDefined((a as any)?.request);
@@ -14,17 +23,25 @@ const asResponse = (uri: Uri, verb: HttpVerb, error: AxiosError): Response =>
     .else(e => toResponse(HttpStatus.InternalServerError, toResult(e.message, uri.path, uri)));
 
 export class AxiosProvider implements RequestProvider {
-  constructor(readonly ai: AxiosInstance = axios) {}
+  constructor(readonly ai: AxiosInstance = axios) {
+  }
 
-  execute = ({ uri, verb, body, transform = (r: any) => r, transformError = (r: any) => r, options = RequestOptions.Json }: Request): Promise<Response> =>
+  execute = ({
+               uri,
+               verb,
+               body,
+               transform = (r: any) => r,
+               transformError = (r: any) => r,
+               options = RequestOptions.Json
+             }: Request): Promise<Response> =>
     this.ai
       .request({
         url: uri.toString(),
         method: verb.toString() as Method,
         headers: uri.isInternal && isEmpty(options.headers.Authorization) ? options.bearer(ctx.request.jwt).headers : options.headers,
         data: options.type.encode(body),
-
         maxRedirects: options.requestOptions.maxRedirects,
+        ...(options.requestOptions.timeout && { timeout: cacheAge.toMilliseconds(options?.requestOptions.timeout) }),
         ...(options.requestOptions.validateStatus && { validateStatus: options.requestOptions.validateStatus }),
       })
       .then(r => toResponse(r.status, transform(r.data), r.headers))

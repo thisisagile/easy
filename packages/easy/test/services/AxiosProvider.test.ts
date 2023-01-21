@@ -226,6 +226,20 @@ describe('AxiosProvider', () => {
 
     expect(axios.request).toHaveBeenCalledWith(fits.with({ validateStatus: validate }));
     expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).toContain('validateStatus');
+    expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).not.toContain('timeout');
+  });
+
+  test('Pass requestOptions.timeout to axios', async () => {
+    axios.request = mock.resolve({ message });
+
+    await provider.execute({
+      uri: DevUri.Developers,
+      verb: HttpVerb.Get,
+      options: RequestOptions.Xml.timeout('3m'),
+    });
+
+    expect(axios.request).toHaveBeenCalledWith(fits.with({ timeout: 180 * 1000 }));
+    expect(Object.keys((axios.request as jest.Mock).mock.calls[0][0])).toContain('timeout');
   });
 
   test("Don't pass requestOptions.validateStatus to axios if undefined", async () => {

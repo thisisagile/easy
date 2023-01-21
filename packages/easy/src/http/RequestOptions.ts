@@ -1,4 +1,4 @@
-import { ctx, Enum, Id, isDefined, isNotEmpty, on, PageOptions, Text, toUuid } from '../types';
+import { CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -6,7 +6,7 @@ export const toPageOptions = (options?: RequestOptions | PageOptions): PageOptio
   options instanceof RequestOptions ? options.pageOptions : options;
 
 export class RequestOptions extends Enum {
-  public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean } = {};
+  public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean; timeout?: CacheAge } = {};
 
   constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
     super(type.name);
@@ -65,6 +65,11 @@ export class RequestOptions extends Enum {
 
   validateStatus = (validate?: (status: number) => boolean): this => {
     this.requestOptions.validateStatus = validate;
+    return this;
+  };
+
+  timeout = (t?: CacheAge): this => {
+    this.requestOptions.timeout = t;
     return this;
   };
 }
