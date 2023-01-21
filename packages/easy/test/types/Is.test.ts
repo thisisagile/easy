@@ -257,7 +257,33 @@ describe('isUndefined', () => {
 });
 
 describe('isPresent', () => {
-  const isTrue: [string, unknown, boolean][] = [
+  test.each([
+    [null, true],
+    [undefined, true],
+    ['', true],
+    [[], true],
+    [{}, true],
+    ['hello', false],
+    [[1, 2, 3], false],
+    [{ a: 1 }, false],
+  ])('returns %s for %s', (input, expected) => {
+    expect(isNotPresent(input)).toBe(expected);
+  });
+
+  test.each([
+    [null, false],
+    [undefined, false],
+    ['', false],
+    [[], false],
+    [{}, false],
+    ['hello', true],
+    [[1, 2, 3], true],
+    [{ a: 1 }, true],
+  ])('returns %s for %s', (input, expected) => {
+    expect(isPresent(input)).toBe(expected);
+  });
+
+  test.each([
     ['undefined is not', undefined, false],
     ['null is not', null, false],
     ['empty string is not', '', false],
@@ -271,11 +297,10 @@ describe('isPresent', () => {
     ['an object is', { valid: 'false' }, true],
     ['an entity is', Dev.Wouter, true],
     ['an array is', ['', ''], true],
-  ];
-
-  test.each(isTrue)('%s present', (name: string, o: unknown, out: boolean) => {
+  ])('%s present', (name: string, o: unknown, out: boolean) => {
     expect(isPresent(o)).toBe(out);
   });
+
   test('spreads that are present', () => {
     expect(isNotPresent(undefined, undefined)).toBeTruthy();
     expect(isNotPresent('undefined', undefined)).toBeTruthy();
