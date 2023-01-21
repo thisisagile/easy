@@ -1,7 +1,7 @@
 import { Struct } from '../Struct';
 import { required } from '../../validation';
 import { Currency } from '../enums';
-import { isEmpty } from '../../types';
+import { isEmpty, text } from '../../types';
 
 export class Money extends Struct {
   @required() readonly currency = Currency.byId<Currency>(this.state.currency);
@@ -12,7 +12,9 @@ export class Money extends Struct {
   times = (n: number): Money => money(this.currency, this.value * n);
 
   toString(): string {
-    return `${this.currency.code} ${this.value?.toFixed(this.currency.digits)}`;
+    return text(this.currency?.code)
+      .with(' ', this.value?.toFixed(this.currency?.digits ?? 2))
+      .toString();
   }
 }
 

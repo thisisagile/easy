@@ -31,6 +31,7 @@ describe('Money', () => {
   test('toString', () => {
     expect(m).toMatchText('€ 42.00');
     expect(money(Currency.GBP, 16)).toMatchText('£ 16.00');
+    expect(new Money({ value: 42 })).toMatchText('42.00');
   });
 
   test('invalid', () => {
