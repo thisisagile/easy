@@ -60,6 +60,9 @@ describe('isText', () => {
 });
 
 describe('kebab', () => {
+  test('empty', () => {
+    expect(kebab()).toBe('');
+  });
   const cases = [
     ['', ''],
     ['a', 'a'],
