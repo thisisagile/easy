@@ -1,4 +1,4 @@
-import { DataProvider, Exception, TableGateway, toList } from '../../src';
+import { DataProvider, Exception, QueryProvider, TableGateway, toList } from '../../src';
 import { Dev, devData, DevTable } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
@@ -22,6 +22,14 @@ describe('TableGateway', () => {
     const res = await target.all();
     expect(res.toJSON()).toEqual([table.in(devData.wouter), table.in(devData.jeroen)]);
     expect(provider.query).toBeQueriedWith(table.select());
+  });
+
+  test('all with optional provider', async () => {
+    const p = mock.a<QueryProvider>({ query: mock.resolve(toList(devData.wouter, devData.jeroen)) });
+    provider.query = mock.resolve();
+    await target.all({ provider: p });
+    expect(provider.query).not.toBeQueriedWith(table.select());
+    expect(p.query).toBeQueriedWith(table.select());
   });
 
   test('byId', async () => {
