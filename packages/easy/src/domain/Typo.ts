@@ -1,16 +1,15 @@
-import { Exception, Gateway, Id, Json, JsonValue, Key, List, PageList, PageOptions, toList, toPageList } from '../types';
+import { Exception, FetchOptions, Gateway, Id, Json, JsonValue, Key, List, PageList, Repository, toList, toPageList } from '../types';
 import { when } from '../validation';
 import { View } from '../utils';
-import { Repository } from '../types';
 
-export class Typo<T> extends Repository<T> {
-  constructor(protected view: View, private readonly gateway: Gateway) {
+export class Typo<T, Options = FetchOptions> extends Repository<T, Options> {
+  constructor(protected view: View, private readonly gateway: Gateway<Options>) {
     super();
   }
 
   create = (j: Json): T => this.view.from(j) as unknown as T;
 
-  all(options?: PageOptions): Promise<PageList<T>> {
+  all(options?: Options): Promise<PageList<T>> {
     return this.gateway.all(options).then(js => toPageList(js.map(j => this.create(j))));
   }
 
@@ -25,19 +24,19 @@ export class Typo<T> extends Repository<T> {
     return this.gateway.byIds(...ids).then(js => toList(js.map(j => this.create(j))));
   }
 
-  byKey(key: Key, options?: PageOptions): Promise<PageList<T>> {
+  byKey(key: Key, options?: Options): Promise<PageList<T>> {
     return this.gateway.by('key', key, options).then(js => toPageList(js.map(j => this.create(j))));
   }
 
-  by(key: keyof T, value: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  by(key: keyof T, value: JsonValue, options?: Options): Promise<PageList<T>> {
     return this.gateway.by(key.toString(), value, options).then(js => toPageList(js.map(j => this.create(j))));
   }
 
-  search(q: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  search(q: JsonValue, options?: Options): Promise<PageList<T>> {
     return this.gateway.search(q, options).then(js => toPageList(js.map(j => this.create(j))));
   }
 
-  filter(options?: PageOptions): Promise<PageList<T>> {
+  filter(options?: Options): Promise<PageList<T>> {
     return this.gateway.filter(options).then(js => toPageList(js.map(j => this.create(j))));
   }
 
