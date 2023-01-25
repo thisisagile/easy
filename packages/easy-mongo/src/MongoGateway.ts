@@ -1,5 +1,20 @@
-import { FindOptions, MongoProvider } from './MongoProvider';
-import { asJson, asPageList, Condition, Gateway, Id, ifDefined, isDefined, Json, JsonValue, List, LogicalCondition, PageList } from '@thisisagile/easy';
+import { Filter, FindOptions, MongoProvider } from './MongoProvider';
+import {
+  asJson,
+  asPageList,
+  Condition,
+  Gateway,
+  Id,
+  ifDefined,
+  isDefined,
+  isPresent,
+  Json,
+  JsonValue,
+  List,
+  LogicalCondition,
+  PageList,
+  toArray,
+} from '@thisisagile/easy';
 import { Collection } from './Collection';
 
 export class MongoGateway implements Gateway<FindOptions> {
@@ -35,6 +50,10 @@ export class MongoGateway implements Gateway<FindOptions> {
 
   exists(id: Id): Promise<boolean> {
     return this.provider.byId(id).then(i => isDefined(i));
+  }
+
+  aggregate(...filters: (Filter | undefined)[]): Promise<PageList<Json>> {
+    return this.provider.aggregate(toArray(...filters).filter(isPresent) as Filter[]);
   }
 
   add(item: Json): Promise<Json> {

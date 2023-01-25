@@ -94,6 +94,24 @@ describe('MongoGateway', () => {
     expect(provider.byId).toHaveBeenCalledWith(42);
   });
 
+  test('aggregate resolves and removes empty filters', async () => {
+    provider.aggregate = mock.resolve();
+    await gateway.aggregate({}, undefined, { $skip: 0 });
+    expect(provider.aggregate).toHaveBeenCalledWith([{ $skip: 0 }]);
+  });
+
+  test('aggregate resolves and removes empty filters, test two', async () => {
+    provider.aggregate = mock.resolve();
+    await gateway.aggregate({}, { $match: { id: 4 } }, { $skip: 0 });
+    expect(provider.aggregate).toHaveBeenCalledWith([{ $match: { id: 4 } }, { $skip: 0 }]);
+  });
+
+  test('aggregate resolves and removes empty filters, now with an array', async () => {
+    provider.aggregate = mock.resolve();
+    await gateway.aggregate([{}, { $match: { id: 4 } }, { $skip: 0 }]);
+    expect(provider.aggregate).toHaveBeenCalledWith([{ $match: { id: 4 } }, { $skip: 0 }]);
+  });
+
   test('add calls the provider', async () => {
     provider.add = mock.resolve(devData.wouter);
     await expect(gateway.add(collData.wouter)).resolves.toStrictEqual(collData.wouter);
