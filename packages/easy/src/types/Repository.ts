@@ -1,8 +1,8 @@
-import { Exception, Id, Json, JsonValue, Key, List, PageList, PageOptions } from './index';
+import { Exception, FetchOptions, Id, Json, JsonValue, Key, List, PageList } from './index';
 import { reject } from '../utils';
 
-export class Repository<T> {
-  all(options?: PageOptions): Promise<PageList<T>> {
+export class Repository<T, Options = FetchOptions> {
+  all(options?: Options): Promise<PageList<T>> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -14,19 +14,19 @@ export class Repository<T> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byKey(key: Key, options?: PageOptions): Promise<PageList<T>> {
+  byKey(key: Key, options?: Options): Promise<PageList<T>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  by(key: keyof T, value: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  by(key: keyof T, value: JsonValue, options?: Options): Promise<PageList<T>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  search(q: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  search(q: JsonValue, options?: Options): Promise<PageList<T>> {
     return reject(Exception.IsNotImplemented);
   }
 
-  filter(options?: PageOptions): Promise<PageList<T>> {
+  filter(options?: Options): Promise<PageList<T>> {
     return reject(Exception.IsNotImplemented);
   }
 
