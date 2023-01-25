@@ -12,6 +12,7 @@ import {
   JsonValue,
   List,
   LogicalCondition,
+  Optional,
   PageList,
   toArray,
 } from '@thisisagile/easy';
@@ -52,7 +53,7 @@ export class MongoGateway implements Gateway<FindOptions> {
     return this.provider.byId(id).then(i => isDefined(i));
   }
 
-  aggregate(...filters: (Filter | undefined)[]): Promise<PageList<Json>> {
+  aggregate(...filters: Optional<Filter>[]): Promise<PageList<Json>> {
     return this.provider.aggregate(toArray(...filters).filter(isPresent) as Filter[]);
   }
 
