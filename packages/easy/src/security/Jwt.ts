@@ -1,9 +1,9 @@
 import { Algorithm, decode, sign, verify } from 'jsonwebtoken';
-import { ctx, Json, tryTo, Validatable, Value } from '../types';
+import { ctx, Json, OneOrMore, Optional, tryTo, Validatable, Value } from '../types';
 
 interface SignOptions {
-  audience?: string | string[] | undefined;
-  issuer?: string | undefined;
+  audience?: Optional<OneOrMore<string>>;
+  issuer?: Optional<string>;
 }
 export class Jwt extends Value implements Validatable {
   get isValid(): boolean {

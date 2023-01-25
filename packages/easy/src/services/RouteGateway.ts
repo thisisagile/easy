@@ -1,5 +1,5 @@
 import { Api, RouteOptions } from './Api';
-import { Func, Id, Json, JsonValue, PageList, Uri } from '../types';
+import { Func, Id, Json, JsonValue, Optional, PageList, Uri } from '../types';
 import { HttpStatus } from '../http';
 import { ApiGateway } from './ApiGateway';
 
@@ -12,7 +12,7 @@ export class RouteGateway extends ApiGateway {
     return this.get(this.route(), options);
   }
 
-  byId(id: Id, options?: RouteOptions): Promise<Json | undefined> {
+  byId(id: Id, options?: RouteOptions): Promise<Optional<Json>> {
     return this.getOne(this.routeId().id(id));
   }
 

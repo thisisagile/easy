@@ -1,4 +1,4 @@
-import { List, meta, tryTo, Uri } from '../types';
+import { List, meta, Optional, tryTo, Uri } from '../types';
 import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
@@ -16,7 +16,7 @@ export type RouteRequires = { token: boolean; labCoat: boolean; scope?: Scope; u
 export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
 export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
-const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Route | undefined =>
+const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Optional<Route> =>
   tryTo(verb)
     .is.defined()
     .map(verb => ({ verb, endpoint, requires, middleware: middleware ?? [] } as Route))

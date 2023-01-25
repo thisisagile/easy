@@ -1,4 +1,4 @@
-import { choose, isA, isDate, isDefined, isNumber, isString, JsonValue, Value } from '../../types';
+import { choose, isA, isDate, isDefined, isNumber, isString, JsonValue, Optional, Value } from '../../types';
 import { DateTime as LuxonDateTime, DateTimeUnit as LuxonDateTimeUnit, Settings } from 'luxon';
 
 Settings.defaultZone = 'utc';
@@ -8,7 +8,7 @@ export type DiffOptions = {
   rounding: 'floor' | 'ceil' | 'round';
 };
 
-export class DateTime extends Value<string | undefined> {
+export class DateTime extends Value<Optional<string>> {
   constructor(value?: string | number | Date, format?: string) {
     super(
       choose(value)
@@ -38,7 +38,7 @@ export class DateTime extends Value<string | undefined> {
   from(locale?: string): string;
   from(date?: DateTime, locale?: string): string;
   from(param?: string | DateTime, other?: string): string {
-    const date: DateTime | undefined = isA<DateTime>(param) ? param : undefined;
+    const date: Optional<DateTime> = isA<DateTime>(param) ? param : undefined;
     const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
     return isDefined(date) ? (this.utc.setLocale(locale).toRelative({ base: date.utc }) as string) : (this.utc.setLocale(locale).toRelative() as string);
   }
@@ -89,7 +89,7 @@ export class DateTime extends Value<string | undefined> {
 
   toFull = (locale?: string): string => this.toLocale(locale, 'DDD');
 
-  toDate(): Date | undefined {
+  toDate(): Optional<Date> {
     return this.isValid ? this.utc.toJSDate() : undefined;
   }
 }

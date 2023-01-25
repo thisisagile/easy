@@ -1,5 +1,5 @@
 import { Api, RouteOptions } from './Api';
-import { FetchOptions, Filter, Gateway, Json, PageList, toPageList, Uri } from '../types';
+import { FetchOptions, Filter, Gateway, Json, Optional, PageList, toPageList, Uri } from '../types';
 import { RequestOptions, toPageOptions } from '../http';
 
 export class ApiGateway extends Gateway<RouteOptions> {
@@ -19,7 +19,7 @@ export class ApiGateway extends Gateway<RouteOptions> {
     );
   }
 
-  getOne(uri: Uri, options?: RouteOptions): Promise<Json | undefined> {
+  getOne(uri: Uri, options?: RouteOptions): Promise<Optional<Json>> {
     return this.get(uri, options).then(r => r.first());
   }
 
