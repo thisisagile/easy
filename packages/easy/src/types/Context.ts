@@ -2,6 +2,7 @@ import { Uuid } from './Uuid';
 import { text } from './Text';
 import { Identity } from './Identity';
 import { tryTo } from './Try';
+import { Optional } from './Types';
 
 export interface EnvContext {
   readonly domain: string;
@@ -10,7 +11,7 @@ export interface EnvContext {
   readonly port: number;
   readonly app: string;
 
-  get(key: string, alt?: string): string | undefined;
+  get(key: string, alt?: string): Optional<string>;
 }
 
 export class DotEnvContext implements EnvContext {
@@ -20,7 +21,7 @@ export class DotEnvContext implements EnvContext {
   readonly port = Number.parseInt(process.env.PORT ?? '8080');
   readonly app = process.env.APP ?? '';
 
-  readonly get = (key: string, alt?: string): string | undefined =>
+  readonly get = (key: string, alt?: string): Optional<string> =>
     tryTo(() =>
       text(key)
         .map(k => k.replace(/([a-z])([A-Z])/g, '$1 $2'))
@@ -70,11 +71,11 @@ export class BaseRequestContext implements RequestContext {
     this.set('correlationId', id);
   }
 
-  get lastError(): string | undefined {
+  get lastError(): Optional<string> {
     return this.get('lastError');
   }
 
-  set lastError(error: string | undefined) {
+  set lastError(error: Optional<string>) {
     this.set('lastError', error);
   }
 

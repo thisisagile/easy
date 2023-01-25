@@ -1,4 +1,4 @@
-import { Exception, Gateway, Id, isDefined, Json, JsonValue, List, toList } from '../types';
+import { Exception, Gateway, Id, isDefined, Json, JsonValue, List, Optional, toList } from '../types';
 import { when } from '../validation';
 
 export class InMemoryGateway extends Gateway {
@@ -10,7 +10,7 @@ export class InMemoryGateway extends Gateway {
     return this.data.then(d => toList(d));
   }
 
-  byId(id: Id): Promise<Json | undefined> {
+  byId(id: Id): Promise<Optional<Json>> {
     return this.data.then(d => d.byId(id)).then(d => (d ? { ...d } : undefined));
   }
 

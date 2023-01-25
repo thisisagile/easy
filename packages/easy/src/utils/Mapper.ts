@@ -1,12 +1,12 @@
-import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, toList, TypeGuard } from '../types';
+import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, Optional, toList, TypeGuard } from '../types';
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
 import { ifNotEmpty } from './If';
 
 export type Mapping = {
   property: string;
-  in: (source?: Json, key?: string) => JsonValue | undefined;
-  out: (source?: Json, key?: string) => JsonValue | undefined;
+  in: (source?: Json, key?: string) => Optional<JsonValue>;
+  out: (source?: Json, key?: string) => Optional<JsonValue>;
 };
 export const isMapping: TypeGuard<Mapping> = (m?: unknown): m is Mapping => isA<Mapping>(m, 'in', 'out');
 
@@ -75,28 +75,28 @@ export const mappings = {
   item: (property: string, options?: PropertyOptions): Property => new Property(property, options),
   ignore: (property = ''): Mapping => ({
     property,
-    in: (): JsonValue | undefined => undefined,
-    out: (): JsonValue | undefined => undefined,
+    in: (): Optional<JsonValue> => undefined,
+    out: (): Optional<JsonValue> => undefined,
   }),
   skipIn: (property: string): Mapping => ({
     property,
-    in: (): JsonValue | undefined => undefined,
+    in: (): Optional<JsonValue> => undefined,
     out: (source: Json = {}): JsonValue => source[property],
   }),
   skipOut: (property: string): Mapping => ({
     property,
     in: (source: Json = {}): JsonValue => source[property],
-    out: (): JsonValue | undefined => undefined,
+    out: (): Optional<JsonValue> => undefined,
   }),
-  func: (property: string, funcIn: Get<JsonValue | undefined, Json>, funcOut: Get<JsonValue | undefined, Json>): Mapping => ({
+  func: (property: string, funcIn: Get<Optional<JsonValue>, Json>, funcOut: Get<Optional<JsonValue>, Json>): Mapping => ({
     property,
-    in: (source: Json = {}): JsonValue | undefined => ofGet(funcIn, source),
-    out: (source: Json = {}): JsonValue | undefined => ofGet(funcOut, source),
+    in: (source: Json = {}): Optional<JsonValue> => ofGet(funcIn, source),
+    out: (source: Json = {}): Optional<JsonValue> => ofGet(funcOut, source),
   }),
   add: (funcIn: Get<JsonValue, Json>): Mapping => ({
     property: '',
     in: (source: Json = {}): JsonValue => ofGet(funcIn, source),
-    out: (): JsonValue | undefined => undefined,
+    out: (): Optional<JsonValue> => undefined,
   }),
   map: (mapper: Construct<Mapper>, property = ''): Mapping => ({
     property,

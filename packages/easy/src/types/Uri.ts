@@ -1,10 +1,11 @@
-import { isDefined, isNotEmpty, isTrue } from "./Is";
+import { isDefined, isNotEmpty, isTrue } from './Is';
 import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
 import { meta } from './Meta';
 import { tryTo } from './Try';
+import { Optional } from './Types';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -71,7 +72,7 @@ export class EasyUri implements Uri {
     return meta(this.state).values<Prop>();
   }
 
-  route = (resource: string | undefined = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
+  route = (resource: Optional<string> = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
 
   set = (segment: Segment, value?: unknown): this => {
     tryTo(value)

@@ -1,5 +1,5 @@
 import { Api } from './Api';
-import { Func, Json, List, Uri } from '../types';
+import { Func, Json, List, Optional, Uri } from '../types';
 import { view } from '../utils';
 import { RouteGateway } from './RouteGateway';
 import { RequestOptions } from '../http';
@@ -21,7 +21,7 @@ export class ViewRouteGateway extends RouteGateway {
     return super.get(uri, options).then(is => is.map(i => this.views.in.from(i)));
   }
 
-  getOne(uri: Uri, options?: RequestOptions): Promise<Json | undefined> {
+  getOne(uri: Uri, options?: RequestOptions): Promise<Optional<Json>> {
     return super
       .get(uri, options)
       .then(is => is.first())

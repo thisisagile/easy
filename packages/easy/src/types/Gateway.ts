@@ -4,6 +4,7 @@ import { Exception } from './Exception';
 import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
+import { Optional } from './Types';
 
 export type FetchOptions = PageOptions;
 
@@ -12,7 +13,7 @@ export abstract class Gateway<Options = FetchOptions> {
     return reject(Exception.IsNotImplemented);
   }
 
-  byId(id: Id, options?: Options): Promise<Json | undefined> {
+  byId(id: Id, options?: Options): Promise<Optional<Json>> {
     return reject(Exception.IsNotImplemented);
   }
 

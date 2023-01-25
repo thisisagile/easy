@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { List, toList } from './List';
 import { isDefined } from './Is';
 import { on } from './Constructor';
+import { Optional } from './Types';
 
 type MetaParseOptions = { initial?: any; skipUndefined?: boolean };
 
@@ -48,7 +49,7 @@ class PropertyMeta {
     return this.subject[this.property];
   }
 
-  get = <T>(key: string): T | undefined => (isDefined(this.data) && isDefined(this.data[key]) ? (this.data[key] as T) : undefined);
+  get = <T>(key: string): Optional<T> => (isDefined(this.data) && isDefined(this.data[key]) ? (this.data[key] as T) : undefined);
 
   set = <T>(key: string, value: T): T => {
     Reflect.defineMetadata(this.property, { ...this.data, [key]: value }, this.subject);

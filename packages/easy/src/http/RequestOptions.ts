@@ -1,8 +1,8 @@
-import { CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, PageOptions, Text, toUuid } from '../types';
+import { CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, Optional, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
-export const toPageOptions = (options?: RequestOptions | PageOptions): PageOptions | undefined =>
+export const toPageOptions = (options?: RequestOptions | PageOptions): Optional<PageOptions> =>
   options instanceof RequestOptions ? options.pageOptions : options;
 
 export class RequestOptions extends Enum {

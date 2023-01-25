@@ -2,6 +2,7 @@ import { Get } from './Get';
 import { isFunc } from './Func';
 import { isDefined } from './Is';
 import { isPrimitive } from './Primitive';
+import { Optional } from './Types';
 
 export type Constructor<T = unknown> = { new (...args: any[]): T };
 
@@ -18,4 +19,4 @@ export const on = <T>(t: T, f: (t: T) => unknown): T => {
   return t;
 };
 
-export const ifA = <T>(c: Constructor<T>, t?: unknown, alt?: unknown): T | undefined => (!isPrimitive(t) && t instanceof c ? t : alt ? ifA(c, alt) : undefined);
+export const ifA = <T>(c: Constructor<T>, t?: unknown, alt?: unknown): Optional<T> => (!isPrimitive(t) && t instanceof c ? t : alt ? ifA(c, alt) : undefined);

@@ -4,6 +4,7 @@ import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
 import { Get, ofGet } from './Get';
 import { Func } from './Func';
+import { Optional } from './Types';
 
 export abstract class Try<T = unknown> implements Validatable {
   is = {
@@ -48,7 +49,7 @@ export abstract class Try<T = unknown> implements Validatable {
 
   abstract or(value: Get<T>): T;
 
-  abstract orElse(value?: Get<T>): T | undefined;
+  abstract orElse(value?: Get<T>): Optional<T>;
 
   abstract orThrow(error: Construct<Error>): T;
 }
@@ -96,7 +97,7 @@ class Success<T> extends Try<T> {
     return this.value;
   }
 
-  orElse(value?: Get<T>): T | undefined {
+  orElse(value?: Get<T>): Optional<T> {
     return this.value;
   }
 
@@ -142,7 +143,7 @@ class Failure<T> extends Try<T> {
     return ofGet(value);
   }
 
-  orElse(value?: Get<T>): T | undefined {
+  orElse(value?: Get<T>): Optional<T> {
     return ofGet(value);
   }
 
