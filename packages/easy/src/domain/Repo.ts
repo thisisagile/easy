@@ -1,17 +1,32 @@
-import { asList, asPageList, Constructor, Exception, Gateway, Id, isValidatable, Json, JsonValue, Key, List, PageList, PageOptions, toJson } from '../types';
+import {
+  asList,
+  asPageList,
+  Constructor,
+  Exception,
+  FetchOptions,
+  Gateway,
+  Id,
+  isValidatable,
+  Json,
+  JsonValue,
+  Key,
+  List,
+  PageList,
+  Repository,
+  toJson,
+} from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
-import { Repository } from '../types';
 
-export class Repo<T extends Struct> extends Repository<T> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway) {
+export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T, Options> {
+  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway<Options>) {
     super();
   }
 
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
-  all(options?: PageOptions): Promise<PageList<T>> {
+  all(options?: Options): Promise<PageList<T>> {
     return this.gateway.all(options).then(js => asPageList(this.ctor, js));
   }
 
@@ -26,19 +41,19 @@ export class Repo<T extends Struct> extends Repository<T> {
     return this.gateway.byIds(...ids).then(j => asList(this.ctor, j));
   }
 
-  byKey(key: Key, options?: PageOptions): Promise<PageList<T>> {
+  byKey(key: Key, options?: Options): Promise<PageList<T>> {
     return this.gateway.by('key', key, options).then(js => asPageList(this.ctor, js));
   }
 
-  by(key: keyof T, value: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  by(key: keyof T, value: JsonValue, options?: Options): Promise<PageList<T>> {
     return this.gateway.by(key.toString(), value, options).then(js => asPageList(this.ctor, js));
   }
 
-  search(q: JsonValue, options?: PageOptions): Promise<PageList<T>> {
+  search(q: JsonValue, options?: Options): Promise<PageList<T>> {
     return this.gateway.search(q, options).then(js => asPageList(this.ctor, js));
   }
 
-  filter(options?: PageOptions): Promise<PageList<T>> {
+  filter(options?: Options): Promise<PageList<T>> {
     return this.gateway.filter(options).then(js => asPageList(this.ctor, js));
   }
 
