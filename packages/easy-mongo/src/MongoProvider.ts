@@ -45,7 +45,7 @@ const omitId = (j: Json): Json => json.delete(j, '_id');
 
 export type Projection = Record<string, 0 | 1>;
 export type FindOptions = FetchOptions & { projection?: Projection };
-export type Filter<T> = MongoFilter<T>;
+export type Filter<T = unknown> = MongoFilter<T>;
 export type Query = Condition | LogicalCondition | Filter<any>;
 
 export type IndexOptions = {
@@ -169,7 +169,7 @@ export class MongoProvider {
     return {
       limit: options?.take ?? 250,
       ...(options?.skip && { skip: options?.skip }),
-      ...(options?.sorts && { sort: options?.sorts } || options?.sort && { sort: this.coll.sort(...options?.sort ?? []) }),
+      ...((options?.sorts && { sort: options?.sorts }) || (options?.sort && { sort: this.coll.sort(...(options?.sort ?? [])) })),
       total: isDefined(options?.skip) || isDefined(options?.take),
       projection: options?.projection ?? { _id: 0 },
     };
