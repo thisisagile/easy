@@ -3,11 +3,11 @@ import { when } from '../validation';
 import { View } from '../utils';
 
 export class Typo<T, Options = FetchOptions> extends Repository<T, Options> {
-  constructor(protected view: View, private readonly gateway: Gateway<Options>) {
+  constructor(protected view: View<T>, private readonly gateway: Gateway<Options>) {
     super();
   }
 
-  create = (j: Json): T => this.view.from(j) as unknown as T;
+  create = (j: Json): T => this.view.from(j);
 
   all(options?: Options): Promise<PageList<T>> {
     return this.gateway.all(options).then(js => toPageList(js.map(j => this.create(j))));
