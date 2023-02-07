@@ -16,7 +16,7 @@ export const developers = view<DevType>({
 
 export class DevTypo extends Typo<DevType> {
   constructor(
-    readonly developers: View,
+    readonly developers: View<DevType>,
     readonly devs = new RouteGateway(
       () => DevUri.Developers,
       () => DevUri.Developer
