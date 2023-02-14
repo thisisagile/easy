@@ -1,8 +1,20 @@
 {
   "extends": [
     "config:base",
-    ":disableDependencyDashboard"
+    ":maintainLockFilesWeekly",
+    ":semanticCommits",
+    ":disableDependencyDashboard",
+    "github>whitesource/merge-confidence:beta"
   ],
+
   "updateInternalDeps": true,
-  "rangeStrategy": "bump"
+  "rangeStrategy": "bump",
+
+  "packageRules": [{
+    "matchPackageNames": "next",
+    "allowedVersions": "< 13",
+  }, {
+    "matchPackageNames": "release-it",
+    "allowedVersions": "< 15",
+  }]
 }
