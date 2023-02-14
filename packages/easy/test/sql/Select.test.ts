@@ -32,7 +32,7 @@ describe('Select', () => {
 
   test('With one or clause', () => {
     const select = devs.select().where(devs.name.is('Naoufal').or(devs.level.greaterEqual(2)));
-    expect(select).toMatchText("SELECT * FROM DevTable WHERE DevTable.Name = 'Naoufal' OR DevTable.CodingLevel >= '2';");
+    expect(select).toMatchText("SELECT * FROM DevTable WHERE (DevTable.Name = 'Naoufal' OR DevTable.CodingLevel >= '2');");
   });
 
   test('With two clauses', () => {

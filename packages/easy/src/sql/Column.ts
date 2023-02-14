@@ -1,6 +1,6 @@
 import { Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
-import { Json, JsonValue, ofGet, Text } from '../types';
+import { Json, JsonValue, ofGet, Text, tryTo } from '../types';
 import { Table } from './Table';
 
 export class Column extends Property implements Text {
@@ -40,9 +40,16 @@ export class Column extends Property implements Text {
     return this.format('$col DESC') as OrderColumn;
   }
 
-  in = (source: Json = {}): JsonValue => this.options?.convert?.to(source[this.property] ?? ofGet(this.options?.dflt));
+  in = (source: Json = {}): JsonValue =>
+    tryTo(source)
+      .map(s => s[this.property] ?? ofGet(this.options?.dflt))
+      .map(v => this.options?.convert?.to(v))
+      .orElse();
 
-  out = (source: Json = {}, key = ''): JsonValue => this.options?.convert?.from(source[key]);
+  out = (source: Json = {}, key = ''): JsonValue =>
+    tryTo(source)
+      .map(s => this.options?.convert?.from(s[key]))
+      .orElse();
 
   function = (func: string): Column => this.format(`${func}($name)`);
 
