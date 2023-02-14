@@ -6,11 +6,17 @@ export const quote = (a: unknown): string => (isNumber(a) || isBoolean(a) || isC
 export class Clause implements Text {
   constructor(readonly first: unknown, readonly operator: string, readonly second: unknown) {}
 
-  and = (other: Clause): Clause => toClause(this, 'AND', other);
-  or = (other: Clause): Clause => toClause(this, 'OR', other);
+  and = (other: Clause): Clause => new ParathesizedClause(this, 'AND', other);
+  or = (other: Clause): Clause => new ParathesizedClause(this, 'OR', other);
 
   toString(): string {
     return `${this.first} ${this.operator} ${quote(this.second)}`;
+  }
+}
+
+export class ParathesizedClause extends Clause {
+  toString(): string {
+    return `(${this.first} ${this.operator} ${quote(this.second)})`;
   }
 }
 
