@@ -2046,16 +2046,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it/conventional-changelog@npm:4.3.0":
-  version: 4.3.0
-  resolution: "@release-it/conventional-changelog@npm:4.3.0"
+"@release-it/conventional-changelog@npm:5.1.1":
+  version: 5.1.1
+  resolution: "@release-it/conventional-changelog@npm:5.1.1"
   dependencies:
     concat-stream: ^2.0.0
     conventional-changelog: ^3.1.25
     conventional-recommended-bump: ^6.1.0
+    semver: 7.3.8
   peerDependencies:
-    release-it: ^14.12.1
-  checksum: 57823757b4f6262551c1fa219cb8319aadec46f835192dbd619ef61e1a64321f43367a78d4d16f95a700056676a725d72d81f8b407693dc41d5ddf32decd6b1b
+    release-it: ^15.4.1
+  checksum: 15ade4ab88dabea7664b28494db035707eb84acc897b51472142abcac6c6acae0e90f9db7d8c93bb1de697678e7321d31192362565c538d4f62a4e7600bc30b2
   languageName: node
   linkType: hard
 
@@ -9627,7 +9628,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@release-it/conventional-changelog": 4.3.0
+    "@release-it/conventional-changelog": 5.1.1
     "@tsconfig/node14": ^1.0.3
     "@types/jest": ^29.2.4
     "@types/node": ^18.11.12
@@ -9788,7 +9789,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.x, semver@npm:^7.1.3, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8":
+"semver@npm:7.3.8, semver@npm:7.x, semver@npm:^7.1.3, semver@npm:^7.3.2, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.3.8":
   version: 7.3.8
   resolution: "semver@npm:7.3.8"
   dependencies:

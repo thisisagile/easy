@@ -19,7 +19,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@release-it/conventional-changelog": "4.3.0",
+    "@release-it/conventional-changelog": "5.1.1",
     "@tsconfig/node14": "^1.0.3",
     "@types/jest": "^29.2.4",
     "@types/node": "^18.11.12",
