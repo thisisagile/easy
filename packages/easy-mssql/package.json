@@ -36,6 +36,6 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "@types/mssql": "^8.1.2",
-    "mssql": "^9.0.1"
+    "mssql": "^9.1.1"
   }
 }

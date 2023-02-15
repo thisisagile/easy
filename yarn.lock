@@ -2203,7 +2203,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/mssql": ^8.1.2
-    mssql: ^9.0.1
+    mssql: ^9.1.1
   languageName: unknown
   linkType: soft
 
@@ -8065,9 +8065,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mssql@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "mssql@npm:9.0.1"
+"mssql@npm:^9.1.1":
+  version: 9.1.1
+  resolution: "mssql@npm:9.1.1"
   dependencies:
     "@tediousjs/connection-string": ^0.4.1
     commander: ^9.4.0
@@ -8077,7 +8077,7 @@ __metadata:
     tedious: ^15.0.1
   bin:
     mssql: bin/mssql
-  checksum: 180072d0f789b348357c2dbb12e5f22cb9bedaefd026117874cca41ee10c54eafb4112c985e987038112a456ac7ba05d7e569063b7d6cef93dbaa9cd5ab7cb95
+  checksum: 03f16ddd5c02b6c0b452087c8aacb2987a018e1a7649052a5262c6208e7357f66a4af824d69d937dae0caa35d279a0758be3f9839894228cbb08a9b9824d1c8d
   languageName: node
   linkType: hard
 
