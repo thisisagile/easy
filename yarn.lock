@@ -4911,12 +4911,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-security@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "eslint-plugin-security@npm:1.5.0"
+"eslint-plugin-security@npm:^1.7.1":
+  version: 1.7.1
+  resolution: "eslint-plugin-security@npm:1.7.1"
   dependencies:
     safe-regex: ^2.1.1
-  checksum: c51c9d43d1ef1eaf803d136ae73522369f1e0b4f2633a56fc3226afd64ad3936943080bf506353c25422d1d73e8395946d016847e0ac5c0b5886c394fe848b9f
+  checksum: 3a650e2482e108bb4b9c3b9ac64adefcf1dfda069cd43f89a7d3b84822da2417c9d1b764ec5e1acf4c193b48edc630c7ef2d0a5279a478a8672f9030bc78a8c0
   languageName: node
   linkType: hard
 
@@ -9658,7 +9658,7 @@ __metadata:
     eslint-plugin-jest: ^27.1.6
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.1.1
-    eslint-plugin-security: ^1.5.0
+    eslint-plugin-security: ^1.7.1
     eslint-plugin-sonarjs: ^0.17.0
     eslint-plugin-standard: ^5.0.0
     jest: ^29.3.1
