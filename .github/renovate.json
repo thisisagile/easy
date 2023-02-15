@@ -10,11 +10,14 @@
   "updateInternalDeps": true,
   "rangeStrategy": "bump",
 
-  "packageRules": [{
-    "matchPackageNames": "next",
-    "allowedVersions": "< 13",
-  }, {
+  "packageRules": [ {
     "matchPackageNames": "release-it",
-    "allowedVersions": "< 15",
+    "allowedVersions": "< 15"
+  }, {
+    "matchPackageNames": "release-it-yarn-workspaces",
+    "allowedVersions": "< 3"
+  }, {
+    "matchPackageNames": "@release-it/conventional-changelog",
+    "allowedVersions": "< 5"
   }]
 }
