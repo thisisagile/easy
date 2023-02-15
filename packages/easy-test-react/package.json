@@ -34,11 +34,11 @@
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
-    "jest-environment-jsdom": "^29.3.1",
+    "jest-environment-jsdom": "^29.4.3",
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "@testing-library/dom": "^8.19.0",
+    "@testing-library/dom": "^8.20.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@thisisagile/easy": "workspace:^",
