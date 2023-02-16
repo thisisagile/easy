@@ -2173,7 +2173,7 @@ __metadata:
     "@types/express": ^4.17.17
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^9.0.1
-    "@types/passport": ^1.0.11
+    "@types/passport": ^1.0.12
     "@types/passport-jwt": ^3.0.8
     "@types/uuid": ^9.0.0
     "@types/validator": ^13.7.12
@@ -2615,12 +2615,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/passport@npm:*, @types/passport@npm:^1.0.11":
+"@types/passport@npm:*":
   version: 1.0.11
   resolution: "@types/passport@npm:1.0.11"
   dependencies:
     "@types/express": "*"
   checksum: 7fea92aeb0d05bd872c17deadc1f1219dbdb23bae1b8f50e1c432ef755bce2b5f3fd60af76c38815f1fbaa047960d3638a4144221c4330457091be1f6e492168
+  languageName: node
+  linkType: hard
+
+"@types/passport@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "@types/passport@npm:1.0.12"
+  dependencies:
+    "@types/express": "*"
+  checksum: 2bce41b248566d8c2aeafcb38f105e3521d42a572e92da9edc5eb669f1b3cb02e5911c9d124191f67d432b677562a885b6ad7f56320c712df1e87ba7619eb8a4
   languageName: node
   linkType: hard
 
