@@ -19,6 +19,8 @@ import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
 
+export type RepoAction = 'add' | 'update' | 'remove';
+
 export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T, Options> {
   constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway<Options>) {
     super();
@@ -62,7 +64,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
   }
 
   add(t: T | Json): Promise<T> {
-    return this.extend(this.create(t))
+    return this.extend(this.create(t), 'add')
       .then(i => when(i).not.isValid.reject())
       .then(i => this.validate(i))
       .then(i => this.gateway.add(toJson(i)))
@@ -74,7 +76,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
       .byId(id)
       .then(j => when(j).not.isDefined.reject(Exception.DoesNotExist))
       .then(j => new this.ctor(j).update(json) as T)
-      .then(i => this.extend(i))
+      .then(i => this.extend(i, 'update'))
       .then(i => when(i).not.isValid.reject())
       .then(i => this.validate(i))
       .then(i => this.gateway.update(toJson(i)))
@@ -85,7 +87,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
     return this.gateway.remove(id);
   }
 
-  extend(item: T): Promise<T> {
+  extend(item: T, _action?: RepoAction): Promise<T> {
     return resolve(item);
   }
 

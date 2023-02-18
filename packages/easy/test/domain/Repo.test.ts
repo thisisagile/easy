@@ -111,6 +111,13 @@ describe('Repo', () => {
     return expect(gateway.add).toHaveBeenCalled();
   });
 
+  test('add valid object does trigger extend with add action', async () => {
+    gateway.add = mock.resolve(Dev.Jeroen.toJSON());
+    repo.extend = mock.resolve(Dev.Jeroen);
+    await repo.add(Dev.Jeroen.toJSON());
+    return expect(repo.extend).toHaveBeenCalledWith(fits.any(), 'add');
+  });
+
   test('add invalid entity does trigger gateway', async () => {
     gateway.add = mock.resolve();
     await expect(repo.add(Dev.Invalid)).rejects.not.toBeValid();
@@ -139,6 +146,14 @@ describe('Repo', () => {
 
   test('Dev update works', () => {
     expect(Dev.Sander.update({ level: 4 })).toMatchObject(fits.with({ level: 4 }));
+  });
+
+  test('update valid object does trigger extend with update action', async () => {
+    gateway.byId = mock.resolve({ id: 43 });
+    gateway.update = mock.resolve(Dev.Jeroen.toJSON());
+    repo.extend = mock.resolve(Dev.Jeroen);
+    await repo.update(Dev.Jeroen.id, Dev.Jeroen.toJSON());
+    return expect(repo.extend).toHaveBeenCalledWith(fits.any(), 'update');
   });
 
   test('update where gateway fails is not valid', async () => {
