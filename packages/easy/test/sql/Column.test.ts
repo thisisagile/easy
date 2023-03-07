@@ -61,4 +61,15 @@ describe('Column', () => {
     expect(name.count.as('Counter')).toMatchText('COUNT(Name) AS Counter');
     expect(devs.level.max.as('Level')).toMatchText('MAX(CodingLevel) AS Level');
   });
+
+  test('in', () => {
+    expect(level.in()).toBe(3);
+    expect(level.in({ CodingLevel: '5' })).toBe(5);
+  });
+
+  test('out', () => {
+    expect(level.out()).toBe('');
+    expect(level.out({ CodingLevel: '5' }, 'CodingLevel')).toBe('5');
+    expect(level.out({ CodingLevel: 3 }, 'CodingLevel')).toBe('3');
+  });
 });

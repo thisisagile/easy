@@ -44,7 +44,7 @@ describe('Table in and out', () => {
   const dev = new DevTable();
 
   test('properties are correct', () => {
-    expect(dev.level.options?.dflt).toBe(3);
+    expect(dev.level.options?.dflt).toBe('3');
     expect(dev.level.options?.convert).toBeDefined();
     expect(dev.name.options?.dflt).toBeUndefined();
     expect(dev.name.options?.convert).toBeDefined();
