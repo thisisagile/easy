@@ -17,7 +17,9 @@ export const aggregation = {
   count: (to = 'count') => ({ [to]: { $count: {} } }),
   after: (key: string, date: unknown) => aggregation.match(aggregation.gte(key, toMongoType(date))),
   before: (key: string, date: unknown) => aggregation.match(aggregation.lt(key, toMongoType(date))),
-  group: (by: Filter, ...fs: Filter[]) => ({ $group: Object.assign({ _id: by }, ...fs) }),
+  group: (by: Filter) => ({
+    and: (...fs: Filter[]) => ({ $group: Object.assign({ _id: by }, ...fs) }),
+  }),
   skip: ({ skip: $skip }: FindOptions): Optional<Filter> => ifDefined($skip, { $skip }),
   take: ({ take: $limit }: FindOptions): Optional<Filter> => ifDefined($limit, { $limit }),
   sort: ($sort: Record<string, typeof asc | typeof desc>): Optional<Filter> => (isPresent($sort) ? { $sort } : undefined),

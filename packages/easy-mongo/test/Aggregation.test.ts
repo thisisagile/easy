@@ -68,16 +68,16 @@ describe('Aggregation', () => {
   });
 
   test('group', () => {
-    const g = group('brandId', sum('total', 'count'));
+    const g = group('brandId').and(sum('total', 'count'));
     expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
-    const g2 = group(date('created.when'), count());
+    const g2 = group(date('created.when')).and(count());
     expect(g2).toMatchObject({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
         count: { $count: {} },
       },
     });
-    const g3 = group(date('created.when'), count(), sum('total'));
+    const g3 = group(date('created.when')).and(count(), sum('total'));
     expect(g3).toMatchObject({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
