@@ -4,7 +4,7 @@ import { aggregation } from '../src';
 describe('Aggregation', () => {
   const name = { name: 'Sander' };
   const options = { skip: 10, take: 5 };
-  const { id, eq, match, sum, group, skip, take, sort, asc, desc } = aggregation;
+  const { id, eq, gt, match, sum, group, skip, take, sort, asc, desc } = aggregation;
 
   test('id', () => {
     expect(id(42)).toMatchObject({ $match: { id: 42 } });
@@ -17,6 +17,10 @@ describe('Aggregation', () => {
 
   test('match', () => {
     expect(match(name)).toMatchObject({ $match: name });
+  });
+
+  test('gt', () => {
+    expect(gt('prio', 10)).toMatchObject({ prio: { $gt: 10 } });
   });
 
   test('sum', () => {
