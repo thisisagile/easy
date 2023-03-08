@@ -1,0 +1,131 @@
+import { stages } from '../src/Stages';
+import { fits } from '@thisisagile/easy-test';
+
+describe('Stages', () => {
+  // Match
+
+  const { match, gt, gte, lt, lte, after, before } = stages.match;
+
+  test('one filter', () => {
+    expect(match({ id: 42 })).toMatchObject({ $match: { id: 42 } });
+    expect(match({ name: 'Sander' })).toMatchObject({ $match: { name: 'Sander' } });
+  });
+
+  test('multiple filters', () => {
+    expect(match({ id: 42, name: 'Sander' })).toMatchObject({ $match: { id: 42, name: 'Sander' } });
+  });
+
+  test('gt', () => {
+    expect(match({ id: gt(42) })).toMatchObject({ $match: { id: { $gt: 42 } } });
+  });
+
+  test('gte', () => {
+    expect(match({ id: gte(42) })).toMatchObject({ $match: { id: { $gte: 42 } } });
+  });
+
+  test('lt', () => {
+    expect(match({ id: lt(42) })).toMatchObject({ $match: { id: { $lt: 42 } } });
+  });
+
+  test('lte', () => {
+    expect(match({ id: lte(42) })).toMatchObject({ $match: { id: { $lte: 42 } } });
+  });
+
+  test('after', () => {
+    expect(match({ 'deleted.when': after('2021-06-24T00:00:00.000Z') })).toMatchObject({
+      $match: { 'deleted.when': { $gte: fits.type(Date) } },
+    });
+  });
+
+  test('before', () => {
+    expect(match({ 'deleted.when': before('2021-06-24T00:00:00.000Z') })).toMatchObject({
+      $match: { 'deleted.when': { $lt: fits.type(Date) } },
+    });
+  });
+
+  // Sort
+
+  const { sort, asc, desc } = stages.sort;
+
+  test('sort', () => {
+    expect(sort({})).toBeUndefined();
+    expect(sort({ name: -1 })).toMatchObject({ $sort: { name: -1 } });
+    expect(sort({ name: 1, email: -1 })).toMatchObject({ $sort: { name: 1, email: -1 } });
+  });
+
+  test('asc', () => {
+    expect(asc('name')).toMatchObject({ $sort: { name: 1 } });
+  });
+
+  test('desc', () => {
+    expect(desc('name')).toMatchObject({ $sort: { name: -1 } });
+  });
+
+  // Group
+
+  const { groupBy, count, avg, sum, first, last, min, max, date } = stages.group;
+  const { decode } = stages;
+
+  test('count', () => {
+    expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
+  });
+
+  test('avg', () => {
+    expect(decode.fields({ total: avg('level') })).toMatchObject({ total: { $avg: '$level' } });
+  });
+
+  test('sum', () => {
+    expect(decode.fields({ total: sum('price') })).toMatchObject({ total: { $sum: '$price' } });
+  });
+
+  test('first', () => {
+    expect(decode.fields({ total: first('item') })).toMatchObject({ total: { $first: '$item' } });
+  });
+
+  test('last', () => {
+    expect(decode.fields({ total: last('item') })).toMatchObject({ total: { $last: '$item' } });
+  });
+
+  test('min', () => {
+    expect(decode.fields({ total: min('item') })).toMatchObject({ total: { $min: '$item' } });
+  });
+
+  test('max', () => {
+    expect(decode.fields({ total: max('item') })).toMatchObject({ total: { $max: '$item' } });
+  });
+
+  test('groupBy string id and single field', () => {
+    const g = groupBy('brandId').and({ total: sum('count') });
+    expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
+  });
+
+  test('groupBy string id and multiple fields', () => {
+    const g = groupBy('brandId').and({ total: sum('count'), count: count() });
+    expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' }, count: { $count: {} } } });
+  });
+
+  test('groupBy filter id and single field', () => {
+    const g = groupBy({ 'created.when': date() }).and({ count: count() });
+    expect(g).toMatchObject({
+      $group: {
+        _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
+        count: { $count: {} },
+      },
+    });
+  });
+
+  // Skip and take
+
+  const options = { skip: 10, take: 5 };
+  const { skip, take } = stages.skip;
+
+  test('skip', () => {
+    expect(skip({})).toBeUndefined();
+    expect(skip(options)).toMatchObject({ $skip: options.skip });
+  });
+
+  test('take', () => {
+    expect(take({})).toBeUndefined();
+    expect(take(options)).toMatchObject({ $limit: options.take });
+  });
+});
