@@ -5,7 +5,7 @@ import { fits } from '@thisisagile/easy-test';
 describe('Aggregation', () => {
   const name = { name: 'Sander' };
   const options = { skip: 10, take: 5 };
-  const { id, eq, gt, lt, gte, lte, date, after, match, sum, count, group, skip, take, sort, asc, desc } = aggregation;
+  const { id, eq, gt, lt, gte, lte, date, after, before, match, sum, count, group, skip, take, sort, asc, desc } = aggregation;
 
   test('id', () => {
     expect(id(42)).toMatchObject({ $match: { id: 42 } });
@@ -57,7 +57,13 @@ describe('Aggregation', () => {
 
   test('after', () => {
     expect(after('deleted.when', '2021-06-24T00:00:00.000Z')).toMatchObject({
-      $match: { 'deleted.when': { $gt: fits.type(Date) } },
+      $match: { 'deleted.when': { $gte: fits.type(Date) } },
+    });
+  });
+
+  test('before', () => {
+    expect(before('deleted.when', '2021-06-24T00:00:00.000Z')).toMatchObject({
+      $match: { 'deleted.when': { $lt: fits.type(Date) } },
     });
   });
 
