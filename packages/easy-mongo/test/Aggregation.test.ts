@@ -1,11 +1,11 @@
 import '@thisisagile/easy-test';
-import { aggregation } from '../src';
+import { aggregations } from '../src';
 import { fits } from '@thisisagile/easy-test';
 
 describe('Aggregation', () => {
   const name = { name: 'Sander' };
   const options = { skip: 10, take: 5 };
-  const { id, eq, gt, lt, gte, lte, date, after, before, match, sum, count, group, skip, take, sort, asc, desc } = aggregation;
+  const { id, eq, gt, lt, gte, lte, date, after, before, match, sum, count, groupBy, skip, take, sort, asc, desc } = aggregations;
 
   test('id', () => {
     expect(id(42)).toMatchObject({ $match: { id: 42 } });
@@ -68,16 +68,16 @@ describe('Aggregation', () => {
   });
 
   test('group', () => {
-    const g = group('brandId').and(sum('total', 'count'));
+    const g = groupBy('brandId').and(sum('total', 'count'));
     expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
-    const g2 = group(date('created.when')).and(count());
+    const g2 = groupBy(date('created.when')).and(count());
     expect(g2).toMatchObject({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
         count: { $count: {} },
       },
     });
-    const g3 = group(date('created.when')).and(count(), sum('total'));
+    const g3 = groupBy(date('created.when')).and(count(), sum('total'));
     expect(g3).toMatchObject({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
