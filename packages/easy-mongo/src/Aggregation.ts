@@ -14,4 +14,5 @@ export const aggregation = {
   take: ({ take: $limit }: FindOptions): Optional<Filter> => ifDefined($limit, { $limit }),
   sort: ($sort: Record<string, typeof asc | typeof desc>): Optional<Filter> => (isPresent($sort) ? { $sort } : undefined),
   asc: (key: string) => aggregation.sort({ [key]: asc }),
+  desc: (key: string) => aggregation.sort({ [key]: desc }),
 };
