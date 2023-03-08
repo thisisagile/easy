@@ -9,6 +9,7 @@ export const aggregation = {
   id: (id: Id) => aggregation.match({ id }),
   eq: (key: string, value: Id | Filter) => aggregation.match({ [key]: value }),
   gt: (key: string, value: Id) => ({ [key]: { $gt: value } }),
+  lt: (key: string, value: Id) => ({ [key]: { $lt: value } }),
   sum: (to: string, from: string = to) => ({ [to]: { $sum: `$${from}` } }),
   group: (id: Id, g: Filter) => ({ $group: { _id: id, ...g } }),
   skip: ({ skip: $skip }: FindOptions): Optional<Filter> => ifDefined($skip, { $skip }),
