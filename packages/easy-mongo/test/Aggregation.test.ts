@@ -1,11 +1,10 @@
 import '@thisisagile/easy-test';
 import { aggregation } from '../src';
-import { asc, desc } from '@thisisagile/easy';
 
 describe('Aggregation', () => {
   const name = { name: 'Sander' };
   const options = { skip: 10, take: 5 };
-  const { id, eq, match, sum, group, skip, take, sort } = aggregation;
+  const { id, eq, match, sum, group, skip, take, sort, asc } = aggregation;
 
   test('id', () => {
     expect(id(42)).toMatchObject({ $match: { id: 42 } });
@@ -41,7 +40,11 @@ describe('Aggregation', () => {
 
   test('sort', () => {
     expect(sort({})).toBeUndefined();
-    expect(sort({ name: asc })).toMatchObject({ $sort: { name: 1 } });
-    expect(sort({ name: asc, email: desc })).toMatchObject({ $sort: { name: 1, email: -1 } });
+    expect(sort({ name: 1 })).toMatchObject({ $sort: { name: 1 } });
+    expect(sort({ name: 1, email: -1 })).toMatchObject({ $sort: { name: 1, email: -1 } });
+  });
+
+  test('asc', () => {
+    expect(asc('name')).toMatchObject({ $sort: { name: 1 } });
   });
 });
