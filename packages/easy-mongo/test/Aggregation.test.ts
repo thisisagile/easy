@@ -1,11 +1,11 @@
 import '@thisisagile/easy-test';
 import { aggregation } from '../src';
-import { toArray } from '@thisisagile/easy';
+import { fits } from '@thisisagile/easy-test';
 
 describe('Aggregation', () => {
   const name = { name: 'Sander' };
   const options = { skip: 10, take: 5 };
-  const { id, eq, gt, lt, gte, lte, date, match, sum, count, group, skip, take, sort, asc, desc } = aggregation;
+  const { id, eq, gt, lt, gte, lte, date, after, match, sum, count, group, skip, take, sort, asc, desc } = aggregation;
 
   test('id', () => {
     expect(id(42)).toMatchObject({ $match: { id: 42 } });
@@ -47,12 +47,18 @@ describe('Aggregation', () => {
   });
 
   test('date', () => {
-    expect(date('lastModified.when')).toMatchObject({ $dateToString: { date: '$lastModified.when', format: '%Y-%m-%d' } });
+    expect(date('lastModified.when')).toMatchObject({
+      $dateToString: {
+        date: '$lastModified.when',
+        format: '%Y-%m-%d',
+      },
+    });
   });
 
-  test('dsdsdsad', () => {
-    const c = Object.assign({ _id: 'hoi' }, ...toArray([{ x: 1 }, { y: 2 }]));
-    expect(c).toMatchObject({ _id: 'hoi', x: 1, y: 2 });
+  test('after', () => {
+    expect(after('deleted.when', '2021-06-24T00:00:00.000Z')).toMatchObject({
+      $match: { 'deleted.when': { $gt: fits.type(Date) } },
+    });
   });
 
   test('group', () => {
