@@ -12,6 +12,7 @@ describe('Aggregation', () => {
 
   test('eq', () => {
     expect(eq('name', 42)).toMatchObject({ $match: { name: 42 } });
+    expect(eq('prio', { $gt: 0 })).toMatchObject({ $match: { prio: { $gt: 0 } } });
   });
 
   test('match', () => {
