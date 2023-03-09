@@ -9687,7 +9687,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"release-it-yarn-workspaces@npm:^3.0.0":
+"release-it-yarn-workspaces@npm:3.0.0":
   version: 3.0.0
   resolution: "release-it-yarn-workspaces@npm:3.0.0"
   dependencies:
@@ -9895,7 +9895,7 @@ __metadata:
     ncp: ^2.0.0
     prettier: ^2.8.4
     release-it: 15.7.0
-    release-it-yarn-workspaces: ^3.0.0
+    release-it-yarn-workspaces: 3.0.0
     ts-jest: ^29.0.5
     typescript: ~4.9.5
   languageName: unknown
