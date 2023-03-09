@@ -2,8 +2,21 @@ import { stages } from '../src';
 import { fits } from '@thisisagile/easy-test';
 
 describe('Stages', () => {
-  // Match
+  // Decode
+  const { decode } = stages;
 
+  test('decode id', () => {
+    expect(decode.id('brandId')).toBe('brandId');
+    expect(decode.id({ total: 42 })).toBe(42);
+    expect(decode.id({ total: count() })).toMatchObject({ $count: {} });
+  });
+
+  test('decode fields', () => {
+    expect(decode.fields({ total: 42 })).toMatchObject({ total: 42 });
+    expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
+  });
+
+  // Match
   const { match, gt, gte, lt, lte, after, before } = stages.match;
 
   test('one filter', () => {
@@ -44,7 +57,6 @@ describe('Stages', () => {
   });
 
   // Sort
-
   const { sort, asc, desc } = stages.sort;
 
   test('sort', () => {
@@ -62,9 +74,7 @@ describe('Stages', () => {
   });
 
   // Group
-
   const { groupBy, count, avg, sum, first, last, min, max, date } = stages.group;
-  const { decode } = stages;
 
   test('count', () => {
     expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
@@ -115,7 +125,6 @@ describe('Stages', () => {
   });
 
   // Skip and take
-
   const options = { skip: 10, take: 5 };
   const { skip, take } = stages.skip;
 
