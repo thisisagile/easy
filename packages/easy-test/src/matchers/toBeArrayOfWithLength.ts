@@ -8,7 +8,7 @@ export const toBeArrayOfWithLength = <T>(items: unknown, ctor: Ctor<T>, length: 
     .not(it => it instanceof Array, 'Subject is not an array.')
     .not(
       it => (it as []).length === length,
-      it => `Subject does not have ${length} elements, but ${it.length}.`
+      it => `Subject does not have ${length} elements, but ${(it as []).length}.`
     )
     .not(it => (it as []).every((i: any) => i instanceof ctor), `Not all elements are of type '${ctor.name}'.`)
     .else(`Subject has ${length} elements, which are all of type '${ctor.name}'`);
