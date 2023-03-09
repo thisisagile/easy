@@ -305,7 +305,7 @@ describe('DateTime', () => {
     const dt = new DateTime(iso);
     expect(dt.toLocale()).toMatchText('25-3-2021');
     expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
-    expect(dt.toLocale('de-DE', 'ffff')).toMatchText('Donnerstag, 25. März 2021 um 08:39 UTC');
+    expect(dt.toLocale('de-DE', 'ffff')).toMatchText('Donnerstag, 25. März 2021, 08:39 Koordinierte Weltzeit');
   });
 
   test('toFull', () => {
@@ -333,7 +333,7 @@ describe('DateTime', () => {
     const d = new DateTime(iso).withZone('America/New_York');
     expect(d).toMatchText(new_york);
     expect(d.toJSON()).toMatchText(iso);
-    expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021 at 4:39 AM GMT-04:00');
+    expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021, 4:39 AM GMT-04:00');
   });
 
   test('toString keeps zone', () => {
