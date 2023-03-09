@@ -1,4 +1,4 @@
-import { stages } from '../src/Stages';
+import { stages } from '../src';
 import { fits } from '@thisisagile/easy-test';
 
 describe('Stages', () => {

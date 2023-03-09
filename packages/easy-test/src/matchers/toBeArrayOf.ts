@@ -3,7 +3,7 @@ import { Constructor as Ctor } from '../utils/Types';
 import { match } from './Match';
 
 export const toBeArrayOf = <T>(items: unknown, ctor: Ctor<T>): CustomMatcherResult =>
-  match<[]>(items as [])
+  match<unknown>(items)
     .undefined(it => it, 'Subject is undefined.')
     .not(it => it instanceof Array, 'Subject is not an array.')
     .not(it => (it as []).every((i: any) => i instanceof ctor), `Not all elements are of type '${ctor.name}'.`)

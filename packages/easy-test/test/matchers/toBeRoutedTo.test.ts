@@ -1,7 +1,6 @@
-import { mock } from '../../src';
-import { toBeRoutedTo } from '../../src/matchers/toBeRoutedTo';
-import Mock = jest.Mock;
+import { mock, toBeRoutedTo } from '../../src';
 import { asString } from '@thisisagile/easy';
+import Mock = jest.Mock;
 
 describe('toBeRoutedTo', () => {
   const uri = { route: '/devs', complete: '$host/$resource/devs', toString: () => '$host/$resource/devs' };
