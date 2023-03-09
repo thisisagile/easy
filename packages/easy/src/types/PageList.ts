@@ -30,5 +30,5 @@ export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> &
 export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> =>
   toPageList<T>(
     items.map(i => ofConstruct(c, i)),
-    items,
+    items
   );

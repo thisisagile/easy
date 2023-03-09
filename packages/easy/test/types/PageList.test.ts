@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asc, isPageList, toFilter, toList, toPageList, toShortFilter } from "../../src";
+import { asc, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
@@ -13,13 +13,13 @@ describe('PageList', () => {
   });
 
   test('toPageList with full options', () => {
-    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: {name: asc} });
+    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: { name: asc } });
     expect(pl).toBeDefined();
     expect(pl).toHaveLength(0);
     expect(pl.take).toBe(5);
     expect(pl.skip).toBe(1);
     expect(pl.total).toBe(42);
-    expect(pl.sorts).toStrictEqual({name: asc});
+    expect(pl.sorts).toStrictEqual({ name: asc });
   });
 
   test('toPageList empty list', () => {

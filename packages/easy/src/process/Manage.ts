@@ -1,5 +1,5 @@
 import { Search } from './Search';
-import { FetchOptions, Id, Json } from "../types";
+import { FetchOptions, Id, Json } from '../types';
 
 export class Manage<T, Options = FetchOptions> extends Search<T, Options> {
   add = (json: Json): Promise<T> => this.repo.add(json);

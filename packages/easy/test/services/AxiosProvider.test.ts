@@ -1,6 +1,6 @@
 import { AxiosProvider, ctx, EasyUri, HttpStatus, HttpVerb, RequestOptions, uri } from '../../src';
 import { DevUri } from '../ref';
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosHeaders, AxiosInstance, AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
 
 describe('AxiosProvider', () => {
@@ -12,7 +12,7 @@ describe('AxiosProvider', () => {
     data,
     statusText: status.name,
     headers: {},
-    config: {},
+    config: {headers: new AxiosHeaders()},
   });
 
   const withErrorAndMessage = (code: HttpStatus, errorCount = 1, message?: string) =>

@@ -3,18 +3,7 @@ import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import {
-  asc,
-  Database,
-  DateTime,
-  DefaultProvider,
-  desc,
-  Exception,
-  Field,
-  Id,
-  JsonValue,
-  toCondition
-} from "@thisisagile/easy";
+import { asc, Database, DateTime, DefaultProvider, desc, Exception, Field, Id, JsonValue, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -215,7 +204,7 @@ describe('MongoProvider', () => {
   ])('byId does not convert the value to a string. This is done in the past see before 06-12-2022', async (value: Id, exp: any) => {
     c.findOne = mock.resolve();
     provider.collection = mock.resolve(c);
-    await provider.byId(value)
+    await provider.byId(value);
     expect(c.findOne).toHaveBeenCalledWith({ id: exp }, expect.anything());
   });
 
@@ -386,13 +375,13 @@ describe('MongoProvider', () => {
   test('find with sort', async () => {
     provider.collection = mock.resolve(c);
     await provider.find(devs.where(devs.name.is('Jeroen')), { sort: [devs.name.desc(), devs.language.asc()] });
-    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({sort: {Name: -1, Language: 1}}));
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
   });
 
   test('find with sorts', async () => {
     provider.collection = mock.resolve(c);
-    await provider.find(devs.where(devs.name.is('Jeroen')), {sorts: {Name: desc, Language: asc}});
-    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({sort: {Name: -1, Language: 1}}));
+    await provider.find(devs.where(devs.name.is('Jeroen')), { sorts: { Name: desc, Language: asc } });
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
   });
 
   test('first time connect fails set client to undefined', async () => {

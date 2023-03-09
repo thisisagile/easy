@@ -13,9 +13,9 @@ export class Update extends SqlQuery {
       `UPDATE ${this.table} ` +
       `SET ${Object.entries(this.fields)
         .map(([k, v]) => toClause(k, '=', v))
-        .join(`, `)} ` +
-      `OUTPUT INSERTED.*` +
-      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)};`, ';')
+        .join(', ')} ` +
+      'OUTPUT INSERTED.*' +
+      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(' AND ')};`, ';')
     );
   }
 }

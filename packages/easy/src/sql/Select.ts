@@ -49,11 +49,11 @@ export class Select extends SqlQuery {
     return (
       `SELECT ` +
       ifGet(this._top, `TOP ${this._top} `, '') +
-      ifGet(this.columns.length, this.columns.join(`, `), '*') +
+      ifGet(this.columns.length, this.columns.join(', '), '*') +
       ` FROM ${this.table}` +
-      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(` AND `)}`, '') +
-      ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(`, `)}`, '') +
-      ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(`, `)}`, '') +
+      ifGet(this.clauses.length, ` WHERE ${this.clauses.join(' AND ')}`, '') +
+      ifGet(this.grouped.length, ` GROUP BY ${this.grouped.join(', ')}`, '') +
+      ifGet(this.ordered.length, ` ORDERED BY ${this.ordered.join(', ')}`, '') +
       ifGet(this._limit, ` LIMIT ${this._limit}`, '') +
       ifGet(this._offset, ` OFFSET ${this._offset};`, ';')
     );

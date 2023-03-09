@@ -14,7 +14,7 @@ export class PuppeteerElement implements TestElement {
   }
 
   property(property: string): Promise<Json | undefined> {
-    return this.handle.then(h => h?.getProperty(property).then(p => p.jsonValue()));
+    return this.handle.then(h => h?.getProperty(property).then(p => p.jsonValue() as Promise<Json>));
   }
 
   exists(): Promise<boolean> {

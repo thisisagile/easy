@@ -122,7 +122,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -135,7 +135,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      }),
+      })
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
@@ -156,7 +156,7 @@ describe('View', () => {
   });
 
   type DevName = {
-    readonly name: string
+    readonly name: string;
   };
 
   test('T[] should return V[] and T should return V', () => {
@@ -172,7 +172,6 @@ describe('View', () => {
     expect(single).not.toBeInstanceOf(Array);
     expect(single).toEqual({ name: 'Rob' });
   });
-
 
   test('same', () => {
     const devs = view({ id: 'id', name: 'name', language: 'language' });

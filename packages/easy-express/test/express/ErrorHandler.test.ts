@@ -8,6 +8,7 @@ describe('ErrorHandler', () => {
   let req: Request;
   let res: Response;
   let next: NextFunction;
+  const serverError = 'Server Error';
 
   const withError = (code: HttpStatus, errorCount = 1) =>
     fits.with({
@@ -158,16 +159,16 @@ describe('ErrorHandler', () => {
   });
 
   test('Set lastError on server error', () => {
-    error(new Error('Server Error'), req, res, next);
-    expect(ctx.request.lastError).toBe('Server Error');
+    error(new Error(serverError), req, res, next);
+    expect(ctx.request.lastError).toBe(serverError);
   });
 
   test('Recover from Errors thrown in error', () => {
     const r = ctx.request;
     ctx.request = undefined as any;
-    error(new Error('Server Error'), req, res, next);
+    error(new Error(serverError), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
-    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.InternalServerError, 1, 'Server Error'));
+    expect(res.json).toHaveBeenCalledWith(withErrorAndMessage(HttpStatus.InternalServerError, 1, serverError));
     ctx.request = r;
   });
 });
