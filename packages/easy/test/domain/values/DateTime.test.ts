@@ -305,7 +305,7 @@ describe('DateTime', () => {
     const dt = new DateTime(iso);
     expect(dt.toLocale()).toMatchText('25-3-2021');
     expect(dt.toLocale('de-DE')).toMatchText('25.3.2021');
-    expect(dt.toLocale('de-DE', 'ffff')).toMatchText('Donnerstag, 25. März 2021, 08:39 Koordinierte Weltzeit');
+    expect(dt.toLocale('de-DE', 'ffff')).toMatchText('Donnerstag, 25. März 2021, 08:39 UTC');
   });
 
   test('toFull', () => {
