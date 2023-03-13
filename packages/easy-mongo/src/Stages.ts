@@ -45,6 +45,10 @@ export const stages = {
     search: (f: Record<string, Get<Filter, string>>) => ({ $search: stages.decode.id(f) }),
     auto: (value?: Id) => (key: string) => ({ autocomplete: { path: key, query: [value] } }),
   },
+  set: {
+    set: (f: Record<string, Get<Filter, string>>) => ({ $set: stages.decode.fields(f) }),
+    score: () => ({ $meta: 'searchScore' }),
+  },
   skip: {
     skip: ({ skip: $skip }: FindOptions): Optional<Filter> => ifDefined($skip, { $skip }),
     take: ({ take: $limit }: FindOptions): Optional<Filter> => ifDefined($limit, { $limit }),

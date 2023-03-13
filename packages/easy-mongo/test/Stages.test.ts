@@ -151,4 +151,16 @@ describe('Stages', () => {
       },
     });
   });
+
+  // Set
+  const { set, score } = stages.set;
+
+  test('score with an additional set', () => {
+    expect(set({ score: score(), name: 'Sander' })).toMatchObject({
+      $set: {
+        score: { $meta: 'searchScore' },
+        name: 'Sander',
+      },
+    });
+  });
 });
