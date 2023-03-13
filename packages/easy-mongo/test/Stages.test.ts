@@ -74,7 +74,7 @@ describe('Stages', () => {
   });
 
   // Group
-  const { groupBy, count, avg, sum, first, last, min, max, date } = stages.group;
+  const { group, count, avg, sum, first, last, min, max, date } = stages.group;
 
   test('count', () => {
     expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
@@ -105,17 +105,17 @@ describe('Stages', () => {
   });
 
   test('groupBy string id and single field', () => {
-    const g = groupBy('brandId').and({ total: sum('count') });
+    const g = group({ total: sum('count') }).by('brandId');
     expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
   });
 
   test('groupBy string id and multiple fields', () => {
-    const g = groupBy('brandId').and({ total: sum('count'), count: count() });
+    const g = group({ total: sum('count'), count: count() }).by('brandId');
     expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' }, count: { $count: {} } } });
   });
 
   test('groupBy filter id and single field', () => {
-    const g = groupBy({ 'created.when': date() }).and({ count: count() });
+    const g = group({ count: count() }).by({ 'created.when': date() });
     expect(g).toMatchObject({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
