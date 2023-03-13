@@ -50,7 +50,7 @@ export const stages = {
     score: () => ({ $meta: 'searchScore' }),
   },
   skip: {
-    skip: ({ skip: $skip }: FindOptions): Optional<Filter> => ifDefined($skip, { $skip }),
-    take: ({ take: $limit }: FindOptions): Optional<Filter> => ifDefined($limit, { $limit }),
+    skip: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.skip, { $skip: o.skip }),
+    take: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.take, { $limit: o.take }),
   },
 };

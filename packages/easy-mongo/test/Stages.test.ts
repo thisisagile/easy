@@ -129,11 +129,13 @@ describe('Stages', () => {
   const { skip, take } = stages.skip;
 
   test('skip', () => {
+    expect(skip()).toBeUndefined();
     expect(skip({})).toBeUndefined();
     expect(skip(options)).toMatchObject({ $skip: options.skip });
   });
 
   test('take', () => {
+    expect(take()).toBeUndefined();
     expect(take({})).toBeUndefined();
     expect(take(options)).toMatchObject({ $limit: options.take });
   });
