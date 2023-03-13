@@ -1,5 +1,5 @@
 import { Filter, FindOptions } from './MongoProvider';
-import { Get, ifDefined, isFunction, isPresent, isString, on, Optional, PartialRecord } from '@thisisagile/easy';
+import { Get, Id, ifDefined, isFunction, isPresent, isString, on, Optional, PartialRecord } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
 export const asc = 1;
@@ -40,6 +40,10 @@ export const stages = {
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
     min: (from?: string): Accumulator => ({ $min: `$${from}` }),
     max: (from?: string): Accumulator => ({ $max: `$${from}` }),
+  },
+  search: {
+    search: (f: Record<string, Get<Filter, string>>) => ({ $search: stages.decode.id(f) }),
+    auto: (value?: Id) => (key: string) => ({ autocomplete: { path: key, query: [value] } }),
   },
   skip: {
     skip: ({ skip: $skip }: FindOptions): Optional<Filter> => ifDefined($skip, { $skip }),

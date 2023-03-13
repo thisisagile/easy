@@ -137,4 +137,18 @@ describe('Stages', () => {
     expect(take({})).toBeUndefined();
     expect(take(options)).toMatchObject({ $limit: options.take });
   });
+
+  // Search
+  const { auto, search } = stages.search;
+
+  test('auto', () => {
+    expect(search({ name: auto('42') })).toMatchObject({
+      $search: {
+        autocomplete: {
+          query: ['42'],
+          path: 'name',
+        },
+      },
+    });
+  });
 });
