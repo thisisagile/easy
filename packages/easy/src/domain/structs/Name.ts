@@ -1,6 +1,6 @@
 import { Struct } from '../Struct';
 import { required } from '../../validation';
-import { text } from '../../types';
+import { Json, text } from '../../types';
 
 export class Name extends Struct {
   @required() readonly first: string = this.state.first;
@@ -11,3 +11,5 @@ export class Name extends Struct {
     return text(this.first, '').add(this.middle, ' ').add(this.last, ' ').toString();
   }
 }
+
+export const name = (n?: Json): Name => new Name(n);

@@ -1,5 +1,4 @@
-import { toJson } from '../../../src';
-import { Name } from '../../../src';
+import { Name, name, toJson } from '../../../src';
 
 describe('Name', () => {
   const j = { first: 'Kevin', last: 'Huijsman' };
@@ -20,12 +19,12 @@ describe('Name', () => {
   });
 
   test('toString of name without middle', () => {
-    const ne = new Name({ first: 'Joyce', last: 'Assaad' });
+    const ne = name({ first: 'Joyce', last: 'Assaad' });
     expect(ne.toString()).toBe('Joyce Assaad');
   });
 
   test('toString of name with middle', () => {
-    const ne = new Name({ first: 'Wouter', middle: 'van', last: 'Bakel' });
+    const ne = name({ first: 'Wouter', middle: 'van', last: 'Bakel' });
     expect(ne.toString()).toBe('Wouter van Bakel');
   });
 });
