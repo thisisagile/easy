@@ -34,21 +34,24 @@ export class DateTime extends Value<Optional<string>> {
     return this.from();
   }
 
-  from(date?: DateTime): string;
-  from(locale?: string): string;
-  from(date?: DateTime, locale?: string): string;
-  from(param?: string | DateTime, other?: string): string {
-    const date: Optional<DateTime> = isA<DateTime>(param) ? param : undefined;
-    const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
-    return isDefined(date) ? (this.utc.setLocale(locale).toRelative({ base: date.utc }) as string) : (this.utc.setLocale(locale).toRelative() as string);
-  }
-
   protected get utc(): LuxonDateTime {
     return this.luxon.setZone('utc');
   }
 
   protected get luxon(): LuxonDateTime {
     return LuxonDateTime.fromISO(this.value as string, { setZone: true });
+  }
+
+  from(date?: DateTime): string;
+
+  from(locale?: string): string;
+
+  from(date?: DateTime, locale?: string): string;
+
+  from(param?: string | DateTime, other?: string): string {
+    const date: Optional<DateTime> = isA<DateTime>(param) ? param : undefined;
+    const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
+    return isDefined(date) ? (this.utc.setLocale(locale).toRelative({ base: date.utc }) as string) : (this.utc.setLocale(locale).toRelative() as string);
   }
 
   isAfter(dt: DateTime): boolean {
@@ -95,3 +98,5 @@ export class DateTime extends Value<Optional<string>> {
 }
 
 export const isDateTime = (dt?: unknown): dt is DateTime => isDefined(dt) && dt instanceof DateTime;
+
+export const dt = (dt?: unknown): DateTime => (isString(dt) || isNumber(dt) || dt instanceof Date ? new DateTime(dt) : new DateTime());

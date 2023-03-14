@@ -1,4 +1,4 @@
-import { DateTime, DateTimeUnit, isDateTime } from '../../../src';
+import { DateTime, DateTimeUnit, dt, isDateTime } from '../../../src';
 import '@thisisagile/easy-test';
 import { mock } from '@thisisagile/easy-test';
 
@@ -344,5 +344,11 @@ describe('DateTime', () => {
   test('toJSON always in UTC', () => {
     expect(new DateTime(new_york).toJSON()).toMatchText(iso);
     expect(new DateTime(iso).toJSON()).toMatchText(iso);
+  });
+
+  test('dt constructor function', () => {
+    expect(dt()).not.toBeValid();
+    expect(dt(iso).toJSON()).toMatchText(iso);
+    expect(dt(new_york).toJSON()).toMatchText(iso);
   });
 });
