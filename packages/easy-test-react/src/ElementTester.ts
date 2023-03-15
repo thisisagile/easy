@@ -21,6 +21,7 @@ export class ElementTester {
   }
 
   click = (): this | undefined => (this.element() && fireEvent.click(this.element()) ? this : undefined);
+  awaitClick = (): Promise<boolean> => waitFor(() => fireEvent.click(this.element()));
   mouseDown = (): this | undefined => (this.element() && fireEvent.mouseDown(this.element()) ? this : undefined);
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
   wait = (): Promise<Element> => waitFor(this.element);
