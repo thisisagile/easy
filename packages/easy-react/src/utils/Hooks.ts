@@ -1,4 +1,4 @@
-import { isPageList, List, PageList, PageOptions, toList, toPageList, Validatable } from '@thisisagile/easy';
+import { isPageList, List, Optional, PageList, PageOptions, toList, toPageList, Validatable } from "@thisisagile/easy";
 import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
@@ -18,6 +18,15 @@ export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>)
 };
 
 export const useAn = useA;
+
+export const useOptional = <E>(item?: Partial<E>): [E, (e: Optional<E>) => Optional<E>, () => Optional<E>] => {
+  const [state, setState] = useState<E>(item as E);
+  const set = (e?: Optional<E>): Optional<E> => {
+    setState(e as E);
+    return e;
+  };
+  return [state, set, (): Optional<E> => set()];
+};
 
 export const useEntity = useA;
 
