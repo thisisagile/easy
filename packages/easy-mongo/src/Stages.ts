@@ -1,5 +1,5 @@
 import { Filter, FindOptions } from './MongoProvider';
-import { Get, Id, ifDefined, isFunction, isPresent, isString, on, Optional, PartialRecord } from '@thisisagile/easy';
+import { Get, Id, ifDefined, isFunction, isPresent, isPrimitive, on, Optional, PartialRecord } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
 export const asc = 1;
@@ -10,7 +10,7 @@ export type Accumulator = PartialRecord<Accumulators, Filter>;
 export const stages = {
   decode: {
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = isFunction(v) ? v(k) : v)), {} as any),
-    id: (f: Filter | string) => (isString(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
+    id: (f: Filter | string) => (isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
   },
   match: {
     match: (f: Record<string, Get<Filter, string>>) => ({ $match: stages.decode.fields(f) }),

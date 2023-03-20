@@ -7,6 +7,8 @@ describe('Stages', () => {
 
   test('decode id', () => {
     expect(decode.id('brandId')).toBe('brandId');
+    expect(decode.id(42)).toBe(42);
+    expect(decode.id(true)).toBe(true);
     expect(decode.id({ total: 42 })).toBe(42);
     expect(decode.id({ total: count() })).toMatchObject({ $count: {} });
   });
