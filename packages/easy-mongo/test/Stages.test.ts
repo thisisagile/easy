@@ -76,7 +76,7 @@ describe('Stages', () => {
   });
 
   // Group
-  const { group, count, avg, sum, first, last, min, max, date } = stages.group;
+  const { group, count, avg, sum, first, last, min, max, date, push } = stages.group;
 
   test('count', () => {
     expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
@@ -109,6 +109,11 @@ describe('Stages', () => {
   test('groupBy string id and single field', () => {
     const g = group({ total: sum('count') }).by('brandId');
     expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
+  });
+
+  test('groupBy id and push', () => {
+    const g = group({ products: push() }).by('brandId');
+    expect(g).toMatchObject({ $group: { _id: 'brandId', products: { $push: '$$ROOT' } } });
   });
 
   test('groupBy string id and multiple fields', () => {

@@ -4,7 +4,7 @@ import { toMongoType } from './Utils';
 
 export const asc = 1;
 export const desc = -1;
-export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max';
+export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export const stages = {
@@ -40,6 +40,7 @@ export const stages = {
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
     min: (from?: string): Accumulator => ({ $min: `$${from}` }),
     max: (from?: string): Accumulator => ({ $max: `$${from}` }),
+    push: (): Accumulator => ({ $push: '$$ROOT' }),
   },
   search: {
     search: (f: Record<string, Get<Filter, string>>) => ({ $search: stages.decode.id(f) }),
