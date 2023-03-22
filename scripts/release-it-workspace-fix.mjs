@@ -36,7 +36,7 @@ class FixWorkspacePlugin extends Plugin {
   }
 
   async bump() {
-    const task = () => {
+    const task = async () => {
       this.packages.forEach(manifest => {
         this.log.exec(`Processing ${manifest.filename}`);
         this._patchDependencies(manifest);
