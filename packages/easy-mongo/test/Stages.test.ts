@@ -6,7 +6,7 @@ describe('Stages', () => {
   const { decode } = stages;
 
   test('decode id', () => {
-    expect(decode.id('brandId')).toBe('brandId');
+    expect(decode.id('brandId')).toBe('$brandId');
     expect(decode.id(42)).toBe(42);
     expect(decode.id(true)).toBe(true);
     expect(decode.id({ total: 42 })).toBe(42);
@@ -108,17 +108,17 @@ describe('Stages', () => {
 
   test('groupBy string id and single field', () => {
     const g = group({ total: sum('count') }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' } } });
+    expect(g).toMatchObject({ $group: { _id: '$brandId', total: { $sum: '$count' } } });
   });
 
   test('groupBy id and push', () => {
     const g = group({ products: push() }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: 'brandId', products: { $push: '$$ROOT' } } });
+    expect(g).toMatchObject({ $group: { _id: '$brandId', products: { $push: '$$ROOT' } } });
   });
 
   test('groupBy string id and multiple fields', () => {
     const g = group({ total: sum('count'), count: count() }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: 'brandId', total: { $sum: '$count' }, count: { $count: {} } } });
+    expect(g).toMatchObject({ $group: { _id: '$brandId', total: { $sum: '$count' }, count: { $count: {} } } });
   });
 
   test('groupBy filter id and single field', () => {
