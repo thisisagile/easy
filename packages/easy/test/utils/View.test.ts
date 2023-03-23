@@ -203,6 +203,19 @@ describe('View', () => {
     expect(v.from({ First: 'Sander' })).toStrictEqual({ First: 'Sander' });
   });
 
+  const toThing = view({
+    first: keep,
+    last: keepOr('Pieterse'),
+    age: keepOr(56),
+  });
+
+  test('views keepOr', () => {
+    const j = toThing.from({ first: 'Jan', last: 'Jansen', age: 3 });
+    expect(j).toMatchObject({ first: 'Jan', last: 'Jansen', age: 3 });
+    const j2 = toThing.from({ first: 'Jan' });
+    expect(j2).toMatchObject({ first: 'Jan', last: 'Pieterse', age: 56 });
+  });
+
   test('views to simple', () => {
     const v = view({ email: to(Email) });
     expect(v.from({ email: 'sander@ibood.com' }).email).toBeInstanceOf(Email);

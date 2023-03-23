@@ -74,7 +74,7 @@ export const views = {
   ignore: () => undefined,
   skip: () => undefined,
   keep: (a: unknown, key?: string) => traverse(a, key),
-  keepOr: (alt?: string) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
+  keepOr: (alt?: unknown) => (a: unknown, key?: string) => traverse(a, key) ?? alt,
   or:
     (key: string, alt = '') =>
     (a: unknown) =>
