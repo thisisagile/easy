@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, Currency, Enum, Id, isEmpty, isList, List, reject, resolve, toList, toObject } from '../../src';
+import { asList, Currency, Enum, HasId, Id, isEmpty, isList, List, reject, resolve, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -153,7 +153,17 @@ describe('List', () => {
 
   test('replace', () => {
     const devs = toList(Dev.Sander, Dev.RobC, Dev.Wouter);
-    expect(devs.replace('id', new Dev({ id: Dev.Sander.id, name: 'Boet', language: 'Typescript', level: 0 }))).toHaveLength(3);
+    expect(
+      devs.replace(
+        'id',
+        new Dev({
+          id: Dev.Sander.id,
+          name: 'Boet',
+          language: 'Typescript',
+          level: 0,
+        })
+      )
+    ).toHaveLength(3);
     expect(devs[0]).not.toMatchObject(Dev.Sander);
     expect(devs[0].name).toBe('Boet');
   });
@@ -302,6 +312,22 @@ describe('isList', () => {
       [Dev.Rob.id]: Dev.Rob,
       [Dev.RobC.id]: Dev.RobC,
     });
+  });
+
+  test('toObject and not loose the key', () => {
+    const naoufal = Dev.Naoufal.toJSON() as HasId;
+    const jeroen = Dev.Jeroen.toJSON() as HasId;
+
+    const resFalse = toList(naoufal, jeroen).toObject('id', { deleteKey: false });
+    expect(resFalse[naoufal.id].id).toBe(naoufal.id);
+  });
+
+  test('toObject and loose the key', () => {
+    const naoufal = Dev.Naoufal.toJSON() as HasId;
+    const jeroen = Dev.Jeroen.toJSON() as HasId;
+
+    const resTrue = toList(naoufal, jeroen).toObject('id', { deleteKey: true });
+    expect(resTrue[naoufal.id]?.id).toBeUndefined();
   });
 });
 

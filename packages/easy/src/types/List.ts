@@ -89,9 +89,10 @@ export class List<T = unknown> extends Array<T> {
 
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
-  toObject = (key: keyof T): Record<string | number | symbol, T> =>
+  toObject = (key: keyof T, options: { deleteKey?: boolean } = {}): Record<string | number | symbol, T> =>
     this.reduce((o: any, i) => {
       o[i[key]] = i;
+      if (options.deleteKey) delete o[i[key]][key];
       return o;
     }, {});
 
