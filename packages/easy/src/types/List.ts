@@ -1,4 +1,4 @@
-import { ArrayLike, toArray, toObject as toObjectArray } from './Array';
+import { ArrayLike, toArray } from './Array';
 import { Constructor } from './Constructor';
 import { json, Json } from './Json';
 import { isArray, isDefined, isEmpty } from './Is';
@@ -89,7 +89,11 @@ export class List<T = unknown> extends Array<T> {
 
   defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
 
-  toObject = (key: keyof T): Record<string | number | symbol, T> => toObjectArray<T>(key, this);
+  toObject = (key: keyof T): Record<string | number | symbol, T> =>
+    this.reduce((o: any, i) => {
+      o[i[key]] = i;
+      return o;
+    }, {});
 
   toObjectList = (key: keyof T): Record<string | number | symbol, List<T>> =>
     this.reduce((a, t) => {

@@ -282,6 +282,16 @@ describe('isList', () => {
     expect(a.overlaps(toList(Dev.Rob, Dev.Sander, Dev.Jeroen))).toBeTruthy();
   });
 
+  test('toObject from undefined works', () => {
+    const res = toList<Dev>().toObject('id');
+    expect(res).toStrictEqual({});
+  });
+
+  test('toObject from single object works', () => {
+    const res = toList(Dev.Naoufal).toObject('id');
+    expect(res[Dev.Naoufal.id]).toStrictEqual(Dev.Naoufal);
+  });
+
   test('toObject', () => {
     const res = Dev.All.toObject('id');
     expect(res).toStrictEqual({
