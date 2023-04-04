@@ -186,4 +186,15 @@ describe('Stages', () => {
       },
     });
   });
+
+  // Project
+  const { include, exclude } = stages.project;
+
+  test('projection include', () => {
+    expect(include({ color: 1 })).toStrictEqual({ $projection: { color: 1 } });
+  });
+
+  test('projection exclude', () => {
+    expect(exclude({ color: 0 })).toStrictEqual({ $projection: { color: 0 } });
+  });
 });

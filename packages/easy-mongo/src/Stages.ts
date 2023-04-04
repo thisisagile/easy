@@ -66,4 +66,8 @@ export const stages = {
     skip: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.skip, { $skip: o.skip }),
     take: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.take, { $limit: o.take }),
   },
+  project: {
+    include: ($projection: Record<string, 1>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
+    exclude: ($projection: Record<string, 0>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
+  }
 };
