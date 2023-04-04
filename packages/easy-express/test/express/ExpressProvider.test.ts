@@ -30,6 +30,7 @@ describe('ExpressProvider', () => {
       end: mock.this(),
       type: mock.this(),
       status: mock.this(),
+      send: mock.this(),
       setHeader: mock.this(),
     } as unknown as Response;
   });
@@ -60,11 +61,11 @@ describe('ExpressProvider', () => {
   test('toResponse with status and type', () => {
     const result = {};
     const cc = mock.empty<CacheControl>({ enabled: false });
-    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Text, cache: cc };
+    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.Form, cache: cc };
     (provider as any).json = mock.return();
     provider.toResponse(res, result, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
-    expect(res.type).toHaveBeenCalledWith(ContentType.Text.code);
+    expect(res.type).toHaveBeenCalledWith(ContentType.Form.code);
     expect((provider as any).json).toHaveBeenCalledWith(res, result, toVerbOptions(options));
   });
 
@@ -83,12 +84,17 @@ describe('ExpressProvider', () => {
     const cc = mock.empty<CacheControl>({ enabled: false });
     const options: VerbOptions = { type: ContentType.Stream, cache: cc };
     (provider as any).json = mock.return();
-    (provider as any).stream = mock.return();
     provider.toResponse(res, buf, options);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Ok.status);
     expect(res.type).toHaveBeenCalledWith(ContentType.Stream.code);
     expect((provider as any).json).not.toHaveBeenCalled();
-    expect((provider as any).stream).toHaveBeenCalledWith(res, buf, toVerbOptions(options));
+    expect(res.end).toHaveBeenCalledWith(buf);
+  });
+
+  test('toResponse with text', () => {
+    provider.toResponse(res, 'foo', { type: ContentType.Text });
+    expect(res.send).toHaveBeenCalledWith('foo');
+    expect(res.type).toHaveBeenCalledWith(ContentType.Text.code);
   });
 
   function mockRouterMethodOnce(router: express.Router, method: ExpressVerb, cb: (endpoint: Endpoint) => any) {

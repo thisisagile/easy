@@ -93,6 +93,9 @@ export class ExpressProvider implements AppProvider {
   protected stream(res: Response, result: unknown): void {
     res.end(result);
   }
+  protected text(res: Response, data: unknown): void {
+    res.send(data);
+  }
 }
 
 export const service = (name: string): Service => new Service(name, new ExpressProvider());
