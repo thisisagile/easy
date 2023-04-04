@@ -1,5 +1,17 @@
 import { Filter, FindOptions } from './MongoProvider';
-import { asString, Get, Id, ifDefined, isFunction, isPresent, isPrimitive, isString, on, Optional, PartialRecord } from '@thisisagile/easy';
+import {
+  asString,
+  Get,
+  Id,
+  ifDefined,
+  isFunction,
+  isPresent,
+  isPrimitive,
+  isString,
+  on,
+  Optional,
+  PartialRecord,
+} from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
 export const asc = 1;
@@ -9,11 +21,11 @@ export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export const stages = {
   decode: {
-    fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = isFunction(v) ? v(k) : v)), {} as any),
+    fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
     id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
   },
   match: {
-    match: (f: Record<string, Get<Filter, string>>) => ({ $match: stages.decode.fields(f) }),
+    match: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $match: stages.decode.fields(f) }),
     gt: (value: Filter) => ({ $gt: value }),
     gte: (value: Filter) => ({ $gte: value }),
     lt: (value: Filter) => ({ $lt: value }),
@@ -32,7 +44,7 @@ export const stages = {
     }),
     date:
       (format = '%Y-%m-%d') =>
-      (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
+        (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
     count: (): Accumulator => ({ $count: {} }),
     sum: (from?: string): Accumulator => ({ $sum: `$${from}` }),
     avg: (from?: string) => ({ $avg: `$${from}` }),

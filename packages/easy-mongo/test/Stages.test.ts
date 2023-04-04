@@ -10,50 +10,56 @@ describe('Stages', () => {
     expect(decode.id(42)).toBe(42);
     expect(decode.id(true)).toBe(true);
     expect(decode.id({ total: 42 })).toBe(42);
-    expect(decode.id({ total: count() })).toMatchObject({ $count: {} });
+    expect(decode.id({ total: count() })).toStrictEqual({ $count: {} });
   });
 
   test('decode fields', () => {
-    expect(decode.fields({ total: 42 })).toMatchObject({ total: 42 });
-    expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
+    expect(decode.fields({ total: 42 })).toStrictEqual({ total: 42 });
+    expect(decode.fields({ total: count() })).toStrictEqual({ total: { $count: {} } });
   });
 
   // Match
   const { match, gt, gte, lt, lte, after, before } = stages.match;
 
   test('one filter', () => {
-    expect(match({ id: 42 })).toMatchObject({ $match: { id: 42 } });
-    expect(match({ name: 'Sander' })).toMatchObject({ $match: { name: 'Sander' } });
+    expect(match({ id: 42 })).toStrictEqual({ $match: { id: 42 } });
+    expect(match({ name: 'Sander' })).toStrictEqual({ $match: { name: 'Sander' } });
+    expect(
+      match({
+        name: 'Sander',
+        promoted: undefined,
+      }),
+    ).toStrictEqual({ $match: { name: 'Sander' } });
   });
 
   test('multiple filters', () => {
-    expect(match({ id: 42, name: 'Sander' })).toMatchObject({ $match: { id: 42, name: 'Sander' } });
+    expect(match({ id: 42, name: 'Sander' })).toStrictEqual({ $match: { id: 42, name: 'Sander' } });
   });
 
   test('gt', () => {
-    expect(match({ id: gt(42) })).toMatchObject({ $match: { id: { $gt: 42 } } });
+    expect(match({ id: gt(42) })).toStrictEqual({ $match: { id: { $gt: 42 } } });
   });
 
   test('gte', () => {
-    expect(match({ id: gte(42) })).toMatchObject({ $match: { id: { $gte: 42 } } });
+    expect(match({ id: gte(42) })).toStrictEqual({ $match: { id: { $gte: 42 } } });
   });
 
   test('lt', () => {
-    expect(match({ id: lt(42) })).toMatchObject({ $match: { id: { $lt: 42 } } });
+    expect(match({ id: lt(42) })).toStrictEqual({ $match: { id: { $lt: 42 } } });
   });
 
   test('lte', () => {
-    expect(match({ id: lte(42) })).toMatchObject({ $match: { id: { $lte: 42 } } });
+    expect(match({ id: lte(42) })).toStrictEqual({ $match: { id: { $lte: 42 } } });
   });
 
   test('after', () => {
-    expect(match({ 'deleted.when': after('2021-06-24T00:00:00.000Z') })).toMatchObject({
+    expect(match({ 'deleted.when': after('2021-06-24T00:00:00.000Z') })).toStrictEqual({
       $match: { 'deleted.when': { $gte: fits.type(Date) } },
     });
   });
 
   test('before', () => {
-    expect(match({ 'deleted.when': before('2021-06-24T00:00:00.000Z') })).toMatchObject({
+    expect(match({ 'deleted.when': before('2021-06-24T00:00:00.000Z') })).toStrictEqual({
       $match: { 'deleted.when': { $lt: fits.type(Date) } },
     });
   });
@@ -63,67 +69,75 @@ describe('Stages', () => {
 
   test('sort', () => {
     expect(sort({})).toBeUndefined();
-    expect(sort({ name: -1 })).toMatchObject({ $sort: { name: -1 } });
-    expect(sort({ name: 1, email: -1 })).toMatchObject({ $sort: { name: 1, email: -1 } });
+    expect(sort({ name: -1 })).toStrictEqual({ $sort: { name: -1 } });
+    expect(sort({ name: 1, email: -1 })).toStrictEqual({ $sort: { name: 1, email: -1 } });
   });
 
   test('asc', () => {
-    expect(asc('name')).toMatchObject({ $sort: { name: 1 } });
+    expect(asc('name')).toStrictEqual({ $sort: { name: 1 } });
   });
 
   test('desc', () => {
-    expect(desc('name')).toMatchObject({ $sort: { name: -1 } });
+    expect(desc('name')).toStrictEqual({ $sort: { name: -1 } });
   });
 
   // Group
   const { group, count, avg, sum, first, last, min, max, date, push } = stages.group;
 
+  test('filter undefined', () => {
+    expect(decode.fields({ total: count(), remove: undefined })).toStrictEqual({ total: { $count: {} } });
+  });
+
+  test('filter with function returning undefined', () => {
+    expect(decode.fields({ total: count(), remove: () => undefined })).toStrictEqual({ total: { $count: {} } });
+  });
+
   test('count', () => {
-    expect(decode.fields({ total: count() })).toMatchObject({ total: { $count: {} } });
+    expect(decode.fields({ total: count() })).toStrictEqual({ total: { $count: {} } });
   });
 
   test('avg', () => {
-    expect(decode.fields({ total: avg('level') })).toMatchObject({ total: { $avg: '$level' } });
+    expect(decode.fields({ total: avg('level') })).toStrictEqual({ total: { $avg: '$level' } });
   });
 
   test('sum', () => {
-    expect(decode.fields({ total: sum('price') })).toMatchObject({ total: { $sum: '$price' } });
+    expect(decode.fields({ total: sum('price') })).toStrictEqual({ total: { $sum: '$price' } });
   });
 
   test('first', () => {
-    expect(decode.fields({ total: first('item') })).toMatchObject({ total: { $first: '$item' } });
+    expect(decode.fields({ total: first('item') })).toStrictEqual({ total: { $first: '$item' } });
   });
 
   test('last', () => {
-    expect(decode.fields({ total: last('item') })).toMatchObject({ total: { $last: '$item' } });
+    expect(decode.fields({ total: last('item') })).toStrictEqual({ total: { $last: '$item' } });
   });
 
   test('min', () => {
-    expect(decode.fields({ total: min('item') })).toMatchObject({ total: { $min: '$item' } });
+    expect(decode.fields({ total: min('item') })).toStrictEqual({ total: { $min: '$item' } });
   });
 
   test('max', () => {
-    expect(decode.fields({ total: max('item') })).toMatchObject({ total: { $max: '$item' } });
+    expect(decode.fields({ total: max('item') })).toStrictEqual({ total: { $max: '$item' } });
   });
 
   test('groupBy string id and single field', () => {
     const g = group({ total: sum('count') }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: '$brandId', total: { $sum: '$count' } } });
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $sum: '$count' } } });
   });
 
   test('groupBy id and push', () => {
     const g = group({ products: push() }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: '$brandId', products: { $push: '$$ROOT' } } });
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', products: { $push: '$$ROOT' } } });
   });
 
   test('groupBy string id and multiple fields', () => {
     const g = group({ total: sum('count'), count: count() }).by('brandId');
-    expect(g).toMatchObject({ $group: { _id: '$brandId', total: { $sum: '$count' }, count: { $count: {} } } });
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $sum: '$count' }, count: { $count: {} } } });
   });
 
   test('groupBy filter id and single field', () => {
     const g = group({ count: count() }).by({ 'created.when': date() });
-    expect(g).toMatchObject({
+    expect(g).toStrictEqual({
       $group: {
         _id: { $dateToString: { date: '$created.when', format: '%Y-%m-%d' } },
         count: { $count: {} },
@@ -138,20 +152,20 @@ describe('Stages', () => {
   test('skip', () => {
     expect(skip()).toBeUndefined();
     expect(skip({})).toBeUndefined();
-    expect(skip(options)).toMatchObject({ $skip: options.skip });
+    expect(skip(options)).toStrictEqual({ $skip: options.skip });
   });
 
   test('take', () => {
     expect(take()).toBeUndefined();
     expect(take({})).toBeUndefined();
-    expect(take(options)).toMatchObject({ $limit: options.take });
+    expect(take(options)).toStrictEqual({ $limit: options.take });
   });
 
   // Search
   const { auto, search } = stages.search;
 
   test('auto', () => {
-    expect(search({ name: auto('42') })).toMatchObject({
+    expect(search({ name: auto('42') })).toStrictEqual({
       $search: {
         autocomplete: {
           query: ['42'],
@@ -165,7 +179,7 @@ describe('Stages', () => {
   const { set, score } = stages.set;
 
   test('score with an additional set', () => {
-    expect(set({ score: score(), name: 'Sander' })).toMatchObject({
+    expect(set({ score: score(), name: 'Sander' })).toStrictEqual({
       $set: {
         score: { $meta: 'searchScore' },
         name: 'Sander',
