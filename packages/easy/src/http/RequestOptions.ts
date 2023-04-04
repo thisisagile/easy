@@ -1,4 +1,4 @@
-import { CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, Optional, PageOptions, Text, toUuid } from '../types';
+import { asString, CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, Optional, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 
@@ -43,7 +43,7 @@ export class RequestOptions extends Enum {
 
   apiKey = (apiKey: string): this => this.setHeader('apiKey', apiKey);
 
-  setHeader = (key: string, value: Id | boolean): this => on(this, t => (t.headers[key] = value));
+  setHeader = (key: Text, value: Id | boolean): this => on(this, t => (t.headers[asString(key)] = value));
 
   setHeaderUnlessPresent = (key: string, value?: Id | boolean): this => (value ? this.setHeader(key, this.headers[key] ?? value) : this);
 

@@ -1,4 +1,4 @@
-import { ContentType, ctx, HttpHeader, isRequestOptions, RequestOptions } from '../../src';
+import { ContentType, ctx, HttpHeader, HttpStatus, isRequestOptions, RequestOptions } from '../../src';
 import { Dev } from '../ref';
 
 describe('RequestOptions', () => {
@@ -51,6 +51,7 @@ describe('RequestOptions', () => {
     expect(opts.setHeader('api', false).headers['api']).toBe(false);
     expect(opts.setHeader('api', 123).headers['api']).toBe(123);
     expect(opts.setHeader('Api', 42).headers['Api']).toBe(42);
+    expect(opts.setHeader(HttpStatus.Ok, 42).headers['200']).toBe(42);
   });
 
   test('set header unless present with undefined value', () => {
