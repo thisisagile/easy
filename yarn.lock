@@ -2612,8 +2612,8 @@ __metadata:
     vitest: ^0.29.8
     vitest-sonar-reporter: 0.4.0
   peerDependencies:
-    vite: ^4.2.1
-    vitest: ^0.29.8
+    vite: "*"
+    vitest: "*"
   languageName: unknown
   linkType: soft
 
