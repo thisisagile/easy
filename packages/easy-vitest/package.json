@@ -1,0 +1,46 @@
+{
+  "name": "@thisisagile/easy-vitest",
+  "version": "0.1.0",
+  "description": "Straightforward library for testing microservices built with @thisisagile/easy using vitest",
+  "author": "Sander Hoogendoorn",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thisisagile/easy.git"
+  },
+  "keywords": [
+    "typescript",
+    "microservices",
+    "domain-driven-design",
+    "evolutionary-architecture",
+    "vitest",
+    "unit testing"
+  ],
+  "scripts": {
+    "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "yarn g:prettier --check --write src test *.json",
+    "build": "yarn g:tsc",
+    "test": "vitest",
+    "prepack": "yarn g:copy-readme"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@jest/expect-utils": "^29.5.0",
+    "@vitest/coverage-c8": "^0.29.8",
+    "@vitest/expect": "^0.29.8",
+    "vite": "^4.2.1",
+    "vitest": "^0.29.8",
+    "vitest-sonar-reporter": "^0.4.0"
+  },
+  "dependencies": {
+    "@types/node": "^18.15.5"
+  }
+}
