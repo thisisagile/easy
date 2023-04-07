@@ -2606,11 +2606,14 @@ __metadata:
   dependencies:
     "@jest/expect-utils": ^29.5.0
     "@types/node": ^18.15.5
-    "@vitest/coverage-c8": ^0.29.8
+    "@vitest/coverage-c8": 0.29.8
     "@vitest/expect": ^0.29.8
     vite: ^4.2.1
     vitest: ^0.29.8
-    vitest-sonar-reporter: ^0.4.0
+    vitest-sonar-reporter: 0.4.0
+  peerDependencies:
+    vite: ^4.2.1
+    vitest: ^0.29.8
   languageName: unknown
   linkType: soft
 
@@ -3228,7 +3231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-c8@npm:^0.29.8":
+"@vitest/coverage-c8@npm:0.29.8":
   version: 0.29.8
   resolution: "@vitest/coverage-c8@npm:0.29.8"
   dependencies:
@@ -12017,7 +12020,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest-sonar-reporter@npm:^0.4.0":
+"vitest-sonar-reporter@npm:0.4.0":
   version: 0.4.0
   resolution: "vitest-sonar-reporter@npm:0.4.0"
   peerDependencies:

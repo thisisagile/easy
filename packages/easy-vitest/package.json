@@ -5,10 +5,12 @@
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index",
   "repository": {
     "type": "git",
-    "url": "git@github.com:thisisagile/easy.git"
+    "url": "git@github.com:thisisagile/easy.git",
+    "directory": "packages/easy-vitest"
   },
   "keywords": [
     "typescript",
@@ -33,14 +35,18 @@
     "access": "public"
   },
   "devDependencies": {
-    "@jest/expect-utils": "^29.5.0",
-    "@vitest/coverage-c8": "^0.29.8",
-    "@vitest/expect": "^0.29.8",
+    "@vitest/coverage-c8": "0.29.8",
     "vite": "^4.2.1",
     "vitest": "^0.29.8",
-    "vitest-sonar-reporter": "^0.4.0"
+    "vitest-sonar-reporter": "0.4.0"
   },
   "dependencies": {
-    "@types/node": "^18.15.5"
+    "@jest/expect-utils": "^29.5.0",
+    "@types/node": "^18.15.5",
+    "@vitest/expect": "^0.29.8"
+  },
+  "peerDependencies": {
+    "vite": "*",
+    "vitest": "*"
   }
 }
