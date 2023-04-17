@@ -1,4 +1,3 @@
-
 export const isDefined = <T = unknown>(o?: T): boolean => o !== undefined && o !== null;
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);

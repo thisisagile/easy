@@ -17,16 +17,19 @@ describe('asJson', () => {
   test('asNumber', () => {
     expect(asNumber(undefined)).toBeNaN();
     expect(asNumber(undefined, 3)).toBe(3);
+    expect(asNumber(undefined, () => 3)).toBe(3);
     expect(asNumber('')).toBeNaN();
     expect(asNumber('', 3)).toBe(3);
     expect(asNumber({})).toBeNaN();
     expect(asNumber({}, 3)).toBe(3);
+    expect(asNumber({}, () => 3)).toBe(3);
     expect(asNumber({name: 'Sa'})).toBeNaN();
     expect(asNumber({name: 'Sa'}, 3)).toBe(3);
     expect(asNumber(4)).toBe(4);
     expect(asNumber(4, 3)).toBe(4);
     expect(asNumber('4')).toBe(4);
     expect(asNumber('4', 3)).toBe(4);
+    expect(asNumber('4', () => 3)).toBe(4);
   });
 
 });
