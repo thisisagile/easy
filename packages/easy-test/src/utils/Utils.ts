@@ -1,4 +1,3 @@
-import {Get, ofGet, tryTo} from '@thisisagile/easy';
 
 export const isDefined = <T = unknown>(o?: T): boolean => o !== undefined && o !== null;
 
@@ -14,8 +13,7 @@ export const isObject = (o?: unknown): o is Record<string, unknown> => o != null
 export const asJson = (a?: unknown): any => ((a as any)?.toJSON ? (a as any).toJSON() : isObject(a) ? a : undefined);
 export const asString = (a?: unknown): string => (a as any)?.toString();
 
-export const asNumber = (n: unknown, alt?: Get<number>): number =>
-    tryTo(() => asString(n))
-        .map(s => parseInt(s))
-        .filter(n => isNumber(n))
-        .or(ofGet(alt) ?? NaN);
+export const asNumber = (num: unknown, alt?: number | (() => number)): number => {
+    const n = parseInt(asString(num));
+    return isNumber(n) ? n : isFunction(alt) ? alt() : isNumber(alt) ? alt : NaN;
+}
