@@ -26,6 +26,7 @@ class Verb extends Sentence {
   like = new Topic('like', this);
   process = new Topic('process', this);
   remove = new Topic('remove', this);
+  translate = new Topic('translate', this);
   update = new Topic('update', this);
   validate = new Topic('validate', this);
 }
@@ -39,6 +40,17 @@ class SupportVerb extends Verb {
 class We extends Sentence {
   could = new SupportVerb('could', this);
   did = new SupportVerb('did', this);
+
+  added = new Topic('added', this);
+  checked = new Topic('checked', this);
+  fetched = new Topic('fetched', this);
+  found = new Topic('found', this);
+  liked = new Topic('liked', this);
+  processed = new Topic('processed', this);
+  removed = new Topic('removed', this);
+  translated = new Topic('translated', this);
+  updated = new Topic('updated', this);
+  validated = new Topic('validated', this);
 }
 
 export const we = new We('we');
