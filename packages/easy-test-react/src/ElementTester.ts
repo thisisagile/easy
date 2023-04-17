@@ -26,4 +26,10 @@ export class ElementTester {
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
   wait = (): Promise<Element> => waitFor(this.element);
   waitForRemove = (): Promise<void> => waitForElementToBeRemoved(this.element);
+  /**
+   * @example Open an antd dropdown
+   * byId('my-dropdown').open()
+   * await awaitClick('my-option')
+   */
+  open = () => (this.element() && fireEvent.mouseDown(this.element().firstElementChild as Element) ? this : undefined);
 }

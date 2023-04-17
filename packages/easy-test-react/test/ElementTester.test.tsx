@@ -68,4 +68,12 @@ describe('ElementTester', () => {
     expect(getByText).toHaveBeenCalled();
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value } });
   });
+
+  test('open fires mouseDown event', () => {
+    fireEvent.mouseDown = mock.return(true);
+    const firstElementChild = mock.a<HTMLElement>();
+    const elementTester = new ElementTester(() => mock.a<HTMLElement>({ firstElementChild }));
+    expect(elementTester.open()).toBe(elementTester);
+    expect(fireEvent.mouseDown).toHaveBeenCalledWith(firstElementChild);
+  });
 });
