@@ -23,5 +23,6 @@ describe('We', () => {
     expect(we.removed.your('request')).toMatchText('We removed your request.');
     expect(we.updated.your('request')).toMatchText('We updated your request.');
     expect(we.validated.your('request')).toMatchText('We validated your request.');
+    expect(we.translated.your('request')).toMatchText('We translated your request.');
   });
 });
