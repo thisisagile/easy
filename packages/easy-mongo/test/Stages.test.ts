@@ -192,9 +192,11 @@ describe('Stages', () => {
 
   test('projection include', () => {
     expect(include({ color: 1 })).toStrictEqual({ $projection: { color: 1 } });
+    expect(include({})).toBeUndefined();
   });
 
   test('projection exclude', () => {
     expect(exclude({ color: 0 })).toStrictEqual({ $projection: { color: 0 } });
+    expect(exclude({})).toBeUndefined();
   });
 });
