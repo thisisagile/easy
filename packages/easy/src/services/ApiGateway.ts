@@ -39,11 +39,11 @@ export class ApiGateway extends Gateway<RouteOptions> {
     );
   }
 
-  patch(uri: Uri, item: Json, options?: RouteOptions): Promise<Json> {
+  patch(uri: Uri, item?: Json, options?: RouteOptions): Promise<Json> {
     return this.api.patch(uri, item, options).then(r => r.body.data?.items.first() ?? {});
   }
 
-  put(uri: Uri, item: Json, options?: RouteOptions): Promise<Json> {
+  put(uri: Uri, item?: Json, options?: RouteOptions): Promise<Json> {
     return this.api.put(uri, item, options).then(r => r.body.data?.items.first() ?? {});
   }
 
