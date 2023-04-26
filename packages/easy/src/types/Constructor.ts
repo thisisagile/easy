@@ -6,7 +6,8 @@ import { Optional } from './Types';
 
 export type Constructor<T = unknown> = { new (...args: any[]): T };
 
-export type Construct<T> = Get<T> | Constructor<T>;
+// export type Construct<T> = Get<T> | Constructor<T>;
+export type Construct<Out, In = any> = Get<Out, In> | Constructor<Out>;
 
 export const isConstructor = <T>(c?: unknown): c is Constructor<T> => (isDefined(c) && isFunc<T, unknown>(c) && c.prototype && c.prototype.constructor) === c;
 
