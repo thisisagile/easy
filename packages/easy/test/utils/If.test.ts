@@ -11,6 +11,12 @@ describe('IfDefined', () => {
   });
 
   test('call f when defined.', () => {
+    expect(ifDefined(undefined, () => 'a')).toBeUndefined();
+    expect(ifDefined('defined', () => 'a')).toBe('a');
+    expect(ifDefined(undefined, () => 'a', () => 'b')).toBe('b');
+    expect(ifDefined('defined', () => 'a', () => 'b')).toBe('a');
+    expect(ifDefined('undefined', s => s, () => 'b')).toBe('undefined');
+
     expect(
       ifDefined(
         'defined',
