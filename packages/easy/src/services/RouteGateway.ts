@@ -1,5 +1,5 @@
 import { Api, RouteOptions } from './Api';
-import { Func, Id, Json, JsonValue, Optional, PageList, Uri } from '../types';
+import {Func, HasId, Id, Json, JsonValue, Optional, PageList, Uri} from '../types';
 import { HttpStatus } from '../http';
 import { ApiGateway } from './ApiGateway';
 
@@ -34,11 +34,11 @@ export class RouteGateway extends ApiGateway {
     return this.postSearch(this.route(), options);
   }
 
-  update(item: Json, options?: RouteOptions): Promise<Json> {
+  update(item: Json & HasId, options?: RouteOptions): Promise<Json> {
     return this.patch(this.routeId().id(item.id), item, options);
   }
 
-  upsert(item: Json, options?: RouteOptions): Promise<Json> {
+  upsert(item: Json & HasId, options?: RouteOptions): Promise<Json> {
     return this.put(this.routeId().id(item.id), item, options);
   }
 

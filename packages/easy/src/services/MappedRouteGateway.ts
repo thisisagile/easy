@@ -1,5 +1,5 @@
 import { Api } from './Api';
-import { Func, Json, List, Optional, Uri } from '../types';
+import {Func, HasId, Json, List, Optional, Uri} from '../types';
 import { Mapper } from '../utils';
 import { RouteGateway } from './RouteGateway';
 import { RequestOptions } from '../http';
@@ -24,7 +24,7 @@ export class MappedRouteGateway extends RouteGateway {
     return super.add(this.map.out(item));
   }
 
-  update(item: Json): Promise<Json> {
-    return super.update(this.map.out(item));
+  update(item:  Json & HasId): Promise<Json> {
+    return super.update(this.map.out(item) as  Json & HasId);
   }
 }

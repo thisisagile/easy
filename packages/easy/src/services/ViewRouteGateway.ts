@@ -1,5 +1,5 @@
 import { Api } from './Api';
-import { Func, Json, List, Optional, Uri } from '../types';
+import {Func, HasId, Json, List, Optional, Uri} from '../types';
 import { view } from '../utils';
 import { RouteGateway } from './RouteGateway';
 import { RequestOptions } from '../http';
@@ -32,7 +32,7 @@ export class ViewRouteGateway extends RouteGateway {
     return super.add(this.views.out.from(item));
   }
 
-  update(item: Json): Promise<Json> {
-    return super.update(this.views.out.from(item));
+  update(item:  Json & HasId): Promise<Json> {
+    return super.update(this.views.out.from(item) as  Json & HasId);
   }
 }
