@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Email, Money, View, view, views } from '../../src';
+import { Email, isList, Money, toList, View, view, views } from '../../src';
 import { Dev } from '../ref';
 
 const { ignore, or, keep, keepOr, value, to } = views;
@@ -159,18 +159,23 @@ describe('View', () => {
     readonly name: string;
   };
 
-  test('T[] should return V[] and T should return V', () => {
+  test('List of T should return List of V | T[] should return V[] | T should return V', () => {
     const devs = view<DevName>({ name: 'name' });
     const arr = devs.from([Dev.Rob, Dev.Jeroen]);
     expect(arr).toBeInstanceOf(Array);
     expect(arr).toHaveLength(2);
     expect(arr[0]).toEqual({ name: 'Rob' });
     expect(arr[1]).toEqual({ name: 'Jeroen' });
+    expect(isList(arr)).toBeFalsy();
 
     const single = devs.from(Dev.Rob);
     expect(arr).toBeInstanceOf(Object);
     expect(single).not.toBeInstanceOf(Array);
     expect(single).toEqual({ name: 'Rob' });
+
+    const devsList = toList<Dev>([Dev.Rob, Dev.Jeroen]);
+    const list = devs.from(devsList);
+    expect(isList(list)).toBeTruthy();
   });
 
   test('same', () => {
