@@ -21,7 +21,7 @@ export class HttpStatus extends Enum {
   static SeeOther = new HttpStatus('See other', 303);
   static NotModified = new HttpStatus('Not modified', 304);
   static UseProxy = new HttpStatus('Use proxy', 305);
-  static SwtichProxy = new HttpStatus('Switch proxy', 306);
+  static SwitchProxy = new HttpStatus('Switch proxy', 306);
   static TemporaryRedirect = new HttpStatus('Temporary redirect', 307);
   static PermanentRedirect = new HttpStatus('Permanent redirect', 308);
   static BadRequest = new HttpStatus('Bad request', 400);
@@ -70,11 +70,11 @@ export class HttpStatus extends Enum {
   }
 
   get isClientError(): boolean {
-    return this.id >= 400 && this.id < 500;
+    return (this.id as number) >= 400 && (this.id as number) < 500;
   }
 
   get isServerError(): boolean {
-    return this.id >= 500 && this.id < 600;
+    return (this.id as number) >= 500 && (this.id as number) < 600;
   }
 
   get status(): number {
