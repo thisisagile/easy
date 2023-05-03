@@ -2411,7 +2411,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^9.0.0, @testing-library/dom@npm:^9.0.1":
+"@testing-library/dom@npm:^9.0.0, @testing-library/dom@npm:^9.2.0":
   version: 9.2.0
   resolution: "@testing-library/dom@npm:9.2.0"
   dependencies:
@@ -2547,7 +2547,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
   dependencies:
-    "@testing-library/dom": ^9.0.1
+    "@testing-library/dom": ^9.2.0
     "@testing-library/jest-dom": ^5.16.5
     "@testing-library/react": ^14.0.0
     "@thisisagile/easy": "workspace:^"
