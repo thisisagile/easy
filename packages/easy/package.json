@@ -33,7 +33,7 @@
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
     "@types/form-urlencoded": "^4.4.0",
-    "@types/jsonwebtoken": "^9.0.1",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/luxon": "3.2.0",
     "@types/validator": "^13.7.15"
   },

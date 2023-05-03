@@ -2467,7 +2467,7 @@ __metadata:
     "@types/cls-hooked": ^4.3.3
     "@types/express": ^4.17.17
     "@types/form-urlencoded": ^4.4.0
-    "@types/jsonwebtoken": ^9.0.1
+    "@types/jsonwebtoken": ^9.0.2
     "@types/passport": ^1.0.12
     "@types/passport-jwt": ^3.0.8
     "@types/uuid": ^9.0.1
@@ -2607,7 +2607,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": ^4.4.0
-    "@types/jsonwebtoken": ^9.0.1
+    "@types/jsonwebtoken": ^9.0.2
     "@types/luxon": 3.2.0
     "@types/uuid": ^9.0.1
     "@types/validator": ^13.7.15
@@ -2842,12 +2842,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^9.0.1":
+"@types/jsonwebtoken@npm:*":
   version: 9.0.1
   resolution: "@types/jsonwebtoken@npm:9.0.1"
   dependencies:
     "@types/node": "*"
   checksum: a7f0925e9a42ad3ae970364c63c5986d40da5c83d51d3f4e624eb0f064a380376f9e3fb3f2f837390a9ab80143f5d75fd51866da30e110f6b486a3379e1c768f
+  languageName: node
+  linkType: hard
+
+"@types/jsonwebtoken@npm:^9.0.2":
+  version: 9.0.2
+  resolution: "@types/jsonwebtoken@npm:9.0.2"
+  dependencies:
+    "@types/node": "*"
+  checksum: 3bb8d40e78d7eb53e427db6e9f0f22e0890cfee80965dcf741d08341814913afb211306de6e9847c6d241cc8e36f8a59090cbfdcc510ab7c81af9d650c5afe0e
   languageName: node
   linkType: hard
 
