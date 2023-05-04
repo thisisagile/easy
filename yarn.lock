@@ -5486,7 +5486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.7.0":
+"eslint-config-prettier@npm:^8.8.0":
   version: 8.8.0
   resolution: "eslint-config-prettier@npm:8.8.0"
   peerDependencies:
@@ -10480,7 +10480,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.54.1
     "@typescript-eslint/parser": ^5.54.1
     eslint: ^8.39.0
-    eslint-config-prettier: ^8.7.0
+    eslint-config-prettier: ^8.8.0
     eslint-plugin-jest: ^27.2.1
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-promise: ^6.1.1
