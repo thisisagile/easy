@@ -54,6 +54,14 @@ describe('ElementTester', () => {
     expect(fireEvent.mouseDown).toHaveBeenCalledWith(a);
   });
 
+  test('mouseDown fires mousedown on child', () => {
+    fireEvent.mouseDown = mock.return(true);
+    const children = [mock.a<Element>()] as unknown as HTMLCollection;
+    const elementTester = new ElementTester(() => mock.a<HTMLElement>({ children }));
+    expect(elementTester.mouseDown(0)).toBe(elementTester);
+    expect(fireEvent.mouseDown).toHaveBeenCalledWith(children[0]);
+  });
+
   test('mouseDown fires mouseDown event but fails', () => {
     fireEvent.mouseDown = mock.return(false);
     expect(et.mouseDown()).not.toBeValid();
