@@ -2579,7 +2579,7 @@ __metadata:
     jest: ^29.5.0
     jest-junit: ^15.0.0
     jest-sonar-reporter: ^2.0.0
-    ts-jest: ^29.0.5
+    ts-jest: ^29.1.0
     weak-napi: ^2.0.2
   languageName: unknown
   linkType: soft
@@ -10493,7 +10493,7 @@ __metadata:
     ncp: ^2.0.0
     prettier: ^2.8.8
     release-it: 15.7.0
-    ts-jest: ^29.0.5
+    ts-jest: ^29.1.0
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
@@ -11458,7 +11458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.0.5":
+"ts-jest@npm:^29.1.0":
   version: 29.1.0
   resolution: "ts-jest@npm:29.1.0"
   dependencies:
