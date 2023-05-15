@@ -17,6 +17,14 @@ describe('Country', () => {
     expect(Country.byId('NL')).toBe(Country.NL);
   });
 
+  test('byId is fast.', ()=>{
+    jest.spyOn(Country, 'first');
+    expect(Country.byId('nl')).toBe(Country.NL);
+    expect(Country.first).toHaveBeenCalledTimes(0);
+    expect(Country.byId('xx')).toBeUndefined();
+    expect(Country.first).toHaveBeenCalledTimes(1);
+  });
+
   test('byIds.', () => {
     expect(Country.byIds<Country>(['nl'])).toMatchText(toList<Country>(Country.NL));
   });

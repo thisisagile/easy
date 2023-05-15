@@ -1,4 +1,4 @@
-import { Enum, Id, text } from '../../types';
+import {Enum, Get, Id, ofGet, text} from '../../types';
 
 export class Country extends Enum {
   static readonly AF = new Country('Afghanistan', 'AF');
@@ -253,6 +253,10 @@ export class Country extends Enum {
 
   constructor(name: string, id: string, private readonly lower = text(id).lower.trim.toString()) {
     super(name, id);
+  }
+
+  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
+    return (Country[`${id}`.toUpperCase() as keyof typeof Country] as Enum ?? this.first(e => e.equals(id)) ?? ofGet(alt)) as E;
   }
 
   equals<E extends Enum>(other: E | Id): other is E {
