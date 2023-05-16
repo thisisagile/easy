@@ -1,4 +1,4 @@
-import { asJson, asNumber } from '../../src/utils/Utils';
+import { asJson, asNumber, toArray } from '../../src/utils/Utils';
 
 class Dev {
   constructor(readonly name: string) {}
@@ -32,4 +32,20 @@ describe('asJson', () => {
     expect(asNumber('4', () => 3)).toBe(4);
   });
 
+  describe("toArray", () => {
+
+    const naoufal = new Dev('Naoufal');
+    const jeroen = new Dev('Jeroen');
+    const spread = [naoufal, jeroen];
+
+    test("from nothing", () => {
+      expect(toArray()).toHaveLength(0);
+      expect(toArray(undefined)).toHaveLength(0);
+      expect(toArray(null)).toHaveLength(0);
+      expect(toArray(naoufal)).toHaveLength(1);
+      expect(toArray(naoufal, jeroen)).toHaveLength(2);
+      expect(toArray([naoufal, jeroen])).toHaveLength(2);
+      expect(toArray(...spread)).toHaveLength(2);
+    });
+  });
 });
