@@ -58,10 +58,13 @@ describe('match', () => {
   });
 
   test('arrays', () => {
+    const sander = new Dev('Sander');
+    const sander2 = new Dev('Sander');
     expect([]).toEqual(fits.items());
     expect([]).toEqual(fits.items([]));
     expect([1, 2, 3]).toEqual(fits.items(1, 2, 3));
     expect([1, 2, 3]).toEqual(fits.items([1, 2, 3]));
+    expect([sander]).not.toEqual(fits.items(sander2));
   });
 
   test('json', () => {
