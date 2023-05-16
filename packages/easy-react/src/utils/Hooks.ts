@@ -67,13 +67,13 @@ export const usePaging = <E>(
   return [list, next, list.length < (list?.total ?? 0), skip, take];
 };
 
-export const useGet = <E>(f: () => Promise<E>): [E, () => Promise<E>] => {
-  const [item, setItem] = useState({} as E);
+export const useGet = <E>(f: () => Promise<E>, initial?: Partial<E>): [E, () => Promise<E>] => {
+  const [item, setItem] = useState((initial ?? {}) as E);
   const getter = () =>
-    f().then(i => {
-      setItem(i);
-      return i;
-    });
+      f().then(i => {
+        setItem(i);
+        return i;
+      });
   return [item, getter];
 };
 
