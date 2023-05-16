@@ -1,4 +1,4 @@
-import { asJson, asString } from '../utils/Utils';
+import { asJson, asString, toArray } from '../utils/Utils';
 import { eq } from '../utils/Eq';
 import { AsymmetricMatcher } from 'expect';
 import { Uri } from '../utils/Types';
@@ -41,4 +41,5 @@ export const fits = {
   textExact: (s: any): any => new ObjectContainingTextExact(s),
   uri: (u: Uri): any => fits.textExact(u),
   json: (s: any): any => new ObjectContainingJson(s),
+  items: (...items: any[]): any => expect.arrayContaining(toArray(...items)),
 };

@@ -57,6 +57,13 @@ describe('match', () => {
     expect(uri).toEqual(fits.uri(complete));
   });
 
+  test('arrays', () => {
+    expect([]).toEqual(fits.items());
+    expect([]).toEqual(fits.items([]));
+    expect([1, 2, 3]).toEqual(fits.items(1, 2, 3));
+    expect([1, 2, 3]).toEqual(fits.items([1, 2, 3]));
+  });
+
   test('json', () => {
     expect({}).toEqual(fits.json({}));
     expect({}).not.toEqual(fits.json({ name: 'Sander' }));
@@ -83,4 +90,5 @@ describe('match', () => {
     m = new ObjectContainingJson('', false);
     expect(m.toString()).toBe('ObjectContaining');
   });
+
 });

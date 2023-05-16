@@ -1,3 +1,5 @@
+import {ArrayLike} from "@thisisagile/easy";
+
 export const isDefined = <T = unknown>(o?: T): boolean => o !== undefined && o !== null;
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
@@ -16,3 +18,6 @@ export const asNumber = (num: unknown, alt?: number | (() => number)): number =>
     const n = parseInt(asString(num));
     return isNumber(n) ? n : isFunction(alt) ? alt() : isNumber(alt) ? alt : NaN;
 }
+
+export const toArray = <T>(...items: ArrayLike<T>): T[] =>
+    items.length > 1 ? (items as T[]) : isArray(items[0]) ? items[0] : isDefined(items[0]) ? [items[0]] : [];
