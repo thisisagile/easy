@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Email, isList, Money, toList, View, view, views } from '../../src';
+import { Email, isList, isPageList, Money, toList, toPageList, View, view, views } from '../../src';
 import { Dev } from '../ref';
 
 const { ignore, or, keep, keepOr, value, to } = views;
@@ -122,7 +122,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: ['Tech', 'Support', 'HR'],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: ['TECH', 'SUPPORT', 'HR'] });
   });
 
@@ -135,7 +135,7 @@ describe('View', () => {
           Name: 'ditisagile',
           Divisions: [{ Name: 'Tech' }, { Name: 'Support' }, { Name: 'HR' }],
         },
-      })
+      }),
     ).toStrictEqual({ name: 'ditisagile', divisions: [{ name: 'TECH' }, { name: 'SUPPORT' }, { name: 'HR' }] });
   });
 
@@ -159,23 +159,29 @@ describe('View', () => {
     readonly name: string;
   };
 
-  test('List of T should return List of V | T[] should return V[] | T should return V', () => {
-    const devs = view<DevName>({ name: 'name' });
-    const arr = devs.from([Dev.Rob, Dev.Jeroen]);
+  test('PageList, List, Array of T should return Pagelist, List, Array of V', () => {
+    const onlyNameView = view<DevName>({ name: 'name' });
+
+    const arr = onlyNameView.from([Dev.Rob, Dev.Jeroen]);
     expect(arr).toBeInstanceOf(Array);
     expect(arr).toHaveLength(2);
     expect(arr[0]).toEqual({ name: 'Rob' });
     expect(arr[1]).toEqual({ name: 'Jeroen' });
     expect(isList(arr)).toBeFalsy();
 
-    const single = devs.from(Dev.Rob);
-    expect(arr).toBeInstanceOf(Object);
+    const single = onlyNameView.from(Dev.Rob);
+    expect(single).toBeInstanceOf(Object);
     expect(single).not.toBeInstanceOf(Array);
     expect(single).toEqual({ name: 'Rob' });
 
     const devsList = toList<Dev>([Dev.Rob, Dev.Jeroen]);
-    const list = devs.from(devsList);
+    const list = onlyNameView.from(devsList);
     expect(isList(list)).toBeTruthy();
+
+    const devsPageList = toPageList<Dev>([Dev.Rob, Dev.Jeroen], { total: 42 });
+    const pl = onlyNameView.from(devsPageList);
+    expect(isPageList(pl)).toBeTruthy();
+    expect(pl.total).toBe(42);
   });
 
   test('same', () => {
