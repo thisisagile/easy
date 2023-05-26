@@ -77,14 +77,14 @@ export class View<V = Json> {
   }
 
   from = <T = unknown>(source: T): T extends PageList<infer V> ? PageList<V> : T extends List<infer V> ? List<V> : T extends Array<infer V> ? V[] : V =>
-    isPageList(source)
-      ? toPageList(
-        source.map(s => this.reduce(asJson(s))),
-        source,
-      )
-      : isArray(source)
-        ? source.map(s => this.reduce(asJson(s)))
-        : this.reduce(asJson(source));
+    isArray(source)
+      ? isPageList(source)
+        ? toPageList(
+          source.map(s => this.reduce(asJson(s))),
+          source,
+        )
+        : source.map(s => this.reduce(asJson(s)))
+      : this.reduce(asJson(source));
 
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 

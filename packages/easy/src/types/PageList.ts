@@ -16,7 +16,7 @@ export const toShortFilter = (field: string, shortField: string, value: any): Fi
 export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; sorts?: PlainSort; filters?: Filter[] };
 export type PageList<T> = List<T> & Omit<PageOptions, 'sort'> & { total?: number };
 
-export const isPageList = <T>(l?: unknown): l is PageList<T> => isList<T>(l) && isA(l, 'total');
+export const isPageList = <T>(l?: T[]): l is PageList<T> => isList<T>(l) && isA(l, 'total');
 
 export const toPageList = <T>(items?: T[], options?: Omit<PageOptions, 'sort'> & { total?: number }): PageList<T> =>
   on(toList<T>(...(items ?? [])) as PageList<T>, l => {
