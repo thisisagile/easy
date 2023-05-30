@@ -41,11 +41,11 @@ export const useList = <E>(...items: E[]): [List<E>, (e: List<E>) => List<E>] =>
   ];
 };
 
-export const usePageList = <E>(...items: E[]): [PageList<E>, (e: List<E>) => PageList<E>] => {
+export const usePageList = <E>(...items: E[]): [PageList<E>, (e: PageList<E>) => PageList<E>] => {
   const [pages, setPages] = useState<PageList<E>>(toPageList<E>(items));
   return [
     pages,
-    (e: List<E>): PageList<E> => {
+    (e: PageList<E>): PageList<E> => {
       setPages(e);
       return e;
     },
@@ -77,7 +77,7 @@ export const useGet = <E>(f: () => Promise<E>, initial?: Partial<E>): [E, () => 
   return [item, getter];
 };
 
-export const useGetList = <E>(f: () => Promise<List<E> | List<never>>): [List<E>, () => Promise<PageList<E> | List<never>>] => {
+export const useGetList = <E>(f: () => Promise<List<E>>): [List<E>, () => Promise<PageList<E>>] => {
   const [list, setList] = usePageList<E>();
   const getter = () => f().then(l => setList(isPageList(l) ? l : toPageList(l, { total: l.length })));
   return [list, getter];
