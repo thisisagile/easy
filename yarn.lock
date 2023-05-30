@@ -2594,7 +2594,7 @@ __metadata:
     "@vitest/expect": ^0.29.8
     vite: ^4.2.1
     vitest: ^0.29.8
-    vitest-sonar-reporter: 0.4.0
+    vitest-sonar-reporter: 0.4.1
   peerDependencies:
     vite: "*"
     vitest: "*"
@@ -11980,12 +11980,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest-sonar-reporter@npm:0.4.0":
-  version: 0.4.0
-  resolution: "vitest-sonar-reporter@npm:0.4.0"
+"vitest-sonar-reporter@npm:0.4.1":
+  version: 0.4.1
+  resolution: "vitest-sonar-reporter@npm:0.4.1"
   peerDependencies:
     vitest: ">=0.18.0"
-  checksum: 46e28842376131bf20345c2470dcbba0f7646eb6f994653f63756c00aff0e25471053685bc8e01012e39129022aa33bf8b217f1e8d140a37bfa71886ea6b1401
+  checksum: d25b5cb06ca2bebc0113bc49897ec6f2451f20bda33e21e621f2d66a57d4d85f0e126594baf70183ddb6dcb7c1e18d20514764f48fd0f22d65b381a80f9295f4
   languageName: node
   linkType: hard
 
