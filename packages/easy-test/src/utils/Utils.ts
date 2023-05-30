@@ -1,4 +1,4 @@
-import {ArrayLike} from "@thisisagile/easy";
+import { ArrayLike } from '@thisisagile/easy';
 
 export const isDefined = <T = unknown>(o?: T): boolean => o !== undefined && o !== null;
 
@@ -15,9 +15,9 @@ export const asJson = (a?: unknown): any => ((a as any)?.toJSON ? (a as any).toJ
 export const asString = (a?: unknown): string => (a as any)?.toString();
 
 export const asNumber = (num: unknown, alt?: number | (() => number)): number => {
-    const n = parseInt(asString(num));
-    return isNumber(n) ? n : isFunction(alt) ? alt() : isNumber(alt) ? alt : NaN;
-}
+  const n = parseInt(asString(num));
+  return isNumber(n) ? n : isFunction(alt) ? alt() : isNumber(alt) ? alt : NaN;
+};
 
 export const toArray = <T>(...items: ArrayLike<T>): T[] =>
-    items.length > 1 ? (items as T[]) : isArray(items[0]) ? items[0] : isDefined(items[0]) ? [items[0]] : [];
+  items.length > 1 ? (items as T[]) : isArray(items[0]) ? items[0] : isDefined(items[0]) ? [items[0]] : [];

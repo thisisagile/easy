@@ -80,7 +80,11 @@ export class View<V = Json> {
   from<T = unknown>(source: T[]): V[];
   from<T = unknown>(source: T): V;
   from<T = unknown>(source: PageList<T> | List<T> | T[] | T): PageList<V> | List<V> | V[] | V {
-    if (isPageList(source)) return toPageList(source.map(s => this.reduce(asJson(s))), source);
+    if (isPageList(source))
+      return toPageList(
+        source.map(s => this.reduce(asJson(s))),
+        source
+      );
     if (isArray(source)) return source.map(s => this.reduce(asJson(s)));
     return this.reduce(asJson(source));
   }

@@ -1,7 +1,6 @@
 import { Filter, FindOptions, MongoProvider } from './MongoProvider';
 import {
   asJson,
-  asPageList,
   Condition,
   Gateway,
   Id,
@@ -22,7 +21,7 @@ export class MongoGateway implements Gateway<FindOptions> {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
 
   all(options?: FindOptions): Promise<PageList<Json>> {
-    return this.provider.all(options).then(js => asPageList(j => this.collection.in(j), js));
+    return this.provider.all(options).then(js => js.map(j => this.collection.in(j)));
   }
 
   byId(id: Id): Promise<Json | undefined> {
@@ -30,7 +29,7 @@ export class MongoGateway implements Gateway<FindOptions> {
   }
 
   by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
-    return this.provider.by(key, value, options).then(js => asPageList(j => this.collection.in(j), js));
+    return this.provider.by(key, value, options).then(js => js.map(j => this.collection.in(j)));
   }
 
   byIds(...ids: Id[]): Promise<List<Json>> {
@@ -38,7 +37,7 @@ export class MongoGateway implements Gateway<FindOptions> {
   }
 
   find(q: JsonValue | Condition | LogicalCondition, options?: FindOptions): Promise<PageList<Json>> {
-    return this.provider.find(asJson(q), options).then(js => asPageList(j => this.collection.in(j), js));
+    return this.provider.find(asJson(q), options).then(js => js.map(j => this.collection.in(j)));
   }
 
   search(q: JsonValue, options?: FindOptions): Promise<PageList<Json>> {

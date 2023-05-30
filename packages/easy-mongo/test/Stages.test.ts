@@ -28,7 +28,7 @@ describe('Stages', () => {
       match({
         name: 'Sander',
         promoted: undefined,
-      }),
+      })
     ).toStrictEqual({ $match: { name: 'Sander' } });
   });
 

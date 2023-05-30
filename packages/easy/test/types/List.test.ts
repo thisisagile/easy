@@ -362,6 +362,12 @@ describe('toList', () => {
     expect(l).toHaveLength(2);
   });
 
+  test('from arrays', () => {
+    const l = toList([Dev.Sander], [Dev.Wouter, Dev.Jeroen]);
+    expect(isList(l)).toBeTruthy();
+    expect(l).toHaveLength(2);
+  });
+
   test('from single item', () => {
     const l = toList(Dev.Naoufal);
     expect(isList(l)).toBeTruthy();
@@ -526,6 +532,18 @@ describe('asList', () => {
     const l = toList<Id>([2]);
     expect(l).toHaveLength(1);
     expect(l[0]).toBe(2);
+  });
+
+  test('toList([string]) => [string]', () => {
+    const l = toList<Id>(['hello']);
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe('hello');
+  });
+
+  test('toList(string) => [string]', () => {
+    const l = toList<Id>('hello');
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe('hello');
   });
 
   test('map returns [number]', () => {

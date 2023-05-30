@@ -1,4 +1,4 @@
-import { Exception, FetchOptions, Gateway, Id, Json, JsonValue, Key, List, PageList, Repository, toList, toPageList } from '../types';
+import { Exception, FetchOptions, Gateway, Id, Json, JsonValue, Key, List, PageList, Repository } from '../types';
 import { when } from '../validation';
 import { View } from '../utils';
 
@@ -10,7 +10,7 @@ export class Typo<T, Options = FetchOptions> extends Repository<T, Options> {
   create = (j: Json): T => this.view.from(j);
 
   all(options?: Options): Promise<PageList<T>> {
-    return this.gateway.all(options).then(js => toPageList(js.map(j => this.create(j))));
+    return this.gateway.all(options).then(js => js.map(this.create));
   }
 
   byId(id: Id): Promise<T> {
@@ -21,23 +21,23 @@ export class Typo<T, Options = FetchOptions> extends Repository<T, Options> {
   }
 
   byIds(...ids: Id[]): Promise<List<T>> {
-    return this.gateway.byIds(...ids).then(js => toList(js.map(j => this.create(j))));
+    return this.gateway.byIds(...ids).then(js => js.map(this.create));
   }
 
   byKey(key: Key, options?: Options): Promise<PageList<T>> {
-    return this.gateway.by('key', key, options).then(js => toPageList(js.map(j => this.create(j))));
+    return this.gateway.by('key', key, options).then(js => js.map(this.create));
   }
 
   by(key: keyof T, value: JsonValue, options?: Options): Promise<PageList<T>> {
-    return this.gateway.by(key.toString(), value, options).then(js => toPageList(js.map(j => this.create(j))));
+    return this.gateway.by(key.toString(), value, options).then(js => js.map(this.create));
   }
 
   search(q: JsonValue, options?: Options): Promise<PageList<T>> {
-    return this.gateway.search(q, options).then(js => toPageList(js.map(j => this.create(j))));
+    return this.gateway.search(q, options).then(js => js.map(this.create));
   }
 
   filter(options?: Options): Promise<PageList<T>> {
-    return this.gateway.filter(options).then(js => toPageList(js.map(j => this.create(j))));
+    return this.gateway.filter(options).then(js => js.map(j => this.create(j)));
   }
 
   exists(id: Id): Promise<boolean> {

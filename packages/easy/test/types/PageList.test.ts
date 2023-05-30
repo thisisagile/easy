@@ -1,8 +1,22 @@
 import '@thisisagile/easy-test';
-import { asc, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
+import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
+  const allDevs = toPageList(Dev.All, { total: 42 });
+
+  test('toPageList(number) => [number]', () => {
+    const l = toPageList<Id>([2]);
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe(2);
+  });
+
+  test('toPageList([string]) => [string]', () => {
+    const l = toPageList<Id>(['hello']);
+    expect(l).toHaveLength(1);
+    expect(l[0]).toBe('hello');
+  });
+
   test('toPageList empty', () => {
     const pl = toPageList();
     expect(pl).toBeDefined();
@@ -87,5 +101,27 @@ describe('PageList', () => {
 
   test('toShortFilter', () => {
     expect(toShortFilter('start', 'end', 42)).toMatchJson({ field: 'start', shortField: 'end', values: [{ value: 42 }] });
+  });
+
+  test('asc', () => {
+    expect(allDevs.map(d => d.name).total).toBe(allDevs.total);
+    expect(allDevs.mapDefined(d => d.name).total).toBe(allDevs.total);
+    expect(allDevs.flatMap(d => d.name).total).toBe(allDevs.total);
+    expect(allDevs.filter(d => d.name === 'Wouter').total).toBe(allDevs.total);
+    expect(allDevs.asc(d => d.name).total).toBe(allDevs.total);
+    expect(allDevs.desc(d => d.name).total).toBe(allDevs.total);
+    expect(allDevs.slice(1).total).toBe(allDevs.total);
+    expect(allDevs.concat(Dev.Sander).total).toBe(allDevs.total);
+    expect(allDevs.splice(2).total).toBe(allDevs.total);
+    expect(allDevs.distinct().total).toBe(allDevs.total);
+    expect(allDevs.distinctByKey('name').total).toBe(allDevs.total);
+    expect(allDevs.diff(allDevs).total).toBe(allDevs.total);
+    expect(allDevs.diffByKey(allDevs, 'name').total).toBe(allDevs.total);
+    expect(allDevs.defined().total).toBe(allDevs.total);
+    expect(allDevs.reverse().total).toBe(allDevs.total);
+    expect(allDevs.replace('name', Dev.Sander).total).toBe(allDevs.total);
+    expect(allDevs.remove(Dev.Sander).total).toBe(allDevs.total);
+    expect(allDevs.intersect(allDevs).total).toBe(allDevs.total);
+    expect(allDevs.intersectByKey(allDevs, 'name').total).toBe(allDevs.total);
   });
 });

@@ -1,17 +1,5 @@
 import { Filter, FindOptions } from './MongoProvider';
-import {
-  asString,
-  Get,
-  Id,
-  ifDefined,
-  isFunction,
-  isPresent,
-  isPrimitive,
-  isString,
-  on,
-  Optional,
-  PartialRecord,
-} from '@thisisagile/easy';
+import { asString, Get, Id, ifDefined, isFunction, isPresent, isPrimitive, isString, on, Optional, PartialRecord } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
 export const asc = 1;
@@ -44,7 +32,7 @@ export const stages = {
     }),
     date:
       (format = '%Y-%m-%d') =>
-        (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
+      (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
     count: (): Accumulator => ({ $count: {} }),
     sum: (from?: string): Accumulator => ({ $sum: `$${from}` }),
     avg: (from?: string) => ({ $avg: `$${from}` }),
@@ -69,5 +57,5 @@ export const stages = {
   project: {
     include: ($projection: Record<string, 1>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
     exclude: ($projection: Record<string, 0>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
-  }
+  },
 };

@@ -93,5 +93,4 @@ describe('match', () => {
     m = new ObjectContainingJson('', false);
     expect(m.toString()).toBe('ObjectContaining');
   });
-
 });

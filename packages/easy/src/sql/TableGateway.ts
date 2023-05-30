@@ -1,4 +1,4 @@
-import { Gateway, Id, isDefined, Json, List, Optional, PageOptions } from '../types';
+import { Gateway, Id, isDefined, Json, Optional, PageList, PageOptions, toPageList } from '../types';
 import { QueryProvider } from '../data';
 import { when } from '../validation';
 import { ifDefined } from '../utils';
@@ -13,10 +13,15 @@ export class TableGateway<T extends Table> extends Gateway<PageOptions> {
 
   protected provide = ({ provider }: TableOptions = {}): QueryProvider => provider ?? this.provider;
 
-  all(options?: TableOptions): Promise<List<Json>> {
+  all(options?: TableOptions): Promise<PageList<Json>> {
     return this.provide(options)
       .query(this.table.select())
-      .then(js => js.map(j => this.table.in(j)));
+      .then(js =>
+        toPageList(
+          js.map(j => this.table.in(j)),
+          options
+        )
+      );
   }
 
   byId(id: Id, options?: TableOptions): Promise<Optional<Json>> {

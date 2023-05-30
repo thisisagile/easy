@@ -23,8 +23,8 @@ describe('asJson', () => {
     expect(asNumber({})).toBeNaN();
     expect(asNumber({}, 3)).toBe(3);
     expect(asNumber({}, () => 3)).toBe(3);
-    expect(asNumber({name: 'Sa'})).toBeNaN();
-    expect(asNumber({name: 'Sa'}, 3)).toBe(3);
+    expect(asNumber({ name: 'Sa' })).toBeNaN();
+    expect(asNumber({ name: 'Sa' }, 3)).toBe(3);
     expect(asNumber(4)).toBe(4);
     expect(asNumber(4, 3)).toBe(4);
     expect(asNumber('4')).toBe(4);
@@ -32,13 +32,12 @@ describe('asJson', () => {
     expect(asNumber('4', () => 3)).toBe(4);
   });
 
-  describe("toArray", () => {
-
+  describe('toArray', () => {
     const naoufal = new Dev('Naoufal');
     const jeroen = new Dev('Jeroen');
     const spread = [naoufal, jeroen];
 
-    test("from nothing", () => {
+    test('from nothing', () => {
       expect(toArray()).toHaveLength(0);
       expect(toArray(undefined)).toHaveLength(0);
       expect(toArray(null)).toHaveLength(0);

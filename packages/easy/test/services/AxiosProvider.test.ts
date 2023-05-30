@@ -12,7 +12,7 @@ describe('AxiosProvider', () => {
     data,
     statusText: status.name,
     headers: {},
-    config: {headers: new AxiosHeaders()},
+    config: { headers: new AxiosHeaders() },
   });
 
   const withErrorAndMessage = (code: HttpStatus, errorCount = 1, message?: string) =>

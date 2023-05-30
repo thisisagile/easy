@@ -1,20 +1,4 @@
-import {
-  asList,
-  asPageList,
-  Constructor,
-  Exception,
-  FetchOptions,
-  Gateway,
-  Id,
-  isValidatable,
-  Json,
-  JsonValue,
-  Key,
-  List,
-  PageList,
-  Repository,
-  toJson,
-} from '../types';
+import { asList, Constructor, Exception, FetchOptions, Gateway, Id, isValidatable, Json, JsonValue, Key, List, PageList, Repository, toJson } from '../types';
 import { when } from '../validation';
 import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
@@ -29,7 +13,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
   create = (item: T | Json): T => (isValidatable(item) ? item : new this.ctor(item));
 
   all(options?: Options): Promise<PageList<T>> {
-    return this.gateway.all(options).then(js => asPageList(this.ctor, js));
+    return this.gateway.all(options).then(js => js.map(i => new this.ctor(i)));
   }
 
   byId(id: Id): Promise<T> {
@@ -44,19 +28,19 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
   }
 
   byKey(key: Key, options?: Options): Promise<PageList<T>> {
-    return this.gateway.by('key', key, options).then(js => asPageList(this.ctor, js));
+    return this.gateway.by('key', key, options).then(js => js.map(i => new this.ctor(i)));
   }
 
   by(key: keyof T, value: JsonValue, options?: Options): Promise<PageList<T>> {
-    return this.gateway.by(key.toString(), value, options).then(js => asPageList(this.ctor, js));
+    return this.gateway.by(key.toString(), value, options).then(js => js.map(i => new this.ctor(i)));
   }
 
   search(q: JsonValue, options?: Options): Promise<PageList<T>> {
-    return this.gateway.search(q, options).then(js => asPageList(this.ctor, js));
+    return this.gateway.search(q, options).then(js => js.map(i => new this.ctor(i)));
   }
 
   filter(options?: Options): Promise<PageList<T>> {
-    return this.gateway.filter(options).then(js => asPageList(this.ctor, js));
+    return this.gateway.filter(options).then(js => js.map(i => new this.ctor(i)));
   }
 
   exists(id: Id): Promise<boolean> {

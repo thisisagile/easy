@@ -13,7 +13,7 @@ describe('Repository', () => {
     expect(new Repository()).toBeInstanceOf(Repository);
   });
 
-  test.each(Object.getOwnPropertyNames(Repository.prototype).filter(m => m != 'constructor'))('execute %s', m => {
-    expect((r as any)[m]()).rejects.toMatchException(Exception.IsNotImplemented);
+  test.each(Object.getOwnPropertyNames(Repository.prototype).filter(m => m != 'constructor'))('execute %s', async m => {
+    await expect((r as any)[m]()).rejects.toMatchException(Exception.IsNotImplemented);
   });
 });

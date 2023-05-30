@@ -11,9 +11,13 @@ import { meta } from './Meta';
 import { Optional } from './Types';
 
 export class List<T = unknown> extends Array<T> {
-  asc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
+  asc(p: GetProperty<T, any>): List<T> {
+    return this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
+  }
 
-  desc = (p: GetProperty<T, any>): List<T> => this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
+  desc(p: GetProperty<T, any>): List<T> {
+    return this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
+  }
 
   first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.find(p, params) : this[0]) as T;
 
@@ -31,13 +35,21 @@ export class List<T = unknown> extends Array<T> {
 
   overlaps = (...items: ArrayLike<T>): boolean => toList<T>(...items).some(i => this.some(t => i === t));
 
-  diff = (others: ArrayLike<T>): List<T> => this.filter(i => !others.includes(i));
+  diff(others: ArrayLike<T>): List<T> {
+    return this.filter(i => !others.includes(i));
+  }
 
-  diffByKey = (others: ArrayLike<T>, key: keyof T): List<T> => this.filter((i: any) => !others.some((o: any) => o[key] === i[key]));
+  diffByKey(others: ArrayLike<T>, key: keyof T): List<T> {
+    return this.filter((i: any) => !others.some((o: any) => o[key] === i[key]));
+  }
 
-  intersect = (others: ArrayLike<T>): List<T> => this.filter(i => others.includes(i));
+  intersect(others: ArrayLike<T>): List<T> {
+    return this.filter(i => others.includes(i));
+  }
 
-  intersectByKey = (others: ArrayLike<T>, key: keyof T): List<T> => this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
+  intersectByKey(others: ArrayLike<T>, key: keyof T): List<T> {
+    return this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
+  }
 
   toJSON = (): Json[] =>
     this.reduce((a, i) => {
@@ -45,49 +57,82 @@ export class List<T = unknown> extends Array<T> {
       return a;
     }, new Array<Json>());
 
-  map = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> => toList<U>(super.map(f, params));
+  map<U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> {
+    return toList<U>(super.map(f, params));
+  }
 
-  flatMap = <U, This = unknown>(f: (this: This, value: T, index: number, array: T[]) => ReadonlyArray<U> | U, params?: This): List<U> =>
-    toList<U>(super.flatMap(f, params));
+  flatMap<U, This = unknown>(f: (this: This, value: T, index: number, array: T[]) => ReadonlyArray<U> | U, params?: This): List<U> {
+    return toList<U>(super.flatMap(f, params));
+  }
 
-  mapDefined = <U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> => this.map(f, params).defined();
+  mapDefined<U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<NonNullable<U>> {
+    return this.map(f, params).defined();
+  }
 
-  mapAsync = (f: (i: T) => Promise<T>): Promise<List<T>> => Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
+  mapAsync(f: (i: T) => Promise<T>): Promise<List<T>> {
+    return Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
+  }
 
-  distinct = (): List<T> => this.filter((i, index) => this.indexOf(i) === index);
+  distinct(): List<T> {
+    return this.filter((i, index) => this.indexOf(i) === index);
+  }
 
-  distinctByKey = (key: keyof T): List<T> => meta(this.toObject(key)).values();
+  distinctByKey(key: keyof T): List<T> {
+    return meta(this.toObject(key)).values();
+  }
 
-  filter = (p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> => toList<T>(super.filter(p, params));
+  filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {
+    return toList<T>(super.filter(p, params));
+  }
 
   sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => sum + p(i), 0);
 
   byId = (id: Id): T => this.first(i => asString((i as any).id) === asString(id));
 
-  add = (...items: (T | T[])[]): this => {
+  add = (...items: ArrayLike<T>): this => {
     super.push(...toArray(...items));
     return this;
   };
 
-  remove = (item: T): List<T> => {
+  concat(...items: ConcatArray<T>[]): List<T>;
+  concat(...items: (T | ConcatArray<T>)[]): List<T>;
+  concat(...items: (T | ConcatArray<T>)[]): List<T> {
+    return toList<T>(super.concat(...items));
+  }
+
+  reverse(): List<T> {
+    return toList<T>(super.reverse());
+  }
+
+  splice(start: number, deleteCount?: number): List<T>;
+  splice(start: number, deleteCount: number, ...items: T[]): List<T>;
+  splice(start: number, deleteCount: number, ...items: T[]): List<T> {
+    return toList<T>(super.splice(start, deleteCount, ...items));
+  }
+
+  remove(item: T): List<T> {
     const index = this.indexOf(item);
     if (index > -1) {
       this.splice(index, 1);
     }
     return this;
-  };
+  }
 
-  replace = (key: keyof T, item: T): List<T> => {
+  replace(key: keyof T, item: T): List<T> {
     tryTo(() => item[key])
       .map(k => this.findIndex(i => i[key] === k))
       .filter(i => i > -1)
       .map(i => (this[i] = item));
     return this;
-  };
+  }
 
-  switch = (item: T): List<T> => (this.includes(item) ? this.remove(item) : this.add(item));
+  switch(item: T): List<T> {
+    return this.includes(item) ? this.remove(item) : this.add(item);
+  }
 
-  defined = (): List<NonNullable<T>> => this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
+  defined(): List<NonNullable<T>> {
+    return this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
+  }
 
   toObject = (key: keyof T, options: { deleteKey?: boolean } = {}): Record<string | number | symbol, T> =>
     this.reduce((o: any, i) => {
@@ -104,7 +149,9 @@ export class List<T = unknown> extends Array<T> {
       return a;
     }, {} as Record<string | number | symbol, List<T>>);
 
-  orElse = (...alt: ArrayLike<T>): Optional<List<T>> => (!isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined);
+  orElse(...alt: ArrayLike<T>): Optional<List<T>> {
+    return !isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined;
+  }
 
   weave = (insertFrom: T[], interval: number): this => {
     for (let i = interval, n = 0; i <= this.length && n < insertFrom.length; i += interval + 1) {
