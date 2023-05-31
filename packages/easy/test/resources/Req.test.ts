@@ -6,6 +6,7 @@ describe('Req', () => {
   const reqPaged = { params: { id: 42, name: 'Jeroen' }, query: { q: 43, language: 'TypeScript', skip: 15, take: 5 }, body: {} };
   const params = { params: { id: 42, name: 'Naoufal' } };
 
+
   test('matches', () => {
     const r = toReq(req);
     expect(r.id).toBe(req.params.id);
@@ -56,5 +57,11 @@ describe('Req', () => {
       skip: undefined,
       take: undefined,
     });
+  });
+
+  test('toReq from with headers', () => {
+    const headers = {'authorization': 'Bearer 1234'}
+    const r = toReq({ headers });
+    expect(r.headers).toMatchObject(headers);
   });
 });
