@@ -114,6 +114,13 @@ describe('View', () => {
     expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
 
+
+  test('view with an InOut, and different type', () => {
+    const v2 = view<{name: string}>({ name: { col: 'Name', in: a => a.toUpperCase() } });
+    const v = view({ first: { col: 'Company', in: v2 } });
+    expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
+  });
+
   test('view with an InOut, with col and function in on an array', () => {
     const v = view({ name: 'Company.Name', divisions: { col: 'Company.Divisions', in: a => a.toUpperCase() } });
     expect(
