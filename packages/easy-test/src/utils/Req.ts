@@ -1,5 +1,6 @@
 import { asNumber, isDefined } from './Utils';
 import { Id, Json, JsonValue, Text } from './Types';
+import { OneOrMore } from '@thisisagile/easy';
 
 export class Req {
   readonly skip = isDefined(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
@@ -25,6 +26,10 @@ export class Req {
 
   get body(): unknown {
     return this.state.body;
+  }
+
+  get headers(): Record<string, OneOrMore<string>> {
+    return this.state.headers;
   }
 
   get = (key: Text): any => this?.state[key.toString()] ?? this.path[key.toString()] ?? this.query[key.toString()];
