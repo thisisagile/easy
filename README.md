@@ -124,7 +124,7 @@ However, if you would create an `Email` value object, the validation can be impl
 You can now use the above `Email` class as the type of email properties in an entity or struct to make sure that this property is a valid email.
 
 #### DateTime
-DateTime is a value object that takes either a Date object, RFC-3339 formatted string, or a number representing Epoch in milliseconds. The json is always an RFC-3339 formatted string. [momentjs](https://momentjs.com/) is used internally.
+DateTime is a value object that takes either a Date object, RFC-3339 formatted string, or a number representing Epoch in milliseconds. The json is always an RFC-3339 formatted string. [luxon](https://moment.github.io/luxon/#/) is used internally.
 
 A few examples of DateTime:
 
