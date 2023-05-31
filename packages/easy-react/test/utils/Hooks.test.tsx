@@ -48,7 +48,7 @@ const PageListHook = () => {
   const [list, setList] = usePageList<Address>();
 
   useEffect(() => {
-    setList(toList<Address>(new Address({ city })));
+    setList(toPageList<Address>([new Address({ city })]));
   }, []);
   return <>{`${list.first()}`}</>;
 };
