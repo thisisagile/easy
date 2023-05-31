@@ -1,4 +1,4 @@
-import { Exception, InMemoryGateway, Json, resolve, toJson, toList } from '../../src';
+import { Exception, InMemoryGateway, Json, resolve, toJson, toPageList } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -7,7 +7,7 @@ describe('InMemoryGateway', () => {
   let gateway: InMemoryGateway;
 
   beforeEach(() => {
-    gateway = new InMemoryGateway(resolve(toList<Json>(Dev.All.toJSON())));
+    gateway = new InMemoryGateway(resolve(toPageList<Json>(Dev.All.toJSON())));
   });
 
   test('byId with known id returns product', () => {
