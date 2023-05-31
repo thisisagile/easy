@@ -7,7 +7,7 @@ describe('UnitOfMeasurement', () => {
     expect(UnitOfMeasurement.MM.mmMultiplier).toBe(1);
     expect(UnitOfMeasurement.CM.id).toBe('cm');
     expect(UnitOfMeasurement.CM.mmMultiplier).toBe(10);
-    expect(UnitOfMeasurement.DM.id).toBe('cm');
+    expect(UnitOfMeasurement.DM.id).toBe('dm');
     expect(UnitOfMeasurement.DM.mmMultiplier).toBe(100);
     expect(UnitOfMeasurement.M.id).toBe('m');
     expect(UnitOfMeasurement.M.mmMultiplier).toBe(1000);

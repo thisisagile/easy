@@ -29,16 +29,24 @@ describe('Locale', () => {
     expect(Locale.AZ_LATN.country).toMatchText('az');
   });
 
-  test('byId is not case sensitive and accepts both dashes as well as underscores.', () => {
+  test('lookup is case insensitive and accepts both dashes as well as underscores.', () => {
+    expect(Locale.lookup('nl_NL')).toBe(Locale.NL_NL);
+    expect(Locale.lookup('nl_nl')).toBe(Locale.NL_NL);
+    expect(Locale.lookup('nl-nl')).toBe(Locale.NL_NL);
+    expect(Locale.lookup('nl,nl')).toBe(Locale.NL_NL);
+    expect(Locale.lookup('nlnl')).toBe(Locale.NL_NL);
+  });
+
+  test('byId is case sensitive and accepts only the actual id.', () => {
     expect(Locale.byId('nl_NL')).toBe(Locale.NL_NL);
-    expect(Locale.byId('nl_nl')).toBe(Locale.NL_NL);
-    expect(Locale.byId('nl-nl')).toBe(Locale.NL_NL);
-    expect(Locale.byId('nl,nl')).toBe(Locale.NL_NL);
-    expect(Locale.byId('nlnl')).toBe(Locale.NL_NL);
+    expect(Locale.byId('nl_nl')).toBeUndefined();
+    expect(Locale.byId('nl-nl')).toBeUndefined();
+    expect(Locale.byId('nl,nl')).toBeUndefined();
+    expect(Locale.byId('nlnl')).toBeUndefined();
   });
 
   test('byIds.', () => {
-    expect(Locale.byIds<Locale>(['nl-nl'])).toMatchText(toList<Locale>(Locale.NL_NL));
+    expect(Locale.byIds<Locale>(['nl_NL'])).toMatchText(toList<Locale>(Locale.NL_NL));
   });
 
   test('equals.', () => {

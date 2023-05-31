@@ -12,13 +12,20 @@ describe('Country', () => {
     expect(Country.NL).toMatchText('NL');
   });
 
-  test('byId is not case sensitive and accepts both dashes as well as underscores.', () => {
-    expect(Country.byId('nl')).toBe(Country.NL);
+  test('byId is case sensitive and accepts only the actual id.', () => {
     expect(Country.byId('NL')).toBe(Country.NL);
+    expect(Country.byId('nl')).toBeUndefined();
+  });
+
+  test('lookup is not case sensitive and accepts both dashes as well as underscores.', () => {
+    expect(Country.lookup('NL')).toBe(Country.NL);
+    expect(Country.lookup('nl')).toBe(Country.NL);
+    expect(Country.lookup('nl-')).toBe(Country.NL);
+    expect(Country.lookup('nl_')).toBe(Country.NL);
   });
 
   test('byIds.', () => {
-    expect(Country.byIds<Country>(['nl'])).toMatchText(toList<Country>(Country.NL));
+    expect(Country.byIds<Country>(['NL'])).toMatchText(toList<Country>(Country.NL));
   });
 
   test('equals.', () => {

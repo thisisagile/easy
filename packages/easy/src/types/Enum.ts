@@ -1,5 +1,5 @@
 import { Id } from './Id';
-import { List } from './List';
+import { List, toList } from './List';
 import { isAn } from './IsA';
 import { meta } from './Meta';
 import { isDefined } from './Is';
@@ -16,9 +16,11 @@ export abstract class Enum implements Validatable {
   }
 
   static all<E extends Enum>(): List<E> {
-    return meta(this)
-      .values<E>()
-      .filter((e: unknown) => isEnum(e));
+    return meta(this.allTuple<E>()).values<E>();
+  }
+
+  protected static allTuple<E extends Enum>(): Record<Id, E> {
+    return meta(this).get(`all-${this.name}`) ?? meta(this).set(`all-${this.name}`, meta(this).values<E>().filter(isEnum).toObject('id'));
   }
 
   static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
@@ -29,12 +31,12 @@ export abstract class Enum implements Validatable {
     return this.all<E>().first(p, params);
   }
 
-  static byIds<E extends Enum>(ids?: Id[]): List<E> {
-    return this.filter(e => ids?.some(i => e.equals(i)));
+  static byIds<E extends Enum>(ids: Id[] = []): List<E> {
+    return toList(ids).mapDefined(id => this.byId<E>(id)).distinct();
   }
 
   static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return this.first(e => e.equals(id)) ?? ofGet(alt);
+    return this.allTuple<E>()[id] ?? ofGet(alt);
   }
 
   equals<E extends Enum>(other: E | Id): other is E {

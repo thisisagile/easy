@@ -1,4 +1,4 @@
-import { Enum, Id, text } from '../../types';
+import { Enum, Id, Optional, text } from '../../types';
 
 export class Locale extends Enum {
   static readonly AF = new Locale('af', 'Afrikaans');
@@ -567,6 +567,10 @@ export class Locale extends Enum {
 
   constructor(id: Id, name: string, readonly country = text(id).lower.last(2).toString(), private readonly lower = text(id).lower.trim.toString()) {
     super(name, id);
+  }
+
+  static lookup(other: string): Optional<Locale> {
+    return this.all<Locale>().first(l => l.equals(other));
   }
 
   equals<E extends Enum>(other: E | Id): other is E {
