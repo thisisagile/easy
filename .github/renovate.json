@@ -13,6 +13,9 @@
   "packageRules": [ {
     "matchPackageNames": "release-it",
     "allowedVersions": "< 15"
+  },{
+    "matchPackageNames": ["jsonwebtoken", "@types/jsonwebtoken"],
+    "allowedVersions": "<=8.5.9"
   }, {
     "matchPackageNames": "release-it-yarn-workspaces",
     "allowedVersions": "< 3"
