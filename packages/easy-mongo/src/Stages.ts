@@ -7,6 +7,8 @@ export const desc = -1;
 export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
+const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
+
 export const stages = {
   decode: {
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
@@ -20,6 +22,7 @@ export const stages = {
     lte: (value: Filter) => ({ $lte: value }),
     after: (date: unknown) => stages.match.gte(toMongoType(date)),
     before: (date: unknown) => stages.match.lt(toMongoType(date)),
+    anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: "i" })
   },
   sort: {
     sort: ($sort: Record<string, typeof asc | typeof desc>): Optional<Filter> => (isPresent($sort) ? { $sort } : undefined),

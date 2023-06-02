@@ -19,7 +19,7 @@ describe('Stages', () => {
   });
 
   // Match
-  const { match, gt, gte, lt, lte, after, before } = stages.match;
+  const { match, gt, gte, lt, lte, after, before, anywhere } = stages.match;
 
   test('one filter', () => {
     expect(match({ id: 42 })).toStrictEqual({ $match: { id: 42 } });
@@ -50,6 +50,11 @@ describe('Stages', () => {
 
   test('lte', () => {
     expect(match({ id: lte(42) })).toStrictEqual({ $match: { id: { $lte: 42 } } });
+  });
+
+  test('anywhere', () => {
+    expect(match({ name: anywhere('sander') })).toStrictEqual({ $match: { name: { $regex: 'sander', $options: 'i' } } });
+    expect(match({ name: anywhere('sa/n&d(er') })).toStrictEqual({ $match: { name: { $regex: 'sa/n&d\\(er', $options: 'i' } } });
   });
 
   test('after', () => {
