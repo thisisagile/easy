@@ -106,6 +106,12 @@ describe('MongoGateway', () => {
     expect(provider.aggregate).toHaveBeenCalledWith([{ $match: { id: 4 } }, { $skip: 0 }]);
   });
 
+  test('match resolves', async () => {
+    provider.aggregate = mock.resolve();
+    await gateway.match({ id: 4 });
+    expect(provider.aggregate).toHaveBeenCalledWith([{ $match: { id: 4 } }]);
+  });
+
   test('aggregate resolves and removes empty filters, now with an array', async () => {
     provider.aggregate = mock.resolve();
     await gateway.aggregate([{}, { $match: { id: 4 } }, { $skip: 0 }]);

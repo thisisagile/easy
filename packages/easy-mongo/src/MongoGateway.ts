@@ -16,6 +16,7 @@ import {
   toArray,
 } from '@thisisagile/easy';
 import { Collection } from './Collection';
+import {stages} from "./Stages";
 
 export class MongoGateway implements Gateway<FindOptions> {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
@@ -54,6 +55,10 @@ export class MongoGateway implements Gateway<FindOptions> {
 
   aggregate(...filters: Optional<Filter>[]): Promise<PageList<Json>> {
     return this.provider.aggregate(toArray(...filters).filter(isPresent) as Filter[]);
+  }
+
+  match(f: Filter): Promise<PageList<Json>> {
+    return this.aggregate(stages.match.match(f));
   }
 
   add(item: Json): Promise<Json> {
