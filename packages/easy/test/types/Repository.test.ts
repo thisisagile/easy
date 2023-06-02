@@ -1,5 +1,4 @@
-import { Repository } from '../../src';
-import { Exception } from '@thisisagile/easy';
+import { Exception, Repository } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Repository', () => {

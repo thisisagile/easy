@@ -1,10 +1,8 @@
-import { asString, ctx, EasyUri, EnvContext, uri, Uri } from '../../src';
+import { DotEnvContext, asString, ctx, EasyUri, EnvContext, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
-
 import { mock } from '@thisisagile/easy-test';
-import { DotEnvContext } from '@thisisagile/easy';
 
 const externalHost = 'https://www.external.com';
 class ExternalUri extends EasyUri {

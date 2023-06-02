@@ -1,7 +1,6 @@
 import '@thisisagile/easy-test';
 import locales from '../../../src/domain/enums/locales.json';
-import { meta, text, toList } from '@thisisagile/easy';
-import { Locale } from '../../../src';
+import { meta, text, toList, Locale } from '../../../src';
 
 describe('Locale', () => {
   test('Generate locale from json.', () => {

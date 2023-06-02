@@ -1,7 +1,6 @@
-import { asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
+import { Exception, asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
-import { Exception } from '@thisisagile/easy';
 
 class Price extends Value<number> {
   get isValid(): boolean {

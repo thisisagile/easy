@@ -1,7 +1,6 @@
-import { choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
+import { asString, choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
 import { Dev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
-import { asString } from '@thisisagile/easy';
 
 describe('Case', () => {
   const which = (name: string) =>

@@ -1,5 +1,5 @@
 import { asString, isEmpty, Value } from '../../types';
-import validator from 'validator';
+import validateUrl from 'validator/lib/isURL';
 
 export interface UrlOptions {
   /**
@@ -66,5 +66,5 @@ export class Url extends Value {
 export const url = (url: unknown, options?: UrlOptions): Url => new Url(url, options);
 
 export const isUrl = (url?: unknown, options?: UrlOptions): boolean => {
-  return !isEmpty(url) && validator.isURL(asString(url), options);
+  return !isEmpty(url) && validateUrl(asString(url), options);
 };

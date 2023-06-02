@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Environment } from '@thisisagile/easy';
+import { Environment } from '../../../src';
 
 describe('Environment', () => {
   test('default construction.', () => {

@@ -1,5 +1,5 @@
 import { asString, isEmpty, Value } from '../../types';
-import validator from 'validator';
+import validateEAN from 'validator/lib/isEAN';
 
 export class EAN extends Value {
   get isValid(): boolean {
@@ -8,5 +8,5 @@ export class EAN extends Value {
 }
 
 export const isEAN = (ean?: unknown): boolean => {
-  return !isEmpty(ean) && validator.isEAN(asString(ean));
+  return !isEmpty(ean) && validateEAN(asString(ean));
 };

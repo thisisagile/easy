@@ -1,5 +1,5 @@
 import { asString, isEmpty, text, Value } from '../../types';
-import validator from 'validator';
+import validateEmail from 'validator/lib/isEmail';
 
 export class Email extends Value {
   constructor(email?: unknown) {
@@ -17,4 +17,4 @@ export class Email extends Value {
 
 export const email = (email?: unknown): Email => new Email(email);
 
-export const isEmail = (e?: unknown): boolean => !isEmpty(e) && validator.isEmail(asString(e));
+export const isEmail = (e?: unknown): boolean => !isEmpty(e) && validateEmail(asString(e));
