@@ -29,6 +29,7 @@ describe('PageList', () => {
   test('toPageList with full options', () => {
     const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: { name: asc } });
     expect(pl).toBeDefined();
+    expect(pl.options).toEqual({ take: 5, skip: 1, total: 42, sorts: { name: asc } })
     expect(pl).toHaveLength(0);
     expect(pl.take).toBe(5);
     expect(pl.skip).toBe(1);

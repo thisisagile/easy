@@ -19,41 +19,36 @@ export const toShortFilter = (field: string, shortField: string, value: any): Fi
 });
 
 export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; sorts?: PlainSort; filters?: Filter[] };
+export type PageListOptions = Exclude<PageOptions, 'sort'> & { total?: number };
 
 export class PageList<T> extends List<T> {
-  private _take = 250;
-  private _skip = 0;
-  private _total?: number;
-  private _sorts?: PlainSort;
-  private _filters?: Filter[];
+  private _options?: PageListOptions;
 
-  setPageOptions(options?: PageOptions & { total?: number }): this {
-    this._take = options?.take ?? 250;
-    this._skip = options?.skip ?? 0;
-    this._total = options?.total;
-    this._sorts = options?.sorts;
-    this._filters = options?.filters;
+  private setPageOptions(options?: PageListOptions): this {
+    this._options = options;
     return this;
   }
-
   get take(): number {
-    return this._take;
+    return this._options?.take ?? 250;
   }
 
   get skip(): number {
-    return this._skip;
+    return this._options?.skip ?? 0;
   }
 
   get total(): Optional<number> {
-    return this._total;
+    return this._options?.total
   }
 
   get sorts(): Optional<PlainSort> {
-    return this._sorts;
+    return this._options?.sorts
   }
 
   get filters(): Optional<Filter[]> {
-    return this._filters;
+    return this._options?.filters
+  }
+  get options(): Optional<PageListOptions> {
+    return this._options;
   }
 
   asc(p: GetProperty<T, any>): PageList<T> {
@@ -153,12 +148,12 @@ export class PageList<T> extends List<T> {
 export const isPageList = <T>(l?: unknown): l is PageList<T> => isList<T>(l) && isA(l, 'total');
 
 export const toPageList = <T>(items: T[] = [], options?: Omit<PageOptions, 'sort'> & { total?: number }): PageList<T> =>
-  choose(items)
+  (choose(items)
     .case(
       i => i.length === 1 && isNumber(i[0]),
       i => new PageList<T>().add(...i)
     )
-    .else(i => new PageList<T>(...i))
+    .else(i => new PageList<T>(...i)) as any)
     .setPageOptions(options);
 
 /* @deprecated No longer needed as the PageList is now a class that extends from List, use the map function */
