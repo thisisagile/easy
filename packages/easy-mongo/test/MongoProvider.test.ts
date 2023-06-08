@@ -310,7 +310,7 @@ describe('MongoProvider', () => {
     ['with condition', { filter: devs.name.exists(true) }, { partialFilterExpression: { Name: { $exists: true } } }],
   ])('CreateIndexesOptions %s', (name, o, expected) => {
     const p = new TestMongoProvider(devs, Promise.resolve(client));
-    expect(p.toCreateIndexesOptions(o)).toMatchJson(fits.json({ ...expected, writeConcern: { w: 1 } }));
+    expect(p.toCreateIndexesOptions(o)).toMatchJson(fits.json({ ...expected }));
   });
 
   test('CreateIndexesOptions uses the correct dates', () => {
@@ -322,7 +322,7 @@ describe('MongoProvider', () => {
     c.createIndex = mock.resolve('_index');
     provider.collection = mock.resolve(c);
     await expect(provider.createIndex('name')).resolves.toBe('_index');
-    expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: true, writeConcern: { w: 1 } }));
+    expect(c.createIndex).toHaveBeenCalledWith('name', fits.json({ unique: true }));
   });
 
   test('createIndex with options', async () => {

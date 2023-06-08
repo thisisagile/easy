@@ -32,7 +32,7 @@ import {
   Collection as MongoCollection,
   CreateIndexesOptions,
   Document,
-  Filter as MongoFilter,
+  StrictFilter as MongoFilter,
   FindCursor,
   FindOptions as MongoFindOptions,
   IndexSpecification,
@@ -189,7 +189,6 @@ export class MongoProvider {
       ...(options?.languageOverride && { language_override: options.languageOverride }),
       ...(options?.languageDefault && { default_language: options.languageDefault }),
       ...(options?.filter && { partialFilterExpression: toMongoType(asJson(options.filter)) }),
-      writeConcern: { w: 1 },
     };
   }
 
