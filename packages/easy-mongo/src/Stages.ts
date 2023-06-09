@@ -73,7 +73,7 @@ export const stages = {
     take: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.take, { $limit: asNumber(o.take) }),
   },
   project: {
-    include: ($projection: Record<string, 1>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
+    include: (...includes: (string | Record<string, 1>)[]): Optional<Filter> => ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 1} : b) }), {}) })),
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> => ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 0} : b) }), {}) }))
   },
 };

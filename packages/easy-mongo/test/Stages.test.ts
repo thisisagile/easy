@@ -209,8 +209,9 @@ describe('Stages', () => {
     const {include, exclude} = stages.project;
 
     test('projection include', () => {
-        expect(include({color: 1})).toStrictEqual({$projection: {color: 1}});
-        expect(include({})).toBeUndefined();
+        expect(include()).toBeUndefined();
+        expect(include({})).toStrictEqual({$project: {}});
+        expect(include('content', {color: 1})).toStrictEqual({$project: {content: 1, color: 1}});
     });
 
     test('projection exclude', () => {
