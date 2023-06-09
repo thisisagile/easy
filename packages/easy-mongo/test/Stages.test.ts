@@ -219,4 +219,14 @@ describe('Stages', () => {
         expect(exclude({})).toStrictEqual({$project: {}});
         expect(exclude('content', {color: 0})).toStrictEqual({$project: {content: 0, color: 0}});
     });
+
+    // ReplaceWith
+
+    const { merge } = stages.replaceWith;
+
+    test('merge', () => {
+        expect(merge()).toBeUndefined();
+        expect(merge({})).toStrictEqual({$replaceWith: { $mergeObjects: [{}] }});
+        expect(merge("$$ROOT", "$contents.nl", { taxonomy: "$taxonomy.nl" })).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$ROOT", "$contents.nl", {taxonomy: "$taxonomy.nl"} ] }});
+    });
 });
