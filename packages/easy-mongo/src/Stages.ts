@@ -24,6 +24,8 @@ export type Accumulator = PartialRecord<Accumulators, Filter>;
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
 
 export const stages = {
+  root: '$$ROOT',
+  current: '$$CURRENT',
   decode: {
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
     id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
