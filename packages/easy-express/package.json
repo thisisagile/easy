@@ -37,7 +37,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.8",
-    "@types/uuid": "^9.0.1",
+    "@types/uuid": "^9.0.2",
     "@types/validator": "^13.7.17"
   },
   "dependencies": {
