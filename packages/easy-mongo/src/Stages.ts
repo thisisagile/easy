@@ -5,6 +5,7 @@ import {
   Get,
   Id,
   ifDefined,
+    ifNotEmpty,
   isFunction,
   isPresent,
   isPrimitive,
@@ -73,6 +74,6 @@ export const stages = {
   },
   project: {
     include: ($projection: Record<string, 1>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
-    exclude: ($projection: Record<string, 0>): Optional<Filter> => (isPresent($projection) ? { $projection } : undefined),
+    exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> => ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 0} : b) }), {}) }))
   },
 };

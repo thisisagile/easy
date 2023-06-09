@@ -78,7 +78,7 @@ describe('Stages', () => {
 
     test('array', () => {
         expect(match({classicId: array([3, 4])})).toStrictEqual({
-            $match: { classicId: {$in: [3, 4]} }
+            $match: {classicId: {$in: [3, 4]}}
         });
     });
 
@@ -214,7 +214,8 @@ describe('Stages', () => {
     });
 
     test('projection exclude', () => {
-        expect(exclude({color: 0})).toStrictEqual({$projection: {color: 0}});
-        expect(exclude({})).toBeUndefined();
+        expect(exclude()).toBeUndefined();
+        expect(exclude({})).toStrictEqual({$project: {}});
+        expect(exclude('content', {color: 0})).toStrictEqual({$project: {content: 0, color: 0}});
     });
 });
