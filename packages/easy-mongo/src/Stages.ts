@@ -79,6 +79,8 @@ export const stages = {
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> => ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 0} : b) }), {}) }))
   },
   replaceWith: {
-    merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $replaceWith: { $mergeObjects: os }}))
+    merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $replaceWith: { $mergeObjects: os }})),
+    mergeToRoot: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.root, ...objects),
+    mergeToCurrent: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
   }
 };
