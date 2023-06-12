@@ -82,5 +82,11 @@ export const stages = {
     merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $replaceWith: { $mergeObjects: os }})),
     mergeToRoot: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.root, ...objects),
     mergeToCurrent: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
+  },
+  facet: {
+    facet: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $facet: stages.decode.fields(f) }),
+    data: () => [{ $match: {}}],
+    count: (from?: string) => (f?: string) => [{$sortByCount: `$${from ?? f}`}],
+    unwindCount: (from?: string) => (f?: string) => [{ $unwind: `$${from ?? f}`}, {$sortByCount: `$${from ?? f}`}],
   }
 };

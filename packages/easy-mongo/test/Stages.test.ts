@@ -241,4 +241,17 @@ describe('Stages', () => {
         expect(mergeToCurrent({})).toStrictEqual({$replaceWith: { $mergeObjects: ["$$CURRENT", {}] }});
         expect(mergeToCurrent("$contents.de", { taxonomy: "$taxonomy.de" })).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$CURRENT", "$contents.de", {taxonomy: "$taxonomy.de"} ] }});
     });
+
+    // Facet
+
+    const { data, facet, count: cont, unwindCount } = stages.facet;
+
+    test('facet', () => {
+        expect(data()).toStrictEqual([{$match: {} }] );
+        expect(facet({data: data()})).toStrictEqual({$facet: { data: [ { $match: {} } ] }});
+        expect(facet({brand: cont()})).toStrictEqual({$facet: { brand: [ { $sortByCount: "$brand" } ] }});
+        expect(facet({brand: cont('brandId')})).toStrictEqual({$facet: { brand: [ { $sortByCount: "$brandId" } ] }});
+        expect(facet({brands: unwindCount()})).toStrictEqual({$facet: { brands: [ { $unwind: "$brands" }, { $sortByCount: "$brands" } ] }});
+        expect(facet({tax: unwindCount('taxonomy.fr')})).toStrictEqual({$facet: { tax: [ { $unwind: "$taxonomy.fr" }, { $sortByCount: "$taxonomy.fr" } ] }});
+    });
 });
