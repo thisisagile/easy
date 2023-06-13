@@ -222,24 +222,24 @@ describe('Stages', () => {
 
     // ReplaceWith
 
-    const { merge, mergeToRoot, mergeToCurrent } = stages.replaceWith;
+    const { merge, rootAnd, currentAnd, replaceWith } = stages.replaceWith;
 
     test('merge', () => {
-        expect(merge()).toBeUndefined();
-        expect(merge({})).toStrictEqual({$replaceWith: { $mergeObjects: [{}] }});
-        expect(merge("$$ROOT", "$contents.nl", { taxonomy: "$taxonomy.nl" })).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$ROOT", "$contents.nl", {taxonomy: "$taxonomy.nl"} ] }});
+        expect(replaceWith(merge())).toBeUndefined();
+        expect(replaceWith(merge({}))).toStrictEqual({$replaceWith: { $mergeObjects: [{}] }});
+        expect(replaceWith(merge("$$ROOT", "$contents.nl", { taxonomy: "$taxonomy.nl" }))).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$ROOT", "$contents.nl", {taxonomy: "$taxonomy.nl"} ] }});
     });
 
     test('mergeToRoot', () => {
-        expect(mergeToRoot()).toStrictEqual({$replaceWith: { $mergeObjects: ["$$ROOT"] }});
-        expect(mergeToRoot({})).toStrictEqual({$replaceWith: { $mergeObjects: ["$$ROOT", {}] }});
-        expect(mergeToRoot("$contents.be", { taxonomy: "$taxonomy.be" })).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$ROOT", "$contents.be", {taxonomy: "$taxonomy.be"} ] }});
+        expect(replaceWith(rootAnd())).toStrictEqual({$replaceWith: { $mergeObjects: ["$$ROOT"] }});
+        expect(replaceWith(rootAnd({}))).toStrictEqual({$replaceWith: { $mergeObjects: ["$$ROOT", {}] }});
+        expect(replaceWith(rootAnd("$contents.be", { taxonomy: "$taxonomy.be" }))).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$ROOT", "$contents.be", {taxonomy: "$taxonomy.be"} ] }});
     });
 
     test('mergeToCurrent', () => {
-        expect(mergeToCurrent()).toStrictEqual({$replaceWith: { $mergeObjects: ["$$CURRENT"] }});
-        expect(mergeToCurrent({})).toStrictEqual({$replaceWith: { $mergeObjects: ["$$CURRENT", {}] }});
-        expect(mergeToCurrent("$contents.de", { taxonomy: "$taxonomy.de" })).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$CURRENT", "$contents.de", {taxonomy: "$taxonomy.de"} ] }});
+        expect(replaceWith(currentAnd())).toStrictEqual({$replaceWith: { $mergeObjects: ["$$CURRENT"] }});
+        expect(replaceWith(currentAnd({}))).toStrictEqual({$replaceWith: { $mergeObjects: ["$$CURRENT", {}] }});
+        expect(replaceWith(currentAnd("$contents.de", { taxonomy: "$taxonomy.de" }))).toStrictEqual({$replaceWith: { $mergeObjects: [ "$$CURRENT", "$contents.de", {taxonomy: "$taxonomy.de"} ] }});
     });
 
     // Facet

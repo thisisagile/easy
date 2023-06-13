@@ -79,9 +79,10 @@ export const stages = {
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> => ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 0} : b) }), {}) }))
   },
   replaceWith: {
-    merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $replaceWith: { $mergeObjects: os }})),
-    mergeToRoot: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.root, ...objects),
-    mergeToCurrent: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
+    replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),
+    merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $mergeObjects: os })),
+    rootAnd: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.root, ...objects),
+    currentAnd: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
   },
   facet: {
     facet: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $facet: stages.decode.fields(f) }),
