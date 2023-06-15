@@ -1,8 +1,25 @@
 import { Construct, isDefined, isNotEmpty, isTrue, ofConstruct, Optional } from '../types';
 
-export const ifTrue = <T>(o: unknown, f: Construct<T>, alt?: Construct<T>): Optional<T> => (isTrue(o) ? ofConstruct(f, o) : ofConstruct(alt, o));
-export const ifFalse = <T>(o: unknown, f: Construct<T>, alt?: Construct<T>): Optional<T> => (!isTrue(o) ? ofConstruct(f, o) : ofConstruct(alt, o));
-export const ifDefined = <Out, In = unknown>(o: Optional<In>, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out> =>
-  isDefined(o) ? ofConstruct(f, o) : ofConstruct(alt);
-export const ifNotEmpty = <T>(o: unknown, f: Construct<T> = o => o, alt?: Construct<T>): Optional<T> =>
-  isNotEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
+export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out> {
+  return isTrue(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}
+
+export function ifFalse<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
+export function ifFalse<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifFalse<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out> {
+  return !isTrue(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}
+
+export function ifDefined<Out, In = unknown>(o: Optional<In>, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
+export function ifDefined<Out, In = unknown>(o: Optional<In>, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifDefined<Out, In = unknown>(o: Optional<In>, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out> {
+  return isDefined(o) ? ofConstruct(f, o) : ofConstruct(alt);
+}
+export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
+export function ifNotEmpty<Out, In = unknown>(o: In, f?: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>> = o => o as Out, alt?: Construct<Out>): Optional<Out> {
+  return isNotEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}

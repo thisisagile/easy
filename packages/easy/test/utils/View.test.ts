@@ -269,14 +269,30 @@ describe('View', () => {
     expect((c as any).email[0].value).toBe(emails[0]);
   });
 
-  type Student = { id: number; name: string; loan: number };
 
   test('typed views', () => {
+    type Student = { id: number; name: string; loan: number };
     const toStudent = view<Student>({
       loan: 3000,
       name: s => `${s.name} Hoogendoorn`,
     }).fromSource;
     const s = toStudent.from({ id: 3, loan: 3, name: 'Sander' });
     expect(s).toMatchJson({ id: 3, loan: 3000, name: 'Sander Hoogendoorn' });
+  });
+
+  test('typed views with nested view', () => {
+    type Student = { id: number; name: string; loans: Loan[] };
+    type Loan = { amount: number;  balance: number };
+    const toLoan = view<Loan>({
+      amount: keepOr(3000),
+      balance: keep,
+    });
+    const toStudent = view<Student>({
+      loans: {col: 'loans', in: toLoan},
+      name: s => `${s.name} Hoogendoorn`,
+
+    }).fromSource;
+    const s = toStudent.from({ id: 3, loans: [{amount: 5000, bank: 'ING'}], name: 'Sander' });
+    expect(s).toMatchJson({ id: 3, loans: [{amount: 5000}], name: 'Sander Hoogendoorn' });
   });
 });
