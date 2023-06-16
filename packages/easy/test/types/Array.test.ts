@@ -1,4 +1,4 @@
-import { array, toArray, toObject } from '../../src';
+import {array, OneOrMore, toArray, toObject} from '../../src';
 import { Dev } from '../ref';
 
 describe('toArray', () => {
@@ -24,6 +24,13 @@ describe('toArray', () => {
 
   test('from array of two items', () => {
     expect(toArray([Dev.Sander, Dev.Jeroen])).toHaveLength(2);
+  });
+
+  const oneOrMore = (a: OneOrMore<unknown>): string => toArray(a).join(',');
+
+  test('with OneOrMore', () => {
+    expect(oneOrMore(Dev.Sander)).toBe('Sander');
+    expect(oneOrMore([Dev.Sander, Dev.Rob])).toBe('Sander,Rob');
   });
 
   test('from spread of two items', () => {
