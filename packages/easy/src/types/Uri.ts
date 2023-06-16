@@ -6,6 +6,7 @@ import { List, toList } from './List';
 import { meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
+import {OneOrMore, toArray} from "./Array";
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -45,6 +46,7 @@ export type Uri = {
 
 export class EasyUri implements Uri {
   static readonly id = uri.path('id');
+  static readonly ids = uri.query('ids');
   static readonly query = uri.query('q');
   static readonly skip = uri.query('skip');
   static readonly take = uri.query('take');
@@ -90,6 +92,7 @@ export class EasyUri implements Uri {
   }
 
   id = (id?: unknown): this => this.set(EasyUri.id, id);
+  ids = (ids: OneOrMore<unknown>): this => this.set(EasyUri.ids, toArray(ids).join(','));
   query = (q?: unknown): this => this.set(EasyUri.query, q);
 
   skip = (index?: number): this => this.set(EasyUri.skip, index);
