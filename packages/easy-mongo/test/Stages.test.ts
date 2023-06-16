@@ -244,14 +244,22 @@ describe('Stages', () => {
 
     // Facet
 
-    const { data, facet, count: cont, unwindCount } = stages.facet;
+    const { data, facet, count: cnt, unwind } = stages.facet;
+
+    test('clauses', () => {
+        expect(cnt('brands')()).toStrictEqual({$sortByCount: "$brands"});
+        expect(cnt()('brands')).toStrictEqual({$sortByCount: "$brands"});
+        expect(cnt('categories')('brands')).toStrictEqual({$sortByCount: "$categories"});
+        expect(unwind('brands')()).toStrictEqual({$unwind: "$brands"});
+        expect(unwind()('brands')).toStrictEqual({$unwind: "$brands"});
+        expect(unwind('categories')('brands')).toStrictEqual({$unwind: "$categories"});
+    })
 
     test('facet', () => {
-        expect(data()).toStrictEqual([{$match: {} }] );
-        expect(facet({data: data()})).toStrictEqual({$facet: { data: [ { $match: {} } ] }});
-        expect(facet({brand: cont()})).toStrictEqual({$facet: { brand: [ { $sortByCount: "$brand" } ] }});
-        expect(facet({brand: cont('brandId')})).toStrictEqual({$facet: { brand: [ { $sortByCount: "$brandId" } ] }});
-        expect(facet({brands: unwindCount()})).toStrictEqual({$facet: { brands: [ { $unwind: "$brands" }, { $sortByCount: "$brands" } ] }});
-        expect(facet({tax: unwindCount('taxonomy.fr')})).toStrictEqual({$facet: { tax: [ { $unwind: "$taxonomy.fr" }, { $sortByCount: "$taxonomy.fr" } ] }});
+        expect(facet({data: data()})).toStrictEqual({$facet: { data: [ ] }});
+        expect(facet({brands: unwind()})).toStrictEqual({$facet: { brands: [ { $unwind: "$brands" } ] }});
+        expect(facet({brands: cnt()})).toStrictEqual({$facet: { brands: [ { $sortByCount: "$brands" } ] }});
+        expect(facet({brands: [unwind(), cnt()]})).toStrictEqual({$facet: { brands: [ {$unwind: '$brands'}, { $sortByCount: "$brands" } ] }});
+        expect(facet({props: [unwind(), group({prop: first('props')}).by('props.id')]})).toStrictEqual({$facet: { props: [ {$unwind: "$props"}, { $group: { _id: "$props.id", prop: {$first: "$props"}}} ]}});
     });
 });

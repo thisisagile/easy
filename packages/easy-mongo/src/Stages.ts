@@ -5,14 +5,15 @@ import {
   Get,
   Id,
   ifDefined,
-    ifNotEmpty,
+  ifNotEmpty,
   isFunction,
   isPresent,
   isPrimitive,
   isString,
   on,
   Optional,
-  PartialRecord
+  OneOrMore,
+  PartialRecord, use, toArray
 } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
@@ -29,6 +30,7 @@ export const stages = {
   id: '_id',
   decode: {
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
+    fieldsArrays: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => r[k] = use(toArray(v), vs => vs.map(v => isFunction(v) ? v(k) : v))), {} as any),
     id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
   },
   match: {
@@ -86,9 +88,9 @@ export const stages = {
     currentAnd: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
   },
   facet: {
-    facet: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $facet: stages.decode.fields(f) }),
-    data: () => [{ $match: {}}],
-    count: (from?: string) => (f?: string) => [{$sortByCount: `$${from ?? f}`}],
-    unwindCount: (from?: string) => (f?: string) => [{ $unwind: `$${from ?? f}`}, {$sortByCount: `$${from ?? f}`}],
+    facet: (f: Record<string, OneOrMore<Get<Optional<Filter>, string>>>) => ({ $facet: stages.decode.fieldsArrays(f) }),
+    unwind: (from?: string) => (f?: string) => ({ $unwind: `$${from ?? f}`}),
+    count: (from?: string) => (f?: string) => ({ $sortByCount: `$${from ?? f}`}),
+    data: () => [],
   }
 };
