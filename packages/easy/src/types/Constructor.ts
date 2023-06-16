@@ -20,4 +20,6 @@ export const on = <T>(t: T, f: (t: T) => unknown): T => {
   return t;
 };
 
+export const use = <T, Out>(t: T, f: (t: T) => Out): Out => f(t);
+
 export const ifA = <T>(c: Constructor<T>, t?: unknown, alt?: unknown): Optional<T> => (!isPrimitive(t) && t instanceof c ? t : alt ? ifA(c, alt) : undefined);
