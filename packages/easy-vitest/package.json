@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@jest/expect-utils": "^29.5.0",
-    "@types/node": "^18.16.16",
+    "@types/node": "^18.16.18",
     "@vitest/expect": "^0.29.8"
   },
   "peerDependencies": {
