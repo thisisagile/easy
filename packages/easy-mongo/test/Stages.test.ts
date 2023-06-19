@@ -19,7 +19,7 @@ describe('Stages', () => {
     });
 
     // Match
-    const {match, gt, gte, lt, lte, array, after, before, anywhere} = stages.match;
+    const {match, gt, gte, lt, lte, isIn, after, before, anywhere} = stages.match;
 
     test('one filter', () => {
         expect(match({id: 42})).toStrictEqual({$match: {id: 42}});
@@ -76,9 +76,15 @@ describe('Stages', () => {
         });
     });
 
-    test('array', () => {
-        expect(match({classicId: array([3, 4])})).toStrictEqual({
+    test('isIn', () => {
+        expect(match({classicId: isIn([3, 4])})).toStrictEqual({
             $match: {classicId: {$in: [3, 4]}}
+        });
+    });
+
+    test('isIn from string', () => {
+        expect(match({classicId: isIn('3,4')})).toStrictEqual({
+            $match: {classicId: {$in: ['3', '4']}}
         });
     });
 

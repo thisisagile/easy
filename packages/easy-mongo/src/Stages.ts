@@ -39,7 +39,8 @@ export const stages = {
     gte: (value: Filter) => ({ $gte: value }),
     lt: (value: Filter) => ({ $lt: value }),
     lte: (value: Filter) => ({ $lte: value }),
-    array: (value: unknown[]) => ({ $in: value }),
+    // array: (value: unknown[]) => ({ $in: value }),
+    isIn: (value: string | unknown[], separator = ',') => ({ $in: isString(value) ? value.split(separator) : value }),
     after: (date: unknown) => stages.match.gte(toMongoType(date)),
     before: (date: unknown) => stages.match.lt(toMongoType(date)),
     anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: "i" })
