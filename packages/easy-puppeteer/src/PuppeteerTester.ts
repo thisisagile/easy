@@ -11,11 +11,17 @@ export class PuppeteerTester implements Tester {
   }
 
   /* istanbul ignore next */
-  static launch = (headless: boolean, launchProps: Json): Promise<Browser> =>
+  static launch = (headless: boolean | 'new' | undefined = 'new', launchProps: Json): Promise<Browser> =>
     puppeteer.launch({ headless, args: ['--no-sandbox', '--start-maximized'], ...launchProps });
 
   /* istanbul ignore next */
-  static async init(host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800, launchProps = {}): Promise<Tester> {
+  static async init(
+    host: string = ctx.env.get('webHost', '') as string,
+    headless: boolean | 'new' | undefined = 'new',
+    width = 1200,
+    height = 800,
+    launchProps = {}
+  ): Promise<Tester> {
     const browser = await PuppeteerTester.launch(headless, launchProps);
     const page = await browser.newPage();
     await page.setViewport({ width, height });
