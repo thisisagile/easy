@@ -1,6 +1,6 @@
 import { PuppeteerElement } from './PuppeteerElement';
 import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
-import { ctx, Id, Json, UseCase } from '@thisisagile/easy';
+import { ctx, Id, UseCase } from '@thisisagile/easy';
 import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
 
 export class PuppeteerTester implements Tester {
@@ -11,7 +11,7 @@ export class PuppeteerTester implements Tester {
   }
 
   /* istanbul ignore next */
-  static launch = (headless = true, launchProps: Json): Promise<Browser> =>
+  static launch = (headless = true, launchProps = {}): Promise<Browser> =>
     puppeteer.launch({ headless: headless ? 'new' : false, args: ['--no-sandbox', '--start-maximized'], ...launchProps });
 
   /* istanbul ignore next */
