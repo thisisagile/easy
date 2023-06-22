@@ -6,6 +6,8 @@ import { Optional } from './Types';
 
 type MetaParseOptions = { initial?: any; skipUndefined?: boolean };
 
+type Entry<T = unknown> = [key: string, value: T];
+
 class ClassMeta {
   constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
 
@@ -16,8 +18,8 @@ class ClassMeta {
     return value;
   };
 
-  entries = <T = unknown>(): List<[key: string, value: T]> =>
-    toList([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<[any, T]>;
+  entries = <T = unknown>(): List<Entry<T>> =>
+    toList([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<Entry<T>>;
 
   parse = (p: (v: unknown) => unknown, options: MetaParseOptions = {}): any => {
     const { initial = {}, skipUndefined = false } = options;
