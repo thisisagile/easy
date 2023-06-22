@@ -1,4 +1,4 @@
-import { Struct, required, isStruct } from '../../src';
+import { Struct, required, isStruct, Json } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
@@ -6,6 +6,10 @@ describe('Struct', () => {
   class Address extends Struct {
     readonly street = this.state.street;
     @required() readonly city = this.state.city;
+
+    update(add: Json): Address {
+      return new Address(this.merge(add));
+    }
   }
 
   test('isValid passes', () => {

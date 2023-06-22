@@ -19,21 +19,37 @@ export class List<T = unknown> extends Array<T> {
     return this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
   }
 
-  first = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.find(p, params) : this[0]) as T;
+  first(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+    return (p ? this.find(p, params) : this[0]) as T;
+  }
 
-  firstValue = <V>(f: (t: T) => V, alt?: Get<V, T>): Optional<V> => tryTo(() => this.first(t => !!f(t))).map(i => (i ? f(i) : ofGet(alt, i))).value;
+  firstValue<V>(f: (t: T) => V, alt?: Get<V, T>): Optional<V> {
+    return tryTo(() => this.first(t => !!f(t))).map(i => (i ? f(i) : ofGet(alt, i))).value;
+  }
 
-  isFirst = (value: T): boolean => value === this.first();
+  isFirst(value: T): boolean {
+    return value === this.first();
+  }
 
-  next = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this[this.findIndex(p, params) + 1] : this[0]);
+  next(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+    return p ? this[this.findIndex(p, params) + 1] : this[0];
+  }
 
-  prev = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this[this.findIndex(p, params) - 1] : this[0]);
+  prev(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+    return p ? this[this.findIndex(p, params) - 1] : this[0];
+  }
 
-  last = (p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T => (p ? this.filter(p, params).last() : this[this.length - 1]);
+  last(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+    return p ? this.filter(p, params).last() : this[this.length - 1];
+  }
 
-  isLast = (value: T): boolean => value === this.last();
+  isLast(value: T): boolean {
+    return value === this.last();
+  }
 
-  overlaps = (...items: ArrayLike<T>): boolean => toList<T>(...items).some(i => this.some(t => i === t));
+  overlaps(...items: ArrayLike<T>): boolean {
+    return toList<T>(...items).some(i => this.some(t => i === t));
+  }
 
   diff(others: ArrayLike<T>): List<T> {
     return this.filter(i => !others.includes(i));
@@ -51,11 +67,12 @@ export class List<T = unknown> extends Array<T> {
     return this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
   }
 
-  toJSON = (): Json[] =>
-    this.reduce((a, i) => {
+  toJSON(): Json[] {
+    return this.reduce((a, i) => {
       a.push(json.parse(i));
       return a;
     }, new Array<Json>());
+  }
 
   map<U>(f: (value: T, index: number, array: T[]) => U, params?: unknown): List<U> {
     return toList<U>(super.map(f, params));
@@ -85,14 +102,18 @@ export class List<T = unknown> extends Array<T> {
     return toList<T>(super.filter(p, params));
   }
 
-  sum = (p: (t: T) => number): number => this.reduce((sum: number, i) => sum + p(i), 0);
+  sum(p: (t: T) => number): number {
+    return this.reduce((sum: number, i) => sum + p(i), 0);
+  }
 
-  byId = (id: Id): T => this.first(i => asString((i as any).id) === asString(id));
+  byId(id: Id): T {
+    return this.first(i => asString((i as any).id) === asString(id));
+  }
 
-  add = (...items: ArrayLike<T>): this => {
+  add(...items: ArrayLike<T>): this {
     super.push(...toArray(...items));
     return this;
-  };
+  }
 
   concat(...items: ConcatArray<T>[]): List<T>;
   concat(...items: (T | ConcatArray<T>)[]): List<T>;
@@ -134,31 +155,33 @@ export class List<T = unknown> extends Array<T> {
     return this.reduce((l, v) => (isDefined(v) ? l.add(v) : l), toList<NonNullable<T>>());
   }
 
-  toObject = (key: keyof T, options: { deleteKey?: boolean } = {}): Record<string | number | symbol, T> =>
-    this.reduce((o: any, i) => {
+  toObject(key: keyof T, options: { deleteKey?: boolean } = {}): Record<string | number | symbol, T> {
+    return this.reduce((o: any, i) => {
       o[i[key]] = i;
       if (options.deleteKey) delete o[i[key]][key];
       return o;
     }, {});
+  }
 
-  toObjectList = (key: keyof T): Record<string | number | symbol, List<T>> =>
-    this.reduce((a, t) => {
+  toObjectList(key: keyof T): Record<string | number | symbol, List<T>> {
+    return this.reduce((a, t) => {
       const k = t[key] as unknown as string | number | symbol;
       a[k] = a[k] ?? toList();
       a[k].push(t);
       return a;
     }, {} as Record<string | number | symbol, List<T>>);
+  }
 
   orElse(...alt: ArrayLike<T>): Optional<List<T>> {
     return !isEmpty(this) ? this : !isEmpty(...alt) ? toList<T>(...alt) : undefined;
   }
 
-  weave = (insertFrom: T[], interval: number): this => {
+  weave(insertFrom: T[], interval: number): this {
     for (let i = interval, n = 0; i <= this.length && n < insertFrom.length; i += interval + 1) {
       this.splice(i, 0, insertFrom[n++]);
     }
     return this;
-  };
+  }
 
   slice(start?: number, end?: number): List<T> {
     return toList(super.slice(start, end));

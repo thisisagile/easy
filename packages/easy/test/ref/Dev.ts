@@ -1,4 +1,4 @@
-import { defined, Entity, gt, Id, Json, lt, required, Struct, toList, asList } from '../../src';
+import { asList, defined, Entity, gt, Id, Json, lt, required, Struct, toList } from '../../src';
 
 export class Certificate extends Struct {
   static readonly ScrumMaster = new Certificate({ id: 42, name: 'Certified scrum master' });
@@ -25,13 +25,19 @@ export class Dev extends Entity {
   @gt(1) @lt(10) readonly level: number = this.state.level ?? 1;
   readonly certificates = asList(Certificate, this.state.certificates);
 
-  title = (): string => `${this.name} is fluent in ${this.language}.`;
+  get title(): string {
+    return `${this.name} is fluent in ${this.language}.`;
+  }
 
   toString(): string {
     return this.name;
   }
 
-  is = (d: Dev): boolean => d.name === this.name;
+  is(d: Dev): boolean {
+    return d.name === this.name;
+  }
 
-  update = (add: Json): Dev => new Dev(this.merge(add));
+  update(add: Json): Dev {
+    return new Dev(this.merge(add));
+  }
 }

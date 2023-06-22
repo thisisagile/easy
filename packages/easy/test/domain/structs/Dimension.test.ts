@@ -32,7 +32,7 @@ describe('Dimension', () => {
 
   test('SizeInMM works', () => {
     const d = Dimension.with(10, UnitOfMeasurement.M);
-    expect(d.sizeInMM()).toBe(10000);
+    expect(d.inMilliMeters).toBe(10000);
   });
 
   test('gte works', () => {

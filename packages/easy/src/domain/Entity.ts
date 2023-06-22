@@ -8,10 +8,11 @@ export abstract class Entity extends Struct {
   @required() readonly created: Audit = new Audit(this.state.created);
   @required() readonly lastModified: Audit = new Audit(this.state.lastModified);
 
-  protected merge = (a: unknown): Json =>
-    json.merge(this, a, {
+  protected merge(a: unknown): Json {
+    return json.merge(this, a, {
       id: this.id,
       created: this.created,
       lastModified: new Audit(),
     });
+  }
 }

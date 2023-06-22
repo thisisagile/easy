@@ -24,6 +24,10 @@ describe('List', () => {
     }
   );
 
+  test('list and array are equal', () => {
+    expect(new List('test', 'test2')).toEqual(['test', 'test2']);
+  });
+
   test('asc and desc', () => {
     expect(devs.asc('name').last()).toMatchObject(Dev.Wouter);
     expect(devs.asc('name').first()).toMatchObject(Dev.Jeroen);

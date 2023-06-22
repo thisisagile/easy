@@ -8,7 +8,18 @@ export class Dimension extends Struct {
 
   static with = (value: number, uom: UnitOfMeasurement = UnitOfMeasurement.MM) => new Dimension({ value, uom });
 
-  sizeInMM = (): number => this.value * this.uom.mmMultiplier;
+  /**
+   @deprecated use inMilliMeters getter instead
+   */
+  sizeInMM(): number {
+    return this.inMilliMeters;
+  }
 
-  gte = (dim: Dimension): boolean => this.sizeInMM() >= dim.sizeInMM();
+  get inMilliMeters(): number {
+    return this.value * this.uom.mmMultiplier;
+  }
+
+  gte(dim: Dimension): boolean {
+    return this.inMilliMeters >= dim.inMilliMeters;
+  }
 }

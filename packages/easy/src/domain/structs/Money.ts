@@ -7,9 +7,15 @@ export class Money extends Struct {
   @required() readonly currency = Currency.byId<Currency>(this.state.currency);
   @required() readonly value = this.state.value as number;
 
-  add = (amount: number): Money => money(this.currency, this.value + amount);
-  subtract = (amount: number): Money => money(this.currency, this.value - amount);
-  times = (n: number): Money => money(this.currency, this.value * n);
+  add(amount: number): Money {
+    return money(this.currency, this.value + amount);
+  }
+  subtract(amount: number): Money {
+    return money(this.currency, this.value - amount);
+  }
+  times(n: number): Money {
+    return money(this.currency, this.value * n);
+  }
 
   toString(): string {
     return text(this.currency?.code)

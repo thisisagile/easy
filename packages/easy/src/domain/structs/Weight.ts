@@ -5,13 +5,31 @@ import { Struct } from '../Struct';
 export class Weight extends Struct {
   @required() readonly value = this.state.value as number;
   readonly uow = UnitOfWeight.byId<UnitOfWeight>(this.state.uow, UnitOfWeight.G);
-  sizeInG = (): number => this.value * this.uow.gMultiplier;
 
-  gte = (w: Weight): boolean => this.sizeInG() >= w.sizeInG();
-  lte = (w: Weight): boolean => this.sizeInG() <= w.sizeInG();
+  /**
+    @deprecated use inGrams getter instead
+   */
+  sizeInG(): number {
+    return this.inGrams;
+  }
 
-  between = (lower: Weight, upper = weight(Number.MAX_VALUE, this.uow)) => this.gte(lower) && this.lte(upper);
-  sum = (add: Weight): Weight => weight((this.sizeInG() + add.sizeInG()) / this.uow.gMultiplier, this.uow);
+  get inGrams(): number {
+    return this.value * this.uow.gMultiplier;
+  }
+
+  gte(w: Weight): boolean {
+    return this.inGrams >= w.inGrams;
+  }
+  lte(w: Weight): boolean {
+    return this.inGrams <= w.inGrams;
+  }
+
+  between(lower: Weight, upper = weight(Number.MAX_VALUE, this.uow)) {
+    return this.gte(lower) && this.lte(upper);
+  }
+  sum(add: Weight): Weight {
+    return weight((this.inGrams + add.inGrams) / this.uow.gMultiplier, this.uow);
+  }
 }
 
 export const weight = (value: number, uow?: UnitOfWeight): Weight => new Weight({ value, uow });
