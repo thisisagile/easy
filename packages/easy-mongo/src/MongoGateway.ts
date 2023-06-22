@@ -16,7 +16,7 @@ import {
   toArray,
 } from '@thisisagile/easy';
 import { Collection } from './Collection';
-import {stages} from "./Stages";
+import { stages } from './Stages';
 
 export class MongoGateway implements Gateway<FindOptions> {
   constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}

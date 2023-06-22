@@ -114,9 +114,8 @@ describe('View', () => {
     expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
 
-
   test('view with an InOut, and different type', () => {
-    const v2 = view<{name: string}>({ name: { col: 'Name', in: a => a.toUpperCase() } });
+    const v2 = view<{ name: string }>({ name: { col: 'Name', in: a => a.toUpperCase() } });
     const v = view({ first: { col: 'Company', in: v2 } });
     expect(v.from({ Company: { Name: 'ditisagile' } })).toStrictEqual({ first: { name: 'DITISAGILE' } });
   });
@@ -269,7 +268,6 @@ describe('View', () => {
     expect((c as any).email[0].value).toBe(emails[0]);
   });
 
-
   test('typed views', () => {
     type Student = { id: number; name: string; loan: number };
     const toStudent = view<Student>({
@@ -282,17 +280,16 @@ describe('View', () => {
 
   test('typed views with nested view', () => {
     type Student = { id: number; name: string; loans: Loan[] };
-    type Loan = { amount: number;  balance: number };
+    type Loan = { amount: number; balance: number };
     const toLoan = view<Loan>({
       amount: keepOr(3000),
       balance: keep,
     });
     const toStudent = view<Student>({
-      loans: {col: 'loans', in: toLoan},
+      loans: { col: 'loans', in: toLoan },
       name: s => `${s.name} Hoogendoorn`,
-
     }).fromSource;
-    const s = toStudent.from({ id: 3, loans: [{amount: 5000, bank: 'ING'}], name: 'Sander' });
-    expect(s).toMatchJson({ id: 3, loans: [{amount: 5000}], name: 'Sander Hoogendoorn' });
+    const s = toStudent.from({ id: 3, loans: [{ amount: 5000, bank: 'ING' }], name: 'Sander' });
+    expect(s).toMatchJson({ id: 3, loans: [{ amount: 5000 }], name: 'Sander Hoogendoorn' });
   });
 });

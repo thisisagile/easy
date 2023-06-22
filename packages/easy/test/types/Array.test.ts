@@ -1,4 +1,4 @@
-import {array, OneOrMore, toArray, toObject} from '../../src';
+import { array, OneOrMore, toArray, toObject } from '../../src';
 import { Dev } from '../ref';
 
 describe('toArray', () => {

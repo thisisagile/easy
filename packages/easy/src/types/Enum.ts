@@ -32,7 +32,9 @@ export abstract class Enum implements Validatable {
   }
 
   static byIds<E extends Enum>(ids: Id[] = []): List<E> {
-    return toList(ids).mapDefined(id => this.byId<E>(id)).distinct();
+    return toList(ids)
+      .mapDefined(id => this.byId<E>(id))
+      .distinct();
   }
 
   static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {

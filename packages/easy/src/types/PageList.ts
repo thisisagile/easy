@@ -37,15 +37,15 @@ export class PageList<T> extends List<T> {
   }
 
   get total(): Optional<number> {
-    return this._options?.total
+    return this._options?.total;
   }
 
   get sorts(): Optional<PlainSort> {
-    return this._options?.sorts
+    return this._options?.sorts;
   }
 
   get filters(): Optional<Filter[]> {
-    return this._options?.filters
+    return this._options?.filters;
   }
   get options(): Optional<PageListOptions> {
     return this._options;
@@ -148,13 +148,14 @@ export class PageList<T> extends List<T> {
 export const isPageList = <T>(l?: unknown): l is PageList<T> => isList<T>(l) && isA(l, 'total');
 
 export const toPageList = <T>(items: T[] = [], options?: Omit<PageOptions, 'sort'> & { total?: number }): PageList<T> =>
-  (choose(items)
-    .case(
-      i => i.length === 1 && isNumber(i[0]),
-      i => new PageList<T>().add(...i)
-    )
-    .else(i => new PageList<T>(...i)) as any)
-    .setPageOptions(options);
+  (
+    choose(items)
+      .case(
+        i => i.length === 1 && isNumber(i[0]),
+        i => new PageList<T>().add(...i)
+      )
+      .else(i => new PageList<T>(...i)) as any
+  ).setPageOptions(options);
 
 /* @deprecated No longer needed as the PageList is now a class that extends from List, use the map function */
 export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> => items.map(i => ofConstruct(c, i));

@@ -13,7 +13,9 @@ import {
   on,
   Optional,
   OneOrMore,
-  PartialRecord, use, toArray
+  PartialRecord,
+  use,
+  toArray,
 } from '@thisisagile/easy';
 import { toMongoType } from './Utils';
 
@@ -22,7 +24,7 @@ export const desc = -1;
 export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
-const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
+const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
 
 export const stages = {
   root: '$$ROOT',
@@ -30,7 +32,8 @@ export const stages = {
   id: '_id',
   decode: {
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
-    fieldsArrays: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => r[k] = use(toArray(v), vs => vs.map(v => isFunction(v) ? v(k) : v))), {} as any),
+    fieldsArrays: (f: Filter) =>
+      Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = use(toArray(v), vs => vs.map(v => (isFunction(v) ? v(k) : v))))), {} as any),
     id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
   },
   match: {
@@ -43,7 +46,7 @@ export const stages = {
     isIn: (value: string | unknown[], separator = ',') => ({ $in: isString(value) ? value.split(separator) : value }),
     after: (date: unknown) => stages.match.gte(toMongoType(date)),
     before: (date: unknown) => stages.match.lt(toMongoType(date)),
-    anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: "i" })
+    anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: 'i' }),
   },
   sort: {
     sort: ($sort: Record<string, typeof asc | typeof desc>): Optional<Filter> => (isPresent($sort) ? { $sort } : undefined),
@@ -79,8 +82,10 @@ export const stages = {
     take: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.take, { $limit: asNumber(o.take) }),
   },
   project: {
-    include: (...includes: (string | Record<string, 1>)[]): Optional<Filter> => ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 1} : b) }), {}) })),
-    exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> => ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? {[b]: 0} : b) }), {}) }))
+    include: (...includes: (string | Record<string, 1>)[]): Optional<Filter> =>
+      ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 1 } : b) }), {}) })),
+    exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> =>
+      ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 0 } : b) }), {}) })),
   },
   replaceWith: {
     replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),
@@ -90,8 +95,8 @@ export const stages = {
   },
   facet: {
     facet: (f: Record<string, OneOrMore<Get<Optional<Filter>, string>>>) => ({ $facet: stages.decode.fieldsArrays(f) }),
-    unwind: (from?: string) => (f?: string) => ({ $unwind: `$${from ?? f}`}),
-    count: (from?: string) => (f?: string) => ({ $sortByCount: `$${from ?? f}`}),
+    unwind: (from?: string) => (f?: string) => ({ $unwind: `$${from ?? f}` }),
+    count: (from?: string) => (f?: string) => ({ $sortByCount: `$${from ?? f}` }),
     data: () => [],
-  }
+  },
 };
