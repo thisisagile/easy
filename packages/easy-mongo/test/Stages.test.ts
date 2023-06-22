@@ -186,7 +186,7 @@ describe('Stages', () => {
   });
 
   // Search
-  const { auto, search } = stages.search;
+  const { auto, fuzzy, search } = stages.search;
 
   test('auto', () => {
     expect(search({ name: auto('42') })).toStrictEqual({
@@ -195,6 +195,31 @@ describe('Stages', () => {
           query: ['42'],
           path: 'name',
         },
+      },
+    });
+  });
+
+
+  test('fuzzy', () => {
+    expect(search({name: fuzzy('42')})).toStrictEqual({
+      $search: {
+        text: {
+          query: '42',
+          path: 'name',
+        },
+        fuzzy: {}
+      },
+    });
+  });
+
+  test('fuzzy with wildcard', () => {
+    expect(search({wildcard: fuzzy('42')})).toStrictEqual({
+      $search: {
+        text: {
+          query: '42',
+          path: {wildcard: "*"},
+        },
+        fuzzy: {}
       },
     });
   });
