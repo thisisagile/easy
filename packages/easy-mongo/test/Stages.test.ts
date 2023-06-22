@@ -207,19 +207,23 @@ describe('Stages', () => {
           query: '42',
           path: 'name',
         },
-        fuzzy: {}
+        fuzzy: {
+          maxEdits: 1
+        }
       },
     });
   });
 
   test('fuzzy with wildcard', () => {
-    expect(search({wildcard: fuzzy('42')})).toStrictEqual({
+    expect(search({wildcard: fuzzy('42', 2)})).toStrictEqual({
       $search: {
         text: {
           query: '42',
           path: {wildcard: "*"},
         },
-        fuzzy: {}
+        fuzzy: {
+          maxEdits: 2
+        }
       },
     });
   });

@@ -72,7 +72,7 @@ export const stages = {
   search: {
     search: (f: Record<string, Get<Filter, string>>) => ({ $search: stages.decode.id(f) }),
     auto: (value?: Id) => (key: string) => ({ autocomplete: { path: key, query: [value] } }),
-    fuzzy: (value?: string) => (key?: string) =>  ({text: {query: value, path: key === "wildcard" ? { wildcard: "*" } : key}, fuzzy: {}})
+    fuzzy: (value?: string, maxEdits = 1) => (key?: string) =>  ({text: {query: value, path: key === "wildcard" ? { wildcard: "*" } : key}, fuzzy: { maxEdits }})
   },
   set: {
     set: (f: Record<string, Get<Filter, string>>) => ({ $set: stages.decode.fields(f) }),
