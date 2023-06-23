@@ -30,7 +30,8 @@ export const lucene = {
         text: (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>) => (path: string) => ifDefined(value, v => ({
             text: {
                 path,
-                query: toArray(v), ...ifDefined(fuzzy, {fuzzy})
+                query: v,
+                ...ifDefined(fuzzy, {fuzzy})
             }
         })),
         lt: (value: unknown) => (path: string) => ifDefined(value, lt => ({range: {path, lt}})),
@@ -47,5 +48,4 @@ export const lucene = {
             }
         }),
     }
-    // compound: ()
 };

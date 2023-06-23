@@ -14,7 +14,7 @@ describe('Lucene', () => {
 
     test('text single value', () => {
         const t = text("42")('size');
-        expect(t).toStrictEqual({text: {path: "size", query: ['42']}});
+        expect(t).toStrictEqual({text: {path: "size", query: '42'}});
     });
 
     test('text multiple values', () => {
@@ -102,17 +102,17 @@ describe('Lucene', () => {
 
     test('field', () => {
         const h = lucene.operations.clause({brand: text('apple')});
-        expect(h).toStrictEqual({text: { path: 'brand', query: ['apple']}});
+        expect(h).toStrictEqual({text: { path: 'brand', query: 'apple'}});
     });
 
     test('should search, single clause', () => {
        const s = search({should: {brand: text('apple')}});
-       expect(s).toStrictEqual({$search: { compound: { should: { text: {path: 'brand', query: ['apple']}}}}});
+       expect(s).toStrictEqual({$search: { compound: { should: { text: {path: 'brand', query: 'apple'}}}}});
     });
 
     test('should search, multiple clauses', () => {
        const s = search({should: [{brand: text('apple')}, {size: lt(42)}]});
-       expect(s).toStrictEqual({$search: { compound: { should: [{ text: {path: 'brand', query: ['apple']}}, { range: {path: 'size', lt: 42}}]}}});
+       expect(s).toStrictEqual({$search: { compound: { should: [{ text: {path: 'brand', query: 'apple'}}, { range: {path: 'size', lt: 42}}]}}});
     });
 });
 
