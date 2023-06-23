@@ -5,7 +5,7 @@ describe('Lucene', () => {
 
     // Operations
 
-    const { text, lt, lte, gt, gte } = lucene.operations;
+    const {text, lt, lte, gt, gte, before, after, between} = lucene.operations;
 
     test('text undefined', () => {
         const t = text(undefined)('size');
@@ -70,6 +70,29 @@ describe('Lucene', () => {
     test('gte', () => {
         const v = gte(42)("size");
         expect(v).toStrictEqual({range: {path: "size", gte: 42}});
+    })
+
+    const date = "2023-06-23T08:38:38.938Z";
+    const date2 = "2024-06-23T08:38:38.938Z";
+
+    test('before', () => {
+        const d = before(date)('start');
+        expect(d).toStrictEqual({range: {path: 'start', lt: new Date(date)}})
+    })
+
+    test('after', () => {
+        const d = after(date)('start');
+        expect(d).toStrictEqual({range: {path: 'start', gte: new Date(date)}})
+    })
+
+    test('between with numbers', () => {
+        const d = between(41, 52)('size');
+        expect(d).toStrictEqual({range: {path: 'size', gte: 41, lt: 52}})
+    })
+
+    test('between with dates', () => {
+        const d = between(date, date2)('start');
+        expect(d).toStrictEqual({range: {path: 'start', gte: new Date(date), lt: new Date(date2)}})
     })
 });
 
