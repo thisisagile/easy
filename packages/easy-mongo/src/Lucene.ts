@@ -1,4 +1,4 @@
-import {ifDefined, isArray, OneOrMore, toArray} from "@thisisagile/easy";
+import {ifDefined, isArray, isFunction, OneOrMore, toArray} from "@thisisagile/easy";
 import {toMongoType} from "./Utils";
 
 type FuzzyOptions = {
@@ -18,7 +18,7 @@ type Compound = {
 
 export const lucene = {
     operations: {
-        clause: (cl: Clause) => Object.entries(cl).reduce((res, [k, v]) => v(k), {} as any),
+        clause: (cl: Clause) => Object.entries(cl).reduce((res, [k, v]) => isFunction(v) ? v(k) : v, {} as any),
         search: (cmp: Partial<Compound>) => ({
             $search: {
                 compound: Object.entries(cmp).reduce((cp, [k, v]) => ({
