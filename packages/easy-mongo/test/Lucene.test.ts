@@ -5,7 +5,7 @@ describe('Lucene', () => {
 
     // Operations
 
-    const {text, lt, lte, gt, gte, before, after, between, search} = lucene.operations;
+    const {text, lt, lte, gt, gte, before, after, between, search, clauses} = lucene;
 
     test('text undefined', () => {
         const t = text(undefined)('size');
@@ -96,23 +96,74 @@ describe('Lucene', () => {
     })
 
     test('empty search', () => {
-       const s = search({});
-       expect(s).toStrictEqual({$search: { compound: {}}});
+        const s = search({});
+        expect(s).toStrictEqual({$search: {compound: {}}});
     });
 
     test('field', () => {
-        const h = lucene.operations.clause({brand: text('apple')});
-        expect(h).toStrictEqual({text: { path: 'brand', query: 'apple'}});
+        const h = lucene.clause({brand: text('apple')});
+        expect(h[0]).toStrictEqual({text: {path: 'brand', query: 'apple'}});
     });
 
     test('should search, single clause', () => {
-       const s = search({should: {brand: text('apple')}});
-       expect(s).toStrictEqual({$search: { compound: { should: { text: {path: 'brand', query: 'apple'}}}}});
+        const s = search({should: {brand: text('apple')}});
+        expect(s).toStrictEqual({$search: {compound: {should: [{text: {path: 'brand', query: 'apple'}}]}}});
+    });
+
+    test('should search, single clause and index', () => {
+        const s = search({should: {brand: text('apple')}}, 'data.nl');
+        expect(s).toStrictEqual({
+            $search: {
+                index: 'data.nl',
+                compound: {should: [{text: {path: 'brand', query: 'apple'}}]}
+            }
+        });
     });
 
     test('should search, multiple clauses', () => {
-       const s = search({should: [{brand: text('apple')}, {size: lt(42)}]});
-       expect(s).toStrictEqual({$search: { compound: { should: [{ text: {path: 'brand', query: 'apple'}}, { range: {path: 'size', lt: 42}}]}}});
+        const s = search({should: [{brand: text('apple')}, {size: lt(42)}]});
+        expect(s).toStrictEqual({
+            $search: {
+                compound: {
+                    should: [{
+                        text: {
+                            path: 'brand',
+                            query: 'apple'
+                        }
+                    }, {range: {path: 'size', lt: 42}}]
+                }
+            }
+        });
     });
+
+    test('should search, multiple clauses in one object', () => {
+        const s = search({should: {brand: text('apple'), size: lt(42)}});
+        expect(s).toStrictEqual({
+            $search: {
+                compound: {
+                    should: [{
+                        text: {
+                            path: 'brand',
+                            query: 'apple'
+                        }
+                    }, {range: {path: 'size', lt: 42}}]
+                }
+            }
+        });
+    });
+
+    test('clauses', () => {
+        const s = clauses({brand: text('42')});
+        expect(s[0]).toStrictEqual({text: {path: 'brand', query: '42'}});
+
+        const s2 = clauses({brand: text('42'), slotId: text([42, 43])});
+        expect(s2[0]).toStrictEqual({text: {path: 'brand', query: '42'}});
+        expect(s2[1]).toStrictEqual({text: {path: 'slotId', query: [42, 43]}});
+
+        const s3 = clauses([{brand: text('42')}, {slotId: text([42, 43])}]);
+        expect(s3[0]).toStrictEqual({text: {path: 'brand', query: '42'}});
+        expect(s3[1]).toStrictEqual({text: {path: 'slotId', query: [42, 43]}});
+    })
+
 });
 

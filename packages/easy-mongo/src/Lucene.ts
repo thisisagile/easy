@@ -1,4 +1,4 @@
-import {ifDefined, isArray, isFunction, OneOrMore, toArray} from "@thisisagile/easy";
+import {Func, ifDefined, isFunction, meta, on, OneOrMore, Optional, toArray, toList} from "@thisisagile/easy";
 import {toMongoType} from "./Utils";
 
 type FuzzyOptions = {
@@ -7,45 +7,44 @@ type FuzzyOptions = {
     maxExpansions: number
 }
 
-type Clause = Record<string, (path: string) => object | undefined>;
+export type Operator = Func<Optional<object>, string>;
+export type Clause = object | Operator;
+export type Clauses = Record<string, Clause>;
 
 type Compound = {
-    must?: OneOrMore<Clause>,
-    mustNot?: OneOrMore<Clause>,
-    should?: OneOrMore<Clause>,
-    filter?: OneOrMore<Clause>
+    must: OneOrMore<Clauses>,
+    should: OneOrMore<Clauses>,
+    mustNot: OneOrMore<Clauses>,
+    filter: OneOrMore<Clauses>
 }
 
 export const lucene = {
-    operations: {
-        clause: (cl: Clause) => Object.entries(cl).reduce((res, [k, v]) => isFunction(v) ? v(k) : v, {} as any),
-        search: (cmp: Partial<Compound>) => ({
-            $search: {
-                compound: Object.entries(cmp).reduce((cp, [k, v]) => ({
-                    ...cp,
-                    [k]: isArray(v) ? toArray(v).map(i => lucene.operations.clause(i)) : lucene.operations.clause(v)
-                }), {} as any)
-            }
-        }),
-        text: (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>) => (path: string) => ifDefined(value, v => ({
-            text: {
-                path,
-                query: v,
-                ...ifDefined(fuzzy, {fuzzy})
-            }
-        })),
-        lt: (value: unknown) => (path: string) => ifDefined(value, lt => ({range: {path, lt}})),
-        lte: (value: unknown) => (path: string) => ifDefined(value, lte => ({range: {path, lte}})),
-        gt: (value: unknown) => (path: string) => ifDefined(value, gt => ({range: {path, gt}})),
-        gte: (value: unknown) => (path: string) => ifDefined(value, gte => ({range: {path, gte}})),
-        after: (date: unknown) => lucene.operations.gte(toMongoType(date)),
-        before: (date: unknown) => lucene.operations.lt(toMongoType(date)),
-        between: (after: unknown, before: unknown) => (path: string) => ({
-            range: {
-                path,
-                gte: toMongoType(after),
-                lt: toMongoType(before)
-            }
-        }),
-    }
+    clause: (c: Clauses) => meta(c).entries<Clause>().reduce((res, [k, v]) => res.add(isFunction(v) ? v(k) : v), toList()),
+    clauses: (cs: OneOrMore<Clauses>) => toArray(cs).flatMap(c => lucene.clause(c)),
+    search: (c: Partial<Compound>, index?: string) => ({
+        $search: {
+            ...ifDefined(index, ({index})),
+            compound: meta(c).entries<Clauses>().reduce((res, [k, v]) => on(res, r => r[k] = lucene.clauses(v)), {} as any)
+        }
+    }),
+    text: (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>): Operator => (path: string) => ifDefined(value, v => ({
+        text: {
+            path,
+            query: v,
+            ...ifDefined(fuzzy, {fuzzy})
+        }
+    })),
+    lt: (value: unknown): Operator => (path: string) => ifDefined(value, lt => ({range: {path, lt}})),
+    lte: (value: unknown): Operator => (path: string) => ifDefined(value, lte => ({range: {path, lte}})),
+    gt: (value: unknown): Operator => (path: string) => ifDefined(value, gt => ({range: {path, gt}})),
+    gte: (value: unknown): Operator => (path: string) => ifDefined(value, gte => ({range: {path, gte}})),
+    after: (date: unknown): Operator => lucene.gte(toMongoType(date)),
+    before: (date: unknown): Operator => lucene.lt(toMongoType(date)),
+    between: (after: unknown, before: unknown): Operator => (path: string) => ({
+        range: {
+            path,
+            gte: toMongoType(after),
+            lt: toMongoType(before)
+        }
+    }),
 };
