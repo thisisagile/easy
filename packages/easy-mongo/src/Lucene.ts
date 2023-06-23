@@ -1,4 +1,4 @@
-import {ifDefined, OneOrMore, toArray} from "@thisisagile/easy";
+import {ifDefined, isArray, OneOrMore, toArray} from "@thisisagile/easy";
 import {toMongoType} from "./Utils";
 
 type FuzzyOptions = {
@@ -7,13 +7,26 @@ type FuzzyOptions = {
     maxExpansions: number
 }
 
+type Clause = Record<string, (path: string) => object | undefined>;
+
+type Compound = {
+    must?: OneOrMore<Clause>,
+    mustNot?: OneOrMore<Clause>,
+    should?: OneOrMore<Clause>,
+    filter?: OneOrMore<Clause>
+}
+
 export const lucene = {
-    // operators: {
-    //     must:
-    //     should:
-    //     filter:
-    // },
     operations: {
+        clause: (cl: Clause) => Object.entries(cl).reduce((res, [k, v]) => v(k), {} as any),
+        search: (cmp: Partial<Compound>) => ({
+            $search: {
+                compound: Object.entries(cmp).reduce((cp, [k, v]) => ({
+                    ...cp,
+                    [k]: isArray(v) ? toArray(v).map(i => lucene.operations.clause(i)) : lucene.operations.clause(v)
+                }), {} as any)
+            }
+        }),
         text: (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>) => (path: string) => ifDefined(value, v => ({
             text: {
                 path,
@@ -35,4 +48,4 @@ export const lucene = {
         }),
     }
     // compound: ()
-}
+};

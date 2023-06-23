@@ -5,7 +5,7 @@ describe('Lucene', () => {
 
     // Operations
 
-    const {text, lt, lte, gt, gte, before, after, between} = lucene.operations;
+    const {text, lt, lte, gt, gte, before, after, between, search} = lucene.operations;
 
     test('text undefined', () => {
         const t = text(undefined)('size');
@@ -94,5 +94,25 @@ describe('Lucene', () => {
         const d = between(date, date2)('start');
         expect(d).toStrictEqual({range: {path: 'start', gte: new Date(date), lt: new Date(date2)}})
     })
+
+    test('empty search', () => {
+       const s = search({});
+       expect(s).toStrictEqual({$search: { compound: {}}});
+    });
+
+    test('field', () => {
+        const h = lucene.operations.clause({brand: text('apple')});
+        expect(h).toStrictEqual({text: { path: 'brand', query: ['apple']}});
+    });
+
+    test('should search, single clause', () => {
+       const s = search({should: {brand: text('apple')}});
+       expect(s).toStrictEqual({$search: { compound: { should: { text: {path: 'brand', query: ['apple']}}}}});
+    });
+
+    test('should search, multiple clauses', () => {
+       const s = search({should: [{brand: text('apple')}, {size: lt(42)}]});
+       expect(s).toStrictEqual({$search: { compound: { should: [{ text: {path: 'brand', query: ['apple']}}, { range: {path: 'size', lt: 42}}]}}});
+    });
 });
 
