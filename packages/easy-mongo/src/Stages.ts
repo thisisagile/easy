@@ -2,7 +2,6 @@ import {Filter, FindOptions} from './MongoProvider';
 import {
     asNumber,
     asString,
-    Func,
     Get,
     Id,
     ifDefined,
@@ -26,6 +25,16 @@ export const desc = -1;
 export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
+class FilterBuilder<Options> {
+    constructor(private filters: Partial<Record<keyof Options, (value: unknown) => Filter>>) {
+    }
+
+    from = (q: Partial<Options> = {}): Filter =>
+        stages.match.match(meta(q)
+            .entries()
+            .reduce((acc, [key, value]) => ({...acc, ...ifDefined(this.filters[key as keyof Options], f => f(value))}), {}));
+}
+
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
 
 export const stages = {
@@ -40,7 +49,7 @@ export const stages = {
     },
     match: {
         match: (f: Record<string, Get<Optional<Filter>, string>>) => ({$match: stages.decode.fields(f)}),
-        filter: (filters: Record<string, Func<Filter, string>>, o: object) => ({$match: meta(o).entries<string>().reduce((a, [k, v]) => ({...a, ...ifDefined(filters[k], f => f(v))}), {})}),
+        filter: <Options>(filters: Partial<Record<keyof Options, (value: unknown) => Filter>>) => new FilterBuilder<Options>(filters),
         gt: (value: Filter) => ({$gt: value}),
         gte: (value: Filter) => ({$gte: value}),
         lt: (value: Filter) => ({$lt: value}),

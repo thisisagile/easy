@@ -1,6 +1,4 @@
 import {stages} from '../src';
-import {Func} from '@thisisagile/easy';
-import {Filter} from '@thisisagile/easy-mongo';
 import {fits} from '@thisisagile/easy-test';
 
 describe('Stages', () => {
@@ -90,17 +88,19 @@ describe('Stages', () => {
         });
     });
 
+    type TestFilter = { ids?: string; q?: string };
+
     // Match filter
-    const filters: Record<string, Func<Filter, string>> = {
-        ids: v => ({ id: isIn(v) }),
-        q: (v: any) => ({ $text: { $search: v } }),
-    };
+    const filters = filter<TestFilter>({
+        ids: v => ({id: isIn(v)}),
+        q: (v: any) => ({$text: {$search: v}}),
+    });
 
     test('match filter', () => {
-        expect(filter(filters, {ids: '43,44', q: 'sander'})).toStrictEqual({
+        expect(filters.from({ids: '43,44', q: 'sander'})).toStrictEqual({
             $match: {
-                id: { $in: ['43', '44'] },
-                $text: { $search: 'sander' }
+                id: {$in: ['43', '44']},
+                $text: {$search: 'sander'}
             }
         });
     });
