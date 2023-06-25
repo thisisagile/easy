@@ -2,6 +2,7 @@ import {Filter, FindOptions} from './MongoProvider';
 import {
     asNumber,
     asString,
+    Func,
     Get,
     Id,
     ifDefined,
@@ -39,7 +40,7 @@ export const stages = {
     },
     match: {
         match: (f: Record<string, Get<Optional<Filter>, string>>) => ({$match: stages.decode.fields(f)}),
-        filter: (filters: Record<string, (value: string) => Filter>, o: object) => ({$match: meta(o).entries<string>().reduce((a, [k, v]) => ({...a, ...ifDefined(filters[k], f => f(v))}), {})}),
+        filter: (filters: Record<string, Func<Filter, string>>, o: object) => ({$match: meta(o).entries<string>().reduce((a, [k, v]) => ({...a, ...ifDefined(filters[k], f => f(v))}), {})}),
         gt: (value: Filter) => ({$gt: value}),
         gte: (value: Filter) => ({$gte: value}),
         lt: (value: Filter) => ({$lt: value}),

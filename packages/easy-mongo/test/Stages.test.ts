@@ -1,4 +1,5 @@
 import {stages} from '../src';
+import {Func} from '@thisisagile/easy';
 import {Filter} from '@thisisagile/easy-mongo';
 import {fits} from '@thisisagile/easy-test';
 
@@ -89,9 +90,8 @@ describe('Stages', () => {
         });
     });
 
-
     // Match filter
-    const filters: Record<string, (v: string) => Filter> = {
+    const filters: Record<string, Func<Filter, string>> = {
         ids: v => ({ id: isIn(v) }),
         q: (v: any) => ({ $text: { $search: v } }),
     };
@@ -104,7 +104,6 @@ describe('Stages', () => {
             }
         });
     });
-
 
     // Sort
     const {sort, asc, desc} = stages.sort;
