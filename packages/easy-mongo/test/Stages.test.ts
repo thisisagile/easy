@@ -1,4 +1,5 @@
 import {stages} from '../src';
+import {Filter} from '@thisisagile/easy-mongo';
 import {fits} from '@thisisagile/easy-test';
 
 describe('Stages', () => {
@@ -19,7 +20,7 @@ describe('Stages', () => {
     });
 
     // Match
-    const {match, gt, gte, lt, lte, isIn, after, before, anywhere} = stages.match;
+    const {match, filter, gt, gte, lt, lte, isIn, after, before, anywhere} = stages.match;
 
     test('one filter', () => {
         expect(match({id: 42})).toStrictEqual({$match: {id: 42}});
@@ -87,6 +88,23 @@ describe('Stages', () => {
             $match: {classicId: {$in: ['3', '4']}},
         });
     });
+
+
+    // Match filter
+    const filters: Record<string, (v: string) => Filter> = {
+        ids: v => ({ id: isIn(v) }),
+        q: (v: any) => ({ $text: { $search: v } }),
+    };
+
+    test('match filter', () => {
+        expect(filter(filters, {ids: '43,44', q: 'sander'})).toStrictEqual({
+            $match: {
+                id: { $in: ['43', '44'] },
+                $text: { $search: 'sander' }
+            }
+        });
+    });
+
 
     // Sort
     const {sort, asc, desc} = stages.sort;
