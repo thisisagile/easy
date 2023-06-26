@@ -230,6 +230,10 @@ describe('Stages', () => {
         });
     });
 
+    test('fuzzy with undefined', () => {
+        expect(search({name: fuzzy(undefined)})).toBeUndefined();
+    });
+
     test('fuzzy with wildcard', () => {
         expect(search({wildcard: fuzzy('42', 2)})).toStrictEqual({
             $search: {
@@ -242,6 +246,10 @@ describe('Stages', () => {
                 },
             }
         });
+    });
+
+    test('fuzzy with wildcard and undefined', () => {
+        expect(search({wildcard: fuzzy(undefined, 2)})).toBeUndefined();
     });
 
     // Set
