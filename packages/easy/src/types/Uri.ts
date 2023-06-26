@@ -44,6 +44,7 @@ const toRoute = (...segments: Segment[]): string =>
 
 export type Uri = {
   id: (id?: unknown) => Uri;
+  ids: (ids: OneOrMore<unknown>) => Uri;
   query: (q?: unknown) => Uri;
   skip: (n?: number) => Uri;
   take: (n?: number) => Uri;
