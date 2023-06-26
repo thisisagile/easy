@@ -26,13 +26,12 @@ export type Accumulators = "$sum" | "$count" | "$avg" | "$first" | "$last" | "$m
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 class FilterBuilder<Options> {
-  constructor(private filters: Partial<Record<keyof Options, (value: unknown) => Filter>>) {
+  constructor(private filters: {[K in keyof Options]: (v: Options[K]) => Filter}) {
   }
-
   from = (q: Partial<Options> = {}): Filter =>
     stages.match.match(meta(q)
       .entries()
-      .reduce((acc, [key, value]) => ({ ...acc, ...ifDefined(this.filters[key as keyof Options], f => f(value)) }), {}));
+      .reduce((acc, [key, value]) => ({ ...acc, ...ifDefined(this.filters[key as keyof Options], f => f(value as Options[keyof Options])) }), {}));
 }
 
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&").replace(/-/g, "\\x2d");
@@ -49,7 +48,7 @@ export const stages = {
   },
   match: {
     match: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $match: stages.decode.fields(f) }),
-    filter: <Options>(filters: Partial<Record<keyof Options, (value: unknown) => Filter>>) => new FilterBuilder<Options>(filters),
+    filter: <Options>(filters: {[K in keyof Options]: (v: Options[K]) => Filter}) => new FilterBuilder<Options>(filters),
     gt: (value: Filter) => ({ $gt: value }),
     gte: (value: Filter) => ({ $gte: value }),
     lt: (value: Filter) => ({ $lt: value }),
