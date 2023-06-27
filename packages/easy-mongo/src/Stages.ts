@@ -25,7 +25,7 @@ export const desc = -1;
 export type Accumulators = "$sum" | "$count" | "$avg" | "$first" | "$last" | "$min" | "$max" | "$push";
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
-class FilterBuilder<Options> {
+export class FilterBuilder<Options> {
   constructor(private filters: {[K in keyof Options]: (v: Options[K]) => Filter}) {
   }
   from = (q: Partial<Options> = {}): Filter =>
