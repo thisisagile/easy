@@ -1,4 +1,4 @@
-import { ArrayLike } from '@thisisagile/easy';
+import { ArrayLike} from "./Types";
 
 export const isDefined = <T = unknown>(o?: T): boolean => o !== undefined && o !== null;
 
