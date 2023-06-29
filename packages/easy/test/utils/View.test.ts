@@ -207,7 +207,6 @@ describe('View', () => {
   test('simple string column', () => {
     const v = view({ first: 'FirstName' });
     expect(v.viewers).toHaveLength(1);
-    // expect(v.viewers[0]?.in?.key).toBe('first');
     expect(v.from({ FirstName: 'Sander' })).toStrictEqual({ first: 'Sander' });
   });
 

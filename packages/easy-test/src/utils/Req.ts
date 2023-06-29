@@ -1,5 +1,5 @@
 import { asNumber, isDefined } from './Utils';
-import { Id, Json, JsonValue, OneOrMore, Text } from "./Types";
+import { Id, Json, JsonValue, OneOrMore, Text } from './Types';
 
 export class Req {
   readonly skip = isDefined(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
