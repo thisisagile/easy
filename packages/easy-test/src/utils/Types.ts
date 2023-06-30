@@ -1,5 +1,9 @@
 import { asString, isFunction } from './Utils';
 
+export type OneOrMore<T> = T | Array<T>;
+
+export type ArrayLike<T> = OneOrMore<T>[];
+
 export type Constructor<T> = { new (...args: any[]): T };
 
 export type Message<P> = Text | ((...params: P[]) => Text);
