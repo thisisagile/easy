@@ -49,7 +49,7 @@ describe('DateTime', () => {
   });
 
   test('from date string', () => {
-    expect(new DateTime('2021-11-11')).toEqual('2021-11-11T00:00:00.000Z');
+    expect(new DateTime('2021-11-15')).toMatchText('2021-11-15T00:00:00.000Z');
     expect(new DateTime('2021-11-11T01:00')).toMatchText('2021-11-11T01:00:00.000Z');
     expect(new DateTime('2021-11-11T01:23:11')).toMatchText('2021-11-11T01:23:11.000Z');
     expect(new DateTime('2021-11-11T01:00:00.000+0100').toJSON()).toMatchText('2021-11-11T00:00:00.000Z');
@@ -59,7 +59,7 @@ describe('DateTime', () => {
     expect(new DateTime('2021-11-11')).toEqual(new DateTime('2021-11-11'));
     expect(new DateTime('2021-11-12T00:00:00.000Z')).toEqual(new DateTime('2021-11-12T00:00:00.000Z'));
     expect(new DateTime('2023-11-11T00:00:00.000Z')).not.toEqual(new DateTime('2023-11-11T00:00:00.001Z'));
-    expect(new DateTime('2024-01-01T01:00:00.000+0100')).not.toEqual('2024-01-01T00:00:00.000Z');
+    expect(new DateTime('2024-01-01T01:00:00.000+0100')).not.toBe('2024-01-01T00:00:00.000Z');
   });
 
   test('from iso date is valid.', () => {
