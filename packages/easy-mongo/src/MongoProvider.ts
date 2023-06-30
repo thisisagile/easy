@@ -59,7 +59,7 @@ export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
   protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
-  aggregate = this.group;
+  readonly group = this.aggregate;
 
   constructor(readonly coll: Collection, protected client?: Promise<MongoClient>) {}
 
@@ -118,7 +118,7 @@ export class MongoProvider {
     return this.find({ [key]: value }, options);
   }
 
-  group(qs: Filter<any>[]): Promise<PageList<Json>> {
+  aggregate(qs: Filter<any>[]): Promise<PageList<Json>> {
     return this.collection()
       .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
       .then(res => this.toArray(res));
