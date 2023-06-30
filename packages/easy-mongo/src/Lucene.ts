@@ -27,9 +27,19 @@ export const lucene = {
       compound: entries(c).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {} as any)
     }
   }),
+  fuzzy:
+    (value?: OneOrMore<unknown>, fuzzy: Partial<FuzzyOptions> ={}): Operator =>
+      (path: string ) =>
+        ifDefined(value, v => ({
+          text: {
+            path: { wildcard: '*' },
+            query: v,
+            ...ifDefined(fuzzy, { fuzzy })
+          }
+        })),
   text:
     (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>): Operator =>
-      (path: string) =>
+      (path: string ) =>
         ifDefined(value, v => ({
           text: {
             path,
