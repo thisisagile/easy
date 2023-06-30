@@ -43,6 +43,12 @@ describe('PageList', () => {
     expect(pl.meta).toEqual({ take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{field: 'name', values: [{value: 3}]}] });
   });
 
+  test('meta sorts as string[]', () => {
+    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: ['name-asc', 'price-desc'] });
+    expect(pl).toBeDefined();
+    expect(pl.meta).toEqual({ take: 5, skip: 1, total: 42, sorts: ['name-asc', 'price-desc'] });
+  });
+
   test('toPageList empty list', () => {
     const pl = toPageList([]);
     expect(pl).toHaveLength(0);
