@@ -47,6 +47,17 @@ export class PageList<T> extends List<T> {
   get filters(): Optional<Filter[]> {
     return this._options?.filters;
   }
+
+  get meta(): PageListOptions {
+    return {
+      take: this.take,
+      skip: this.skip,
+      total: this.total,
+      sorts: this.sorts,
+      filters: this.filters,
+    };
+  }
+
   get options(): Optional<PageListOptions> {
     return this._options;
   }
