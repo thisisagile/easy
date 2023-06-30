@@ -3,7 +3,7 @@ import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
-import { meta } from './Meta';
+import { entries, meta } from "./Meta";
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
@@ -114,8 +114,7 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
   take = (items?: number): this => this.set(EasyUri.take, items);
 
   expand(props: Partial<Props>): this {
-    return meta(props)
-      .entries()
+    return entries(props)
       .filter(([_, v]) => isNotEmpty(v))
       .reduce((u, [k, v]) => (isBoolean(v) ? u.set(uri.boolean(k), v) : u.set(uri.query(k), toArray(v).join(','))), this);
   }
