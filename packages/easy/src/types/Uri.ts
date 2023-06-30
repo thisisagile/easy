@@ -116,6 +116,7 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
   expand(props: Partial<Props>): this {
     return meta(props)
       .entries()
+      .filter(([_, v]) => isNotEmpty(v))
       .reduce((u, [k, v]) => (isBoolean(v) ? u.set(uri.boolean(k), v) : u.set(uri.query(k), toArray(v).join(','))), this);
   }
 }

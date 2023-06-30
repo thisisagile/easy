@@ -122,12 +122,23 @@ describe('Uri', () => {
     expect(DevUri.Developers.query('test').skip(0).take(10)).toMatchRoute(`${host}/dev/developers?q=test&skip=0&take=10`);
   });
 
-  test('empty options', () => {
+  const baseUri = 'https://www.easy.io/dev/developers';
+  test('Expand with empty options', () => {
     const u = DevUri.Developers.expand({});
-    expect(u).toMatchText('https://www.easy.io/dev/developers');
+    expect(u).toMatchText(baseUri);
   });
 
-  test('default options', () => {
+  test('Expand with undefined value', () => {
+    const u = DevUri.Developers.expand({ q: undefined });
+    expect(u).toMatchText(baseUri);
+  });
+
+  test('Expand with empty value', () => {
+    const u = DevUri.Developers.expand({ q: '' });
+    expect(u).toMatchText(baseUri);
+  });
+
+  test('Expand with default options', () => {
     const u = DevUri.Developers.expand({ q: 'sander' });
     expect(u).toMatchText('https://www.easy.io/dev/developers?q=sander');
   });
@@ -135,40 +146,40 @@ describe('Uri', () => {
   type DevProps = { live: boolean; startDate: DateTime; brands: OneOrMore<Id> };
 
   class PropsDevUri extends EasyUri<DevProps> {
-    readonly resource = uri.segment('dev');
     static readonly devs = uri.segment('developers');
+    readonly resource = uri.segment('dev');
 
     static get Developers(): PropsDevUri {
       return new PropsDevUri([DevUri.devs]);
     }
   }
 
-  test('simple true option', () => {
+  test('Expand with simple true option', () => {
     const u = PropsDevUri.Developers.expand({ live: true });
     expect(u).toMatchText('https://www.easy.io/dev/developers?live');
   });
 
-  test('simple false option', () => {
+  test('Expand with simple false option', () => {
     const u = PropsDevUri.Developers.expand({ live: false });
-    expect(u).toMatchText('https://www.easy.io/dev/developers');
+    expect(u).toMatchText(baseUri);
   });
 
-  test('simple datetime option', () => {
+  test('Expand with simple datetime option', () => {
     const u = PropsDevUri.Developers.expand({ startDate: new DateTime(1621347575) });
     expect(u).toMatchText('https://www.easy.io/dev/developers?startDate=1970-01-19T18:22:27.575Z');
   });
 
-  test('simple array option', () => {
+  test('Expand with simple array option', () => {
     const u = PropsDevUri.Developers.expand({ brands: '42' });
     expect(u).toMatchText('https://www.easy.io/dev/developers?brands=42');
   });
 
-  test('multiple array option', () => {
+  test('Expand with multiple array option', () => {
     const u = PropsDevUri.Developers.expand({ brands: ['42', '43'] });
     expect(u).toMatchText('https://www.easy.io/dev/developers?brands=42,43');
   });
 
-  test('multiple options', () => {
+  test('Expand with multiple options', () => {
     const u = PropsDevUri.Developers.expand({ live: true, brands: ['42', '43'] });
     expect(u).toMatchText('https://www.easy.io/dev/developers?live&brands=42,43');
   });
