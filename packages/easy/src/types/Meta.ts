@@ -57,3 +57,6 @@ class PropertyMeta {
 }
 
 export const meta = (subject: unknown): ClassMeta => new ClassMeta(subject ?? {});
+
+export const entries = <T = unknown>(subject: Record<string, T>): List<Entry<T>> => meta(subject).entries<T>();
+
