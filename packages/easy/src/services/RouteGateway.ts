@@ -1,7 +1,7 @@
-import { Api, RouteOptions } from './Api';
-import { Func, Id, Json, JsonValue, Optional, PageList, Uri } from '../types';
-import { HttpStatus } from '../http';
-import { ApiGateway } from './ApiGateway';
+import { Api, RouteOptions } from "./Api";
+import { Func, Id, Json, JsonValue, List, Optional, PageList, toArray, Uri } from "../types";
+import { HttpStatus } from "../http";
+import { ApiGateway } from "./ApiGateway";
 
 export class RouteGateway extends ApiGateway {
   constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {
@@ -14,6 +14,10 @@ export class RouteGateway extends ApiGateway {
 
   byId(id: Id, options?: RouteOptions): Promise<Optional<Json>> {
     return this.getOne(this.routeId().id(id));
+  }
+
+  byIds(...ids: Id[]): Promise<List<Json>> {
+    return this.get(this.route().ids(toArray(...ids)));
   }
 
   search(q: JsonValue, options?: RouteOptions): Promise<PageList<Json>> {
