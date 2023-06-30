@@ -1,5 +1,5 @@
-import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
-import { checkLabCoat, checkScope, checkToken, checkUseCase } from './SecurityHandler';
+import express, { Express, NextFunction, Request, RequestHandler, Response } from "express";
+import { checkLabCoat, checkScope, checkToken, checkUseCase } from "./SecurityHandler";
 import {
   AppProvider,
   Endpoint,
@@ -13,19 +13,18 @@ import {
   RouteRequires,
   routes,
   Service,
-  toJson,
   toList,
   toOriginatedError,
   toReq,
   toVerbOptions,
-  VerbOptions,
-} from '@thisisagile/easy';
+  VerbOptions
+} from "@thisisagile/easy";
 
-export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
+export type ExpressVerb = "get" | "post" | "put" | "patch" | "delete";
 
 export class ExpressProvider implements AppProvider {
   constructor(protected app: Express = express()) {
-    this.app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+    this.app.set("trust proxy", ["loopback", "linklocal", "uniquelocal"]);
   }
 
   use = (handler: Handler): void => {
@@ -67,10 +66,10 @@ export class ExpressProvider implements AppProvider {
 
   protected handle =
     (endpoint: Endpoint, options?: VerbOptions): RequestHandler =>
-    (req: Request, res: Response, next: NextFunction) =>
-      endpoint(toReq(req))
-        .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
-        .catch(error => next(toOriginatedError(error, options)));
+      (req: Request, res: Response, next: NextFunction) =>
+        endpoint(toReq(req))
+          .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))
+          .catch(error => next(toOriginatedError(error, options)));
 
   protected toResponse(res: Response, result: unknown, options: Required<VerbOptions>): void {
     res.status(options.onOk.status);
@@ -86,13 +85,14 @@ export class ExpressProvider implements AppProvider {
     if (HttpStatus.NoContent.equals(options.onOk)) {
       res.send();
     } else {
-      res.json(rest.toData(options.onOk, toList<any>(result), (result as PageList<any>)?.total, toJson({ filters: (result as PageList<any>)?.filters })));
+      res.json(rest.toData(options.onOk, toList<any>(result), (result as PageList<any>)?.total, (result as PageList<any>)?.meta));
     }
   }
 
   protected stream(res: Response, result: unknown): void {
     res.end(result);
   }
+
   protected text(res: Response, data: unknown): void {
     res.send(data);
   }
