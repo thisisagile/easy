@@ -118,6 +118,12 @@ describe('MongoGateway', () => {
     expect(provider.aggregate).toHaveBeenCalledWith([{ $match: { id: 4 } }, { $skip: 0 }]);
   });
 
+  test('total resolves', async () => {
+    provider.aggregate = mock.resolve(toList({ total: 42 }));
+    await expect(gateway.count({id: 3})).resolves.toBe(42);
+    expect(provider.aggregate).toHaveBeenCalledWith([{id: 3}, {"$count": "total"}]);
+  });
+
   test('add calls the provider', async () => {
     provider.add = mock.resolve(devData.wouter);
     await expect(gateway.add(collData.wouter)).resolves.toStrictEqual(collData.wouter);
