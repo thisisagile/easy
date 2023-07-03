@@ -88,6 +88,11 @@ describe('Uri', () => {
     expect(DevUri.Developer.id(42).query('yes')).toMatchRoute(`${host}/dev/developers/42?q=yes`);
   });
 
+  test('returns full route plus id and a query and sort', () => {
+    expect(DevUri.Developers.query('yes').sort('name-asc')).toMatchRoute(`${host}/dev/developers?q=yes&s=name-asc`);
+    expect(DevUri.Developer.id(42).query('yes').sort('name-desc')).toMatchRoute(`${host}/dev/developers/42?q=yes&s=name-desc`);
+  });
+
   test('returns full route plus id and two queries', () => {
     expect(DevUri.Developers.query('yes').language('Java')).toMatchRoute(`${host}/dev/developers?q=yes&language=Java`);
     expect(DevUri.Developer.id(42).query('yes').language('C')).toMatchRoute(`${host}/dev/developers/42?q=yes&language=C`);

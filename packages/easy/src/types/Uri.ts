@@ -46,6 +46,7 @@ export type Uri = {
   id: (id?: unknown) => Uri;
   ids: (ids: OneOrMore<unknown>) => Uri;
   query: (q?: unknown) => Uri;
+  sort: (q?: unknown) => Uri;
   skip: (n?: number) => Uri;
   take: (n?: number) => Uri;
   path: string;
@@ -54,12 +55,13 @@ export type Uri = {
   toString: () => string;
 };
 
-export type UriExpandProps = { q: string };
+export type UriExpandProps = { q: string, s: string };
 
 export class EasyUri<Props = UriExpandProps> implements Uri {
   static readonly id = uri.path('id');
   static readonly ids = uri.query('ids');
   static readonly query = uri.query('q');
+  static readonly sort = uri.query('s');
   static readonly skip = uri.query('skip');
   static readonly take = uri.query('take');
 
@@ -109,6 +111,7 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
   id = (id?: unknown): this => this.set(EasyUri.id, id);
   ids = (ids: OneOrMore<unknown>): this => this.set(EasyUri.ids, toArray(ids).join(','));
   query = (q?: unknown): this => this.set(EasyUri.query, q);
+  sort = (s?: unknown): this => this.set(EasyUri.sort, s);
 
   skip = (index?: number): this => this.set(EasyUri.skip, index);
   take = (items?: number): this => this.set(EasyUri.take, items);
