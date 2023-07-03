@@ -59,7 +59,6 @@ export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
   protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
-  readonly group = this.aggregate;
 
   constructor(readonly coll: Collection, protected client?: Promise<MongoClient>) {}
 
@@ -116,6 +115,10 @@ export class MongoProvider {
 
   by(key: string, value: JsonValue, options?: FindOptions): Promise<PageList<Json>> {
     return this.find({ [key]: value }, options);
+  }
+
+  group(qs: Filter<any>[]): Promise<PageList<Json>> {
+    return this.aggregate(qs);
   }
 
   aggregate(qs: Filter<any>[]): Promise<PageList<Json>> {
