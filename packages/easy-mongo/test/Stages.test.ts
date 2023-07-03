@@ -130,6 +130,7 @@ describe('Stages', () => {
       expect(s.from({s: 'no-asc'}, 'name-asc')).toStrictEqual({ $sort: { name: 1 } });
       expect(s.from({ s: "name-asc" })).toStrictEqual({ $sort: { name: 1 } });
       expect(s.from({ s: "name-asc" }, 'name-desc')).toStrictEqual({ $sort: { name: 1 } });
+      expect(s.keys).toStrictEqual(['name-asc', 'name-desc']);
   });
 
   // Group
