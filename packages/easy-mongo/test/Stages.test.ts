@@ -106,7 +106,7 @@ describe('Stages', () => {
   });
 
   // Sort
-  const { sort, asc, desc } = stages.sort;
+  const { sort, sorter, asc, desc } = stages.sort;
 
   test('sort', () => {
     expect(sort({})).toBeUndefined();
@@ -120,6 +120,16 @@ describe('Stages', () => {
 
   test('desc', () => {
     expect(desc('name')).toStrictEqual({ $sort: { name: -1 } });
+  });
+
+  test('sorter', () => {
+      const s = sorter({'name-asc': { name: 1 }, 'name-desc': {name: -1}});
+      expect(s.from()).toBeUndefined();
+      expect(s.from({s: 'no-asc'})).toBeUndefined();
+      expect(s.from({s: 'no-asc'}, 'no-asc2')).toBeUndefined();
+      expect(s.from({s: 'no-asc'}, 'name-asc')).toStrictEqual({ $sort: { name: 1 } });
+      expect(s.from({ s: "name-asc" })).toStrictEqual({ $sort: { name: 1 } });
+      expect(s.from({ s: "name-asc" }, 'name-desc')).toStrictEqual({ $sort: { name: 1 } });
   });
 
   // Group

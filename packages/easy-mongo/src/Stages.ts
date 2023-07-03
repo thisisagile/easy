@@ -35,6 +35,18 @@ export class FilterBuilder<Options> {
     );
 }
 
+type Sort = Record<string, typeof asc | typeof desc>;
+
+export class SortBuilder {
+  constructor(private sorts: Record<string, Sort>) {}
+
+  from = (s: {s?: string} = {}, alt?: string): Optional<Filter> => stages.sort.sort(this.sorts[s?.s ?? ''] ?? this.sorts[alt ?? '']);
+
+  get keys(): string[] {
+    return Object.keys(this.sorts);
+  }
+}
+
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
 
 export const stages = {
@@ -60,7 +72,8 @@ export const stages = {
     anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: 'i' }),
   },
   sort: {
-    sort: ($sort: Record<string, typeof asc | typeof desc>): Optional<Filter> => (isPresent($sort) ? { $sort } : undefined),
+    sort: ($sort: Sort) => (isPresent($sort) ? { $sort } : undefined),
+    sorter: (sorts: Record<string, Sort>) => new SortBuilder(sorts),
     asc: (key: string) => stages.sort.sort({ [key]: asc }),
     desc: (key: string) => stages.sort.sort({ [key]: desc }),
   },
