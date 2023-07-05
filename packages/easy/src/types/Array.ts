@@ -19,7 +19,7 @@ export const array = {
       ...f,
       ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey])
     })),
-  swap: <T>(items: T[] = [], item: T): T[] => use([...items], res => {
+  switch: <T>(items: T[] = [], item: T): T[] => use([...items], res => {
     on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item)));
     return res;
   })
