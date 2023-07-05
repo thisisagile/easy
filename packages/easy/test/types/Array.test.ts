@@ -191,5 +191,26 @@ describe('toObject', () => {
       expect(m).toHaveLength(first.length);
       expect(m[2].last).toBe(second[2].last);
     });
+
+    test('swap adding item', () => {
+      const ls = [Dev.Naoufal, Dev.Jeroen, Dev.Wouter];
+      const ls2 = array.swap(ls, Dev.Sander);
+      expect(ls).toHaveLength(3);
+      expect(ls2).toHaveLength(4);
+    });
+
+    test('swap adding item where items is undefined', () => {
+      const ls = undefined as unknown as Dev[]
+      const ls2 = array.swap(ls, Dev.Sander);
+      expect(ls).toBeUndefined();
+      expect(ls2).toHaveLength(1);
+    });
+
+    test('swap removing item', () => {
+      const ls = [Dev.Naoufal, Dev.Jeroen, Dev.Wouter];
+      const ls2 = array.swap(ls, Dev.Jeroen);
+      expect(ls).toHaveLength(3);
+      expect(ls2).toHaveLength(2);
+    });
   });
 });
