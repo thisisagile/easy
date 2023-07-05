@@ -19,7 +19,10 @@ export const array = {
       ...f,
       ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey])
     })),
-  swap: <T>(items: T[] = [], item: T): T[] => use([...items], res => { on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item))); return res}),
+  swap: <T>(items: T[] = [], item: T): T[] => use([...items], res => {
+    on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item)));
+    return res;
+  })
 };
 
 // export const objectify = <T>(items: T[], f: (a: any, p: T) => void): any => items.reduce((acc: any, p: T) => on(acc, a => f(a, p)), {});
