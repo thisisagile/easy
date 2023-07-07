@@ -23,6 +23,21 @@ describe('ApiGateway', () => {
     await expect(gateway.get(DevUri.Developers, mock.a<RequestOptions>({}))).resolves.toHaveLength(0);
   });
 
+  const filters = [{ field: 'A', values: [{ value: 1 }, { value: 2 }] }];
+  const sorts = ['alpha-asc', 'alpha-desc'];
+
+  test('get calls api correctly with options (but missing sorts)', async () => {
+    api.get = mock.resolve({ body: {data: { totalItems: 42, items: [{id: 1, name: 'Sander'}], meta: { filters, sorts, skip: 0, take: 250  }}}});
+    const pl = await gateway.get(DevUri.Developers, {skip: 0, take: 5});
+    expect(pl).toHaveLength(1);
+    expect(pl[0].name).toBe('Sander');
+    expect(pl.total).toBe(42);
+    expect(pl.skip).toBe(0);
+    expect(pl.take).toBe(250);
+    expect(pl.filters).toStrictEqual(filters);
+    // expect(pl.sorts).toStrictEqual(sorts);
+  });
+
   test('post calls api correctly', async () => {
     const body = Dev.Sander.toJSON();
     api.post = mock.resolve(toResponse(HttpStatus.Created, body));
