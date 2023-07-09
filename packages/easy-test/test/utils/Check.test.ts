@@ -7,7 +7,7 @@ describe("Check", () => {
   const { return: returns } = mock;
 
   beforeEach(() => {
-    ctx = {utils: {printReceived: returns(), printExpected: returns(), diff: returns()}} as unknown as jest.MatcherContext;
+    ctx = {utils: {printReceived: returns('received'), printExpected: returns('expected'), diff: returns('diff')}} as unknown as jest.MatcherContext;
   });
 
   test("received and expected are undefined", () => {
@@ -50,5 +50,18 @@ describe("Check", () => {
   test("property of received is valid", () => {
     const m = check(ctx, {name: 'Claudia'});
     expect(m.not(([r]) => r.name === 'Claudia', '').else().pass).toBeTruthy();
+  });
+
+  test('print strings', () => {
+    const m = check(ctx, {name: 'Claudia'}, {name: 'Joyce'});
+    expect(m.print('This is what we {r}')).toBe('This is what we received');
+    expect(m.print('This is what we {e}')).toBe('This is what we expected');
+    expect(m.print('And this is the {diff}')).toBe('And this is the diff');
+  })
+
+  test('print functions', () => {
+    const m = check(ctx, {name: 'Claudia'}, {name: 'Joyce'});
+    expect(m.print(([{name: r}, {name: e}]) => `This is ${r} and this is ${e}`)).toBe('This is Claudia and this is Joyce');
+    // expect(m.print(([, {name: e}])
   });
 });
