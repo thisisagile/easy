@@ -26,16 +26,24 @@ describe('ApiGateway', () => {
   const filters = [{ field: 'A', values: [{ value: 1 }, { value: 2 }] }];
   const sorts = ['alpha-asc', 'alpha-desc'];
 
-  test('get calls api correctly with options (but missing sorts)', async () => {
-    api.get = mock.resolve({ body: {data: { totalItems: 42, items: [{id: 1, name: 'Sander'}], meta: { filters, sorts, skip: 0, take: 250  }}}});
+  test('get calls api correctly with no options but with totalItems', async () => {
+    api.get = mock.resolve({ body: {data: { totalItems: 42, items: [{id: 1, name: 'Sander'}]}}});
     const pl = await gateway.get(DevUri.Developers, {skip: 0, take: 5});
     expect(pl).toHaveLength(1);
     expect(pl[0].name).toBe('Sander');
     expect(pl.total).toBe(42);
-    expect(pl.skip).toBe(0);
-    expect(pl.take).toBe(250);
+    expect(pl.filters).toBeUndefined();
+    expect(pl.sorts).toBeUndefined();
+  });
+
+  test('get calls api correctly with options', async () => {
+    api.get = mock.resolve({ body: {data: { totalItems: 42, items: [{id: 1, name: 'Sander'}], meta: { filters, total: 41, sorts, skip: 0, take: 250  }}}});
+    const pl = await gateway.get(DevUri.Developers, {skip: 0, take: 5});
+    expect(pl).toHaveLength(1);
+    expect(pl[0].name).toBe('Sander');
+    expect(pl.total).toBe(41);
     expect(pl.filters).toStrictEqual(filters);
-    // expect(pl.sorts).toStrictEqual(sorts);
+    expect(pl.sorts).toStrictEqual(sorts);
   });
 
   test('post calls api correctly', async () => {
