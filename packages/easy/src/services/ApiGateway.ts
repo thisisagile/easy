@@ -1,6 +1,6 @@
-import { Api, RouteOptions } from './Api';
-import { FetchOptions, Filter, Gateway, Json, Optional, PageList, toPageList, Uri, use } from "../types";
-import { RequestOptions, toPageOptions } from '../http';
+import { Api, RouteOptions } from "./Api";
+import { FetchOptions, Gateway, Json, Optional, PageList, toPageList, Uri, use } from "../types";
+import { RequestOptions } from "../http";
 
 export class ApiGateway extends Gateway<RouteOptions> {
   constructor(readonly api: Api = new Api()) {
@@ -8,7 +8,7 @@ export class ApiGateway extends Gateway<RouteOptions> {
   }
 
   get(uri: Uri, options?: RouteOptions): Promise<PageList<Json>> {
-    return this.api.get(uri, options).then(r => use(r.body.data, d => toPageList(d?.items, {total: d?.totalItems, ...d?.meta})));
+    return this.api.get(uri, options).then(r => use(r.body.data, d => toPageList(d?.items, { total: d?.totalItems, ...d?.meta })));
   }
 
   getOne(uri: Uri, options?: RouteOptions): Promise<Optional<Json>> {
@@ -20,15 +20,7 @@ export class ApiGateway extends Gateway<RouteOptions> {
   }
 
   postSearch(uri: Uri, options?: RequestOptions | FetchOptions): Promise<PageList<Json>> {
-    return this.api.post(uri, options).then(r =>
-      toPageList<Json>(
-        r.body.data?.items,
-        toPageOptions(options) && {
-          total: r.body.data?.totalItems,
-          filters: r.body.data?.meta?.filters as Filter[],
-        }
-      )
-    );
+    return this.api.post(uri, options).then(r => use(r.body.data, d => toPageList(d?.items, { total: d?.totalItems, ...d?.meta })));
   }
 
   patch(uri: Uri, item?: Json, options?: RouteOptions): Promise<Json> {
