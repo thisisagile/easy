@@ -30,7 +30,7 @@ class Check<S> {
     return this.not(() => isDefined(p([this.received, this.expected])), this.print(message));
   }
 
-  else(message: ToMessage<S> = "Expected {r} not to match with {e}."): CustomMatcherResult {
+  else(message: ToMessage<S> = "Expected {r} not to match with {e}, but it did."): CustomMatcherResult {
     return {
       pass: !this.failed,
       message: () => (this.failed ? this.message : this.print(message))

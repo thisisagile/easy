@@ -52,6 +52,16 @@ describe("Check", () => {
     expect(m.not(([r]) => r.name === 'Claudia', '').else().pass).toBeTruthy();
   });
 
+  test('property of received is valid with message', () => {
+    const m = check(ctx, {name: 'Claudia'});
+    expect(m.not(([r]) => r.name === 'Claudia', 'This is what I {r}').else().message()).toBe('Expected received not to match with expected, but it did.');
+  });
+
+  test('property of received throws error', () => {
+    const m = check(ctx, {name: 'Claudia', error: () => { throw new Error('Error')}});
+    expect(m.not(([r]) => r.error(), 'We have not {r} anything').else().message()).toBe('Error');
+  });
+
   test('print strings', () => {
     const m = check(ctx, {name: 'Claudia'}, {name: 'Joyce'});
     expect(m.print('This is what we {r}')).toBe('This is what we received');
