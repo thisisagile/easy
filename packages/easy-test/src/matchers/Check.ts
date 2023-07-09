@@ -39,3 +39,9 @@ class Check<S> {
 }
 
 export const check = <S>(ctx: jest.MatcherContext, received: S, expected?: S): Check<S> => new Check<S>(ctx, received, expected as S);
+
+export const checkDefined = <S>(ctx: jest.MatcherContext, received: S, expected?: S): Check<S> => new Check<S>(ctx, received, expected as S)
+  .undefined(([r]) => r, "Received array is undefined.")
+  .undefined(([, e]) => e, "Expected array is undefined.")
+;
+
