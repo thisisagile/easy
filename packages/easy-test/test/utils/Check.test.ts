@@ -62,6 +62,10 @@ describe("Check", () => {
   test('print functions', () => {
     const m = check(ctx, {name: 'Claudia'}, {name: 'Joyce'});
     expect(m.print(([{name: r}, {name: e}]) => `This is ${r} and this is ${e}`)).toBe('This is Claudia and this is Joyce');
-    // expect(m.print(([, {name: e}])
+  });
+
+  test('else with message', () => {
+    const m = check(ctx, {name: 'Claudia'}, {name: 'Joyce'});
+    expect(m.else('This is what we have {r}').message()).toBe('This is what we have received');
   });
 });
