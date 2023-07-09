@@ -1,5 +1,6 @@
 export * from './HttpMatchers';
 export * from './Match';
+export * from './Check';
 export * from './ResultMatchers';
 export * from './toBeArrayOf';
 export * from './toBeArrayOfWithLength';
@@ -7,6 +8,7 @@ export * from './toBeAt';
 export * from './toBeExactlyAt';
 export * from './toFailMatcher';
 export * from './toBeValid';
+export * from './toMatchArray';
 export * from './toMatchExactJson';
 export * from './toMatchException';
 export * from './toMatchJson';
