@@ -9,7 +9,7 @@ import {
   Response,
   RouteGateway,
   Store,
-  toList,
+  toList, toPageList,
   toResponse,
   uri
 } from "../../src";
@@ -17,7 +17,7 @@ import { Dev, DevUri } from "../ref";
 import { fits, mock } from "@thisisagile/easy-test";
 
 describe("RouteGateway", () => {
-  const devs = [Dev.Sander.toJSON(), Dev.Naoufal.toJSON(), Dev.Wouter.toJSON()];
+  const devs = toPageList([Dev.Sander.toJSON(), Dev.Naoufal.toJSON(), Dev.Wouter.toJSON()]);
   let api: Api;
   let gateway: RouteGateway;
 
@@ -37,7 +37,7 @@ describe("RouteGateway", () => {
   });
 
   test("all calls api correctly without totalItems", async () => {
-    api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 } }));
+    api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs } }));
     const all = await gateway.all();
     expect(all).toHaveLength(devs.length);
     expect(all.total).toBeUndefined();
@@ -46,7 +46,7 @@ describe("RouteGateway", () => {
   test("all calls api correctly with totalItems", async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, { data: { items: devs, totalItems: 42 } }));
     const all = await gateway.all({ skip: 1, take: 5 });
-    expect(all).toHaveLength(devs.length);
+    expect(all).toMatchArray(devs);
     expect(all.total).toBe(42);
   });
 
@@ -69,13 +69,13 @@ describe("RouteGateway", () => {
 
   test("byIds calls api correctly", async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
-    await expect(gateway.byIds(42, 43)).resolves.toMatchObject(devs);
+    await expect(gateway.byIds(42, 43)).resolves.toMatchArray(devs);
     expect(api.get).toBeRoutedTo(DevUri.Developers.ids([42, 43]));
   });
 
   test("byIds with array calls api correctly", async () => {
     api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
-    await expect(gateway.byIds(...[42, 43])).resolves.toMatchObject(devs);
+    await expect(gateway.byIds(...[42, 43])).resolves.toMatchArray(devs);
     expect(api.get).toBeRoutedTo(DevUri.Developers.ids([42, 43]));
   });
 
