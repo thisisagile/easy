@@ -4,7 +4,7 @@ import { lucene } from '../src';
 describe('Lucene', () => {
   // Operations
 
-  const { text, lt, lte, gt, gte, before, after, between, search, clauses, fuzzy } = lucene;
+  const { text, lt, lte, gt, gte, before, after, between, search, clauses } = lucene;
 
   test('text undefined', () => {
     const t = text(undefined)('size');
@@ -99,18 +99,23 @@ describe('Lucene', () => {
     expect(s).toStrictEqual({ $search: { compound: {} } });
   });
 
-  test('field', () => {
+  test('text', () => {
     const h = lucene.clause({ brand: text('apple') });
     expect(h[0]).toStrictEqual({ text: { path: 'brand', query: 'apple' } });
   });
 
-  test('fuzzy wildcard', () => {
-    const h = lucene.clause({ wildCard: fuzzy('apple') });
+  test('text wildcard', () => {
+    const h = lucene.clause({ wildcard: text('apple') });
+    expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple' } });
+  });
+
+  test('text wildcard with fuzzy', () => {
+    const h = lucene.clause({ wildcard: text('apple', {}) });
     expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple', fuzzy:{} } });
   });
 
-  test('fuzzy wildcard with fuzzy', () => {
-    const h = lucene.clause({ wildCard: fuzzy('apple', {maxExpansions: 1, prefixLength: 2}) });
+  test('text wildcard with fuzzy options', () => {
+    const h = lucene.clause({ wildcard: text('apple', {maxExpansions: 1, prefixLength: 2}) });
     expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple', fuzzy:{maxExpansions: 1, prefixLength: 2} } });
   });
 
@@ -120,7 +125,7 @@ describe('Lucene', () => {
   });
 
   test('should search, single fuzzy clause', () => {
-    const s = search({ should: { wildcard: fuzzy('appel') } });
+    const s = search({ should: { wildcard: text('appel', {}) } });
     expect(s).toStrictEqual({ $search: { compound: { should: [{ text: { path: {wildcard: '*'}, query: 'appel', fuzzy:{} } }] } } });
   });
 
