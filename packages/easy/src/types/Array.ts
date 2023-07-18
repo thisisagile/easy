@@ -22,7 +22,12 @@ export const array = {
   switch: <T>(items: T[] = [], item: T): T[] => use([...items], res => {
     on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item)));
     return res;
-  })
+  }),
+  splitIn: <T>(items: T[] = [], length = 2): T[][] => {
+    const res: T[][] = Array.from({ length }, () => []);
+    items.forEach((i, index) => res[index % length].push(i));
+    return res;
+  }
 };
 
 // export const objectify = <T>(items: T[], f: (a: any, p: T) => void): any => items.reduce((acc: any, p: T) => on(acc, a => f(a, p)), {});

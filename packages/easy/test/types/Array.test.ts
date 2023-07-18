@@ -212,5 +212,44 @@ describe('toObject', () => {
       expect(ls).toHaveLength(3);
       expect(ls2).toHaveLength(2);
     });
+
+    const devs = [Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander, Dev.Rob, Dev.RobC];
+
+    test('splitIn with undefined array', () => {
+      const [a, b] = array.splitIn(undefined as unknown as Dev[], 2);
+      expect(a).toHaveLength(0);
+      expect(b).toHaveLength(0);
+    });
+
+    test('splitIn with empty array', () => {
+      const [a, b] = array.splitIn([], 2);
+      expect(a).toHaveLength(0);
+      expect(b).toHaveLength(0);
+    });
+
+    test('splitIn with array of 1', () => {
+      const [a, b] = array.splitIn([Dev.Naoufal], 2);
+      expect(a).toHaveLength(1);
+      expect(b).toHaveLength(0);
+    });
+
+    test('splitIn with array of 2', () => {
+      const [a, b] = array.splitIn([Dev.Naoufal, Dev.Jeroen], 2);
+      expect(a).toHaveLength(1);
+      expect(b).toHaveLength(1);
+    });
+
+    test('splitIn with array of 3', () => {
+      const [a, b] = array.splitIn([Dev.Naoufal, Dev.Jeroen, Dev.Wouter], 2);
+      expect(a).toHaveLength(2);
+      expect(b).toHaveLength(1);
+    });
+
+    test('splitIn in 3 parts', () => {
+      const [a, b, c] = array.splitIn(devs, 3);
+      expect(a).toHaveLength(2);
+      expect(b).toHaveLength(2);
+      expect(c).toHaveLength(2);
+    });
   });
 });
