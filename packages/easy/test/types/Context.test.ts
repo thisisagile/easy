@@ -44,6 +44,11 @@ describe('Environment Context', () => {
     expect(ctx.request.lastError).toBe('Wrong');
   });
 
+  test('simple wrap on request context', async () => {
+    const r = await ctx.request.wrap(async () => Promise.resolve(42));
+    expect(r).toBe(42);
+  });
+
   test('token should be an any in the context', () => {
     const c = new Context({ request: new BaseRequestContext() });
     c.request.token = { tenant: 42 };

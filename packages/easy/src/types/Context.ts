@@ -38,6 +38,7 @@ export interface RequestContext {
   get<T>(key: string): T;
   set<T>(key: string, value: T): T;
   create: (f: () => void) => void;
+  wrap<T>(f: () => Promise<T>): Promise<T>;
 }
 
 export class BaseRequestContext implements RequestContext {
@@ -88,6 +89,8 @@ export class BaseRequestContext implements RequestContext {
   }
 
   public readonly create = (f: () => void): void => f();
+
+  public readonly wrap = <T>(f: () => Promise<T>): Promise<T> => f();
 }
 
 /**
