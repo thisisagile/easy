@@ -19,7 +19,7 @@ describe('Stages', () => {
   });
 
   // Match
-  const { match, filter, gt, gte, lt, lte, isIn, notIn,after, before, anywhere } = stages.match;
+  const { match, filter, gt, gte, lt, lte, isIn, notIn, after, before, anywhere } = stages.match;
 
   test('one filter', () => {
     expect(match({ id: 42 })).toStrictEqual({ $match: { id: 42 } });
@@ -28,7 +28,7 @@ describe('Stages', () => {
       match({
         name: 'Sander',
         promoted: undefined,
-      })
+      }),
     ).toStrictEqual({ $match: { name: 'Sander' } });
   });
 
@@ -53,7 +53,14 @@ describe('Stages', () => {
   });
 
   test('anywhere', () => {
-    expect(match({ name: anywhere('sander') })).toStrictEqual({ $match: { name: { $regex: 'sander', $options: 'i' } } });
+    expect(match({ name: anywhere('sander') })).toStrictEqual({
+      $match: {
+        name: {
+          $regex: 'sander',
+          $options: 'i',
+        },
+      },
+    });
     expect(match({ name: anywhere('sa/n&d(er') })).toStrictEqual({
       $match: {
         name: {
@@ -135,14 +142,14 @@ describe('Stages', () => {
   });
 
   test('sorter', () => {
-      const s = sorter({'name-asc': { name: 1 }, 'name-desc': {name: -1}});
-      expect(s.from()).toBeUndefined();
-      expect(s.from({s: 'no-asc'})).toBeUndefined();
-      expect(s.from({s: 'no-asc'}, 'no-asc2')).toBeUndefined();
-      expect(s.from({s: 'no-asc'}, 'name-asc')).toStrictEqual({ $sort: { name: 1 } });
-      expect(s.from({ s: "name-asc" })).toStrictEqual({ $sort: { name: 1 } });
-      expect(s.from({ s: "name-asc" }, 'name-desc')).toStrictEqual({ $sort: { name: 1 } });
-      expect(s.keys).toStrictEqual(['name-asc', 'name-desc']);
+    const s = sorter({ 'name-asc': { name: 1 }, 'name-desc': { name: -1 } });
+    expect(s.from()).toBeUndefined();
+    expect(s.from({ s: 'no-asc' })).toBeUndefined();
+    expect(s.from({ s: 'no-asc' }, 'no-asc2')).toBeUndefined();
+    expect(s.from({ s: 'no-asc' }, 'name-asc')).toStrictEqual({ $sort: { name: 1 } });
+    expect(s.from({ s: 'name-asc' })).toStrictEqual({ $sort: { name: 1 } });
+    expect(s.from({ s: 'name-asc' }, 'name-desc')).toStrictEqual({ $sort: { name: 1 } });
+    expect(s.keys).toStrictEqual(['name-asc', 'name-desc']);
   });
 
   // Group
@@ -192,6 +199,21 @@ describe('Stages', () => {
   test('groupBy id and push', () => {
     const g = group({ products: push() }).by('brandId');
     expect(g).toStrictEqual({ $group: { _id: '$brandId', products: { $push: '$$ROOT' } } });
+  });
+
+  test('groupBy id and push specific field', () => {
+    const g = group({ prop: first('props'), values: push('props.values') }).by('props.id');
+    expect(g).toStrictEqual({
+      $group: {
+        _id: '$props.id',
+        prop: {
+          $first: '$props',
+        },
+        values: {
+          $push: '$props.values',
+        },
+      },
+    });
   });
 
   test('groupBy string id and multiple fields', () => {

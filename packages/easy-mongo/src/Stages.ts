@@ -26,25 +26,30 @@ export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$m
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export class FilterBuilder<Options> {
-  constructor(private filters: { [K in keyof Options]: (v: Options[K]) => Filter }) {}
+  constructor(private filters: { [K in keyof Options]: (v: Options[K]) => Filter }) {
+  }
+
   from = (q: Partial<Options> = {}): Filter =>
     stages.match.match(
       meta(q)
         .entries()
-        .reduce((acc, [key, value]) => ({ ...acc, ...ifDefined(this.filters[key as keyof Options], f => f(value as Options[keyof Options])) }), {})
+        .reduce((acc, [key, value]) => ({ ...acc, ...ifDefined(this.filters[key as keyof Options], f => f(value as Options[keyof Options])) }), {}),
     );
 }
 
 type Sort = Record<string, typeof asc | typeof desc>;
 
 export class SortBuilder {
-  constructor(private sorts: Record<string, Sort>) {}
-
-  from = (s: {s?: string} = {}, alt?: string): Optional<Filter> => stages.sort.sort(this.sorts[s?.s ?? ''] ?? this.sorts[alt ?? '']);
+  constructor(private sorts: Record<string, Sort>) {
+  }
 
   get keys(): string[] {
     return Object.keys(this.sorts);
   }
+
+  from = (s: {
+    s?: string
+  } = {}, alt?: string): Optional<Filter> => stages.sort.sort(this.sorts[s?.s ?? ''] ?? this.sorts[alt ?? '']);
 }
 
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
@@ -84,7 +89,7 @@ export const stages = {
     }),
     date:
       (format = '%Y-%m-%d') =>
-      (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
+        (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
     count: (): Accumulator => ({ $count: {} }),
     sum: (from?: string): Accumulator => ({ $sum: `$${from}` }),
     avg: (from?: string) => ({ $avg: `$${from}` }),
@@ -92,21 +97,21 @@ export const stages = {
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
     min: (from?: string): Accumulator => ({ $min: `$${from}` }),
     max: (from?: string): Accumulator => ({ $max: `$${from}` }),
-    push: (): Accumulator => ({ $push: '$$ROOT' }),
+    push: (from = '$ROOT'): Accumulator => ({ $push: `$${from}` }),
   },
   search: {
     search: (f: Record<string, Get<Filter, string>>) => ifDefined(stages.decode.id(f), $search => ({ $search })),
     auto: (value?: Id) => (key: string) => ifDefined(value, v => ({ autocomplete: { path: key, query: [v] } })),
     fuzzy:
       (value?: string, maxEdits = 1) =>
-      (key?: string) =>
-        ifDefined(value, v => ({
-          text: {
-            query: v,
-            path: key === 'wildcard' ? { wildcard: '*' } : key,
-            fuzzy: { maxEdits },
-          },
-        })),
+        (key?: string) =>
+          ifDefined(value, v => ({
+            text: {
+              query: v,
+              path: key === 'wildcard' ? { wildcard: '*' } : key,
+              fuzzy: { maxEdits },
+            },
+          })),
   },
   set: {
     set: (f: Record<string, Get<Filter, string>>) => ({ $set: stages.decode.fields(f) }),
