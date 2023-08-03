@@ -1,3 +1,4 @@
+export * from './AtlasSearchGateway';
 export * from './Collection';
 export * from './Lucene';
 export * from './MongoGateway';
