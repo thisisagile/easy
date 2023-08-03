@@ -23,3 +23,8 @@ export const on = <T>(t: T, f: (t: T) => unknown): T => {
 export const use = <T, Out>(t: T, f: (t: T) => Out): Out => f(t);
 
 export const ifA = <T>(c: Constructor<T>, t?: unknown, alt?: unknown): Optional<T> => (!isPrimitive(t) && t instanceof c ? t : alt ? ifA(c, alt) : undefined);
+
+export type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>;
+  }[Keys];

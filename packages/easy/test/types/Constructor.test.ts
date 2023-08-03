@@ -1,5 +1,5 @@
 import { Dev, DevUri } from '../ref';
-import { ifA, isConstructor, ofConstruct, on, text, toName } from '../../src';
+import { ifA, isConstructor, ofConstruct, on, RequireAtLeastOne, text, toName } from '../../src';
 
 describe('toName', () => {
   test('check', () => {
@@ -101,5 +101,13 @@ describe('ifA', () => {
     expect(ifA(Dev, undefined, false)).toBeUndefined();
     expect(ifA(Dev, undefined, {})).toBeUndefined();
     expect(ifA(Dev, undefined, Dev.Eugen)).toBeInstanceOf(Dev);
+  });
+});
+
+describe('RequireAtLeastOne', () => {
+  test('check', () => {
+    type T = RequireAtLeastOne<{ a?: string; b?: number }>;
+    const t: T = { a: 'a' };
+    expect(t).toStrictEqual({ a: 'a' });
   });
 });

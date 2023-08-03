@@ -1,10 +1,11 @@
 import '@thisisagile/easy-test';
-import { lucene } from '../src';
+import { lucene, SearchDefinition } from '../src';
+import { toList } from '@thisisagile/easy';
 
 describe('Lucene', () => {
   // Operations
 
-  const { text, lt, lte, gt, gte, before, after, between, search, clauses } = lucene;
+  const { text, wildcard, lt, lte, gt, gte, before, after, between, search, clauses, exists, facet, searchWithDef } = lucene;
 
   test('text undefined', () => {
     const t = text(undefined)('size');
@@ -39,6 +40,11 @@ describe('Lucene', () => {
   test('lt', () => {
     const v = lt(42)('size');
     expect(v).toStrictEqual({ range: { path: 'size', lt: 42 } });
+  });
+
+  test('exists', () => {
+    const v = exists()('size');
+    expect(v).toStrictEqual({ exists: { path: 'size' } });
   });
 
   test('lte with undefined', () => {
@@ -106,17 +112,22 @@ describe('Lucene', () => {
 
   test('text wildcard', () => {
     const h = lucene.clause({ wildcard: text('apple') });
-    expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple' } });
+    expect(h[0]).toStrictEqual({ text: { path: { wildcard: '*' }, query: 'apple' } });
   });
 
   test('text wildcard with fuzzy', () => {
     const h = lucene.clause({ wildcard: text('apple', {}) });
-    expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple', fuzzy:{} } });
+    expect(h[0]).toStrictEqual({ text: { path: { wildcard: '*' }, query: 'apple', fuzzy: {} } });
   });
 
   test('text wildcard with fuzzy options', () => {
-    const h = lucene.clause({ wildcard: text('apple', {maxExpansions: 1, prefixLength: 2}) });
-    expect(h[0]).toStrictEqual({ text: { path: {wildcard: '*'}, query: 'apple', fuzzy:{maxExpansions: 1, prefixLength: 2} } });
+    const h = lucene.clause({ wildcard: text('apple', { maxExpansions: 1, prefixLength: 2 }) });
+    expect(h[0]).toStrictEqual({ text: { path: { wildcard: '*' }, query: 'apple', fuzzy: { maxExpansions: 1, prefixLength: 2 } } });
+  });
+
+  test('wildcard', () => {
+    const h = lucene.clause({ wildcard: wildcard() });
+    expect(h[0]).toStrictEqual({ wildcard: { path: { wildcard: '*' }, query: '*' } });
   });
 
   test('should search, single clause', () => {
@@ -126,7 +137,7 @@ describe('Lucene', () => {
 
   test('should search, single fuzzy clause', () => {
     const s = search({ should: { wildcard: text('appel', {}) } });
-    expect(s).toStrictEqual({ $search: { compound: { should: [{ text: { path: {wildcard: '*'}, query: 'appel', fuzzy:{} } }] } } });
+    expect(s).toStrictEqual({ $search: { compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: {} } }] } } });
   });
 
   test('should search, single clause and index', () => {
@@ -188,5 +199,86 @@ describe('Lucene', () => {
     const s3 = clauses([{ brand: text('42') }, { slotId: text([42, 43]) }]);
     expect(s3[0]).toStrictEqual({ text: { path: 'brand', query: '42' } });
     expect(s3[1]).toStrictEqual({ text: { path: 'slotId', query: [42, 43] } });
+  });
+
+  const def: SearchDefinition = {
+    // @ts-ignore
+    brand: v => ({ should: { brand: text(v) } }),
+    // @ts-ignore
+    size: v => ({ should: { size: lt(v) } }),
+    // @ts-ignore
+    q: v => ({ should: { wildcard: text(v) } }),
+    // @ts-ignore
+    fuzzy: v => ({ should: { wildcard: text(v, { maxExpansions: 1, prefixLength: 2 }) } }),
+    // @ts-ignore
+    status: () => ({ facet: facet.string('status') }),
+    // @ts-ignore
+    price: () => ({ facet: facet.number('price.cents', toList(500, 2000, 3500, 6000)) }),
+  };
+  describe('search', () => {
+    test('empty search', () => {
+      const s = searchWithDef({}, def);
+      expect(s).toStrictEqual({ $search: { compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] } } });
+    });
+
+    test('should search, single clause', () => {
+      const s = searchWithDef({ brand: 'apple' }, def);
+      expect(s).toStrictEqual({ $search: { compound: { should: [{ text: { path: 'brand', query: 'apple' } }] } } });
+    });
+
+    test('should search, single fuzzy clause', () => {
+      const s = searchWithDef({ fuzzy: 'appel' }, def);
+      expect(s).toStrictEqual({
+        $search: { compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: { maxExpansions: 1, prefixLength: 2 } } }] } },
+      });
+    });
+
+    test('should search, single clause and index', () => {
+      const s = searchWithDef({ brand: 'apple' }, def, 'data.nl');
+      expect(s).toStrictEqual({
+        $search: {
+          index: 'data.nl',
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+        },
+      });
+    });
+
+    test('should search, multiple clauses', () => {
+      const s = searchWithDef({ brand: 'apple', size: 42 }, def);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: {
+            should: [
+              {
+                text: {
+                  path: 'brand',
+                  query: 'apple',
+                },
+              },
+              { range: { path: 'size', lt: 42 } },
+            ],
+          },
+        },
+      });
+    });
+  });
+
+  describe('searchMeta', () => {
+    test('facets work', () => {
+      const s = lucene.searchMeta({}, def);
+      expect(s).toStrictEqual({
+        $searchMeta: {
+          facet: {
+            operator: {
+              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] },
+            },
+            facets: {
+              status: { path: 'status', type: 'string', numBuckets: 1000 },
+              price: { path: 'price.cents', type: 'number', boundaries: [500, 2000, 3500, 6000] },
+            },
+          },
+        },
+      });
+    });
   });
 });
