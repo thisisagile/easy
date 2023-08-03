@@ -1,5 +1,5 @@
 import { lucene, MongoProvider, SearchDefinition, stages } from '../src';
-import { toPageList } from '@thisisagile/easy';
+import { FilterValue, resolve, toPageList } from '@thisisagile/easy';
 import { DevCollection } from './ref/DevCollection';
 import { mock } from '@thisisagile/easy-test';
 import { AtlasSearchGateway } from '../src/AtlasSearchGateway';
@@ -37,5 +37,20 @@ describe('AtlasSearchGateway', () => {
         facets: { language: '$facet.language.buckets' },
       }),
     ]);
+  });
+
+  test('facets work', async () => {
+    const query = { q: 'manea', skip: 12, take: 6 };
+    provider.aggregate = mock.once(resolve(results), resolve(toPageList([{ facets: { language: [{ _id: 'java', count: 42 }] }, total: 55 }])));
+    const actual = await gateway.query(query);
+    expect(actual).toMatchJson(toPageList(results));
+    expect(actual.options).toEqual({
+      total: 55,
+      filters: [{ label: 'Language', field: 'language', values: [{ label: 'java', value: 'java', count: 42 } as FilterValue] }],
+      sorts: [],
+      skip: 12,
+      take: 6,
+    });
+    expect(provider.aggregate).toHaveBeenCalledTimes(2);
   });
 });

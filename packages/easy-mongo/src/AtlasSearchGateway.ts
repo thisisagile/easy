@@ -45,8 +45,8 @@ export class AtlasSearchGateway extends MongoGateway {
       .then(({ data, meta }) =>
         toPageList<Json>(data, {
           total: meta?.total ?? 0,
-          skip: query?.skip as number,
-          take: query?.take as number,
+          skip: (query?.skip as number) ?? 0,
+          take: (query?.take as number) ?? 250,
           sorts: Object.keys(this.sortDef),
           filters: toFilters(meta.facets),
         })
