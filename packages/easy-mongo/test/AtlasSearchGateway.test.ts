@@ -23,7 +23,7 @@ describe('AtlasSearchGateway', () => {
   beforeEach(() => {
     collection = new DevCollection();
     provider = mock.a<MongoProvider>({ aggregate: mock.resolve(results) });
-    gateway = new AtlasSearchGateway(collection, provider, def);
+    gateway = new AtlasSearchGateway(collection, def, {}, provider);
   });
 
   test('query', async () => {

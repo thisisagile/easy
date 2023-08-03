@@ -23,9 +23,9 @@ const toValue = (f: FacetResult): Value => ({ label: f._id ?? 'unknown', value: 
 export class AtlasSearchGateway extends MongoGateway {
   constructor(
     collection: Collection,
-    provider: MongoProvider = collection.provider,
     readonly searchDef: SearchDefinition,
-    readonly sortDef: Record<string, Record<string, 1 | -1>> = {}
+    readonly sortDef: Record<string, Record<string, 1 | -1>> = {},
+    provider: MongoProvider = collection.provider
   ) {
     super(collection, provider);
   }
