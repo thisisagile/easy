@@ -251,5 +251,11 @@ describe('toObject', () => {
       expect(b).toHaveLength(2);
       expect(c).toHaveLength(2);
     });
+
+    test('splitIn by default splits into 2', () => {
+      const [a, b] = array.splitIn([Dev.Naoufal, Dev.Jeroen]);
+      expect(a).toHaveLength(1);
+      expect(b).toHaveLength(1);
+    });
   });
 });

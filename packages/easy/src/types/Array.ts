@@ -29,5 +29,3 @@ export const array = {
     return res;
   }
 };
-
-// export const objectify = <T>(items: T[], f: (a: any, p: T) => void): any => items.reduce((acc: any, p: T) => on(acc, a => f(a, p)), {});
