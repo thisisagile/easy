@@ -3,6 +3,7 @@ import {
   choose,
   isArray,
   isEnum,
+  isFunction,
   isResults,
   isValidatable,
   isValue,
@@ -32,7 +33,7 @@ const validators = (subject: unknown): List<Validator> =>
     .reduce((list, vs) => list.add(vs), toList<Validator>());
 
 const runValidator = (v: Validator, subject?: unknown): Results =>
-  tryTo(() => (subject as any)[v.property])
+  tryTo(() => (isFunction((subject as any)[v.property]) ? (subject as any)[v.property]() : (subject as any)[v.property]))
     .map(actual => [actual, v.constraint(actual)])
     .map(([actual, res]) => (isResults(res) ? res : !res ? asResults(subject, v.text, { ...v, actual }) : toResults()))
     .recover(e => asResults(subject, asString(e))).value;

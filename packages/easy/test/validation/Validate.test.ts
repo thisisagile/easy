@@ -41,7 +41,7 @@ class ConstrainedProductWithRule extends Struct {
   @required() readonly id: string = this.state.id;
 
   @rule('always throw.')
-  check = (): boolean => {
+  check(): boolean {
     throw Exception.IsNotValid;
   };
 }
@@ -53,6 +53,11 @@ class PricesProduct extends Entity {
   @rule('Sales price {this.sales} should be higher than purchase price {this.purchase}.')
   check = (): boolean => {
     return this.sales.value > this.purchase.value;
+  };
+
+  @rule('Purchase price {this.purchase} should be lower than 1000.')
+  limit(): boolean {
+    return  this.purchase.value < 1000;
   };
 }
 
@@ -156,6 +161,8 @@ describe('validate', () => {
   test('business rule', () => {
     expect(validate(new PricesProduct({ id: 3, purchase: 10, sales: 20 }))).toBeValid();
     expect(validate(new PricesProduct({ id: 3, purchase: 30, sales: 20 }))).not.toBeValid();
+    expect(validate(new PricesProduct({ id: 3, purchase: 1001, sales: 1500 }))).not.toBeValid();
+    expect(validate(new PricesProduct({ id: 3, purchase: 1000, sales: 1600 }))).not.toBeValid();
   });
 
   test('validate list', () => {

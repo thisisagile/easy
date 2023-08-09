@@ -1,4 +1,21 @@
-import { Func, inFuture, inPast, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, text, Text, toList, tryTo } from '../types';
+import {
+  Func,
+  inFuture,
+  inPast,
+  isBoolean,
+  isDefined,
+  isFunction,
+  isIn,
+  isNotEmpty,
+  isString,
+  List,
+  meta,
+  Results,
+  text,
+  Text,
+  toList,
+  tryTo,
+} from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = Func<boolean | Results, any>;
@@ -64,4 +81,4 @@ export const maxLength = (length: number, message?: Text): PropertyDecorator =>
   );
 
 export const rule = (message?: Text): PropertyDecorator =>
-  constraint(v => (isFunction(v) ? (v() as boolean | Results) : false), message ?? `Value {actual} must be true`);
+  constraint(v => (isFunction(v) ? (v() as boolean | Results) : isBoolean(v) ? v : false), message ?? `Value {actual} must be true`);
