@@ -1,21 +1,4 @@
-import {
-  Func,
-  inFuture,
-  inPast,
-  isBoolean,
-  isDefined,
-  isFunction,
-  isIn,
-  isNotEmpty,
-  isString,
-  List,
-  meta,
-  Results,
-  text,
-  Text,
-  toList,
-  tryTo,
-} from '../types';
+import { Func, inFuture, inPast, isBoolean, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, text, Text, toList, tryTo } from '../types';
 import { validate, Validator } from './Validate';
 
 export type Constraint = Func<boolean | Results, any>;

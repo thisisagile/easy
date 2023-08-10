@@ -43,12 +43,15 @@ class ConstrainedProductWithRule extends Struct {
   @rule('always throw.')
   check(): boolean {
     throw Exception.IsNotValid;
-  };
+  }
 }
 
 class PricesProduct extends Entity {
   @valid() readonly purchase: Price = new Price(this.state.purchase);
   @valid() readonly sales: Price = new Price(this.state.sales);
+
+  @rule('Is always true')
+  readonly profit = true;
 
   @rule('Sales price {this.sales} should be higher than purchase price {this.purchase}.')
   check = (): boolean => {
@@ -57,8 +60,8 @@ class PricesProduct extends Entity {
 
   @rule('Purchase price {this.purchase} should be lower than 1000.')
   limit(): boolean {
-    return  this.purchase.value < 1000;
-  };
+    return this.purchase.value < 1000;
+  }
 }
 
 class BrandProductPrices extends Struct {
