@@ -166,6 +166,12 @@ describe('validate', () => {
     expect(validate(new PricesProduct({ id: 3, purchase: 30, sales: 20 }))).not.toBeValid();
     expect(validate(new PricesProduct({ id: 3, purchase: 1001, sales: 1500 }))).not.toBeValid();
     expect(validate(new PricesProduct({ id: 3, purchase: 1000, sales: 1600 }))).not.toBeValid();
+    class Prop extends Struct {
+      @required() readonly name: string = this.state.name;
+      @rule('This wil always trigger')
+      readonly value: string = this.state.value;
+    }
+    expect(validate(new Prop({name: "test"}))).not.toBeValid();
   });
 
   test('validate list', () => {
