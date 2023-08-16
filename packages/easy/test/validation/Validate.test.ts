@@ -179,8 +179,13 @@ describe('validate', () => {
       @rule('Is always false')
       readonly loss = false;
     }
-
     expect(validate(new PriceProductFalse({ id: 3, purchase: 10, sales: 20,  }))).not.toBeValid();
+
+    class PriceProductWithoutMessageFalse extends PricesProduct {
+      @rule()
+      readonly loss = false;
+    }
+    expect(validate(new PriceProductWithoutMessageFalse({ id: 3, purchase: 10, sales: 20,  }))).not.toBeValid();
   });
 
   test('validate list', () => {
