@@ -146,7 +146,7 @@ describe('Stages', () => {
     expect(s.from()).toBeUndefined();
     expect(s.from({ s: 'no-asc' })).toBeUndefined();
     expect(s.from({ s: 'no-asc' }, 'no-asc2')).toBeUndefined();
-    expect(s.from({ s: 'no-asc' }, 'name-asc')).toStrictEqual({ $sort: { name: 1 } });
+    expect(s.from({ s: 'no-asc' }, 'name-desc')).toStrictEqual({ $sort: { name: -1 } });
     expect(s.from({ s: 'name-asc' })).toStrictEqual({ $sort: { name: 1 } });
     expect(s.from({ s: 'name-asc' }, 'name-desc')).toStrictEqual({ $sort: { name: 1 } });
     expect(s.keys).toStrictEqual(['name-asc', 'name-desc']);
@@ -310,12 +310,23 @@ describe('Stages', () => {
   });
 
   // Project
-  const { include, exclude } = stages.project;
+  const { include, exclude, includer } = stages.project;
 
   test('projection include', () => {
     expect(include()).toBeUndefined();
     expect(include({})).toStrictEqual({ $project: {} });
     expect(include('content', { color: 1 })).toStrictEqual({ $project: { content: 1, color: 1 } });
+  });
+
+  test('includer', () => {
+    const i = includer({ basic: ['name', 'description'], extended: ['name', 'description', 'specs'] });
+    expect(i.from()).toBeUndefined();
+    expect(i.from({ i: 'unknown' })).toBeUndefined();
+    expect(i.from({ i: 'unknown' }, 'unknown2')).toBeUndefined();
+    expect(i.from({ i: 'unknown' }, 'extended')).toStrictEqual({ $project: { name: 1, description: 1, specs: 1 } });
+    expect(i.from({ i: 'basic' })).toStrictEqual({ $project: { name: 1, description: 1 } });
+    expect(i.from({ i: 'basic' }, 'extended')).toStrictEqual({ $project: { name: 1, description: 1 } });
+    expect(i.keys).toStrictEqual(['basic', 'extended']);
   });
 
   test('projection exclude', () => {

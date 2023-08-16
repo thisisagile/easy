@@ -52,6 +52,19 @@ export class SortBuilder {
   } = {}, alt?: string): Optional<Filter> => stages.sort.sort(this.sorts[s?.s ?? ''] ?? this.sorts[alt ?? '']);
 }
 
+export class IncludeBuilder {
+  constructor(private includes: Record<string,  (string | Record<string, 1>)[]>) {
+  }
+
+  get keys(): string[] {
+    return Object.keys(this.includes);
+  }
+
+  from = (i: {
+    i?:  string
+  } = {}, alt?:  string): Optional<Filter> => stages.project.include(...this.includes[i?.i ?? ''] ?? this.includes[alt ?? ''] ?? []);
+}
+
 const escapeRegex = (s: string) => s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
 
 export const stages = {
@@ -126,6 +139,7 @@ export const stages = {
       ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 1 } : b) }), {}) })),
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> =>
       ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 0 } : b) }), {}) })),
+    includer: (includes: Record<string, (string | Record<string, 1>)[]>) => new IncludeBuilder(includes),
   },
   replaceWith: {
     replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),
