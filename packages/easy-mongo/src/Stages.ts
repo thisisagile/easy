@@ -139,7 +139,7 @@ export const stages = {
       ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 1 } : b) }), {}) })),
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> =>
       ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 0 } : b) }), {}) })),
-    includer: (includes: Record<string, (string | Record<string, 1>)[]>) => new IncludeBuilder(includes),
+    includes: (includes: Record<string, (string | Record<string, 1>)[]>) => new IncludeBuilder(includes),
   },
   replaceWith: {
     replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),

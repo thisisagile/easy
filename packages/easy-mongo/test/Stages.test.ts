@@ -310,7 +310,7 @@ describe('Stages', () => {
   });
 
   // Project
-  const { include, exclude, includer } = stages.project;
+  const { include, exclude, includes } = stages.project;
 
   test('projection include', () => {
     expect(include()).toBeUndefined();
@@ -318,8 +318,8 @@ describe('Stages', () => {
     expect(include('content', { color: 1 })).toStrictEqual({ $project: { content: 1, color: 1 } });
   });
 
-  test('includer', () => {
-    const i = includer({ basic: ['name', 'description'], extended: ['name', 'description', 'specs'] });
+  test('includes', () => {
+    const i = includes({ basic: ['name', 'description'], extended: ['name', 'description', 'specs'] });
     expect(i.from()).toBeUndefined();
     expect(i.from({ i: 'unknown' })).toBeUndefined();
     expect(i.from({ i: 'unknown' }, 'unknown2')).toBeUndefined();
