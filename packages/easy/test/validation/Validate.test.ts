@@ -64,6 +64,7 @@ class PricesProduct extends Entity {
   }
 }
 
+
 class BrandProductPrices extends Struct {
   @required() readonly brand: string = this.state.brand;
   @required() @valid() readonly productPrices: List<PricesProduct> = asList(PricesProduct, this.state.productPrices);
@@ -166,12 +167,20 @@ describe('validate', () => {
     expect(validate(new PricesProduct({ id: 3, purchase: 30, sales: 20 }))).not.toBeValid();
     expect(validate(new PricesProduct({ id: 3, purchase: 1001, sales: 1500 }))).not.toBeValid();
     expect(validate(new PricesProduct({ id: 3, purchase: 1000, sales: 1600 }))).not.toBeValid();
+
     class Prop extends Struct {
       @required() readonly name: string = this.state.name;
       @rule('This wil always trigger')
       readonly value: string = this.state.value;
     }
     expect(validate(new Prop({name: "test"}))).not.toBeValid();
+
+    class PriceProductFalse extends PricesProduct {
+      @rule('Is always false')
+      readonly loss = false;
+    }
+
+    expect(validate(new PriceProductFalse({ id: 3, purchase: 10, sales: 20,  }))).not.toBeValid();
   });
 
   test('validate list', () => {
