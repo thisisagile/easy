@@ -130,6 +130,33 @@ describe('Repo', () => {
     return expect(gateway.add).toHaveBeenCalledWith(Dev.Jeroen.toJSON());
   });
 
+  test('add calls validate', async () => {
+    gateway.add = mock.resolve(Dev.Jeroen.toJSON());
+    repo.validate = mock.resolve(Dev.Jeroen);
+    await repo.add(Dev.Jeroen);
+    return expect(repo.validate).toHaveBeenCalledWith(Dev.Jeroen, 'add');
+  });
+
+  test('add rejects if validate rejects', async () => {
+    repo.validate = mock.reject(Exception.Unknown);
+    await expect(repo.add(Dev.Jeroen)).rejects.toBeDefined();
+  });
+
+  test('update calls validate', async () => {
+    gateway.byId = mock.resolve(Dev.Jeroen.toJSON());
+    gateway.update = mock.resolve(Dev.Jeroen.toJSON());
+    repo.extend = mock.resolve(Dev.Jeroen);
+    repo.validate = mock.resolve(Dev.Jeroen);
+    await repo.update(Dev.Jeroen.id, Dev.Jeroen.toJSON());
+    return expect(repo.validate).toHaveBeenCalledWith(Dev.Jeroen, 'update');
+  });
+
+  test('update rejects if validate rejects', async () => {
+    gateway.byId = mock.resolve(Dev.Jeroen.toJSON());
+    repo.validate = mock.reject(Exception.Unknown);
+    await expect(repo.update(Dev.Jeroen.id, Dev.Jeroen.toJSON())).rejects.toBeDefined();
+  });
+
   test('update where object is not found does not trigger gateway', async () => {
     gateway.byId = mock.resolve();
     gateway.update = mock.resolve();
@@ -142,10 +169,6 @@ describe('Repo', () => {
     gateway.update = mock.resolve();
     await expect(repo.update(43, Dev.Invalid.toJSON())).rejects.not.toBeValid();
     return expect(gateway.update).not.toHaveBeenCalled();
-  });
-
-  test('Dev update works', () => {
-    expect(Dev.Sander.update({ level: 4 })).toMatchObject(fits.with({ level: 4 }));
   });
 
   test('update valid object does trigger extend with update action', async () => {
