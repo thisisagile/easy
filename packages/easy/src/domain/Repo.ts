@@ -50,7 +50,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
   add(t: T | Json): Promise<T> {
     return this.extend(this.create(t), 'add')
       .then(i => when(i).not.isValid.reject())
-      .then(i => this.validate(i))
+      .then(i => this.validate(i, 'add'))
       .then(i => this.gateway.add(toJson(i)))
       .then(j => new this.ctor(j));
   }
@@ -62,7 +62,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
       .then(j => new this.ctor(j).update(json) as T)
       .then(i => this.extend(i, 'update'))
       .then(i => when(i).not.isValid.reject())
-      .then(i => this.validate(i))
+      .then(i => this.validate(i, 'update'))
       .then(i => this.gateway.update(toJson(i)))
       .then(j => new this.ctor(j));
   }
@@ -75,7 +75,7 @@ export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T
     return resolve(item);
   }
 
-  validate(item: T): Promise<T> {
+  validate(item: T, _action?: RepoAction): Promise<T> {
     return resolve(item);
   }
 
