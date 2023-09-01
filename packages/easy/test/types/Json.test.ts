@@ -185,6 +185,7 @@ describe('json', () => {
     expect(json.set({}, '')).toStrictEqual({});
     expect(json.set({}, 'name')).toStrictEqual({});
     expect(json.set({}, 'name', 'Sander')).toStrictEqual({ name: 'Sander' });
+    expect(json.set({}, 'name', null)).toStrictEqual({ name: null });
     expect(json.set({}, 'name', { first: 'Sander' })).toStrictEqual({ name: { first: 'Sander' } });
     expect(json.set({ name: { first: 'Sander' } }, 'name', { first: 'Jeroen' })).toStrictEqual({ name: { first: 'Jeroen' } });
     expect(json.set({ name: { first: 'Sander' } }, 'name')).toStrictEqual({});
