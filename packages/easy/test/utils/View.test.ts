@@ -1,5 +1,18 @@
 import '@thisisagile/easy-test';
-import { asNumber, Constructor, Email, isList, isPageList, Money, view, views, toList, toPageList, traverse, View } from '../../src';
+import {
+  asNumber,
+  Constructor,
+  Email,
+  isList,
+  isPageList,
+  Money,
+  toList,
+  toPageList,
+  traverse,
+  view,
+  View,
+  views,
+} from '../../src';
 import { Dev } from '../ref';
 
 describe('View', () => {
@@ -89,6 +102,16 @@ describe('View', () => {
     expect(s.from(source).email).toBeInstanceOf(Email);
     const s2 = view({ email: Email }).fromSource;
     expect(s2.from(source).email).toBeInstanceOf(Email);
+  });
+
+  test('constructor do not construct when null', () => {
+    const s = view({ email: Email });
+    const r = s.from({ email: null });
+    expect(r.email).toBeNull();
+
+    const s2 = view({ emails: Email });
+    const r2 = s2.from({ emails: [null]});
+    expect(r2.emails).toEqual([null]);
   });
 
   test('function', () => {
@@ -280,8 +303,8 @@ describe('View', () => {
 
   const to =
     <T>(ctor: Constructor<T>) =>
-    (a: unknown, key?: string) =>
-      new ctor(traverse(a, key));
+      (a: unknown, key?: string) =>
+        new ctor(traverse(a, key));
 
   test('simples or', () => {
     const v = view({ first: or.key('Name.First'), last: or.value('H') });
