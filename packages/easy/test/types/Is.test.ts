@@ -119,10 +119,10 @@ describe('isObject', () => {
   });
 });
 
-describe('isNotEmptyObject', () => {
+describe('isEmptyObject', () => {
   class Empty {}
 
-  test('isNotEmptyObject false', () => {
+  test('isEmptyObject false', () => {
     expect(isEmptyObject(undefined)).toBeFalsy();
     expect(isEmptyObject(null)).toBeFalsy();
     expect(isEmptyObject()).toBeFalsy();
@@ -132,7 +132,7 @@ describe('isNotEmptyObject', () => {
     expect(isEmptyObject(Dev.Jeroen)).toBeFalsy();
   });
 
-  test('isNotEmptyObject true', () => {
+  test('isEmptyObject true', () => {
     expect(isEmptyObject({})).toBeTruthy();
     expect(isEmptyObject(new Empty())).toBeTruthy();
   });
