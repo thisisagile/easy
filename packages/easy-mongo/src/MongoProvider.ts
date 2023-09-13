@@ -102,7 +102,7 @@ export class MongoProvider {
           ifTrue(o.total, () => c.countDocuments(q))
         )
       )
-      .then(([res, total]) => this.toArray(res, options && { total }));
+      .then(([res, total]) => this.toArray(res, { ...options, total }));
   }
 
   all(options?: FindOptions): Promise<PageList<Json>> {

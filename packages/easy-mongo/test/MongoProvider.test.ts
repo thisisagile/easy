@@ -161,6 +161,26 @@ describe('MongoProvider', () => {
     );
   });
 
+  test('find with sort', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find(devs.where(devs.name.is('Jeroen')), { sort: [devs.name.desc(), devs.language.asc()] });
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
+  });
+
+  test('find with sorts', async () => {
+    provider.collection = mock.resolve(c);
+    await provider.find(devs.where(devs.name.is('Jeroen')), { sorts: { Name: desc, Language: asc } });
+    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
+  });
+
+  test('find returns original options', async () => {
+    c.countDocuments = mock.resolve(42);
+    provider.collection = mock.resolve(c);
+    const r = await provider.find({}, { take: 2, skip: 1 });
+    expect(c.find).toHaveBeenCalledWith({}, fits.json({ limit: 2, total: true, skip: 1 }));
+    expect(r.options).toEqual({ take: 2, skip: 1, total: 42 });
+  });
+
   test('group calls aggregate on the collection', () => {
     cursor.toArray = mock.resolve([devData.jeroen, devData.wouter, devData.naoufal]);
     c.aggregate = mock.resolve(cursor);
@@ -370,18 +390,6 @@ describe('MongoProvider', () => {
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs, Promise.resolve(client));
     expect(p.toFindOptions(s)).toStrictEqual(expected);
-  });
-
-  test('find with sort', async () => {
-    provider.collection = mock.resolve(c);
-    await provider.find(devs.where(devs.name.is('Jeroen')), { sort: [devs.name.desc(), devs.language.asc()] });
-    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
-  });
-
-  test('find with sorts', async () => {
-    provider.collection = mock.resolve(c);
-    await provider.find(devs.where(devs.name.is('Jeroen')), { sorts: { Name: desc, Language: asc } });
-    expect(c.find).toHaveBeenCalledWith(fits.any(), fits.with({ sort: { Name: -1, Language: 1 } }));
   });
 
   test('first time connect fails set client to undefined', async () => {
