@@ -1,5 +1,6 @@
 import {
   asJson,
+  asNumber,
   asString,
   choose,
   Condition,
@@ -32,11 +33,11 @@ import {
   Collection as MongoCollection,
   CreateIndexesOptions,
   Document,
-  StrictFilter as MongoFilter,
   FindCursor,
   FindOptions as MongoFindOptions,
   IndexSpecification,
   MongoClient,
+  StrictFilter as MongoFilter,
 } from 'mongodb';
 import { Collection } from './Collection';
 import { toMongoType } from './Utils';
@@ -170,8 +171,8 @@ export class MongoProvider {
 
   protected toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
     return {
-      limit: options?.take ?? 250,
-      ...(options?.skip && { skip: options?.skip }),
+      limit: asNumber(options?.take ?? 250),
+      ...(options?.skip && { skip: asNumber(options?.skip) }),
       ...((options?.sorts && { sort: options?.sorts }) || (options?.sort && { sort: this.coll.sort(...(options?.sort ?? [])) })),
       total: isDefined(options?.skip) || isDefined(options?.take),
       projection: options?.projection ?? { _id: 0 },
