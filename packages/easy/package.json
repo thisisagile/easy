@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup",
+    "build": "yarn g:tsc ",
+    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },

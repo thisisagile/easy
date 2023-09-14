@@ -4,6 +4,7 @@
   "compilerOptions": {
     "removeComments": true,
     "declaration": true,
+    "composite": true,
     "sourceMap": true,
     "target": "esnext",
 

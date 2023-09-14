@@ -22,7 +22,7 @@
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
     "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup",
+    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
     "postbuild": "copyfiles -u 1 src/**/*.scss dist",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme",
