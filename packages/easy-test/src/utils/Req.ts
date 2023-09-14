@@ -1,6 +1,5 @@
-import { asNumber } from './Utils';
+import { asNumber, isNumber } from './Utils';
 import { Id, Json, JsonValue, OneOrMore, Text } from './Types';
-import { ifDefined } from '@thisisagile/easy';
 
 export class Req {
   constructor(readonly state: any = {}) {}
@@ -22,11 +21,11 @@ export class Req {
   }
 
   get skip(): number | undefined {
-    return ifDefined(this.query?.skip, asNumber(this.query?.skip));
+    return isNumber(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
   }
 
   get take(): number | undefined {
-    return ifDefined(this.query?.take, asNumber(this.query?.take));
+    return isNumber(this.query?.take) ? asNumber(this.query?.take) : undefined;
   }
 
   get body(): unknown {
