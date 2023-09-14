@@ -10,7 +10,7 @@
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
     "format-all": "yarn workspaces foreach run format",
     "lint-all": "yarn workspaces foreach run lint",
-    "build-all": "yarn workspaces foreach -pt run build:tsup",
+    "build-all": "yarn workspaces foreach -p --topological-dev run build:tsup",
     "test-all": "jest --coverage",
     "test-sonarqube": "yarn workspaces foreach run test",
     "release": "yarn build-all && release-it",
