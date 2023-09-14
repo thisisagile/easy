@@ -1,4 +1,4 @@
-import { toReq } from '../../src';
+import { Req, toReq } from '../../src';
 import { DevUri } from '../ref';
 
 describe('Req', () => {
@@ -59,7 +59,13 @@ describe('Req', () => {
   });
 
   test('get skip and take', () => {
-    const r = toReq(reqPaged);
+    const r = new Req({}, { skip: 15, take: 5 }, {}, {});
+    expect(r.skip).toBe(15);
+    expect(r.take).toBe(5);
+  });
+
+  test('skip and take if not number', () => {
+    const r = new Req({}, { skip: '15', take: '5' }, {}, {});
     expect(r.skip).toBe(15);
     expect(r.take).toBe(5);
   });
