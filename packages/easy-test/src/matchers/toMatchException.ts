@@ -1,9 +1,8 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Exception } from '../utils/Types';
 import { match } from './Match';
 import { isDefined } from '../utils/Utils';
 
-export const toMatchException = (received: Exception, expected: unknown, reason?: string): CustomMatcherResult =>
+export const toMatchException = (received: Exception, expected: unknown, reason?: string): jest.CustomMatcherResult =>
   match<Exception>(expected as Exception)
     .undefined(e => e.id, 'Expected value is not an exception.')
     .not(

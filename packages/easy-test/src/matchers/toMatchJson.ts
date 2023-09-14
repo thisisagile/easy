@@ -1,4 +1,3 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { match } from './Match';
 import { eq } from '../utils/Eq';
 import { asJson } from '../utils/Utils';
@@ -10,7 +9,7 @@ export const MatchesJson = {
   Yes: 'Subset matches subject',
 };
 
-export const toMatchJson = (value?: unknown, subset?: unknown): CustomMatcherResult =>
+export const toMatchJson = (value?: unknown, subset?: unknown): jest.CustomMatcherResult =>
   match<unknown>(value)
     .undefined(v => v, MatchesJson.SubjectUndefined)
     .undefined(() => subset, MatchesJson.SubsetUndefined)

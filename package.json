@@ -5,11 +5,12 @@
     "g:prettier": "cd $INIT_CWD && prettier",
     "g:eslint": "cd $INIT_CWD && eslint",
     "g:tsc": "cd $INIT_CWD && tsc -b --force",
+    "g:tsup": "cd $INIT_CWD && tsup",
     "g:jest": "cd $INIT_CWD && jest",
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
     "format-all": "yarn workspaces foreach run format",
     "lint-all": "yarn workspaces foreach run lint",
-    "build-all": "yarn workspaces foreach -pt run build",
+    "build-all": "yarn workspaces foreach -pt run build:tsup",
     "test-all": "jest --coverage",
     "test-sonarqube": "yarn workspaces foreach run test",
     "release": "yarn build-all && release-it",
@@ -21,7 +22,7 @@
   "devDependencies": {
     "@release-it-plugins/workspaces": "^3.2.0",
     "@release-it/conventional-changelog": "5.1.1",
-    "@tsconfig/node14": "^1.0.3",
+    "@tsconfig/node18": "^18.2.2",
     "@types/jest": "^29.5.2",
     "@types/node": "^18.16.18",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
@@ -41,6 +42,7 @@
     "prettier": "^2.8.8",
     "release-it": "15.7.0",
     "ts-jest": "^29.1.0",
+    "tsup": "^7.2.0",
     "typescript": "^5.1.3"
   },
   "packageManager": "yarn@3.6.0"

@@ -1,4 +1,3 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Id, Tester, UseCase } from '../utils/Types';
 import { isDefined } from '../utils/Utils';
 import { match } from './Match';
@@ -8,7 +7,7 @@ const toUrl = (uc: UseCase, id?: Id): string => {
   return `/${uc.app.id}/${uc.id}${i}`;
 };
 
-export const toBeExactlyAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherResult => {
+export const toBeExactlyAt = (tester?: Tester, uc?: UseCase, id?: Id): jest.CustomMatcherResult => {
   return match<Tester>(tester as Tester)
     .undefined(t => t, 'Tester is undefined')
     .undefined(t => t.url, 'Tester does not contain a URL')

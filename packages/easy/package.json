@@ -5,6 +5,7 @@
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index",
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
     "build": "yarn g:tsc",
+    "build:tsup": "yarn g:tsup",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },

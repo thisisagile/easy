@@ -1,4 +1,3 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { match } from './Match';
 import { Results } from '../utils/Types';
 
@@ -11,7 +10,7 @@ const hasMessage = (res: Results, message: string) => res.results.some((r: any) 
 
 const messages = (res: Results): string => "'" + res?.results.map(r => r.message).join("', '") + "'";
 
-export const toResultWith = (results: Results, message: string): CustomMatcherResult =>
+export const toResultWith = (results: Results, message: string): jest.CustomMatcherResult =>
   match(results)
     .undefined(r => r, notDefined)
     .not(
@@ -20,13 +19,13 @@ export const toResultWith = (results: Results, message: string): CustomMatcherRe
     )
     .else(`Succeeds with message ${message}`);
 
-export const toFail = (results: Results): CustomMatcherResult =>
+export const toFail = (results: Results): jest.CustomMatcherResult =>
   match(results)
     .undefined(r => r, notDefined)
     .not(r => !r.isValid, doesNotFail)
     .else('Results does not fail');
 
-export const toFailWith = (results: Results, message: string): CustomMatcherResult =>
+export const toFailWith = (results: Results, message: string): jest.CustomMatcherResult =>
   match(results)
     .undefined(r => r, notDefined)
     .not(r => !r.isValid, doesNotFail)

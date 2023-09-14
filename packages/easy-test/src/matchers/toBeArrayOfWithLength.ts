@@ -1,8 +1,7 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Constructor as Ctor } from '../utils/Types';
 import { match } from './Match';
 
-export const toBeArrayOfWithLength = <T>(items: unknown, ctor: Ctor<T>, length: number): CustomMatcherResult =>
+export const toBeArrayOfWithLength = <T>(items: unknown, ctor: Ctor<T>, length: number): jest.CustomMatcherResult =>
   match<unknown>(items)
     .undefined(it => it, 'Subject is undefined.')
     .not(it => it instanceof Array, 'Subject is not an array.')

@@ -1,6 +1,5 @@
 import { match } from './Match';
 import { Message, toMessage } from '../utils/Types';
-import CustomMatcherResult = jest.CustomMatcherResult;
 
 // Handles CustomMatcherResult validations.
 
@@ -14,7 +13,7 @@ export const FailsWith = {
   No: (message: string, instead: string): string => `Match does fail, however not with message '${message}', but with message '${instead}' instead.`,
 };
 
-export const toFailMatcher = (result: CustomMatcherResult): CustomMatcherResult =>
+export const toFailMatcher = (result: jest.CustomMatcherResult): jest.CustomMatcherResult =>
   match(result)
     .not(
       c => !c.pass,
@@ -22,7 +21,7 @@ export const toFailMatcher = (result: CustomMatcherResult): CustomMatcherResult 
     )
     .else(Fails.Yes);
 
-export const toFailMatcherWith = (result: CustomMatcherResult, message: Message<CustomMatcherResult>): CustomMatcherResult =>
+export const toFailMatcherWith = (result: jest.CustomMatcherResult, message: Message<jest.CustomMatcherResult>): jest.CustomMatcherResult =>
   match(result)
     .not(
       c => !c.pass,

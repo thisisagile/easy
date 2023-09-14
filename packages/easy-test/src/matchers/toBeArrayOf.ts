@@ -1,8 +1,7 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Constructor as Ctor } from '../utils/Types';
 import { match } from './Match';
 
-export const toBeArrayOf = <T>(items: unknown, ctor: Ctor<T>): CustomMatcherResult =>
+export const toBeArrayOf = <T>(items: unknown, ctor: Ctor<T>): jest.CustomMatcherResult =>
   match<unknown>(items)
     .undefined(it => it, 'Subject is undefined.')
     .not(it => it instanceof Array, 'Subject is not an array.')

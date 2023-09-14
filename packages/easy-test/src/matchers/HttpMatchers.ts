@@ -1,8 +1,7 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Response } from '../utils/Response';
 import { match } from './Match';
 
-export const toHaveStatus = (res: Response, code: number): CustomMatcherResult =>
+export const toHaveStatus = (res: Response, code: number): jest.CustomMatcherResult =>
   match<Response>(res)
     .undefined(r => r, 'Response is unknown.')
     .undefined(
@@ -15,27 +14,27 @@ export const toHaveStatus = (res: Response, code: number): CustomMatcherResult =
     )
     .else(`Response does have status code '${code}'.`);
 
-export const toBeOk = (res: Response): CustomMatcherResult => toHaveStatus(res, 200);
+export const toBeOk = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 200);
 
-export const toBeCreated = (res: Response): CustomMatcherResult => toHaveStatus(res, 201);
+export const toBeCreated = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 201);
 
-export const toHaveNoContent = (res: Response): CustomMatcherResult => toHaveStatus(res, 204);
+export const toHaveNoContent = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 204);
 
-export const toBeBadRequest = (res: Response): CustomMatcherResult => toHaveStatus(res, 400);
+export const toBeBadRequest = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 400);
 
-export const toBeUnauthorized = (res: Response): CustomMatcherResult => toHaveStatus(res, 401);
+export const toBeUnauthorized = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 401);
 
-export const toBeForbidden = (res: Response): CustomMatcherResult => toHaveStatus(res, 403);
+export const toBeForbidden = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 403);
 
-export const toBeNotFound = (res: Response): CustomMatcherResult => toHaveStatus(res, 404);
+export const toBeNotFound = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 404);
 
-export const toBeConflict = (res: Response): CustomMatcherResult => toHaveStatus(res, 409);
+export const toBeConflict = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 409);
 
-export const toBeInternalServerError = (res: Response): CustomMatcherResult => toHaveStatus(res, 500);
+export const toBeInternalServerError = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 500);
 
-export const toBeBadGateway = (res: Response): CustomMatcherResult => toHaveStatus(res, 502);
+export const toBeBadGateway = (res: Response): jest.CustomMatcherResult => toHaveStatus(res, 502);
 
-export const toBeOkWithItems = (res: Response, length: number): CustomMatcherResult =>
+export const toBeOkWithItems = (res: Response, length: number): jest.CustomMatcherResult =>
   match<Response>(res)
     .undefined(r => r.status?.id, 'Response did not have a status')
     .not(

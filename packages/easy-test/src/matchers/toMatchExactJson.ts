@@ -1,4 +1,3 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { match } from './Match';
 import { eq } from '../utils/Eq';
 
@@ -9,7 +8,7 @@ export const MatchesExactJson = {
   Yes: 'Object matches subject exactly',
 };
 
-export const toMatchExactJson = (value?: unknown, json?: unknown): CustomMatcherResult =>
+export const toMatchExactJson = (value?: unknown, json?: unknown): jest.CustomMatcherResult =>
   match<unknown>(value)
     .undefined(v => v, MatchesExactJson.SubjectUndefined)
     .undefined(() => json, MatchesExactJson.SubsetUndefined)

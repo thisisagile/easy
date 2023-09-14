@@ -1,11 +1,11 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
 
   "compilerOptions": {
     "removeComments": true,
     "declaration": true,
     "sourceMap": true,
-    "composite": true,
+    "target": "esnext",
 
     "resolveJsonModule": true,
 

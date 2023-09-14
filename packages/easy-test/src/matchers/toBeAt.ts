@@ -1,8 +1,7 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Id, Tester, UseCase } from '../utils/Types';
 import { match } from './Match';
 
-export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): CustomMatcherResult => {
+export const toBeAt = (tester?: Tester, uc?: UseCase, id?: Id): jest.CustomMatcherResult => {
   return match<Tester>(tester as Tester)
     .undefined(t => t, 'Tester is undefined')
     .undefined(t => t.url, 'Tester does not contain a URL')

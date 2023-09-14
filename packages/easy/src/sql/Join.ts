@@ -2,9 +2,10 @@ import { Column } from './Column';
 import { Table } from './Table';
 
 export class Join {
-  readonly db = this.first.db;
-
-  constructor(private first: Table, private second: Table, private c?: Column, private c2?: Column) {}
+  readonly db;
+  constructor(private first: Table, private second: Table, private c?: Column, private c2?: Column) {
+    this.db = this.first.db;
+  }
 
   on(c: Column, c2: Column): this {
     this.c = c;

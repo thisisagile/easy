@@ -1,9 +1,8 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { Uri } from '../utils/Types';
 import { match } from './Match';
 import { asString } from '../utils/Utils';
 
-export const toMatchRoute = (uri?: Uri, route?: Uri | string): CustomMatcherResult =>
+export const toMatchRoute = (uri?: Uri, route?: Uri | string): jest.CustomMatcherResult =>
   match<Uri | undefined>(uri)
     .undefined(u => u, 'Subject is undefined.')
     .undefined(() => route, 'Route to include is undefined.')

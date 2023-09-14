@@ -1,8 +1,7 @@
-import CustomMatcherResult = jest.CustomMatcherResult;
 import { match } from './Match';
 import { asString } from '../utils/Utils';
 
-export const toMatchText = (value?: unknown, text?: unknown): CustomMatcherResult =>
+export const toMatchText = (value?: unknown, text?: unknown): jest.CustomMatcherResult =>
   match<unknown>(value)
     .undefined(v => v, 'Subject is undefined.')
     .undefined(() => text, 'Text to match with is undefined.')

@@ -1,6 +1,5 @@
 import { isDefined } from '../utils/Utils';
 import { Message, toMessage } from '../utils/Types';
-import CustomMatcherResult = jest.CustomMatcherResult;
 
 export class Match<S> {
   constructor(private readonly subject: S, private readonly failed = false, private readonly message: Message<S> = '') {}
@@ -21,7 +20,7 @@ export class Match<S> {
     return this.not(() => isDefined(p(this.subject)), message);
   }
 
-  else(message: Message<S>): CustomMatcherResult {
+  else(message: Message<S>): jest.CustomMatcherResult {
     return {
       pass: !this.failed,
       message: () => (this.failed ? toMessage(this.message) : `${toMessage(message, this.subject)}, which we did not expect.`),
