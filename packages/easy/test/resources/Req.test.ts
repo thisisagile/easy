@@ -58,6 +58,12 @@ describe('Req', () => {
     });
   });
 
+  test('get skip and take', () => {
+    const r = toReq(reqPaged);
+    expect(r.skip).toBe(15);
+    expect(r.take).toBe(5);
+  });
+
   test('toReq from with headers', () => {
     const headers = { authorization: 'Bearer 1234' };
     const r = toReq({ headers });
