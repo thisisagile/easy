@@ -12,7 +12,7 @@ describe('List', () => {
       name: 'Jane',
       age: undefined,
       weight: 95,
-    }
+    },
   );
   const jackAndJill = toList(
     { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
@@ -21,7 +21,7 @@ describe('List', () => {
       name: 'Jill',
       age: undefined,
       weight: undefined as unknown as number,
-    }
+    },
   );
 
   test('list and array are equal', () => {
@@ -41,7 +41,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first()
+        .first(),
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -165,8 +165,8 @@ describe('List', () => {
           name: 'Boet',
           language: 'Typescript',
           level: 0,
-        })
-      )
+        }),
+      ),
     ).toHaveLength(3);
     expect(devs[0]).not.toMatchObject(Dev.Sander);
     expect(devs[0].name).toBe('Boet');
@@ -588,6 +588,45 @@ describe('asList', () => {
     expect(toList().sum(() => 23)).toBe(0);
   });
 
+  const item1 = { amount: 3, discount: 32, name: 'sander', live: true };
+  const item2 = { amount: 1, discount: 42, name: 'rob', live: false};
+
+  test('max', () => {
+    const items = toList(item1, item2);
+
+    expect(items.max('amount')).toBe(item1);
+    expect(items.max('discount')).toBe(item2);
+    expect(items.max('name')).toBe(item1);
+    expect(items.max('live')).toBe(item1);
+  });
+
+  test('min', () => {
+    const items = toList(item1, item2);
+
+    expect(items.min('amount')).toBe(item2);
+    expect(items.min('discount')).toBe(item1);
+    expect(items.min('name')).toBe(item2);
+    expect(items.min('live')).toBe(item2);
+  });
+
+  test('maxValue', () => {
+    const items = toList(item1, item2);
+
+    expect(items.maxValue('amount')).toBe(3);
+    expect(items.maxValue('discount')).toBe(42);
+    expect(items.maxValue('name')).toBe('sander');
+    expect(items.maxValue('live')).toBe(true);
+  });
+
+  test('minValue', () => {
+    const items = toList(item1, item2);
+
+    expect(items.minValue('amount')).toBe(1);
+    expect(items.minValue('discount')).toBe(32);
+    expect(items.minValue('name')).toBe('rob');
+    expect(items.minValue('live')).toBe(false);
+  });
+
   test('firstItem', () => {
     const list = toList<{ id?: number; age?: number; name?: string }>(
       { name: 'sander' },
@@ -595,7 +634,7 @@ describe('asList', () => {
       {
         id: 1,
         name: 'jeroen',
-      }
+      },
     );
     expect(list.firstValue(i => i.name)).toBe('sander');
     expect(list.firstValue(i => i.id)).toBe(1);

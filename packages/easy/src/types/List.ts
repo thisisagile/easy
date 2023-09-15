@@ -106,6 +106,22 @@ export class List<T = unknown> extends Array<T> {
     return this.reduce((sum: number, i) => sum + p(i), 0);
   }
 
+  max(key: keyof T): T {
+    return this.desc(key).first();
+  }
+
+  min(key: keyof T): T {
+    return this.asc(key).first();
+  }
+
+  maxValue(key: keyof T):  T[keyof T] | undefined {
+    return this.desc(key).first()?.[key];
+  }
+
+  minValue(key: keyof T):  T[keyof T] | undefined {
+    return this.asc(key).first()?.[key];
+  }
+
   byId(id: Id): T {
     return this.first(i => asString((i as any).id) === asString(id));
   }
