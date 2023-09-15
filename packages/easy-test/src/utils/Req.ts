@@ -1,8 +1,13 @@
-import { asNumber, isNumber } from './Utils';
+import { asNumber, isDefined } from './Utils';
 import { Id, Json, JsonValue, OneOrMore, Text } from './Types';
 
 export class Req {
-  constructor(readonly state: any = {}) {}
+  readonly skip: number | undefined;
+  readonly take: number | undefined;
+  constructor(readonly state: any = {}) {
+    this.skip = isDefined(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
+    this.take = isDefined(this.query?.take) ? asNumber(this.query?.take) : undefined;
+  }
 
   get id(): Id {
     return this.state.id ?? this.path.id;
@@ -18,14 +23,6 @@ export class Req {
 
   get query(): Json {
     return this.state?.query ?? {};
-  }
-
-  get skip(): number | undefined {
-    return isNumber(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
-  }
-
-  get take(): number | undefined {
-    return isNumber(this.query?.take) ? asNumber(this.query?.take) : undefined;
   }
 
   get body(): unknown {

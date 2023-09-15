@@ -18,7 +18,7 @@ describe('Req', () => {
   });
 
   test('skip and take if not number', () => {
-    const r = new Req({ query: { skip: 15, take: 5 } });
+    const r = new Req({ query: { skip: '15', take: '5' } });
     expect(r.skip).toBe(15);
     expect(r.take).toBe(5);
   });
