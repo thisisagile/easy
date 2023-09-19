@@ -127,7 +127,7 @@ describe('Lucene', () => {
 
   test('wildcard', () => {
     const h = lucene.clause({ wildcard: wildcard() });
-    expect(h[0]).toStrictEqual({ wildcard: { path: { wildcard: '*' }, query: '*' } });
+    expect(h[0]).toStrictEqual({ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } });
   });
 
   test('should search, single clause', () => {
@@ -218,7 +218,7 @@ describe('Lucene', () => {
   describe('search', () => {
     test('empty search', () => {
       const s = searchWithDef({}, def);
-      expect(s).toStrictEqual({ $search: { compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] } } });
+      expect(s).toStrictEqual({ $search: { compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true, } }] } } });
     });
 
     test('should search, single clause', () => {
@@ -270,7 +270,7 @@ describe('Lucene', () => {
         $searchMeta: {
           facet: {
             operator: {
-              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] },
+              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true, } }] },
             },
             facets: {
               status: { path: 'status', type: 'string', numBuckets: 1000 },
@@ -289,7 +289,7 @@ describe('Lucene', () => {
     const s = lucene.searchMeta({}, def);
     expect(s).toStrictEqual({
       $searchMeta: {
-        compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] },
+        compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
       },
     });
   });

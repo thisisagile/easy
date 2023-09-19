@@ -107,11 +107,12 @@ export const lucene = {
         },
       })),
   wildcard:
-    (value?: OneOrMore<unknown>): Operator =>
+    (value?: OneOrMore<unknown>, allowAnalyzedField = true): Operator =>
     (path: string) => ({
       wildcard: {
         path: path === 'wildcard' ? { wildcard: '*' } : path,
         query: ifDefined(value, value, '*'),
+        allowAnalyzedField
       },
     }),
   lt:
