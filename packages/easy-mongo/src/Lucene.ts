@@ -4,7 +4,9 @@ import {
   Func,
   ifDefined,
   ifNotEmpty,
+  ifTrue,
   isDefined,
+  isEmptyObject,
   isFunction,
   List,
   on,
@@ -79,12 +81,18 @@ export const lucene = {
   searchMeta: (query: Record<string, string | number>, def: SearchDefinition, index?: string) => ({
     $searchMeta: {
       ...ifDefined(index, { index }),
-      facet: {
-        operator: {
-          compound: compound(query, def),
+      ...ifTrue(
+        !isEmptyObject(lucene.facets(def)),
+        {
+          facet: {
+            operator: {
+              compound: compound(query, def),
+            },
+            facets: lucene.facets(def),
+          },
         },
-        facets: lucene.facets(def),
-      },
+        { compound: compound(query, def) }
+      ),
     },
   }),
   exists: (): Operator => (path: string) => ({ exists: { path } }),

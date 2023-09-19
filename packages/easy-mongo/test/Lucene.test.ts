@@ -281,4 +281,16 @@ describe('Lucene', () => {
       });
     });
   });
+
+  test('works without giving facets', () => {
+    const def: SearchDefinition = {
+      brand: v => ({ should: { brand: text(v) } }),
+    };
+    const s = lucene.searchMeta({}, def);
+    expect(s).toStrictEqual({
+      $searchMeta: {
+        compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*' } }] },
+      },
+    });
+  });
 });
