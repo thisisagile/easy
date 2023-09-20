@@ -70,15 +70,15 @@ export const lucene = {
       compound: entries(c).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {} as any),
     },
   }),
-  searchWithDef: (query: Record<string, string | number>, options: SearchDefinition, index?: string) => {
+  searchWithDef: (query: Record<string, string | number>, options: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => {
     const sort = entries(query)
       .mapDefined(([k, v]) => options[k]?.(v)?.sort)
       .first();
     return {
-      $search: { ...ifDefined(index, { index }), compound: compound(query, options), ...ifDefined(sort, { sort }) },
+      $search: { ...ifDefined(index, { index }), compound: compound(query, options), ...ifDefined(sort, { sort }), count: { type: count } },
     };
   },
-  searchMeta: (query: Record<string, string | number>, def: SearchDefinition, index?: string) => ({
+  searchMeta: (query: Record<string, string | number>, def: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => ({
     $searchMeta: {
       ...ifDefined(index, { index }),
       ...ifTrue(
@@ -93,6 +93,7 @@ export const lucene = {
         },
         { compound: compound(query, def) }
       ),
+      count: { type: count }
     },
   }),
   exists: (): Operator => (path: string) => ({ exists: { path } }),
@@ -112,7 +113,7 @@ export const lucene = {
       wildcard: {
         path: path === 'wildcard' ? { wildcard: '*' } : path,
         query: ifDefined(value, value, '*'),
-        allowAnalyzedField
+        allowAnalyzedField,
       },
     }),
   lt:

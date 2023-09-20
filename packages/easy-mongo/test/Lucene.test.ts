@@ -202,43 +202,71 @@ describe('Lucene', () => {
   });
 
   const def: SearchDefinition = {
-    // @ts-ignore
     brand: v => ({ should: { brand: text(v) } }),
-    // @ts-ignore
     size: v => ({ should: { size: lt(v) } }),
-    // @ts-ignore
     q: v => ({ should: { wildcard: text(v) } }),
-    // @ts-ignore
     fuzzy: v => ({ should: { wildcard: text(v, { maxExpansions: 1, prefixLength: 2 }) } }),
-    // @ts-ignore
     status: () => ({ facet: facet.string('status') }),
-    // @ts-ignore
     price: () => ({ facet: facet.number('price.cents', toList(500, 2000, 3500, 6000)) }),
   };
   describe('search', () => {
     test('empty search', () => {
       const s = searchWithDef({}, def);
-      expect(s).toStrictEqual({ $search: { compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true, } }] } } });
+      expect(s).toStrictEqual({
+        $search: {
+          compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
+          count: {
+            type: 'total',
+          },
+        },
+      });
     });
 
     test('should search, single clause', () => {
       const s = searchWithDef({ brand: 'apple' }, def);
-      expect(s).toStrictEqual({ $search: { compound: { should: [{ text: { path: 'brand', query: 'apple' } }] } } });
+      expect(s).toStrictEqual({
+        $search: {
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          count: {
+            type: 'total',
+          },
+        },
+      });
     });
 
     test('should search, single fuzzy clause', () => {
       const s = searchWithDef({ fuzzy: 'appel' }, def);
       expect(s).toStrictEqual({
-        $search: { compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: { maxExpansions: 1, prefixLength: 2 } } }] } },
+        $search: {
+          compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: { maxExpansions: 1, prefixLength: 2 } } }] },
+          count: {
+            type: 'total',
+          },
+        },
       });
     });
 
+    test('set count to lowerBound', () => {
+      const s = searchWithDef({ brand: 'apple' }, def, 'lowerBound');
+      expect(s).toStrictEqual({
+        $search: {
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          count: {
+            type: 'lowerBound',
+          },
+        },
+      });
+    })
+
     test('should search, single clause and index', () => {
-      const s = searchWithDef({ brand: 'apple' }, def, 'data.nl');
+      const s = searchWithDef({ brand: 'apple' }, def, 'total', 'data.nl');
       expect(s).toStrictEqual({
         $search: {
           index: 'data.nl',
           compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          count: {
+            type: 'total',
+          },
         },
       });
     });
@@ -258,6 +286,9 @@ describe('Lucene', () => {
               { range: { path: 'size', lt: 42 } },
             ],
           },
+          count: {
+            type: 'total',
+          },
         },
       });
     });
@@ -270,17 +301,32 @@ describe('Lucene', () => {
         $searchMeta: {
           facet: {
             operator: {
-              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true, } }] },
+              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
             },
             facets: {
               status: { path: 'status', type: 'string', numBuckets: 1000 },
               price: { path: 'price.cents', type: 'number', boundaries: [500, 2000, 3500, 6000] },
             },
           },
+          count: {
+            type: 'total',
+          },
         },
       });
     });
   });
+
+  test('set count to lowerBound', () => {
+    const s = lucene.searchMeta({}, def, 'lowerBound');
+    expect(s).toStrictEqual({
+      $searchMeta: {
+        facet: expect.anything(),
+        count: {
+          type: 'lowerBound',
+        },
+      },
+    });
+  })
 
   test('works without giving facets', () => {
     const def: SearchDefinition = {
@@ -290,6 +336,9 @@ describe('Lucene', () => {
     expect(s).toStrictEqual({
       $searchMeta: {
         compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
+        count: {
+          type: 'total',
+        },
       },
     });
   });
