@@ -36,7 +36,7 @@ export class AtlasSearchGateway extends MongoGateway {
       this.aggregate(
         searchMeta(query, this.searchDef),
         replaceWith({
-          total: '$count.lowerBound',
+          total: '$count.total',
           facets: Object.keys(facets(this.searchDef)).reduce((acc, k) => ({ ...acc, [k]: `$facet.${k}.buckets` }), {}),
         })
       )

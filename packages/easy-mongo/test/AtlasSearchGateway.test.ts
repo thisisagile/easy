@@ -1,8 +1,7 @@
-import { lucene, MongoProvider, SearchDefinition, stages } from '../src';
+import { AtlasSearchGateway, lucene, MongoProvider, SearchDefinition, stages } from '../src';
 import { FilterValue, resolve, toPageList } from '@thisisagile/easy';
 import { DevCollection } from './ref/DevCollection';
 import { mock } from '@thisisagile/easy-test';
-import { AtlasSearchGateway } from '../src/AtlasSearchGateway';
 
 const { searchWithDef, searchMeta, facet } = lucene;
 const { skip, take } = stages.skip;
@@ -13,9 +12,7 @@ describe('AtlasSearchGateway', () => {
   let collection: DevCollection;
   let gateway: AtlasSearchGateway;
   const def: SearchDefinition = {
-    // @ts-ignore
     q: v => ({ should: { wildcard: lucene.text(v) } }),
-    // @ts-ignore
     language: () => ({ facet: facet.string('language') }),
   };
   const results = toPageList([{ _id: { shopId: 42 } }]);
@@ -33,7 +30,7 @@ describe('AtlasSearchGateway', () => {
     expect(provider.aggregate).toHaveBeenNthCalledWith(2, [
       searchMeta(query, def),
       replaceWith({
-        total: '$count.lowerBound',
+        total: '$count.total',
         facets: { language: '$facet.language.buckets' },
       }),
     ]);
