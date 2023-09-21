@@ -114,14 +114,6 @@ export class List<T = unknown> extends Array<T> {
     return this.asc(key).first();
   }
 
-  maxValue(key: keyof T):  T[keyof T] | undefined {
-    return this.desc(key).first()?.[key];
-  }
-
-  minValue(key: keyof T):  T[keyof T] | undefined {
-    return this.asc(key).first()?.[key];
-  }
-
   byId(id: Id): T {
     return this.first(i => asString((i as any).id) === asString(id));
   }
@@ -209,3 +201,7 @@ export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
 export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
+
+export const maxValue = <T>(l: List<T>, key: keyof T): T[keyof T] | undefined => l.desc(key).first()?.[key];
+
+export const minValue = <T>(l: List<T>, key: keyof T): T[keyof T] | undefined => l.asc(key).first()?.[key];
