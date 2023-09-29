@@ -60,7 +60,7 @@ const compound = (query: Record<string, string | number>, def: SearchDefinition)
     ...ifNotEmpty(mustNot(query, def), m => ({ mustNot: m })),
     ...ifNotEmpty(must(query, def), m => ({ must: m })),
   }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {
-    minimumShouldMatch: 1,
+    minimumShouldMatch: should(query, def).length > 0 ? 1 : 0,
   } as any);
 
 export const lucene = {
