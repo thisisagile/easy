@@ -1,3 +1,4 @@
+export * from './Base64';
 export * from './Convert';
 export * from './If';
 export * from './Loading';
