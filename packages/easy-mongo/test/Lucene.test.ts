@@ -214,7 +214,7 @@ describe('Lucene', () => {
       const s = searchWithDef({}, def);
       expect(s).toStrictEqual({
         $search: {
-          compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
+          compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }], minimumShouldMatch: 1 },
           count: {
             type: 'total',
           },
@@ -226,7 +226,7 @@ describe('Lucene', () => {
       const s = searchWithDef({ brand: 'apple' }, def);
       expect(s).toStrictEqual({
         $search: {
-          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 1 },
           count: {
             type: 'total',
           },
@@ -238,7 +238,7 @@ describe('Lucene', () => {
       const s = searchWithDef({ fuzzy: 'appel' }, def);
       expect(s).toStrictEqual({
         $search: {
-          compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: { maxExpansions: 1, prefixLength: 2 } } }] },
+          compound: { should: [{ text: { path: { wildcard: '*' }, query: 'appel', fuzzy: { maxExpansions: 1, prefixLength: 2 } } }], minimumShouldMatch: 1 },
           count: {
             type: 'total',
           },
@@ -250,20 +250,20 @@ describe('Lucene', () => {
       const s = searchWithDef({ brand: 'apple' }, def, 'lowerBound');
       expect(s).toStrictEqual({
         $search: {
-          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 1 },
           count: {
             type: 'lowerBound',
           },
         },
       });
-    })
+    });
 
     test('should search, single clause and index', () => {
       const s = searchWithDef({ brand: 'apple' }, def, 'total', 'data.nl');
       expect(s).toStrictEqual({
         $search: {
           index: 'data.nl',
-          compound: { should: [{ text: { path: 'brand', query: 'apple' } }] },
+          compound: { should: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 1 },
           count: {
             type: 'total',
           },
@@ -285,6 +285,7 @@ describe('Lucene', () => {
               },
               { range: { path: 'size', lt: 42 } },
             ],
+            minimumShouldMatch: 1,
           },
           count: {
             type: 'total',
@@ -301,7 +302,7 @@ describe('Lucene', () => {
         $searchMeta: {
           facet: {
             operator: {
-              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
+              compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }], minimumShouldMatch: 1 },
             },
             facets: {
               status: { path: 'status', type: 'string', numBuckets: 1000 },
@@ -326,7 +327,7 @@ describe('Lucene', () => {
         },
       },
     });
-  })
+  });
 
   test('works without giving facets', () => {
     const def: SearchDefinition = {
@@ -335,7 +336,7 @@ describe('Lucene', () => {
     const s = lucene.searchMeta({}, def);
     expect(s).toStrictEqual({
       $searchMeta: {
-        compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }] },
+        compound: { should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }], minimumShouldMatch: 1 },
         count: {
           type: 'total',
         },

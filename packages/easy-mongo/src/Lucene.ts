@@ -59,7 +59,9 @@ const compound = (query: Record<string, string | number>, def: SearchDefinition)
     ...ifNotEmpty(filter(query, def), f => ({ filter: f })),
     ...ifNotEmpty(mustNot(query, def), m => ({ mustNot: m })),
     ...ifNotEmpty(must(query, def), m => ({ must: m })),
-  }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {} as any);
+  }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {
+    minimumShouldMatch: 1,
+  } as any);
 
 export const lucene = {
   clause: (c: Clauses) => entries(c).reduce((res, [k, v]) => res.add(isFunction(v) ? v(k) : v), toList()),
@@ -93,7 +95,7 @@ export const lucene = {
         },
         { compound: compound(query, def) }
       ),
-      count: { type: count }
+      count: { type: count },
     },
   }),
   exists: (): Operator => (path: string) => ({ exists: { path } }),

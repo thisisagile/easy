@@ -163,10 +163,10 @@ export class MongoProvider {
     return this.createIndex(ii, { unique: false, ...options });
   }
 
-  collection(): Promise<MongoCollection> {
+  collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
     return this.cluster()
       .then(c => c.db(this.coll.db.name))
-      .then(db => db.collection(asString(this.coll)));
+      .then(db => db.collection<T>(asString(this.coll)));
   }
 
   protected toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
