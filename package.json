@@ -5,7 +5,7 @@
     "g:prettier": "cd $INIT_CWD && prettier",
     "g:eslint": "cd $INIT_CWD && eslint",
     "g:tsc": "cd $INIT_CWD && tsc -b --force",
-    "g:tsup": "cd $INIT_CWD && tsup",
+    "g:tsup": "cd $INIT_CWD && tsup --silent",
     "g:jest": "cd $INIT_CWD && jest",
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
     "format-all": "yarn workspaces foreach run format",
