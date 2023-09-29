@@ -50,6 +50,7 @@ export const error = (e: Error, req: express.Request, res: express.Response, _ne
     .map(oe => toBody(oe))
     .accept(r => (response = r))
     .accept(r => (ctx.request.lastError = r.status.isServerError ? r.body.error?.errors[0]?.message : undefined))
+    .accept(r => (ctx.request.lastErrorStack = r.status.isServerError ? e.stack : undefined))
     .recover(() => response)
     .accept(r => res.status(r.status.status).json(r.body));
 };

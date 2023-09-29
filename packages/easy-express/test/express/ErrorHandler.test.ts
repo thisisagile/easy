@@ -156,11 +156,14 @@ describe('ErrorHandler', () => {
   test("Don't set lastError on client error", () => {
     error(toOriginatedError(toResults('Client', 'Error')), req, res, next);
     expect(ctx.request.lastError).toBeUndefined();
+    expect(ctx.request.lastErrorStack).toBeUndefined();
   });
 
   test('Set lastError on server error', () => {
-    error(new Error(serverError), req, res, next);
+    const e = new Error(serverError);
+    error(e, req, res, next);
     expect(ctx.request.lastError).toBe(serverError);
+    expect(ctx.request.lastErrorStack).toBe(e.stack);
   });
 
   test('Recover from Errors thrown in error', () => {

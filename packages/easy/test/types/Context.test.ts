@@ -42,6 +42,8 @@ describe('Environment Context', () => {
   test('simple get and set on request context', () => {
     ctx.request.lastError = 'Wrong';
     expect(ctx.request.lastError).toBe('Wrong');
+    ctx.request.lastErrorStack = 'Trace';
+    expect(ctx.request.lastErrorStack).toBe('Trace');
   });
 
   test('simple wrap on request context', async () => {

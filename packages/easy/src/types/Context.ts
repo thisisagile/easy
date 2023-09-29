@@ -35,6 +35,7 @@ export interface RequestContext {
   jwt: string;
   correlationId?: Uuid;
   lastError?: string;
+  lastErrorStack?: string;
   get<T>(key: string): T;
   set<T>(key: string, value: T): T;
   create: (f: () => void) => void;
