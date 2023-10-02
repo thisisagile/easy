@@ -51,21 +51,20 @@ const must = (query: Record<string, string | number>, def: SearchDefinition): Cl
 const mustNot = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.mustNot);
 const filter = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.filter);
 
-const compound = (query: Record<string, string | number>, def: SearchDefinition): Partial<Compound> =>
-  entries({
-    should: ifNotEmpty(should(query, def).concat(filter(query, def), must(query, def), mustNot(query, def)), should(query, def), [
-      { wildcard: lucene.wildcard() },
-    ]),
-    ...ifNotEmpty(filter(query, def), f => ({ filter: f })),
-    ...ifNotEmpty(mustNot(query, def), m => ({ mustNot: m })),
-    ...ifNotEmpty(must(query, def), m => ({ must: m })),
-  }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {
-    minimumShouldMatch: should(query, def).length > 0 ? 1 : 0,
-  } as any);
-
 export const lucene = {
   clause: (c: Clauses) => entries(c).reduce((res, [k, v]) => res.add(isFunction(v) ? v(k) : v), toList()),
   clauses: (cs: OneOrMore<Clauses>) => toArray(cs).flatMap(c => lucene.clause(c)),
+  compound: (query: Record<string, string | number>, def: SearchDefinition): Partial<Compound> =>
+    entries({
+      should: ifNotEmpty(should(query, def).concat(filter(query, def), must(query, def), mustNot(query, def)), should(query, def), [
+        { wildcard: lucene.wildcard() },
+      ]),
+      ...ifNotEmpty(filter(query, def), f => ({ filter: f })),
+      ...ifNotEmpty(mustNot(query, def), m => ({ mustNot: m })),
+      ...ifNotEmpty(must(query, def), m => ({ must: m })),
+    }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {
+      minimumShouldMatch: should(query, def).length > 0 ? 1 : 0,
+    } as any),
   search: (c: Partial<Compound>, index?: string) => ({
     $search: {
       ...ifDefined(index, { index }),
@@ -77,7 +76,7 @@ export const lucene = {
       .mapDefined(([k, v]) => options[k]?.(v)?.sort)
       .first();
     return {
-      $search: { ...ifDefined(index, { index }), compound: compound(query, options), ...ifDefined(sort, { sort }), count: { type: count } },
+      $search: { ...ifDefined(index, { index }), compound: lucene.compound(query, options), ...ifDefined(sort, { sort }), count: { type: count } },
     };
   },
   searchMeta: (query: Record<string, string | number>, def: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => ({
@@ -88,12 +87,12 @@ export const lucene = {
         {
           facet: {
             operator: {
-              compound: compound(query, def),
+              compound: lucene.compound(query, def),
             },
             facets: lucene.facets(def),
           },
         },
-        { compound: compound(query, def) }
+        { compound: lucene.compound(query, def) }
       ),
       count: { type: count },
     },
