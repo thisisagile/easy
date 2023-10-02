@@ -86,8 +86,11 @@ export class DateTime extends Value<Optional<string>> {
     return new DateTime(this.luxon.plus(isNumber(n) ? { [unit ?? 'day' as string]: n } : n).toISO());
   }
 
-  subtract(n: number, unit: DateTimeUnit = "day"): DateTime {
-    return new DateTime(this.luxon.minus({ [unit]: n }).toISO());
+  subtract(n: number): DateTime;
+  subtract(n: number, unit: DurationUnit): DateTime;
+  subtract(duration: Duration): DateTime;
+  subtract(n: number | Duration, unit?: DurationUnit): DateTime {
+    return new DateTime(this.luxon.minus(isNumber(n) ? { [unit ?? 'day' as string]: n } : n).toISO());
   }
 
   diff(other: DateTime, unit: DateTimeUnit = "day", opts?: DiffOptions): number {

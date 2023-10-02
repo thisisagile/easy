@@ -236,15 +236,23 @@ describe('DateTime', () => {
   });
 
   test('subtract', () => {
+    const da = '2021-03-20T08:39:44.000Z';
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).subtract(5);
-    expect(d).toMatchText('2021-03-20T08:39:44.000Z');
+    expect(d).toMatchText(da);
+    const d2 = new DateTime(iso).subtract(5, 'day');
+    expect(d2).toMatchText(da);
+    const d3 = new DateTime(iso).subtract({days: 5});
+    expect(d3).toMatchText(da);
   });
 
   test('subtract other unit', () => {
+    const da = '2016-03-25T08:39:44.000Z';
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).subtract(5, 'year');
-    expect(d).toMatchText('2016-03-25T08:39:44.000Z');
+    expect(d).toMatchText(da);
+    const d2 = new DateTime(iso).subtract({ years: 5 });
+    expect(d2).toMatchText(da);
   });
 
   test('subtract again, to check immutability', () => {
