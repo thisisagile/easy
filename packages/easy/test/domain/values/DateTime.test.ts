@@ -22,6 +22,7 @@ const formats = {
 };
 
 describe('DateTime', () => {
+
   test('construct from undefined is not valid and value is undefined.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
@@ -207,21 +208,31 @@ describe('DateTime', () => {
   });
 
   test('add', () => {
+    const da = '2021-03-30T08:39:44.000Z';
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(5);
-    expect(d).toMatchText('2021-03-30T08:39:44.000Z');
+    expect(d).toMatchText(da);
+    const d2 = new DateTime(iso).add(5, 'day');
+    expect(d2).toMatchText(da);
+    const d3 = new DateTime(iso).add({days: 5});
+    expect(d3).toMatchText(da);
   });
 
   test('add other unit', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(5, 'year');
     expect(d).toMatchText('2026-03-25T08:39:44.000Z');
+    const d2 = new DateTime(iso).add({ years: 5 });
+    expect(d2).toMatchText('2026-03-25T08:39:44.000Z');
   });
 
   test('add negative', () => {
+    const da = '2021-03-20T08:39:44.000Z';
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(-5);
-    expect(d).toMatchText('2021-03-20T08:39:44.000Z');
+    expect(d).toMatchText(da);
+    const d2 = new DateTime(iso).add({days: -5});
+    expect(d2).toMatchText(da);
   });
 
   test('subtract', () => {
