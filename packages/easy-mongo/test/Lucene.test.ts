@@ -294,6 +294,31 @@ describe('Lucene', () => {
         },
       });
     });
+
+    test('works with full query', () => {
+      const def: SearchDefinition = {
+        s: (v, q) => ({ should: { s: text(v ?? q?.other) } }),
+      };
+      const s = searchWithDef({ s: undefined as any, other: 'test' }, def);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: {
+            should: [
+              {
+                text: {
+                  path: 's',
+                  query: 'test',
+                },
+              },
+            ],
+            minimumShouldMatch: 1,
+          },
+          count: {
+            type: 'total',
+          },
+        },
+      });
+    });
   });
 
   describe('searchMeta', () => {

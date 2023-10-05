@@ -35,7 +35,8 @@ export type Clauses = Record<string, Clause>;
 export type SearchDefinition = Record<
   string,
   (
-    v: string | number
+    v: string | number,
+    q?: Record<string, string | number>
   ) => RequireAtLeastOne<{ should?: Clauses; filter?: Clauses; must?: Clauses; mustNot?: Clauses; sort?: Record<string, 1 | -1>; facet?: Facet }>
 >;
 
@@ -46,10 +47,11 @@ type Compound = {
   filter: OneOrMore<Clauses>;
 };
 
-const should = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.should);
-const must = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.must);
-const mustNot = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.mustNot);
-const filter = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v)?.filter);
+const should = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v, query)?.should);
+const must = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v, query)?.must);
+const mustNot = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] =>
+  entries(query).mapDefined(([k, v]) => def[k]?.(v, query)?.mustNot);
+const filter = (query: Record<string, string | number>, def: SearchDefinition): Clauses[] => entries(query).mapDefined(([k, v]) => def[k]?.(v, query)?.filter);
 
 export const lucene = {
   clause: (c: Clauses) => entries(c).reduce((res, [k, v]) => res.add(isFunction(v) ? v(k) : v), toList()),
@@ -73,7 +75,7 @@ export const lucene = {
   }),
   searchWithDef: (query: Record<string, string | number>, options: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => {
     const sort = entries(query)
-      .mapDefined(([k, v]) => options[k]?.(v)?.sort)
+      .mapDefined(([k, v]) => options[k]?.(v, query)?.sort)
       .first();
     return {
       $search: { ...ifDefined(index, { index }), compound: lucene.compound(query, options), ...ifDefined(sort, { sort }), count: { type: count } },
