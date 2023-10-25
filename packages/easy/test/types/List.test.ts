@@ -1,20 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import {
-  asList,
-  Currency,
-  Enum,
-  HasId,
-  Id,
-  isEmpty,
-  isList,
-  List,
-  maxValue,
-  minValue,
-  reject,
-  resolve,
-  toList,
-  toObject,
-} from '../../src';
+import { asList, Currency, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList, toObject } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -27,7 +12,7 @@ describe('List', () => {
       name: 'Jane',
       age: undefined,
       weight: 95,
-    },
+    }
   );
   const jackAndJill = toList(
     { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
@@ -36,7 +21,7 @@ describe('List', () => {
       name: 'Jill',
       age: undefined,
       weight: undefined as unknown as number,
-    },
+    }
   );
 
   test('list and array are equal', () => {
@@ -56,7 +41,7 @@ describe('List', () => {
       devs
         .asc('name')
         .map(d => d.name)
-        .first(),
+        .first()
     ).toBe(Dev.Jeroen.name);
   });
 
@@ -180,8 +165,8 @@ describe('List', () => {
           name: 'Boet',
           language: 'Typescript',
           level: 0,
-        }),
-      ),
+        })
+      )
     ).toHaveLength(3);
     expect(devs[0]).not.toMatchObject(Dev.Sander);
     expect(devs[0].name).toBe('Boet');
@@ -245,6 +230,26 @@ describe('List', () => {
     expect(johnAndJane.intersectByKey(jackAndJill, 'name')).toHaveLength(0);
     expect(johnAndJane.intersectByKey(jackAndJill, 'age')).toHaveLength(2);
     expect(johnAndJane.intersectByKey(jackAndJill, 'weight')).toHaveLength(0);
+  });
+
+  test('none should return true on an empty list', () => {
+    const input = new List();
+    expect(input.none(i => i === true)).toBeTruthy();
+  });
+
+  test('none should return true when if a single element in the list does not match the predicate', () => {
+    const input = new List(1);
+    expect(input.none(i => i === 2)).toBeTruthy();
+  });
+
+  test('none should return true when all elements in the list do not match the predicate', () => {
+    const input = new List(1, 2, 3);
+    expect(input.none(i => i === 4)).toBeTruthy();
+  });
+
+  test('none should return false when a single element in the list matches the predicate', () => {
+    const input = new List(1, 2, 3, 4);
+    expect(input.none(i => i === 3)).toBeFalsy();
   });
 });
 
@@ -649,7 +654,7 @@ describe('asList', () => {
       {
         id: 1,
         name: 'jeroen',
-      },
+      }
     );
     expect(list.firstValue(i => i.name)).toBe('sander');
     expect(list.firstValue(i => i.id)).toBe(1);

@@ -194,6 +194,10 @@ export class List<T = unknown> extends Array<T> {
   slice(start?: number, end?: number): List<T> {
     return toList(super.slice(start, end));
   }
+
+  none(p: (t: T) => boolean): boolean {
+    return !this.some(p);
+  }
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
