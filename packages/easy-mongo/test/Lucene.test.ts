@@ -199,6 +199,9 @@ describe('Lucene', () => {
     const s3 = clauses([{ brand: text('42') }, { slotId: text([42, 43]) }]);
     expect(s3[0]).toStrictEqual({ text: { path: 'brand', query: '42' } });
     expect(s3[1]).toStrictEqual({ text: { path: 'slotId', query: [42, 43] } });
+
+    const s4 = clauses([{ price: { $gte: '10' } }]);
+    expect(s4[0]).toStrictEqual({ $gte: '10' });
   });
 
   const def: SearchDefinition = {
@@ -209,6 +212,7 @@ describe('Lucene', () => {
     status: () => ({ facet: facet.string('status') }),
     price: () => ({ facet: facet.number('price.cents', toList(500, 2000, 3500, 6000)) }),
   };
+
   describe('search', () => {
     test('empty search', () => {
       const s = searchWithDef({}, def);
