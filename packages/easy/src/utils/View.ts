@@ -1,5 +1,4 @@
 import {
-  asJson,
   choose,
   Constructor,
   DontInfer,
@@ -50,7 +49,7 @@ const optional = (c: Constructor, v: any) =>
   ifDefined(
     v,
     i => new c(i),
-    () => v,
+    () => v
   );
 
 const toViewers = (views: ViewRecord): Viewer[] =>
@@ -59,8 +58,7 @@ const toViewers = (views: ViewRecord): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View<V = Json> {
-  constructor(private views = {} as ViewRecord<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {
-  }
+  constructor(private views = {} as ViewRecord<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {}
 
   get fromSource(): View<V> {
     return new View(this.views, 'source', this.viewers);
@@ -74,7 +72,7 @@ export class View<V = Json> {
     if (isPageList(source))
       return toPageList(
         source.map(s => this.reduce(s)),
-        source,
+        source
       );
     if (isArray(source)) return source.map(s => this.reduce(s));
     return this.reduce(source);
@@ -83,7 +81,7 @@ export class View<V = Json> {
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
   private reduce = (source: any): any =>
-    use(asJson(source), src => this.viewers.reduce((acc, v) => json.set(acc, v.key, v.f(src, v.key)), this.startsFrom === 'scratch' ? {} : src));
+    use(json.parse(source), src => this.viewers.reduce((acc, v) => json.set(acc, v.key, v.f(src, v.key)), this.startsFrom === 'scratch' ? {} : src));
 }
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;

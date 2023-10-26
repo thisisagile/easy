@@ -1,18 +1,5 @@
 import '@thisisagile/easy-test';
-import {
-  asNumber,
-  Constructor,
-  Email,
-  isList,
-  isPageList,
-  Money,
-  toList,
-  toPageList,
-  traverse,
-  view,
-  View,
-  views,
-} from '../../src';
+import { asNumber, Constructor, Email, isList, isPageList, Money, toList, toPageList, traverse, view, View, views } from '../../src';
 import { Dev } from '../ref';
 
 describe('View', () => {
@@ -53,6 +40,12 @@ describe('View', () => {
     expect(s.from(source)).toStrictEqual({});
     const s2 = view({ id: ignore }).fromSource;
     expect(s2.from(source)?.id).toBeUndefined();
+  });
+
+  test('ignore should not change input', () => {
+    const s = view({ id: ignore }).fromSource;
+    expect(s.from(source)?.id).toBeUndefined();
+    expect(source.id).toBe(43);
   });
 
   test('boolean', () => {
@@ -110,7 +103,7 @@ describe('View', () => {
     expect(r.email).toBeNull();
 
     const s2 = view({ emails: Email });
-    const r2 = s2.from({ emails: [null]});
+    const r2 = s2.from({ emails: [null] });
     expect(r2.emails).toEqual([null]);
   });
 
@@ -303,8 +296,8 @@ describe('View', () => {
 
   const to =
     <T>(ctor: Constructor<T>) =>
-      (a: unknown, key?: string) =>
-        new ctor(traverse(a, key));
+    (a: unknown, key?: string) =>
+      new ctor(traverse(a, key));
 
   test('simples or', () => {
     const v = view({ first: or.key('Name.First'), last: or.value('H') });
