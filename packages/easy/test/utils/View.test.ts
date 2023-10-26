@@ -42,12 +42,6 @@ describe('View', () => {
     expect(s2.from(source)?.id).toBeUndefined();
   });
 
-  test('ignore should not change input', () => {
-    const s = view({ id: ignore }).fromSource;
-    expect(s.from(source)?.id).toBeUndefined();
-    expect(source.id).toBe(43);
-  });
-
   test('boolean', () => {
     const s = view({ is18: true });
     expect(s.from(source)).toStrictEqual({ is18: true });

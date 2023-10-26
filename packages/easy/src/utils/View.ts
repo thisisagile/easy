@@ -1,4 +1,5 @@
 import {
+  asJson,
   choose,
   Constructor,
   DontInfer,
@@ -81,7 +82,7 @@ export class View<V = Json> {
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
   private reduce = (source: any): any =>
-    use(json.parse(source), src => this.viewers.reduce((acc, v) => json.set(acc, v.key, v.f(src, v.key)), this.startsFrom === 'scratch' ? {} : src));
+    use(asJson(source), src => this.viewers.reduce((acc, v) => json.set(acc, v.key, v.f(src, v.key)), this.startsFrom === 'scratch' ? {} : src));
 }
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;
