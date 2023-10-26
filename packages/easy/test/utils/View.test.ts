@@ -1,6 +1,7 @@
 import '@thisisagile/easy-test';
 import { asNumber, Constructor, Email, isList, isPageList, Money, toList, toPageList, traverse, view, View, views } from '../../src';
 import { Dev } from '../ref';
+import { DateTime } from '@thisisagile/easy';
 
 describe('View', () => {
   let source: any;
@@ -47,6 +48,12 @@ describe('View', () => {
     expect(s.from(source)).toStrictEqual({ is18: true });
     const s2 = view({ id: true }).fromSource;
     expect(s2.from(source).id).toBeTruthy();
+  });
+
+  test('keep type when mapping from source', () => {
+    const s = view({}).fromSource;
+    const r = s.from({ end: DateTime.now });
+    expect(r.end).toBeInstanceOf(DateTime);
   });
 
   test('o', () => {
