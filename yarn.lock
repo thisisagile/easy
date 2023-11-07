@@ -1630,7 +1630,7 @@ __metadata:
     "@types/form-urlencoded": ^4.4.0
     "@types/jsonwebtoken": ^9.0.2
     "@types/passport": ^1.0.12
-    "@types/passport-jwt": ^3.0.8
+    "@types/passport-jwt": ^3.0.13
     "@types/uuid": ^9.0.2
     "@types/validator": ^13.7.17
     cls-hooked: ^4.2.2
@@ -2032,14 +2032,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/passport-jwt@npm:^3.0.8":
-  version: 3.0.8
-  resolution: "@types/passport-jwt@npm:3.0.8"
+"@types/passport-jwt@npm:^3.0.13":
+  version: 3.0.13
+  resolution: "@types/passport-jwt@npm:3.0.13"
   dependencies:
     "@types/express": "*"
     "@types/jsonwebtoken": "*"
     "@types/passport-strategy": "*"
-  checksum: 321eca319eff51c87a5ddebf590937b24ed7fa6c8cc2465cecb4edf49f839b7770e57a4ed009f323c66ade6c0f1d9b6a51033d82dd392270b17976380893af2f
+  checksum: 89e206659f38fd520c0d72561606ef1860dc23e59d401bcb429052001ef069a713b1a745ec1208273454e52336a175fb6692dcd3422ecebb552a21cf4b03dc56
   languageName: node
   linkType: hard
 
