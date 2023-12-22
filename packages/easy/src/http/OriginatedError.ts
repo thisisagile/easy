@@ -4,6 +4,7 @@ import { VerbOptions } from './Verb';
 export class OriginatedError extends Error {
   constructor(readonly origin: ErrorOrigin, readonly options?: VerbOptions) {
     super();
+    if (isError(origin)) this.stack = origin.stack;
   }
 }
 

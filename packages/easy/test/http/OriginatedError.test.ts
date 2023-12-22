@@ -31,4 +31,9 @@ describe('toOriginatedError', () => {
     expect(e).toBeInstanceOf(OriginatedError);
     expect(e.origin).toEqual(res);
   });
+
+  test('keep stack trace', () => {
+    const e = new Error();
+    expect(toOriginatedError(e).stack).toBe(e.stack);
+  })
 });
