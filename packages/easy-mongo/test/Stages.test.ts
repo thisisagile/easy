@@ -411,4 +411,8 @@ describe('Stages', () => {
       $facet: { props: [{ $unwind: '$props' }, { $group: { _id: '$props.id', prop: { $first: '$props' } } }] },
     });
   });
+
+  test('straight unwind', () => {
+    expect(stages.unwind.unwind('brands')).toStrictEqual({ $unwind: '$brands' });
+  })
 });

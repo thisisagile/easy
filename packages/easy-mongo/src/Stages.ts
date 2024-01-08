@@ -153,4 +153,7 @@ export const stages = {
     count: (from?: string) => (f?: string) => ({ $sortByCount: `$${from ?? f}` }),
     data: () => [],
   },
+  unwind: {
+    unwind: (prop?: string) => ({ $unwind: `$${prop}` }),
+  }
 };
