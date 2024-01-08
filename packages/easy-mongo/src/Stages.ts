@@ -1,4 +1,4 @@
-import { Filter, FindOptions } from './MongoProvider';
+import { Filter, FindOptions } from "./MongoProvider";
 import {
   asNumber,
   asString,
@@ -16,9 +16,9 @@ import {
   Optional,
   PartialRecord,
   toArray,
-  use,
-} from '@thisisagile/easy';
-import { toMongoType } from './Utils';
+  use
+} from "@thisisagile/easy";
+import { toMongoType } from "./Utils";
 
 export const asc = 1;
 export const desc = -1;
@@ -84,8 +84,8 @@ export const stages = {
     gte: (value: Filter) => ({ $gte: value }),
     lt: (value: Filter) => ({ $lt: value }),
     lte: (value: Filter) => ({ $lte: value }),
-    isIn: (value: OneOrMore<unknown>, separator = ',') => ({ $in: isString(value) ? value.split(separator) : value }),
-    notIn: (value: OneOrMore<unknown>, separator = ',') => ({ $nin: isString(value) ? value.split(separator) : value }),
+    isIn: (value: OneOrMore<unknown>, separator = ',') => ifNotEmpty(value, v => ({ $in: isString(v) ? v.split(separator) : v })),
+    notIn: (value: OneOrMore<unknown>, separator = ',') => ifNotEmpty(value, v => ({ $nin: isString(v) ? v.split(separator) : v })),
     after: (date: unknown) => stages.match.gte(toMongoType(date)),
     before: (date: unknown) => stages.match.lt(toMongoType(date)),
     anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: 'i' }),

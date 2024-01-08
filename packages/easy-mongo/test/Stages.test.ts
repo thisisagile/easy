@@ -1,5 +1,5 @@
-import { stages } from '../src';
-import { fits } from '@thisisagile/easy-test';
+import { stages } from "../src";
+import { fits } from "@thisisagile/easy-test";
 
 describe('Stages', () => {
   // Decode
@@ -89,6 +89,18 @@ describe('Stages', () => {
     });
   });
 
+  test('isIn if undefined', () => {
+    expect(match({ classicId: isIn(undefined as unknown as string) })).toStrictEqual({
+      $match: { },
+    });
+  });
+
+  test('isIn from empty string', () => {
+    expect(match({ classicId: isIn('') })).toStrictEqual({
+      $match: { },
+    });
+  });
+
   test('isIn from string', () => {
     expect(match({ classicId: isIn('3,4') })).toStrictEqual({
       $match: { classicId: { $in: ['3', '4'] } },
@@ -100,6 +112,20 @@ describe('Stages', () => {
       $match: { classicId: { $nin: [3, 4] } },
     });
   });
+
+
+  test('notIn if undefined', () => {
+    expect(match({ classicId: notIn(undefined as unknown as string) })).toStrictEqual({
+      $match: { },
+    });
+  });
+
+  test('notIn from empty string', () => {
+    expect(match({ classicId: notIn('') })).toStrictEqual({
+      $match: { },
+    });
+  });
+
 
   test('notIn from string', () => {
     expect(match({ classicId: notIn('3,4') })).toStrictEqual({
