@@ -1,5 +1,5 @@
-import '@thisisagile/easy-test';
-import { toList, Country } from '../../../src';
+import "@thisisagile/easy-test";
+import { Country, toList } from "../../../src";
 
 describe('Country', () => {
   test('id and name matches.', () => {
@@ -24,7 +24,7 @@ describe('Country', () => {
   });
 
   test('byIds.', () => {
-    expect(Country.byIds<Country>(['NL'])).toMatchText(toList<Country>(Country.NL));
+    expect(Country.byIds(['NL'])).toMatchText(toList<Country>(Country.NL));
   });
 
   test('equals.', () => {

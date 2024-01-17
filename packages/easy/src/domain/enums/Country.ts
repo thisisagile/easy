@@ -1,4 +1,4 @@
-import { Enum, Id, Optional, text } from '../../types';
+import { Enum, Id, Optional, text } from "../../types";
 
 export class Country extends Enum {
   static readonly AF = new Country('Afghanistan', 'AF');
