@@ -3,7 +3,7 @@ import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
-import { entries, meta } from "./Meta";
+import { entries, meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
@@ -55,7 +55,7 @@ export type Uri = {
   toString: () => string;
 };
 
-export type UriExpandProps = { q: string, s: string };
+export type UriExpandProps = { q: string; s: string };
 
 export class EasyUri<Props = UriExpandProps> implements Uri {
   static readonly id = uri.path('id');
@@ -66,7 +66,7 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
   static readonly take = uri.query('take');
 
   readonly host = uri.host();
-  readonly resource = uri.resource(this);
+  protected resource = uri.resource(this);
 
   protected state: any = {};
 
