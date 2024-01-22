@@ -8,6 +8,7 @@ import {
   ifDefined,
   includes,
   inList,
+  inOptionalList,
   isValue,
   lt,
   lte,
@@ -95,6 +96,7 @@ describe('Optional constraint', () => {
   class Cat extends Struct {
     @required() readonly name = this.state.name;
     @optional() readonly age = ifDefined(this.state.age, Age);
+    @inOptionalList(['Sander', 'Jeroen']) readonly friend = this.state.friend;
   }
 
   test('Optional constraint succeeds.', () => {
@@ -108,8 +110,19 @@ describe('Optional constraint', () => {
     expect(validate(c)).toFailWith('This is not a valid age.');
   });
 
-  test('Optional property is undefined result is still valid.', () => {
+  test('Optional properties are undefined result is still valid.', () => {
     const c = new Cat({ name: 'Felix' });
+    expect(validate(c)).toBeValid();
+  });
+
+  test('InOptionalList fails with invalid value', () => {
+    const c = new Cat({ name: 'Felix', friend: 'Willem' });
+    expect(validate(c)).not.toBeValid();
+    expect(validate(c)).toFailWith('Value Willem must appear in list.');
+  });
+
+  test('InOptionalList succeeds with valid value', () => {
+    const c = new Cat({ name: 'Felix', friend: 'Sander' });
     expect(validate(c)).toBeValid();
   });
 });

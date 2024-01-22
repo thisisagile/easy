@@ -29,6 +29,9 @@ export const includes = (sub: string, message?: string): PropertyDecorator =>
 export const inList = (values: unknown[], message?: Text): PropertyDecorator =>
   constraint(v => isDefined(v) && isIn(v, values), message ?? 'Value {actual} must appear in list.');
 
+export const inOptionalList = (values: unknown[], message?: Text): PropertyDecorator =>
+  constraint(v => !isDefined(v) || isIn(v, values), message ?? 'Value {actual} must appear in list.');
+
 export const gt = (limit: number, message?: Text): PropertyDecorator => constraint(v => v > limit, message ?? `Value {actual} must be larger than '${limit}'.`);
 
 export const gte = (limit: number, message?: Text): PropertyDecorator =>
