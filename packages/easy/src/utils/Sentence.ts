@@ -12,10 +12,10 @@ class Topic extends Sentence {
   it = new Sentence('it', this);
   anything = new Sentence('anything', this);
   id = (id: Id) => new Sentence(`id '${id}'`, this);
-  your = (subject?: unknown) => new Sentence(`your ${subject ?? 'item'}`, this);
-  a = (subject?: unknown) => new Sentence(subject ? `a ${subject}` : 'an item', this);
-  an = (subject?: unknown) => new Sentence(`an ${subject ?? 'item'}`, this);
-  any = (subjects?: unknown) => new Sentence(`any ${subjects ?? 'items'}`, this);
+  your = (subject?: Text) => new Sentence(`your ${subject ?? 'item'}`, this);
+  a = (subject?: Text) => new Sentence(subject ? `a ${subject}` : 'an item', this);
+  an = (subject?: Text) => new Sentence(`an ${subject ?? 'item'}`, this);
+  any = (subjects?: Text) => new Sentence(`any ${subjects ?? 'items'}`, this);
 }
 
 class Verb extends Sentence {
