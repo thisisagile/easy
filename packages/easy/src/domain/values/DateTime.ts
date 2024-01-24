@@ -54,7 +54,7 @@ export class DateTime extends Value<Optional<string>> {
 
   from(param?: string | DateTime, other?: string): string {
     const date: Optional<DateTime> = isA<DateTime>(param) ? param : undefined;
-    const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
+    const locale: string = (isString(param) ? param : undefined) ?? other ?? 'en';
     return ifDefined(
       date,
       d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
