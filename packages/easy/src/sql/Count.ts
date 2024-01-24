@@ -1,13 +1,7 @@
 import { ifGet } from '../types';
-import { Join } from './Join';
-import { Table } from './Table';
 import { Select } from './Select';
 
 export class Count extends Select {
-  constructor(table: Table | Join) {
-    super(table);
-  }
-
   toString(): string {
     return (
       `SELECT COUNT(*)` +
