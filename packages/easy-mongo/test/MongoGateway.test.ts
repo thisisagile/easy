@@ -120,13 +120,13 @@ describe('MongoGateway', () => {
 
   test('total resolves', async () => {
     provider.aggregate = mock.resolve(toList({ total: 42 }));
-    await expect(gateway.count({id: 3})).resolves.toBe(42);
-    expect(provider.aggregate).toHaveBeenCalledWith([{id: 3}, {"$count": "total"}]);
+    await expect(gateway.count({ id: 3 })).resolves.toBe(42);
+    expect(provider.aggregate).toHaveBeenCalledWith([{ id: 3 }, { $count: 'total' }]);
   });
 
   test('total resolves on empty list', async () => {
     provider.aggregate = mock.resolve(toList());
-    await expect(gateway.count({q: 'something which is not found'})).resolves.toBe(0);
+    await expect(gateway.count({ q: 'something which is not found' })).resolves.toBe(0);
   });
 
   test('add calls the provider', async () => {

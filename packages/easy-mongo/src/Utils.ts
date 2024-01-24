@@ -1,14 +1,4 @@
-import {
-  choose,
-  DateTime,
-  isArray,
-  isDate,
-  isDateTime,
-  isIsoDateString,
-  isObject,
-  Json,
-  meta,
-} from '@thisisagile/easy';
+import { choose, DateTime, isArray, isDate, isDateTime, isIsoDateString, isObject, Json, meta } from '@thisisagile/easy';
 
 export const toMongoType = (input: unknown): Json =>
   choose(input)

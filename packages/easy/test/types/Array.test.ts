@@ -200,7 +200,7 @@ describe('toObject', () => {
     });
 
     test('swap adding item where items is undefined', () => {
-      const ls = undefined as unknown as Dev[]
+      const ls = undefined as unknown as Dev[];
       const ls2 = array.switch(ls, Dev.Sander);
       expect(ls).toBeUndefined();
       expect(ls2).toHaveLength(1);

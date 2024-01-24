@@ -387,7 +387,7 @@ describe('MongoProvider', () => {
     ['with sort', { sort: [{ key: 'id', value: 1 }] } as FindOptions, { limit: 250, total: false, sort: { id: 1 }, projection: { _id: 0 } }],
     ['with custom projection', { projection: { id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1 } }],
     ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1, _id: 1 } }],
-    ['with string type skip and take', { take: "42", skip: "43" } as unknown as FindOptions, { limit: 42, skip: 43, total: true, projection: { _id: 0 } }],
+    ['with string type skip and take', { take: '42', skip: '43' } as unknown as FindOptions, { limit: 42, skip: 43, total: true, projection: { _id: 0 } }],
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs, Promise.resolve(client));
     expect(p.toFindOptions(s)).toStrictEqual(expected);

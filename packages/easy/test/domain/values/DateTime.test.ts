@@ -22,7 +22,6 @@ const formats = {
 };
 
 describe('DateTime', () => {
-
   test('construct from undefined is not valid and value is undefined.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
@@ -214,7 +213,7 @@ describe('DateTime', () => {
     expect(d).toMatchText(da);
     const d2 = new DateTime(iso).add(5, 'day');
     expect(d2).toMatchText(da);
-    const d3 = new DateTime(iso).add({days: 5});
+    const d3 = new DateTime(iso).add({ days: 5 });
     expect(d3).toMatchText(da);
   });
 
@@ -231,7 +230,7 @@ describe('DateTime', () => {
     Date.now = mock.return(date.epoch);
     const d = new DateTime(iso).add(-5);
     expect(d).toMatchText(da);
-    const d2 = new DateTime(iso).add({days: -5});
+    const d2 = new DateTime(iso).add({ days: -5 });
     expect(d2).toMatchText(da);
   });
 
@@ -242,7 +241,7 @@ describe('DateTime', () => {
     expect(d).toMatchText(da);
     const d2 = new DateTime(iso).subtract(5, 'day');
     expect(d2).toMatchText(da);
-    const d3 = new DateTime(iso).subtract({days: 5});
+    const d3 = new DateTime(iso).subtract({ days: 5 });
     expect(d3).toMatchText(da);
   });
 

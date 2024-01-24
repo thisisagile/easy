@@ -1,5 +1,5 @@
-import { isArray, isDefined } from "./Is";
-import { on, use } from "./Constructor";
+import { isArray, isDefined } from './Is';
+import { on, use } from './Constructor';
 
 export type OneOrMore<T> = T | Array<T>;
 export type ArrayLike<T> = OneOrMore<T>[];
@@ -14,18 +14,19 @@ export const toObject = <T>(key: keyof T, ...items: ArrayLike<T>): Record<string
   }, {});
 
 export const array = {
-  merge: (first: any[] = [], second: any[] = [], firstKey = "id", secondKey = "id"): any[] =>
+  merge: (first: any[] = [], second: any[] = [], firstKey = 'id', secondKey = 'id'): any[] =>
     first.map(f => ({
       ...f,
-      ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey])
+      ...second.find(s => isDefined(s[secondKey]) && isDefined(f[firstKey]) && s[secondKey] === f[firstKey]),
     })),
-  switch: <T>(items: T[] = [], item: T): T[] => use([...items], res => {
-    on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item)));
-    return res;
-  }),
+  switch: <T>(items: T[] = [], item: T): T[] =>
+    use([...items], res => {
+      on(res.indexOf(item), i => (i !== -1 ? res.splice(i, 1) : res.push(item)));
+      return res;
+    }),
   splitIn: <T>(items: T[] = [], length = 2): T[][] => {
     const res: T[][] = Array.from({ length }, () => []);
     items.forEach((i, index) => res[index % length].push(i));
     return res;
-  }
+  },
 };

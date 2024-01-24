@@ -38,9 +38,9 @@ describe('PageList', () => {
   });
 
   test('meta', () => {
-    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{field: 'name', values: [{value: 3}]}] });
+    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{ field: 'name', values: [{ value: 3 }] }] });
     expect(pl).toBeDefined();
-    expect(pl.meta).toEqual({ take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{field: 'name', values: [{value: 3}]}] });
+    expect(pl.meta).toEqual({ take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{ field: 'name', values: [{ value: 3 }] }] });
   });
 
   test('meta sorts as string[]', () => {

@@ -35,5 +35,5 @@ describe('toOriginatedError', () => {
   test('keep stack trace', () => {
     const e = new Error();
     expect(toOriginatedError(e).stack).toBe(e.stack);
-  })
+  });
 });

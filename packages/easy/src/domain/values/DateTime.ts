@@ -1,20 +1,15 @@
-import { choose, isA, isDate, isDefined, isNumber, isString, JsonValue, Optional, Value } from "../../types";
-import {
-  DateTime as LuxonDateTime,
-  DateTimeUnit as LuxonDateTimeUnit,
-  DurationUnit as LuxonDurationUnit,
-  Settings
-} from "luxon";
-import { ifDefined } from "../../utils";
+import { choose, isA, isDate, isDefined, isNumber, isString, JsonValue, Optional, Value } from '../../types';
+import { DateTime as LuxonDateTime, DateTimeUnit as LuxonDateTimeUnit, DurationUnit as LuxonDurationUnit, Settings } from 'luxon';
+import { ifDefined } from '../../utils';
 
-Settings.defaultZone = "utc";
+Settings.defaultZone = 'utc';
 
 export type DateTimeUnit = LuxonDateTimeUnit;
 export type DurationUnit = LuxonDurationUnit;
 export type Duration = Partial<Record<DurationUnit, number>>;
 
 export type DiffOptions = {
-  rounding: "floor" | "ceil" | "round";
+  rounding: 'floor' | 'ceil' | 'round';
 };
 
 export class DateTime extends Value<Optional<string>> {
@@ -44,7 +39,7 @@ export class DateTime extends Value<Optional<string>> {
   }
 
   protected get utc(): LuxonDateTime {
-    return this.luxon.setZone("utc");
+    return this.luxon.setZone('utc');
   }
 
   protected get luxon(): LuxonDateTime {
@@ -59,7 +54,7 @@ export class DateTime extends Value<Optional<string>> {
 
   from(param?: string | DateTime, other?: string): string {
     const date: Optional<DateTime> = isA<DateTime>(param) ? param : undefined;
-    const locale: string = isString(param) ? param : undefined ?? other ?? "en";
+    const locale: string = isString(param) ? param : undefined ?? other ?? 'en';
     return ifDefined(
       date,
       d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
@@ -76,32 +71,32 @@ export class DateTime extends Value<Optional<string>> {
   }
 
   equals(dt: DateTime): boolean {
-    return this.utc.hasSame(dt.utc, "millisecond");
+    return this.utc.hasSame(dt.utc, 'millisecond');
   }
 
   add(n: number): DateTime;
   add(n: number, unit: DurationUnit): DateTime;
   add(duration: Duration): DateTime;
   add(n: number | Duration, unit?: DurationUnit): DateTime {
-    return new DateTime(this.luxon.plus(isNumber(n) ? { [unit ?? 'day' as string]: n } : n).toISO());
+    return new DateTime(this.luxon.plus(isNumber(n) ? { [unit ?? ('day' as string)]: n } : n).toISO());
   }
 
   subtract(n: number): DateTime;
   subtract(n: number, unit: DurationUnit): DateTime;
   subtract(duration: Duration): DateTime;
   subtract(n: number | Duration, unit?: DurationUnit): DateTime {
-    return new DateTime(this.luxon.minus(isNumber(n) ? { [unit ?? 'day' as string]: n } : n).toISO());
+    return new DateTime(this.luxon.minus(isNumber(n) ? { [unit ?? ('day' as string)]: n } : n).toISO());
   }
 
-  diff(other: DateTime, unit: DateTimeUnit = "day", opts?: DiffOptions): number {
-    return Math[opts?.rounding ?? "floor"](this.utc.diff(other.utc).as(unit));
+  diff(other: DateTime, unit: DateTimeUnit = 'day', opts?: DiffOptions): number {
+    return Math[opts?.rounding ?? 'floor'](this.utc.diff(other.utc).as(unit));
   }
 
-  startOf(unit: DateTimeUnit = "day"): DateTime {
+  startOf(unit: DateTimeUnit = 'day'): DateTime {
     return new DateTime(this.luxon.startOf(unit).toISO());
   }
 
-  endOf(unit: DateTimeUnit = "day"): DateTime {
+  endOf(unit: DateTimeUnit = 'day'): DateTime {
     return new DateTime(this.luxon.endOf(unit).toISO());
   }
 
@@ -110,7 +105,7 @@ export class DateTime extends Value<Optional<string>> {
   }
 
   toString(): string {
-    return this.value ?? "";
+    return this.value ?? '';
   }
 
   toJSON(): JsonValue {
@@ -121,12 +116,12 @@ export class DateTime extends Value<Optional<string>> {
     return this.luxon.toFormat(format);
   }
 
-  toLocale(locale = "nl-NL", format = "D"): string {
+  toLocale(locale = 'nl-NL', format = 'D'): string {
     return this.luxon.setLocale(locale).toFormat(format);
   }
 
   toFull(locale?: string): string {
-    return this.toLocale(locale, "DDD");
+    return this.toLocale(locale, 'DDD');
   }
 
   toDate(): Optional<Date> {

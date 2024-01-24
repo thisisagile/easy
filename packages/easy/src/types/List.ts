@@ -1,14 +1,14 @@
-import { ArrayLike, toArray } from "./Array";
-import { Constructor, on } from "./Constructor";
-import { json, Json } from "./Json";
-import { isArray, isDefined, isEmpty } from "./Is";
-import { isA } from "./IsA";
-import { Get, GetProperty, ofGet, ofProperty } from "./Get";
-import { Id } from "./Id";
-import { asString } from "./Text";
-import { tryTo } from "./Try";
-import { meta } from "./Meta";
-import { Optional } from "./Types";
+import { ArrayLike, toArray } from './Array';
+import { Constructor, on } from './Constructor';
+import { json, Json } from './Json';
+import { isArray, isDefined, isEmpty } from './Is';
+import { isA } from './IsA';
+import { Get, GetProperty, ofGet, ofProperty } from './Get';
+import { Id } from './Id';
+import { asString } from './Text';
+import { tryTo } from './Try';
+import { meta } from './Meta';
+import { Optional } from './Types';
 
 export class List<T = unknown> extends Array<T> {
   asc(p: GetProperty<T, any>): List<T> {
@@ -200,14 +200,13 @@ export class List<T = unknown> extends Array<T> {
   }
 
   chunk(chunkSize: number): List<List<T>> {
-    return this.reduce((acc, _, index) =>
-      (index % chunkSize === 0) ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc, toList<List<T>>());
+    return this.reduce((acc, _, index) => (index % chunkSize === 0 ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc), toList<List<T>>());
   }
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
 
-export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, "first", "last", "asc", "desc");
+export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
 export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
 

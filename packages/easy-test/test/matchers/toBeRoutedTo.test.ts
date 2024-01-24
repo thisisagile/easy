@@ -1,5 +1,5 @@
-import { mock, toBeRoutedTo } from "../../src";
-import { asString } from "@thisisagile/easy";
+import { mock, toBeRoutedTo } from '../../src';
+import { asString } from '@thisisagile/easy';
 import Mock = jest.Mock;
 
 describe('toBeRoutedTo', () => {

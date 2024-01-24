@@ -1,5 +1,5 @@
-import { toMatchArray } from "../../src";
-import "@thisisagile/easy-test";
+import { toMatchArray } from '../../src';
+import '@thisisagile/easy-test';
 
 class TestList<T> extends Array<T> {
   constructor(...items: T[]) {
@@ -8,9 +8,8 @@ class TestList<T> extends Array<T> {
   }
 }
 
-describe("toMatchArray", () => {
-
-  test("fails", () => {
+describe('toMatchArray', () => {
+  test('fails', () => {
     expect(undefined).not.toMatchArray([1, 2, 3, 4]);
     expect({}).not.toMatchArray([1, 2, 3, 4]);
     expect([1, 2, 3]).not.toMatchArray([1, 2, 3, 4]);
@@ -18,7 +17,7 @@ describe("toMatchArray", () => {
     expect(new TestList(1, 2, 3, 4)).not.toMatchArray([1, 2, 3, 5]);
   });
 
-  test("succeeds", () => {
+  test('succeeds', () => {
     expect([]).toMatchArray([]);
     expect([1, 2, 3, 4]).toMatchArray([1, 2, 3, 4]);
     expect(new TestList(1, 2, 3, 4)).toMatchArray([1, 2, 3, 4]);

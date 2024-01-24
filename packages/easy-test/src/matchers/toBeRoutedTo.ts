@@ -1,13 +1,16 @@
-import { checkDefined } from "./Check";
-import { Uri } from "../utils/Types";
-import { asString } from "../utils/Utils";
-import { match } from "./Match";
+import { checkDefined } from './Check';
+import { Uri } from '../utils/Types';
+import { asString } from '../utils/Utils';
+import { match } from './Match';
 
 export const weExpectedButReceivedInstead = ([r, e]: [any, any]) => `We expected ${asString(e)}, but we received '${asString(r)}' instead.`;
 
 export function toMatchAsString(this: jest.MatcherContext, received: unknown, expected: unknown): jest.CustomMatcherResult {
   return checkDefined(this, received, expected)
-    .not(([r, e]) => this.equals(asString(r), asString(e)), ([r, e]) => weExpectedButReceivedInstead([r, e]))
+    .not(
+      ([r, e]) => this.equals(asString(r), asString(e)),
+      ([r, e]) => weExpectedButReceivedInstead([r, e])
+    )
     .else();
 }
 
@@ -30,7 +33,7 @@ export const toBeRoutedTo = (query: jest.Mock, expected: Uri): jest.CustomMatche
     .else(`Called uri does match '${asString(expected)}'`);
 
 expect.extend({
-  toBeRoutedTo: toBeRoutedTo
+  toBeRoutedTo: toBeRoutedTo,
 });
 
 declare global {

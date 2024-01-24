@@ -1,5 +1,5 @@
-import { stages } from "../src";
-import { fits } from "@thisisagile/easy-test";
+import { stages } from '../src';
+import { fits } from '@thisisagile/easy-test';
 
 describe('Stages', () => {
   // Decode
@@ -28,7 +28,7 @@ describe('Stages', () => {
       match({
         name: 'Sander',
         promoted: undefined,
-      }),
+      })
     ).toStrictEqual({ $match: { name: 'Sander' } });
   });
 
@@ -388,5 +388,5 @@ describe('Stages', () => {
 
   test('straight unwind', () => {
     expect(stages.unwind.unwind('brands')).toStrictEqual({ $unwind: '$brands' });
-  })
+  });
 });

@@ -58,7 +58,7 @@ export class MongoGateway implements Gateway<FindOptions> {
   }
 
   count(...filters: Optional<Filter>[]): Promise<number> {
-    return this.aggregate(...filters, {$count: 'total' }).then(d => d.first()?.total as number ?? 0);
+    return this.aggregate(...filters, { $count: 'total' }).then(d => (d.first()?.total as number) ?? 0);
   }
 
   match(f: Filter): Promise<PageList<Json>> {

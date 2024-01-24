@@ -30,7 +30,7 @@ export class AtlasSearchGateway extends MongoGateway {
     super(collection, provider);
   }
 
-  query (query: Record<keyof typeof this.searchDef, string | number>): Promise<PageList<Json>> {
+  query(query: Record<keyof typeof this.searchDef, string | number>): Promise<PageList<Json>> {
     return tuple2(
       this.aggregate(searchWithDef(query, this.searchDef), skip({ skip: (query?.skip as number) ?? 0 }), take({ take: (query?.take as number) ?? 250 })),
       this.aggregate(
@@ -51,5 +51,5 @@ export class AtlasSearchGateway extends MongoGateway {
           filters: toFilters(meta.facets),
         })
       );
-  };
+  }
 }
