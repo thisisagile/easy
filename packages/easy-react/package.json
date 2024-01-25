@@ -40,7 +40,7 @@
     "@thisisagile/easy-test-react": "workspace:*",
     "@types/copyfiles": "^2.4.1",
     "copyfiles": "^2.4.1",
-    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
     "next": "^13.2.4",
     "next-transpile-modules": "^10.0.0"
