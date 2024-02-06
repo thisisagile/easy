@@ -1,10 +1,13 @@
-import express, { Request, RequestHandler } from 'express';
+import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
-import passportJwt, { ExtractJwt, Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
+import type { SecretOrKeyProvider, StrategyOptionsWithRequest } from 'passport-jwt';
+import type { Algorithm } from 'jsonwebtoken';
 import { authError } from './AuthError';
-import { ctx, Environment, HttpStatus, ifFalse, Scope, UseCase } from '@thisisagile/easy';
+import { ctx, Environment, HttpStatus, ifFalse } from '@thisisagile/easy';
+import type { Scope, UseCase } from '@thisisagile/easy';
 
-type SecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
+type EasySecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 
 export interface SecurityOptions {
   /** Configuration for verifying JWTs */
@@ -15,7 +18,7 @@ export interface SecurityOptions {
 
     /** Should return a secret (symmetric) or PEM-encoded public key (asymmetric) for the given key and request combination.
      * REQUIRED unless secretOrKey is provided. Note it is up to the implementer to decode rawJwtToken. */
-    secretOrKeyProvider?: SecretOrKeyProvider;
+    secretOrKeyProvider?: EasySecretOrKeyProvider;
 
     /** If defined, the token issuer (iss) will be verified against this value. */
     issuer?: string;
@@ -24,7 +27,7 @@ export interface SecurityOptions {
     audience?: string;
 
     /** If defined, the token algorithm (alg) must be in this list. */
-    algorithms?: string[];
+    algorithms?: Algorithm[];
   };
 }
 
@@ -42,7 +45,7 @@ export const checkUseCase =
   (req, res, next) =>
     next(ifFalse((req.user as any)?.usecases?.includes(uc.id), authError(HttpStatus.Forbidden)));
 
-const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrKeyProvider | undefined =>
+const wrapSecretOrKeyProvider = (p?: EasySecretOrKeyProvider): SecretOrKeyProvider | undefined =>
   p
     ? (request, rawJwtToken, done) =>
         p(request, rawJwtToken)
@@ -50,18 +53,17 @@ const wrapSecretOrKeyProvider = (p?: SecretOrKeyProvider): passportJwt.SecretOrK
           .catch(e => done(e))
     : undefined;
 
-export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: express.Request, res: express.Response, next: express.NextFunction) => void) => {
-  const jwtConfig: StrategyOptions = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: jwtStrategyOptions?.secretOrKey ?? (jwtStrategyOptions?.secretOrKeyProvider ? undefined : ctx.env.get('tokenPublicKey')),
-    secretOrKeyProvider: wrapSecretOrKeyProvider(jwtStrategyOptions?.secretOrKeyProvider),
-    issuer: jwtStrategyOptions?.issuer,
-    audience: jwtStrategyOptions?.audience,
-    algorithms: jwtStrategyOptions?.algorithms,
-    passReqToCallback: true,
-  };
+export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: Request, res: Response, next: NextFunction) => void) => {
+  jwtStrategyOptions ??= {};
+  if ('secretOrKeyProvider' in jwtStrategyOptions) (jwtStrategyOptions as any).secretOrKeyProvider = wrapSecretOrKeyProvider(jwtStrategyOptions.secretOrKeyProvider);
+  else if (!('secretOrKey' in jwtStrategyOptions)) jwtStrategyOptions.secretOrKey = ctx.env.get('tokenPublicKey') as string;
 
-  const strategy = new JwtStrategy(jwtConfig, (req: express.Request, payload: any, done: (err: any, user: any) => void) => {
+  const strategy =
+    new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    passReqToCallback: true,
+    ...jwtStrategyOptions,
+  } as StrategyOptionsWithRequest, (req: Request, payload: any, done: (err: any, user: any) => void) => {
     ctx.request.token = payload;
     ctx.request.jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req) ?? '';
     done(null, payload);

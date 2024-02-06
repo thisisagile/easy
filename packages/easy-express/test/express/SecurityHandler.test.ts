@@ -70,10 +70,12 @@ describe('SecurityHandler middleware', () => {
     useSpy = jest.spyOn(passport, 'use');
   });
 
-  const testSecretOrKeyProvider = (cb: (err: any, secretOrKey?: string | Buffer) => void) =>
-    useSpy.mockImplementationOnce(((s: any) => {
-      s._secretOrKeyProvider(null, null, cb);
-    }) as any);
+  const testSecretOrKeyProvider = () =>
+    new Promise((resolve, reject) =>
+      useSpy.mockImplementationOnce(((s: any) => {
+        s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => err ? reject(err) : resolve(secretOrKey));
+      }) as any)
+    );
 
   test('security middleware with default settings', () => {
     const initializeSpy = jest.spyOn(passport, 'initialize');
@@ -104,7 +106,9 @@ describe('SecurityHandler middleware', () => {
 
     useSpy.mockImplementationOnce(((s: any) => {
       expect(s._verifOpts).toStrictEqual({
-        ...jwtStrategyOptions,
+        audience: 'audience',
+        issuer: 'issuer',
+        algorithms: undefined,
         ignoreExpiration: false,
       });
     }) as any);
@@ -114,41 +118,35 @@ describe('SecurityHandler middleware', () => {
     expect(useSpy).toHaveBeenCalled();
   });
 
-  test('security middleware with secretOrKey', () => {
+  test('security middleware with secretOrKey', async () => {
     const jwtStrategyOptions = { secretOrKey: key };
 
-    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
-      expect(secretOrKey).toBe(key);
-    });
-
+    const p = testSecretOrKeyProvider();
     security({ jwtStrategyOptions });
 
+    await expect(p).resolves.toBe(key);
     expect(useSpy).toHaveBeenCalled();
   });
 
-  test('security middleware with secretOrKeyProvider', () => {
+  test('security middleware with secretOrKeyProvider', async () => {
     const keyProvider = mock.resolve(key);
     const jwtStrategyOptions = { secretOrKeyProvider: keyProvider };
 
-    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
-      expect(secretOrKey).toBe(key);
-    });
-
+    const p = testSecretOrKeyProvider();
     security({ jwtStrategyOptions });
 
+    await expect(p).resolves.toBe(key);
     expect(useSpy).toHaveBeenCalled();
   });
 
-  test('security middleware with failing secretOrKeyProvider', () => {
+  test('security middleware with failing secretOrKeyProvider', async () => {
     const keyProvider = mock.reject('someError');
     const jwtStrategyOptions = { secretOrKeyProvider: keyProvider };
 
-    testSecretOrKeyProvider((err: any, secretOrKey?: string | Buffer) => {
-      expect(err).toBe('someError');
-    });
-
+    const p = testSecretOrKeyProvider();
     security({ jwtStrategyOptions });
 
+    await expect(p).rejects.toBe('someError');
     expect(useSpy).toHaveBeenCalled();
   });
 
