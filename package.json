@@ -23,7 +23,7 @@
     "@release-it-plugins/workspaces": "^3.2.0",
     "@release-it/conventional-changelog": "5.1.1",
     "@tsconfig/node18": "^18.2.2",
-    "@types/jest": "^29.5.11",
+    "@types/jest": "^29.5.12",
     "@types/node": "^18.16.18",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
