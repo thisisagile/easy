@@ -1,3 +1,5 @@
+import { Optional } from '../types';
+
 export function log<T>(t: T): T;
 export function log<T>(label: string, t: T): T;
 export function log<T>(labelOrT: string | T, t?: T): T {
@@ -8,4 +10,8 @@ export function log<T>(labelOrT: string | T, t?: T): T {
     console.log(labelOrT);
     return labelOrT as T;
   }
+}
+export function dir<T>(t?: T): Optional<T> {
+  console.dir(t, { depth: 200 });
+  return t;
 }
