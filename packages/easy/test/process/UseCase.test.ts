@@ -60,4 +60,21 @@ describe('UseCase', () => {
     const uc = UseCase.byScopes(s);
     expect(uc).toHaveLength(0);
   });
+
+  test('for works', () => {
+    const marketing = 'Marketing';
+    const uc = DevUseCase.WriteCode.for(marketing);
+    expect(uc.name).toBe('Write Code Marketing');
+    expect(uc.id).toBe('write-code-marketing');
+    expect(uc.scopes[0]).toMatchObject(DevScope.Dev.for(marketing));
+  });
+
+  test('for works with multiple scopes', () => {
+    const marketing = 'Marketing';
+    const uc = DevUseCase.WriteUnitTest.for(marketing);
+    expect(uc.name).toBe('Write Unit Test Marketing');
+    expect(uc.id).toBe('write-unit-test-marketing');
+    expect(uc.scopes[0]).toMatchObject(DevScope.Dev.for(marketing));
+    expect(uc.scopes[1]).toMatchObject(DevScope.Tester.for(marketing));
+  });
 });
