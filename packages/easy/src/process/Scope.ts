@@ -2,7 +2,7 @@ import { Enum, IdName, isString, kebab, List, Text, text, toList } from '../type
 
 export class Scope extends Enum {
 
-  protected constructor(readonly name: string, id: Text = text(name).kebab, protected subs: List<Scope> = toList()) {
+  protected constructor(readonly name: string, id: Text = text(name).kebab, readonly subs: List<Scope> = toList()) {
     super(name, id.toString());
   }
 
