@@ -21,4 +21,11 @@ describe('Scope', () => {
     expect(DevScope.Manager.for(marketing).name).toBe('Manager Marketing');
     expect(DevScope.Manager.for(marketing).id).toBe('mngr-marketing');
   });
+
+  test('combines', () => {
+    expect(DevScope.People.name).toBe('People');
+    expect(DevScope.People.id).toBe('people');
+    expect(DevScope.Managers.expand()).toHaveLength(4);
+    expect(DevScope.People.expand()).toHaveLength(7);
+  });
 });
