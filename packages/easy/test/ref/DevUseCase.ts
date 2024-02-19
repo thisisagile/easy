@@ -16,5 +16,5 @@ export class DevUseCase extends UseCase {
   static readonly WriteUnitTest = new UseCase(App.Main, 'Write Unit Test').with(DevScope.Dev, DevScope.Tester);
   static readonly BuildCode = new UseCase(App.Main, 'Build Code').with(DevScope.Dev, DevScope.Tester);
   static readonly ReleaseCode = new UseCase(App.Main, 'Release Code').with(DevScope.Dev, DevScope.Tester);
-  static readonly CreateSpreadSheet = new UseCase(App.Main, 'Create Spread Sheet').with(DevScope.Manager);
+  static readonly CreateSpreadSheet = new UseCase(App.Main, 'Create Spread Sheet').with(DevScope.Managers);
 }

@@ -61,6 +61,16 @@ describe('UseCase', () => {
     expect(uc).toHaveLength(0);
   });
 
+  test('scopes are distinct', () => {
+    const uc = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester, DevScope.Manager);
+    expect(uc.scopes).toHaveLength(2);
+  });
+
+  test('scopes flatMap', () => {
+    const uc = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Managers);
+    expect(uc.scopes).toHaveLength(DevScope.Managers.subs.length + 1);
+  });
+
   test('for works', () => {
     const marketing = 'Marketing';
     const uc = DevUseCase.WriteCode.for(marketing);
@@ -76,5 +86,10 @@ describe('UseCase', () => {
     expect(uc.id).toBe('write-unit-test-marketing');
     expect(uc.scopes[0]).toMatchObject(DevScope.Dev.for(marketing));
     expect(uc.scopes[1]).toMatchObject(DevScope.Tester.for(marketing));
+  });
+
+  test('check multiple scopes', () => {
+    const uc = DevUseCase.CreateSpreadSheet;
+    expect(uc.scopes).toHaveLength(4);
   });
 });
