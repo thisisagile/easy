@@ -138,6 +138,18 @@ describe('DateTime', () => {
   });
 
   test.each([
+    ['2024-02-19', false], //Monday
+    ['2024-02-20', false], // Tuesday
+    ['2024-02-21', false], // Wednesday
+    ['2024-02-22', false], // Thursday
+    ['2024-02-23', false], // Friday
+    ['2024-02-24', true], // Saturday
+    ['2024-02-25', true], // Sunday
+  ])('isWeekend: %s should return %s', (d, e) => {
+    expect(new DateTime(d).isWeekend()).toBe(e);
+  });
+
+  test.each([
     ['year', '2021-12-31T21:59:59.999Z'],
     ['month', '2021-10-31T21:59:59.999Z'],
     ['week', '2021-10-17T21:59:59.999Z'],

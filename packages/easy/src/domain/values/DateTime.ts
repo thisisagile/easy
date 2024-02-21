@@ -100,6 +100,10 @@ export class DateTime extends Value<Optional<string>> {
     return new DateTime(this.luxon.endOf(unit).toISO());
   }
 
+  isWeekend(): boolean {
+    return this.luxon.weekday > 5;
+  }
+
   withZone(zone: string): DateTime {
     return new DateTime(this.utc.setZone(zone).toISO());
   }
