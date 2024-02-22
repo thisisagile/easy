@@ -8,7 +8,11 @@ export class UseCase extends Enum {
   }
 
   with(...s: Scope[]): this {
-    this.scopes.add(...toList(s).flatMap(s => s.expand()).distinct());
+    this.scopes.add(
+      ...toList(s)
+        .flatMap(s => s.expand())
+        .distinct()
+    );
     return this;
   }
 

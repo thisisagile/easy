@@ -13,13 +13,15 @@ export type DiffOptions = {
 };
 
 export class DateTime extends Value<Optional<string>> {
-  constructor(value?: string | number | Date, format?: string) {
+  constructor(value?: string | number | Date | DateTime | null, format?: string) {
     super(
       choose(value)
-        .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })).toISO())
-        .type(isNumber, v => LuxonDateTime.fromMillis(v).toISO())
-        .type(isDate, v => LuxonDateTime.fromJSDate(v).toISO())
-        .else(undefined as unknown as string)
+        .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })))
+        .type(isNumber, v => LuxonDateTime.fromMillis(v))
+        .type(isDate, v => LuxonDateTime.fromJSDate(v))
+        .type(isDateTime, v => LuxonDateTime.fromISO(v.toString()))
+        .else(undefined as unknown as LuxonDateTime)
+        ?.toISO() as unknown as string
     );
   }
 
@@ -98,6 +100,10 @@ export class DateTime extends Value<Optional<string>> {
 
   endOf(unit: DateTimeUnit = 'day'): DateTime {
     return new DateTime(this.luxon.endOf(unit).toISO());
+  }
+
+  isWeekend(): boolean {
+    return this.luxon.isWeekend;
   }
 
   withZone(zone: string): DateTime {
