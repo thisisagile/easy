@@ -103,7 +103,7 @@ export class DateTime extends Value<Optional<string>> {
   }
 
   isWeekend(): boolean {
-    return this.luxon.weekday > 5;
+    return this.luxon.isWeekend;
   }
 
   withZone(zone: string): DateTime {
