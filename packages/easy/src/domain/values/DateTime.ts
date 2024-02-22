@@ -19,7 +19,7 @@ export class DateTime extends Value<Optional<string>> {
         .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })).toISO())
         .type(isNumber, v => LuxonDateTime.fromMillis(v).toISO())
         .type(isDate, v => LuxonDateTime.fromJSDate(v).toISO())
-        .type(isDateTime, v => LuxonDateTime.fromISO(v.toString(), { setZone: true }).toISO())
+        .type(isDateTime, v => LuxonDateTime.fromISO(v.toString()).toISO())
         .else(undefined as unknown as string)
     );
   }
