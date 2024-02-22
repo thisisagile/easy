@@ -1,5 +1,5 @@
 import { mock } from '@thisisagile/easy-test';
-import { Browser, ElementHandle, HTTPResponse, Page, Target } from 'puppeteer';
+import { Browser, ElementHandle, HTTPResponse, Page } from 'puppeteer';
 import { PuppeteerElement, PuppeteerTester } from '../src';
 import { DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
@@ -215,9 +215,7 @@ describe('PuppeteerTester', () => {
   });
 
   test('url', () => {
-    page.target = mock.return(mock.empty<Target>());
-    page.target().url = mock.return('http://thisurl.com');
-
+    page.url = mock.return('http://thisurl.com');
     expect(tester.url).toMatch('http://thisurl.com');
   });
 
