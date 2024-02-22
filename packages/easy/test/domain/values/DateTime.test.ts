@@ -83,6 +83,7 @@ describe('DateTime', () => {
     ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmssssszzz, '2021-10-11T00:23:59.123Z'],
     ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
     ['Wed Dec 24 09:15:00 -0800 2014', 'EEE MMM dd hh:mm:ss ZZZ yyyy', '2014-12-24T17:15:00.000Z'],
+    [new DateTime('2024-10-11T01:23:59.123Z'), undefined, '2024-10-11T01:23:59.123Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
     const res = new DateTime(s, f);
     expect(res).toBeValid();
@@ -184,6 +185,11 @@ describe('DateTime', () => {
 
   test('toString from undefined returns empty string.', () => {
     const res = new DateTime(undefined as unknown as string);
+    expect(res).toMatchText('');
+  });
+
+  test('toString from null returns empty string.', () => {
+    const res = new DateTime(null as unknown as string);
     expect(res).toMatchText('');
   });
 
