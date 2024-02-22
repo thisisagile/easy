@@ -13,7 +13,7 @@ export type DiffOptions = {
 };
 
 export class DateTime extends Value<Optional<string>> {
-  constructor(value?: string | number | Date | null, format?: string) {
+  constructor(value?: string | number | Date | DateTime | null, format?: string) {
     super(
       choose(value)
         .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })))
