@@ -7,7 +7,7 @@ export class PuppeteerTester implements Tester {
   constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {}
 
   get url(): string {
-    return this.page.target().url();
+    return this.page.url();
   }
 
   /* istanbul ignore next */
