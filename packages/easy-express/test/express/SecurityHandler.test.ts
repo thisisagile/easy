@@ -73,7 +73,7 @@ describe('SecurityHandler middleware', () => {
   const testSecretOrKeyProvider = () =>
     new Promise((resolve, reject) =>
       useSpy.mockImplementationOnce(((s: any) => {
-        s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => err ? reject(err) : resolve(secretOrKey));
+        s._secretOrKeyProvider(null, null, (err: any, secretOrKey?: string | Buffer) => (err ? reject(err) : resolve(secretOrKey)));
       }) as any)
     );
 

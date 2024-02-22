@@ -55,19 +55,22 @@ const wrapSecretOrKeyProvider = (p?: EasySecretOrKeyProvider): SecretOrKeyProvid
 
 export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: Request, res: Response, next: NextFunction) => void) => {
   jwtStrategyOptions ??= {};
-  if ('secretOrKeyProvider' in jwtStrategyOptions) (jwtStrategyOptions as any).secretOrKeyProvider = wrapSecretOrKeyProvider(jwtStrategyOptions.secretOrKeyProvider);
+  if ('secretOrKeyProvider' in jwtStrategyOptions)
+    (jwtStrategyOptions as any).secretOrKeyProvider = wrapSecretOrKeyProvider(jwtStrategyOptions.secretOrKeyProvider);
   else if (!('secretOrKey' in jwtStrategyOptions)) jwtStrategyOptions.secretOrKey = ctx.env.get('tokenPublicKey') as string;
 
-  const strategy =
-    new JwtStrategy({
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    passReqToCallback: true,
-    ...jwtStrategyOptions,
-  } as StrategyOptionsWithRequest, (req: Request, payload: any, done: (err: any, user: any) => void) => {
-    ctx.request.token = payload;
-    ctx.request.jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req) ?? '';
-    done(null, payload);
-  });
+  const strategy = new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      passReqToCallback: true,
+      ...jwtStrategyOptions,
+    } as StrategyOptionsWithRequest,
+    (req: Request, payload: any, done: (err: any, user: any) => void) => {
+      ctx.request.token = payload;
+      ctx.request.jwt = ExtractJwt.fromAuthHeaderAsBearerToken()(req) ?? '';
+      done(null, payload);
+    }
+  );
 
   passport.use(strategy);
   return passport.initialize();

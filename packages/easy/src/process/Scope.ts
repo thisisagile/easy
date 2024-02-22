@@ -1,7 +1,6 @@
 import { Enum, IdName, isString, kebab, List, Text, text, toList } from '../types';
 
 export class Scope extends Enum {
-
   protected constructor(readonly name: string, id: Text = text(name).kebab, readonly subs: List<Scope> = toList()) {
     super(name, id.toString());
   }
@@ -16,6 +15,9 @@ export class Scope extends Enum {
   }
 
   expand(): List<Scope> {
-    return this.subs.flatMap(s => s.expand()).add(this).distinct();
+    return this.subs
+      .flatMap(s => s.expand())
+      .add(this)
+      .distinct();
   }
 }
