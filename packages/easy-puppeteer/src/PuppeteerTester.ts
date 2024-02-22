@@ -12,7 +12,7 @@ export class PuppeteerTester implements Tester {
 
   /* istanbul ignore next */
   static launch = (headless = true, launchProps = {}): Promise<Browser> =>
-    puppeteer.launch({ headless: headless ? 'new' : false, args: ['--no-sandbox', '--start-maximized'], ...launchProps });
+    puppeteer.launch({ headless: headless ? 'shell' : false, args: ['--no-sandbox', '--start-maximized'], ...launchProps });
 
   /* istanbul ignore next */
   static async init(host: string = ctx.env.get('webHost', '') as string, headless = true, width = 1200, height = 800, launchProps = {}): Promise<Tester> {
@@ -71,7 +71,7 @@ export class PuppeteerTester implements Tester {
   }
 
   private byXPath(q: string): TestElement {
-    const h = this.page.waitForXPath(`${q}`);
+    const h = this.page.waitForSelector(`xpath/.${q}`);
     return new PuppeteerElement(h as Promise<ElementHandle<Element>>);
   }
 }
