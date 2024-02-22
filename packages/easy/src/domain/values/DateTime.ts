@@ -21,7 +21,7 @@ export class DateTime extends Value<Optional<string>> {
         .type(isDate, v => LuxonDateTime.fromJSDate(v))
         .type(isDateTime, v => LuxonDateTime.fromISO(v.toString()))
         .else(undefined as unknown as LuxonDateTime)
-        ?.toISO() as string
+        ?.toISO() as unknown as string
     );
   }
 
