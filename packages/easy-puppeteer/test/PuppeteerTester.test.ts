@@ -114,14 +114,14 @@ describe('PuppeteerTester', () => {
     const h = mock.empty<Promise<ElementHandle>>();
     const pe = new PuppeteerElement(h);
 
-    page.waitForXPath = mock.return(pe);
+    page.waitForSelector = mock.return(pe);
 
     const result = tester.row('value');
 
     expect(result).toBeInstanceOf(PuppeteerElement);
     expect(result).toMatchObject(pe);
-    expect(page.waitForXPath).toHaveBeenCalledWith(`(//tr[contains(., 'value')])[1]`);
-    expect(page.waitForXPath).toHaveBeenCalledTimes(1);
+    expect(page.waitForSelector).toHaveBeenCalledWith(`xpath/.(//tr[contains(., 'value')])[1]`);
+    expect(page.waitForSelector).toHaveBeenCalledTimes(1);
   });
 
   test('goto resolves ok response', async () => {
