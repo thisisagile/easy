@@ -18,6 +18,7 @@ describe('View', () => {
       company: { id: 143, name: 'iBOOD', city: 'Amsterdam' },
       email: 'sander@ibood.io',
       tags: ['dev', 'arch', 'test'],
+      start: '2021-01-01T00:00:00.000Z',
     };
     source2 = {
       tags: ['dev', 'arch', 'test'],
@@ -96,6 +97,14 @@ describe('View', () => {
     expect(s.from(source).email).toBeInstanceOf(Email);
     const s2 = view({ email: Email }).fromSource;
     expect(s2.from(source).email).toBeInstanceOf(Email);
+  });
+
+  test('datetime', () => {
+    const s = view({ start: DateTime });
+    expect(s.from(source).start).toBeInstanceOf(DateTime);
+    expect(s.from(source).start).toBeValid();
+    const s2 = view({ end: DateTime });
+    expect(s2.from(source).end).toBeUndefined();
   });
 
   test('constructor do not construct when null', () => {
