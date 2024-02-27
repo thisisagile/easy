@@ -1,13 +1,13 @@
-import { asString, isDefined, isEmpty, isEmptyObject, kebab, Value } from '../../types';
+import { isNotEmpty, text, Value } from '../../types';
 import { isSlug } from 'validator';
 
 export class Slug extends Value {
   constructor(slug?: unknown) {
-    super(isDefined(asString(slug)) && !isEmptyObject(slug) ? kebab(asString(slug)) : '');
+    super(text(slug).strictKebab.toString());
   }
 
   get isValid(): boolean {
-    return isSlug(this.value) && !isEmpty(this.value) && !isEmptyObject(this.value);
+    return isNotEmpty(this.value) && isSlug(this.value);
   }
 }
 
