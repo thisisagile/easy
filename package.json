@@ -8,11 +8,11 @@
     "g:tsup": "cd $INIT_CWD && tsup --silent",
     "g:jest": "cd $INIT_CWD && jest",
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
-    "format-all": "yarn workspaces foreach run format",
-    "lint-all": "yarn workspaces foreach run lint",
-    "build-all": "yarn workspaces foreach -p --topological-dev run build:tsup",
+    "format-all": "yarn workspaces foreach -A run format",
+    "lint-all": "yarn workspaces foreach -A run lint",
+    "build-all": "yarn workspaces foreach -Ap --topological-dev run build:tsup",
     "test-all": "jest --coverage",
-    "test-sonarqube": "yarn workspaces foreach run test",
+    "test-sonarqube": "yarn workspaces foreach -A run test",
     "release": "yarn build-all && release-it",
     "u": "yarn upgrade-interactive && yarn dedupe"
   },
@@ -45,5 +45,5 @@
     "tsup": "^7.2.0",
     "typescript": "^5.3.3"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@4.1.0"
 }
