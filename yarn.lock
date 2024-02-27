@@ -1508,9 +1508,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@release-it-plugins/workspaces@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "@release-it-plugins/workspaces@npm:3.2.0"
+"@release-it-plugins/workspaces@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "@release-it-plugins/workspaces@npm:4.2.0"
   dependencies:
     detect-indent: "npm:^6.0.0"
     detect-newline: "npm:^3.1.0"
@@ -1520,8 +1520,8 @@ __metadata:
     walk-sync: "npm:^2.0.2"
     yaml: "npm:^2.1.1"
   peerDependencies:
-    release-it: ^14.0.0 || ^15.2.0
-  checksum: 10c0/db7ebe0f5f0cb2c2b7e46ba84e3bf4a3372a8f7fd1bb9786e29918a0086d28ac8dbe6f5cbcc815439551415f0547abf8b66ecba25296f52c7cc7697f7d636b88
+    release-it: ^14.0.0 || ^15.2.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/edd74018ccf4570bd6905ce7792db333981ece61ac6afbea9e6c76b877b558ef2627106db80bf55c8229cdd2f84e7e948c3bc08a3223bea7a1ce108dbe9bd8a0
   languageName: node
   linkType: hard
 
@@ -9880,7 +9880,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root@workspace:."
   dependencies:
-    "@release-it-plugins/workspaces": "npm:^3.2.0"
+    "@release-it-plugins/workspaces": "npm:^4.2.0"
     "@release-it/conventional-changelog": "npm:5.1.1"
     "@tsconfig/node18": "npm:^18.2.2"
     "@types/jest": "npm:^29.5.12"
