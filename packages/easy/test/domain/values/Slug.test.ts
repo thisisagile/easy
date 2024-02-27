@@ -7,9 +7,9 @@ const slWithUppercase: unknown = 'thIs iS a sLug   ';
 
 describe('Slug', () => {
   test('invalid', () => {
+    expect(new Slug(undefined)).not.toBeValid();
     expect(new Slug('')).not.toBeValid();
     expect(new Slug(' ')).not.toBeValid();
-    expect(slug({})).not.toBeValid();
     expect(slug(slWithSpaces).value).not.toBeValid();
   });
 
