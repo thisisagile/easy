@@ -3,4 +3,5 @@ export * from './EAN';
 export * from './Email';
 export * from './IBAN';
 export * from './PostalCode';
+export * from './Slug';
 export * from './Url';
