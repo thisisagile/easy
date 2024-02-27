@@ -1688,7 +1688,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    mongodb: "npm:^5.6.0"
+    mongodb: "npm:^5.9.2"
   languageName: unknown
   linkType: soft
 
@@ -8126,7 +8126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:^5.6.0":
+"mongodb@npm:^5.9.2":
   version: 5.9.2
   resolution: "mongodb@npm:5.9.2"
   dependencies:
