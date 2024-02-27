@@ -1,4 +1,20 @@
-import { Exception, asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value } from '../../src';
+import {
+  Exception,
+  asList,
+  Entity,
+  Enum,
+  includes,
+  isValue,
+  List,
+  required,
+  rule,
+  Struct,
+  toList,
+  valid,
+  validate,
+  Value,
+  isValid,
+} from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
@@ -97,6 +113,12 @@ describe('validate', () => {
     expect(validate(Type.Plug)).toBeValid();
     expect(validate(Type.byId(Type.Plug.id))).toBeValid();
     expect(validate(Type.byId(666))).not.toBeValid();
+  });
+
+  test('isValid', () => {
+    expect(isValid(Type.Plug)).toBeTruthy();
+    expect(isValid(Type.byId(Type.Plug.id))).toBeTruthy();
+    expect(isValid(Type.byId(666))).toBeFalsy();
   });
 
   test('value', () => {
