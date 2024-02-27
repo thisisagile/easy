@@ -1732,7 +1732,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@thisisagile/easy-test-react": "workspace:*"
-    "@types/copyfiles": "npm:^2.4.1"
+    "@types/copyfiles": "npm:^2.4.4"
     copyfiles: "npm:^2.4.1"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
@@ -1909,7 +1909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/copyfiles@npm:^2.4.1":
+"@types/copyfiles@npm:^2.4.4":
   version: 2.4.4
   resolution: "@types/copyfiles@npm:2.4.4"
   checksum: 10c0/c57d13c4a4fa85ba052cce3921cc73624a64df40077e2fa9ba704ddf43a2c342e151c0e090531e3366dc5545cc2e48649933aaf501070923f11374fac42f9e2a
