@@ -19,7 +19,7 @@ export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List
 const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Optional<Route> =>
   tryTo(verb)
     .is.defined()
-    .map(verb => ({ verb, endpoint, requires, middleware: middleware ?? [] } as Route))
+    .map(verb => ({ verb, endpoint, requires, middleware: middleware ?? [] }) as Route)
     .orElse();
 
 class Router implements Routes {

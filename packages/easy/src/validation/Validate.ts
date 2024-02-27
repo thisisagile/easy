@@ -58,4 +58,3 @@ export const validate = (subject?: unknown): Results =>
 export const validateReject = <T>(subject: T): Promise<T> => when(subject).not.isValid.reject();
 
 export const isValid = <T>(t: T): boolean => validate(t).isValid;
-
