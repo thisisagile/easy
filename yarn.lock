@@ -1665,7 +1665,7 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/cls-hooked": "npm:^4.3.4"
+    "@types/cls-hooked": "npm:^4.3.8"
     "@types/express": "npm:^4.17.21"
     "@types/form-urlencoded": "npm:^4.4.0"
     "@types/jsonwebtoken": "npm:^9.0.2"
@@ -1891,7 +1891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cls-hooked@npm:^4.3.4":
+"@types/cls-hooked@npm:^4.3.8":
   version: 4.3.8
   resolution: "@types/cls-hooked@npm:4.3.8"
   dependencies:
