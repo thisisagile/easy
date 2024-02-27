@@ -1,9 +1,9 @@
 import { slug, Slug } from '../../../src';
 import '@thisisagile/easy-test';
 
-const sl: unknown = 'this-is-a-slug';
-const slWithSpaces: unknown = 'this is a slug   ';
-const slWithUppercase: unknown = 'thIs iS a sLug   ';
+const sl = 'this-is-a-slug';
+const slWithSpaces = 'this is a slug   ';
+const slWithUppercase = 'thIs iS a sLug   ';
 
 describe('Slug', () => {
   test('invalid', () => {
