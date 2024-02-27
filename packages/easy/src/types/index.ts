@@ -25,6 +25,7 @@ export * from './Meta';
 export * from './Nullish';
 export * from './Number';
 export * from './PageList';
+export * from './Parser';
 export * from './Primitive';
 export * from './Repository';
 export * from './Result';
