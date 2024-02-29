@@ -1,4 +1,4 @@
-import { reject, resolve, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
+import { List, reject, resolve, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -108,6 +108,13 @@ describe('tuple', () => {
       .then(([, ms]) => toList(ms));
 
     expect(res).toHaveLength(2);
+    expect(res[1]).toBeInstanceOf(Manager);
+  });
+
+  test('resolve sync and async list', async () => {
+    const res = await tuple.list([asyncM(ceo), asyncM(cto)]);
+    expect(res).toHaveLength(2);
+    expect(res).toBeInstanceOf(List);
     expect(res[1]).toBeInstanceOf(Manager);
   });
 });
