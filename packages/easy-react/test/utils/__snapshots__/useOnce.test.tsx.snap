@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useOnce useOnce works with initial and reject. 1`] = `
+<div>
+  <div
+    data-testid="feyenoord"
+  >
+    Club
+  </div>
+</div>
+`;
+
+exports[`useOnce useOnce works with initial and undefined. 1`] = `
+<div>
+  <div
+    data-testid="feyenoord"
+  >
+    Club
+  </div>
+</div>
+`;
+
+exports[`useOnce useOnce works with initial. 1`] = `
+<div>
+  <div
+    data-testid="barcelona"
+  >
+    Club
+  </div>
+</div>
+`;
+
+exports[`useOnce useOnce works. 1`] = `
+<div>
+  <div
+    data-testid="barcelona"
+  >
+    Club
+  </div>
+</div>
+`;
