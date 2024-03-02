@@ -27,4 +27,10 @@ describe('useOnce', () => {
     expect(container).toMatchSnapshot();
     expect(atId('44')).toBeValid();
   });
+
+  test('useOnce works with deps and initial.', async () => {
+    const { container, atId } = await rendersWait(<Club f={() => resolve({ id: 44 })} options={{ initial: { id: 56 }, deps: [{ id: 44 }] }} />);
+    expect(container).toMatchSnapshot();
+    expect(atId('44')).toBeValid();
+  });
 });
