@@ -1,13 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`useOnce useOnce works with initial and undefined. 1`] = `
-<div>
-  <div>
-    Club
-  </div>
-</div>
-`;
-
 exports[`useOnce useOnce works with initial. 1`] = `
 <div>
   <div

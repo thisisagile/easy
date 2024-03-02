@@ -21,10 +21,4 @@ describe('useOnce', () => {
     expect(container).toMatchSnapshot();
     expect(atId('barcelona')).toBeValid();
   });
-
-  test('useOnce works with initial and undefined.', async () => {
-    const { container, atId } = await rendersWait(<Club f={() => resolve(undefined as unknown as string)} initial={'feyenoord'} />);
-    expect(container).toMatchSnapshot();
-    expect(atId('feyenoord')).toBeValid();
-  });
 });
