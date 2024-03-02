@@ -1,9 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`useOnce useOnce works with deps. 1`] = `
+<div>
+  <div
+    data-testid="44"
+  >
+    Club
+  </div>
+</div>
+`;
+
 exports[`useOnce useOnce works with initial. 1`] = `
 <div>
   <div
-    data-testid="barcelona"
+    data-testid="43"
   >
     Club
   </div>
@@ -13,7 +23,7 @@ exports[`useOnce useOnce works with initial. 1`] = `
 exports[`useOnce useOnce works. 1`] = `
 <div>
   <div
-    data-testid="barcelona"
+    data-testid="42"
   >
     Club
   </div>
