@@ -5,8 +5,8 @@ export type UseOnceOptions<E> = {
   initial?: Partial<E>;
 };
 
-export function useOnce<E>(f: () => Promise<E>, options: UseOnceOptions<E> = { deps: [] }): [E] {
-  const [item, setItem] = useState(options.initial as E);
-  useEffect(() => void f().then(i => setItem(i)), options.deps);
+export function useOnce<E>(f: () => Promise<E>, options?: UseOnceOptions<E>): [E] {
+  const [item, setItem] = useState(options?.initial as E);
+  useEffect(() => void f().then(i => setItem(i)), options?.deps ?? []);
   return [item];
 }
