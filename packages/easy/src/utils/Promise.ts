@@ -1,4 +1,4 @@
-import { ErrorOrigin, toArray } from '../types';
+import { ErrorOrigin, List, toArray, toList } from '../types';
 
 type Pro<A> = A | PromiseLike<A>;
 type Aw<A> = Awaited<A>;
@@ -15,6 +15,7 @@ export const tuple = {
     Promise.all([first, second, third, forth, fifth]),
   all: <F, S>(first: Pro<F>, second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(second)]),
   spread: <F, S>(first: Pro<F>, ...second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(toArray(second))]),
+  list: <T>(list: Pro<T>[]): Promise<List<Aw<T>>> => Promise.all([...list]).then(toList),
 };
 
 export const tuple2 = tuple[2];

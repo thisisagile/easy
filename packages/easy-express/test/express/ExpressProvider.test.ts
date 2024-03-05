@@ -33,6 +33,7 @@ describe('ExpressProvider', () => {
       send: mock.this(),
       setHeader: mock.this(),
     } as unknown as Response;
+    console.log = mock.return();
   });
 
   test('use', () => {
@@ -152,6 +153,13 @@ describe('ExpressProvider', () => {
     expect(endpoint.path).toBe(DevUri.Developers.path);
     expect(resource.insert).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
+  });
+
+  test('start with log of resources', async () => {
+    const resource = new DevsResource();
+    provider.route(service, resource);
+    expect(console.log).toHaveBeenNthCalledWith(1, 'GET', '/dev/developers');
+    expect(console.log).toHaveBeenNthCalledWith(2, 'POST', '/dev/developers');
   });
 
   test('use options from decorator', async () => {
