@@ -11,4 +11,4 @@ export class Slug extends Value {
   }
 }
 
-export const slug = (slug?: unknown): Slug => new Slug(slug);
+export const toSlug = (slug?: unknown): Slug => new Slug(slug);
