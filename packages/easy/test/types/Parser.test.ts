@@ -1,48 +1,30 @@
-import { ErrorOrigin, Exception, Get, ofGet, Parser, reject, resolve } from '../../src';
+import { ErrorOrigin, Exception, Get, isDefined, ofGet, Parser, reject, resolve } from '../../src';
 import { Dev } from '../ref';
 
-class TestParser<T, V> extends Parser<T, V> {
-  positive = (): V => ofGet(this.valid ? this.f : this.alt, this.value);
+class TestParser extends Parser<number, number> {
+  multiply = (): number => (this.valid ? this.value * 2 : this.value * 3);
 }
 
-const parse = (value: number) =>
-  new TestParser(
-    value,
-    v => v * 2,
-    v => v * 3
-  );
-const parseObject = (value: { id: number }) =>
-  new TestParser(
-    value,
-    v => v.id * 2,
-    v => v.id * 3
-  );
+const parse = (value: number) => new TestParser(value);
 
 describe('TestParser', () => {
   test('just parse', () => {
-    expect(parse(2).positive()).toBe(4);
+    expect(parse(2).multiply()).toBe(4);
   });
 
   test('parse with if', () => {
-    expect(parse(2).if.empty().positive()).toBe(6);
-    expect(parse(2).if.not.empty().positive()).toBe(4);
+    expect(parse(2).if.empty().multiply()).toBe(6);
+    expect(parse(2).if.not.empty().multiply()).toBe(4);
   });
 
   test('parse with if defined', () => {
-    expect(parse(2).if.defined().positive()).toBe(4);
-    expect(parse(2).if.not.defined().positive()).toBe(6);
+    expect(parse(2).if.defined().multiply()).toBe(4);
+    expect(parse(2).if.not.defined().multiply()).toBe(6);
   });
 
   test('parse with object and predicate', () => {
-    expect(parse(2).if.is.object().positive()).toBe(6);
-    expect(parse(2).if.is.string().positive()).toBe(6);
-  });
-
-  test('parse with not object and predicate', () => {
-    expect(parseObject({ id: 5 }).positive()).toBe(10);
-    expect(parseObject({ id: 5 }).if.is.object().positive()).toBe(10);
-    expect(parseObject({ id: 5 }).if.empty().positive()).toBe(15);
-    expect(parseObject({ id: 5 }).if.not.empty().positive()).toBe(10);
+    expect(parse(2).if.is.object().multiply()).toBe(6);
+    expect(parse(2).if.is.string().multiply()).toBe(6);
   });
 });
 
@@ -58,13 +40,7 @@ class WhenParser<T, V> extends Parser<T, V> {
   }
 }
 
-const when = <T>(value: T) =>
-  new WhenParser<T, T>(
-    value,
-    v => v,
-    v => v,
-    false
-  );
+const when = <T>(value: T) => new WhenParser<T, T>(value, false);
 
 describe('WhenParser', () => {
   test('just reject', async () => {
@@ -153,5 +129,47 @@ describe('WhenParser', () => {
         .if.in(1, 2, 3)
         .recover(() => 3)
     ).resolves.toBe(2);
+  });
+});
+
+type Test = { id: number; name?: string };
+
+class Caller {
+  double = (value: Test) => value.id * 2;
+  add = (value: Test, add: number) => value.id + add;
+}
+
+class NestedParser extends Parser<Test, Test> {
+  constructor(
+    protected value: Test,
+    protected caller = new Caller()
+  ) {
+    super(value, true);
+  }
+
+  call = () => (this.valid ? this.caller.double(this.value) : this.caller.add(this.value, 1));
+
+  callerExists = () => isDefined(this.caller);
+}
+
+const nested = <T>(value: Test) => new NestedParser(value);
+
+describe('NestedParser', () => {
+  test('just call', () => {
+    expect(nested({ id: 2 }).call()).toBe(4);
+  });
+
+  test('call with caller', () => {
+    expect(nested({ id: 3 }).call()).toBe(6);
+    expect(
+      nested({ id: 4 })
+        .if.empty(t => t.name)
+        .call()
+    ).toBe(8);
+    expect(
+      nested({ id: 5 })
+        .if.not.empty(t => t.name)
+        .call()
+    ).toBe(6);
   });
 });

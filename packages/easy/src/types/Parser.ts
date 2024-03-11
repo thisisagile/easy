@@ -1,11 +1,12 @@
-import { Get, ofGet } from './Get';
-import { isDefined, isEmpty, isIn, isObject, isString } from './Is';
+import { Get, ofGet, Predicate } from './Get';
+import { isDefined, isEmpty, isIn, isObject, isString, isTrue } from './Is';
 import { isValid } from '../validation';
-import { Constructor } from './Constructor';
+import { Constructor, on } from './Constructor';
 import { toArray } from './Array';
 
 export class Parser<T, V> {
   if = {
+    equals: (pred?: Predicate<T>): this => this.evaluate(isTrue, pred),
     empty: <U>(pred?: Get<U, T>): this => this.evaluate(isEmpty, pred),
     defined: <U>(pred?: Get<U, T>): this => this.evaluate(isDefined, pred),
     valid: <U>(pred?: Get<U, T>): this => this.evaluate(isValid, pred),
@@ -29,23 +30,16 @@ export class Parser<T, V> {
     },
   };
 
-  constructor(protected value: T, protected f: Get<V, T>, protected alt: Get<V, T>, readonly valid = true) {}
+  constructor(
+    protected value: T,
+    protected valid = true
+  ) {}
 
   protected evaluate<U>(meta: Get<boolean>, pred?: Get<U, T>): this {
-    return new (this.constructor as new (value: T, f: Get<V, T>, alt: Get<V, T>, allow?: boolean) => this)(
-      this.value,
-      this.f,
-      this.alt,
-      ofGet(meta, pred ? ofGet(pred, this.value) : this.value)
-    );
+    return on(this, t => (t.valid = ofGet(meta, pred ? ofGet(pred, this.value) : this.value)));
   }
 
   protected evaluateNot<U>(meta: Get<boolean>, pred?: Get<U, T>): this {
-    return new (this.constructor as new (value: T, f: Get<V, T>, alt: Get<V, T>, allow?: boolean) => this)(
-      this.value,
-      this.f,
-      this.alt,
-      !ofGet(meta, pred ? ofGet(pred, this.value) : this.value)
-    );
+    return on(this, t => (t.valid = !ofGet(meta, pred ? ofGet(pred, this.value) : this.value)));
   }
 }
