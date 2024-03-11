@@ -67,7 +67,7 @@ export class ToText implements Text {
     return this.map(s => s.trim())
       .replace('™', '')
       .replace('ß', 'ss')
-      .lower.map(s => s.split(/\s/g).join('-'))
+      .kebab
       .map(s => s.normalize('NFKD'))
       .map(s => s.split(/[^a-zA-Z0-9-\s]+/g).join(''))
       .map(s =>
