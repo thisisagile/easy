@@ -1,48 +1,30 @@
-import { ErrorOrigin, Exception, Get, ofGet, Parser, reject, resolve } from '../../src';
+import { ErrorOrigin, Exception, Get, isDefined, ofGet, Parser, reject, resolve } from '../../src';
 import { Dev } from '../ref';
 
-class TestParser<T, V> extends Parser<T, V> {
-  positive = (): V => ofGet(this.valid ? this.f : this.alt, this.value);
+class TestParser extends Parser<number, number> {
+  multiply = (): number => (this.valid ? this.value * 2 : this.value * 3);
 }
 
-const parse = (value: number) =>
-  new TestParser(
-    value,
-    v => v * 2,
-    v => v * 3
-  );
-const parseObject = (value: { id: number }) =>
-  new TestParser(
-    value,
-    v => v.id * 2,
-    v => v.id * 3
-  );
+const parse = (value: number) => new TestParser(value);
 
 describe('TestParser', () => {
   test('just parse', () => {
-    expect(parse(2).positive()).toBe(4);
+    expect(parse(2).multiply()).toBe(4);
   });
 
   test('parse with if', () => {
-    expect(parse(2).if.empty().positive()).toBe(6);
-    expect(parse(2).if.not.empty().positive()).toBe(4);
+    expect(parse(2).if.empty().multiply()).toBe(6);
+    expect(parse(2).if.not.empty().multiply()).toBe(4);
   });
 
   test('parse with if defined', () => {
-    expect(parse(2).if.defined().positive()).toBe(4);
-    expect(parse(2).if.not.defined().positive()).toBe(6);
+    expect(parse(2).if.defined().multiply()).toBe(4);
+    expect(parse(2).if.not.defined().multiply()).toBe(6);
   });
 
   test('parse with object and predicate', () => {
-    expect(parse(2).if.is.object().positive()).toBe(6);
-    expect(parse(2).if.is.string().positive()).toBe(6);
-  });
-
-  test('parse with not object and predicate', () => {
-    expect(parseObject({ id: 5 }).positive()).toBe(10);
-    expect(parseObject({ id: 5 }).if.is.object().positive()).toBe(10);
-    expect(parseObject({ id: 5 }).if.empty().positive()).toBe(15);
-    expect(parseObject({ id: 5 }).if.not.empty().positive()).toBe(10);
+    expect(parse(2).if.is.object().multiply()).toBe(6);
+    expect(parse(2).if.is.string().multiply()).toBe(6);
   });
 });
 
@@ -58,13 +40,7 @@ class WhenParser<T, V> extends Parser<T, V> {
   }
 }
 
-const when = <T>(value: T) =>
-  new WhenParser<T, T>(
-    value,
-    v => v,
-    v => v,
-    false
-  );
+const when = <T>(value: T) => new WhenParser<T, T>(value, false);
 
 describe('WhenParser', () => {
   test('just reject', async () => {
@@ -156,135 +132,44 @@ describe('WhenParser', () => {
   });
 });
 
-// describe('Testing original When :) ', () => {
-//   test('Construct when', () => {
-//     expect(when(Dev.Sander).valid).toBeTruthy();
-//     expect(when(Dev.Sander).not.valid).toBeFalsy();
-//     expect(when(Dev.Sander).not.not.valid).toBeTruthy();
-//     expect(when(Dev.Sander).not.not.not.valid).toBeFalsy();
-//   });
-//
-//   test('Construct with real object and isDefined', () => {
-//     expect(when(Dev.Sander).isDefined.valid).toBeTruthy();
-//     expect(when(Dev.Sander).not.isDefined.valid).toBeFalsy();
-//     expect(when(Dev.Sander).not.not.isDefined.valid).toBeTruthy();
-//     expect(when(Dev.Sander).not.not.not.isDefined.valid).toBeFalsy();
-//   });
-//
-//   test('Construct with real object and isIn', () => {
-//     expect(when(Dev.Sander).in().valid).toBeFalsy();
-//     expect(when(Dev.Sander).in(Dev.Sander).valid).toBeTruthy();
-//     expect(when(Dev.Sander).in(Dev.Wouter, Dev.Jeroen).valid).toBeFalsy();
-//     expect(when(Dev.Sander).in(Dev.Wouter, Dev.Jeroen, Dev.Sander).valid).toBeTruthy();
-//     expect(when(Dev.Sander).not.in(Dev.Jeroen).valid).toBeTruthy();
-//   });
-//
-//   test('Construct, isDefined and reject', async () => {
-//     expect(when(undefined).not.isDefined.valid).toBeTruthy();
-//     await expect(when(Dev.Invalid).not.isValid.reject('Is wrong')).rejects.not.toBeValid();
-//     await expect(when(undefined).not.isDefined.reject('Is wrong')).rejects.not.toBeValid();
-//     return expect(when(Dev.Sander).not.isDefined.reject('Is wrong')).resolves.toMatchObject(Dev.Sander);
-//   });
-//
-//   test('Construct, isDefined and recover', async () => {
-//     await expect(when(Dev.Sander).isDefined.recover(l => l)).resolves.toMatchObject(Dev.Sander);
-//     await expect(when(undefined as unknown as Dev).not.isDefined.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Jeroen);
-//     await expect(when(Dev.Invalid).not.isValid.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Jeroen);
-//     return expect(when(Dev.Sander).not.isDefined.recover(() => Dev.Jeroen)).resolves.toMatchObject(Dev.Sander);
-//   });
-//
-//   test('Construct with undefined object and isDefined', () => {
-//     expect(when(undefined).isDefined.valid).toBeFalsy();
-//     expect(when(undefined).not.isDefined.valid).toBeTruthy();
-//   });
-//
-//   test('Construct with undefined object and is', () => {
-//     expect(when(Dev.Sander).is(Dev.Sander).valid).toBeTruthy();
-//     expect(when(Dev.Wouter).is(Dev.Jeroen).valid).toBeFalsy();
-//   });
-//
-//   test('Construct with undefined object and isEmpty', () => {
-//     expect(when('no').isEmpty.valid).toBeFalsy();
-//     expect(when('no').not.isEmpty.valid).toBeTruthy();
-//   });
-//
-//   test('Construct and isTrue', () => {
-//     expect(when('sander').isTrue.valid).toBeTruthy();
-//     expect(when(undefined).not.isTrue.valid).toBeTruthy();
-//     expect(when({}).isTrue.valid).toBeTruthy();
-//     expect(when(Dev.Sander).isTrue.valid).toBeTruthy();
-//     expect(when(true).isTrue.valid).toBeTruthy();
-//     expect(when(false).not.isTrue.valid).toBeTruthy();
-//   });
-//
-//   test('validation', () => {
-//     expect(when(Dev.Sander).isValid.valid).toBeTruthy();
-//     expect(when(undefined).isValid.valid).toBeFalsy();
-//     expect(when(undefined).not.isValid.valid).toBeTruthy();
-//     return expect(when(Dev.Wouter).not.isValid.valid).toBeFalsy();
-//   });
-//
-//   test('Construct with undefined object and isInstanceOf', () => {
-//     expect(when(Dev.Jeroen).isInstance(Dev).valid).toBeTruthy();
-//     expect(when(undefined).not.isInstance(Dev).valid).toBeTruthy();
-//   });
-//
-//   test('Construct with undefined object and has', () => {
-//     expect(when(Dev.Jeroen).with(d => d.language === Dev.Jeroen.language).valid).toBeTruthy();
-//     expect(when(Dev.Jeroen).with(d => d.language === '').valid).toBeFalsy();
-//   });
-//
-//   test('Contains', () => {
-//     expect(when(Dev.Jeroen).contains(d => d.language).valid).toBeTruthy();
-//     expect(when(Dev.Invalid).contains(d => d.name).valid).toBeFalsy();
-//   });
-//
-//   test('Contains and', async () => {
-//     await expect(
-//       when(Dev.Jeroen)
-//         .not.contains(d => d.language)
-//         .and.contains(d => d.name)
-//         .reject(Exception.Unknown)
-//     ).resolves.toBe(Dev.Jeroen);
-//     await expect(
-//       when(Dev.Invalid)
-//         .not.contains(d => d.level)
-//         .and.contains(d => d.name)
-//         .reject(Exception.Unknown)
-//     ).rejects.toMatchException(Exception.Unknown);
-//     return expect(
-//       when(Dev.Invalid)
-//         .not.contains(d => d.language)
-//         .and.contains(d => d.name)
-//         .reject(Exception.Unknown)
-//     ).rejects.toMatchException(Exception.Unknown);
-//   });
-//
-//   test('Reject without error, with error, with exception, with function', async () => {
-//     let res = await when(Dev.Invalid)
-//       .not.isValid.reject()
-//       .catch(r => r);
-//     expect(res).toBeInstanceOf(Results);
-//
-//     res = await when(Dev.Invalid)
-//       .not.isValid.reject('Is wrong')
-//       .catch(r => r);
-//     expect(res).toBe('Is wrong');
-//
-//     res = await when(Dev.Invalid)
-//       .not.isValid.reject(d => d.language)
-//       .catch(r => r);
-//     expect(res).toBe(Dev.Invalid.language);
-//
-//     res = await when(Dev.Invalid)
-//       .not.isValid.reject(Exception.DoesNotExist)
-//       .catch(r => r);
-//     expect(res).toBeInstanceOf(Exception);
-//
-//     res = await when(Language.byId(42))
-//       .not.isValid.reject()
-//       .catch(r => r);
-//     expect(res).toHaveLength(1);
-//   });
-// });
-//
+type Test = { id: number; name?: string };
+
+class Caller {
+  double = (value: Test) => value.id * 2;
+  add = (value: Test, add: number) => value.id + add;
+}
+
+class NestedParser extends Parser<Test, Test> {
+  constructor(
+    protected value: Test,
+    protected caller = new Caller()
+  ) {
+    super(value, true);
+  }
+
+  call = () => (this.valid ? this.caller.double(this.value) : this.caller.add(this.value, 1));
+
+  callerExists = () => isDefined(this.caller);
+}
+
+const nested = <T>(value: Test) => new NestedParser(value);
+
+describe('NestedParser', () => {
+  test('just call', () => {
+    expect(nested({ id: 2 }).call()).toBe(4);
+  });
+
+  test('call with caller', () => {
+    expect(nested({ id: 3 }).call()).toBe(6);
+    expect(
+      nested({ id: 4 })
+        .if.empty(t => t.name)
+        .call()
+    ).toBe(8);
+    expect(
+      nested({ id: 5 })
+        .if.not.empty(t => t.name)
+        .call()
+    ).toBe(6);
+  });
+});
