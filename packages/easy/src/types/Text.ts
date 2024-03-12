@@ -71,7 +71,6 @@ export class ToText implements Text {
           .toLowerCase()
           .replace(/[^a-z\d]+/g, '-')
           .replace(/^-+|-+$/g,''))
-     ;
   }
 
   get snake(): ToText {
