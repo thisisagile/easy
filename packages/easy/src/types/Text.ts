@@ -67,11 +67,11 @@ export class ToText implements Text {
       .map(s =>
         s.replace(/ß/g, 'ss')
           .normalize('NFKD')
-          .replace(/-+/g, ' ') // Sanitize if already sluggified or contains hyphens
-          .replace(/[^a-z\d\s]+/gi, '')
-          .trim()
-          .replace(/\s+/g, ' '))
-      .kebab;
+          .replace(/[\u0300-\u036F]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z\d]+/g, '-')
+          .replace(/^-+|-+$/g,''))
+     ;
   }
 
   get snake(): ToText {
