@@ -23,7 +23,8 @@ export const kebab = (s = ''): string =>
     .toLowerCase();
 
 export class ToText implements Text {
-  constructor(readonly subject: string) {}
+  constructor(readonly subject: string) {
+  }
 
   get cap(): ToText {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
@@ -34,7 +35,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => text(w).cap)
-        .join(' ')
+        .join(' '),
     );
   }
 
@@ -64,7 +65,14 @@ export class ToText implements Text {
 
   get slug(): ToText {
     return this
-      .map(s => s.replace(/ß/g, 'ss').normalize('NFKD').replace(/[^a-z\d\s]+/gi, '').replace(/\s+/g, ' ').trim()).kebab;
+      .map(s =>
+        s.replace(/ß/g, 'ss')
+          .normalize('NFKD')
+          .replace(/-+/g, ' ') // Sanitize slug if already sluggified or if contains hyphens
+          .replace(/[^a-z\d\s]+/gi, '') // Remove all non-alphanumeric characters
+          .trim()
+          .replace(/\s+/g, ' ')) // Replace multiple spaces with a single space
+      .kebab;
   }
 
   get snake(): ToText {
@@ -88,7 +96,7 @@ export class ToText implements Text {
       s
         .split(' ')
         .map(w => w[0])
-        .join('')
+        .join(''),
     );
   }
 
@@ -129,7 +137,7 @@ export class ToText implements Text {
       toList(s)
         .add(...other.map(u => text(u).toString()))
         .filter(s => isNotEmpty(s))
-        .join(separator)
+        .join(separator),
     );
 
   toString(): string {
