@@ -62,6 +62,11 @@ export class ToText implements Text {
     return this.map(s => s.replace(/[^a-z\d]+/gi, ' ').trim()).kebab;
   }
 
+  get slug(): ToText {
+    return this
+      .map(s => s.replace(/ß/g, 'ss').normalize('NFKD').replace(/[^a-z\d\s]+/gi, '').replace(/\s+/g, ' ').trim()).kebab;
+  }
+
   get snake(): ToText {
     return this.upper.replace(' ', '_');
   }

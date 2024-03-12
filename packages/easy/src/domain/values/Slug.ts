@@ -3,7 +3,7 @@ import { isSlug } from 'validator';
 
 export class Slug extends Value {
   constructor(slug?: unknown) {
-    super(text(slug).strictKebab.toString());
+    super(text(slug).slug.toString());
   }
 
   get isValid(): boolean {
