@@ -22,7 +22,7 @@ describe('Slug', () => {
   test('trims spaces and kebab on construction', () => {
     expect(toSlug(slWithSpaces).value).toStrictEqual(sl);
     expect(toSlug(' also a slug').value).toBe('also-a-slug');
-    expect(toSlug(' A slug & it"s special? characters! ').value).toBe('a-slug-its-special-characters');
+    expect(toSlug(' A slug & it"s special? char™acters! ').value).toBe('a-slug-its-special-characters');
     expect(toSlug(slWithUppercase).value).toStrictEqual(sl);
   });
 

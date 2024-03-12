@@ -63,18 +63,8 @@ export class ToText implements Text {
   }
 
   get slug(): ToText {
-    return this.map(s => s.trim())
-      .replace('™', '')
-      .replace('ß', 'ss')
-      .kebab
-      .map(s => s.normalize('NFKD'))
-      .map(s => s.split(/[^a-zA-Z0-9-\s]+/g).join(''))
-      .map(s =>
-        s
-          .split(/(-)(?=\1)/g)
-          .filter(s => s !== '-')
-          .join(''),
-      );
+    return this
+      .map(s => s.replace('™', '').replace('ß', 'ss').normalize('NFKD').replace(/[^a-z\d\s]+/gi, '').replace(/\s\s+/g, ' ').trim()).kebab;
   }
 
   get snake(): ToText {
