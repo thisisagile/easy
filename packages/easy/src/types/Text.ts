@@ -67,10 +67,10 @@ export class ToText implements Text {
       .map(s =>
         s.replace(/ß/g, 'ss')
           .normalize('NFKD')
-          .replace(/-+/g, ' ') // Sanitize slug if already sluggified or if contains hyphens
-          .replace(/[^a-z\d\s]+/gi, '') // Remove all non-alphanumeric characters
+          .replace(/-+/g, ' ') // Sanitize if already sluggified or contains hyphens
+          .replace(/[^a-z\d\s]+/gi, '')
           .trim()
-          .replace(/\s+/g, ' ')) // Replace multiple spaces with a single space
+          .replace(/\s+/g, ' '))
       .kebab;
   }
 
