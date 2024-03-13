@@ -63,14 +63,15 @@ export class ToText implements Text {
   }
 
   get slug(): ToText {
-    return this
-      .map(s =>
-        s.replace(/ß/g, 'ss')
-          .normalize('NFKD')
-          .replace(/[\u0300-\u036F]/g, '')
-          .toLowerCase()
-          .replace(/[^a-z\d]+/g, '-')
-          .replace(/^-*(.+?)-*$/g, '$1'))
+    return this.map(s =>
+      s
+        .replace(/ß/g, 'ss')
+        .normalize('NFKD')
+        .replace(/[\u0300-\u036F]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z\d]+/g, '-')
+        .replace(/^-*|-*$/g, '')
+    );
   }
 
   get snake(): ToText {
