@@ -24,6 +24,7 @@ describe('Slug', () => {
     expect(toSlug(' A slug & it"s special? characters™!      ').value).toBe('a-slug-it-s-special-characterstm');
     expect(toSlug('this-is a!-slug... ').value).toBe(sl);
     expect(toSlug('       -!!!!this--- -is - &&a& &  ----slug!-... ').value).toBe(sl);
+    expect(toSlug('---------this---is-a----slug-------').value).toBe(sl);
     expect(toSlug('this-is-a-slug').value).toBe(sl);
     expect(toSlug(slWithUppercase).value).toStrictEqual(sl);
   });
