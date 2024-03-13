@@ -70,7 +70,8 @@ export class ToText implements Text {
         .replace(/[\u0300-\u036F]/g, '')
         .toLowerCase()
         .replace(/[^a-z\d]+/g, '-')
-        .replace(/^-*|-*$/g, '')
+        .replace(/^-+/g, '')
+        .replace(/-+$/g, '')
     );
   }
 
