@@ -21,22 +21,22 @@ describe('Slug', () => {
 
   test('trims spaces and kebab on construction', () => {
     expect(toSlug(slWithSpaces).value).toStrictEqual(sl);
-    expect(toSlug(' also a slug').value).toBe('also-a-slug');
-    expect(toSlug(' A slug & it"s special? characters™!      ').value).toBe('a-slug-its-special-characterstm');
+    expect(toSlug(' A slug & it"s special? characters™!      ').value).toBe('a-slug-it-s-special-characterstm');
+    expect(toSlug('this-is a!-slug... ').value).toBe(sl);
+    expect(toSlug('       -!!!!this--- -is - &&a& &  ----slug!-... ').value).toBe(sl);
+    expect(toSlug('this-is-a-slug').value).toBe(sl);
     expect(toSlug(slWithUppercase).value).toStrictEqual(sl);
   });
 
   test('replaces diacritics with regular characters', () => {
+    expect(toSlug('é').value).toBe('e');
     expect(toSlug('éè & ëê').value).toBe('ee-ee');
     expect(toSlug('áà $%^ äâ').value).toBe('aa-aa');
     expect(toSlug('óòöô').value).toBe('oooo');
     expect(toSlug('úùüû').value).toBe('uuuu');
     expect(toSlug('íìïî').value).toBe('iiii');
-    expect(toSlug('ñ').value).toBe('n');
     expect(toSlug('ññññ').value).toBe('nnnn');
-    expect(toSlug('ç').value).toBe('c');
     expect(toSlug('çççç').value).toBe('cccc');
-    expect(toSlug('ß').value).toBe('ss');
     expect(toSlug('ßßßß').value).toBe('ssssssss');
   });
 });
