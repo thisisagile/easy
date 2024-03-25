@@ -7,6 +7,7 @@ import { entries, meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
+import { ifDefined } from '../utils';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -31,7 +32,15 @@ export const uri = {
   resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
   segment: (key?: Text): Segment => toSegment(key, { segment: key as string }),
   path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
-  query: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isDefined(value) ? `${key}=${value}` : '') }),
+  query: (key: Text): Segment =>
+    toSegment(key, {
+      query: (value: unknown): string =>
+        tryTo(value)
+          .is.defined()
+          .map(v => encodeURIComponent(asString(v)))
+          .map(v => `${key}=${v}`)
+          .orElse('') ?? '',
+    }),
   boolean: (key: Text): Segment => toSegment(key, { query: (value: unknown): string => (isTrue(value) ? `${key}` : '') }),
 };
 

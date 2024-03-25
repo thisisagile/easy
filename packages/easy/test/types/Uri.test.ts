@@ -73,7 +73,7 @@ describe('Uri', () => {
 
   test('return with ids', () => {
     expect(DevUri.Developers.ids(42)).toMatchRoute(`${host}/dev/developers?ids=42`);
-    expect(DevUri.Developers.ids([42, 43])).toMatchRoute(`${host}/dev/developers?ids=42,43`);
+    expect(DevUri.Developers.ids([42, 43])).toMatchRoute(`${host}/dev/developers?ids=42%2C43`);
   });
 
   test('returns ok when query parameter is undefined', () => {
@@ -83,13 +83,20 @@ describe('Uri', () => {
     expect(DevUri.Developers.language().level(3)).toMatchRoute(`${host}/dev/developers?level=3`);
   });
 
+  /** @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toWellFormed */
+  test('returns ok when query parameter is ill-formed', () => {
+    expect(DevUri.Developers.language('\uD800')).toMatchRoute(`${host}/dev/developers`);
+    expect(DevUri.Developers.language('ab😄c')).toMatchRoute(`${host}/dev/developers?language=ab%F0%9F%98%84c`);
+    expect(DevUri.Developers.language('ab\uD83D\uDE04c')).toMatchRoute(`${host}/dev/developers?language=ab%F0%9F%98%84c`);
+  });
+
   test('returns full route plus id and a query', () => {
     expect(DevUri.Developers.query('yes')).toMatchRoute(`${host}/dev/developers?q=yes`);
     expect(DevUri.Developer.id(42).query('yes')).toMatchRoute(`${host}/dev/developers/42?q=yes`);
   });
 
   test('returns full route plus id and a query and sort', () => {
-    expect(DevUri.Developers.query('yes').sort('name-asc')).toMatchRoute(`${host}/dev/developers?q=yes&s=name-asc`);
+    expect(DevUri.Developers.query('test+page&sorting').sort('name-asc').toString()).toBe(`${host}/dev/developers?q=test%2Bpage%26sorting&s=name-asc`);
     expect(DevUri.Developer.id(42).query('yes').sort('name-desc')).toMatchRoute(`${host}/dev/developers/42?q=yes&s=name-desc`);
   });
 
@@ -171,7 +178,7 @@ describe('Uri', () => {
 
   test('Expand with simple datetime option', () => {
     const u = PropsDevUri.Developers.expand({ startDate: new DateTime(1621347575) });
-    expect(u).toMatchText('https://www.easy.io/dev/developers?startDate=1970-01-19T18:22:27.575Z');
+    expect(u).toMatchText('https://www.easy.io/dev/developers?startDate=1970-01-19T18%3A22%3A27.575Z');
   });
 
   test('Expand with simple array option', () => {
@@ -181,11 +188,11 @@ describe('Uri', () => {
 
   test('Expand with multiple array option', () => {
     const u = PropsDevUri.Developers.expand({ brands: ['42', '43'] });
-    expect(u).toMatchText('https://www.easy.io/dev/developers?brands=42,43');
+    expect(u).toMatchText('https://www.easy.io/dev/developers?brands=42%2C43');
   });
 
   test('Expand with multiple options', () => {
     const u = PropsDevUri.Developers.expand({ live: true, brands: ['42', '43'] });
-    expect(u).toMatchText('https://www.easy.io/dev/developers?live&brands=42,43');
+    expect(u).toMatchText('https://www.easy.io/dev/developers?live&brands=42%2C43');
   });
 });
