@@ -155,6 +155,18 @@ describe('ExpressProvider', () => {
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
   });
 
+  test('route passes security to handler', () => {
+    const router = express.Router();
+    const resource = new DevsResource();
+    mockRouterMethodOnce(router, 'get', mock.return());
+    mockRouterMethodOnce(router, 'post', mock.return());
+    jest.spyOn(express, 'Router').mockReturnValueOnce(router);
+    (provider as any).handle = mock.return();
+    provider.route(service, resource);
+
+    expect((provider as any).handle).toHaveBeenCalledWith(fits.any(), fits.any(), fits.with({ token: false, uc: undefined }));
+  });
+
   test('start with log of resources', async () => {
     const resource = new DevsResource();
     provider.route(service, resource);

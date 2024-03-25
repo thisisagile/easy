@@ -42,7 +42,7 @@ export class ExpressProvider implements AppProvider {
         route.route(service.name),
         ...this.addSecurityMiddleware(requires),
         ...middleware,
-        this.handle(endpoint, verb.options)
+        this.handle(endpoint, verb.options, requires)
       );
     });
 
@@ -65,7 +65,7 @@ export class ExpressProvider implements AppProvider {
   }
 
   protected handle =
-    (endpoint: Endpoint, options?: VerbOptions): RequestHandler =>
+    (endpoint: Endpoint, options?: VerbOptions, requires?: RouteRequires): RequestHandler =>
     (req: Request, res: Response, next: NextFunction) =>
       endpoint(toReq(req))
         .then((r: any) => this.toResponse(res, r, toVerbOptions(options)))

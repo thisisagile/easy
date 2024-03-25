@@ -5,7 +5,7 @@ import { HasId, resolve } from '@thisisagile/easy';
 import { useOnce } from '../../src';
 
 describe('useOnce', () => {
-  const Club = ({ f, initial, deps = [] }: { f: () => Promise<HasId>; initial?: HasId; deps?: DependencyList }) => {
+  const Club = ({ f, initial, deps }: { f: () => Promise<HasId>; initial?: HasId; deps?: DependencyList }) => {
     const [o] = useOnce(f, { initial, deps });
     return <div data-testid={o?.id}>Club</div>;
   };
