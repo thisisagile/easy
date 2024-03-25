@@ -83,7 +83,6 @@ describe('Uri', () => {
     expect(DevUri.Developers.language().level(3)).toMatchRoute(`${host}/dev/developers?level=3`);
   });
 
-  /** @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/toWellFormed */
   test('returns ok when query parameter is ill-formed', () => {
     expect(DevUri.Developers.language('\uD800')).toMatchRoute(`${host}/dev/developers`);
     expect(DevUri.Developers.language('ab😄c')).toMatchRoute(`${host}/dev/developers?language=ab%F0%9F%98%84c`);
