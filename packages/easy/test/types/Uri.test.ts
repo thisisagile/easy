@@ -94,6 +94,10 @@ describe('Uri', () => {
     expect(DevUri.Developer.id(42).query('yes')).toMatchRoute(`${host}/dev/developers/42?q=yes`);
   });
 
+  test('byIds with array works', () => {
+    expect(DevUri.Developers.ids([1, 2])).toMatchRoute(`${host}/dev/developers?ids=1%2C2`);
+  });
+
   test('returns full route plus id and a query and sort', () => {
     expect(DevUri.Developers.query('test+page&sorting').sort('name-asc').toString()).toBe(`${host}/dev/developers?q=test%2Bpage%26sorting&s=name-asc`);
     expect(DevUri.Developer.id(42).query('yes').sort('name-desc')).toMatchRoute(`${host}/dev/developers/42?q=yes&s=name-desc`);
