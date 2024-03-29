@@ -45,7 +45,7 @@
     "form-urlencoded": "^6.1.0",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.4.4",
-    "reflect-metadata": "^0.1.13",
+    "reflect-metadata": "^0.2.2",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"
   }
