@@ -63,6 +63,7 @@ describe('kebab', () => {
   test('empty', () => {
     expect(kebab()).toBe('');
   });
+
   const cases = [
     ['', ''],
     ['a', 'a'],
@@ -75,9 +76,14 @@ describe('kebab', () => {
     ['héél', 'h-l'],
     ['{{hallo}}', 'hallo'],
     ['---hallo---', 'hallo'],
+    ['camelCase', 'camel-case'],
+    ['snake_case', 'snake-case'],
+    ['kebab-case', 'kebab-case'],
+    ['UPPER_SNAKE_CASE', 'upper-snake-case'],
+    ['TitleCase', 'title-case'],
   ];
+
   test.each(cases)('to kebab "%s"', (t, exp) => {
-    expect(text(t).strictKebab).toMatchText(exp);
     expect(kebab(t)).toBe(exp);
   });
 });

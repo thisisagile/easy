@@ -15,12 +15,12 @@ export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t)
 
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
-export const kebab = (s = ''): string =>
-  s
-    .replace(/[^a-z\d]+/gi, '-')
-    .replace(/-$/, '')
-    .replace(/^-/, '')
-    .toLowerCase();
+export const toWords = (input: unknown): string[] => {
+  const regex = /(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])|[_\W]+/g;
+  return asString(input).split(regex).filter(Boolean);
+};
+
+export const kebab = (s = ''): string => toWords(s).join('-').toLowerCase();
 
 export class ToText implements Text {
   constructor(readonly subject: string) {}
@@ -70,7 +70,7 @@ export class ToText implements Text {
         .replace(/[\u0300-\u036F]/g, '')
         .toLowerCase()
         .replace(/[^a-z\d]+/g, '-')
-        .replace( /(^-)|(-$)/g, '')
+        .replace(/(^-)|(-$)/g, '')
     );
   }
 
