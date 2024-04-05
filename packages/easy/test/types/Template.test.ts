@@ -10,7 +10,7 @@ describe('Template', () => {
     expect(template('{type.title}', Dev.Sander)).toMatchText('Dev');
   });
 
-  test('subject', () => {
+  test('this', () => {
     expect(template('{this}', undefined)).toMatchText('');
     expect(template('{this.name}', Dev.Sander)).toMatchText('Sander');
   });
@@ -18,6 +18,11 @@ describe('Template', () => {
   test('actual', () => {
     expect(template('{actual}', Dev.Sander, { actual: 'good' })).toMatchText('good');
     expect(template('{actual.upper}', Dev.Sander, { actual: 'good' })).toMatchText('GOOD');
+    expect(template('{actual}', Dev.Sander, { actual: JSON.stringify({ id: 42 }) })).toMatchText('{"id":42}');
+  });
+
+  test('subject', () => {
+    expect(template('{subject}', Dev.Sander)).toMatchText(JSON.stringify(Dev.Sander));
   });
 
   test('property', () => {
@@ -28,7 +33,12 @@ describe('Template', () => {
   const temp = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {type} {property.upper} {actual.lower}';
 
   test('the full monty', () => {
-    expect(template(temp, Dev.Jeroen, { property: 'language', actual: 'C' })).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
+    expect(
+      template(temp, Dev.Jeroen, {
+        property: 'language',
+        actual: 'C',
+      })
+    ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
 
   test('more', () => {

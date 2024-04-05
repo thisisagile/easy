@@ -4,10 +4,14 @@ import { asString, text, Text, ToText } from './Text';
 import { toName } from './Constructor';
 import { tryTo } from './Try';
 
-export type TemplateOptions = { type?: Text; property?: Text; actual?: Text };
+export type TemplateOptions = { type?: Text; property?: Text; actual?: Text; subject?: Text };
 
 class Template implements Text {
-  constructor(private readonly template: string, private readonly subject: unknown = {}, private readonly options = {}) {}
+  constructor(
+    private readonly template: string,
+    private readonly subject: unknown = {},
+    private readonly options = {}
+  ) {}
 
   toString = (): string => {
     return meta(this.options)
@@ -43,5 +47,6 @@ class Template implements Text {
 export const template = (tmpl: Text, subject: unknown, options: TemplateOptions = {}): Text =>
   new Template(asString(tmpl), subject, {
     type: toName(subject),
+    subject: text(JSON.stringify(subject)),
     ...options,
   });
