@@ -1,4 +1,4 @@
-import { asString, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, uri, Uri } from '../../src';
+import { asString, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, toSegment, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
@@ -197,5 +197,14 @@ describe('Uri', () => {
   test('Expand with multiple options', () => {
     const u = PropsDevUri.Developers.expand({ live: true, brands: ['42', '43'] });
     expect(u).toMatchText('https://www.easy.io/dev/developers?live&brands=42%2C43');
+  });
+});
+
+describe('toSegment', () => {
+  test('toSegment with undefined key', () => {
+    expect(toSegment(undefined)).toMatchObject({ key: undefined, segment: undefined });
+  });
+  test('toSegment with key', () => {
+    expect(toSegment('key')).toMatchObject({ key: 'key', segment: undefined });
   });
 });

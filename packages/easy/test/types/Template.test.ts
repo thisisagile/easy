@@ -1,8 +1,13 @@
 import { Dev } from '../ref';
-import { template } from '../../src';
+import { template, Template } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Template', () => {
+  test('constructor', () => {
+    expect(new Template('')).toBeInstanceOf(Template);
+    expect(new Template('', '', {})).toBeInstanceOf(Template);
+  });
+
   test('type', () => {
     expect(template('', Dev.Sander)).toMatchText('');
     expect(template('{type}', undefined)).toMatchText('');
