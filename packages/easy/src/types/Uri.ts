@@ -1,4 +1,4 @@
-import { isBoolean, isDefined, isNotEmpty, isTrue } from './Is';
+import { isBoolean, isNotEmpty, isTrue } from './Is';
 import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
@@ -7,7 +7,6 @@ import { entries, meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
-import { ifDefined } from '../utils';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 

@@ -6,7 +6,7 @@ import { tryTo } from './Try';
 
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text; subject?: Text };
 
-class Template implements Text {
+export class Template implements Text {
   constructor(
     private readonly template: string,
     private readonly subject: unknown = {},
