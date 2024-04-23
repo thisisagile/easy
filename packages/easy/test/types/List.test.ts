@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, Currency, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList, toObject } from '../../src';
+import { asList, Currency, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -33,6 +33,15 @@ describe('List', () => {
     expect(devs.asc('name').first()).toMatchObject(Dev.Jeroen);
     expect(devs.desc(d => d.name).first()).toMatchObject(Dev.Wouter);
     expect(devs.desc(d => d.name).last()).toMatchObject(Dev.Jeroen);
+  });
+
+  test('desc by date', () => {
+    const first = { created: new DateTime('2020-01-01T00:00:00') },
+      second = { created: new DateTime('2020-01-02T00:00:00') },
+      third = { created: new DateTime('2020-01-03T00:00:00') },
+      l = toList([first, third, second]);
+    expect(l.asc('created').first()).toMatchObject(first);
+    expect(l.desc('created').first()).toMatchObject(third);
   });
 
   test('map', () => {
