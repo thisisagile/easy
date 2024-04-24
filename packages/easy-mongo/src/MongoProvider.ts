@@ -20,7 +20,6 @@ import {
   LogicalCondition,
   OneOrMore,
   PageList,
-  reject,
   Sort,
   toArray,
   toPageList,
@@ -59,36 +58,36 @@ export type IndexOptions = {
 export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
-  protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
+  protected static readonly clients: { [key: string]: MongoClient } = {};
 
-  constructor(readonly coll: Collection, protected client?: Promise<MongoClient>) {}
+  constructor(readonly coll: Collection) {}
 
-  static client(db: Database): Promise<MongoClient> {
-    return when(db.options?.cluster)
-      .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
-      .then(
-        u =>
-          (MongoProvider.clients[u] =
-            MongoProvider.clients[u] ??
-            MongoClient.connect(u, {
-              auth: {
-                username: asString(db.options?.user),
-                password: asString(db.options?.password),
-              },
-              ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
-              ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
-              ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
-            }))
-      );
+  async cluster(): Promise<MongoClient> {
+    const db = this.coll.db;
+    const c = await when(db.options?.cluster).not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'));
+    return MongoProvider.clients[c] ?? (MongoProvider.clients[c] = await MongoProvider.connect(c, db));
   }
 
-  cluster(): Promise<MongoClient> {
-    return Promise.resolve()
-      .then(() => this.client ?? (this.client = MongoProvider.client(this.coll.db)))
-      .catch(e => {
-        this.client = undefined;
-        return reject(e);
-      });
+  collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
+    return this.cluster()
+      .then(c => c.db(this.coll.db.name))
+      .then(db => db.collection<T>(asString(this.coll)));
+  }
+
+  private static connect(u: string, db: Database) {
+    return MongoClient.connect(u, {
+      auth: {
+        username: asString(db.options?.user),
+        password: asString(db.options?.password),
+      },
+      ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
+      ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
+      ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
+    }).then(c => {
+      c.on('error', () => delete MongoProvider.clients[u]);
+      c.on('close', () => delete MongoProvider.clients[u]);
+      return c;
+    });
   }
 
   toMongoJson(query: Query): Json {
@@ -161,12 +160,6 @@ export class MongoProvider {
   createTextIndex(indexes: OneOrMore<Field | string>, options?: IndexOptions): Promise<string> {
     const ii = toArray(indexes).reduce((i, f) => ({ ...i, [asString(f)]: 'text' }), {});
     return this.createIndex(ii, { unique: false, ...options });
-  }
-
-  collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
-    return this.cluster()
-      .then(c => c.db(this.coll.db.name))
-      .then(db => db.collection<T>(asString(this.coll)));
   }
 
   protected toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {

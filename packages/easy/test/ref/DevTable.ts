@@ -1,7 +1,7 @@
 import { convert, Database, DefaultProvider, MapOptions, Table } from '../../src';
 
 export class DevDatabase extends Database {
-  static readonly DevDB = new Database('DevDB', DefaultProvider);
+  static readonly DevDB = new Database('DevDB', DefaultProvider, { cluster: 'dev' });
 }
 
 export class DevTable extends Table {

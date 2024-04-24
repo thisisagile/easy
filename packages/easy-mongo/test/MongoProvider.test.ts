@@ -3,7 +3,8 @@ import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
-import { asc, Database, DateTime, DefaultProvider, desc, Exception, Field, Id, JsonValue, toCondition } from '@thisisagile/easy';
+import { TechCollection } from './ref/TechCollection';
+import { asc, DateTime, desc, Exception, Field, Id, JsonValue, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -12,17 +13,18 @@ describe('MongoProvider', () => {
   const cursor = mock.a<AbstractCursor>({ toArray: mock.return([]) });
   let provider: MongoProvider;
   const devs = new DevCollection();
+  const tech = new TechCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
   let connect: any;
 
   beforeEach(() => {
     c.find = mock.resolve({ toArray: () => Promise.resolve([]) });
-    client = mock.empty<MongoClient>({ connect: mock.impl(() => client) });
+    client = mock.empty<MongoClient>({ connect: mock.impl(() => client), on: mock.impl(() => undefined) });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
-    provider = new MongoProvider(devs, Promise.resolve(client));
+    provider = new MongoProvider(devs);
     connect = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
   });
 
@@ -32,31 +34,28 @@ describe('MongoProvider', () => {
 
   test('client calls MongoClient connect', async () => {
     (MongoProvider as any).clients = {};
-    await expect(MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
-    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' } });
-  });
-
-  test('client calls MongoClient connect once per cluster', async () => {
-    (MongoProvider as any).clients = {};
-    await expect(MongoProvider.client(new Database('db1', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
-    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr2' }))).resolves.toEqual(client);
-    expect(connect).toHaveBeenCalledTimes(2);
+    await expect(new MongoProvider(devs).cluster()).resolves.toEqual(client);
+    expect(connect).toHaveBeenCalledWith('dev', { auth: { password: '', username: '' } });
   });
 
   test('client calls MongoClient connect once for same cluster', async () => {
     (MongoProvider as any).clients = {};
-    await expect(MongoProvider.client(new Database('db1', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
-    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
-    await expect(MongoProvider.client(new Database('db2', DefaultProvider, { cluster: 'clstr' }))).resolves.toEqual(client);
+    await new MongoProvider(devs).cluster();
+    await new MongoProvider(devs).cluster();
     expect(connect).toHaveBeenCalledTimes(1);
   });
 
-  test('client passes the options to the Mongo client', async () => {
+  test('client calls MongoClient connect once per cluster', async () => {
     (MongoProvider as any).clients = {};
-    await expect(
-      MongoProvider.client(new Database('db', DefaultProvider, { cluster: 'clstr', maxPoolSize: 20, minPoolSize: 15, maxIdleTimeMS: 42 }))
-    ).resolves.toEqual(client);
-    expect(connect).toHaveBeenCalledWith('clstr', { auth: { password: '', username: '' }, maxPoolSize: 20, minPoolSize: 15, maxIdleTimeMS: 42 });
+    await new MongoProvider(devs).cluster();
+    await new MongoProvider(tech).cluster();
+    expect(connect).toHaveBeenCalledTimes(2);
+  });
+
+  test('cluster fails if mongo client thows', async () => {
+    connect = jest.spyOn(MongoClient as any, 'connect').mockRejectedValue(Exception.Unknown);
+    (MongoProvider as any).clients = {};
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
   });
 
   test('all calls find', async () => {
@@ -315,7 +314,7 @@ describe('MongoProvider', () => {
     ['with object', { name: 1 } as Record<string, 1 | -1>, { name: 1 }],
     ['with object array', [{ name: 1 }, { id: -1 }] as Record<string, 1 | -1>[], [{ name: 1 }, { id: -1 }]],
   ])('IndexSpecification %s', (name, s, expected) => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     expect(p.toIndexSpecification(s)).toStrictEqual(expected);
   });
 
@@ -329,12 +328,12 @@ describe('MongoProvider', () => {
     ['with filter undefined', { filter: undefined }, {}],
     ['with condition', { filter: devs.name.exists(true) }, { partialFilterExpression: { Name: { $exists: true } } }],
   ])('CreateIndexesOptions %s', (name, o, expected) => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     expect(p.toCreateIndexesOptions(o)).toMatchJson(fits.json({ ...expected }));
   });
 
   test('CreateIndexesOptions uses the correct dates', () => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     expect(p.toCreateIndexesOptions({ filter: { date } })).toMatchJson(fits.json({ partialFilterExpression: { date: new DateTime(date).toDate() } }));
   });
 
@@ -360,21 +359,21 @@ describe('MongoProvider', () => {
   });
 
   test('createTextIndex is default non unique', async () => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     p.createIndex = mock.resolve('_index');
     await expect(p.createTextIndex('name')).resolves.toBe('_index');
     expect(p.createIndex).toHaveBeenCalledWith({ name: 'text' }, { unique: false });
   });
 
   test('createPartialIndex with filter', async () => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     p.createIndex = mock.resolve('_index');
     await expect(p.createPartialIndex('name', filter, { unique: false })).resolves.toBe('_index');
     expect(p.createIndex).toHaveBeenCalledWith('name', { filter, unique: false });
   });
 
   test('createPartialIndex with condition', async () => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     p.createIndex = mock.resolve('_index');
     await expect(p.createPartialIndex('name', devs.name.exists(true))).resolves.toBe('_index');
     expect(p.createIndex).toHaveBeenCalledWith('name', { filter: fits.json(devs.name.exists(true).toJSON()) });
@@ -389,30 +388,7 @@ describe('MongoProvider', () => {
     ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1, _id: 1 } }],
     ['with string type skip and take', { take: '42', skip: '43' } as unknown as FindOptions, { limit: 42, skip: 43, total: true, projection: { _id: 0 } }],
   ])('toFindOptions %s', (name, s, expected) => {
-    const p = new TestMongoProvider(devs, Promise.resolve(client));
+    const p = new TestMongoProvider(devs);
     expect(p.toFindOptions(s)).toStrictEqual(expected);
-  });
-
-  test('first time connect fails set client to undefined', async () => {
-    provider = new MongoProvider(devs);
-    MongoProvider.client = mock.reject(Exception.IsNotValid);
-    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.client).toHaveBeenNthCalledWith(1, devs.db);
-    expect(MongoProvider.client).toHaveBeenNthCalledWith(2, devs.db);
-    expect(client.connect).not.toHaveBeenCalled();
-  });
-
-  test('reject if db getter throws exception', async () => {
-    jest.spyOn(devs, 'db', 'get').mockImplementation(() => {
-      throw Exception.IsNotImplemented;
-    });
-    provider = new MongoProvider(devs);
-    const db = mock.empty<Db>();
-    db.collection = mock.resolve({ collectionName: 'devCollection' });
-    client.db = mock.resolve(db);
-    MongoProvider.client = mock.resolve(client);
-    await expect(provider.collection()).rejects.toBeInstanceOf(Exception);
-    expect(MongoProvider.client).not.toHaveBeenCalled();
   });
 });
