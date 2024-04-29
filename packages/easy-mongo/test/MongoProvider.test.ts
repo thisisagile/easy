@@ -20,7 +20,7 @@ describe('MongoProvider', () => {
 
   beforeEach(() => {
     c.find = mock.resolve({ toArray: () => Promise.resolve([]) });
-    client = mock.empty<MongoClient>({ connect: mock.impl(() => client), on: mock.impl(() => undefined) });
+    client = mock.empty<MongoClient>({ connect: mock.impl(() => client), on: mock.impl(() => undefined), close: mock.resolve() });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
@@ -52,10 +52,16 @@ describe('MongoProvider', () => {
     expect(connect).toHaveBeenCalledTimes(2);
   });
 
-  test('cluster fails if mongo client thows', async () => {
+  test('cluster fails if mongo client throws', async () => {
     connect = jest.spyOn(MongoClient as any, 'connect').mockRejectedValue(Exception.Unknown);
     (MongoProvider as any).clients = {};
     await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+  });
+
+  test('disconnect', () => {
+    (MongoProvider as any).clients = { dev: client };
+    MongoProvider.disconnect();
+    expect(client.close).toHaveBeenCalled();
   });
 
   test('all calls find', async () => {

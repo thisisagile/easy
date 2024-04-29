@@ -90,6 +90,10 @@ export class MongoProvider {
     });
   }
 
+  static disconnect() {
+    Object.values(MongoProvider.clients).forEach(c => void c.close());
+  }
+
   toMongoJson(query: Query): Json {
     return toMongoType(asJson(query));
   }
