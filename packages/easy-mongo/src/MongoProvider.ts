@@ -91,8 +91,8 @@ export class MongoProvider {
     });
   }
 
-  static disconnect(): Promise<void> {
-    return entries(MongoProvider.clients).reduce((p, [, c]) => p.then(() => c.close()), Promise.resolve());
+  static destroyAll(): Promise<void> {
+    return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.close().then(() => delete MongoProvider.clients[u]))).then(() => undefined);
   }
 
   toMongoJson(query: Query): Json {
