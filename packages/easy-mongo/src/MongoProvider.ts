@@ -5,6 +5,7 @@ import {
   choose,
   Condition,
   Database,
+  entries,
   Exception,
   FetchOptions,
   Field,
@@ -90,8 +91,8 @@ export class MongoProvider {
     });
   }
 
-  static disconnect() {
-    Object.values(MongoProvider.clients).forEach(c => void c.close());
+  static disconnect(): Promise<void> {
+    return entries(MongoProvider.clients).reduce((p, [, c]) => p.then(() => c.close()), Promise.resolve());
   }
 
   toMongoJson(query: Query): Json {

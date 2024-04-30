@@ -58,9 +58,9 @@ describe('MongoProvider', () => {
     await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
   });
 
-  test('disconnect', () => {
+  test('disconnect', async () => {
     (MongoProvider as any).clients = { dev: client };
-    MongoProvider.disconnect();
+    await MongoProvider.disconnect();
     expect(client.close).toHaveBeenCalled();
   });
 
