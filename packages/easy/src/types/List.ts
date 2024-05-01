@@ -59,6 +59,13 @@ export class List<T = unknown> extends Array<T> {
     return this.filter((i: any) => !others.some((o: any) => o[key] === i[key]));
   }
 
+  symmetricDiff(others: ArrayLike<T>): List<T> {
+    return this.diff(others).concat(toList<T>(...others).diff(this));
+  }
+  symmetricDiffByKey(others: ArrayLike<T>, key: keyof T): List<T> {
+    return this.diffByKey(others, key).concat(toList<T>(...others).diffByKey(this, key));
+  }
+
   intersect(others: ArrayLike<T>): List<T> {
     return this.filter(i => others.includes(i));
   }
@@ -172,12 +179,15 @@ export class List<T = unknown> extends Array<T> {
   }
 
   toObjectList(key: keyof T): Record<string | number | symbol, List<T>> {
-    return this.reduce((a, t) => {
-      const k = t[key] as unknown as string | number | symbol;
-      a[k] = a[k] ?? toList();
-      a[k].push(t);
-      return a;
-    }, {} as Record<string | number | symbol, List<T>>);
+    return this.reduce(
+      (a, t) => {
+        const k = t[key] as unknown as string | number | symbol;
+        a[k] = a[k] ?? toList();
+        a[k].push(t);
+        return a;
+      },
+      {} as Record<string | number | symbol, List<T>>
+    );
   }
 
   orElse(...alt: ArrayLike<T>): Optional<List<T>> {

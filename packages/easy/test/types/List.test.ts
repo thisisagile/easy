@@ -219,6 +219,26 @@ describe('List', () => {
     expect(johnAndJane.diffByKey(jackAndJill, 'weight')).toHaveLength(2);
   });
 
+  test('symmetric diff', () => {
+    expect(toList(1, 2, 3, 4).symmetricDiff([4, 5, 6])).toEqual(toList([1, 2, 3, 5, 6]));
+    expect(toList().symmetricDiff(toList())).toEqual(toList());
+    expect(toList({ id: 42 }).symmetricDiff(toList())).toEqual(toList({ id: 42 }));
+    expect(toList().symmetricDiff(toList({ id: 42 }))).toEqual(toList({ id: 42 }));
+    const proletarians = devs.symmetricDiff(managers);
+    expect(proletarians).toHaveLength(3);
+    expect(proletarians).toContain(Dev.Sander);
+    expect(proletarians).toContain(Dev.Wouter);
+    expect(proletarians).toContain(Dev.Rob);
+  });
+
+  test('symmetric diff by key', () => {
+    expect(devs.symmetricDiffByKey(managers, 'name')).toHaveLength(3);
+    expect(johnAndJane.symmetricDiffByKey(jackAndJill, 'id')).toHaveLength(0);
+    expect(johnAndJane.symmetricDiffByKey(jackAndJill, 'name')).toHaveLength(4);
+    expect(johnAndJane.symmetricDiffByKey(jackAndJill, 'age')).toHaveLength(0);
+    expect(johnAndJane.symmetricDiffByKey(jackAndJill, 'weight')).toHaveLength(4);
+  });
+
   test('interSect', () => {
     expect(toList().intersect(toList())).toMatchJson(toList());
     expect(toList({ id: 42 }).intersect(toList())).toMatchJson(toList());
