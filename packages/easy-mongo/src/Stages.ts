@@ -139,11 +139,12 @@ export const stages = {
     take: (o: FindOptions = {}): Optional<Filter> => ifDefined(o.take, { $limit: asNumber(o.take) }),
   },
   project: {
-    include: (...includes: (string | Record<string, 1>)[]): Optional<Filter> =>
+    include: (...includes: (string | Record<string, 1 | string>)[]): Optional<Filter> =>
       ifNotEmpty(includes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 1 } : b) }), {}) })),
     exclude: (...excludes: (string | Record<string, 0>)[]): Optional<Filter> =>
       ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 0 } : b) }), {}) })),
     includes: (includes: Record<string, (string | Record<string, 1>)[]>) => new IncludeBuilder(includes),
+    project: (project?: Filter) => ifDefined(project, $project => ({ $project })),
   },
   replaceWith: {
     replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),

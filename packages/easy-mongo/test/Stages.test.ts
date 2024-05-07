@@ -311,12 +311,19 @@ describe('Stages', () => {
   });
 
   // Project
-  const { include, exclude, includes } = stages.project;
+  const { include, exclude, includes, project } = stages.project;
 
   test('projection include', () => {
     expect(include()).toBeUndefined();
     expect(include({})).toStrictEqual({ $project: {} });
     expect(include('content', { color: 1 })).toStrictEqual({ $project: { content: 1, color: 1 } });
+    expect(include('content', { name: '$name', color: 1 })).toStrictEqual({
+      $project: {
+        content: 1,
+        name: '$name',
+        color: 1,
+      },
+    });
   });
 
   test('includes', () => {
@@ -334,6 +341,12 @@ describe('Stages', () => {
     expect(exclude()).toBeUndefined();
     expect(exclude({})).toStrictEqual({ $project: {} });
     expect(exclude('content', { color: 0 })).toStrictEqual({ $project: { content: 0, color: 0 } });
+  });
+
+  test('project', () => {
+    expect(project()).toBeUndefined();
+    expect(project({})).toStrictEqual({ $project: {} });
+    expect(project({ name: 1, color: 1 })).toStrictEqual({ $project: { name: 1, color: 1 } });
   });
 
   // ReplaceWith
