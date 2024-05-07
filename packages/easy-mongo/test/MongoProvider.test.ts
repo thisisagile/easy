@@ -4,7 +4,7 @@ import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from '@thisisagile/easy/test/ref';
 import { DevCollection } from './ref/DevCollection';
 import { TechCollection } from './ref/TechCollection';
-import { asc, DateTime, desc, Exception, Field, Id, JsonValue, toCondition } from '@thisisagile/easy';
+import { asc, DateTime, desc, Exception, Field, Id, JsonValue, resolve, toCondition } from '@thisisagile/easy';
 
 describe('MongoProvider', () => {
   let client: MongoClient;
@@ -30,18 +30,23 @@ describe('MongoProvider', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
+    (MongoProvider as any).clients = {};
   });
 
   test('client calls MongoClient connect', async () => {
-    (MongoProvider as any).clients = {};
     await expect(new MongoProvider(devs).cluster()).resolves.toEqual(client);
     expect(connect).toHaveBeenCalledWith('dev', { auth: { password: '', username: '' } });
   });
 
   test('client calls MongoClient connect once for same cluster', async () => {
-    (MongoProvider as any).clients = {};
     await new MongoProvider(devs).cluster();
     await new MongoProvider(devs).cluster();
+    expect(connect).toHaveBeenCalledTimes(1);
+  });
+
+  test('connects only once', async () => {
+    const cons = Promise.all([new MongoProvider(devs).cluster(), new MongoProvider(devs).cluster(), new MongoProvider(devs).cluster()]);
+    await expect(cons).resolves.toHaveLength(3);
     expect(connect).toHaveBeenCalledTimes(1);
   });
 
@@ -59,7 +64,7 @@ describe('MongoProvider', () => {
   });
 
   test('destroyAll', async () => {
-    (MongoProvider as any).clients = { dev: client };
+    (MongoProvider as any).clients = { dev: resolve(client) };
     await MongoProvider.destroyAll();
     expect(client.close).toHaveBeenCalled();
   });

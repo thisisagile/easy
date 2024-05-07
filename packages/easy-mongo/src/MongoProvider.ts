@@ -59,14 +59,14 @@ export type IndexOptions = {
 export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export class MongoProvider {
-  protected static readonly clients: { [key: string]: MongoClient } = {};
+  protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
 
   constructor(readonly coll: Collection) {}
 
   async cluster(): Promise<MongoClient> {
     const db = this.coll.db;
     const c = await when(db.options?.cluster).not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'));
-    return MongoProvider.clients[c] ?? (MongoProvider.clients[c] = await MongoProvider.connect(c, db));
+    return MongoProvider.clients[c] ?? (MongoProvider.clients[c] = MongoProvider.connect(c, db));
   }
 
   collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
@@ -84,15 +84,22 @@ export class MongoProvider {
       ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
       ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
       ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
-    }).then(c => {
-      c.on('error', () => delete MongoProvider.clients[u]);
-      c.on('close', () => delete MongoProvider.clients[u]);
-      return c;
-    });
+    })
+      .then(c => {
+        c.on('error', () => delete MongoProvider.clients[u]);
+        c.on('close', () => delete MongoProvider.clients[u]);
+        return c;
+      })
+      .catch(err => {
+        delete MongoProvider.clients[u];
+        return Promise.reject(err);
+      });
   }
 
   static destroyAll(): Promise<void> {
-    return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.close().then(() => delete MongoProvider.clients[u]))).then(() => undefined);
+    return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.then(c => c.close()).then(() => delete MongoProvider.clients[u]))).then(
+      () => undefined
+    );
   }
 
   toMongoJson(query: Query): Json {
