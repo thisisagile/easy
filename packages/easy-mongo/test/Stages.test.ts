@@ -172,6 +172,7 @@ describe('Stages', () => {
   });
 
   test('sum', () => {
+    expect(decode.fields({ count: sum() })).toStrictEqual({ count: { $sum: 1 } });
     expect(decode.fields({ total: sum('price') })).toStrictEqual({ total: { $sum: '$price' } });
   });
 

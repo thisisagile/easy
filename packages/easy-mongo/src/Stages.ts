@@ -6,6 +6,7 @@ import {
   Id,
   ifDefined,
   ifNotEmpty,
+  isDefined,
   isFunction,
   isPresent,
   isPrimitive,
@@ -107,7 +108,7 @@ export const stages = {
       (format = '%Y-%m-%d') =>
       (key: string) => ({ $dateToString: { date: `$${key}`, format } }),
     count: (): Accumulator => ({ $count: {} }),
-    sum: (from?: string): Accumulator => ({ $sum: `$${from}` }),
+    sum: (from?: string): Accumulator => (isDefined(from) ? { $sum: `$${from}` } : { $sum: 1 }),
     avg: (from?: string) => ({ $avg: `$${from}` }),
     first: (from?: string): Accumulator => ({ $first: `$${from}` }),
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
