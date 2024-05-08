@@ -35,6 +35,8 @@ describe('View', () => {
     expect(s.from(source)).toStrictEqual({});
     const s2 = view({ id: undefined }).fromSource;
     expect(s2.from(source)?.id).toBeUndefined();
+    expect(s2.from(null)).toStrictEqual({});
+    expect(s2.from(undefined)).toStrictEqual({});
   });
 
   test('gone', () => {
