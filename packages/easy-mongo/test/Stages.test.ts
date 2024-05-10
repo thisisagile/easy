@@ -52,6 +52,16 @@ describe('Stages', () => {
     expect(match({ id: lte(42) })).toStrictEqual({ $match: { id: { $lte: 42 } } });
   });
 
+  test('or', () => {
+    expect(match({ $or: [{ total: lte(42) }, { name: 'Sander' }] })).toStrictEqual({ $match: { $or: [{ total: { $lte: 42 } }, { name: 'Sander' }] } });
+    expect(
+      match({
+        $or: [{ total: lte(42) }, { name: 'Sander' }],
+        margin: gt(3),
+      })
+    ).toStrictEqual({ $match: { $or: [{ total: { $lte: 42 } }, { name: 'Sander' }], margin: { $gt: 3 } } });
+  });
+
   test('anywhere', () => {
     expect(match({ name: anywhere('sander') })).toStrictEqual({
       $match: {
@@ -200,6 +210,16 @@ describe('Stages', () => {
   test('groupBy id and push', () => {
     const g = group({ products: push() }).by('brandId');
     expect(g).toStrictEqual({ $group: { _id: '$brandId', products: { $push: '$$ROOT' } } });
+  });
+
+  test('complex groupBy id and push', () => {
+    const g = group({ products: push() }).by({ by: { $arrayElemAt: [{ $split: ['$items.offerItem.classicId', '-'] }, 0] } });
+    expect(g).toStrictEqual({
+      $group: {
+        _id: { $arrayElemAt: [{ $split: ['$items.offerItem.classicId', '-'] }, 0] },
+        products: { $push: '$$ROOT' },
+      },
+    });
   });
 
   test('groupBy id and push specific field', () => {
