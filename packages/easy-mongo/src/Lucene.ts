@@ -64,7 +64,7 @@ export const lucene = {
         mustNot: mustNot(query, def),
         must: must(query, def),
       }).filter(([_, v]) => v.length > 0),
-      e => e.reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), { minimumShouldMatch: should(query, def).length > 0 ? 1 : 0 } as any),
+      e => e.reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), should(query, def).length > 0 ? { minimumShouldMatch: 1 } : ({} as any)),
       () => ifTrue(wildcard, () => ({ should: lucene.clauses([{ wildcard: lucene.wildcard() }]), minimumShouldMatch: 0 }))
     ),
   search: (c: Partial<Compound>, index?: string) => ({

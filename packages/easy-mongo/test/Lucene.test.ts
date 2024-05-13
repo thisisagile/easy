@@ -257,7 +257,7 @@ describe('Lucene', () => {
       const s = searchWithDef({ brand: 'apple' }, def);
       expect(s).toStrictEqual({
         $search: {
-          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 0 },
+          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }] },
           count: {
             type: 'total',
           },
@@ -292,7 +292,7 @@ describe('Lucene', () => {
       const s = searchWithDef({ brand: 'apple' }, def, 'lowerBound');
       expect(s).toStrictEqual({
         $search: {
-          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 0 },
+          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }] },
           count: {
             type: 'lowerBound',
           },
@@ -327,7 +327,6 @@ describe('Lucene', () => {
               },
               { range: { path: 'size', lt: 42 } },
             ],
-            minimumShouldMatch: 0,
           },
           count: {
             type: 'total',
