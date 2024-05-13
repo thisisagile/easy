@@ -56,17 +56,17 @@ const filter = (query: Record<string, string | number>, def: SearchDefinition): 
 export const lucene = {
   clause: (c: Clauses) => entries(c).reduce((res, [k, v]) => res.add(isFunction(v) ? v(k) : v), toList()),
   clauses: (cs: OneOrMore<Clauses>) => toArray(cs).flatMap(c => lucene.clause(c)),
-  compound: (query: Record<string, string | number>, def: SearchDefinition): Partial<Compound> =>
-    entries({
-      should: ifNotEmpty(should(query, def).concat(filter(query, def), must(query, def), mustNot(query, def)), should(query, def), [
-        { wildcard: lucene.wildcard() },
-      ]),
-      ...ifNotEmpty(filter(query, def), f => ({ filter: f })),
-      ...ifNotEmpty(mustNot(query, def), m => ({ mustNot: m })),
-      ...ifNotEmpty(must(query, def), m => ({ must: m })),
-    }).reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), {
-      minimumShouldMatch: should(query, def).length > 0 ? 1 : 0,
-    } as any),
+  compound: (query: Record<string, string | number>, def: SearchDefinition, wildcard = true): Partial<Compound> =>
+    ifNotEmpty(
+      entries({
+        should: should(query, def),
+        filter: filter(query, def),
+        mustNot: mustNot(query, def),
+        must: must(query, def),
+      }).filter(([_, v]) => v.length > 0),
+      e => e.reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), { minimumShouldMatch: should(query, def).length > 0 ? 1 : 0 } as any),
+      () => ifTrue(wildcard, () => ({ should: lucene.clauses([{ wildcard: lucene.wildcard() }]), minimumShouldMatch: 0 }))
+    ),
   search: (c: Partial<Compound>, index?: string) => ({
     $search: {
       ...ifDefined(index, { index }),

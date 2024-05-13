@@ -251,11 +251,13 @@ describe('Lucene', () => {
       });
     });
 
+    test('empty search with no wildcard should return undefined', () => expect(lucene.compound({}, def, false)).toBeUndefined());
+
     test('should search, single clause', () => {
       const s = searchWithDef({ brand: 'apple' }, def);
       expect(s).toStrictEqual({
         $search: {
-          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], should: [], minimumShouldMatch: 0 },
+          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 0 },
           count: {
             type: 'total',
           },
@@ -290,7 +292,7 @@ describe('Lucene', () => {
       const s = searchWithDef({ brand: 'apple' }, def, 'lowerBound');
       expect(s).toStrictEqual({
         $search: {
-          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], should: [], minimumShouldMatch: 0 },
+          compound: { filter: [{ text: { path: 'brand', query: 'apple' } }], minimumShouldMatch: 0 },
           count: {
             type: 'lowerBound',
           },
@@ -325,7 +327,6 @@ describe('Lucene', () => {
               },
               { range: { path: 'size', lt: 42 } },
             ],
-            should: [],
             minimumShouldMatch: 0,
           },
           count: {
