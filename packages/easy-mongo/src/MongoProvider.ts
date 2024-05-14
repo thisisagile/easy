@@ -26,6 +26,7 @@ import {
   toPageList,
   tuple2,
   tuple3,
+  use,
   when,
 } from '@thisisagile/easy';
 import {
@@ -63,10 +64,12 @@ export class MongoProvider {
 
   constructor(readonly coll: Collection) {}
 
-  async cluster(): Promise<MongoClient> {
-    const db = this.coll.db;
-    const c = await when(db.options?.cluster).not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'));
-    return MongoProvider.clients[c] ?? (MongoProvider.clients[c] = MongoProvider.connect(c, db));
+  cluster(): Promise<MongoClient> {
+    return use(this.coll.db, db =>
+      when(db.options?.cluster)
+        .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
+        .then(c => MongoProvider.clients[c] ?? (MongoProvider.clients[c] = MongoProvider.connect(c, db)))
+    );
   }
 
   collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
