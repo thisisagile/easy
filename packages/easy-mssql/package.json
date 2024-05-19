@@ -25,6 +25,7 @@
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "src"

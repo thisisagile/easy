@@ -28,6 +28,7 @@
     "prepack": "yarn g:copy-readme",
     "demo": "cd demo && next dev -p 3001"
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "src"
