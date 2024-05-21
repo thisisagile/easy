@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
 import { useEntity, useGet, useGetList, useList, usePageList, usePaging, useToggle } from '../../src';
-import { Address, resolve, toList, toPageList } from '@thisisagile/easy';
+import { Entity, required, resolve, text, toList, toPageList } from '@thisisagile/easy';
 
 const city = 'Amsterdam';
 
@@ -16,6 +16,17 @@ const ToggleHook = () => {
   }, []);
   return <div id={'42'}>{`${toggle}`}</div>;
 };
+
+class Address extends Entity {
+  @required() readonly city = this.state.city as string;
+  @required() readonly street = this.state.street as string;
+  @required() readonly houseNumber = this.state.number as number;
+  @required() readonly postalCode = this.state.postalCode as string;
+
+  toString(): string {
+    return text(this.street).with(' ', this.houseNumber).with(', ', text(this.postalCode).with(' ', this.city)).toString();
+  }
+}
 
 const EntityHook = () => {
   const [address, setAddress] = useEntity<Address>();
