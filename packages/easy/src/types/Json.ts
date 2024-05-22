@@ -3,6 +3,7 @@ import { isEmpty, isObject } from './Is';
 import { Get, ofGet } from './Get';
 import { ifDefined } from '../utils';
 import { TypeGuard } from './TypeGuard';
+import { entries } from './Meta';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };
@@ -21,6 +22,7 @@ export const json = {
     isEmpty(key) ? subject : value !== undefined ? { ...(subject as any), ...{ [key]: value as JsonValue } } : json.delete(subject, key),
   omit: <T extends Json = Json>(subject: T, ...keys: string[]): T => keys.reduce((js, k) => json.delete(js, k), json.parse<T>(subject)),
   defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T,
+  isSubset: (subject: Json, subset: Json): boolean => !entries(subset).some(([k, v]) => subject[k] !== v),
 };
 
 export const toJson = json.merge;

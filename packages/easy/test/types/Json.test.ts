@@ -218,4 +218,14 @@ describe('json', () => {
   test('delete works with non existing key', () => {
     expect(json.delete({ skip: 1, take: 5 }, 'page')).toMatchObject({ skip: 1, take: 5 });
   });
+
+  test('isSubset', () => {
+    expect(json.isSubset({ name: 'Sander' }, {})).toBeTruthy();
+    expect(json.isSubset({}, { name: 'Sander' })).toBeFalsy();
+    expect(json.isSubset({ level: 3 }, { name: 'Sander' })).toBeFalsy();
+    expect(json.isSubset({ name: 'Sander' }, { name: 'Sander' })).toBeTruthy();
+    expect(json.isSubset({ name: 'Sander' }, { name: 'Jeroen' })).toBeFalsy();
+    expect(json.isSubset({ name: 'Sander' }, { name: 'Sander', level: 3 })).toBeFalsy();
+    expect(json.isSubset({ name: 'Sander', level: 3 }, { name: 'Sander' })).toBeTruthy();
+  });
 });
