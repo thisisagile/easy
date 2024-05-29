@@ -1,9 +1,10 @@
 import { asNumber, isDefined } from './Utils';
 import { Id, Json, JsonValue, OneOrMore, Text } from './Types';
 
-export class Req {
+export class Req<B = unknown> {
   readonly skip: number | undefined;
   readonly take: number | undefined;
+
   constructor(readonly state: any = {}) {
     this.skip = isDefined(this.query?.skip) ? asNumber(this.query?.skip) : undefined;
     this.take = isDefined(this.query?.take) ? asNumber(this.query?.take) : undefined;
@@ -25,7 +26,7 @@ export class Req {
     return this.state?.query ?? {};
   }
 
-  get body(): unknown {
+  get body(): B {
     return this.state.body;
   }
 

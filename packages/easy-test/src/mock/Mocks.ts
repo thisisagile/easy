@@ -3,17 +3,11 @@ import { Req } from '../utils/Req';
 import { HttpStatus, Response } from '../utils/Response';
 
 export class Mocks {
-  clear = (): typeof jest => jest.clearAllMocks();
-  impl = (f?: (...args: any[]) => any): jest.Mock => jest.fn().mockImplementation(f);
-  property = <T extends object, P extends jest.NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): jest.SpyInstance =>
-    jest.spyOn(object, getter, 'get' as jest.PropertyAccessors<P, T>).mockReturnValue(value as any);
-  reject = (value?: unknown): jest.Mock => jest.fn().mockRejectedValue(value);
-  rejectWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockRejectedValue(mock.a(props));
   req = {
     id: (id: Id): Req => new Req({ id }),
     q: (q: unknown): Req => new Req({ q }),
     with: (a: Json): Req => new Req(a),
-    body: (body: unknown): Req => new Req({ body }),
+    body: <B = unknown>(body: B): Req<B> => new Req<B>({ body }),
     path: (path: Json): Req => new Req({ path }),
     query: (query: Json): Req => new Req({ query }),
   };
@@ -40,11 +34,6 @@ export class Mocks {
       },
     }),
   };
-  resolve = (value?: unknown): jest.Mock => jest.fn().mockResolvedValue(value);
-  resolveWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockResolvedValue(mock.a(props));
-  return = (value?: unknown): jest.Mock => jest.fn().mockReturnValue(value);
-  returnWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockReturnValue(mock.a(props));
-  this = (): jest.Mock => jest.fn().mockReturnThis();
   provider = {
     data: (...items: any[]): { execute: jest.Mock } => ({
       execute: jest.fn().mockResolvedValue({
@@ -57,6 +46,28 @@ export class Mocks {
       }),
     }),
   };
+
+  clear = (): typeof jest => jest.clearAllMocks();
+
+  impl = (f?: (...args: any[]) => any): jest.Mock => jest.fn().mockImplementation(f);
+
+  property = <T extends object, P extends jest.NonFunctionPropertyNames<Required<T>>>(object: T, getter: P, value: T[P]): jest.SpyInstance =>
+    jest.spyOn(object, getter, 'get' as jest.PropertyAccessors<P, T>).mockReturnValue(value as any);
+
+  reject = (value?: unknown): jest.Mock => jest.fn().mockRejectedValue(value);
+
+  rejectWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockRejectedValue(mock.a(props));
+
+  resolve = (value?: unknown): jest.Mock => jest.fn().mockResolvedValue(value);
+
+  resolveWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockResolvedValue(mock.a(props));
+
+  return = (value?: unknown): jest.Mock => jest.fn().mockReturnValue(value);
+
+  returnWith = <T = any>(props: Partial<T> = {}): jest.Mock => jest.fn().mockReturnValue(mock.a(props));
+
+  this = (): jest.Mock => jest.fn().mockReturnThis();
+
   empty = <T = any>(props: Partial<T> = {}): T => props as T;
   a = this.empty;
   an = this.empty;
