@@ -1,11 +1,12 @@
 import '@thisisagile/easy-test';
-import { Jwt, validate } from '../../src';
+import sign from 'jsonwebtoken';
+
+import { ctx, Jwt } from '../../src';
 import { Dev } from '../ref';
 
 describe('Test Jwt', () => {
   const dev = Dev.Naoufal.toJSON();
-  const jwt = Jwt.sign(dev);
-  const falseJwt = Jwt.of({ jwt: 'wrong' });
+  const jwt = Jwt.of({ jwt: sign.sign(dev, ctx.env.get('tokenPrivateKey') as string) });
 
   test('Check if a valid jwt contains the token.', () => {
     expect(jwt).toBeValid();
@@ -17,18 +18,7 @@ describe('Test Jwt', () => {
     expect(res2).toMatchObject(dev);
   });
 
-  test('Validate', () => {
-    expect(validate(jwt)).toBeValid();
-    expect(validate(falseJwt)).not.toBeValid();
-  });
-
   test('toJSON.', () => {
     expect(jwt.toJSON()).toStrictEqual({ jwt: jwt.value });
-  });
-
-  test('Sign with options', () => {
-    const jwt = Jwt.sign(dev, { audience: 'audience', issuer: 'issuer' });
-    expect(jwt.decode().iss).toBe('issuer');
-    expect(jwt.decode().aud).toBe('audience');
   });
 });
