@@ -10,9 +10,12 @@ describe('toName', () => {
 });
 
 class Tester {
-  constructor(public name = 'Jeroen', readonly level = 3) {}
+  constructor(
+    public name = 'Jeroen',
+    readonly level = 3
+  ) {}
 
-  rename = (n: string) => (this.name = n);
+  rename = (n: string): Tester => new Tester(n, this.level);
 }
 
 describe('isConstructor', () => {
@@ -82,7 +85,14 @@ describe('on', () => {
     const tester = new Tester();
     const t2 = on(tester, t => t.rename('Rob'));
     expect(tester).toStrictEqual(t2);
-    expect(t2.name).toBe('Rob');
+    expect(t2.name).toBe('Jeroen');
+  });
+
+  test('check on with Promise', async () => {
+    const tester = new Tester();
+    const t2 = await on(tester, t => Promise.resolve(() => t.rename('Rob')));
+    expect(tester).toStrictEqual(t2);
+    expect(t2.name).toBe('Jeroen');
   });
 });
 
