@@ -20,17 +20,8 @@ const isPromise = <T>(value: unknown): value is Promise<T> => {
 
 export const on = <T, R>(t: T, f: (t: T) => R): R extends Promise<unknown> ? Promise<T> : T => {
   const result = f(t);
-  return isPromise(result)
-    ? (onAsync(t, f as (t: T) => Promise<unknown>) as R extends Promise<unknown> ? Promise<T> : T)
-    : (onSync(t, f) as R extends Promise<unknown> ? Promise<T> : T);
+  return (isPromise(result) ? result.then(() => t) : t) as R extends Promise<unknown> ? Promise<T> : T;
 };
-
-const onSync = <T>(t: T, f: (t: T) => unknown): T => {
-  f(t);
-  return t;
-};
-
-const onAsync = <T>(t: T, f: (t: T) => Promise<unknown>): Promise<T> => f(t).then(() => t);
 
 export const use = <T, Out>(t: T, f: (t: T) => Out): Out => f(t);
 
