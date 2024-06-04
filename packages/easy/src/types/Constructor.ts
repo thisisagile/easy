@@ -6,7 +6,6 @@ import { Optional } from './Types';
 
 export type Constructor<T = unknown> = { new (...args: any[]): T };
 
-// export type Construct<T> = Get<T> | Constructor<T>;
 export type Construct<Out, In = any> = Get<Out, In> | Constructor<Out>;
 
 export const isConstructor = <T>(c?: unknown): c is Constructor<T> => (isDefined(c) && isFunc<T, unknown>(c) && c.prototype && c.prototype.constructor) === c;
@@ -19,10 +18,12 @@ const isPromise = <T>(value: unknown): value is Promise<T> => {
   return value instanceof Promise;
 };
 
-export const on = <T, R>(t: T, f: (t: T) => R): R extends Promise<unknown> ? Promise<T> : T =>
-  isPromise(f)
+export const on = <T, R>(t: T, f: (t: T) => R): R extends Promise<unknown> ? Promise<T> : T => {
+  const result = f(t);
+  return isPromise(result)
     ? (onAsync(t, f as (t: T) => Promise<unknown>) as R extends Promise<unknown> ? Promise<T> : T)
     : (onSync(t, f) as R extends Promise<unknown> ? Promise<T> : T);
+};
 
 const onSync = <T>(t: T, f: (t: T) => unknown): T => {
   f(t);
