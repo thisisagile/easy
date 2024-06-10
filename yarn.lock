@@ -1775,7 +1775,7 @@ __metadata:
   dependencies:
     "@jest/expect-utils": "npm:^29.7.0"
     "@types/jest": "npm:^29.5.12"
-    "@types/node": "npm:^18.19.18"
+    "@types/node": "npm:^18.19.34"
     expect: "npm:^29.7.0"
     jest: "npm:^29.7.0"
     jest-junit: "npm:^16.0.0"
@@ -2090,12 +2090,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^18.19.18":
-  version: 18.19.18
-  resolution: "@types/node@npm:18.19.18"
+"@types/node@npm:^18.19.34":
+  version: 18.19.34
+  resolution: "@types/node@npm:18.19.34"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/94c786bef8a4d02b1ea0b638a72ed77f16d732dec530d615fe729c72f0fa87191f82a2ac2b1c187f5354967dddfe49b1d5c177a8b3cfb6ba182c173a5e6d6b3d
+  checksum: 10c0/e985f50684def801801069e236165ee511f9195fc04ad4a2af7642d86aeaeaf7bfe34c147f894a48618a5c71c15b388ca91341a244792149543a712e38351988
   languageName: node
   linkType: hard
 
@@ -9873,7 +9873,7 @@ __metadata:
     "@release-it/conventional-changelog": "npm:5.1.1"
     "@tsconfig/node-lts": "npm:^20.1.3"
     "@types/jest": "npm:^29.5.12"
-    "@types/node": "npm:^18.19.18"
+    "@types/node": "npm:^18.19.34"
     "@typescript-eslint/eslint-plugin": "npm:^7.1.0"
     "@typescript-eslint/parser": "npm:^7.1.0"
     eslint: "npm:^8.57.0"
