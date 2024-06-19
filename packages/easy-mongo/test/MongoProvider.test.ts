@@ -20,7 +20,11 @@ describe('MongoProvider', () => {
 
   beforeEach(() => {
     c.find = mock.resolve({ toArray: () => Promise.resolve([]) });
-    client = mock.empty<MongoClient>({ connect: mock.impl(() => client), on: mock.impl(() => undefined), close: mock.resolve() });
+    client = mock.empty<MongoClient>({
+      connect: mock.impl(() => client),
+      on: mock.impl(() => undefined),
+      close: mock.resolve(),
+    });
     db = mock.empty<Db>();
     db.collection = mock.resolve({ collectionName: 'devCollection' });
     client.db = mock.resolve(db);
@@ -148,6 +152,22 @@ describe('MongoProvider', () => {
     expect(r.total).toBe(42);
   });
 
+  test('find with timeout options calls count', async () => {
+    c.countDocuments = mock.resolve(42);
+    provider.collection = mock.resolve(c);
+    const r = await provider.find(devs.where(devs.name.is('Jeroen')), {
+      take: 2,
+      sort: [devs.name.desc(), devs.language.asc()],
+      maxTimeMS: 3000,
+    });
+    expect(c.find).toHaveBeenCalledWith(
+      { $and: [{ Name: { $eq: 'Jeroen' } }] },
+      { limit: 2, maxTimeMS: 3000, projection: { _id: 0 }, sort: { Language: 1, Name: -1 }, total: true }
+    );
+    expect(c.countDocuments).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, { maxTimeMS: 3000 });
+    expect(r.total).toBe(42);
+  });
+
   test('find calls toMongoType on queries, to correct dates', async () => {
     provider.collection = mock.resolve(c);
 
@@ -191,6 +211,14 @@ describe('MongoProvider', () => {
     expect(r.options).toEqual({ take: 2, skip: 1, total: 42 });
   });
 
+  test('aggregate calls collection aggregate with options', async () => {
+    cursor.toArray = mock.resolve([devData.jeroen, devData.wouter, devData.naoufal]);
+    c.aggregate = mock.resolve(cursor);
+    provider.collection = mock.resolve(c);
+    await expect(provider.aggregate([{ id: '54' }, { id: '55' }, { id: '56' }], { maxTimeMS: 2000 })).resolves.toHaveLength(3);
+    return expect(c.aggregate).toHaveBeenCalledWith([{ id: '54' }, { id: '55' }, { id: '56' }], { maxTimeMS: 2000 });
+  });
+
   test('group calls aggregate on the collection', () => {
     cursor.toArray = mock.resolve([devData.jeroen, devData.wouter, devData.naoufal]);
     c.aggregate = mock.resolve(cursor);
@@ -204,7 +232,7 @@ describe('MongoProvider', () => {
 
     await provider.group([{ date: date }]);
 
-    expect(c.aggregate).toHaveBeenCalledWith([{ date: new DateTime(date).toDate() }]);
+    expect(c.aggregate).toHaveBeenCalledWith([{ date: new DateTime(date).toDate() }], undefined);
     expect(c.aggregate).not.toHaveBeenCalledWith([{ date: date }]);
   });
 
@@ -295,7 +323,7 @@ describe('MongoProvider', () => {
 
     await provider.count({ date: date });
 
-    expect(c.countDocuments).toHaveBeenCalledWith({ date: new DateTime(date).toDate() });
+    expect(c.countDocuments).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, undefined);
     expect(c.countDocuments).not.toHaveBeenCalledWith({ date: date });
   });
 
@@ -393,11 +421,54 @@ describe('MongoProvider', () => {
   test.each([
     ['with undefined', undefined as unknown as FindOptions, { limit: 250, total: false, projection: { _id: 0 } }],
     ['with custom take', { take: 300 } as FindOptions, { limit: 300, total: true, projection: { _id: 0 } }],
-    ['with custom take and skip', { take: 300, skip: 300 } as FindOptions, { limit: 300, skip: 300, total: true, projection: { _id: 0 } }],
-    ['with sort', { sort: [{ key: 'id', value: 1 }] } as FindOptions, { limit: 250, total: false, sort: { id: 1 }, projection: { _id: 0 } }],
-    ['with custom projection', { projection: { id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1 } }],
-    ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { limit: 250, total: false, projection: { id: 1, _id: 1 } }],
-    ['with string type skip and take', { take: '42', skip: '43' } as unknown as FindOptions, { limit: 42, skip: 43, total: true, projection: { _id: 0 } }],
+    [
+      'with custom take and skip',
+      { take: 300, skip: 300 } as FindOptions,
+      {
+        limit: 300,
+        skip: 300,
+        total: true,
+        projection: { _id: 0 },
+      },
+    ],
+    [
+      'with sort',
+      { sort: [{ key: 'id', value: 1 }] } as FindOptions,
+      {
+        limit: 250,
+        total: false,
+        sort: { id: 1 },
+        projection: { _id: 0 },
+      },
+    ],
+    [
+      'with custom projection',
+      { projection: { id: 1 } } as FindOptions,
+      {
+        limit: 250,
+        total: false,
+        projection: { id: 1 },
+      },
+    ],
+    [
+      'with custom projections',
+      { projection: { id: 1, _id: 1 } } as FindOptions,
+      {
+        limit: 250,
+        total: false,
+        projection: { id: 1, _id: 1 },
+      },
+    ],
+    [
+      'with string type skip and take',
+      { take: '42', skip: '43' } as unknown as FindOptions,
+      {
+        limit: 42,
+        skip: 43,
+        total: true,
+        projection: { _id: 0 },
+      },
+    ],
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs);
     expect(p.toFindOptions(s)).toStrictEqual(expected);

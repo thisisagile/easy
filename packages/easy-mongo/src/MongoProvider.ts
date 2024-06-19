@@ -10,6 +10,7 @@ import {
   FetchOptions,
   Field,
   Id,
+  ifDefined,
   ifTrue,
   isArray,
   isDefined,
@@ -59,23 +60,17 @@ export type IndexOptions = {
 
 export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
+export type Options = { maxTimeMS?: number };
+
 export class MongoProvider {
   protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
 
   constructor(readonly coll: Collection) {}
 
-  cluster(): Promise<MongoClient> {
-    return use(this.coll.db, db =>
-      when(db.options?.cluster)
-        .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
-        .then(c => MongoProvider.clients[c] ?? (MongoProvider.clients[c] = MongoProvider.connect(c, db)))
+  static destroyAll(): Promise<void> {
+    return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.then(c => c.close()).then(() => delete MongoProvider.clients[u]))).then(
+      () => undefined
     );
-  }
-
-  collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
-    return this.cluster()
-      .then(c => c.db(this.coll.db.name))
-      .then(db => db.collection<T>(asString(this.coll)));
   }
 
   private static connect(u: string, db: Database) {
@@ -99,25 +94,40 @@ export class MongoProvider {
       });
   }
 
-  static destroyAll(): Promise<void> {
-    return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.then(c => c.close()).then(() => delete MongoProvider.clients[u]))).then(
-      () => undefined
+  cluster(): Promise<MongoClient> {
+    return use(this.coll.db, db =>
+      when(db.options?.cluster)
+        .not.isDefined.reject(Exception.IsNotValid.because('Missing cluster in database options.'))
+        .then(c => MongoProvider.clients[c] ?? (MongoProvider.clients[c] = MongoProvider.connect(c, db)))
     );
+  }
+
+  collection<T extends Document = Document>(): Promise<MongoCollection<T>> {
+    return this.cluster()
+      .then(c => c.db(this.coll.db.name))
+      .then(db => db.collection<T>(asString(this.coll)));
   }
 
   toMongoJson(query: Query): Json {
     return toMongoType(asJson(query));
   }
 
-  find(query: Query, options?: FindOptions): Promise<PageList<Json>> {
-    return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(options))
+  find(query: Query, options?: FindOptions & Options): Promise<PageList<Json>> {
+    const { maxTimeMS, ...opts } = options ?? {};
+    return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(opts))
       .then(([c, q, o]) =>
         tuple2(
-          c.find(q, o),
-          ifTrue(o.total, () => c.countDocuments(q))
+          c.find(q, { ...o, ...ifDefined(maxTimeMS, { maxTimeMS }, {}) }),
+          ifTrue(o.total, () =>
+            ifDefined(
+              maxTimeMS,
+              maxTimeMS => c.countDocuments(q, { maxTimeMS }),
+              () => c.countDocuments(q)
+            )
+          )
         )
       )
-      .then(([res, total]) => this.toArray(res, { ...options, total }));
+      .then(([res, total]) => this.toArray(res, { ...opts, total }));
   }
 
   all(options?: FindOptions): Promise<PageList<Json>> {
@@ -132,13 +142,18 @@ export class MongoProvider {
     return this.find({ [key]: value }, options);
   }
 
-  group(qs: Filter<any>[]): Promise<PageList<Json>> {
-    return this.aggregate(qs);
+  group(qs: Filter<any>[], options?: Options): Promise<PageList<Json>> {
+    return this.aggregate(qs, options);
   }
 
-  aggregate(qs: Filter<any>[]): Promise<PageList<Json>> {
+  aggregate(qs: Filter<any>[], options?: Options): Promise<PageList<Json>> {
     return this.collection()
-      .then(c => c.aggregate(qs.map(q => this.toMongoJson(q))))
+      .then(c =>
+        c.aggregate(
+          qs.map(q => this.toMongoJson(q)),
+          options
+        )
+      )
       .then(res => this.toArray(res));
   }
 
@@ -160,8 +175,8 @@ export class MongoProvider {
       .then(d => d.acknowledged);
   }
 
-  count(query?: Query): Promise<number> {
-    return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {})));
+  count(query?: Query, options?: Options): Promise<number> {
+    return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {}), options));
   }
 
   createIndex(indexes: Indexes, options?: IndexOptions): Promise<string> {
