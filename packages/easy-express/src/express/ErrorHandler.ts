@@ -11,15 +11,14 @@ import {
   isResponse,
   isResults,
   isText,
-  OriginatedError,
   Response,
   rest,
   Result,
   toHttpStatus,
-  toOriginatedError,
   toResult,
   tryTo,
 } from '@thisisagile/easy';
+import { OriginatedError, toOriginatedError } from '@thisisagile/easy-service';
 
 const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
   status,

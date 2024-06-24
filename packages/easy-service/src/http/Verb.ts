@@ -1,8 +1,4 @@
-import { meta } from '../types/Meta';
-import { HttpStatus } from './HttpStatus';
-import { ContentType } from './ContentType';
-import { CacheControl } from './CacheControl';
-import { HttpVerb } from './HttpVerb';
+import { meta, CacheControl, ContentType, HttpStatus, HttpVerb } from '@thisisagile/easy';
 
 export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType; cache?: CacheControl };
 export type Verb = { verb: HttpVerb; options: VerbOptions };

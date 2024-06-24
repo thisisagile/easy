@@ -14,22 +14,17 @@ export * from './domain/Struct';
 export * from './domain/Repo';
 export * from './domain/Typo';
 
-export * from './health/HealthResource';
-export * from './health/HealthUri';
-
 export * from './http/CacheControl';
 export * from './http/ContentType';
 export * from './http/HttpHeader';
 export * from './http/HttpStatus';
 export * from './http/HttpVerb';
-export * from './http/OriginatedError';
 export * from './http/Request';
 export * from './http/RequestOptions';
 export * from './http/RequestProvider';
 export * from './http/Response';
 export * from './http/RestResult';
 export * from './http/toResponse';
-export * from './http/Verb';
 
 export * from './process/App';
 export * from './process/Manage';
@@ -37,12 +32,7 @@ export * from './process/Scope';
 export * from './process/Search';
 export * from './process/UseCase';
 
-export * from './resources/AppProvider';
 export * from './resources/Req';
-export * from './resources/Requires';
-export * from './resources/Resource';
-export * from './resources/Route';
-export * from './resources/Service';
 
 export * from './security/Jwt';
 

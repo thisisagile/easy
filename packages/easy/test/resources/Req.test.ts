@@ -1,4 +1,4 @@
-import { Req, toReq } from '../../src';
+import { Req, toReq } from '../../src/resources/Req';
 import { DevUri } from '../ref';
 
 describe('Req', () => {

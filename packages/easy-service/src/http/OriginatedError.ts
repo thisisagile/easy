@@ -1,6 +1,5 @@
+import { ErrorOrigin, isError } from '@thisisagile/easy';
 import { VerbOptions } from './Verb';
-import { ErrorOrigin } from '../types/ErrorOrigin';
-import { isError } from '../types/Is';
 
 export class OriginatedError extends Error {
   constructor(
