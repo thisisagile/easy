@@ -1,5 +1,5 @@
 import { any, asJson, isJson, json, PageOptions, toJson } from '../../src';
-import { Dev, DevsResource } from '../ref';
+import { Dev, DevTableGateway } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('isJson', () => {
@@ -17,7 +17,7 @@ describe('isJson', () => {
   test('isJson false', () => {
     expect(isJson()).toBeFalsy();
     expect(isJson({})).toBeFalsy();
-    expect(isJson(new DevsResource())).toBeFalsy();
+    expect(isJson(new DevTableGateway())).toBeFalsy();
   });
 });
 

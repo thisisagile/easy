@@ -1,5 +1,6 @@
-import { ContentType, isOriginatedError, OriginatedError, toOriginatedError, toResults } from '../../src';
-import { Dev } from '../ref';
+import { ContentType, toResults } from '@thisisagile/easy';
+import { Dev } from '@thisisagile/easy/test/ref';
+import { isOriginatedError, OriginatedError, toOriginatedError } from '../../src/http';
 
 describe('OriginatedError', () => {
   test('origin', () => {

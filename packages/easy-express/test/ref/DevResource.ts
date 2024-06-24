@@ -1,26 +1,9 @@
-import {
-  asString,
-  del,
-  get,
-  HttpStatus,
-  isDefined,
-  List,
-  meta,
-  patch,
-  post,
-  put,
-  Req,
-  requires,
-  Resource,
-  route,
-  search,
-  stream,
-  toList,
-} from '@thisisagile/easy';
+import { asString, HttpStatus, isDefined, List, meta, Req, toList } from '@thisisagile/easy';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 import { RequestHandler } from 'express';
 import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
+import { del, get, patch, post, put, requires, Resource, route, search, stream } from '@thisisagile/easy-service';
 
 const log =
   (): ClassDecorator =>

@@ -1,9 +1,8 @@
-import { List, meta, Optional, tryTo, Uri } from '../types';
-import { Verb } from '../http';
-import { Req } from './Req';
+import { List, meta, Optional, tryTo, Uri, Scope, UseCase } from '@thisisagile/easy';
+import { Req } from '../../../easy/src/resources/Req';
 import { Resource } from './Resource';
-import { Scope, UseCase } from '../process';
 import { RequestHandler } from 'express';
+import { Verb } from '../http';
 
 export const route =
   (uri: Uri): ClassDecorator =>

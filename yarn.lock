@@ -1664,6 +1664,7 @@ __metadata:
   resolution: "@thisisagile/easy-express@workspace:packages/easy-express"
   dependencies:
     "@thisisagile/easy": "workspace:^"
+    "@thisisagile/easy-service": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/cls-hooked": "npm:^4.3.8"
     "@types/express": "npm:^4.17.21"
@@ -1744,6 +1745,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@thisisagile/easy-service@workspace:^, @thisisagile/easy-service@workspace:packages/easy-service":
+  version: 0.0.0-use.local
+  resolution: "@thisisagile/easy-service@workspace:packages/easy-service"
+  dependencies:
+    "@thisisagile/easy": "workspace:^"
+    "@thisisagile/easy-test": "workspace:*"
+    "@types/jsonwebtoken": "npm:^9.0.6"
+    jsonwebtoken: "npm:^8.5.1"
+  languageName: unknown
+  linkType: soft
+
 "@thisisagile/easy-test-react@workspace:*, @thisisagile/easy-test-react@workspace:packages/easy-test-react":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
@@ -1792,13 +1804,11 @@ __metadata:
   dependencies:
     "@thisisagile/easy-test": "workspace:*"
     "@types/form-urlencoded": "npm:^4.4.0"
-    "@types/jsonwebtoken": "npm:^9.0.6"
     "@types/luxon": "npm:3.4.2"
     "@types/uuid": "npm:^9.0.8"
     "@types/validator": "npm:^13.11.10"
     axios: "npm:^1.3.4"
     form-urlencoded: "npm:^6.1.0"
-    jsonwebtoken: "npm:^9.0.0"
     luxon: "npm:^3.4.4"
     reflect-metadata: "npm:^0.1.13"
     uuid: "npm:^9.0.1"
@@ -2026,7 +2036,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^9.0.6":
+"@types/jsonwebtoken@npm:*, @types/jsonwebtoken@npm:^9, @types/jsonwebtoken@npm:^9.0.6":
   version: 9.0.6
   resolution: "@types/jsonwebtoken@npm:9.0.6"
   dependencies:
@@ -7414,7 +7424,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jsonwebtoken@npm:^9.0.0":
+"jsonwebtoken@npm:^8.5.1":
+  version: 8.5.1
+  resolution: "jsonwebtoken@npm:8.5.1"
+  dependencies:
+    jws: "npm:^3.2.2"
+    lodash.includes: "npm:^4.3.0"
+    lodash.isboolean: "npm:^3.0.3"
+    lodash.isinteger: "npm:^4.0.4"
+    lodash.isnumber: "npm:^3.0.3"
+    lodash.isplainobject: "npm:^4.0.6"
+    lodash.isstring: "npm:^4.0.1"
+    lodash.once: "npm:^4.0.0"
+    ms: "npm:^2.1.1"
+    semver: "npm:^5.6.0"
+  checksum: 10c0/c5ad937b6fa23a230efa8ed8ca3c0da8ebfdd377bafc3e8432a11b03ef90e733400a00b26c0dfee47db44a2e64b88b154b57e9926a92990f98dd25aaed15006e
+  languageName: node
+  linkType: hard
+
+"jsonwebtoken@npm:^9.0.0, jsonwebtoken@npm:^9.0.2":
   version: 9.0.2
   resolution: "jsonwebtoken@npm:9.0.2"
   dependencies:
@@ -7471,6 +7499,13 @@ __metadata:
     jwa: "npm:^2.0.0"
     safe-buffer: "npm:^5.0.1"
   checksum: 10c0/f1ca77ea5451e8dc5ee219cb7053b8a4f1254a79cb22417a2e1043c1eb8a569ae118c68f24d72a589e8a3dd1824697f47d6bd4fb4bebb93a3bdf53545e721661
+  languageName: node
+  linkType: hard
+
+"jwt-decode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jwt-decode@npm:4.0.0"
+  checksum: 10c0/de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
   languageName: node
   linkType: hard
 
@@ -9860,6 +9895,7 @@ __metadata:
     "@release-it/conventional-changelog": "npm:5.1.1"
     "@tsconfig/node-lts": "npm:^20.1.3"
     "@types/jest": "npm:^29.5.12"
+    "@types/jsonwebtoken": "npm:^9"
     "@types/node": "npm:^18.19.34"
     "@typescript-eslint/eslint-plugin": "npm:^7.12.0"
     "@typescript-eslint/parser": "npm:^7.12.0"
@@ -9874,6 +9910,8 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-junit: "npm:^16.0.0"
     jest-sonar-reporter: "npm:^2.0.0"
+    jsonwebtoken: "npm:^9.0.2"
+    jwt-decode: "npm:^4.0.0"
     ncp: "npm:^2.0.0"
     prettier: "npm:^3.3.1"
     release-it: "npm:15.7.0"
@@ -10001,7 +10039,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.6.0":
   version: 5.7.2
   resolution: "semver@npm:5.7.2"
   bin:

@@ -1,7 +1,7 @@
-import { resolve } from '../utils';
+import { resolve, Json } from '@thisisagile/easy';
 import { HealthUri } from './HealthUri';
-import { Json } from '../types';
-import { get, Resource, route } from '../resources';
+import { Resource, route } from '../resources';
+import { get } from '../http';
 
 @route(HealthUri.Health)
 export class HealthResource implements Resource {

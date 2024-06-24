@@ -1,5 +1,5 @@
-import { meta } from '../types';
-import { Scope, UseCase } from '../process';
+import { meta } from '@thisisagile/easy';
+import { Scope, UseCase } from '@thisisagile/easy';
 
 export class Requires {
   readonly labCoat =

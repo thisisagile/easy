@@ -1,6 +1,6 @@
-import { AppProvider, Service } from '../../src';
 import { DevResource, DevService, DevsResource } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
+import { AppProvider } from '../../src';
 
 describe('Service', () => {
   let app: AppProvider;

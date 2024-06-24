@@ -11,7 +11,11 @@ export class Exception extends Enum {
   static readonly IsNotValid = new Exception('Is not valid');
   static readonly Unknown = new Exception('Unknown error');
 
-  constructor(readonly message: string, id?: Id, readonly reason?: Text) {
+  constructor(
+    readonly message: string,
+    id?: Id,
+    readonly reason?: Text
+  ) {
     super(message, id ?? text(message).pascal.toString());
   }
 

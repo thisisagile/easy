@@ -1,8 +1,11 @@
-import { ErrorOrigin, isError } from '../types';
+import { ErrorOrigin, isError } from '@thisisagile/easy';
 import { VerbOptions } from './Verb';
 
 export class OriginatedError extends Error {
-  constructor(readonly origin: ErrorOrigin, readonly options?: VerbOptions) {
+  constructor(
+    readonly origin: ErrorOrigin,
+    readonly options?: VerbOptions
+  ) {
     super();
     if (isError(origin)) this.stack = origin.stack;
   }

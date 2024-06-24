@@ -1,11 +1,15 @@
 import { AppProvider, Handler } from './AppProvider';
-import { Constructor, Enum, List, toList, tryTo } from '../types';
+import { Constructor, Enum, List, toList, tryTo } from '@thisisagile/easy';
 import { Resource } from './Resource';
 
 export class Service extends Enum {
   protected port = 8080;
 
-  constructor(readonly name: string, protected app: AppProvider, protected resources: List<Resource> = toList()) {
+  constructor(
+    readonly name: string,
+    protected app: AppProvider,
+    protected resources: List<Resource> = toList()
+  ) {
     super(name);
   }
 

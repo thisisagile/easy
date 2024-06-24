@@ -1,6 +1,6 @@
-import { meta, Scope, UseCase } from '../../src';
+import { meta, Scope, UseCase } from '@thisisagile/easy';
 import { DevResource, DevsResource } from '../ref';
-import { DevScope, DevUseCase } from '../ref/DevUseCase';
+import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
 
 describe('Requires', () => {
   test('token is required', () => {
