@@ -1,4 +1,5 @@
-import { Constructor } from './Constructor';
+import { Constructor, use } from './Constructor';
+import { Identity } from './Identity';
 
 export const isDefined = <T = unknown>(o?: T): o is NonNullable<T> => o !== undefined && o !== null;
 
@@ -34,6 +35,8 @@ export const isIn = (o: unknown, values: unknown[]): boolean => isArray(values) 
 export const isIntersecting = (o?: unknown[], values?: unknown[]): boolean => isArray(o) && isArray(values) && o.some(ov => isIn(ov, values));
 
 export const isError = (e: unknown): e is Error => isDefined(e) && e instanceof Error;
+
+export const isIdentity = (by: unknown): by is Identity => use(by as Identity, b => isObject(b) && isDefined(b.id));
 
 export const isNotPresent = (...os: unknown[]): boolean =>
   os.some(
