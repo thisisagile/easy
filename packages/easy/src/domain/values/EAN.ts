@@ -1,5 +1,5 @@
 import { asString, isEmpty, Value } from '../../types';
-import validateEAN from 'validator/lib/isEAN';
+import { isEAN as validateEAN } from 'validator';
 
 export class EAN extends Value {
   get isValid(): boolean {

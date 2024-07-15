@@ -1,5 +1,5 @@
 import { asString, isEmpty, Value } from '../../types';
-import validateIBAN from 'validator/lib/isIBAN';
+import { isIBAN as validateIBAN } from 'validator';
 
 export class IBAN extends Value {
   get isValid(): boolean {

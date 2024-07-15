@@ -1,5 +1,5 @@
 import { asString, isEmpty, Value } from '../../types';
-import validateUrl from 'validator/lib/isURL';
+import { isURL as validateUrl } from 'validator';
 
 export interface UrlOptions {
   /**
@@ -54,7 +54,10 @@ export interface UrlOptions {
 }
 
 export class Url extends Value {
-  constructor(value: unknown, readonly options?: UrlOptions) {
+  constructor(
+    value: unknown,
+    readonly options?: UrlOptions
+  ) {
     super(asString(value));
   }
 

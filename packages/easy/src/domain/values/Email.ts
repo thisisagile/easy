@@ -1,5 +1,5 @@
 import { asString, isEmpty, text, Value } from '../../types';
-import validateEmail from 'validator/lib/isEmail';
+import { isEmail as validateEmail } from 'validator';
 
 export class Email extends Value {
   constructor(email?: unknown) {

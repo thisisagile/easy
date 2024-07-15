@@ -1,9 +1,12 @@
 import { Id, text, Value } from '../../types';
 import { Country } from '../enums';
-import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode';
+import { isPostalCode, PostalCodeLocale } from 'validator';
 
 export class PostalCode extends Value {
-  constructor(postalCode?: unknown, readonly country: Country | Id = Country.NL) {
+  constructor(
+    postalCode?: unknown,
+    readonly country: Country | Id = Country.NL
+  ) {
     super(text(postalCode).replace(' ', '').toString());
   }
   get isValid(): boolean {
