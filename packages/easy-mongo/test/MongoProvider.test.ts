@@ -1,7 +1,7 @@
 import { AbstractCursor, Collection, CreateIndexesOptions, Db, FindOptions as MongoFindOptions, IndexSpecification, MongoClient } from 'mongodb';
 import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Dev, devData } from '@thisisagile/easy/test/ref';
+import { Dev, devData } from './ref/Dev';
 import { DevCollection } from './ref/DevCollection';
 import { TechCollection } from './ref/TechCollection';
 import { asc, DateTime, desc, Exception, Field, Id, JsonValue, resolve, toCondition } from '@thisisagile/easy';

@@ -1,5 +1,11 @@
-import { Exception, FetchOptions, Gateway, Id, isDefined, Json, JsonValue, Optional, PageList, toPageList } from '../types';
-import { when } from '../validation';
+import { FetchOptions, Gateway } from '../types/Gateway';
+import { PageList, toPageList } from '../types/PageList';
+import { Json, JsonValue } from '../types/Json';
+import { Id } from '../types/Id';
+import { Optional } from '../types/Types';
+import { isDefined } from '../types/Is';
+import { when } from '../validation/When';
+import { Exception } from '../types/Exception';
 
 export class InMemoryGateway extends Gateway {
   constructor(private readonly data: Promise<PageList<Json>>) {

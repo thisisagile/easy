@@ -3,13 +3,15 @@ import { List, toList } from './List';
 import { isDefined } from './Is';
 import { on, use } from './Constructor';
 import { Optional } from './Types';
+import { Entry, entries, values } from './Object';
 
 type MetaParseOptions = { initial?: any; skipUndefined?: boolean };
 
-type Entry<T = unknown> = [key: string, value: T];
-
 class ClassMeta {
-  constructor(readonly subject: any, private readonly data: any = (subject.prototype ?? subject).constructor) {}
+  constructor(
+    readonly subject: any,
+    private readonly data: any = (subject.prototype ?? subject).constructor
+  ) {}
 
   get = <T>(key: string): T => Reflect.getMetadata(key, this.data) as T;
 
@@ -18,8 +20,7 @@ class ClassMeta {
     return value;
   };
 
-  entries = <T = unknown>(): List<Entry<T>> =>
-    toList([...Object.entries(this.subject), ...Object.entries(Object.getPrototypeOf(this.subject))]) as List<Entry<T>>;
+  entries = <T = unknown>(): List<Entry<T>> => entries<T>(this.subject);
 
   parse = <Out, Value>(f: (v: Value) => Out, options: MetaParseOptions = {}): Record<string, Out> => {
     const { initial = {}, skipUndefined = false } = options;
@@ -36,13 +37,17 @@ class ClassMeta {
       .map(p => p.get<T>(key))
       .reduce((list, u) => (u ? list.add(u) : list), toList<T>());
 
-  values = <T = unknown>(): List<T> => toList([...Object.values<T>(this.subject), ...Object.values<T>(Object.getPrototypeOf(this.subject))]);
+  values = <T = unknown>(): List<T> => values<T>(this.subject);
 
   property = (property: string | symbol): PropertyMeta => new PropertyMeta(this.subject, property);
 }
 
 class PropertyMeta {
-  constructor(readonly subject: any, readonly property: string | symbol, private readonly data = Reflect.getMetadata(property, subject)) {}
+  constructor(
+    readonly subject: any,
+    readonly property: string | symbol,
+    private readonly data = Reflect.getMetadata(property, subject)
+  ) {}
 
   get value(): any {
     return this.subject[this.property];
@@ -57,5 +62,3 @@ class PropertyMeta {
 }
 
 export const meta = (subject: unknown): ClassMeta => new ClassMeta(subject ?? {});
-
-export const entries = <T = unknown>(subject: Record<string, T>): List<Entry<T>> => meta(subject).entries<T>();

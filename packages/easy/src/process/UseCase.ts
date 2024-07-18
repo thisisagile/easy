@@ -1,9 +1,19 @@
-import { Enum, IdName, isIn, isString, kebab, List, Text, text, toList } from '../types';
 import { Scope } from './Scope';
 import { App } from './App';
+import { Enum } from '../types/Enum';
+import { text } from '../types/Template';
+import { kebab, Text } from '../types/Text';
+import { List, toList } from '../types/List';
+import { IdName } from '../types/Identity';
+import { isIn, isString } from '../types/Is';
 
 export class UseCase extends Enum {
-  constructor(readonly app: App, name: string, id: Text = text(name).kebab, readonly scopes: List<Scope> = toList<Scope>()) {
+  constructor(
+    readonly app: App,
+    name: string,
+    id: Text = text(name).kebab,
+    readonly scopes: List<Scope> = toList<Scope>()
+  ) {
     super(name, id.toString());
   }
 

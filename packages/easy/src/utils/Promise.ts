@@ -1,4 +1,6 @@
-import { ErrorOrigin, List, toArray, toList } from '../types';
+import { toArray } from '../types/Array';
+import { ErrorOrigin } from '../types/ErrorOrigin';
+import { List, toList } from '../types/List';
 
 type Pro<A> = A | PromiseLike<A>;
 type Aw<A> = Awaited<A>;

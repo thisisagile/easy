@@ -1,5 +1,11 @@
 import { Algorithm, decode, sign, verify } from 'jsonwebtoken';
-import { ctx, Json, OneOrMore, Optional, tryTo, Validatable, Value } from '../types';
+import { Optional } from '../types/Types';
+import { OneOrMore } from '../types/Array';
+import { Value } from '../types/Value';
+import { Validatable } from '../types/Validatable';
+import { tryTo } from '../types/Try';
+import { ctx } from '../types/Context';
+import { Json } from '../types/Json';
 
 interface SignOptions {
   audience?: Optional<OneOrMore<string>>;

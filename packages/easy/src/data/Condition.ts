@@ -1,8 +1,14 @@
-import { isDefined, json, Json, JsonValue, Sort } from '../types';
-import { convert, Convert } from '../utils';
+import { json, Json, JsonValue } from '../types/Json';
+import { Sort } from '../types/Sort';
+import { convert, Convert } from '../utils/Convert';
+import { isDefined } from '../types/Is';
 
 export class Condition {
-  constructor(readonly key: string, readonly operator: string, readonly value: unknown) {}
+  constructor(
+    readonly key: string,
+    readonly operator: string,
+    readonly value: unknown
+  ) {}
 
   and = (...others: Condition[]): LogicalCondition => new LogicalCondition('and', [this, ...others]);
   or = (...others: Condition[]): LogicalCondition => new LogicalCondition('or', [this, ...others]);
@@ -13,7 +19,10 @@ export class Condition {
 }
 
 export class LogicalCondition {
-  constructor(readonly operator: string, readonly conditions: Condition[]) {}
+  constructor(
+    readonly operator: string,
+    readonly conditions: Condition[]
+  ) {}
 
   toJSON(): Json {
     return { [`$${this.operator}`]: this.conditions.map(c => c.toJSON()) };
@@ -21,7 +30,10 @@ export class LogicalCondition {
 }
 
 export class SortCondition extends Condition implements Sort {
-  constructor(readonly key: string, readonly value: -1 | 1) {
+  constructor(
+    readonly key: string,
+    readonly value: -1 | 1
+  ) {
     super(key, '', value);
   }
 

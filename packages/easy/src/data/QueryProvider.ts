@@ -1,6 +1,7 @@
 import { Query } from './Query';
-import { Json, List } from '../types';
 import { DataProvider } from './DataProvider';
+import { List } from '../types/List';
+import { Json } from '../types/Json';
 
 export interface QueryProvider extends DataProvider {
   query: (q: Query) => Promise<List<Json>>;

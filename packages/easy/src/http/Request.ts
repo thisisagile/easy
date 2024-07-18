@@ -1,6 +1,6 @@
-import { Uri } from '../types';
 import { HttpVerb } from './HttpVerb';
 import { RequestOptions } from './RequestOptions';
+import type { Uri } from '../types/Uri';
 
 export type Request = {
   uri: Uri;

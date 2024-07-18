@@ -1,6 +1,11 @@
 import { Api, RouteOptions } from './Api';
-import { FetchOptions, Gateway, Json, Optional, PageList, toPageList, Uri, use } from '../types';
-import { RequestOptions } from '../http';
+import { FetchOptions, Gateway } from '../types/Gateway';
+import { Uri } from '../types/Uri';
+import { PageList, toPageList } from '../types/PageList';
+import { Json } from '../types/Json';
+import { use } from '../types/Constructor';
+import { Optional } from '../types/Types';
+import { RequestOptions } from '../http/RequestOptions';
 
 export class ApiGateway extends Gateway<RouteOptions> {
   constructor(readonly api: Api = new Api()) {

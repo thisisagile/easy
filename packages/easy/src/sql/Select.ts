@@ -1,8 +1,9 @@
-import { ifGet, List, toList } from '../types';
 import { Column, OrderColumn } from './Column';
 import { Join } from './Join';
 import { SqlQuery } from './SqlQuery';
 import { Table } from './Table';
+import { List, toList } from '../types/List';
+import { ifGet } from '../types/Get';
 
 export class Select extends SqlQuery {
   protected ordered: List<OrderColumn> = toList();
@@ -11,7 +12,10 @@ export class Select extends SqlQuery {
   protected _limit = 0;
   protected _offset = 0;
 
-  constructor(table: Table | Join, readonly columns: List<Column> = toList()) {
+  constructor(
+    table: Table | Join,
+    readonly columns: List<Column> = toList()
+  ) {
     super(table);
   }
 

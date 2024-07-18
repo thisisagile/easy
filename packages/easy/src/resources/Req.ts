@@ -1,10 +1,21 @@
-import { asNumber, Id, Json, JsonValue, OneOrMore, Optional, PageOptions, Text } from '../types';
-import { ifDefined } from '../utils';
+import { PageOptions } from '../types/PageList';
+import { Optional } from '../types/Types';
+import { Json, JsonValue } from '../types/Json';
+import { OneOrMore } from '../types/Array';
+import { ifDefined } from '../utils/If';
+import { asNumber } from '../types/Number';
+import { Id } from '../types/Id';
+import type { Text } from '../types/Text';
 
 export class Req<T = unknown> implements Omit<PageOptions, 'sort'> {
   readonly skip: Optional<number>;
   readonly take: Optional<number>;
-  constructor(readonly path: Json = {}, readonly query: Json = {}, readonly body: T, readonly headers: Record<string, OneOrMore<string>>) {
+  constructor(
+    readonly path: Json = {},
+    readonly query: Json = {},
+    readonly body: T,
+    readonly headers: Record<string, OneOrMore<string>>
+  ) {
     this.skip = ifDefined(query.skip, s => asNumber(s));
     this.take = ifDefined(query.take, t => asNumber(t));
   }

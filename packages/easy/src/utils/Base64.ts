@@ -1,4 +1,4 @@
-import { Json } from '../types';
+import type { Json } from '../types/Json';
 
 export const base64 = {
   decode: (data: string): string => Buffer.from(data, 'base64').toString('utf-8'),

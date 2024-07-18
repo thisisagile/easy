@@ -1,7 +1,15 @@
-import { Construct, Get, isA, isEmpty, json, Json, JsonValue, List, meta, ofConstruct, ofGet, Optional, toList, TypeGuard } from '../types';
 import { Property, PropertyOptions } from './Property';
 import { State } from './State';
 import { ifNotEmpty } from './If';
+import { json, Json, JsonValue } from '../types/Json';
+import { Optional } from '../types/Types';
+import { TypeGuard } from '../types/TypeGuard';
+import { isA } from '../types/IsA';
+import { List, toList } from '../types/List';
+import { meta } from '../types/Meta';
+import { isEmpty } from '../types/Is';
+import { Get, ofGet } from '../types/Get';
+import { Construct, ofConstruct } from '../types/Constructor';
 
 export type Mapping = {
   property: string;
@@ -16,7 +24,10 @@ export type MapOptions = { startFrom: MapStartFrom };
 export class Mapper extends State implements Mapping {
   protected readonly map = mappings;
 
-  constructor(readonly options: MapOptions = { startFrom: 'scratch' }, readonly property = '') {
+  constructor(
+    readonly options: MapOptions = { startFrom: 'scratch' },
+    readonly property = ''
+  ) {
     super();
   }
 

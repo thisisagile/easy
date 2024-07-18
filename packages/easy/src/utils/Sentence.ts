@@ -1,7 +1,13 @@
-import { Id, text, Text } from '../types';
+import type { Text } from '../types/Text';
+import { text } from '../types/Template';
+import { Id } from '../types/Id';
 
 export class Sentence implements Text {
-  constructor(word: Text, pre?: Sentence, private sentence: Text[] = (pre?.sentence ?? []).concat(word)) {}
+  constructor(
+    word: Text,
+    pre?: Sentence,
+    private sentence: Text[] = (pre?.sentence ?? []).concat(word)
+  ) {}
 
   toString(): string {
     return text(this.sentence.join(' ')).sentence.toString();

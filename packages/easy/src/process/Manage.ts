@@ -1,5 +1,7 @@
 import { Search } from './Search';
-import { FetchOptions, Id, Json } from '../types';
+import { FetchOptions } from '../types/Gateway';
+import { Json } from '../types/Json';
+import { Id } from '../types/Id';
 
 export class Manage<T, Options = FetchOptions> extends Search<T, Options> {
   add(json: Json): Promise<T> {

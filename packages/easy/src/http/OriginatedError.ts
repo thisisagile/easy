@@ -1,8 +1,12 @@
-import { ErrorOrigin, isError } from '../types';
 import { VerbOptions } from './Verb';
+import { ErrorOrigin } from '../types/ErrorOrigin';
+import { isError } from '../types/Is';
 
 export class OriginatedError extends Error {
-  constructor(readonly origin: ErrorOrigin, readonly options?: VerbOptions) {
+  constructor(
+    readonly origin: ErrorOrigin,
+    readonly options?: VerbOptions
+  ) {
     super();
     if (isError(origin)) this.stack = origin.stack;
   }

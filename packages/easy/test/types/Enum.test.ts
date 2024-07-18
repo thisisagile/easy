@@ -1,4 +1,3 @@
-import { Country, Enum } from '../../src';
 import { Language } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -57,7 +56,6 @@ describe('Enum', () => {
 
   test('byId works', () => {
     expect(MoreLanguage.byId('java')).toBeDefined();
-    expect(Country.byId('NL')).toBeDefined();
     expect(MoreLanguage.byId('delphi')).toBeDefined();
     expect(MoreLanguage.byId('c')).toBeUndefined();
     expect(MoreLanguage.byId('delphi', MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.Delphi);

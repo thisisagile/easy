@@ -1,7 +1,6 @@
 import { convert, Database, Field, Json } from '@thisisagile/easy';
 import '@thisisagile/easy-test';
-import { DevCollection } from './ref/DevCollection';
-import { DevDatabase } from '@thisisagile/easy/test/ref';
+import { DevCollection, DevDatabase } from './ref/DevCollection';
 import { Collection } from '../src';
 
 describe('Collection', () => {

@@ -1,11 +1,20 @@
 import { Api } from './Api';
-import { Func, Json, Optional, PageList, Uri } from '../types';
-import { Mapper } from '../utils';
 import { RouteGateway } from './RouteGateway';
-import { RequestOptions } from '../http';
+import { Func } from '../types/Func';
+import { Uri } from '../types/Uri';
+import { Mapper } from '../utils/Mapper';
+import { RequestOptions } from '../http/RequestOptions';
+import { PageList } from '../types/PageList';
+import { Json } from '../types/Json';
+import { Optional } from '../types/Types';
 
 export class MappedRouteGateway extends RouteGateway {
-  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly map = new Mapper(), readonly api: Api = new Api()) {
+  constructor(
+    readonly route: Func<Uri>,
+    readonly routeId: Func<Uri>,
+    readonly map = new Mapper(),
+    readonly api: Api = new Api()
+  ) {
     super(route, routeId, api);
   }
 

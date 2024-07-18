@@ -1,11 +1,18 @@
 import { AppProvider, Handler } from './AppProvider';
-import { Constructor, Enum, List, toList, tryTo } from '../types';
 import { Resource } from './Resource';
+import { Enum } from '../types/Enum';
+import { List, toList } from '../types/List';
+import { Constructor } from '../types/Constructor';
+import { tryTo } from '../types/Try';
 
 export class Service extends Enum {
   protected port = 8080;
 
-  constructor(readonly name: string, protected app: AppProvider, protected resources: List<Resource> = toList()) {
+  constructor(
+    readonly name: string,
+    protected app: AppProvider,
+    protected resources: List<Resource> = toList()
+  ) {
     super(name);
   }
 

@@ -1,9 +1,9 @@
 import { isA } from './IsA';
 import { isEmpty, isObject } from './Is';
 import { Get, ofGet } from './Get';
-import { ifDefined } from '../utils';
+import { ifDefined } from '../utils/If';
 import { TypeGuard } from './TypeGuard';
-import { entries } from './Meta';
+import { entries } from './Object';
 
 export type JsonValue = string | number | boolean | null | Json | JsonValue[];
 export type Json = { [key: string]: JsonValue };

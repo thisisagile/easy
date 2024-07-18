@@ -1,10 +1,17 @@
-import { Property, PropertyOptions } from '../utils';
 import { Clause, toClause } from './Clause';
-import { Json, JsonValue, ofGet, Text, tryTo } from '../types';
 import { Table } from './Table';
+import { Property, PropertyOptions } from '../utils/Property';
+import { Json, JsonValue } from '../types/Json';
+import { tryTo } from '../types/Try';
+import { ofGet } from '../types/Get';
+import type { Text } from '../types/Text';
 
 export class Column extends Property implements Text {
-  constructor(readonly owner: Table, property: string, options?: PropertyOptions) {
+  constructor(
+    readonly owner: Table,
+    property: string,
+    options?: PropertyOptions
+  ) {
     super(property, options);
   }
 
@@ -85,7 +92,10 @@ export class Column extends Property implements Text {
 }
 
 export class PatternColumn extends Column {
-  constructor(protected col: Column, protected pattern: string) {
+  constructor(
+    protected col: Column,
+    protected pattern: string
+  ) {
     super(col.owner, col.property);
   }
 

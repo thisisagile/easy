@@ -1,5 +1,5 @@
-import { ifGet } from '../types';
 import { Select } from './Select';
+import { ifGet } from '../types/Get';
 
 export class Count extends Select {
   toString(): string {

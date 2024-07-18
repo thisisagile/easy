@@ -1,9 +1,18 @@
-import { Exception, FetchOptions, Gateway, Id, Json, JsonValue, Key, List, PageList, Repository } from '../types';
-import { when } from '../validation';
-import { View } from '../utils';
+import { View } from '../utils/View';
+import { FetchOptions, Gateway } from '../types/Gateway';
+import { Repository } from '../types/Repository';
+import { Json, JsonValue } from '../types/Json';
+import { PageList } from '../types/PageList';
+import { Id, Key } from '../types/Id';
+import { when } from '../validation/When';
+import { Exception } from '../types/Exception';
+import { List } from '../types/List';
 
 export class Typo<T, Options = FetchOptions> extends Repository<T, Options> {
-  constructor(protected view: View<T>, private readonly gateway: Gateway<Options>) {
+  constructor(
+    protected view: View<T>,
+    private readonly gateway: Gateway<Options>
+  ) {
     super();
   }
 

@@ -1,5 +1,13 @@
-import { Func, inFuture, inPast, isBoolean, isDefined, isFunction, isIn, isNotEmpty, isString, List, meta, Results, text, Text, toList, tryTo } from '../types';
 import { validate, Validator } from './Validate';
+import { Func } from '../types/Func';
+import { Results } from '../types/Results';
+import { meta } from '../types/Meta';
+import { List, toList } from '../types/List';
+import { isBoolean, isDefined, isFunction, isIn, isNotEmpty, isString } from '../types/Is';
+import { tryTo } from '../types/Try';
+import { text } from '../types/Template';
+import { inFuture, inPast } from '../types/IsDate';
+import type { Text } from '../types/Text';
 
 export type Constraint = Func<boolean | Results, any>;
 

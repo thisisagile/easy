@@ -1,5 +1,6 @@
-import { meta } from '../types';
-import { Scope, UseCase } from '../process';
+import { meta } from '../types/Meta';
+import { Scope } from '../process/Scope';
+import { UseCase } from '../process/UseCase';
 
 export class Requires {
   readonly labCoat =

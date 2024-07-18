@@ -1,6 +1,12 @@
-import { choose, FetchOptions, Id, JsonValue, Key, List, PageList, Repository, toPageList } from '../types';
-import { resolve } from '../utils';
-import { Req } from '../resources';
+import { FetchOptions } from '../types/Gateway';
+import { Repository } from '../types/Repository';
+import { PageList, toPageList } from '../types/PageList';
+import { Id, Key } from '../types/Id';
+import { List } from '../types/List';
+import { Req } from '../resources/Req';
+import { JsonValue } from '../types/Json';
+import { choose } from '../types/Case';
+import { resolve } from '../utils/Promise';
 
 export class Search<T, Options = FetchOptions> {
   constructor(protected repo: Repository<T, Options>) {}

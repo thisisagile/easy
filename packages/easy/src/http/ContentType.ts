@@ -1,5 +1,7 @@
-import { asString, Enum, Get, ofGet } from '../types';
 import formUrlEncoded from 'form-urlencoded';
+import { Enum } from '../types/Enum';
+import { Get, ofGet } from '../types/Get';
+import { asString } from '../types/Text';
 
 export class ContentType extends Enum {
   static Form = new ContentType('form', 'application/x-www-form-urlencoded', b => formUrlEncoded(b));
@@ -8,7 +10,11 @@ export class ContentType extends Enum {
   static Text = new ContentType('text', 'text/plain');
   static Xml = new ContentType('xml', 'application/xml');
 
-  private constructor(name: string, readonly type: string, protected readonly encoder: Get<string> = b => asString(b)) {
+  private constructor(
+    name: string,
+    readonly type: string,
+    protected readonly encoder: Get<string> = b => asString(b)
+  ) {
     super(name, type);
   }
 

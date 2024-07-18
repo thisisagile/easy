@@ -1,11 +1,20 @@
-import { FetchOptions, Store, Uri } from '../types';
-import { HttpVerb, Request, RequestOptions, RequestProvider, Response, toPageOptions } from '../http';
 import { AxiosProvider } from './AxiosProvider';
+import { RequestOptions, toPageOptions } from '../http/RequestOptions';
+import { FetchOptions } from '../types/Gateway';
+import { RequestProvider } from '../http/RequestProvider';
+import { Store } from '../types/Cache';
+import { Uri } from '../types/Uri';
+import { HttpVerb } from '../http/HttpVerb';
+import { Request } from '../http/Request';
+import { Response } from '../http/Response';
 
 export type RouteOptions = RequestOptions | FetchOptions;
 
 export class Api {
-  constructor(readonly provider: RequestProvider = new AxiosProvider(), protected store?: Store<Response, Request>) {}
+  constructor(
+    readonly provider: RequestProvider = new AxiosProvider(),
+    protected store?: Store<Response, Request>
+  ) {}
 
   get(uri: Uri, options?: RouteOptions, transform?: (r: any) => any, transformError = (r: any) => r): Promise<Response> {
     return this.execute({

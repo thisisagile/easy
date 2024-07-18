@@ -1,5 +1,5 @@
 import { SqlQuery } from './SqlQuery';
-import { ifGet } from '../types';
+import { ifGet } from '../types/Get';
 
 export class Delete extends SqlQuery {
   toString(): string {

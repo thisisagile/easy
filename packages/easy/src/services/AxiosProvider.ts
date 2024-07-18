@@ -1,6 +1,18 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse, Method } from 'axios';
-import { HttpStatus, HttpVerb, isRestResult, Request, RequestOptions, RequestProvider, Response, toResponse } from '../http';
-import { cacheAge, choose, ctx, isDefined, isEmpty, toResult, Uri } from '../types';
+import { toResponse } from '../http/toResponse';
+import { isDefined, isEmpty } from '../types/Is';
+import { Uri } from '../types/Uri';
+import { HttpVerb } from '../http/HttpVerb';
+import { choose } from '../types/Case';
+import { isRestResult } from '../http/RestResult';
+import { toResult } from '../types/Result';
+import { HttpStatus } from '../http/HttpStatus';
+import { RequestProvider } from '../http/RequestProvider';
+import { RequestOptions } from '../http/RequestOptions';
+import { ctx } from '../types/Context';
+import { cacheAge } from '../types/CacheAge';
+import { Response } from '../http/Response';
+import { Request } from '../http/Request';
 
 const isResponse = (a: unknown): a is { response: AxiosResponse } => isDefined((a as any)?.response);
 const isRequest = (a: unknown): a is { request: any } => isDefined((a as any)?.request);

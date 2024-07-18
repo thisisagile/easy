@@ -1,0 +1,44 @@
+{
+  "name": "@thisisagile/easy-domain",
+  "version": "0.1.0",
+  "description": "Common domain objects for easy microservices",
+  "author": "Sander Hoogendoorn",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thisisagile/easy.git"
+  },
+  "keywords": [
+    "typescript",
+    "microservices",
+    "domain-driven-design",
+    "evolutionary-architecture"
+  ],
+  "scripts": {
+    "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "yarn g:prettier --check --write src test *.json",
+    "build": "yarn g:tsc ",
+    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "test": "yarn g:jest --coverage",
+    "prepack": "yarn g:copy-readme"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*",
+    "@types/validator": "^13.11.9",
+    "validator": "^13.11.0"
+  },
+  "dependencies": {
+    "@thisisagile/easy": "workspace:*"
+  }
+}

@@ -1,10 +1,16 @@
-import { cacheAge, CacheAge, entries, isNumber, on } from '../types';
-import { ifDefined } from '../utils';
+import { cacheAge, CacheAge } from '../types/CacheAge';
+import { on } from '../types/Constructor';
+import { entries } from '../types/Object';
+import { ifDefined } from '../utils/If';
+import { isNumber } from '../types/Is';
 
 export class CacheControl {
   name = 'Cache-Control';
 
-  protected constructor(readonly enabled = true, private directives: Record<string, boolean | CacheAge | undefined> = {}) {}
+  protected constructor(
+    readonly enabled = true,
+    private directives: Record<string, boolean | CacheAge | undefined> = {}
+  ) {}
 
   static disabled = () => new CacheControl(false);
 

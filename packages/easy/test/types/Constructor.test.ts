@@ -30,7 +30,6 @@ describe('isConstructor', () => {
       })
     ).toBeFalsy();
     expect(isConstructor(() => text('Yes'))).toBeFalsy();
-    expect(isConstructor(text)).toBeFalsy();
     expect(isConstructor(new Tester())).toBeFalsy();
     expect(isConstructor(new Tester())).toBeFalsy();
   });

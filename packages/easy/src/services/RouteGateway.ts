@@ -1,10 +1,21 @@
 import { Api, RouteOptions } from './Api';
-import { Func, Id, Json, JsonValue, List, Optional, PageList, toArray, Uri } from '../types';
-import { HttpStatus } from '../http';
 import { ApiGateway } from './ApiGateway';
+import { Func } from '../types/Func';
+import { Uri } from '../types/Uri';
+import { PageList } from '../types/PageList';
+import { Json, JsonValue } from '../types/Json';
+import { Id } from '../types/Id';
+import { Optional } from '../types/Types';
+import { List } from '../types/List';
+import { toArray } from '../types/Array';
+import { HttpStatus } from '../http/HttpStatus';
 
 export class RouteGateway extends ApiGateway {
-  constructor(readonly route: Func<Uri>, readonly routeId: Func<Uri>, readonly api: Api = new Api()) {
+  constructor(
+    readonly route: Func<Uri>,
+    readonly routeId: Func<Uri>,
+    readonly api: Api = new Api()
+  ) {
     super(api);
   }
 

@@ -1,5 +1,8 @@
-import { meta } from '../types';
-import { CacheControl, ContentType, HttpStatus, HttpVerb } from './index';
+import { meta } from '../types/Meta';
+import { HttpStatus } from './HttpStatus';
+import { ContentType } from './ContentType';
+import { CacheControl } from './CacheControl';
+import { HttpVerb } from './HttpVerb';
 
 export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType; cache?: CacheControl };
 export type Verb = { verb: HttpVerb; options: VerbOptions };

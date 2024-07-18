@@ -1,9 +1,14 @@
-import { List, meta, Optional, tryTo, Uri } from '../types';
-import { Verb } from '../http';
 import { Req } from './Req';
 import { Resource } from './Resource';
-import { Scope, UseCase } from '../process';
 import { RequestHandler } from 'express';
+import { Uri } from '../types/Uri';
+import { meta } from '../types/Meta';
+import { List } from '../types/List';
+import { Scope } from '../process/Scope';
+import { UseCase } from '../process/UseCase';
+import { Verb } from '../http/Verb';
+import { Optional } from '../types/Types';
+import { tryTo } from '../types/Try';
 
 export const route =
   (uri: Uri): ClassDecorator =>

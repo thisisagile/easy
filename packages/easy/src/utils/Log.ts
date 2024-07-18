@@ -1,4 +1,4 @@
-import { Optional } from '../types';
+import { Optional } from '../types/Types';
 
 export function log<T>(t: T): T;
 export function log<T>(label: string, t: T): T;

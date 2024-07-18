@@ -1,6 +1,6 @@
 import { Resource } from './Resource';
 import { Service } from './Service';
-import { Func } from '../types';
+import { Func } from '../types/Func';
 
 export type Handler = Func<void, any>;
 

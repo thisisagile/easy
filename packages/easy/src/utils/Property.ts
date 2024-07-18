@@ -1,6 +1,7 @@
 import { convert, Convert } from './Convert';
-import { Get, Json, JsonValue, ofGet } from '../types';
 import { Mapping } from './Mapper';
+import { Get, ofGet } from '../types/Get';
+import { Json, JsonValue } from '../types/Json';
 
 export type PropertyOptions<T = unknown> = {
   convert?: Convert<any, any>;
@@ -9,7 +10,10 @@ export type PropertyOptions<T = unknown> = {
 };
 
 export class Property<T = unknown> implements Mapping {
-  constructor(readonly property: string, readonly options?: PropertyOptions) {
+  constructor(
+    readonly property: string,
+    readonly options?: PropertyOptions
+  ) {
     this.options = { ...options, convert: options?.convert ?? convert.default };
   }
 

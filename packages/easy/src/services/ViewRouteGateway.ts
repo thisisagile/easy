@@ -1,8 +1,12 @@
 import { Api } from './Api';
-import { Func, Json, Optional, PageList, Uri } from '../types';
-import { view } from '../utils';
 import { RouteGateway } from './RouteGateway';
-import { RequestOptions } from '../http';
+import { Func } from '../types/Func';
+import { Uri } from '../types/Uri';
+import { view } from '../utils/View';
+import { RequestOptions } from '../http/RequestOptions';
+import { PageList } from '../types/PageList';
+import { Json } from '../types/Json';
+import { Optional } from '../types/Types';
 
 export class ViewRouteGateway extends RouteGateway {
   constructor(

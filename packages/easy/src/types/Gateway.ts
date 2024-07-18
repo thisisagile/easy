@@ -1,10 +1,10 @@
 import { Json, JsonValue } from './Json';
 import { Id } from './Id';
 import { Exception } from './Exception';
-import { reject } from '../utils';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
 import { Optional } from './Types';
+import { reject } from '../utils/Promise';
 
 export type FetchOptions = PageOptions;
 

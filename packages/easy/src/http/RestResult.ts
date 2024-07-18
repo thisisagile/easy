@@ -1,6 +1,12 @@
-import { choose, Id, isDefined, isError, isResult, isResults, Json, List, Result, toList, toResult } from '../types';
 import { HttpStatus, isHttpStatus } from './HttpStatus';
 import { isResponse } from './Response';
+import { List, toList } from '../types/List';
+import { Json } from '../types/Json';
+import { isResult, Result, toResult } from '../types/Result';
+import { isDefined, isError } from '../types/Is';
+import { choose } from '../types/Case';
+import { isResults } from '../types/Results';
+import { Id } from '../types/Id';
 
 export type RestResult = {
   data?: { code: number; items: List<Json>; itemCount: number; totalItems?: number; meta?: Json };

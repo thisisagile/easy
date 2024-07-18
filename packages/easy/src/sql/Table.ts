@@ -1,13 +1,16 @@
 import { Column } from './Column';
-import { MapOptions, Mapper, mappings, PropertyOptions } from '../utils';
-import { Database } from '../data';
-import { Json, toList, toUuid } from '../types';
 import { Select } from './Select';
 import { Insert } from './Insert';
 import { Update } from './Update';
 import { Delete } from './Delete';
 import { Join } from './Join';
 import { Count } from './Count';
+import { MapOptions, Mapper, mappings } from '../utils/Mapper';
+import { PropertyOptions } from '../utils/Property';
+import { toUuid } from '../types/Uuid';
+import { Database } from '../data/Database';
+import { toList } from '../types/List';
+import { Json } from '../types/Json';
 
 export class Table extends Mapper {
   protected readonly map = {

@@ -1,7 +1,7 @@
 import { mock } from '@thisisagile/easy-test';
 import { Browser, ElementHandle, Page, Response } from 'playwright';
 import { PlaywrightElement, PlaywrightTester } from '../src';
-import { DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
+import { DevUseCase } from './ref/DevUseCase';
 
 describe('PlaywrightTester', () => {
   let tester: PlaywrightTester;

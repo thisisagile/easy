@@ -1,6 +1,9 @@
-import { DevDatabase } from '@thisisagile/easy/test/ref';
-import { convert, Database } from '@thisisagile/easy';
+import { convert, Database, DefaultProvider } from '@thisisagile/easy';
 import { Collection } from '../../src';
+
+export class DevDatabase extends Database {
+  static readonly DevDB = new Database('DevDB', DefaultProvider, { cluster: 'dev' });
+}
 
 export class DevCollection extends Collection {
   get db(): Database {

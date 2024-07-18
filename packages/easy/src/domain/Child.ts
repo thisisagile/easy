@@ -1,6 +1,7 @@
 import { Struct } from './Struct';
-import { Id, json, Json, toId } from '../types';
-import { required } from '../validation';
+import { required } from '../validation/Contraints';
+import { Id, toId } from '../types/Id';
+import { json, Json } from '../types/Json';
 
 export abstract class Child extends Struct {
   @required() readonly id: Id = this.state.id ?? toId();

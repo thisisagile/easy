@@ -1,5 +1,9 @@
-import { Func, Get, isDefined, isEmpty, ofGet, Predicate, tryTo, TypeGuard } from './index';
-import { validate } from '../validation';
+import { Get, ofGet, Predicate } from './Get';
+import { TypeGuard } from './TypeGuard';
+import { Func } from './Func';
+import { isDefined, isEmpty } from './Is';
+import { validate } from '../validation/Validate';
+import { tryTo } from './Try';
 
 class CaseBuilder<V> {
   constructor(readonly v: V) {}
@@ -31,7 +35,10 @@ class CaseBuilder<V> {
 }
 
 class Case<T, V = unknown> {
-  constructor(protected value: V, protected outcome?: T) {}
+  constructor(
+    protected value: V,
+    protected outcome?: T
+  ) {}
 
   case(pred: Predicate<V>, out: Get<T, V>): Case<T, V> {
     return tryTo(pred, this.value)
@@ -72,7 +79,10 @@ class Case<T, V = unknown> {
 }
 
 class Found<T, V> extends Case<T, V> {
-  constructor(protected value: V, protected outcome: T) {
+  constructor(
+    protected value: V,
+    protected outcome: T
+  ) {
     super(value, outcome);
   }
 

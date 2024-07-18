@@ -1,14 +1,13 @@
 import { ArrayLike, toArray } from './Array';
 import { Constructor, on } from './Constructor';
-import { json, Json } from './Json';
+import type { Json } from './Json';
 import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
 import { Get, GetProperty, ofGet, ofProperty } from './Get';
-import { Id } from './Id';
+import type { Id } from './Id';
 import { asString } from './Text';
-import { tryTo } from './Try';
-import { meta } from './Meta';
 import { Optional } from './Types';
+import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
   asc(p: GetProperty<T, any>): List<T> {
@@ -24,7 +23,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   firstValue<V>(f: (t: T) => V, alt?: Get<V, T>): Optional<V> {
-    return tryTo(() => this.first(t => !!f(t))).map(i => (i ? f(i) : ofGet(alt, i))).value;
+    return ifDefined(
+      this.first(t => !!f(t)),
+      f,
+      v => ofGet(alt, v)
+    );
   }
 
   isFirst(value: T): boolean {
@@ -76,7 +79,7 @@ export class List<T = unknown> extends Array<T> {
 
   toJSON(): Json[] {
     return this.reduce((a, i) => {
-      a.push(json.parse(i));
+      a.push(JSON.parse(JSON.stringify(i ?? {})));
       return a;
     }, new Array<Json>());
   }
@@ -102,7 +105,7 @@ export class List<T = unknown> extends Array<T> {
   }
 
   distinctByKey(key: keyof T): List<T> {
-    return meta(this.toObject(key)).values();
+    return toList([...Object.values<T>(this.toObject(key)), ...Object.values<T>(Object.getPrototypeOf(this.toObject(key)))]);
   }
 
   filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {
@@ -155,10 +158,8 @@ export class List<T = unknown> extends Array<T> {
   }
 
   replace(key: keyof T, item: T): List<T> {
-    tryTo(() => item[key])
-      .map(k => this.findIndex(i => i[key] === k))
-      .filter(i => i > -1)
-      .map(i => (this[i] = item));
+    const index = this.findIndex(i => i[key] === item?.[key]);
+    ifTrue(index != -1, () => this.splice(index, 1, item));
     return this;
   }
 
@@ -218,7 +219,7 @@ export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List
 
 export const isList = <T>(l?: unknown): l is List<T> => isDefined(l) && isArray(l) && isA<List<T>>(l, 'first', 'last', 'asc', 'desc');
 
-export const asList = <T>(c: Constructor<T>, items: unknown | unknown[] = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
+export const asList = <T>(c: Constructor<T>, items: unknown = []): List<T> => toList<T>(toArray(items).map(i => new c(i)));
 
 export const maxValue = <T>(l: List<T>, key: keyof T): T[keyof T] | undefined => l.desc(key).first()?.[key];
 

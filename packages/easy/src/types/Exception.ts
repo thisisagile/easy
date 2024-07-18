@@ -1,7 +1,8 @@
-import { asString, Text, text } from './Text';
+import { asString, Text } from './Text';
 import { Enum } from './Enum';
 import { isDefined } from './Is';
 import { Id } from './Id';
+import { text } from './Template';
 
 export class Exception extends Enum {
   static readonly AlreadyExists = new Exception('Subject already exists');
@@ -11,7 +12,11 @@ export class Exception extends Enum {
   static readonly IsNotValid = new Exception('Is not valid');
   static readonly Unknown = new Exception('Unknown error');
 
-  constructor(readonly message: string, id?: Id, readonly reason?: Text) {
+  constructor(
+    readonly message: string,
+    id?: Id,
+    readonly reason?: Text
+  ) {
     super(message, id ?? text(message).pascal.toString());
   }
 

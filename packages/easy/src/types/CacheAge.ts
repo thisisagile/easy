@@ -1,4 +1,6 @@
-import { asNumber, asString, choose } from './index';
+import { asNumber } from './Number';
+import { choose } from './Case';
+import { asString } from './Text';
 
 export type CacheAge = `${number}${'ms' | 's' | 'm' | 'h' | 'd'}` | number;
 

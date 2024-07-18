@@ -1,4 +1,6 @@
-import { Construct, isDefined, isNotEmpty, isTrue, ofConstruct, Optional } from '../types';
+import { isDefined, isNotEmpty, isTrue } from '../types/Is';
+import { Optional } from '../types/Types';
+import { Construct, ofConstruct } from '../types/Constructor';
 
 export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
 export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;

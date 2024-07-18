@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asNumber, Constructor, Email, isList, isPageList, Money, toList, toPageList, traverse, view, View, views } from '../../src';
+import { asNumber, Constructor, isList, isPageList, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
 import { Dev } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
@@ -94,13 +94,6 @@ describe('View', () => {
     expect(s2.from(source)).toStrictEqual({ ...source, values: ['dev', 'arch', 'test'] });
   });
 
-  test('constructor', () => {
-    const s = view({ email: Email });
-    expect(s.from(source).email).toBeInstanceOf(Email);
-    const s2 = view({ email: Email }).fromSource;
-    expect(s2.from(source).email).toBeInstanceOf(Email);
-  });
-
   test('datetime', () => {
     const s = view({ start: DateTime });
     expect(s.from(source).start).toBeInstanceOf(DateTime);
@@ -110,13 +103,13 @@ describe('View', () => {
   });
 
   test('constructor do not construct when null', () => {
-    const s = view({ email: Email });
-    const r = s.from({ email: null });
-    expect(r.email).toBeNull();
+    const s = view({ start: DateTime });
+    const r = s.from({ start: null });
+    expect(r.start).toBeNull();
 
-    const s2 = view({ emails: Email });
-    const r2 = s2.from({ emails: [null] });
-    expect(r2.emails).toEqual([null]);
+    const s2 = view({ end: DateTime });
+    const r2 = s2.from({ end: null });
+    expect(r2.end).toBeNull();
   });
 
   test('function', () => {
@@ -344,6 +337,13 @@ describe('View', () => {
     const j2 = toThing.from({ first: 'Jan' });
     expect(j2).toMatchObject({ first: 'Jan', last: 'Pieterse', age: 56 });
   });
+
+  class Email extends Value {}
+
+  class Money extends Struct {
+    @required() readonly currency = this.state.currency as string;
+    @required() readonly value = this.state.value as number;
+  }
 
   test('simples to simple', () => {
     const v = view({ email: to(Email) });

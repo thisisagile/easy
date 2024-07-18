@@ -1,6 +1,7 @@
-import { HttpStatus, toHttpStatus } from './HttpStatus';
-import { rest, RestResult } from './RestResult';
-import { Code, isA, TypeGuard } from '../types';
+import { HttpStatus } from './HttpStatus';
+import type { RestResult } from './RestResult';
+import { isA } from '../types/IsA';
+import { TypeGuard } from '../types/TypeGuard';
 
 export type Response = {
   status: HttpStatus;
@@ -9,9 +10,3 @@ export type Response = {
 };
 
 export const isResponse: TypeGuard<Response> = (r?: unknown): r is Response => isA<Response>(r, 'status', 'body');
-
-export const toResponse = (status: HttpStatus | Code, body?: unknown, headers?: { [key: string]: any }): Response => ({
-  status: toHttpStatus(status),
-  headers,
-  body: rest.to(body),
-});

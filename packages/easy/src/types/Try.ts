@@ -1,5 +1,5 @@
 import { isDefined, isEmpty, isTrue } from './Is';
-import { validate } from '../validation';
+import { validate } from '../validation/Validate';
 import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
 import { Get, ofGet } from './Get';

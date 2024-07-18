@@ -1,13 +1,21 @@
-import { Gateway, Id, isDefined, Json, Optional, PageList, PageOptions, toPageList } from '../types';
-import { QueryProvider } from '../data';
-import { when } from '../validation';
-import { ifDefined } from '../utils';
 import { Table } from './Table';
+import { PageList, PageOptions, toPageList } from '../types/PageList';
+import { QueryProvider } from '../data/QueryProvider';
+import { Gateway } from '../types/Gateway';
+import { Json } from '../types/Json';
+import { Id } from '../types/Id';
+import { Optional } from '../types/Types';
+import { ifDefined } from '../utils/If';
+import { isDefined } from '../types/Is';
+import { when } from '../validation/When';
 
 export type TableOptions = PageOptions & { provider?: QueryProvider };
 
 export class TableGateway<T extends Table> extends Gateway<PageOptions> {
-  constructor(readonly table: T, readonly provider = table.db.provide<QueryProvider>()) {
+  constructor(
+    readonly table: T,
+    readonly provider = table.db.provide<QueryProvider>()
+  ) {
     super();
   }
 

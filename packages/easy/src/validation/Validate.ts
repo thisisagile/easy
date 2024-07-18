@@ -1,26 +1,19 @@
-import {
-  asString,
-  choose,
-  isArray,
-  isEnum,
-  isFunction,
-  isResults,
-  isValidatable,
-  isValue,
-  List,
-  meta,
-  Results,
-  TemplateOptions,
-  text,
-  Text,
-  toList,
-  toName,
-  toResult,
-  toResults,
-  tryTo,
-} from '../types';
 import { Constraint } from './Contraints';
 import { when } from './When';
+import { text } from '../types/Template';
+import type { TemplateOptions } from '../types/Template';
+import { isResults, Results, toResults } from '../types/Results';
+import { toName } from '../types/Constructor';
+import { toResult } from '../types/Result';
+import { List, toList } from '../types/List';
+import { meta } from '../types/Meta';
+import { isArray, isFunction } from '../types/Is';
+import { asString } from '../types/Text';
+import { choose } from '../types/Case';
+import { isEnum } from '../types/Enum';
+import { isValue } from '../types/Value';
+import { isValidatable } from '../types/Validatable';
+import type { Text } from '../types/Text';
 
 export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: Text };
 
@@ -32,16 +25,20 @@ const validators = (subject: unknown): List<Validator> =>
     .keys<List<Validator>>('constraint')
     .reduce((list, vs) => list.add(vs), toList<Validator>());
 
-const runValidator = (v: Validator, subject?: unknown): Results =>
-  tryTo(() => (isFunction((subject as any)[v.property]) ? (subject as any)[v.property]() : (subject as any)[v.property]))
-    .map(actual => [actual, v.constraint(actual)])
-    .map(([actual, res]) => (isResults(res) ? res : !res ? asResults(subject, v.text, { ...v, actual }) : toResults()))
-    .recover(e => asResults(subject, asString(e))).value;
+const runValidator = (v: Validator, subject?: unknown): Results => {
+  try {
+    const actual = isFunction((subject as any)[v.property]) ? (subject as any)[v.property]() : (subject as any)[v.property];
+    const constraint = v.constraint(actual);
+    return isResults(constraint) ? constraint : !constraint ? asResults(subject, v.text, { ...v, actual }) : toResults();
+  } catch (e) {
+    return asResults(subject, asString(e));
+  }
+};
 
 const constraints = (subject?: unknown): Results =>
-  tryTo(() => validators(subject))
-    .map(vs => vs.mapDefined(v => runValidator(v, subject)))
-    .map(res => res.reduce((rs, r) => rs.add(...r.results), toResults())).value;
+  validators(subject)
+    .map(vs => runValidator(vs, subject))
+    .reduce((rs, r) => rs.add(...r.results), toResults());
 
 export const validate = (subject?: unknown): Results =>
   choose(subject)

@@ -1,7 +1,9 @@
-import { resolve } from '../utils';
 import { HealthUri } from './HealthUri';
-import { Json } from '../types';
-import { get, Resource, route } from '../resources';
+import { route } from '../resources/Route';
+import { Resource } from '../resources/Resource';
+import { get } from '../http/Verb';
+import { Json } from '../types/Json';
+import { resolve } from '../utils/Promise';
 
 @route(HealthUri.Health)
 export class HealthResource implements Resource {

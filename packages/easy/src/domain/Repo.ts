@@ -1,12 +1,23 @@
-import { asList, Constructor, Exception, FetchOptions, Gateway, Id, isValidatable, Json, JsonValue, Key, List, PageList, Repository, toJson } from '../types';
-import { when } from '../validation';
-import { reject, resolve } from '../utils';
 import { Struct } from './Struct';
+import { FetchOptions, Gateway } from '../types/Gateway';
+import { Repository } from '../types/Repository';
+import { Constructor } from '../types/Constructor';
+import { Json, JsonValue, toJson } from '../types/Json';
+import { isValidatable } from '../types/Validatable';
+import { PageList } from '../types/PageList';
+import { Id, Key } from '../types/Id';
+import { when } from '../validation/When';
+import { Exception } from '../types/Exception';
+import { asList, List } from '../types/List';
+import { reject, resolve } from '../utils/Promise';
 
 export type RepoAction = 'add' | 'update' | 'remove';
 
 export class Repo<T extends Struct, Options = FetchOptions> extends Repository<T, Options> {
-  constructor(protected ctor: Constructor<T>, private readonly gateway: Gateway<Options>) {
+  constructor(
+    protected ctor: Constructor<T>,
+    private readonly gateway: Gateway<Options>
+  ) {
     super();
   }
 

@@ -3,7 +3,7 @@ import { MongoGateway } from './MongoGateway';
 import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
 import { lucene, SearchDefinition } from './Lucene';
-import { entries, Filter, Json, PageList, text, toPageList, tuple2 } from '@thisisagile/easy';
+import { asNumber, entries, Filter, Json, PageList, text, toPageList, tuple2 } from '@thisisagile/easy';
 
 const { skip, take } = stages.skip;
 const { replaceWith } = stages.replaceWith;
@@ -41,12 +41,12 @@ export class AtlasSearchGateway extends MongoGateway {
         })
       )
     )
-      .then(([data, meta]) => ({ data, meta: meta.first() as any }))
+      .then(([data, meta]) => ({ data, meta: meta.first() }))
       .then(({ data, meta }) =>
         toPageList<Json>(data, {
-          total: meta?.total ?? 0,
-          skip: (query?.skip as number) ?? 0,
-          take: (query?.take as number) ?? 250,
+          total: asNumber(meta?.total, 0),
+          skip: asNumber(query?.skip, 0),
+          take: asNumber(query?.take, 250),
           sorts: Object.keys(this.sortDef),
           filters: toFilters(meta.facets),
         })

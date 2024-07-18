@@ -1,4 +1,4 @@
-import { Construct, ofConstruct } from '../types';
+import { Construct, ofConstruct } from '../types/Constructor';
 
 export class State {
   constructor(protected readonly state: any = {}) {}

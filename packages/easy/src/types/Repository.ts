@@ -1,5 +1,10 @@
-import { Exception, FetchOptions, Id, Json, JsonValue, Key, List, PageList } from './index';
-import { reject } from '../utils';
+import { FetchOptions } from './Gateway';
+import { PageList } from './PageList';
+import { Exception } from './Exception';
+import { reject } from '../utils/Promise';
+import { Id, Key } from './Id';
+import { List } from './List';
+import { Json, JsonValue } from './Json';
 
 export class Repository<T, Options = FetchOptions> {
   all(options?: Options): Promise<PageList<T>> {

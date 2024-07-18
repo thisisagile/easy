@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, Currency, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -496,9 +496,7 @@ describe('toList', () => {
   });
 
   test('byId', () => {
-    expect(toList()).toHaveLength(0);
-    expect(toList(Currency.all()).byId(42)).toBeUndefined();
-    expect(toList(Currency.all()).byId(Currency.AUD.id)).toBe(Currency.AUD);
+    expect(toList().byId(42)).toBeUndefined();
     const devs = toList([Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander]);
     expect(devs.byId(Dev.Sander.id)).toBe(Dev.Sander);
     const food = toList('hamburger', 'pizza', 'fries');

@@ -1,9 +1,19 @@
-import { Constructor, ErrorOrigin, Exception, Get, isDefined, isEmpty, isIn, ofGet, Predicate, Results, toArray } from '../types';
 import { validate } from './Validate';
-import { reject, resolve } from '../utils';
+import { Results } from '../types/Results';
+import { Constructor } from '../types/Constructor';
+import { Get, ofGet, Predicate } from '../types/Get';
+import { isDefined, isEmpty, isIn } from '../types/Is';
+import { toArray } from '../types/Array';
+import { ErrorOrigin } from '../types/ErrorOrigin';
+import { reject, resolve } from '../utils/Promise';
+import { Exception } from '../types/Exception';
 
 export class When<W> {
-  constructor(readonly subject: W, readonly valid = true, private results?: Results) {}
+  constructor(
+    readonly subject: W,
+    readonly valid = true,
+    private results?: Results
+  ) {}
 
   get not(): When<W> {
     return this.clone(!this.valid);

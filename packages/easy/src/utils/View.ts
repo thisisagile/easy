@@ -1,26 +1,15 @@
-import {
-  asJson,
-  choose,
-  Constructor,
-  DontInfer,
-  isArray,
-  isBoolean,
-  isConstructor,
-  isEqual,
-  isFunction,
-  isPageList,
-  isString,
-  json,
-  Json,
-  List,
-  meta,
-  PageList,
-  Primitive,
-  toPageList,
-  use,
-} from '../types';
 import { traverse } from './Traverse';
 import { ifDefined } from './If';
+import { Primitive } from '../types/Primitive';
+import { Constructor, isConstructor, use } from '../types/Constructor';
+import { asJson, json, Json } from '../types/Json';
+import { choose } from '../types/Case';
+import { isArray, isBoolean, isFunction, isString } from '../types/Is';
+import { meta } from '../types/Meta';
+import { isPageList, PageList, toPageList } from '../types/PageList';
+import { List } from '../types/List';
+import { isEqual } from '../types/IsEqual';
+import { DontInfer } from '../types/Types';
 
 type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
@@ -59,7 +48,11 @@ const toViewers = (views: ViewRecord): Viewer[] =>
     .map(([k, v]) => toViewer(k, v));
 
 export class View<V = Json> {
-  constructor(private views = {} as ViewRecord<V>, readonly startsFrom: 'scratch' | 'source' = 'scratch', readonly viewers: Viewer[] = toViewers(views)) {}
+  constructor(
+    private views = {} as ViewRecord<V>,
+    readonly startsFrom: 'scratch' | 'source' = 'scratch',
+    readonly viewers: Viewer[] = toViewers(views)
+  ) {}
 
   get fromSource(): View<V> {
     return new View(this.views, 'source', this.viewers);

@@ -1,6 +1,16 @@
-import { asString, CacheAge, ctx, Enum, Id, isDefined, isNotEmpty, on, Optional, PageOptions, Text, toUuid } from '../types';
 import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
+import { PageOptions } from '../types/PageList';
+import { Optional } from '../types/Types';
+import { Text } from '../types/Text';
+import { Enum } from '../types/Enum';
+import { CacheAge } from '../types/CacheAge';
+import { ctx } from '../types/Context';
+import { toUuid } from '../types/Uuid';
+import { Id } from '../types/Id';
+import { on } from '../types/Constructor';
+import { asString } from '../types/Text';
+import { isDefined, isNotEmpty } from '../types/Is';
 
 export const toPageOptions = (options?: RequestOptions | PageOptions): Optional<PageOptions> =>
   options instanceof RequestOptions ? options.pageOptions : options;
@@ -8,7 +18,11 @@ export const toPageOptions = (options?: RequestOptions | PageOptions): Optional<
 export class RequestOptions extends Enum {
   public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean; timeout?: CacheAge } = {};
 
-  constructor(readonly type: ContentType = ContentType.Json, readonly headers: { [key: string]: any } = {}, public pageOptions?: PageOptions) {
+  constructor(
+    readonly type: ContentType = ContentType.Json,
+    readonly headers: { [key: string]: any } = {},
+    public pageOptions?: PageOptions
+  ) {
     super(type.name);
     this.headers['Content-Type'] = type.id;
     this.headers[HttpHeader.Correlation] = ctx.request.correlationId ?? toUuid();

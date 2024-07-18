@@ -1,5 +1,7 @@
-import { isDefined, json, Json, Validatable } from '../types';
-import { validate } from '../validation';
+import { Validatable } from '../types/Validatable';
+import { validate } from '../validation/Validate';
+import { json, Json } from '../types/Json';
+import { isDefined } from '../types/Is';
 
 export abstract class Struct implements Validatable {
   constructor(protected readonly state: any = {}) {}

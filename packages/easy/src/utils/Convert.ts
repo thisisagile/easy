@@ -1,7 +1,10 @@
-import { asString } from '../types';
+import { asString } from '../types/Text';
 
 export class Convert<From = unknown, To = unknown> {
-  constructor(public readonly from: (f: From) => To, public readonly to: (t: To) => From) {}
+  constructor(
+    public readonly from: (f: From) => To,
+    public readonly to: (t: To) => From
+  ) {}
 }
 
 export const convert = {

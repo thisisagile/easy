@@ -1,6 +1,8 @@
-import { ctx, Func, Store } from '../types';
 import { Response } from './Response';
 import { Request } from './Request';
+import { Store } from '../types/Cache';
+import { Func } from '../types/Func';
+import { ctx } from '../types/Context';
 
 export class LocalRequestStore implements Store<Response, Request> {
   key = (_req: Request): string => '';

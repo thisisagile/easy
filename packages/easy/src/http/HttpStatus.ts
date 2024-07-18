@@ -1,4 +1,7 @@
-import { Code, Enum, isAn, TypeGuard } from '../types';
+import { Enum } from '../types/Enum';
+import { TypeGuard } from '../types/TypeGuard';
+import { isAn } from '../types/IsA';
+import { Code } from '../types/Id';
 
 export class HttpStatus extends Enum {
   static Continue = new HttpStatus('Continue', 100);

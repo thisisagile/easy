@@ -3,10 +3,11 @@ import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
-import { entries, meta } from './Meta';
+import { meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
+import { entries } from './Object';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 

@@ -1,6 +1,6 @@
 import { Get, ofGet, Predicate } from './Get';
 import { isDefined, isEmpty, isIn, isObject, isString, isTrue } from './Is';
-import { isValid } from '../validation';
+import { isValid } from '../validation/Validate';
 import { Constructor, on } from './Constructor';
 import { toArray } from './Array';
 

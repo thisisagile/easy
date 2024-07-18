@@ -1,6 +1,7 @@
-import { Property } from '../utils';
 import { Condition, SortCondition, toCondition } from './Condition';
-import { isDefined, toArray } from '../types';
+import { Property } from '../utils/Property';
+import { toArray } from '../types/Array';
+import { isDefined } from '../types/Is';
 
 export class Field extends Property {
   is = (value: unknown): Condition => this.condition('eq', value);

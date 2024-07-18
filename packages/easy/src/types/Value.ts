@@ -1,4 +1,7 @@
-import { asString, isDefined, JsonValue, Validatable } from './index';
+import { Validatable } from './Validatable';
+import { isDefined } from './Is';
+import { JsonValue } from './Json';
+import { asString } from './Text';
 
 export class Value<V = string> implements Validatable {
   constructor(readonly value: V) {

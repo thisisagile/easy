@@ -20,7 +20,7 @@ import {
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 import { RequestHandler } from 'express';
-import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
+import { DevScope, DevUseCase } from './DevUseCase';
 
 const log =
   (): ClassDecorator =>
