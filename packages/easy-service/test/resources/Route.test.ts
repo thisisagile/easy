@@ -1,7 +1,8 @@
-import { HttpVerb, meta, routes, Uri } from '../../src';
+import { HttpVerb, meta, Uri } from '@thisisagile/easy';
 import { DevResource, DevsResource, DevUri } from '../ref';
 import '@thisisagile/easy-test';
-import { DevScope, DevUseCase } from '../ref/DevUseCase';
+import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
+import { routes } from '../../src';
 
 describe('Route', () => {
   test('Route works on a class', () => {

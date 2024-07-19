@@ -1,7 +1,8 @@
-import { CacheControl, ContentType, HttpStatus, HttpVerb, meta, toVerbOptions, Verb } from '../../src';
+import { CacheControl, ContentType, HttpStatus, HttpVerb, meta } from '@thisisagile/easy';
 import { DevResource, DevsResource } from '../ref';
 import '@thisisagile/easy-test';
 import { fits } from '@thisisagile/easy-test';
+import { toVerbOptions, Verb } from '../../src';
 
 describe('Verb', () => {
   const devs = meta(new DevsResource());

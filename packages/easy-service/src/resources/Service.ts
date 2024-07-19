@@ -1,9 +1,6 @@
 import { AppProvider, Handler } from './AppProvider';
+import { Constructor, Enum, List, toList, tryTo } from '@thisisagile/easy';
 import { Resource } from './Resource';
-import { Enum } from '../types/Enum';
-import { List, toList } from '../types/List';
-import { Constructor } from '../types/Constructor';
-import { tryTo } from '../types/Try';
 
 export class Service extends Enum {
   protected port = 8080;

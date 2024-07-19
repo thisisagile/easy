@@ -1,24 +1,19 @@
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkLabCoat, checkScope, checkToken, checkUseCase } from './SecurityHandler';
+import { HttpStatus, isEmpty, PageList, rest, toList, toReq } from '@thisisagile/easy';
 import {
   AppProvider,
   Endpoint,
   Handler,
-  HttpStatus,
-  isEmpty,
-  PageList,
   Resource,
-  rest,
   Route,
   RouteRequires,
   routes,
   Service,
-  toList,
   toOriginatedError,
-  toReq,
   toVerbOptions,
   VerbOptions,
-} from '@thisisagile/easy';
+} from '@thisisagile/easy-service';
 
 export type ExpressVerb = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
