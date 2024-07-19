@@ -1,5 +1,4 @@
-import { List, meta, Optional, tryTo, Uri, Scope, UseCase } from '@thisisagile/easy';
-import { Req } from '../../../easy/src/resources/Req';
+import { List, meta, Optional, tryTo, Uri, Scope, UseCase, Req } from '@thisisagile/easy';
 import { Resource } from './Resource';
 import { RequestHandler } from 'express';
 import { Verb } from '../http/Verb';
