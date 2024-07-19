@@ -11,61 +11,6 @@
     "type": "git",
     "url": "git@github.com:thisisagile/easy.git"
   },
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./data/*": {
-      "import": "./dist/data/*.mjs",
-      "types": "./dist/data/*.d.ts"
-    },
-    "./domain/*": {
-      "import": "./dist/domain/*.mjs",
-      "types": "./dist/domain/*.d.ts"
-    },
-    "./heatlh/*": {
-      "import": "./dist/heatlh/*.mjs",
-      "types": "./dist/heatlh/*.d.ts"
-    },
-    "./http/*": {
-      "import": "./dist/http/*.mjs",
-      "types": "./dist/http/*.d.ts"
-    },
-    "./process/*": {
-      "import": "./dist/process/*.mjs",
-      "types": "./dist/process/*.d.ts"
-    },
-    "./resources/*": {
-      "import": "./dist/resources/*.mjs",
-      "types": "./dist/resources/*.d.ts"
-    },
-    "./security/*": {
-      "import": "./dist/security/*.mjs",
-      "types": "./dist/security/*.d.ts"
-    },
-    "./services/*": {
-      "import": "./dist/services/*.mjs",
-      "types": "./dist/services/*.d.ts"
-    },
-    "./sql/*": {
-      "import": "./dist/sql/*.mjs",
-      "types": "./dist/sql/*.d.ts"
-    },
-    "./types/*": {
-      "import": "./dist/types/*.mjs",
-      "types": "./dist/types/*.d.ts"
-    },
-    "./utils/*": {
-      "import": "./dist/utils/*.mjs",
-      "types": "./dist/utils/*.d.ts"
-    },
-    "./validation/*": {
-      "import": "./dist/validation/*.mjs",
-      "types": "./dist/validation/*.d.ts"
-    }
-  },
   "keywords": [
     "typescript",
     "microservices",

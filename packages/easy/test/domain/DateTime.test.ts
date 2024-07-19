@@ -55,6 +55,10 @@ describe('DateTime', () => {
     expect(new DateTime('2021-11-11T01:00:00.000+0100').toJSON()).toMatchText('2021-11-11T00:00:00.000Z');
   });
 
+  test('toString', () => {
+    expect(new DateTime('2021-11-22').toString()).toBe('2021-11-22T00:00:00.000Z');
+  });
+
   test('equality', () => {
     expect(new DateTime('2021-11-11')).toEqual(new DateTime('2021-11-11'));
     expect(new DateTime('2021-11-12T00:00:00.000Z')).toEqual(new DateTime('2021-11-12T00:00:00.000Z'));
