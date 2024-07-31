@@ -185,7 +185,7 @@ describe('Stages', () => {
   });
 
   // Group
-  const { group, addToSet, count, avg, sum, first, last, min, max, date, push } = stages.group;
+  const { group, addToSet, multiply, count, avg, sum, first, last, min, max, date, push } = stages.group;
 
   test('filter undefined', () => {
     expect(decode.fields({ total: count(), remove: undefined })).toStrictEqual({ total: { $count: {} } });
@@ -267,6 +267,16 @@ describe('Stages', () => {
   test('groupBy string id and addToSet', () => {
     const g = group({ total: addToSet('count') }).by('brandId');
     expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $addToSet: '$count' } } });
+  });
+
+  test('groupBy string id and multiply', () => {
+    const g = group({ total: multiply('count', 'unitPrice') }).by('brandId');
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $multiply: ['$count', '$unitPrice'] } } });
+  });
+
+  test('groupBy string id and multiply in $sum', () => {
+    const g = group({ total: { $sum: multiply('count', 'unitPrice') } }).by('brandId');
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $sum: { $multiply: ['$count', '$unitPrice'] } } } });
   });
 
   test('groupBy filter id and single field', () => {

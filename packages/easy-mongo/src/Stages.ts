@@ -24,7 +24,7 @@ import { toMongoType } from './Utils';
 
 export const asc = 1;
 export const desc = -1;
-export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push' | '$addToSet';
+export type Accumulators = '$sum' | '$count' | '$multiply' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push' | '$addToSet';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export class FilterBuilder<Options> {
@@ -116,6 +116,7 @@ export const stages = {
     count: (): Accumulator => ({ $count: {} }),
     sum: (from?: string): Accumulator => (isDefined(from) ? { $sum: `$${from}` } : { $sum: 1 }),
     avg: (from?: string) => ({ $avg: `$${from}` }),
+    multiply: (...multiply: string[]) => ({ $multiply: multiply.map(m => `$${m}`) }),
     first: (from?: string): Accumulator => ({ $first: `$${from}` }),
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
     min: (from?: string): Accumulator => ({ $min: `$${from}` }),
