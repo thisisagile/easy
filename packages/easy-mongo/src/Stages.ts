@@ -8,11 +8,11 @@ import {
   ifDefined,
   ifNotEmpty,
   isDefined,
-  isFunction,
   isPresent,
   isPrimitive,
   isString,
   meta,
+  ofGet,
   on,
   OneOrMore,
   Optional,
@@ -77,11 +77,10 @@ export const stages = {
   current: '$$CURRENT',
   id: '_id',
   decode: {
-    object: (f: Filter) => use(Object.entries(f)[0], ([k, v]) => (isFunction(v) ? v(k) : v)),
-    fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
-    fieldsArrays: (f: Filter) =>
-      Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = use(toArray(v), vs => vs.map(v => (isFunction(v) ? v(k) : v))))), {} as any),
-    id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => (isFunction(v) ? v(k) : v))[0]),
+    object: (f: Filter) => use(Object.entries(f)[0], ([k, v]) => ofGet(v, k)),
+    fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(ofGet(v, k), nv => (r[k] = nv))), {} as any),
+    fieldsArrays: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = use(toArray(v), vs => vs.map(v => ofGet(v, k))))), {} as any),
+    id: (f: Filter | string) => (isString(f) ? `$${asString(f)}` : isPrimitive(f) ? f : Object.entries(f).map(([k, v]) => ofGet(v, k))[0]),
   },
   match: {
     match: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $match: stages.decode.fields(f) }),
