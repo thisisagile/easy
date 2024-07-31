@@ -121,6 +121,7 @@ export const stages = {
     last: (from?: string): Accumulator => ({ $last: `$${from}` }),
     min: (from?: string): Accumulator => ({ $min: `$${from}` }),
     max: (from?: string): Accumulator => ({ $max: `$${from}` }),
+    addToSet: (from?: string): Accumulator => ({ $addToSet: `$${from}` }),
     push: (from = '$ROOT'): Accumulator => ({ $push: `$${from}` }),
   },
   search: {

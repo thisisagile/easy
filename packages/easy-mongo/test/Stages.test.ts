@@ -184,7 +184,7 @@ describe('Stages', () => {
   });
 
   // Group
-  const { group, count, avg, sum, first, last, min, max, date, push } = stages.group;
+  const { group, addToSet, count, avg, sum, first, last, min, max, date, push } = stages.group;
 
   test('filter undefined', () => {
     expect(decode.fields({ total: count(), remove: undefined })).toStrictEqual({ total: { $count: {} } });
@@ -261,6 +261,11 @@ describe('Stages', () => {
   test('groupBy string id and multiple fields', () => {
     const g = group({ total: sum('count'), count: count() }).by('brandId');
     expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $sum: '$count' }, count: { $count: {} } } });
+  });
+
+  test('groupBy string id and addToSet', () => {
+    const g = group({ total: addToSet('count') }).by('brandId');
+    expect(g).toStrictEqual({ $group: { _id: '$brandId', total: { $addToSet: '$count' } } });
   });
 
   test('groupBy filter id and single field', () => {
