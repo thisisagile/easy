@@ -1,6 +1,5 @@
 import { stages } from '../src';
 import { fits } from '@thisisagile/easy-test';
-import { Currency } from '@thisisagile/easy';
 
 describe('Stages', () => {
   // Decode
@@ -38,12 +37,14 @@ describe('Stages', () => {
   });
 
   test('money', () => {
-    expect(money(Currency.EUR, 42)('price')).toStrictEqual({
+    const currency = { id: 'EUR', name: 'Euro', digits: 2, code: '€' };
+    const currency2 = { id: 'PLN', name: 'Zloty', digits: 2, code: 'Z' };
+    expect(money(currency, 42)('price')).toStrictEqual({
       'price.currency': 'EUR',
       'price.value': 42,
     });
 
-    expect(or({ price: money(Currency.EUR, 42) }, { price: money(Currency.PLN, lte(34)) })).toStrictEqual({
+    expect(or({ price: money(currency, 42) }, { price: money(currency2, lte(34)) })).toStrictEqual({
       $or: [
         {
           'price.currency': 'EUR',

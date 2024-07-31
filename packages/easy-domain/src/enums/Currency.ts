@@ -1,14 +1,6 @@
 import { Enum } from '@thisisagile/easy';
 
 export class Currency extends Enum {
-  constructor(
-    id: string,
-    name: string,
-    readonly digits: number,
-    code: string
-  ) {
-    super(name, id, code);
-  }
   static readonly EUR = new Currency('EUR', 'Euro', 2, '€');
   static readonly USD = new Currency('USD', 'US Dollar', 2, '$');
   static readonly AED = new Currency('AED', 'United Arab Emirates Dirham', 2, 'AED');
@@ -128,4 +120,13 @@ export class Currency extends Enum {
   static readonly ZAR = new Currency('ZAR', 'South African Rand', 2, 'R');
   static readonly ZMK = new Currency('ZMK', 'Zambian Kwacha', 0, 'ZK');
   static readonly ZWL = new Currency('ZWL', 'Zimbabwean Dollar', 0, 'ZWL$');
+
+  constructor(
+    id: string,
+    name: string,
+    readonly digits: number,
+    code: string
+  ) {
+    super(name, id, code);
+  }
 }

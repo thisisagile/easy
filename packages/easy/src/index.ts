@@ -61,6 +61,7 @@ export * from './types/CacheAge';
 export * from './types/Case';
 export * from './types/Constructor';
 export * from './types/Context';
+export * from './types/Currency';
 export * from './types/Enum';
 export * from './types/Environment';
 export * from './types/ErrorOrigin';
