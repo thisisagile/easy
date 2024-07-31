@@ -1,5 +1,6 @@
 import { stages } from '../src';
 import { fits } from '@thisisagile/easy-test';
+import { Currency } from '@thisisagile/easy';
 
 describe('Stages', () => {
   // Decode
@@ -19,7 +20,7 @@ describe('Stages', () => {
   });
 
   // Match
-  const { match, filter, gt, gte, lt, lte, isIn, notIn, after, before, anywhere } = stages.match;
+  const { match, filter, or, money, gt, gte, lt, lte, isIn, notIn, after, before, anywhere } = stages.match;
 
   test('one filter', () => {
     expect(match({ id: 42 })).toStrictEqual({ $match: { id: 42 } });
@@ -34,6 +35,26 @@ describe('Stages', () => {
 
   test('multiple filters', () => {
     expect(match({ id: 42, name: 'Sander' })).toStrictEqual({ $match: { id: 42, name: 'Sander' } });
+  });
+
+  test('money', () => {
+    expect(money(Currency.EUR, 42)('price')).toStrictEqual({
+      'price.currency': 'EUR',
+      'price.value': 42,
+    });
+
+    expect(or({ price: money(Currency.EUR, 42) }, { price: money(Currency.PLN, lte(34)) })).toStrictEqual({
+      $or: [
+        {
+          'price.currency': 'EUR',
+          'price.value': 42,
+        },
+        {
+          'price.currency': 'PLN',
+          'price.value': { $lte: 34 },
+        },
+      ],
+    });
   });
 
   test('gt', () => {

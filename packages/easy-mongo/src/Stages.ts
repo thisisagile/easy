@@ -2,6 +2,7 @@ import { Filter, FindOptions } from './MongoProvider';
 import {
   asNumber,
   asString,
+  Currency,
   Get,
   Id,
   ifDefined,
@@ -23,7 +24,7 @@ import { toMongoType } from './Utils';
 
 export const asc = 1;
 export const desc = -1;
-export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push';
+export type Accumulators = '$sum' | '$count' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push' | '$addToSet';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export class FilterBuilder<Options> {
@@ -76,6 +77,7 @@ export const stages = {
   current: '$$CURRENT',
   id: '_id',
   decode: {
+    object: (f: Filter) => use(Object.entries(f)[0], ([k, v]) => (isFunction(v) ? v(k) : v)),
     fields: (f: Filter) => Object.entries(f).reduce((res, [k, v]) => on(res, r => ifDefined(isFunction(v) ? v(k) : v, nv => (r[k] = nv))), {} as any),
     fieldsArrays: (f: Filter) =>
       Object.entries(f).reduce((res, [k, v]) => on(res, r => (r[k] = use(toArray(v), vs => vs.map(v => (isFunction(v) ? v(k) : v))))), {} as any),
@@ -84,6 +86,7 @@ export const stages = {
   match: {
     match: (f: Record<string, Get<Optional<Filter>, string>>) => ({ $match: stages.decode.fields(f) }),
     filter: <Options>(filters: { [K in keyof Options]: (v: Options[K]) => Filter }) => new FilterBuilder<Options>(filters),
+    or: (...filters: Filter[]) => ({ $or: toArray(filters).map(f => stages.decode.object(f)) }),
     gt: (value: Filter) => ({ $gt: value }),
     gte: (value: Filter) => ({ $gte: value }),
     lt: (value: Filter) => ({ $lt: value }),
@@ -93,6 +96,10 @@ export const stages = {
     after: (date: unknown) => stages.match.gte(toMongoType(date)),
     before: (date: unknown) => stages.match.lt(toMongoType(date)),
     anywhere: (q: string) => ({ $regex: escapeRegex(q), $options: 'i' }),
+    money: (currency: Currency, value: Filter) => (key: string) => ({
+      [`${key}.currency`]: currency.id,
+      ...stages.decode.fields({ [`${key}.value`]: value }),
+    }),
   },
   sort: {
     sort: ($sort: Sort) => (isPresent($sort) ? { $sort } : undefined),
