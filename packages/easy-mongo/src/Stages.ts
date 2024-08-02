@@ -159,6 +159,8 @@ export const stages = {
     merge: (...objects: Filter[]): Optional<Filter> => ifNotEmpty(objects, os => ({ $mergeObjects: os })),
     rootAnd: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.root, ...objects),
     currentAnd: (...objects: Filter[]): Optional<Filter> => stages.replaceWith.merge(stages.current, ...objects),
+    reroot: (prop: string): Filter => ({ $replaceRoot: { newRoot: `$${prop}` } }),
+    concat: (...props: string[]): Optional<Filter> => ifNotEmpty(props, ps => ({ $concatArrays: ps.map(p => `$${p}`) })),
   },
   facet: {
     facet: (f: Record<string, OneOrMore<Get<Optional<Filter>, string>>>) => ({ $facet: stages.decode.fieldsArrays(f) }),

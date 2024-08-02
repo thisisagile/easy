@@ -408,13 +408,26 @@ describe('Stages', () => {
 
   // ReplaceWith
 
-  const { merge, rootAnd, currentAnd, replaceWith } = stages.replaceWith;
+  const { merge, reroot, concat, rootAnd, currentAnd, replaceWith } = stages.replaceWith;
 
   test('merge', () => {
     expect(replaceWith(merge())).toBeUndefined();
     expect(replaceWith(merge({}))).toStrictEqual({ $replaceWith: { $mergeObjects: [{}] } });
     expect(replaceWith(merge('$$ROOT', '$contents.nl', { taxonomy: '$taxonomy.nl' }))).toStrictEqual({
       $replaceWith: { $mergeObjects: ['$$ROOT', '$contents.nl', { taxonomy: '$taxonomy.nl' }] },
+    });
+  });
+
+  test('reroot', () => {
+    expect(reroot('results')).toStrictEqual({
+      $replaceRoot: { newRoot: '$results' },
+    });
+  });
+
+  test('concat', () => {
+    expect(concat()).toBeUndefined();
+    expect(concat('results', 'totals')).toStrictEqual({
+      $concatArrays: ['$results', '$totals'],
     });
   });
 
