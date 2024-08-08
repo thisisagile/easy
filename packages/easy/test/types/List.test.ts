@@ -128,29 +128,51 @@ describe('List', () => {
     expect(a.overlaps(toList(Dev.Rob, Dev.Sander, Dev.Jeroen))).toBeTruthy();
   });
 
-  test('isSubSet', () => {
+  test('is subset of', () => {
     const devs = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander);
-    expect(devs.isSubSet()).toBeTruthy();
-    expect(devs.isSubSet(Dev.Jeroen)).toBeTruthy();
-    expect(devs.isSubSet(Dev.Jeroen, Dev.Naoufal)).toBeTruthy();
-    expect(devs.isSubSet(Dev.Jeroen, Dev.Naoufal, Dev.Naoufal, Dev.Sander)).toBeTruthy();
+    expect(devs.is.subset.of()).toBeFalsy();
+    expect(devs.is.subset.of(Dev.Jeroen)).toBeFalsy();
+    expect(devs.is.subset.of(Dev.Jeroen, Dev.Naoufal)).toBeFalsy();
+    expect(devs.is.subset.of(Dev.Eugen)).toBeFalsy();
+    expect(devs.is.subset.of(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
 
-    expect(devs.isSubSet(Dev.Eugen)).toBeFalsy();
-    expect(devs.isSubSet(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
-    expect(devs.isSubSet(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeFalsy();
+    expect(devs.is.subset.of(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander)).toBeTruthy();
+    expect(devs.is.subset.of(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeTruthy();
   });
 
-  test('isSuperSet', () => {
+  test('is superset of', () => {
     const devs = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander);
-    expect(devs.isSuperSet()).toBeFalsy();
-    expect(devs.isSuperSet(Dev.Jeroen)).toBeFalsy();
-    expect(devs.isSuperSet(Dev.Jeroen, Dev.Naoufal)).toBeFalsy();
-    expect(devs.isSuperSet(Dev.Jeroen, Dev.Naoufal, Dev.Naoufal, Dev.Sander)).toBeFalsy();
+    expect(devs.is.superset.of()).toBeTruthy();
+    expect(devs.is.superset.of(Dev.Jeroen)).toBeTruthy();
+    expect(devs.is.superset.of(Dev.Jeroen, Dev.Naoufal)).toBeTruthy();
+    expect(devs.is.superset.of(Dev.Eugen)).toBeFalsy();
+    expect(devs.is.superset.of(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
 
-    expect(devs.isSuperSet(Dev.Eugen)).toBeFalsy();
-    expect(devs.isSuperSet(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
+    expect(devs.is.superset.of(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander)).toBeFalsy();
+    expect(devs.is.superset.of(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeFalsy();
+  });
 
-    expect(devs.isSuperSet(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeTruthy();
+  test('is intersecting with', () => {
+    expect(toList().is.intersecting.with(toList())).toBeFalsy();
+    expect(toList(Dev.Jeroen).is.intersecting.with(Dev.Eugen)).toBeFalsy();
+    expect(toList(Dev.Jeroen).is.intersecting.with(Dev.Jeroen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.intersecting.with(Dev.Jeroen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.intersecting.with(Dev.Jeroen, Dev.Eugen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.intersecting.with(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeTruthy();
+    expect(toList(Dev.Rob).is.intersecting.with(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeTruthy();
+  });
+
+  test('is disjoint with', () => {
+    expect(toList().is.disjoint.with(toList())).toBeTruthy();
+    expect(toList().is.disjoint.with(toList(Dev.Eugen))).toBeTruthy();
+    expect(toList(Dev.Jeroen).is.disjoint.with(Dev.Eugen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Rob).is.disjoint.with(Dev.Eugen, Dev.Naoufal)).toBeTruthy();
+
+    expect(toList(Dev.Jeroen).is.disjoint.with(Dev.Jeroen)).toBeFalsy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.disjoint.with(Dev.Jeroen)).toBeFalsy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.disjoint.with(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).is.disjoint.with(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
+    expect(toList(Dev.Rob).is.disjoint.with(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
   });
 
   test('concat', () => {
