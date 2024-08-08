@@ -54,6 +54,14 @@ export class List<T = unknown> extends Array<T> {
     return toList<T>(...items).some(i => this.some(t => i === t));
   }
 
+  isSubSet(...items: ArrayLike<T>): boolean {
+    return toList(items).diff(this).length === 0;
+  }
+
+  isSuperSet(...items: ArrayLike<T>): boolean {
+    return toList(...items).isSubSet(...this);
+  }
+
   diff(others: ArrayLike<T>): List<T> {
     return this.filter(i => !others.includes(i));
   }
@@ -65,6 +73,7 @@ export class List<T = unknown> extends Array<T> {
   symmetricDiff(others: ArrayLike<T>): List<T> {
     return this.diff(others).concat(toList<T>(...others).diff(this));
   }
+
   symmetricDiffByKey(others: ArrayLike<T>, key: keyof T): List<T> {
     return this.diffByKey(others, key).concat(toList<T>(...others).diffByKey(this, key));
   }

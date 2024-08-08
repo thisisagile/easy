@@ -117,6 +117,42 @@ describe('List', () => {
     expect(devs.isLast(Dev.Naoufal)).toBeTruthy();
   });
 
+  test('overlaps', () => {
+    const a = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal);
+    expect(a.overlaps()).toBeFalsy();
+    expect(a.overlaps(Dev.Rob)).toBeFalsy();
+    expect(a.overlaps([Dev.Rob, Dev.Sander])).toBeFalsy();
+    expect(a.overlaps(toList(Dev.Rob, Dev.Sander))).toBeFalsy();
+    expect(a.overlaps(Dev.Wouter)).toBeTruthy();
+    expect(a.overlaps(Dev.Wouter, Dev.Sander)).toBeTruthy();
+    expect(a.overlaps(toList(Dev.Rob, Dev.Sander, Dev.Jeroen))).toBeTruthy();
+  });
+
+  test('isSubSet', () => {
+    const devs = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander);
+    expect(devs.isSubSet()).toBeTruthy();
+    expect(devs.isSubSet(Dev.Jeroen)).toBeTruthy();
+    expect(devs.isSubSet(Dev.Jeroen, Dev.Naoufal)).toBeTruthy();
+    expect(devs.isSubSet(Dev.Jeroen, Dev.Naoufal, Dev.Naoufal, Dev.Sander)).toBeTruthy();
+
+    expect(devs.isSubSet(Dev.Eugen)).toBeFalsy();
+    expect(devs.isSubSet(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
+    expect(devs.isSubSet(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeFalsy();
+  });
+
+  test('isSuperSet', () => {
+    const devs = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander);
+    expect(devs.isSuperSet()).toBeFalsy();
+    expect(devs.isSuperSet(Dev.Jeroen)).toBeFalsy();
+    expect(devs.isSuperSet(Dev.Jeroen, Dev.Naoufal)).toBeFalsy();
+    expect(devs.isSuperSet(Dev.Jeroen, Dev.Naoufal, Dev.Naoufal, Dev.Sander)).toBeFalsy();
+
+    expect(devs.isSuperSet(Dev.Eugen)).toBeFalsy();
+    expect(devs.isSuperSet(Dev.Jeroen, Dev.Eugen)).toBeFalsy();
+
+    expect(devs.isSuperSet(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander, Dev.Eugen)).toBeTruthy();
+  });
+
   test('concat', () => {
     const devs = toList(Dev.Sander, Dev.Wouter);
     expect(devs.concat()).toBeInstanceOf(List);
@@ -332,17 +368,6 @@ describe('isList', () => {
 
   test('Is true', () => {
     expect(isList<Dev>(toList(Dev.Sander, Dev.Jeroen))).toBeTruthy();
-  });
-
-  test('has', () => {
-    const a = toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal);
-    expect(a.overlaps()).toBeFalsy();
-    expect(a.overlaps(Dev.Rob)).toBeFalsy();
-    expect(a.overlaps([Dev.Rob, Dev.Sander])).toBeFalsy();
-    expect(a.overlaps(toList(Dev.Rob, Dev.Sander))).toBeFalsy();
-    expect(a.overlaps(Dev.Wouter)).toBeTruthy();
-    expect(a.overlaps(Dev.Wouter, Dev.Sander)).toBeTruthy();
-    expect(a.overlaps(toList(Dev.Rob, Dev.Sander, Dev.Jeroen))).toBeTruthy();
   });
 
   test('toObject from undefined works', () => {
