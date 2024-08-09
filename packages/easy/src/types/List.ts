@@ -10,12 +10,14 @@ import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
-  is = {
-    subset: { of: (...items: ArrayLike<T>): boolean => this.diff(items).length === 0 },
-    superset: { of: (...items: ArrayLike<T>): boolean => this.length > items.length && toList(...items).is.subset.of(...this) },
-    intersecting: { with: (...items: ArrayLike<T>): boolean => this.intersect(items).length > 0 },
-    disjoint: { with: (...items: ArrayLike<T>): boolean => !this.is.intersecting.with(...items) },
-  };
+  get is() {
+    return {
+      subset: { of: (...items: ArrayLike<T>): boolean => this.diff(items).length === 0 },
+      superset: { of: (...items: ArrayLike<T>): boolean => this.length > items.length && toList(...items).is.subset.of(...this) },
+      intersecting: { with: (...items: ArrayLike<T>): boolean => this.intersect(items).length > 0 },
+      disjoint: { with: (...items: ArrayLike<T>): boolean => !this.is.intersecting.with(...items) },
+    };
+  }
 
   asc(p: GetProperty<T, any>): List<T> {
     return this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
