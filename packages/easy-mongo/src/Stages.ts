@@ -24,7 +24,7 @@ import { toMongoType } from './Utils';
 
 export const asc = 1;
 export const desc = -1;
-export type Accumulators = '$sum' | '$count' | '$multiply' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push' | '$addToSet';
+export type Accumulators = '$sum' | '$count' | '$multiply' | '$avg' | '$first' | '$last' | '$min' | '$max' | '$push' | '$addToSet' | '$size';
 export type Accumulator = PartialRecord<Accumulators, Filter>;
 
 export class FilterBuilder<Options> {
@@ -123,6 +123,7 @@ export const stages = {
     max: (from?: string): Accumulator => ({ $max: `$${from}` }),
     addToSet: (from?: string): Accumulator => ({ $addToSet: `$${from}` }),
     push: (from = '$ROOT'): Accumulator => ({ $push: `$${from}` }),
+    size: (from?: string): Accumulator => ({ $size: `$${from}` }),
   },
   search: {
     search: (f: Record<string, Get<Filter, string>>) => ifDefined(stages.decode.id(f), $search => ({ $search })),
