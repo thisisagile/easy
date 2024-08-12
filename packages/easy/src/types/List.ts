@@ -10,13 +10,19 @@ import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
-  get is() {
-    return {
-      subset: { of: (...items: ArrayLike<T>): boolean => this.diff(items).length === 0 },
-      superset: { of: (...items: ArrayLike<T>): boolean => this.length > items.length && toList(...items).is.subset.of(...this) },
-      intersecting: { with: (...items: ArrayLike<T>): boolean => this.intersect(items).length > 0 },
-      disjoint: { with: (...items: ArrayLike<T>): boolean => !this.is.intersecting.with(...items) },
-    };
+  isSubSetOf(...items: ArrayLike<T>): boolean {
+    return this.diff(items).length === 0;
+  }
+
+  isSuperSetOf(...items: ArrayLike<T>): boolean {
+    return this.length > items.length && toList(...items).isSubSetOf(...this);
+  }
+  isIntersectingWith(...items: ArrayLike<T>): boolean {
+    return this.intersect(items).length > 0;
+  }
+
+  isDisjointWith(...items: ArrayLike<T>): boolean {
+    return !this.isIntersectingWith(...items);
   }
 
   asc(p: GetProperty<T, any>): List<T> {
