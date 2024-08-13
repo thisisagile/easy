@@ -57,7 +57,7 @@ describe('isText', () => {
     expect(text('sander').cap).toMatchText('Sander');
     expect(text('Sander').cap).toMatchText('Sander');
     expect(text('SANder').cap).toMatchText('Sander');
-    expect(text('sander de graaf').cap).toMatchText('Sander de graaf');
+    expect(text('sander de wit').cap).toMatchText('Sander de wit');
   });
 
   test('title', () => {
@@ -65,7 +65,15 @@ describe('isText', () => {
     expect(text('sander').title).toMatchText('Sander');
     expect(text('Sander').title).toMatchText('Sander');
     expect(text('SANder').title).toMatchText('Sander');
-    expect(text('sander de graaf').title).toMatchText('Sander De Graaf');
+    expect(text('sander de bruin').title).toMatchText('Sander De Bruin');
+  });
+
+  test('capFirst', () => {
+    expect(text().capFirst).toMatchText('');
+    expect(text('sander').capFirst).toMatchText('Sander');
+    expect(text('Sander').capFirst).toMatchText('Sander');
+    expect(text('SANder').capFirst).toMatchText('SANder');
+    expect(text('sander de blauw').capFirst).toMatchText('Sander de blauw');
   });
 
   test('toJSON', () => {

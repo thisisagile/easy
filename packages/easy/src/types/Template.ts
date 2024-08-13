@@ -55,6 +55,10 @@ export class ToText implements Text {
     return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
   }
 
+  get capFirst(): ToText {
+    return this.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+  }
+
   get title(): ToText {
     return this.map(s =>
       s
