@@ -52,6 +52,14 @@ describe('isText', () => {
     expect(text(Dev.Rob).with('-', '', Dev.Sander)).toMatchText('Rob-Sander');
   });
 
+  test('cap', () => {
+    expect(text().cap).toMatchText('');
+    expect(text('sander').cap).toMatchText('Sander');
+    expect(text('Sander').cap).toMatchText('Sander');
+    expect(text('SANder').cap).toMatchText('Sander');
+    expect(text('sander de graaf').cap).toMatchText('Sander de graaf');
+  });
+
   test('toJSON', () => {
     const name = text('Sander');
     const dev = { name };
