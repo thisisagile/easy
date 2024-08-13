@@ -1,4 +1,3 @@
-import { meta } from './Meta';
 import { List, toList } from './List';
 import { asString, replaceAll, Text } from './Text';
 import { toName } from './Constructor';
@@ -6,6 +5,7 @@ import { Optional } from './Types';
 import { Get, ofGet } from './Get';
 import { isEmpty, isNotEmpty } from './Is';
 import { JsonValue } from './Json';
+import { entries } from './Object';
 
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text; subject?: Text };
 
@@ -13,12 +13,11 @@ export class Template implements Text {
   constructor(
     private readonly template: string,
     private readonly subject: unknown = {},
-    private readonly options = {}
+    private readonly options: TemplateOptions = {}
   ) {}
 
   toString = (): string => {
-    return meta(this.options)
-      .entries()
+    return entries(this.options)
       .reduce((t, [k]) => this.option(t, k), this.object())
       .replace('  ', ' ');
   };
@@ -182,8 +181,10 @@ export function text(subject?: unknown, alt = ''): ToText {
 
 export function textValue(subject: any, prop: string): string {
   const p = prop.split('.');
+  const root = subject?.[p[0]];
+  const initial = typeof root === 'object' && root !== null ? root : text(root);
   return p
     .splice(1)
-    .reduce((t: ToText, s) => (t as any)[s], text(subject?.[p[0]]))
+    .reduce((t, s) => t[s], initial)
     .toString();
 }

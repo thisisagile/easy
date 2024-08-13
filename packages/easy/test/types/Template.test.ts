@@ -54,4 +54,25 @@ describe('Template', () => {
   test('template is undefined', () => {
     expect(template(undefined as unknown as string, Dev.Wouter)).toMatchText('');
   });
+
+  test('template with plain json structure', () => {
+    const json = {
+      user: {
+        name: 'Sander',
+      },
+      age: 42,
+      apples: [
+        { id: 1, color: 'red' },
+        { id: 2, color: 'green' },
+      ],
+      department: {
+        name: 'Finance',
+        manager: {
+          name: 'Jeroen',
+        },
+      },
+    };
+    const rrr = template('{this.user.name} is {this.age} years old and has {this.apples.length} apples. His manager is {this.department.manager.name}', json);
+    expect(rrr).toMatchText('Sander is 42 years old and has 2 apples. His manager is Jeroen');
+  });
 });
