@@ -380,6 +380,25 @@ describe('List.weave', () => {
   });
 });
 
+describe('List.accumulate', () => {
+  test('accumulate', () => {
+    const data = [
+      { hour: '09:00', app: 4, website: 5 },
+      { hour: '10:00', app: 6, website: 7 },
+      { hour: '11:00', app: 8, website: 9 },
+    ];
+
+    const accumulatedData = [
+      { hour: '09:00', app: 4, website: 5 },
+      { hour: '10:00', app: 10, website: 12 },
+      { hour: '11:00', app: 18, website: 21 },
+    ];
+
+    const acc = toList(data).accumulate(['app', 'website']);
+    acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
+  });
+});
+
 describe('isList', () => {
   test('Is false', () => {
     expect(isList()).toBeFalsy();

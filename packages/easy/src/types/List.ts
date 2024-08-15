@@ -6,7 +6,7 @@ import { isA } from './IsA';
 import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import type { Id } from './Id';
 import { asString } from './Text';
-import { Optional } from './Types';
+import { NumericKeys, Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
@@ -17,6 +17,7 @@ export class List<T = unknown> extends Array<T> {
   isSuperSetOf(...items: ArrayLike<T>): boolean {
     return this.length > items.length && toList(...items).isSubSetOf(...this);
   }
+
   isIntersectingWith(...items: ArrayLike<T>): boolean {
     return this.intersect(items).length > 0;
   }
@@ -228,6 +229,17 @@ export class List<T = unknown> extends Array<T> {
 
   chunk(chunkSize: number): List<List<T>> {
     return this.reduce((acc, _, index) => (index % chunkSize === 0 ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc), toList<List<T>>());
+  }
+
+  accumulate(keys: NumericKeys<T>[]): List<T> {
+    return this.map((d, i, arr) => {
+      const acc = keys.reduce((acc, v) => {
+        (acc as any)[v] = i === 0 ? d[v] : (arr[i - 1][v] as number) + (d[v] as number);
+        return acc;
+      }, d);
+      arr[i] = acc;
+      return acc;
+    });
   }
 }
 
