@@ -1,10 +1,10 @@
-import { isList, List } from './List';
+import { isList, List, toList } from './List';
 import { Construct, ofConstruct } from './Constructor';
 import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
 import { GetProperty } from './Get';
 import { ArrayLike } from './Array';
-import { Optional } from './Types';
+import { NumericKeys, Optional } from './Types';
 import { isNumber } from './Is';
 import { choose } from './Case';
 
@@ -76,6 +76,18 @@ export class PageList<T> extends List<T> {
 
   diffByKey(others: ArrayLike<T>, key: keyof T): PageList<T> {
     return toPageList(super.diffByKey(others, key), this);
+  }
+
+  accumulate(keys: NumericKeys<T>[]): PageList<T> {
+    return toPageList(super.accumulate(keys), this);
+  }
+
+  symmetricDiff(others: ArrayLike<T>): PageList<T> {
+    return toPageList(super.symmetricDiff(others), this);
+  }
+
+  symmetricDiffByKey(others: ArrayLike<T>, key: keyof T): PageList<T> {
+    return toPageList(super.symmetricDiffByKey(others, key), this);
   }
 
   intersect(others: ArrayLike<T>): PageList<T> {

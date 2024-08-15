@@ -260,6 +260,8 @@ describe('List', () => {
 
   test('diff', () => {
     expect(toList(1, 2, 3, 4).diff([4, 5, 6])).toMatchJson(toList([1, 2, 3]));
+    expect(toList(1, 2, 3, 4).diff([])).toMatchJson(toList([1, 2, 3, 4]));
+    expect(toList(1, 2, 3, 4).diff([1, 2, 3, 4])).toMatchJson(toList());
     expect(toList().diff(toList())).toMatchJson(toList());
     expect(toList({ id: 42 }).diff(toList())).toMatchJson(toList({ id: 42 }));
     expect(toList().diff(toList({ id: 42 }))).toMatchJson(toList());

@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
+import { asc, Id, isPageList, List, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 
 describe('PageList', () => {
@@ -136,5 +136,10 @@ describe('PageList', () => {
     expect(allDevs.remove(Dev.Sander).total).toBe(allDevs.total);
     expect(allDevs.intersect(allDevs).total).toBe(allDevs.total);
     expect(allDevs.intersectByKey(allDevs, 'name').total).toBe(allDevs.total);
+  });
+
+  test('is subset of', () => {
+    const devs = toPageList(toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander), { total: 4 });
+    const d = devs as List<Dev>;
   });
 });
