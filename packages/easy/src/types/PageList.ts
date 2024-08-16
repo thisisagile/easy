@@ -4,7 +4,7 @@ import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
 import { GetProperty } from './Get';
 import { ArrayLike } from './Array';
-import { NumericKeys, Optional } from './Types';
+import { Optional } from './Types';
 import { isNumber } from './Is';
 import { choose } from './Case';
 
@@ -76,10 +76,6 @@ export class PageList<T> extends List<T> {
 
   diffByKey(others: ArrayLike<T>, key: keyof T): PageList<T> {
     return toPageList(super.diffByKey(others, key), this);
-  }
-
-  accumulate(keys: NumericKeys<T>[]): PageList<T> {
-    return toPageList(super.accumulate(keys), this);
   }
 
   symmetricDiff(others: ArrayLike<T>): PageList<T> {

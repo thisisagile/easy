@@ -119,6 +119,15 @@ describe('View', () => {
     expect(s2.from(source)).toStrictEqual({ ...source, id: 85 });
   });
 
+  test('view in view', () => {
+    type Employee = { name: string; function: string };
+    type Company = { name: string; CEO: Employee };
+    const toEmployee = view<Employee>({ name: views.keep, function: views.value('CEO') });
+    const toCompany = view<Company>({ name: views.keep, CEO: toEmployee });
+    const s = toCompany.from({ name: 'iBOOD', CEO: { name: 'Sander' } });
+    expect(s).toStrictEqual({ name: 'iBOOD', CEO: { name: 'Sander', function: 'CEO' } });
+  });
+
   test('simple', () => {
     const s2 = view({ id: 'id', city: () => 'Utrecht' });
     const s = view({ company: s2 });
