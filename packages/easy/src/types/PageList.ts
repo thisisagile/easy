@@ -4,7 +4,7 @@ import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
 import { GetProperty } from './Get';
 import { ArrayLike } from './Array';
-import { NumericKeys, Optional } from './Types';
+import { Optional } from './Types';
 import { isNumber } from './Is';
 import { choose } from './Case';
 
@@ -119,7 +119,7 @@ export class PageList<T> extends List<T> {
     return toPageList(super.filter(p, params), this);
   }
 
-  accumulate(...keys: NumericKeys<T>[]): PageList<T> {
+  accumulate(...keys: (keyof T)[]): PageList<T> {
     return toPageList(super.accumulate(...keys), this);
   }
 
