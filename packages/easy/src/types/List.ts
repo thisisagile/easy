@@ -6,7 +6,7 @@ import { isA } from './IsA';
 import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import type { Id } from './Id';
 import { asString } from './Text';
-import { Optional } from './Types';
+import { NumericKeys, Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
@@ -92,6 +92,17 @@ export class List<T = unknown> extends Array<T> {
 
   intersectByKey(others: ArrayLike<T>, key: keyof T): List<T> {
     return this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
+  }
+
+  accumulate(...keys: NumericKeys<T>[]): List<T> {
+    return this.map((d, i, arr) => {
+      const acc = keys.reduce((acc, v) => {
+        (acc as any)[v] = i === 0 ? d[v] : (arr[i - 1][v] as number) + (d[v] as number);
+        return acc;
+      }, d);
+      arr[i] = acc;
+      return acc;
+    });
   }
 
   toJSON(): Json[] {

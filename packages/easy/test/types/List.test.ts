@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList, toPageList } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('List', () => {
@@ -781,5 +781,24 @@ describe('asList', () => {
     expect(devs2[1]).toHaveLength(2);
     expect(devs2[2]).toHaveLength(2);
     expect(devs2[3]).toHaveLength(1);
+  });
+});
+
+describe('List.accumulate', () => {
+  test('accumulate', () => {
+    const data = [
+      { hour: '09:00', app: 4, website: 5 },
+      { hour: '10:00', app: 6, website: 7 },
+      { hour: '11:00', app: 8, website: 9 },
+    ];
+
+    const accumulatedData = [
+      { hour: '09:00', app: 4, website: 5 },
+      { hour: '10:00', app: 10, website: 12 },
+      { hour: '11:00', app: 18, website: 21 },
+    ];
+
+    const acc = toList(data).accumulate('app', 'website');
+    acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
   });
 });

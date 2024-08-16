@@ -1,6 +1,7 @@
 import '@thisisagile/easy-test';
-import { asc, Id, isPageList, List, toFilter, toList, toPageList, toShortFilter } from '../../src';
+import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
+import exp from 'node:constants';
 
 describe('PageList', () => {
   const allDevs = toPageList(Dev.All, { total: 42 });
@@ -38,9 +39,21 @@ describe('PageList', () => {
   });
 
   test('meta', () => {
-    const pl = toPageList([], { take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{ field: 'name', values: [{ value: 3 }] }] });
+    const pl = toPageList([], {
+      take: 5,
+      skip: 1,
+      total: 42,
+      sorts: { name: asc },
+      filters: [{ field: 'name', values: [{ value: 3 }] }],
+    });
     expect(pl).toBeDefined();
-    expect(pl.meta).toEqual({ take: 5, skip: 1, total: 42, sorts: { name: asc }, filters: [{ field: 'name', values: [{ value: 3 }] }] });
+    expect(pl.meta).toEqual({
+      take: 5,
+      skip: 1,
+      total: 42,
+      sorts: { name: asc },
+      filters: [{ field: 'name', values: [{ value: 3 }] }],
+    });
   });
 
   test('meta sorts as string[]', () => {
@@ -89,7 +102,14 @@ describe('PageList', () => {
   test('toPageList list and filters', () => {
     const pl = toPageList(Dev.All, {
       total: 42,
-      filters: [{ field: 'offer.items.cat', shortField: 'cat', label: 'category', values: [{ label: 'Wonen', value: '1233-123-13' }] }],
+      filters: [
+        {
+          field: 'offer.items.cat',
+          shortField: 'cat',
+          label: 'category',
+          values: [{ label: 'Wonen', value: '1233-123-13' }],
+        },
+      ],
     });
     expect(pl.filters).toBeDefined();
     expect(pl.filters).toHaveLength(1);
@@ -113,7 +133,11 @@ describe('PageList', () => {
   });
 
   test('toShortFilter', () => {
-    expect(toShortFilter('start', 'end', 42)).toMatchJson({ field: 'start', shortField: 'end', values: [{ value: 42 }] });
+    expect(toShortFilter('start', 'end', 42)).toMatchJson({
+      field: 'start',
+      shortField: 'end',
+      values: [{ value: 42 }],
+    });
   });
 
   test('asc', () => {
@@ -138,8 +162,23 @@ describe('PageList', () => {
     expect(allDevs.intersectByKey(allDevs, 'name').total).toBe(allDevs.total);
   });
 
-  test('is subset of', () => {
-    const devs = toPageList(toList(Dev.Jeroen, Dev.Wouter, Dev.Naoufal, Dev.Sander), { total: 4 });
-    const d = devs as List<Dev>;
+  describe('accumulate', () => {
+    test('accumulate', () => {
+      const data = [
+        { hour: '09:00', app: 4, website: 5 },
+        { hour: '10:00', app: 6, website: 7 },
+        { hour: '11:00', app: 8, website: 9 },
+      ];
+
+      const accumulatedData = [
+        { hour: '09:00', app: 4, website: 5 },
+        { hour: '10:00', app: 10, website: 12 },
+        { hour: '11:00', app: 18, website: 21 },
+      ];
+
+      const acc = toPageList(data, { total: 5 }).accumulate('app', 'website');
+      acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
+      expect(acc.total).toBe(5);
+    });
   });
 });

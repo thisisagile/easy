@@ -1,10 +1,10 @@
-import { isList, List, toList } from './List';
+import { isList, List } from './List';
 import { Construct, ofConstruct } from './Constructor';
 import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
 import { GetProperty } from './Get';
 import { ArrayLike } from './Array';
-import { Optional } from './Types';
+import { NumericKeys, Optional } from './Types';
 import { isNumber } from './Is';
 import { choose } from './Case';
 
@@ -24,10 +24,10 @@ export type PageListOptions = Exclude<PageOptions, 'sort'> & { total?: number };
 export class PageList<T> extends List<T> {
   private _options?: PageListOptions;
 
-  private setPageOptions(options?: PageListOptions): this {
-    this._options = options;
-    return this;
+  get options(): Optional<PageListOptions> {
+    return this._options;
   }
+
   get take(): number {
     return this._options?.take ?? 250;
   }
@@ -56,10 +56,6 @@ export class PageList<T> extends List<T> {
       sorts: this.sorts,
       filters: this.filters,
     };
-  }
-
-  get options(): Optional<PageListOptions> {
-    return this._options;
   }
 
   asc(p: GetProperty<T, any>): PageList<T> {
@@ -123,8 +119,14 @@ export class PageList<T> extends List<T> {
     return toPageList(super.filter(p, params), this);
   }
 
+  accumulate(...keys: NumericKeys<T>[]): PageList<T> {
+    return toPageList(super.accumulate(...keys), this);
+  }
+
   concat(...items: ConcatArray<T>[]): PageList<T>;
+
   concat(...items: (T | ConcatArray<T>)[]): PageList<T>;
+
   concat(...items: (T | ConcatArray<T>)[]): PageList<T> {
     return toPageList(super.concat(...items), this);
   }
@@ -134,7 +136,9 @@ export class PageList<T> extends List<T> {
   }
 
   splice(start: number, deleteCount?: number): PageList<T>;
+
   splice(start: number, deleteCount: number, ...items: T[]): PageList<T>;
+
   splice(start: number, deleteCount: number, ...items: T[]): PageList<T> {
     return toPageList(super.splice(start, deleteCount, ...items), this);
   }
@@ -161,6 +165,11 @@ export class PageList<T> extends List<T> {
 
   slice(start?: number, end?: number): PageList<T> {
     return toPageList(super.slice(start, end), this);
+  }
+
+  private setPageOptions(options?: PageListOptions): this {
+    this._options = options;
+    return this;
   }
 }
 
