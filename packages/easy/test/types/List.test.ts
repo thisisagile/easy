@@ -1,6 +1,7 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList, toPageList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
+import exp from 'node:constants';
 
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
@@ -379,6 +380,13 @@ describe('List.weave', () => {
     expect(toList(Dev.Rob).distinctByKey('id')).toHaveLength(1);
     expect(toList(Dev.Rob, Dev.Rob).distinctByKey('id')).toHaveLength(1);
     expect(toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Rob, Dev.Wouter).distinctByKey('id')).toHaveLength(4);
+  });
+
+  test('distinct by value', () => {
+    expect(toList(Dev.Jeroen, Dev.Rob, Dev.Rob).distinctByValue()).toHaveLength(2);
+    expect(toList(Dev.Jeroen, Dev.Rob, Dev.Rob, Dev.Jeroen).distinctByValue()).toHaveLength(2);
+    expect(toList(1, 2, 3, 3, 2).distinctByValue()).toStrictEqual([1, 2, 3]);
+    expect(toList('a', 'b', 'a').distinctByValue()).toStrictEqual(['a', 'b']);
   });
 });
 

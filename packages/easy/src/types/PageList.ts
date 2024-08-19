@@ -1,4 +1,4 @@
-import { isList, List } from './List';
+import { isList, List, toList } from './List';
 import { Construct, ofConstruct } from './Constructor';
 import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
@@ -113,6 +113,9 @@ export class PageList<T> extends List<T> {
 
   distinctByKey(key: keyof T): PageList<T> {
     return toPageList(super.distinctByKey(key), this);
+  }
+  distinctByValue(): PageList<T> {
+    return toPageList(super.distinctByValue(), this);
   }
 
   filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): PageList<T> {

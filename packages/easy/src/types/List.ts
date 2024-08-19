@@ -136,6 +136,10 @@ export class List<T = unknown> extends Array<T> {
     return toList([...Object.values<T>(this.toObject(key)), ...Object.values<T>(Object.getPrototypeOf(this.toObject(key)))]);
   }
 
+  distinctByValue(): List<T> {
+    return toList<T>(...new Set<T>(this));
+  }
+
   filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {
     return toList<T>(super.filter(p, params));
   }

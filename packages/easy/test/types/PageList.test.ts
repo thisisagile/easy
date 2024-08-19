@@ -140,7 +140,7 @@ describe('PageList', () => {
     });
   });
 
-  test('asc', () => {
+  test('overloads', () => {
     expect(allDevs.map(d => d.name).total).toBe(allDevs.total);
     expect(allDevs.mapDefined(d => d.name).total).toBe(allDevs.total);
     expect(allDevs.flatMap(d => d.name).total).toBe(allDevs.total);
@@ -152,6 +152,7 @@ describe('PageList', () => {
     expect(allDevs.splice(2).total).toBe(allDevs.total);
     expect(allDevs.distinct().total).toBe(allDevs.total);
     expect(allDevs.distinctByKey('name').total).toBe(allDevs.total);
+    expect(allDevs.distinctByValue().total).toBe(allDevs.total);
     expect(allDevs.diff(allDevs).total).toBe(allDevs.total);
     expect(allDevs.diffByKey(allDevs, 'name').total).toBe(allDevs.total);
     expect(allDevs.defined().total).toBe(allDevs.total);
