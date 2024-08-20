@@ -137,7 +137,15 @@ export class List<T = unknown> extends Array<T> {
   }
 
   distinctByValue(): List<T> {
-    return toList<T>(...new Set<T>(this));
+    const seen = new Set<string>();
+    return this.filter(item => {
+      const key = JSON.stringify(item);
+      if (!seen.has(key)) {
+        seen.add(key);
+        return true;
+      }
+      return false;
+    });
   }
 
   filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {

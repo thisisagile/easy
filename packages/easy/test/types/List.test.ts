@@ -1,7 +1,6 @@
 import { Certificate, Dev } from '../ref';
 import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
-import exp from 'node:constants';
 
 describe('List', () => {
   const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
@@ -387,6 +386,24 @@ describe('List.weave', () => {
     expect(toList(Dev.Jeroen, Dev.Rob, Dev.Rob, Dev.Jeroen).distinctByValue()).toHaveLength(2);
     expect(toList(1, 2, 3, 3, 2).distinctByValue()).toStrictEqual([1, 2, 3]);
     expect(toList('a', 'b', 'a').distinctByValue()).toStrictEqual(['a', 'b']);
+    expect(
+      toList([
+        {
+          id: 'd0b199e9-4434-50ac-847e-61edbb95424e',
+          name: 'Apple macbook air 13 inch 256gb i3 Silver',
+          ean: '0190199255708',
+          quantity: 1,
+          qty: 1,
+        },
+        {
+          id: 'd0b199e9-4434-50ac-847e-61edbb95424e',
+          name: 'Apple macbook air 13 inch 256gb i3 Silver',
+          ean: '0190199255708',
+          quantity: 1,
+          qty: 1,
+        },
+      ]).distinctByValue()
+    ).toHaveLength(1);
   });
 });
 
