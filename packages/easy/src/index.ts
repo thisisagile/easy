@@ -54,6 +54,7 @@ export * from './sql/Table';
 export * from './sql/TableGateway';
 export * from './sql/Update';
 
+export * from './types/AnyKey';
 export * from './types/Array';
 export * from './types/Builder';
 export * from './types/Cache';
