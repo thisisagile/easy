@@ -373,7 +373,7 @@ describe('Stages', () => {
   });
 
   // Project
-  const { include, exclude, includes, project } = stages.project;
+  const { include, exclude, includes, project, date: pDate } = stages.project;
 
   test('projection include', () => {
     expect(include()).toBeUndefined();
@@ -409,6 +409,11 @@ describe('Stages', () => {
     expect(project()).toBeUndefined();
     expect(project({})).toStrictEqual({ $project: {} });
     expect(project({ name: 1, color: 1 })).toStrictEqual({ $project: { name: 1, color: 1 } });
+  });
+
+  test('date', () => {
+    expect(pDate('created')).toStrictEqual({ $toDate: '$created', format: '%Y-%m-%d' });
+    expect(pDate('created', '%Y-%m-%d %H:%M:%S')).toStrictEqual({ $toDate: '$created', format: '%Y-%m-%d %H:%M:%S' });
   });
 
   // ReplaceWith

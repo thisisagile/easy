@@ -19,6 +19,6 @@ describe('AnyKey', () => {
     expect(t.toValue('name.last')).toBe('Jansen');
     expect(t.toValue('name.first')).toBe('Jan');
     expect(t.toValue('paid.cents')).toBe(3000);
-    expect(t.toValue('name.address.city')).toBe('Amsterdam');
+    expect(t.toValue('name.address.country')).toBe('NL');
   });
 });
