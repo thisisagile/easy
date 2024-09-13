@@ -110,6 +110,7 @@ export * from './utils/Log';
 export * from './utils/Mapper';
 export * from './utils/Promise';
 export * from './utils/Property';
+export * from './utils/Seconds';
 export * from './utils/State';
 export * from './utils/Sentence';
 export * from './utils/Traverse';
