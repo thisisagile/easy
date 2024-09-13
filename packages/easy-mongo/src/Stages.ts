@@ -154,7 +154,8 @@ export const stages = {
       ifNotEmpty(excludes, es => ({ $project: es.reduce((a: Filter, b: Filter) => ({ ...a, ...(isString(b) ? { [b]: 0 } : b) }), {}) })),
     includes: (includes: Record<string, (string | Record<string, 1>)[]>) => new IncludeBuilder(includes),
     project: (project?: Filter) => ifDefined(project, $project => ({ $project })),
-    date: (key: string, format = '%Y-%m-%d') => ({ $toDate: `$${key}`, format }),
+    date: (key: string, format?: string) => ({ $toDate: `$${key}`, ...ifDefined(format, { format }) }),
+    duration: (from: string, to: string) => ({ $divide: [{ $subtract: [stages.project.date(from), stages.project.date(to)] }, 1000] }),
   },
   replaceWith: {
     replaceWith: (f?: Filter): Optional<Filter> => ifDefined(f, { $replaceWith: f }),
