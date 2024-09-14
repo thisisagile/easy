@@ -1,7 +1,7 @@
-import { second } from '../../src';
+import { seconds } from '../../src';
 
 describe('Seconds', () => {
-  const { toDuration } = second;
+  const { toDuration, toText } = seconds;
 
   test('split', () => {
     expect(toDuration(0)).toEqual({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -15,13 +15,13 @@ describe('Seconds', () => {
   });
 
   test('toText', () => {
-    expect(second.toText(0)).toBe('0s');
-    expect(second.toText(1)).toBe('1s');
-    expect(second.toText(60)).toBe('1m');
-    expect(second.toText(3600)).toBe('1h');
-    expect(second.toText(86400)).toBe('1d');
-    expect(second.toText(86401)).toBe('1d');
-    expect(second.toText(86461)).toBe('1d 1m');
-    expect(second.toText(90061)).toBe('1d 1h 1m');
+    expect(toText(0)).toBe('0s');
+    expect(toText(1)).toBe('1s');
+    expect(toText(60)).toBe('1m');
+    expect(toText(3600)).toBe('1h');
+    expect(toText(86400)).toBe('1d');
+    expect(toText(86401)).toBe('1d');
+    expect(toText(86461)).toBe('1d 1m');
+    expect(toText(90061)).toBe('1d 1h 1m');
   });
 });
