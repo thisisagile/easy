@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Audit, traverse } from '../../src';
+import { accumulate, Audit, traverse, traverseSet } from '../../src';
 import { Dev } from '../ref';
 
 describe('traverse', () => {
@@ -34,5 +34,49 @@ describe('traverse', () => {
 
   test('traverse with existing double-nested property', () => {
     expect(traverse(Dev.Jeroen, 'created.by.id')).toBe(0);
+  });
+});
+
+describe('traverseSet', () => {
+  const original = {
+    id: 42,
+    name: { first: 'Sander', last: 'Hoogendoorn', income: { currency: 'EUR', cents: '1000' } },
+  };
+
+  test('traverseSet known prop and value', () => {
+    expect(traverseSet(original, 'id', 43)).toStrictEqual({ ...original, id: 43 });
+  });
+
+  test('traverseSet known level 2 prop', () => {
+    expect(traverseSet(original, 'name.first', 'Boet')).toStrictEqual({
+      ...original,
+      name: { first: 'Boet', last: 'Hoogendoorn', income: { currency: 'EUR', cents: '1000' } },
+    });
+  });
+
+  test('traverseSet known level 3 prop', () => {
+    expect(traverseSet(original, 'name.income.currency', 'PLN')).toStrictEqual({
+      ...original,
+      name: { first: 'Sander', last: 'Hoogendoorn', income: { currency: 'PLN', cents: '1000' } },
+    });
+  });
+});
+
+describe('accumulate', () => {
+  test('accumulate', () => {
+    const data = [
+      { hour: '09:00', app: 4, website: 5, nested: { value: 2 } },
+      { hour: '10:00', app: 6, website: 7, nested: { value: 2 } },
+      { hour: '11:00', app: 8, website: 9, nested: { value: 3 } },
+    ];
+
+    const accumulatedData = [
+      { hour: '09:00', app: 4, website: 5, nested: { value: 2 } },
+      { hour: '10:00', app: 10, website: 12, nested: { value: 4 } },
+      { hour: '11:00', app: 18, website: 21, nested: { value: 7 } },
+    ];
+
+    const acc = accumulate(data, 'app', 'website', 'nested.value');
+    acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
   });
 });
