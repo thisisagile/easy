@@ -1,6 +1,4 @@
-import { dt, seconds } from '../../src';
-import { DateTime } from 'luxon';
-import { mock } from '@thisisagile/easy-test';
+import { seconds } from '../../src';
 
 describe('Seconds', () => {
   test('split', () => {
@@ -23,17 +21,5 @@ describe('Seconds', () => {
     expect(seconds.toText(86401)).toBe('1d');
     expect(seconds.toText(86461)).toBe('1d 1m');
     expect(seconds.toText(90061)).toBe('1d 1h 1m');
-  });
-
-  test('ago', () => {
-    const start = dt('2021-01-01T00:00:00Z');
-    const end = dt('2021-01-01T00:00:01Z');
-    expect(seconds.ago(start, end)).toBe('1s');
-  });
-
-  test('ago with default end', () => {
-    DateTime.now = mock.return(dt('2021-01-03T03:03:01Z'));
-    const start = dt('2021-01-06T00:00:00Z');
-    expect(seconds.ago(start)).toBe('1348d 13h 13m');
   });
 });

@@ -398,4 +398,16 @@ describe('DateTime', () => {
     expect(dt(iso).toJSON()).toMatchText(iso);
     expect(dt(new_york).toJSON()).toMatchText(iso);
   });
+
+  test('ago', () => {
+    const start = dt('2021-01-01T00:00:00Z');
+    const end = dt('2021-01-01T00:00:01Z');
+    expect(start.ago(end)).toBe('1s');
+  });
+
+  test('ago with default end', () => {
+    const start = dt('2021-01-06T00:00:00Z');
+    mock.property(DateTime, 'now', dt('2021-01-10T03:03:01Z'));
+    expect(start.ago()).toBe('4d 3h 3m');
+  });
 });

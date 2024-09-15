@@ -1,6 +1,5 @@
 import { ifTrue } from './If';
 import { toList } from '../types/List';
-import { DateTime } from '../domain/DateTime';
 
 export const seconds = {
   toDuration: (s: number) => {
@@ -17,6 +16,4 @@ export const seconds = {
       .mapDefined(s => s)
       .join(' ');
   },
-
-  ago: (start: DateTime, end: DateTime = DateTime.now) => seconds.toText(end.diff(start, 'second')),
 };

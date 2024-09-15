@@ -7,6 +7,7 @@ import { isDate } from '../types/IsDate';
 import { isA } from '../types/IsA';
 import { ifDefined } from '../utils/If';
 import { JsonValue } from '../types/Json';
+import { seconds } from '../utils/Seconds';
 
 Settings.defaultZone = 'utc';
 
@@ -138,6 +139,10 @@ export class DateTime extends Value<Optional<string>> {
 
   toDate(): Optional<Date> {
     return this.isValid ? this.utc.toJSDate() : undefined;
+  }
+
+  ago(end: DateTime = DateTime.now): string {
+    return seconds.toText(end.diff(this, 'second'));
   }
 }
 
