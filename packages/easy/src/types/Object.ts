@@ -14,3 +14,7 @@ export function entries<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>)
 export function values<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>): List<T> {
   return toList([...Object.values<T>(subject), ...Object.values<T>(Object.getPrototypeOf(subject))]);
 }
+
+export function keys<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>): List<string> {
+  return toList([...Object.keys(subject), ...Object.keys(Object.getPrototypeOf(subject))]);
+}
