@@ -7,6 +7,22 @@ describe('traverse', () => {
     expect(traverse(undefined, '')).toBeUndefined();
   });
 
+  test('traverse with null subject', () => {
+    expect(traverse(null, '')).toBeUndefined();
+  });
+
+  test('traverse with false subject', () => {
+    expect(traverse(false, '')).toBeUndefined();
+  });
+
+  test('traverse with null subject nested', () => {
+    expect(traverse({ group: null }, 'group.name')).toBeUndefined();
+  });
+
+  test('traverse with undefined subject nested', () => {
+    expect(traverse({ group: undefined }, 'group.name')).toBeUndefined();
+  });
+
   test('traverse with undefined property', () => {
     expect(traverse(Dev.Jeroen, undefined as unknown as string)).toBeUndefined();
   });
@@ -34,6 +50,10 @@ describe('traverse', () => {
 
   test('traverse with existing double-nested property', () => {
     expect(traverse(Dev.Jeroen, 'created.by.id')).toBe(0);
+  });
+
+  test('traverse with existing triple-nested property', () => {
+    expect(traverse({}, 'created.by.id')).toBeUndefined();
   });
 });
 
