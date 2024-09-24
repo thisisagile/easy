@@ -141,6 +141,10 @@ export class DateTime extends Value<Optional<string>> {
     return this.isValid ? this.utc.toJSDate() : undefined;
   }
 
+  toEpoch(): number {
+    return this.luxon.toMillis();
+  }
+
   ago(end: DateTime = DateTime.now): string {
     return seconds.toText(end.diff(this, 'second'));
   }
