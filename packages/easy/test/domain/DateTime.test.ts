@@ -399,6 +399,10 @@ describe('DateTime', () => {
     expect(dt(new_york).toJSON()).toMatchText(iso);
   });
 
+  test('toEpoch', () => {
+    expect(new DateTime(date.epoch).toEpoch()).toBe(date.epoch);
+  });
+
   test('ago', () => {
     const start = dt('2021-01-01T00:00:00Z');
     const end = dt('2021-01-01T00:00:01Z');
