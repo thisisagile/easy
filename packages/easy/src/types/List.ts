@@ -90,8 +90,12 @@ export class List<T = unknown> extends Array<T> {
     return this.filter(i => others.includes(i));
   }
 
-  intersectByKey(others: ArrayLike<T>, key: keyof T): List<T> {
+  intersectByKey<U>(others: ArrayLike<U>, key: keyof T & keyof U): List<T> {
     return this.filter((i: any) => others.some((o: any) => o[key] === i[key]));
+  }
+
+  intersectBy<U>(others: ArrayLike<U>, f: (value: T, value2: U) => boolean): List<T> {
+    return this.filter(i => others.some(o => f(i, o as U)));
   }
 
   accumulate(...keys: (keyof T)[]): List<T> {

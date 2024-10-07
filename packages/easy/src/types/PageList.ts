@@ -86,7 +86,7 @@ export class PageList<T> extends List<T> {
     return toPageList(super.intersect(others), this);
   }
 
-  intersectByKey(others: ArrayLike<T>, key: keyof T): PageList<T> {
+  intersectByKey<U>(others: ArrayLike<U>, key: keyof T & keyof U): PageList<T> {
     return toPageList(super.intersectByKey(others, key), this);
   }
 

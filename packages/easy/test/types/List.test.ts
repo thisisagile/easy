@@ -321,6 +321,16 @@ describe('List', () => {
     expect(johnAndJane.intersectByKey(jackAndJill, 'weight')).toHaveLength(0);
   });
 
+  test('intersect by key can also work on other types', () => {
+    const managers = toList<{ id: Id; firstName: string }>({ id: 1, firstName: 'Jeroen' }, { id: 1000, firstName: 'Naoufal' });
+    expect(devs.intersectByKey(managers, 'id')).toHaveLength(1);
+  });
+
+  test('intersect by', () => {
+    const managers = toList<{ firstName: string }>({ firstName: 'Jeroen' }, { firstName: 'Naoufal' });
+    expect(devs.intersectBy(managers, (d, m) => d.name === m.firstName)).toHaveLength(2);
+  });
+
   test('none should return true on an empty list', () => {
     const input = new List();
     expect(input.none(i => i === true)).toBeTruthy();
