@@ -19,8 +19,10 @@ export type DiffOptions = {
   rounding: 'floor' | 'ceil' | 'round';
 };
 
+type DatetimeInput = string | number | Date | DateTime | null;
+
 export class DateTime extends Value<Optional<string>> {
-  constructor(value?: string | number | Date | DateTime | null, format?: string) {
+  constructor(value?: DatetimeInput, format?: string) {
     super(
       choose(value)
         .type(isString, v => (format ? LuxonDateTime.fromFormat(v, format, { setZone: true }) : LuxonDateTime.fromISO(v, { setZone: true })))
@@ -152,4 +154,4 @@ export class DateTime extends Value<Optional<string>> {
 
 export const isDateTime = (dt?: unknown): dt is DateTime => isDefined(dt) && dt instanceof DateTime;
 
-export const dt = (dt?: unknown): DateTime => (isString(dt) || isNumber(dt) || dt instanceof Date ? new DateTime(dt) : new DateTime());
+export const dt = (dt?: DatetimeInput): DateTime => new DateTime(dt);

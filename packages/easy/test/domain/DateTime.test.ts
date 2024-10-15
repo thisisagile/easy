@@ -396,7 +396,10 @@ describe('DateTime', () => {
   test('dt constructor function', () => {
     expect(dt()).not.toBeValid();
     expect(dt(iso).toJSON()).toMatchText(iso);
-    expect(dt(new_york).toJSON()).toMatchText(iso);
+    expect(dt(new_york).toJSON()).toMatchText(iso); // from string
+    expect(dt(dt(iso)).toJSON()).toMatchText(iso); // from DateTime
+    expect(dt(new Date(iso)).toJSON()).toMatchText(iso); // from js Date
+    expect(dt(new Date(iso).getTime()).toJSON()).toMatchText(iso); // from number
   });
 
   test('toEpoch', () => {
