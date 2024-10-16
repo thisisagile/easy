@@ -1,6 +1,7 @@
-import { Exception, asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value, isValid } from '../../src';
+import { Exception, asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value, isValid, list } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
+import { fits } from '@thisisagile/easy-test';
 
 class Price extends Value<number> {
   get isValid(): boolean {
@@ -77,6 +78,12 @@ class Email extends Value<string> {
   get isValid(): boolean {
     return this.value.includes('@');
   }
+}
+
+class ConstrainedOffer extends Struct {
+  @required() readonly id: number = this.state.id;
+  @required() readonly classicId: number = this.state.classicId;
+  @list() readonly products: List<ConstrainedProduct> = asList(ConstrainedProduct, this.state.products);
 }
 
 describe('validate', () => {
@@ -165,6 +172,20 @@ describe('validate', () => {
 
   test('entity with double nested constraints', () => {
     expect(validate(new ConstrainedProductWithRule({ id: 42 }))).toHaveLength(1);
+  });
+
+  test('entity with list is invalid', () => {
+    const err = validate(
+      new ConstrainedOffer({ id: 1, classicId: 1, products: [{ name: 'test', brand: { name: 'test', site: 'test' }, type: 'plug', price: 10 }, { id: 123 }] })
+    );
+    expect(err).toHaveLength(10);
+    expect(err.results[0].message).toBe('Child with index 0 is invalid');
+  });
+
+  test('entity with list is valid', () => {
+    expect(validate(
+      new ConstrainedOffer({ id: 1, classicId: 1, products: [{ name: 'test', brand: { name: 'test', site: 'www.easy.io' }, type: 'plug', price: 10 }] })
+    )).toHaveLength(0);
   });
 
   test('business rule', () => {

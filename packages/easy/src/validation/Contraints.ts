@@ -1,6 +1,6 @@
-import { validate, Validator } from './Validate';
+import { asResults, validate, Validator } from './Validate';
 import { Func } from '../types/Func';
-import { Results } from '../types/Results';
+import { Results, toResults } from '../types/Results';
 import { meta } from '../types/Meta';
 import { List, toList } from '../types/List';
 import { isBoolean, isDefined, isFunction, isIn, isNotEmpty, isString } from '../types/Is';
@@ -8,6 +8,9 @@ import { tryTo } from '../types/Try';
 import { text } from '../types/Template';
 import { inFuture, inPast } from '../types/IsDate';
 import type { Text } from '../types/Text';
+import { log } from '../utils/Log';
+import { toResult } from '../types/Result';
+import { toName, use } from '../types/Constructor';
 
 export type Constraint = Func<boolean | Results, any>;
 
@@ -76,3 +79,14 @@ export const maxLength = (length: number, message?: Text): PropertyDecorator =>
 
 export const rule = (message?: Text): PropertyDecorator =>
   constraint(v => (isFunction(v) ? (v() as boolean | Results) : isBoolean(v) ? v : false), message ?? `Value {actual} must be true`);
+
+export const list = (): PropertyDecorator =>
+  constraint(v => {
+    return v.reduce(
+      (acc: Results, elem: any, index: number) =>
+        use(validate(elem), val =>
+          !val.isValid ? acc.add(toResult(`Child with index ${index} is invalid`, `${toName(elem)}[${index}]`)).add(...val.results) : acc.add(...val.results)
+        ),
+      toResults()
+    );
+  }, '');
