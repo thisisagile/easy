@@ -37,7 +37,7 @@
     "@thisisagile/easy-test": "workspace:*",
     "@types/form-urlencoded": "^4.4.0",
     "@types/luxon": "3.4.2",
-    "@types/validator": "^13.11.10"
+    "@types/validator": "^13.12.2"
   },
   "dependencies": {
     "@types/uuid": "^9.0.8",
@@ -46,6 +46,6 @@
     "luxon": "^3.4.4",
     "reflect-metadata": "^0.2.2",
     "uuid": "^9.0.1",
-    "validator": "^13.11.0"
+    "validator": "^13.12.0"
   }
 }

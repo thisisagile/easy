@@ -1673,8 +1673,8 @@ __metadata:
   dependencies:
     "@thisisagile/easy": "workspace:*"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/validator": "npm:^13.11.9"
-    validator: "npm:^13.11.0"
+    "@types/validator": "npm:^13.12.2"
+    validator: "npm:^13.12.0"
   languageName: unknown
   linkType: soft
 
@@ -1692,7 +1692,7 @@ __metadata:
     "@types/passport": "npm:^1.0.16"
     "@types/passport-jwt": "npm:^4.0.1"
     "@types/uuid": "npm:^9.0.8"
-    "@types/validator": "npm:^13.11.10"
+    "@types/validator": "npm:^13.12.2"
     cls-hooked: "npm:^4.2.2"
     express: "npm:^4.21.0"
     form-urlencoded: "npm:^6.1.0"
@@ -1825,13 +1825,13 @@ __metadata:
     "@types/form-urlencoded": "npm:^4.4.0"
     "@types/luxon": "npm:3.4.2"
     "@types/uuid": "npm:^9.0.8"
-    "@types/validator": "npm:^13.11.10"
+    "@types/validator": "npm:^13.12.2"
     axios: "npm:^1.7.5"
     form-urlencoded: "npm:^6.1.0"
     luxon: "npm:^3.4.4"
     reflect-metadata: "npm:^0.2.2"
     uuid: "npm:^9.0.1"
-    validator: "npm:^13.11.0"
+    validator: "npm:^13.12.0"
   languageName: unknown
   linkType: soft
 
@@ -2262,10 +2262,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/validator@npm:^13.11.10, @types/validator@npm:^13.11.9":
-  version: 13.12.0
-  resolution: "@types/validator@npm:13.12.0"
-  checksum: 10c0/a539f06c840dc672dedc819c5906472561dd4269c8298f5e0b0066226a8c47e4ffd60b1c10f21b91ee3cfb591e391537f879e0524e42db7f50a61995c2b2f2ef
+"@types/validator@npm:^13.12.2":
+  version: 13.12.2
+  resolution: "@types/validator@npm:13.12.2"
+  checksum: 10c0/64f1326c768947d756ab5bcd73f3f11a6f07dc76292aea83890d0390a9b9acb374f8df6b24af2c783271f276d3d613b78fc79491fe87edee62108d54be2e3c31
   languageName: node
   linkType: hard
 
@@ -11592,7 +11592,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.11.0":
+"validator@npm:^13.12.0":
   version: 13.12.0
   resolution: "validator@npm:13.12.0"
   checksum: 10c0/21d48a7947c9e8498790550f56cd7971e0e3d724c73388226b109c1bac2728f4f88caddfc2f7ed4b076f9b0d004316263ac786a17e9c4edf075741200718cd32
