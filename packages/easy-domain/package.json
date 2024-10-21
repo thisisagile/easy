@@ -35,8 +35,8 @@
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
-    "@types/validator": "^13.11.9",
-    "validator": "^13.11.0"
+    "@types/validator": "^13.12.2",
+    "validator": "^13.12.0"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:*"
