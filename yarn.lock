@@ -1960,7 +1960,7 @@ __metadata:
     "@types/luxon": "npm:3.4.2"
     "@types/uuid": "npm:^9.0.8"
     "@types/validator": "npm:^13.12.2"
-    axios: "npm:^1.7.5"
+    axios: "npm:^1.7.7"
     form-urlencoded: "npm:^6.1.0"
     luxon: "npm:^3.4.4"
     reflect-metadata: "npm:^0.2.2"
@@ -2995,7 +2995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.7.5":
+"axios@npm:^1.7.7":
   version: 1.7.7
   resolution: "axios@npm:1.7.7"
   dependencies:
