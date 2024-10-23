@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
-    "@types/form-urlencoded": "^4.4.0",
+    "@types/form-urlencoded": "^4.4.2",
     "@types/luxon": "3.4.2",
     "@types/validator": "^13.12.2"
   },
