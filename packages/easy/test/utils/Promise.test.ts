@@ -1,4 +1,4 @@
-import { List, reject, resolve, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
+import { Exception, List, reject, resolve, settled, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -17,6 +17,7 @@ describe('Promise', () => {
 describe('tuple', () => {
   class Dev {
     constructor(readonly name: string) {}
+
     toString(): string {
       return this.name;
     }
@@ -24,6 +25,7 @@ describe('tuple', () => {
 
   class Manager {
     constructor(readonly role: string) {}
+
     toString(): string {
       return this.role;
     }
@@ -86,7 +88,7 @@ describe('tuple', () => {
     const res = await when(ceo)
       .not.isDefined.reject()
       .then(c => tuple5(asyncM(c), d, asyncM(c), asyncM(c), d))
-      .then(([c, , , ,]) => c);
+      .then(([c]) => c);
 
     expect(res).toBeInstanceOf(Manager);
   });
@@ -116,5 +118,24 @@ describe('tuple', () => {
     expect(res).toHaveLength(2);
     expect(res).toBeInstanceOf(List);
     expect(res[1]).toBeInstanceOf(Manager);
+  });
+
+  test('tuple settled', async () => {
+    const res = await tuple.settled([asyncM(ceo), asyncM(cto)]);
+    expect(res.fulfilled).toHaveLength(2);
+    expect(res.rejected).toHaveLength(0);
+  });
+
+  test('tuple settled when one promise rejects', async () => {
+    const res = await tuple.settled([asyncM(ceo), reject(Exception.DoesNotExist)]);
+    expect(res.fulfilled).toHaveLength(1);
+    expect(res.rejected).toHaveLength(1);
+    expect(res.rejected[0]).toBe('DoesNotExist');
+  });
+
+  test.each([undefined, null, toList()])('tuple settled on empty list', async a => {
+    const res = await settled([a] as any);
+    expect(res.fulfilled).toHaveLength(0);
+    expect(res.rejected).toHaveLength(0);
   });
 });
