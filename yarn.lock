@@ -1829,8 +1829,8 @@ __metadata:
     "@types/validator": "npm:^13.12.2"
     cls-hooked: "npm:^4.2.2"
     express: "npm:^4.21.1"
-    form-urlencoded: "npm:^6.1.0"
-    jsonwebtoken: "npm:^9.0.0"
+    form-urlencoded: "npm:^6.1.5"
+    jsonwebtoken: "npm:^9.0.2"
     passport: "npm:^0.7.0"
     passport-jwt: "npm:^4.0.1"
   languageName: unknown
@@ -1905,7 +1905,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/jsonwebtoken": "npm:^9.0.6"
-    jsonwebtoken: "npm:^9.0.0"
+    jsonwebtoken: "npm:^9.0.2"
   languageName: unknown
   linkType: soft
 
@@ -1961,8 +1961,8 @@ __metadata:
     "@types/uuid": "npm:^9.0.8"
     "@types/validator": "npm:^13.12.2"
     axios: "npm:^1.7.5"
-    form-urlencoded: "npm:^6.1.0"
-    luxon: "npm:^3.4.4"
+    form-urlencoded: "npm:^6.1.5"
+    luxon: "npm:^3.5.0"
     reflect-metadata: "npm:^0.2.2"
     uuid: "npm:^9.0.1"
     validator: "npm:^13.12.0"
@@ -2328,17 +2328,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 18.3.3
-  resolution: "@types/react@npm:18.3.3"
-  dependencies:
-    "@types/prop-types": "npm:*"
-    csstype: "npm:^3.0.2"
-  checksum: 10c0/fe455f805c5da13b89964c3d68060cebd43e73ec15001a68b34634604a78140e6fc202f3f61679b9d809dde6d7a7c2cb3ed51e0fd1462557911db09879b55114
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^18.3.11":
+"@types/react@npm:*, @types/react@npm:^18.3.11":
   version: 18.3.11
   resolution: "@types/react@npm:18.3.11"
   dependencies:
@@ -3236,16 +3226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"braces@npm:^3.0.2, braces@npm:~3.0.2":
-  version: 3.0.2
-  resolution: "braces@npm:3.0.2"
-  dependencies:
-    fill-range: "npm:^7.0.1"
-  checksum: 10c0/321b4d675791479293264019156ca322163f02dc06e3c4cab33bb15cd43d80b51efef69b0930cfde3acd63d126ebca24cd0544fa6f261e093a0fb41ab9dda381
-  languageName: node
-  linkType: hard
-
-"braces@npm:^3.0.3":
+"braces@npm:^3.0.3, braces@npm:~3.0.2":
   version: 3.0.3
   resolution: "braces@npm:3.0.3"
   dependencies:
@@ -5450,15 +5431,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fill-range@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "fill-range@npm:7.0.1"
-  dependencies:
-    to-regex-range: "npm:^5.0.1"
-  checksum: 10c0/7cdad7d426ffbaadf45aeb5d15ec675bbd77f7597ad5399e3d2766987ed20bda24d5fac64b3ee79d93276f5865608bb22344a26b9b1ae6c4d00bd94bf611623f
-  languageName: node
-  linkType: hard
-
 "fill-range@npm:^7.1.1":
   version: 7.1.1
   resolution: "fill-range@npm:7.1.1"
@@ -5577,10 +5549,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-urlencoded@npm:*, form-urlencoded@npm:^6.1.0":
-  version: 6.1.4
-  resolution: "form-urlencoded@npm:6.1.4"
-  checksum: 10c0/2285c56acf3de5126723c4f55bb9e279818b8991ff1123d749c03a1a26b16e945f76c49802478cc33b2a9821553db70b789149e0e9d8b8204d8c2d40472b8c25
+"form-urlencoded@npm:*, form-urlencoded@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "form-urlencoded@npm:6.1.5"
+  checksum: 10c0/8558f56669505a1bf6ad689ad280eb350b8273c969ab9f1698255480e909378686a6dcde4eb8d4c135e699cd580d6d446f0f63d05d2482383f34c64efcbb9759
   languageName: node
   linkType: hard
 
@@ -8016,10 +7988,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^3.4.4":
-  version: 3.4.4
-  resolution: "luxon@npm:3.4.4"
-  checksum: 10c0/02e26a0b039c11fd5b75e1d734c8f0332c95510f6a514a9a0991023e43fb233884da02d7f966823ffb230632a733fc86d4a4b1e63c3fbe00058b8ee0f8c728af
+"luxon@npm:^3.5.0":
+  version: 3.5.0
+  resolution: "luxon@npm:3.5.0"
+  checksum: 10c0/335789bba95077db831ef99894edadeb23023b3eb2137a1b56acd0d290082b691cf793143d69e30bc069ec95f0b49f36419f48e951c68014f19ffe12045e3494
   languageName: node
   linkType: hard
 
@@ -8168,17 +8140,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.4":
-  version: 4.0.5
-  resolution: "micromatch@npm:4.0.5"
-  dependencies:
-    braces: "npm:^3.0.2"
-    picomatch: "npm:^2.3.1"
-  checksum: 10c0/3d6505b20f9fa804af5d8c596cb1c5e475b9b0cd05f652c5b56141cf941bd72adaeb7a436fda344235cef93a7f29b7472efc779fcdb83b478eab0867b95cdeff
-  languageName: node
-  linkType: hard
-
-"micromatch@npm:^4.0.5":
+"micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:

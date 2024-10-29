@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
-    "jsonwebtoken": "^9.0.0"
+    "jsonwebtoken": "^9.0.2"
   }
 }
