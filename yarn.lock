@@ -1819,7 +1819,7 @@ __metadata:
     "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-service": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
-    "@types/cls-hooked": "npm:^4.3.8"
+    "@types/cls-hooked": "npm:^4.3.9"
     "@types/express": "npm:^4.17.21"
     "@types/form-urlencoded": "npm:^4.4.2"
     "@types/jsonwebtoken": "npm:^9.0.6"
@@ -2055,12 +2055,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/cls-hooked@npm:^4.3.8":
-  version: 4.3.8
-  resolution: "@types/cls-hooked@npm:4.3.8"
+"@types/cls-hooked@npm:^4.3.9":
+  version: 4.3.9
+  resolution: "@types/cls-hooked@npm:4.3.9"
   dependencies:
     "@types/node": "npm:*"
-  checksum: 10c0/f7492cbc1baa0965890d02b3b12f8b235f6c9221ca2fa5e7ba5fcab5a47e1aa6abedec08901f283fd82c1eb604e3d66ace76fb00638c22676fe5a4d8a2b7e355
+  checksum: 10c0/fd531903b2cd7fa76d36ec81142ac55f0ea8702f6d76238a1ca5c773b8e35889cf528198a8a83b5e551f928f47bdfad947e29d9ebbe0df712cbf14510f7ae713
   languageName: node
   linkType: hard
 
