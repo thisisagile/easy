@@ -137,7 +137,15 @@ export class List<T = unknown> extends Array<T> {
   }
 
   distinctByKey(key: keyof T): List<T> {
-    return toList([...Object.values<T>(this.toObject(key)), ...Object.values<T>(Object.getPrototypeOf(this.toObject(key)))]);
+    const seen = new Set<T[keyof T]>();
+    return this.filter(item => {
+      const v = item[key];
+      if (!seen.has(v)) {
+        seen.add(v);
+        return true;
+      }
+      return false;
+    });
   }
 
   distinctByValue(): List<T> {
@@ -172,7 +180,7 @@ export class List<T = unknown> extends Array<T> {
     return this.first(i => asString((i as any).id) === asString(id));
   }
 
-  byKey(key: keyof T, value: T[keyof T]): T {
+  byKey(key: keyof T, value: unknown): T {
     return this.first(i => i[key] == value);
   }
 

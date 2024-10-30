@@ -322,7 +322,13 @@ describe('List', () => {
   });
 
   test('intersect by key can also work on other types', () => {
-    const managers = toList<{ id: Id; firstName: string }>({ id: 1, firstName: 'Jeroen' }, { id: 1000, firstName: 'Naoufal' });
+    const managers = toList<{ id: Id; firstName: string }>(
+      { id: 1, firstName: 'Jeroen' },
+      {
+        id: 1000,
+        firstName: 'Naoufal',
+      }
+    );
     expect(devs.intersectByKey(managers, 'id')).toHaveLength(1);
   });
 
@@ -332,7 +338,7 @@ describe('List', () => {
   });
 
   test('byKey', () => {
-    const l = toList<{name: string, grade: number}>({name: 'Jeroen', grade: 10}, {name: 'Naoufal', grade: 9});
+    const l = toList<{ name: string; grade: number }>({ name: 'Jeroen', grade: 10 }, { name: 'Naoufal', grade: 9 });
     expect(l.byKey('grade', 9).name).toBe('Naoufal');
     expect(devs.byKey('name', 'Jeroen')).toBe(Dev.Jeroen);
     expect(devs.byKey(undefined as unknown as keyof Dev, 10)).toBeUndefined();
@@ -392,11 +398,17 @@ describe('List.weave', () => {
     expect(toList([1, 2, 3, 4, 5, 6]).weave([21, 42], 1)).toMatchJson(toList(1, 21, 2, 42, 3, 4, 5, 6));
   });
 
-  test('dedupe', () => {
+  test('distinctByKey', () => {
     expect(toList<Dev>().distinctByKey('id')).toHaveLength(0);
     expect(toList(Dev.Rob).distinctByKey('id')).toHaveLength(1);
     expect(toList(Dev.Rob, Dev.Rob).distinctByKey('id')).toHaveLength(1);
     expect(toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Rob, Dev.Wouter).distinctByKey('id')).toHaveLength(4);
+  });
+
+  test('distinctByKey does not change the sorting', () => {
+    expect(toList(Dev.Wouter, Dev.Jeroen, Dev.Naoufal, Dev.Jeroen, Dev.Naoufal, Dev.Wouter, Dev.Rob).distinctByKey('id')).toEqual(
+      toList(Dev.Wouter, Dev.Jeroen, Dev.Naoufal, Dev.Rob)
+    );
   });
 
   test('distinct by value', () => {
