@@ -331,6 +331,14 @@ describe('List', () => {
     expect(devs.intersectBy(managers, (d, m) => d.name === m.firstName)).toHaveLength(2);
   });
 
+  test('byKey', () => {
+    const l = toList<{name: string, grade: number}>({name: 'Jeroen', grade: 10}, {name: 'Naoufal', grade: 9});
+    expect(l.byKey('grade', 9).name).toBe('Naoufal');
+    expect(devs.byKey('name', 'Jeroen')).toBe(Dev.Jeroen);
+    expect(devs.byKey(undefined as unknown as keyof Dev, 10)).toBeUndefined();
+    expect(devs.byKey('name', undefined as unknown as string)).toBeUndefined();
+  });
+
   test('none should return true on an empty list', () => {
     const input = new List();
     expect(input.none(i => i === true)).toBeTruthy();

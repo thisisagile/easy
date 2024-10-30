@@ -172,6 +172,10 @@ export class List<T = unknown> extends Array<T> {
     return this.first(i => asString((i as any).id) === asString(id));
   }
 
+  byKey(key: keyof T, value: T[keyof T]): T {
+    return this.first(i => i[key] == value);
+  }
+
   add(...items: ArrayLike<T>): this {
     super.push(...toArray(...items));
     return this;
