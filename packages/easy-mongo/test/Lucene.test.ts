@@ -95,6 +95,11 @@ describe('Lucene', () => {
     expect(d).toStrictEqual({ range: { path: 'size', gte: 41, lt: 52 } });
   });
 
+  test('between with inclusion of upper limit', () => {
+    const d = between(41, 52, true)('size');
+    expect(d).toStrictEqual({ range: { path: 'size', gte: 41, lte: 52 } });
+  });
+
   test('between with dates', () => {
     const d = between(date, date2)('start');
     expect(d).toStrictEqual({ range: { path: 'start', gte: new Date(date), lt: new Date(date2) } });

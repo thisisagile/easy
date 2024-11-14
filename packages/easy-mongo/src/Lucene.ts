@@ -37,7 +37,14 @@ export type SearchDefinition = Record<
   (
     v: string | number,
     q?: Record<string, string | number>
-  ) => RequireAtLeastOne<{ should?: Clauses; filter?: Clauses; must?: Clauses; mustNot?: Clauses; sort?: Record<string, 1 | -1>; facet?: Facet }>
+  ) => RequireAtLeastOne<{
+    should?: Clauses;
+    filter?: Clauses;
+    must?: Clauses;
+    mustNot?: Clauses;
+    sort?: Record<string, 1 | -1>;
+    facet?: Facet;
+  }>
 >;
 
 type Compound = {
@@ -65,7 +72,11 @@ export const lucene = {
         must: must(query, def),
       }).filter(([_, v]) => v.length > 0),
       e => e.reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), should(query, def).length > 0 ? { minimumShouldMatch: 1 } : ({} as any)),
-      () => ifTrue(wildcard, () => ({ should: lucene.clauses([{ wildcard: lucene.wildcard() }]), minimumShouldMatch: 0 }))
+      () =>
+        ifTrue(wildcard, () => ({
+          should: lucene.clauses([{ wildcard: lucene.wildcard() }]),
+          minimumShouldMatch: 0,
+        }))
     ),
   search: (c: Partial<Compound>, index?: string) => ({
     $search: {
@@ -78,7 +89,12 @@ export const lucene = {
       .mapDefined(([k, v]) => options[k]?.(v, query)?.sort)
       .first();
     return {
-      $search: { ...ifDefined(index, { index }), compound: lucene.compound(query, options), ...ifDefined(sort, { sort }), count: { type: count } },
+      $search: {
+        ...ifDefined(index, { index }),
+        compound: lucene.compound(query, options),
+        ...ifDefined(sort, { sort }),
+        count: { type: count },
+      },
     };
   },
   searchMeta: (query: Record<string, string | number>, def: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => ({
@@ -138,14 +154,17 @@ export const lucene = {
   after: (date: unknown): Operator => lucene.gte(toMongoType(date)),
   before: (date: unknown): Operator => lucene.lt(toMongoType(date)),
   between:
-    (after: unknown, before: unknown): Operator =>
-    (path: string) => ({
-      range: {
-        path,
-        gte: toMongoType(after),
-        lt: toMongoType(before),
-      },
-    }),
+    (after: unknown, before: unknown, includeLimit?: boolean): Operator =>
+    (path: string) => {
+      const upperLimit = includeLimit ? { lte: toMongoType(before) } : { lt: toMongoType(before) };
+      return {
+        range: {
+          path,
+          gte: toMongoType(after),
+          ...upperLimit,
+        },
+      };
+    },
   facets: (def: SearchDefinition) =>
     entries(def)
       .filter(([k, v]) => isDefined(v(k)?.facet))
