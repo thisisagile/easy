@@ -369,14 +369,14 @@ describe('View', () => {
     const v = view({ email: to(Email) });
     const c = v.from({ email: 'wouter@gmail.com' });
     expect(c.email).toBeInstanceOf(Email);
-    expect((c as any).email.value).toBe('wouter@gmail.com');
+    expect(c.email.value).toBe('wouter@gmail.com');
   });
 
   test('simples constructor', () => {
     const v = view({ turnover: to(Money) });
     const c = v.from({ turnover: { currency: 'EUR', value: 42 } });
     expect(c.turnover).toBeInstanceOf(Money);
-    expect((c.turnover as any).value).toBe(42);
+    expect(c.turnover.value).toBe(42);
   });
 
   test('typed simples', () => {

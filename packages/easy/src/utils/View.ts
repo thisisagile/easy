@@ -2,7 +2,7 @@ import { traverse } from './Traverse';
 import { ifDefined } from './If';
 import { Primitive } from '../types/Primitive';
 import { Constructor, isConstructor, use } from '../types/Constructor';
-import { asJson, json, Json } from '../types/Json';
+import { asJson, json } from '../types/Json';
 import { choose } from '../types/Case';
 import { isArray, isBoolean, isFunction, isString } from '../types/Is';
 import { meta } from '../types/Meta';
