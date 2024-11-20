@@ -256,20 +256,21 @@ export class List<T = unknown> extends Array<T> {
     return this.reduce((acc, _, index) => (index % chunkSize === 0 ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc), toList<List<T>>());
   }
 
-  update(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
-    return this.map((v, i, a) => (p(v, i, a) ? value : v));
+  update(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)): List<T> {
+    return this.map((v, i, a) => (p(v, i, a) ? ofGet<T>(val, v, i, a) : v));
   }
 
-  updateFirst(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
+  updateFirst(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)) {
     const index = this.findIndex(p);
-    return this.update((t, i) => p(t, i, this) && i == index, value)
+    return this.update((t, i) => p(t, i, this) && i == index, val);
   }
 
-  updateFirstById(id: Id, value: T): List<T> {
-    return this.updateFirst(i => asString((i as any)?.id) === asString(id), value);
+  updateFirstById(id: Id, val: T | ((v: T) => T)) {
+    return this.updateFirst(i => asString((i as any)?.id) === asString(id), val);
   }
-  updateById(id: Id, value: T): List<T> {
-    return this.update(i => asString((i as any)?.id) === asString(id), value);
+
+  updateById(id: Id, val: T | ((v: T) => T)) {
+    return this.update(i => asString((i as any)?.id) === asString(id), val);
   }
 }
 

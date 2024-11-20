@@ -859,6 +859,7 @@ describe('List.accumulate', () => {
 });
 
 describe('update', () => {
+
   test('update', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal);
     const updated = devs.update(d => d.id === Dev.Jeroen.id, Dev.Rob);
@@ -867,9 +868,32 @@ describe('update', () => {
     expect(updated[1].name).toBe('Naoufal');
   });
 
+  test('update with lamda as value', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal);
+    const updated = devs.update(
+      d => d.id === Dev.Jeroen.id,
+      d => d.update({ name: 'Rob' })
+    );
+    expect(updated).toHaveLength(2);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+  });
+
   test('update updates many', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
     const updated = devs.update(d => d.id === Dev.Jeroen.id, Dev.Rob);
+    expect(updated).toHaveLength(3);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+    expect(updated[2].name).toBe('Rob');
+  });
+
+  test('update updates many with lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const updated = devs.update(
+      d => d.id === Dev.Jeroen.id,
+      d => d.update({ name: 'Rob' })
+    );
     expect(updated).toHaveLength(3);
     expect(updated[0].name).toBe('Rob');
     expect(updated[1].name).toBe('Naoufal');
@@ -885,9 +909,33 @@ describe('update', () => {
     expect(updated[2].name).toBe('Jeroen');
   });
 
+  test('update with index and lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const updated = devs.update(
+      (d, i) => d.id === Dev.Jeroen.id && i < 1,
+      d => d.update({ name: 'Rob' })
+    );
+    expect(updated).toHaveLength(3);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+    expect(updated[2].name).toBe('Jeroen');
+  });
+
   test('update first', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
     const updated = devs.updateFirst(d => d.id === Dev.Jeroen.id, Dev.Rob);
+    expect(updated).toHaveLength(3);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+    expect(updated[2].name).toBe('Jeroen');
+  });
+
+  test('update first with lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const updated = devs.updateFirst(
+      d => d.id === Dev.Jeroen.id,
+      d => d.update({ name: 'Rob' })
+    );
     expect(updated).toHaveLength(3);
     expect(updated[0].name).toBe('Rob');
     expect(updated[1].name).toBe('Naoufal');
@@ -902,6 +950,14 @@ describe('update', () => {
     expect(updated[1].name).toBe('Naoufal');
   });
 
+  test('update by id with lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal);
+    const updated = devs.updateById(Dev.Jeroen.id, d => d.update({ name: 'Rob' }));
+    expect(updated).toHaveLength(2);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+  });
+
   test('update updates by id', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
     const updated = devs.updateById(Dev.Jeroen.id, Dev.Rob);
@@ -911,9 +967,27 @@ describe('update', () => {
     expect(updated[2].name).toBe('Rob');
   });
 
+  test('update updates by id with lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const updated = devs.updateById(Dev.Jeroen.id, d => d.update({ name: 'Rob' }));
+    expect(updated).toHaveLength(3);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+    expect(updated[2].name).toBe('Rob');
+  });
+
   test('update first by id', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
     const updated = devs.updateFirstById(Dev.Jeroen.id, Dev.Rob);
+    expect(updated).toHaveLength(3);
+    expect(updated[0].name).toBe('Rob');
+    expect(updated[1].name).toBe('Naoufal');
+    expect(updated[2].name).toBe('Jeroen');
+  });
+
+  test('update first by id with lambda', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const updated = devs.updateFirstById(Dev.Jeroen.id, d => d.update({ name: 'Rob' }));
     expect(updated).toHaveLength(3);
     expect(updated[0].name).toBe('Rob');
     expect(updated[1].name).toBe('Naoufal');

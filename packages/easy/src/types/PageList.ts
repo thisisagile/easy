@@ -172,20 +172,20 @@ export class PageList<T> extends List<T> {
     return toPageList(super.slice(start, end), this);
   }
 
-  update(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
-    return toPageList(super.update(p, value), this);
+  update(p: (value: T, index: number, array: T[]) => unknown, val: T |  ((v: T) => T) ): PageList<T> {
+    return toPageList(super.update(p, val), this);
   }
 
-  updateFirst(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
-    return toPageList(super.updateFirst(p, value), this);
+  updateFirst(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)): PageList<T> {
+    return toPageList(super.updateFirst(p, val), this);
   }
 
-  updateFirstById(id: Id, value: T): List<T> {
-    return toPageList(super.updateFirstById(id, value), this);
+  updateFirstById(id: Id, val: T | ((v: T) => T)): PageList<T> {
+    return toPageList(super.updateFirstById(id, val), this);
   }
 
-  updateById(id: Id, value: T): List<T> {
-    return toPageList(super.updateById(id, value), this);
+  updateById(id: Id, val: T | ((v: T) => T)): PageList<T> {
+    return toPageList(super.updateById(id, val), this);
   }
 
   private setPageOptions(options?: PageListOptions): this {
