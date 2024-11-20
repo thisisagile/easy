@@ -1,7 +1,6 @@
 import '@thisisagile/easy-test';
 import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
-import exp from 'node:constants';
 
 describe('PageList', () => {
   const allDevs = toPageList(Dev.All, { total: 42 });
@@ -180,6 +179,69 @@ describe('PageList', () => {
       const acc = toPageList(data, { total: 5 }).accumulate('app', 'website');
       acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
       expect(acc.total).toBe(5);
+    });
+  });
+
+  describe('update', () => {
+    test('update', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal]);
+      const upd = ds.update(d => d.id === Dev.Jeroen.id, Dev.Rob);
+      expect(upd).toHaveLength(2);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+    });
+
+    test('update updates many', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal, Dev.Jeroen]);
+      const upd = ds.update(d => d.id === Dev.Jeroen.id, Dev.Rob);
+      expect(upd).toHaveLength(3);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+      expect(upd[2].name).toBe('Rob');
+    });
+
+    test('update with index', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal, Dev.Jeroen]);
+      const upd = ds.update((d, i) => d.id === Dev.Jeroen.id && i < 1, Dev.Rob);
+      expect(upd).toHaveLength(3);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+      expect(upd[2].name).toBe('Jeroen');
+    });
+
+    test('update first', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal, Dev.Jeroen]);
+      const upd = ds.updateFirst(d => d.id === Dev.Jeroen.id, Dev.Rob);
+      expect(upd).toHaveLength(3);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+      expect(upd[2].name).toBe('Jeroen');
+    });
+
+    test('update by id', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal]);
+      const upd = ds.updateById(Dev.Jeroen.id, Dev.Rob);
+      expect(upd).toHaveLength(2);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+    });
+
+    test('update updates by id', () => {
+      const ds = toPageList([Dev.Jeroen, Dev.Naoufal, Dev.Jeroen]);
+      const upd = ds.updateById(Dev.Jeroen.id, Dev.Rob);
+      expect(upd).toHaveLength(3);
+      expect(upd[0].name).toBe('Rob');
+      expect(upd[1].name).toBe('Naoufal');
+      expect(upd[2].name).toBe('Rob');
+    });
+
+    test('update first by id', () => {
+      const devs = toPageList([Dev.Jeroen, Dev.Naoufal, Dev.Jeroen]);
+      const updated = devs.updateFirstById(Dev.Jeroen.id, Dev.Rob);
+      expect(updated).toHaveLength(3);
+      expect(updated[0].name).toBe('Rob');
+      expect(updated[1].name).toBe('Naoufal');
+      expect(updated[2].name).toBe('Jeroen');
     });
   });
 });

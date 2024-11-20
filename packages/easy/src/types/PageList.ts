@@ -7,6 +7,7 @@ import { ArrayLike } from './Array';
 import { Optional } from './Types';
 import { isNumber } from './Is';
 import { choose } from './Case';
+import type { Id } from './Id';
 
 export type FilterValue = { label?: string; value: any };
 export type Filter = { label?: string; field: string; shortField?: string; values: FilterValue[] };
@@ -169,6 +170,22 @@ export class PageList<T> extends List<T> {
 
   slice(start?: number, end?: number): PageList<T> {
     return toPageList(super.slice(start, end), this);
+  }
+
+  update(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
+    return toPageList(super.update(p, value), this);
+  }
+
+  updateFirst(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
+    return toPageList(super.updateFirst(p, value), this);
+  }
+
+  updateFirstById(id: Id, value: T): List<T> {
+    return toPageList(super.updateFirstById(id, value), this);
+  }
+
+  updateById(id: Id, value: T): List<T> {
+    return toPageList(super.updateById(id, value), this);
   }
 
   private setPageOptions(options?: PageListOptions): this {

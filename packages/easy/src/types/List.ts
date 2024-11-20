@@ -255,6 +255,22 @@ export class List<T = unknown> extends Array<T> {
   chunk(chunkSize: number): List<List<T>> {
     return this.reduce((acc, _, index) => (index % chunkSize === 0 ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc), toList<List<T>>());
   }
+
+  update(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
+    return this.map((v, i, a) => (p(v, i, a) ? value : v));
+  }
+
+  updateFirst(p: (value: T, index: number, array: T[]) => unknown, value: T): List<T> {
+    const index = this.findIndex(p);
+    return this.update((t, i) => p(t, i, this) && i == index, value)
+  }
+
+  updateFirstById(id: Id, value: T): List<T> {
+    return this.updateFirst(i => asString((i as any)?.id) === asString(id), value);
+  }
+  updateById(id: Id, value: T): List<T> {
+    return this.update(i => asString((i as any)?.id) === asString(id), value);
+  }
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
