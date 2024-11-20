@@ -14,8 +14,9 @@ import { DontInfer } from '../types/Types';
 type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
 
-type ViewType = Primitive | Constructor | Func | View | undefined;
-type ViewRecord<V = Json> = Partial<Record<keyof V, ViewType>>;
+type ViewType<V = any> = Primitive | Constructor | Func | View<V> | undefined;
+// type ViewRecord<V = Json> = Partial<Record<keyof V, ViewType>>;
+type ViewRecord<V = any> = Partial<{ [P in keyof V]: ViewType<V[P]>  }>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
@@ -47,7 +48,7 @@ const toViewers = (views: ViewRecord): Viewer[] =>
     .entries<ViewType>()
     .map(([k, v]) => toViewer(k, v));
 
-export class View<V = Json> {
+export class View<V = any> {
   constructor(
     private views = {} as ViewRecord<V>,
     readonly startsFrom: 'scratch' | 'source' = 'scratch',
@@ -80,7 +81,7 @@ export class View<V = Json> {
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;
 
-export const view = <V = Json>(views: ViewRecord<DontInfer<V>>): View<V> => new View<V>(views);
+export const view = <V = any>(views: ViewRecord<DontInfer<V>>): View<V> => new View<V>(views);
 
 export const views = {
   ignore,

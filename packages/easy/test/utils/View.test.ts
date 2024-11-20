@@ -1,5 +1,20 @@
 import '@thisisagile/easy-test';
-import { asNumber, Constructor, isList, isPageList, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
+import {
+  asNumber,
+  Constructor,
+  isList,
+  isPageList,
+  Json,
+  required,
+  Struct,
+  toList,
+  toPageList,
+  traverse,
+  Value,
+  view,
+  View,
+  views,
+} from '../../src';
 import { Dev } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
@@ -388,4 +403,5 @@ describe('View', () => {
     const s = toStudent.from({ id: 3, loan: 3, name: 'Sander' });
     expect(s).toMatchJson({ id: 3, loan: 3000, name: 'Sander Hoogendoorn' });
   });
+
 });
