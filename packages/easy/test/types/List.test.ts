@@ -859,7 +859,6 @@ describe('List.accumulate', () => {
 });
 
 describe('update', () => {
-
   test('update', () => {
     const devs = toList(Dev.Jeroen, Dev.Naoufal);
     const updated = devs.update(d => d.id === Dev.Jeroen.id, Dev.Rob);
@@ -992,5 +991,15 @@ describe('update', () => {
     expect(updated[0].name).toBe('Rob');
     expect(updated[1].name).toBe('Naoufal');
     expect(updated[2].name).toBe('Jeroen');
+  });
+
+  test('type checker allows narrowing of type', () => {
+    type Animal = { name: string; age: number };
+    type Cat = Animal & { meow: boolean };
+
+    const cats = toList<Cat>();
+    const animalHandler = (a: List<Animal>) => a;
+
+    expect(animalHandler(cats)).toBe(cats);
   });
 });

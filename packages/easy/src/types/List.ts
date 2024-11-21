@@ -256,20 +256,21 @@ export class List<T = unknown> extends Array<T> {
     return this.reduce((acc, _, index) => (index % chunkSize === 0 ? on(acc, a => a.push(this.slice(index, index + chunkSize))) : acc), toList<List<T>>());
   }
 
-  update(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)): List<T> {
+  //we needed to add U because of a Typescript issue with generics
+  update<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)): List<T> {
     return this.map((v, i, a) => (p(v, i, a) ? ofGet<T>(val, v, i, a) : v));
   }
 
-  updateFirst(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)) {
+  updateFirst<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)) {
     const index = this.findIndex(p);
     return this.update((t, i) => p(t, i, this) && i == index, val);
   }
 
-  updateFirstById(id: Id, val: T | ((v: T) => T)) {
+  updateFirstById<U = T>(id: Id, val: T | ((v: U) => T)) {
     return this.updateFirst(i => asString((i as any)?.id) === asString(id), val);
   }
 
-  updateById(id: Id, val: T | ((v: T) => T)) {
+  updateById<U = T>(id: Id, val: T | ((v: U) => T)) {
     return this.update(i => asString((i as any)?.id) === asString(id), val);
   }
 }

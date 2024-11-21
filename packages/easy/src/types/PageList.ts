@@ -172,19 +172,20 @@ export class PageList<T> extends List<T> {
     return toPageList(super.slice(start, end), this);
   }
 
-  update(p: (value: T, index: number, array: T[]) => unknown, val: T |  ((v: T) => T) ): PageList<T> {
+  //we needed to add U because of a Typescript issue with generics
+  update<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)): PageList<T> {
     return toPageList(super.update(p, val), this);
   }
 
-  updateFirst(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: T) => T)): PageList<T> {
+  updateFirst<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)): PageList<T> {
     return toPageList(super.updateFirst(p, val), this);
   }
 
-  updateFirstById(id: Id, val: T | ((v: T) => T)): PageList<T> {
+  updateFirstById<U = T>(id: Id, val: T | ((v: U) => T)): PageList<T> {
     return toPageList(super.updateFirstById(id, val), this);
   }
 
-  updateById(id: Id, val: T | ((v: T) => T)): PageList<T> {
+  updateById<U = T>(id: Id, val: T | ((v: U) => T)): PageList<T> {
     return toPageList(super.updateById(id, val), this);
   }
 
