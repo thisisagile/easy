@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asNumber, Constructor, isList, isPageList, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
+import { asNumber, Constructor, isList, isPageList, List, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
 import { Dev } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
@@ -126,6 +126,22 @@ describe('View', () => {
     const toCompany = view<Company>({ name: views.keep, CEO: toEmployee });
     const s = toCompany.from({ name: 'iBOOD', CEO: { name: 'Sander' } });
     expect(s).toStrictEqual({ name: 'iBOOD', CEO: { name: 'Sander', function: 'CEO' } });
+  });
+
+  test('view in view with list', () => {
+    type Employee = { name: string; function?: string };
+    type Company = { name: string; CEOs: List<Employee> };
+
+    const toEmployee = view<Employee>({ name: views.keep, function: views.value('CEO') });
+    const toCompany = view<Company>({ name: views.keep, CEOs: toEmployee });
+    const s = toCompany.from({ name: 'iBOOD', CEOs: toList<Employee>({ name: 'Sander' }, { name: 'Rogier' }) });
+    expect(s).toStrictEqual({
+      name: 'iBOOD',
+      CEOs: [
+        { name: 'Sander', function: 'CEO' },
+        { name: 'Rogier', function: 'CEO' },
+      ],
+    });
   });
 
   test('simple', () => {

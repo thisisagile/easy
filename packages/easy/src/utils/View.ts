@@ -15,8 +15,7 @@ type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
 
 type ViewType<V = any> = Primitive | Constructor | Func | View<V> | undefined;
-// type ViewRecord<V = Json> = Partial<Record<keyof V, ViewType>>;
-type ViewRecord<V = any> = Partial<{ [P in keyof V]: ViewType<V[P]>  }>;
+type ViewRecord<V = any> = Partial<Record<keyof V, ViewType>>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
