@@ -71,7 +71,7 @@ export class PageList<T> extends List<T> {
     return toPageList(super.diff(others), this);
   }
 
-  diffByKey(others: ArrayLike<T>, key: keyof T): PageList<T> {
+  diffByKey<U = T>(others: ArrayLike<U>, key: keyof T & keyof U): PageList<T> {
     return toPageList(super.diffByKey(others, key), this);
   }
 

@@ -74,7 +74,7 @@ export class List<T = unknown> extends Array<T> {
     return this.filter(i => !others.includes(i));
   }
 
-  diffByKey(others: ArrayLike<T>, key: keyof T): List<T> {
+  diffByKey<U = T>(others: ArrayLike<U>, key: keyof T & keyof U): List<T> {
     return this.filter((i: any) => !others.some((o: any) => o[key] === i[key]));
   }
 

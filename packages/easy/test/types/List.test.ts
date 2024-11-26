@@ -993,13 +993,21 @@ describe('update', () => {
     expect(updated[2].name).toBe('Jeroen');
   });
 
-  test('type checker allows narrowing of type', () => {
-    type Animal = { name: string; age: number };
-    type Cat = Animal & { meow: boolean };
+  type Animal = { name: string; age: number };
 
+  test('type checker allows narrowing of type', () => {
+    type Cat = Animal & { meow: boolean };
     const cats = toList<Cat>();
     const animalHandler = (a: List<Animal>) => a;
 
     expect(animalHandler(cats)).toBe(cats);
+  });
+
+  test('diffByKey works with different types', () => {
+    const devs = toList(Dev.Naoufal, Dev.Jeroen);
+    const a = toList<Animal>({ name: 'Naoufal', age: 42 });
+    const diff = devs.diffByKey(a, 'name');
+    expect(diff).toHaveLength(1);
+    expect(diff.first()).toBe(Dev.Jeroen);
   });
 });
