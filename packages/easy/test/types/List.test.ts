@@ -827,6 +827,15 @@ describe('asList', () => {
     expect(devs2).toHaveLength(2);
   });
 
+  test('ids', () => {
+    const ns = toList('Sander', 'Jeroen');
+    expect(ns.ids).toHaveLength(0);
+    const cs = toList({ name: 'Sander' }, { name: 'Jeroen' });
+    expect(cs.ids).toHaveLength(0);
+    const devs = toList(Dev.Jeroen, Dev.Sander, Dev.Jeroen, Dev.Rob, Dev.Sander, Dev.Jeroen);
+    expect(devs.ids.join(',')).toBe('1,3,1,5,3,1');
+  });
+
   test('chunk', () => {
     const devs = toList(Dev.Jeroen, Dev.Sander, Dev.Wouter, Dev.Rob, Dev.RobC, Dev.Eugen, Dev.Naoufal);
     const devs2 = devs.chunk(2);

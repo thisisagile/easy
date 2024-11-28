@@ -10,6 +10,10 @@ import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
 export class List<T = unknown> extends Array<T> {
+  get ids(): List<Id> {
+    return this.mapDefined(i => (i as any).id as Id);
+  }
+
   isSubSetOf(...items: ArrayLike<T>): boolean {
     return this.diff(items).length === 0;
   }
