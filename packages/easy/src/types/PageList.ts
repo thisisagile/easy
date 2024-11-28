@@ -59,6 +59,10 @@ export class PageList<T> extends List<T> {
     };
   }
 
+  get ids(): PageList<Id> {
+    return this.mapDefined(i => (i as any).id as Id);
+  }
+
   asc(p: GetProperty<T, any>): PageList<T> {
     return toPageList(super.asc(p), this);
   }

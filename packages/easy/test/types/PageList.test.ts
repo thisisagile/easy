@@ -244,4 +244,13 @@ describe('PageList', () => {
       expect(updated[2].name).toBe('Jeroen');
     });
   });
+
+  test('ids', () => {
+    const ns = toPageList(['Sander', 'Jeroen']);
+    expect(ns.ids).toHaveLength(0);
+    const cs = toPageList([{ name: 'Sander' }, { name: 'Jeroen' }]);
+    expect(cs.ids).toHaveLength(0);
+    const devs = toPageList([Dev.Jeroen, Dev.Sander, Dev.Jeroen, Dev.Rob, Dev.Sander, Dev.Jeroen]);
+    expect(devs.ids.join(',')).toBe('1,3,1,5,3,1');
+  });
 });
