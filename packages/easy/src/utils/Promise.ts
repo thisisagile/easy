@@ -19,6 +19,13 @@ export const tuple = {
   all: <F, S>(first: Pro<F>, second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(second)]),
   spread: <F, S>(first: Pro<F>, ...second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(toArray(second))]),
   list: <T>(list: Pro<T>[]): Promise<List<Aw<T>>> => Promise.all([...list]).then(toList),
+  serial: async <T>(list: Pro<T>[]): Promise<List<Aw<T>>> => {
+    const results = toList<Aw<T>>();
+    for (const p of list) {
+      results.push(await p);
+    }
+    return results;
+  },
   settled: <T>(list: Pro<T>[]): Promise<{ fulfilled: List<Aw<T>>; rejected: List<string> }> =>
     Promise.allSettled([...list]).then(rs => ({
       fulfilled: toList(...rs.filter(r => r.status === 'fulfilled').map(r => r.value)),
