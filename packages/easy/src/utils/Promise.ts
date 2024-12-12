@@ -2,7 +2,6 @@ import { toArray } from '../types/Array';
 import { ErrorOrigin } from '../types/ErrorOrigin';
 import { List, toList } from '../types/List';
 import { asString } from '../types/Text';
-import { on } from '../types/Constructor';
 
 type Pro<A> = A | PromiseLike<A>;
 type Aw<A> = Awaited<A>;
