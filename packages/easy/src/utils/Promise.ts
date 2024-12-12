@@ -2,6 +2,7 @@ import { toArray } from '../types/Array';
 import { ErrorOrigin } from '../types/ErrorOrigin';
 import { List, toList } from '../types/List';
 import { asString } from '../types/Text';
+import { on } from '../types/Constructor';
 
 type Pro<A> = A | PromiseLike<A>;
 type Aw<A> = Awaited<A>;
@@ -19,13 +20,6 @@ export const tuple = {
   all: <F, S>(first: Pro<F>, second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(second)]),
   spread: <F, S>(first: Pro<F>, ...second: Pro<S>[]): Promise<[Aw<F>, Aw<S[]>]> => Promise.all([first, Promise.all(toArray(second))]),
   list: <T>(list: Pro<T>[]): Promise<List<Aw<T>>> => Promise.all([...list]).then(toList),
-  serial: async <T>(list: Pro<T>[]): Promise<List<Aw<T>>> => {
-    const results = toList<Aw<T>>();
-    for (const p of list) {
-      results.push(await p);
-    }
-    return results;
-  },
   settled: <T>(list: Pro<T>[]): Promise<{ fulfilled: List<Aw<T>>; rejected: List<string> }> =>
     Promise.allSettled([...list]).then(rs => ({
       fulfilled: toList(...rs.filter(r => r.status === 'fulfilled').map(r => r.value)),

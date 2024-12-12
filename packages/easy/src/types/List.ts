@@ -136,6 +136,10 @@ export class List<T = unknown> extends Array<T> {
     return Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
   }
 
+  mapSerial<U>(f: (i: T) => Promise<U>): Promise<List<U>> {
+    return super.reduce((p, item) => p.then(results => on(results, async r => r.push(await f(item)))), Promise.resolve(toList<U>()));
+  }
+
   distinct(): List<T> {
     return this.filter((i, index) => this.indexOf(i) === index);
   }

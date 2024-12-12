@@ -81,6 +81,13 @@ describe('List', () => {
     await expect(devs.mapAsync(d => hello(d))).rejects.toBe('error');
   });
 
+  test('mapSerial success', async () => {
+    const hello = (d: Dev): Promise<Dev> => resolve(d);
+    const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
+
+    await expect(devs.mapSerial(d => hello(d))).resolves.toMatchText(devs);
+  });
+
   test('filter', () => {
     const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]).filter(d => d.name.includes('a'));
     expect(devs).toBeInstanceOf(List);

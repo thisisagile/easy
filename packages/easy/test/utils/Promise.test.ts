@@ -133,13 +133,6 @@ describe('tuple', () => {
     expect(res.rejected[0]).toBe('DoesNotExist');
   });
 
-  test('tuple.serial', async () => {
-    let str = '';
-    const p1 = resolve(1).then(() => (str += 'a'));
-    const p2 = resolve(1).then(() => (str += 'b'));
-    await expect(tuple.serial([p1, p2])).resolves.toStrictEqual(toList('a', 'ab'));
-  });
-
   test.each([undefined, null, toList()])('tuple settled on empty list', async a => {
     const res = await settled([a] as any);
     expect(res.fulfilled).toHaveLength(0);
