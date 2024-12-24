@@ -66,10 +66,30 @@ describe('Object', () => {
     expect(address).toEqual({ ...target, name: undefined, address: undefined });
   });
 
+  type Person = { id: number; accountId?: string };
+
+  test('extractKeys multiple where some are undefined but with valid value', () => {
+    const p = { id: 42 } as Person;
+    const [person, rest] = extractKeys(p, ['id']);
+    expect(person).toEqual({ id: 42 });
+    expect((person as any).accountId).toBeUndefined();
+    expect(rest).toEqual({});
+  });
+
+  test('extractKeys multiple where some are undefined, and should not be in the new object', () => {
+    const p = { id: 42 } as Person;
+    const [person, rest] = extractKeys(p, ['accountId']);
+    expect(person).toEqual({});
+    expect(rest).toEqual({ id: 42 });
+    expect((rest as any).accountId).toBeUndefined();
+  });
+
   test('extractKeys multiple from const', () => {
     const keys = ['name', 'address'] as const;
     const [person, address] = extractKeys(target, keys);
     expect(person).toEqual({ name: target.name, address: target.address });
     expect(address).toEqual({ ...target, name: undefined, address: undefined });
+    expect((address as any).name).toBeUndefined();
+    expect(Object.keys(address).join(',')).toBe('id,full');
   });
 });
