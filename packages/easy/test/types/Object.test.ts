@@ -42,26 +42,33 @@ describe('Object', () => {
     expect(keys(target)).toContain('name');
   });
 
-  test('separate simple', () => {
+  test('extractKeys simple', () => {
     const [p, a] = extractKeys({ id: 42, name: 'Sander' }, ['id']);
     expect(p).toEqual({ id: 42 });
     expect(a).toEqual({ name: 'Sander' });
   });
 
-  test('separate empty', () => {
+  test('extractKeys empty', () => {
     const [p, a] = extractKeys(target, []);
     expect(p).toEqual({});
     expect(a).toEqual(target);
   });
 
-  test('separate single', () => {
+  test('extractKeys single', () => {
     const [p, a] = extractKeys(target, ['name']);
     expect(p).toEqual({ name: target.name });
     expect(a).toEqual({ ...target, name: undefined });
   });
 
-  test('separate multiple', () => {
+  test('extractKeys multiple', () => {
     const [person, address] = extractKeys(target, ['name', 'address']);
+    expect(person).toEqual({ name: target.name, address: target.address });
+    expect(address).toEqual({ ...target, name: undefined, address: undefined });
+  });
+
+  test('extractKeys multiple from const', () => {
+    const keys = ['name', 'address'] as const;
+    const [person, address] = extractKeys(target, keys);
     expect(person).toEqual({ name: target.name, address: target.address });
     expect(address).toEqual({ ...target, name: undefined, address: undefined });
   });
