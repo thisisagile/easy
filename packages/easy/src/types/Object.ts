@@ -21,7 +21,7 @@ export function keys<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>): L
 
 export function extractKeys<T extends object, K extends keyof T>(
   obj: T,
-  keys: K[] | readonly (string | number)[]
+  keys: K[] | readonly (keyof T)[]
 ): {
   keys: Pick<T, K>;
 } & Omit<T, K> {
