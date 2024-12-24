@@ -1,4 +1,4 @@
-import { entries, keys, values } from '../../src';
+import { entries, extractKeys, keys, values } from '../../src';
 
 const target = {
   id: 42,
@@ -21,8 +21,6 @@ const target = {
   full: () => `John F. Doe`,
 };
 
-class Person {}
-
 describe('Object', () => {
   test('entries', () => {
     expect(entries({})).toHaveLength(0);
@@ -42,5 +40,29 @@ describe('Object', () => {
     expect(keys(target)).toHaveLength(4);
     expect(keys(target)).toContain('id');
     expect(keys(target)).toContain('name');
+  });
+
+  test('separate simple', () => {
+    const [p, a] = extractKeys({ id: 42, name: 'Sander' }, ['id']);
+    expect(p).toEqual({ id: 42 });
+    expect(a).toEqual({ name: 'Sander' });
+  });
+
+  test('separate empty', () => {
+    const [p, a] = extractKeys(target, []);
+    expect(p).toEqual({});
+    expect(a).toEqual(target);
+  });
+
+  test('separate single', () => {
+    const [p, a] = extractKeys(target, ['name']);
+    expect(p).toEqual({ name: target.name });
+    expect(a).toEqual({ ...target, name: undefined });
+  });
+
+  test('separate multiple', () => {
+    const [person, address] = extractKeys(target, ['name', 'address']);
+    expect(person).toEqual({ name: target.name, address: target.address });
+    expect(address).toEqual({ ...target, name: undefined, address: undefined });
   });
 });
