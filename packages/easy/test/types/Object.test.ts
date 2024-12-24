@@ -43,53 +43,53 @@ describe('Object', () => {
   });
 
   test('extractKeys simple', () => {
-    const [p, a] = extractKeys({ id: 42, name: 'Sander' }, ['id']);
-    expect(p).toEqual({ id: 42 });
-    expect(a).toEqual({ name: 'Sander' });
+    const { keys, ...rest } = extractKeys({ id: 42, name: 'Sander' }, ['id']);
+    expect(keys).toEqual({ id: 42 });
+    expect(rest).toEqual({ name: 'Sander' });
   });
 
   test('extractKeys empty', () => {
-    const [p, a] = extractKeys(target, []);
-    expect(p).toEqual({});
-    expect(a).toEqual(target);
+    const { keys, ...rest } = extractKeys(target, []);
+    expect(keys).toEqual({});
+    expect(rest).toEqual(target);
   });
 
   test('extractKeys single', () => {
-    const [p, a] = extractKeys(target, ['name']);
-    expect(p).toEqual({ name: target.name });
-    expect(a).toEqual({ ...target, name: undefined });
+    const { keys, ...rest } = extractKeys(target, ['name']);
+    expect(keys).toEqual({ name: target.name });
+    expect(rest).toEqual({ ...target, name: undefined });
   });
 
   test('extractKeys multiple', () => {
-    const [person, address] = extractKeys(target, ['name', 'address']);
-    expect(person).toEqual({ name: target.name, address: target.address });
-    expect(address).toEqual({ ...target, name: undefined, address: undefined });
+    const { keys, ...rest } = extractKeys(target, ['name', 'address']);
+    expect(keys).toEqual({ name: target.name, address: target.address });
+    expect(rest).toEqual({ ...target, name: undefined, address: undefined });
   });
 
   type Person = { id: number; accountId?: string };
 
   test('extractKeys multiple where some are undefined but with valid value', () => {
     const p = { id: 42 } as Person;
-    const [person, rest] = extractKeys(p, ['id']);
-    expect(person).toEqual({ id: 42 });
-    expect((person as any).accountId).toBeUndefined();
+    const { keys, ...rest } = extractKeys(p, ['id']);
+    expect(keys).toEqual({ id: 42 });
+    expect((keys as any).accountId).toBeUndefined();
     expect(rest).toEqual({});
   });
 
   test('extractKeys multiple where some are undefined, and should not be in the new object', () => {
     const p = { id: 42 } as Person;
-    const [person, rest] = extractKeys(p, ['accountId']);
-    expect(person).toEqual({});
+    const { keys, ...rest } = extractKeys(p, ['accountId']);
+    expect(keys).toEqual({});
     expect(rest).toEqual({ id: 42 });
     expect((rest as any).accountId).toBeUndefined();
   });
 
   test('extractKeys multiple from const', () => {
-    const keys = ['name', 'address'] as const;
-    const [person, address] = extractKeys(target, keys);
-    expect(person).toEqual({ name: target.name, address: target.address });
-    expect(address).toEqual({ ...target, name: undefined, address: undefined });
-    expect((address as any).name).toBeUndefined();
-    expect(Object.keys(address).join(',')).toBe('id,full');
+    const ks = ['name', 'address'] as const;
+    const { keys, ...rest } = extractKeys(target, ks);
+    expect(keys).toEqual({ name: target.name, address: target.address });
+    expect(rest).toEqual({ ...target, name: undefined, address: undefined });
+    expect((rest as any).name).toBeUndefined();
+    expect(Object.keys(rest).join(',')).toBe('id,full');
   });
 });

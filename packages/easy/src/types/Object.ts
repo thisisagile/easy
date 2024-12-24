@@ -19,15 +19,20 @@ export function keys<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>): L
   return toList([...Object.keys(subject), ...Object.keys(Object.getPrototypeOf(subject))]);
 }
 
-export function extractKeys<T extends object, K extends keyof T>(obj: T, keys: K[] | readonly (string | number)[]): [Pick<T, K>, Omit<T, K>] {
+export function extractKeys<T extends object, K extends keyof T>(
+  obj: T,
+  keys: K[] | readonly (string | number)[]
+): {
+  keys: Pick<T, K>;
+} & Omit<T, K> {
   return keys
     .filter((k): k is K => k in obj)
     .reduce(
       (acc, key) => {
-        (acc[0] as T)[key] = obj[key];
-        delete (acc[1] as T)[key];
+        (acc.keys as T)[key] = obj[key];
+        delete acc[key];
         return acc;
       },
-      [{} as Pick<T, K>, { ...obj } as Omit<T, K>]
+      { keys: {} as Pick<T, K>, ...obj }
     );
 }
