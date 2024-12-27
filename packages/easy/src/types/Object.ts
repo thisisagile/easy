@@ -19,7 +19,7 @@ export function keys<T = unknown>(subject: { [p: string]: T } | ArrayLike<T>): L
   return toList([...Object.keys(subject), ...Object.keys(Object.getPrototypeOf(subject))]);
 }
 
-export function extractKeys<T extends object, K extends keyof T>(
+export function extractKeys<T extends Record<string | number, unknown>, K extends keyof T>(
   obj: T,
   keys: K[] | readonly (keyof T)[]
 ): {
