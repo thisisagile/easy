@@ -52,7 +52,7 @@ export class ToText implements Text {
   constructor(readonly subject: string) {}
 
   get cap(): ToText {
-    return this.map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase());
+    return this.map(s => capitalize(s?.toLowerCase()));
   }
 
   get capFirst(): ToText {
