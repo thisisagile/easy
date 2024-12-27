@@ -1,5 +1,5 @@
 import { List, toList } from './List';
-import { asString, replaceAll, Text } from './Text';
+import { asString, capitalize, replaceAll, Text } from './Text';
 import { toName } from './Constructor';
 import { Optional } from './Types';
 import { Get, ofGet } from './Get';
@@ -56,7 +56,7 @@ export class ToText implements Text {
   }
 
   get capFirst(): ToText {
-    return this.map(s => s.charAt(0).toUpperCase() + s.slice(1));
+    return this.map(s => capitalize(s));
   }
 
   get title(): ToText {
