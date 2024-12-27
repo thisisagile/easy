@@ -19,3 +19,5 @@ export const toWords = (input: unknown): string[] => {
 };
 
 export const kebab = (s = ''): string => toWords(s).join('-').toLowerCase();
+
+export const capitalize = (s = ''): string => s.charAt(0).toUpperCase() + s.slice(1);

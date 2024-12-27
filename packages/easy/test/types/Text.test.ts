@@ -1,4 +1,4 @@
-import { asString, isText, kebab, replaceAll, Text, text, toJson } from '../../src';
+import { asString, capitalize, isText, kebab, replaceAll, Text, text, toJson } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -109,5 +109,14 @@ describe('kebab', () => {
 
   test.each(cases)('to kebab "%s"', (t, exp) => {
     expect(kebab(t)).toBe(exp);
+  });
+
+  test('capitalize', () => {
+    expect(capitalize()).toBe('');
+    expect(capitalize('')).toBe('');
+    expect(capitalize('sander')).toBe('Sander');
+    expect(capitalize('Sander')).toBe('Sander');
+    expect(capitalize('SANder')).toBe('SANder');
+    expect(capitalize('sander de blauw')).toBe('Sander de blauw');
   });
 });
