@@ -41,9 +41,9 @@
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "@testing-library/dom": "^9.3.4",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@thisisagile/easy": "workspace:^",
     "@types/react": "^18.3.11",
     "react": "^18.3.1",

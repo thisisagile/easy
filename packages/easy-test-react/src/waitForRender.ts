@@ -1,5 +1,5 @@
-import { act, render, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
-import { ReactElement } from 'react';
+import { render, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
+import { act, ReactElement } from 'react';
 
 /* istanbul ignore next */
 export async function waitForRender(ui: ReactElement, options?: Omit<RenderOptions, 'queries'>): Promise<RenderResult> {
