@@ -42,7 +42,7 @@
   "dependencies": {
     "@jest/expect-utils": "^29.7.0",
     "@types/jest": "^29.5.14",
-    "@types/node": "^18.19.58",
+    "@types/node": "^20.17.11",
     "expect": "^29.7.0",
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
