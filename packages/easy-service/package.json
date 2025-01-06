@@ -34,8 +34,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@thisisagile/easy-test": "workspace:*",
-    "@types/jsonwebtoken": "^9.0.6"
+    "@thisisagile/easy-test": "workspace:*"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
