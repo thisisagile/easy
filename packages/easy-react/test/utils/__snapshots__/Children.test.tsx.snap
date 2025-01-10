@@ -23,11 +23,3 @@ exports[`Children renders correctly without children. 1`] = `
   </div>
 </div>
 `;
-
-exports[`Children renders correctly. 1`] = `
-<div>
-  <div>
-    0
-  </div>
-</div>
-`;
