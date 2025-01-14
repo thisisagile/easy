@@ -76,6 +76,16 @@ describe('isText', () => {
     expect(text('sander de blauw').capFirst).toMatchText('Sander de blauw');
   });
 
+  test('split', () => {
+    const sentence = text('This is true');
+    expect(text().split()).toEqual(['']);
+    expect(text('').split()).toEqual(['']);
+    expect(text({ name: 'Sander' }).split()).toEqual(['']);
+    expect(sentence.split()).toEqual(['This', 'is', 'true']);
+    expect(sentence.split(' ')).toEqual(['This', 'is', 'true']);
+    expect(sentence.split('i')).toEqual(['Th', 's ', 's true']);
+  });
+
   test('toJSON', () => {
     const name = text('Sander');
     const dev = { name };

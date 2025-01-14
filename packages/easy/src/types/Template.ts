@@ -169,6 +169,8 @@ export class ToText implements Text {
         .join(separator)
     );
 
+  split = (separator: string = ' '): List<string> => toList(this.subject.split(separator));
+
   toString(): string {
     return this.subject;
   }
