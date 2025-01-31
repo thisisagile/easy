@@ -36,7 +36,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "typescript": "^5.4.5",
+    "typescript": "^5.7.3",
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
