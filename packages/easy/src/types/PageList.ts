@@ -9,7 +9,7 @@ import { isNumber } from './Is';
 import { choose } from './Case';
 import type { Id } from './Id';
 
-export type FilterValue = { label?: string; value: any };
+export type FilterValue = { label?: string; value: any, count?: number };
 export type Filter = { label?: string; field: string; shortField?: string; values: FilterValue[] };
 
 export const toFilter = (field: string, value: any): Filter => toShortFilter(field, field, value);

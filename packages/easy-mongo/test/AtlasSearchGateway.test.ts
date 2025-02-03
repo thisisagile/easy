@@ -1,5 +1,5 @@
 import { AtlasSearchGateway, lucene, MongoProvider, SearchDefinition, stages } from '../src';
-import { FilterValue, resolve, toPageList } from '@thisisagile/easy';
+import { resolve, toPageList } from '@thisisagile/easy';
 import { DevCollection } from './ref/DevCollection';
 import { mock } from '@thisisagile/easy-test';
 
@@ -43,7 +43,7 @@ describe('AtlasSearchGateway', () => {
     expect(actual).toMatchJson(toPageList(results));
     expect(actual.options).toEqual({
       total: 55,
-      filters: [{ label: 'Language', field: 'language', values: [{ label: 'java', value: 'java', count: 42 } as FilterValue] }],
+      filters: [{ label: 'Language', field: 'language', values: [{ label: 'java', value: 'java', count: 42 }] }],
       sorts: [],
       skip: 12,
       take: 6,
