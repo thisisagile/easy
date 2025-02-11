@@ -3,7 +3,7 @@
 
 <a href="https://www.npmjs.com/package/@thisisagile/easy" target="_blank"><img src="https://img.shields.io/npm/v/@thisisagile/easy.svg" alt="npm version" /></a>
 <a href="https://www.npmjs.com/package/@thisisagile/easy" target="_blank"><img src="https://img.shields.io/npm/dm/@thisisagile/easy.svg" alt="npm downloads" /></a>
-<a href="https://github.com/thisisagile/easy/actions?query=workflow%3A%22pipeline%22"><img src="https://github.com/thisisagile/easy/workflows/pipeline/badge.svg?branch=main" alt="pipeline status" /></a>
+<a href="https://github.com/thisisagile/easy/actions/workflows/main.yml?query=branch%3Amain"><img src="https://github.com/thisisagile/easy/actions/workflows/main.yml/badge.svg" alt="pipeline status" /></a>
 <a href="https://sonarcloud.io/dashboard?id=thisisagile_easy" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=alert_status" alt="quality gate" /></a>
 <a href="https://github.com/semantic-release/semantic-release" target="_blank"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release" /></a>
 <a href="https://sonarcloud.io/dashboard?id=thisisagile_easy" target="_blank"><img src="https://sonarcloud.io/api/project_badges/measure?project=thisisagile_easy&metric=coverage" alt="coverage" /></a>
