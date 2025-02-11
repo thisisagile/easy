@@ -47,7 +47,7 @@
     "tsup": "^7.2.0",
     "typescript": "^5.7.3"
   },
-  "packageManager": "yarn@4.2.2",
+  "packageManager": "yarn@4.6.0",
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0"
