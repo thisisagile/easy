@@ -37,7 +37,7 @@
     "@thisisagile/easy-test": "workspace:*",
     "@types/cls-hooked": "^4.3.9",
     "@types/form-urlencoded": "^4.4.2",
-    "@types/jsonwebtoken": "^9.0.7",
+    "@types/jsonwebtoken": "^9.0.8",
     "@types/passport": "^1.0.17",
     "@types/passport-jwt": "^4.0.1",
     "@types/uuid": "^9.0.8",

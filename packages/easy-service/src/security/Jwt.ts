@@ -23,7 +23,7 @@ export class Jwt extends JwtBase implements Validatable {
       .map(key =>
         sign(token, key, {
           ...options,
-          expiresIn: ctx.env.get('tokenExpiresIn') ?? '1h',
+          expiresIn: ctx.env.get('tokenExpiresIn') as any ?? '1h',
           keyid: ctx.env.get('tokenKeyid') ?? 'easy',
           algorithm: ctx.env.get('tokenAlgorithm', 'RS256') as Algorithm,
         })
