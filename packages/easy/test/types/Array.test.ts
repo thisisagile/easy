@@ -264,6 +264,11 @@ describe('toObject', () => {
       expect(b).toMatchObject([2, 4, 6]);
     });
 
+    test('chunk empty', () => {
+      const [a] = array.chunk();
+      expect(a).toBeUndefined();
+    });
+
     test('chunk empty array', () => {
       const [a] = array.chunk([]);
       expect(a).toBeUndefined();
