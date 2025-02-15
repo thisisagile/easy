@@ -29,4 +29,10 @@ export const array = {
     items.forEach((i, index) => res[index % length].push(i));
     return res;
   },
+  chunk: <T>(items: T[] = [], length = 2): T[][] => {
+    const chunks = Math.ceil(items.length / length);
+    const res: T[][] = Array.from({ length: chunks }, () => []);
+    items.forEach((i, index) => res[Math.floor(index / chunks)].push(i));
+    return res;
+  },
 };

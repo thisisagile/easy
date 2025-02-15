@@ -257,5 +257,18 @@ describe('toObject', () => {
       expect(a).toHaveLength(1);
       expect(b).toHaveLength(1);
     });
+
+    test('split in is round robin?', () => {
+      const [a, b] = array.splitIn([1, 2, 3, 4, 5, 6, 7]);
+      expect(a).toMatchObject([1, 3, 5, 7]);
+      expect(b).toMatchObject([2, 4, 6]);
+    });
+
+    test('chunk in is round robin?', () => {
+      const [a, b, c] = array.chunk([1, 2, 3, 4, 5, 6, 7], 3);
+      expect(a).toMatchObject([1, 2, 3]);
+      expect(b).toMatchObject([4, 5, 6]);
+      expect(c).toMatchObject([7]);
+    });
   });
 });
