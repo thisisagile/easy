@@ -51,7 +51,7 @@ describe('Mapper', () => {
     expect(source).toStrictEqual({ city, Country });
   });
 
-  test('altered map  should return out', () => {
+  test('altered map should return out', () => {
     const scratch = new InheritedMapper().out({ city, Country });
     expect(scratch).toStrictEqual({ CityName });
     const source = new InheritedMapper({ startFrom: 'source' }).out({ city, Country });
@@ -265,5 +265,81 @@ describe('Mapper', () => {
       Company: { Name: 'Google', Website: site },
       StartUp: { Name: 'GoogleB', Website: site },
     });
+  });
+});
+
+describe('mappings', () => {
+  test('item works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.item('CityName').in(source);
+    expect(scratch).toBe(CityName);
+    const result = mappings.item('CityName').out(source);
+    expect(result).toBeUndefined();
+  });
+
+  test('ignore works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.ignore('CityName').in(source);
+    expect(scratch).toBeUndefined();
+    const result = mappings.ignore('CityName').out(source);
+    expect(result).toBeUndefined();
+  });
+
+  test('skipIn works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.skipIn('CityName').in(source);
+    expect(scratch).toBeUndefined();
+    const result = mappings.skipIn('CityName').out(source);
+    expect(result).toBe(CityName);
+  });
+
+  test('skipOut works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.skipOut('CityName').in(source);
+    expect(scratch).toBe(CityName);
+    const result = mappings.skipOut('CityName').out(source);
+    expect(result).toBeUndefined();
+  });
+
+  test('func works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings
+      .func(
+        'CityName',
+        a => a.CityName,
+        a => a.CityName
+      )
+      .in(source);
+    expect(scratch).toBe(CityName);
+    const result = mappings
+      .func(
+        'CityName',
+        a => a.CityName,
+        a => a.CityName
+      )
+      .out(source);
+    expect(result).toBe(CityName);
+  });
+
+  test('add works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.add(a => a.CityName).in(source);
+    expect(scratch).toBe(CityName);
+    const result = mappings.add(a => a.CityName).out(source);
+    expect(result).toBeUndefined();
+  });
+
+  test('map works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.map(new Mapper(), 'CityName').in(source);
+    expect(scratch).toStrictEqual({});
+    const result = mappings.map(new Mapper(), 'CityName').out(source);
+    expect(result).toStrictEqual({});
+  });
+
+  test('propsToList works', () => {
+    const source = { CityName, Country };
+    const scratch = mappings.propsToList(mappings.item('CityName'), mappings.item('Country')).in(source);
+    expect(scratch).toStrictEqual([CityName, Country]);
   });
 });
