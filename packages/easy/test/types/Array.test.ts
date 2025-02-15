@@ -264,7 +264,18 @@ describe('toObject', () => {
       expect(b).toMatchObject([2, 4, 6]);
     });
 
-    test('chunk in is round robin?', () => {
+    test('chunk empty array', () => {
+      const [a] = array.chunk([]);
+      expect(a).toBeUndefined();
+    });
+
+    test('chunk default chunk size', () => {
+      const [a, b] = array.chunk([1, 2, 3, 4, 5, 6, 7]);
+      expect(a).toMatchObject([1, 2, 3, 4]);
+      expect(b).toMatchObject([5, 6, 7]);
+    });
+
+    test('chunk is not in round robin', () => {
       const [a, b, c] = array.chunk([1, 2, 3, 4, 5, 6, 7], 3);
       expect(a).toMatchObject([1, 2, 3]);
       expect(b).toMatchObject([4, 5, 6]);
