@@ -1,5 +1,5 @@
 import { Dev, devData, DevMap, TesterMap } from '../ref';
-import { isUuid, Mapper, toId } from '../../src';
+import { isUuid, Mapper, mappings, toId, toList } from '../../src';
 
 describe('Mapper', () => {
   const empty = new Mapper();
@@ -135,6 +135,7 @@ describe('Mapper', () => {
     readonly name = this.map.item('Name');
     readonly company = this.map.map(new Business({ startFrom: 'scratch' }), 'Business');
     readonly managers = this.map.list(new Manager(), 'Managers');
+    readonly city = this.map.add(() => 'Amsterdam');
   }
 
   test('using map array works', () => {
@@ -153,9 +154,17 @@ describe('Mapper', () => {
         { name: 'Rogier', title: 'COO' },
         { name: 'Sander', title: 'CTO' },
       ],
+      city: 'Amsterdam',
     };
     const map = new MapWithList({ startFrom: 'scratch' });
     expect(map.in(original)).toStrictEqual(mapped);
     expect(map.out(mapped)).toStrictEqual(original);
+  });
+
+  test('mapping list with empty data', () => {
+    const map = new MapWithList();
+    const mapping = mappings.list(map, 'Managers');
+    expect(mapping.in()).toStrictEqual(toList());
+    expect(mapping.out()).toStrictEqual(toList({ Business: {}, Managers: [] }));
   });
 });
