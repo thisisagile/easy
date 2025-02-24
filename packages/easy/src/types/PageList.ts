@@ -1,4 +1,4 @@
-import { isList, List } from './List';
+import { isList, List, toList } from './List';
 import { Construct, ofConstruct } from './Constructor';
 import { isA } from './IsA';
 import { PlainSort, Sort } from './Sort';
@@ -110,6 +110,10 @@ export class PageList<T> extends List<T> {
 
   mapAsync(f: (i: T) => Promise<T>): Promise<PageList<T>> {
     return super.mapAsync(f).then(r => toPageList(r, this));
+  }
+
+  areEqual(...items: ArrayLike<T> ): boolean {
+    return this.isSubSetOf(...items) && toList(...items).isSubSetOf(...this);
   }
 
   distinct(): PageList<T> {

@@ -30,6 +30,10 @@ export class List<T = unknown> extends Array<T> {
     return !this.isIntersectingWith(...items);
   }
 
+  areEqual(...items: ArrayLike<T> ): boolean {
+    return this.isSubSetOf(...items) && toList(...items).isSubSetOf(...this);
+  }
+
   asc(p: GetProperty<T, any>): List<T> {
     return this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
   }

@@ -182,6 +182,19 @@ describe('List', () => {
     expect(toList(Dev.Rob).isDisjointWith(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
   });
 
+  test('are equal', () => {
+    expect(toList().areEqual(toList())).toBeTruthy();
+    expect(toList(Dev.Jeroen).areEqual(Dev.Eugen)).toBeFalsy();
+    expect(toList(Dev.Jeroen).areEqual(Dev.Jeroen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).areEqual(Dev.Jeroen)).toBeFalsy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).areEqual([Dev.Jeroen])).toBeFalsy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).areEqual(Dev.Jeroen, Dev.Eugen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen, Dev.Eugen).areEqual(Dev.Jeroen, Dev.Eugen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen, Dev.Eugen).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Jeroen)).toBeTruthy();
+    expect(toList(Dev.Jeroen, Dev.Eugen).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
+    expect(toList(Dev.Rob).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
+  });
+
   test('concat', () => {
     const devs = toList(Dev.Sander, Dev.Wouter);
     expect(devs.concat()).toBeInstanceOf(List);
