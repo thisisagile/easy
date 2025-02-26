@@ -2,28 +2,32 @@ import { Certificate, Dev } from '../ref';
 import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
-describe('List', () => {
-  const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
-  const managers = toList([Dev.Jeroen, Dev.Naoufal, Dev.Rob]);
-  const johnAndJane = toList(
-    { id: 1, name: 'John', age: undefined, weight: 99 },
-    {
-      id: 2,
-      name: 'Jane',
-      age: undefined,
-      weight: 95,
-    }
-  );
-  const jackAndJill = toList(
-    { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
-    {
-      id: 2,
-      name: 'Jill',
-      age: undefined,
-      weight: undefined as unknown as number,
-    }
-  );
+// eslint-disable-next-line jest/no-export
+export const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal]);
+// eslint-disable-next-line jest/no-export
+export const managers = toList([Dev.Jeroen, Dev.Naoufal, Dev.Rob]);
+// eslint-disable-next-line jest/no-export
+export const johnAndJane = toList(
+  { id: 1, name: 'John', age: undefined, weight: 99 },
+  {
+    id: 2,
+    name: 'Jane',
+    age: undefined,
+    weight: 95,
+  }
+);
+// eslint-disable-next-line jest/no-export
+export const jackAndJill = toList(
+  { id: 1, name: 'Jack', age: undefined, weight: undefined as unknown as number },
+  {
+    id: 2,
+    name: 'Jill',
+    age: undefined,
+    weight: undefined as unknown as number,
+  }
+);
 
+describe('List', () => {
   test('list and array are equal', () => {
     expect(new List('test', 'test2')).toEqual(['test', 'test2']);
   });

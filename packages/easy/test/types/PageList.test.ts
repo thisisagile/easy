@@ -1,6 +1,7 @@
 import '@thisisagile/easy-test';
 import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
+import { devs, jackAndJill, johnAndJane, managers } from './List.test';
 
 describe('PageList', () => {
   const allDevs = toPageList(Dev.All, { total: 42 });
@@ -252,5 +253,33 @@ describe('PageList', () => {
     expect(cs.ids).toHaveLength(0);
     const devs = toPageList([Dev.Jeroen, Dev.Sander, Dev.Jeroen, Dev.Rob, Dev.Sander, Dev.Jeroen]);
     expect(devs.ids.join(',')).toBe('1,3,1,5,3,1');
+  });
+
+  test('symmetric diff', () => {
+    expect(toPageList([1, 2, 3, 4]).symmetricDiff([4, 5, 6])).toMatchJson(toPageList([1, 2, 3, 5, 6]));
+    expect(toPageList().symmetricDiff(toPageList())).toMatchJson(toPageList());
+    expect(toPageList([{ id: 42 }]).symmetricDiff(toPageList())).toMatchJson(toPageList([{ id: 42 }]));
+    expect(toPageList().symmetricDiff(toPageList([{ id: 42 }]))).toMatchJson(toPageList([{ id: 42 }]));
+  });
+
+  test('symmetric diff by key', () => {
+    expect(devs.symmetricDiffByKey(managers, 'name')).toHaveLength(3);
+    expect(toPageList(johnAndJane).symmetricDiffByKey(toPageList(jackAndJill), 'id')).toHaveLength(0);
+    expect(toPageList(johnAndJane).symmetricDiffByKey(toPageList(jackAndJill), 'name')).toHaveLength(4);
+    expect(toPageList(johnAndJane).symmetricDiffByKey(toPageList(jackAndJill), 'age')).toHaveLength(0);
+    expect(toPageList(johnAndJane).symmetricDiffByKey(toPageList(jackAndJill), 'weight')).toHaveLength(4);
+  });
+
+  test('are equal', () => {
+    expect(toPageList([]).areEqual(toList())).toBeTruthy();
+    expect(toPageList([Dev.Jeroen]).areEqual(Dev.Eugen)).toBeFalsy();
+    expect(toPageList([Dev.Jeroen]).areEqual(Dev.Jeroen)).toBeTruthy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen]).areEqual(Dev.Jeroen)).toBeFalsy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen]).areEqual([Dev.Jeroen])).toBeFalsy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen]).areEqual(Dev.Jeroen, Dev.Eugen)).toBeTruthy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen, Dev.Eugen]).areEqual(Dev.Jeroen, Dev.Eugen)).toBeTruthy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen, Dev.Eugen]).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Jeroen)).toBeTruthy();
+    expect(toPageList([Dev.Jeroen, Dev.Eugen]).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
+    expect(toPageList([Dev.Rob]).areEqual(Dev.Jeroen, Dev.Eugen, Dev.Rob)).toBeFalsy();
   });
 });
