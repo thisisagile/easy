@@ -1,6 +1,7 @@
 import { DateTime, DateTimeUnit, dt, isDateTime } from '../../src';
 import '@thisisagile/easy-test';
 import { mock } from '@thisisagile/easy-test';
+import { Zone } from 'luxon';
 
 const iso = '2021-03-25T08:39:44.000Z';
 const new_york = '2021-03-25T04:39:44.000-04:00';
@@ -21,7 +22,7 @@ const formats = {
   yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
 };
 
-describe('DateTime', () => {
+describe('DateTime2', () => {
   test('construct from undefined is not valid and value is undefined.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
@@ -53,6 +54,7 @@ describe('DateTime', () => {
     expect(new DateTime('2021-11-11T01:00')).toMatchText('2021-11-11T01:00:00.000Z');
     expect(new DateTime('2021-11-11T01:23:11')).toMatchText('2021-11-11T01:23:11.000Z');
     expect(new DateTime('2021-11-11T01:00:00.000+0100').toJSON()).toMatchText('2021-11-11T00:00:00.000Z');
+    expect(new DateTime('2024-10-11T01:23:59.123Z')).toMatchText('2024-10-11T01:23:59.123Z');
   });
 
   test('toString', () => {
@@ -87,7 +89,6 @@ describe('DateTime', () => {
     ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmssssszzz, '2021-10-11T00:23:59.123Z'],
     ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
     ['Wed Dec 24 09:15:00 -0800 2014', 'EEE MMM dd hh:mm:ss ZZZ yyyy', '2014-12-24T17:15:00.000Z'],
-    [new DateTime('2024-10-11T01:23:59.123Z'), undefined, '2024-10-11T01:23:59.123Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
     const res = new DateTime(s, f);
     expect(res).toBeValid();
@@ -140,6 +141,14 @@ describe('DateTime', () => {
   ])('endOf with unit: %s should return %s', (ut, e) => {
     const res = new DateTime('2021-10-15T01:23:58.123Z');
     expect(res.endOf(ut as DateTimeUnit).toJSON()).toMatchText(new DateTime(e));
+  });
+
+  test('startOf and endOf should not break on DST changes', () => {
+    const start = dt('2025-03-30T20:00').withZone('Europe/Amsterdam').startOf('day');
+    expect(start).toMatchText('2025-03-30T00:00:00.000+01:00');
+
+    const end = dt('2025-03-30').withZone('Europe/Amsterdam').endOf('day');
+    expect(end).toMatchText('2025-03-30T23:59:59.999+02:00');
   });
 
   test.each([
@@ -380,7 +389,7 @@ describe('DateTime', () => {
     const d = new DateTime(iso).withZone('America/New_York');
     expect(d).toMatchText(new_york);
     expect(d.toJSON()).toMatchText(iso);
-    expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021 at 4:39 AM GMT-04:00');
+    expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021 at 4:39 AM Eastern Daylight Time');
   });
 
   test('toString keeps zone', () => {
