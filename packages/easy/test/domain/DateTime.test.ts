@@ -22,12 +22,18 @@ const formats = {
   yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
 };
 
-describe('DateTime2', () => {
+describe('DateTime', () => {
   test('construct from undefined is not valid and value is undefined.', () => {
     const res = new DateTime(undefined as unknown as string);
     expect(res.value).toBeUndefined();
     expect(res).not.toBeValid();
   });
+
+  test('construct from arbitrary object has undefined value', () => {
+    const res = new DateTime({} as any);
+    expect(res.value).toBeUndefined();
+    expect(res).not.toBeValid();
+  })
 
   test('from empty string is not valid.', () => {
     const res = new DateTime('');

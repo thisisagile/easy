@@ -33,7 +33,7 @@ export class DateTime extends Value<Optional<string>> {
       .type(isDate, v => LuxonDateTime.fromJSDate(v))
       .type(isDateTime, v => v.luxon)
       // Allow constructing with LuxonDateTime without exposing types
-      .else(value as any ?? LuxonDateTime.fromISO(undefined as any));
+      .else(value instanceof LuxonDateTime ? value : LuxonDateTime.fromISO(undefined as any));
 
     super(luxon.toISO() ?? undefined);
     this.luxon = luxon;
