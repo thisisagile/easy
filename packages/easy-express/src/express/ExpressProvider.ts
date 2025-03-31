@@ -84,6 +84,14 @@ export class ExpressProvider implements AppProvider {
     }
   }
 
+  protected rawJson(res: Response, result: unknown, options: Required<VerbOptions>): void {
+    if (HttpStatus.NoContent.equals(options.onOk)) {
+      res.send();
+    } else {
+      res.json(result);
+    }
+  }
+
   protected stream(res: Response, result: unknown): void {
     res.end(result);
   }

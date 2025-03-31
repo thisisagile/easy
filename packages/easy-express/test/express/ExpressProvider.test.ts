@@ -71,6 +71,17 @@ describe('ExpressProvider', () => {
     expect((provider as any).json).toHaveBeenCalledWith(res, result, toVerbOptions(options));
   });
 
+  test('toResponse rawJson', () => {
+    const result = {};
+    const cc = mock.empty<CacheControl>({ enabled: false });
+    const options: VerbOptions = { onOk: HttpStatus.Created, type: ContentType.RawJson, cache: cc };
+    (provider as any).rawJson = mock.return();
+    provider.toResponse(res, result, options);
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.Created.status);
+    expect(res.type).toHaveBeenCalledWith(ContentType.RawJson.code);
+    expect((provider as any).rawJson).toHaveBeenCalledWith(res, result, toVerbOptions(options));
+  });
+
   test('toResponse calls cache set header', () => {
     const result = {};
     const cc = mock.empty<CacheControl>({ name: 'Cache-Control', enabled: true });

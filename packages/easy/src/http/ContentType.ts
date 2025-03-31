@@ -6,6 +6,7 @@ import { asString } from '../types/Text';
 export class ContentType extends Enum {
   static Form = new ContentType('form', 'application/x-www-form-urlencoded', b => formUrlEncoded(b));
   static Json = new ContentType('json', 'application/json', b => b);
+  static RawJson = new ContentType('rawJson', 'application/json', b => b);
   static Stream = new ContentType('stream', 'application/octet-stream');
   static Text = new ContentType('text', 'text/plain');
   static Xml = new ContentType('xml', 'application/xml');
