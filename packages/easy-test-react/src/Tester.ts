@@ -5,15 +5,10 @@ import { waitForRender } from './waitForRender';
 import { ElementTester } from './ElementTester';
 
 export class Tester {
-  constructor(
-    public readonly container: HTMLElement,
-    private byQ = container.querySelectorAll
-  ) {}
+  constructor(public readonly container: HTMLElement) {}
 
   static render = (component: ReactElement): Promise<Tester> => waitForRender(component).then(c => new Tester(c.container));
   static renderSync = (component: ReactElement): Tester => new Tester(render(component).container);
-
-  // byTxt = (text: string, index: number = 0): HTMLElement => screen.getAllByText(text)[index];
 
   byText = (text: string, index?: number): HTMLElement => (index ? screen.getAllByText(text)[index] : screen.getByText(text));
   atText = (text: string, index?: number): ElementTester => new ElementTester(() => this.byText(text, index));
@@ -28,7 +23,10 @@ export class Tester {
   byPlaceholder = (placeholder: string, index?: number): HTMLElement =>
     index ? screen.getAllByPlaceholderText(placeholder)[index] : screen.getByPlaceholderText(placeholder);
   atPlaceholder = (placeholder: string, index?: number): ElementTester => new ElementTester(() => this.byPlaceholder(placeholder, index));
-  byQuery = (query: string, index: number = 0): HTMLElement => this.byQ(query)[index] as HTMLElement;
+  byQuery = (query: string, index: number = 0): HTMLElement => {
+    const elements = this.container.querySelectorAll(query);
+    return elements[index] as HTMLElement;
+  };
   atQuery = (query: string, index?: number): ElementTester => new ElementTester(() => this.byQuery(query, index));
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
 }
