@@ -1,4 +1,4 @@
-import { asString, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, toSegment, uri, Uri } from '../../src';
+import { asString, clipUri, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, toSegment, uri, Uri } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
@@ -206,5 +206,33 @@ describe('toSegment', () => {
   });
   test('toSegment with key', () => {
     expect(toSegment('key')).toMatchObject({ key: 'key', segment: undefined });
+  });
+});
+
+describe('clipUri', () => {
+  describe('clipUri', () => {
+    const example = 'example.com';
+    const path = 'example.com/path';
+
+    test.each([
+      ['http://www.example.com', example],
+      ['https://example.com', example],
+      ['http://example.com/', example],
+      ['https://www.example.com/', example],
+      ['www.example.com', example],
+      ['example.com', example],
+      ['https://example.com/path', path],
+      ['http://www.example.com/path/', path],
+      ['https://example.com/path/', path],
+      ['http://example.com/path?query=1', 'example.com/path?query=1'],
+      ['https://www.example.com/path?query=1', 'example.com/path?query=1'],
+      ['example.com/', example],
+      ['https://', ''],
+      [undefined, ''],
+      [null, ''],
+      ['', ''],
+    ])('clipUri(%p) should return %p', (input, expected) => {
+      expect(clipUri(input)).toBe(expected);
+    });
   });
 });

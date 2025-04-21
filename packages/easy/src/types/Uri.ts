@@ -131,3 +131,8 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
       .reduce((u, [k, v]) => (isBoolean(v) ? u.set(uri.boolean(k), v) : u.set(uri.query(k), toArray(v).join(','))), this);
   }
 }
+
+export const clipUri = (uri?: EasyUri | string | null): string =>
+  tryTo(() => asString(uri))
+    .map(uri => uri.replace(/^(https?:\/\/)?(www\.)?/, ''))
+    .map(uri => uri.replace(/\/$/, '')).value;
