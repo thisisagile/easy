@@ -29,6 +29,7 @@ export class Tester {
   };
   atQuery = (query: string, index?: number): ElementTester => new ElementTester(() => this.byQuery(query, index));
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
+  debug = () => screen.debug();
 }
 
 export const rendersWait = async (component: ReactElement): Promise<Tester> => await Tester.render(component);
