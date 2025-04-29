@@ -78,4 +78,19 @@ describe('ElementTester', () => {
     expect(screen.getByText).toHaveBeenCalled();
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value } });
   });
+
+  test('keyDown fires keydown event', () => {
+    fireEvent.keyDown = mock.return(true);
+    const key = 'Enter';
+    et.keyDown(key);
+    expect(screen.getByText).toHaveBeenCalled();
+    expect(fireEvent.keyDown).toHaveBeenCalledWith(a, { key });
+  });
+
+  test('pressEnter fires keydown event', () => {
+    fireEvent.keyDown = mock.return(true);
+    et.pressEnter();
+    expect(screen.getByText).toHaveBeenCalled();
+    expect(fireEvent.keyDown).toHaveBeenCalledWith(a, { key: 'Enter' });
+  });
 });
