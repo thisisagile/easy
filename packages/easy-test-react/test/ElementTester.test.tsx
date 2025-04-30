@@ -79,6 +79,13 @@ describe('ElementTester', () => {
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value } });
   });
 
+  test('clear fires value change event', () => {
+    fireEvent.change = mock.return();
+    et.clear();
+    expect(screen.getByText).toHaveBeenCalled();
+    expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value: '' } });
+  });
+
   test('keyDown fires keydown event', () => {
     fireEvent.keyDown = mock.return(true);
     const key = 'Enter';

@@ -26,6 +26,7 @@ export class ElementTester {
   mouseDown = (index?: number): this | undefined =>
     this.element() && fireEvent.mouseDown(isDefined(index) ? this.element().children[index] : this.element()) ? this : undefined;
   pressEnter = (): this | undefined => this.keyDown('Enter');
+  clear = (): boolean => this.type('');
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
   wait = (): Promise<Element> => waitFor(this.element);
   waitForRemove = (): Promise<void> => waitForElementToBeRemoved(this.element);
