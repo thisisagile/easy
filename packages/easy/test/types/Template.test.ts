@@ -46,6 +46,16 @@ describe('Template', () => {
     ).toMatchText('3 Jeroen Typescript typescript dev LANGUAGE c');
   });
 
+  const tmpl = 'Contact {this.target.name}';
+  test.each([
+  [tmpl, {}, 'Contact '],
+  [tmpl, null, 'Contact '],
+  [tmpl, undefined, 'Contact '],
+  ['Contact {this.target.name.lower}', undefined, 'Contact '],
+])('template renders correctly with missing props for %s', (templateString, subject, expected) => {
+  expect(template(templateString, subject)).toMatchText(expected);
+});
+
   test('more', () => {
     const temp = 'We want to work with {this.name}';
     expect(template(temp, Dev.Wouter)).toMatchText('We want to work with Wouter');

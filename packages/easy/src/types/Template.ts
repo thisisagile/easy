@@ -191,6 +191,6 @@ export function textValue(subject: any, prop: string): string {
   const initial = typeof root === 'object' && root !== null ? root : text(root);
   return p
     .splice(1)
-    .reduce((t, s) => t[s], initial)
-    .toString();
+    .reduce((t, s) => t?.[s], initial)
+    ?.toString() ?? '';
 }
