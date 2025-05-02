@@ -405,3 +405,47 @@ describe('View', () => {
     expect(s).toMatchJson({ id: 3, loan: 3000, name: 'Sander Hoogendoorn' });
   });
 });
+
+const toThing = view({
+  id: 'id',
+  name: 'name',
+});
+
+const data = [
+  { id: 1, name: 'a' },
+  { id: 2, name: 'b' },
+  { id: 3, name: 'c' },
+];
+
+const options = { take: 3 };
+
+describe('view works', () => {
+  test('toThing works for an array', () => {
+    const things = toThing.from(data);
+    expect(things).toHaveLength(3);
+    expect((things as any).options).toBeUndefined();
+  });
+
+  test('toThing works for a List', () => {
+    const pl = toList(data);
+    const things = toThing.from(pl);
+    expect(things).toHaveLength(3);
+    expect((things as any).options).toBeUndefined();
+  });
+
+  test('toThing works for a PageList', () => {
+    const pl = toPageList(data);
+    expect(pl.options).toBeUndefined();
+    const things = toThing.from(pl);
+    expect(things).toHaveLength(3);
+    expect(things.options).toBeUndefined();
+  });
+
+  test('toThing works for a PageList with options', () => {
+    const pl = toPageList(data, options);
+    expect(pl.options).toEqual(options);
+    const things = toThing.from(pl);
+    expect(things).toHaveLength(3);
+    expect(things.options).toEqual(options);
+  });
+});

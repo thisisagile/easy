@@ -66,7 +66,7 @@ export class View<V = any> {
     if (isPageList(source))
       return toPageList(
         source.map(s => this.reduce(s)),
-        source
+        source.options
       );
     if (isArray(source)) return source.map(s => this.reduce(s));
     return this.reduce(source);
