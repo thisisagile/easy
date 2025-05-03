@@ -1865,7 +1865,7 @@ __metadata:
     copyfiles: "npm:^2.4.1"
     jest-environment-jsdom: "npm:^29.7.0"
     jest-transform-stub: "npm:^2.0.0"
-    next: "npm:^14.2.24"
+    next: "npm:^14.2.28"
     next-transpile-modules: "npm:^10.0.0"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
@@ -7833,7 +7833,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next@npm:^14.2.24":
+"next@npm:^14.2.28":
   version: 14.2.28
   resolution: "next@npm:14.2.28"
   dependencies:
