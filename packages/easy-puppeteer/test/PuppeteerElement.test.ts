@@ -18,6 +18,13 @@ describe('PuppeteerElement', () => {
     expect(eh.type).toHaveBeenCalledWith('123');
   });
 
+  test('press.', async () => {
+    const eh = mock.empty<ElementHandle>({ press: mock.return() });
+    const pe = new PuppeteerElement(Promise.resolve(eh));
+    await pe.press('Enter');
+    expect(eh.press).toHaveBeenCalledWith('Enter');
+  });
+
   test('property.', async () => {
     const p = mock.empty<JSHandle>({ jsonValue: mock.return() });
     const eh = mock.empty<ElementHandle>({ getProperty: mock.resolve(p) });

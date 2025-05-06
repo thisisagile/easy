@@ -20,7 +20,7 @@ describe('PlaywrightTester', () => {
   test.each([
     ['byClass element not found', { handle: mock.empty<Promise<null>>() }],
     ['byClass element found', { handle: mock.empty<Promise<ElementHandle>>() }],
-  ])('%s', (name, { handle }) => {
+  ])('%s', (_, { handle }) => {
     const pe = new PlaywrightElement(handle);
     page.waitForSelector = mock.return(pe);
 

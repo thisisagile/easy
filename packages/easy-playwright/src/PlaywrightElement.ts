@@ -13,6 +13,10 @@ export class PlaywrightElement implements TestElement {
     return this.handle.then(h => h?.type(text));
   }
 
+  press(key: string): Promise<void> {
+    return this.handle.then(h => h?.press(key));
+  }
+
   property(property: string): Promise<Json | undefined> {
     return this.handle.then(h => h?.getProperty(property).then(p => p.jsonValue()));
   }

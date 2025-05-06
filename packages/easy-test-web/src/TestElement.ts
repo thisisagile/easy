@@ -5,6 +5,8 @@ export interface TestElement {
 
   type(text: string): Promise<void>;
 
+  press(key: string): Promise<void>;
+
   property(property: string): Promise<Json | undefined>;
 
   exists(): Promise<boolean>;
