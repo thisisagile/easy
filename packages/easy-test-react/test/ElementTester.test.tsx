@@ -94,6 +94,12 @@ describe('ElementTester', () => {
     expect(fireEvent.keyDown).toHaveBeenCalledWith(a, { key });
   });
 
+  test('keyDown fires but event fails', () => {
+    fireEvent.keyDown = mock.return(false);
+    const key = 'Enter';
+    expect(et.keyDown(key)).toBeUndefined();
+  });
+
   test('pressEnter fires keydown event', () => {
     fireEvent.keyDown = mock.return(true);
     et.pressEnter();
