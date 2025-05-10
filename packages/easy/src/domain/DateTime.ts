@@ -9,6 +9,7 @@ import { ifDefined } from '../utils/If';
 import { JsonValue } from '../types/Json';
 import { seconds } from '../utils/Seconds';
 import { tryTo } from '../types/Try';
+import { use } from '../types/Constructor';
 
 Settings.defaultZone = 'utc';
 
@@ -62,13 +63,13 @@ export class DateTime extends Value<Optional<string>> {
   from(locale?: string): string;
   from(date?: DateTime, locale?: string): string;
   from(dateOrLocale?: string | DateTime, maybeLocale?: string): string {
-    const date: Optional<DateTime> = isA<DateTime>(dateOrLocale) ? dateOrLocale : undefined;
-    const locale: string = (isString(dateOrLocale) ? dateOrLocale : undefined) ?? maybeLocale ?? 'en';
     return (
-      ifDefined(
-        date,
-        d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
-        () => this.utc.setLocale(locale).toRelative()
+      use((isString(dateOrLocale) ? dateOrLocale : maybeLocale) ?? 'en', locale =>
+        ifDefined(
+          isA<DateTime>(dateOrLocale) ? dateOrLocale : undefined,
+          d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
+          () => this.utc.setLocale(locale).toRelative()
+        )
       ) ?? ''
     );
   }
