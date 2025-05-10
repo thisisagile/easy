@@ -86,6 +86,11 @@ describe('DateTime', () => {
     expect(new DateTime(new Date(date.epoch))).toBeValid();
   });
 
+  test('fromNow', () => {
+    const res = new DateTime(date.epoch);
+    expect(res.fromNow).toMatchText('4 years ago');
+  });
+
   test.each([
     ['2021-11-10', formats.yyyymmdd, '2021-10-11T00:00:00.000Z'],
     ['2022-10-11', formats.yyyyddmm, '2022-10-11T00:00:00.000Z'],
