@@ -1,7 +1,6 @@
 import { DateTime, DateTimeUnit, dt, isDateTime } from '../../src';
 import '@thisisagile/easy-test';
 import { mock } from '@thisisagile/easy-test';
-import { Zone } from 'luxon';
 
 const iso = '2021-03-25T08:39:44.000Z';
 const new_york = '2021-03-25T04:39:44.000-04:00';
@@ -33,7 +32,7 @@ describe('DateTime', () => {
     const res = new DateTime({} as any);
     expect(res.value).toBeUndefined();
     expect(res).not.toBeValid();
-  })
+  });
 
   test('from empty string is not valid.', () => {
     const res = new DateTime('');
@@ -431,5 +430,12 @@ describe('DateTime', () => {
     const start = dt('2021-01-06T00:00:00Z');
     mock.property(DateTime, 'now', dt('2021-01-10T03:03:01Z'));
     expect(start.ago()).toBe('4d 3h 3m');
+  });
+
+  test('withClock', () => {
+    const start = dt('2021-02-06T00:00:00Z');
+    const clock = dt('2021-01-10T03:03:01Z');
+    const result = start.withClock(clock);
+    expect(result).toMatchText('2021-02-06T03:03:01.000Z');
   });
 });

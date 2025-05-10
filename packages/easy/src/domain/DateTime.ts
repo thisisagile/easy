@@ -8,6 +8,7 @@ import { isA } from '../types/IsA';
 import { ifDefined } from '../utils/If';
 import { JsonValue } from '../types/Json';
 import { seconds } from '../utils/Seconds';
+import { tryTo } from '../types/Try';
 
 Settings.defaultZone = 'utc';
 
@@ -63,11 +64,13 @@ export class DateTime extends Value<Optional<string>> {
   from(dateOrLocale?: string | DateTime, maybeLocale?: string): string {
     const date: Optional<DateTime> = isA<DateTime>(dateOrLocale) ? dateOrLocale : undefined;
     const locale: string = (isString(dateOrLocale) ? dateOrLocale : undefined) ?? maybeLocale ?? 'en';
-    return ifDefined(
-      date,
-      d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
-      () => this.utc.setLocale(locale).toRelative()
-    ) ?? "";
+    return (
+      ifDefined(
+        date,
+        d => this.utc.setLocale(locale).toRelative({ base: d.utc }),
+        () => this.utc.setLocale(locale).toRelative()
+      ) ?? ''
+    );
   }
 
   isAfter(dt: DateTime): boolean {
@@ -145,9 +148,13 @@ export class DateTime extends Value<Optional<string>> {
   ago(end: DateTime = DateTime.now): string {
     return seconds.toText(end.diff(this, 'second'));
   }
+
+  withClock = (clock: DateTime): DateTime =>
+    tryTo(() => [this.toDate() as Date, clock.toDate() as Date])
+      .map(([td, cd]) => new Date(td.getFullYear(), td.getMonth(), td.getDate(), cd.getHours(), cd.getMinutes(), cd.getSeconds()))
+      .map(d => new DateTime(d)).value;
 }
 
 export const isDateTime = (dt?: unknown): dt is DateTime => isDefined(dt) && dt instanceof DateTime;
 
 export const dt = (dt?: DatetimeInput): DateTime => new DateTime(dt);
-
