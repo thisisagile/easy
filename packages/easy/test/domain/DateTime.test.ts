@@ -337,6 +337,7 @@ describe('DateTime', () => {
     expect(d.from('de')).toMatchText('vor 7 Sekunden');
     expect(d.from(other, 'de')).toMatchText('in 3 Tagen');
     expect(d.from(other, 'nl')).toMatchText('over 3 dagen');
+    expect(d.from('de-DE')).toMatchText('vor 7 Sekunden');
   });
 
   test('isAfter', () => {
