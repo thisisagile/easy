@@ -149,10 +149,11 @@ export class DateTime extends Value<Optional<string>> {
     return seconds.toText(end.diff(this, 'second'));
   }
 
-  withClock = (clock: DateTime): DateTime =>
-    tryTo(() => [this.toDate() as Date, clock.toDate() as Date])
+  withClock(clock: DateTime): DateTime {
+    return tryTo(() => [this.toDate() as Date, clock.toDate() as Date])
       .map(([td, cd]) => new Date(td.getFullYear(), td.getMonth(), td.getDate(), cd.getHours(), cd.getMinutes(), cd.getSeconds()))
       .map(d => new DateTime(d)).value;
+  }
 }
 
 export const isDateTime = (dt?: unknown): dt is DateTime => isDefined(dt) && dt instanceof DateTime;
