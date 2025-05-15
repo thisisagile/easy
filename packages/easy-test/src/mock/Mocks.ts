@@ -47,7 +47,7 @@ export class Mocks {
     }),
   };
 
-  static getArg = <T>(mock: unknown, call = 0, arg = 0): T | undefined => {
+  static readonly getArg = <T>(mock: unknown, call = 0, arg = 0): T | undefined => {
     if (!isJestMock(mock)) throw new Error('Function provided is not a Jest mock');
     return mock.mock.calls[call]?.[arg] as T;
   };
