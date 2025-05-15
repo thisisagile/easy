@@ -47,6 +47,11 @@ export class Mocks {
     }),
   };
 
+  static getArg = <T>(mock: unknown, call = 0, arg = 0): T | undefined => {
+    if (!isJestMock(mock)) throw new Error('Function provided is not a Jest mock');
+    return mock.mock.calls[call]?.[arg] as T;
+  };
+
   clear = (): typeof jest => jest.clearAllMocks();
 
   impl = (f?: (...args: any[]) => any): jest.Mock => jest.fn().mockImplementation(f);
@@ -79,6 +84,10 @@ export class Mocks {
     return date;
   };
   once = (...values: unknown[]): jest.Mock => values.reduce((m: jest.Mock, v: unknown) => m.mockImplementationOnce(() => v), jest.fn());
+}
+
+function isJestMock(fn: any): fn is jest.Mock {
+  return typeof fn === 'function' && 'mock' in fn && Array.isArray(fn.mock?.calls);
 }
 
 export const mock = new Mocks();

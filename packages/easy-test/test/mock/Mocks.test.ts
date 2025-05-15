@@ -234,4 +234,25 @@ describe('mock', () => {
     expect(resp.body?.error?.errors).toContain('error two');
     expect(resp.body?.error?.message).toContain('u fool');
   });
+
+  test('get arg throws when not called with a mock', () => {
+    expect(() => Mocks.getArg(() => {})).toThrow('Function provided is not a Jest mock');
+  });
+
+  class Test {
+    do = (input: string, _: number): string => input;
+  }
+
+  test('get arg takes the correct call and arg', () => {
+    const tester = new Test();
+    tester.do = mock.return('a');
+    tester.do('1', 1);
+    tester.do('2', 2);
+    expect(Mocks.getArg(tester.do)).toBe('1');
+    expect(Mocks.getArg<number>(tester.do, 0, 1)).toBe(1);
+    expect(Mocks.getArg<string>(tester.do, 1)).toBe('2');
+    expect(Mocks.getArg(tester.do, 1, 1)).toBe(2);
+    expect(Mocks.getArg(tester.do, 2)).toBeUndefined();
+    expect(Mocks.getArg(tester.do, 0, 2)).toBeUndefined();
+  });
 });
