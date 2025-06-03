@@ -38,6 +38,6 @@
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
-    "mongodb": "^6.12.0"
+    "mongodb": "^6.17.0"
   }
 }
