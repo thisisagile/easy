@@ -11,8 +11,18 @@ export class Certificate extends Struct {
 
 export class Dev extends Entity {
   static readonly Invalid = new Dev({ level: 1 });
-  static readonly Jeroen = new Dev({ id: 1, name: 'Jeroen', level: 3, certificates: [Certificate.ScrumMaster, Certificate.Flow] });
-  static readonly Naoufal = new Dev({ id: 2, name: 'Naoufal', level: 3, certificates: [Certificate.ScrumMaster, Certificate.Flow, Certificate.MSP] });
+  static readonly Jeroen = new Dev({
+    id: 1,
+    name: 'Jeroen',
+    level: 3,
+    certificates: [Certificate.ScrumMaster, Certificate.Flow],
+  });
+  static readonly Naoufal = new Dev({
+    id: 2,
+    name: 'Naoufal',
+    level: 3,
+    certificates: [Certificate.ScrumMaster, Certificate.Flow, Certificate.MSP],
+  });
   static readonly Sander = new Dev({ id: 3, name: 'Sander', level: 3, certificates: [Certificate.ScrumMaster] });
   static readonly Wouter = new Dev({ id: 4, name: 'Wouter', level: 3 });
   static readonly Rob = new Dev({ id: 5, name: 'Rob', level: 3 });
@@ -40,4 +50,8 @@ export class Dev extends Entity {
   update(add: Json): Dev {
     return new Dev(this.merge(add));
   }
+
+  error = (): string => {
+    throw new Error('Error in dev');
+  }; // eslint-disable-line @typescript-eslint/no-unused-vars
 }

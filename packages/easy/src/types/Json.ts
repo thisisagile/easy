@@ -21,6 +21,7 @@ export const json = {
   set: <T extends Json = Json>(subject: T, key = '', value?: unknown): T =>
     isEmpty(key) ? subject : value !== undefined ? { ...(subject as any), ...{ [key]: value as JsonValue } } : json.delete(subject, key),
   omit: <T extends Json = Json>(subject: T, ...keys: string[]): T => keys.reduce((js, k) => json.delete(js, k), json.parse<T>(subject)),
+  pick: <T extends Json = Json>(subject: T, ...keys: string[]): T => keys.reduce((js, k) => json.set(js, k, (subject as any)[k]), {} as T),
   defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T,
   isSubset: (subject: Json, subset: Json): boolean => !entries(subset).some(([k, v]) => subject[k] !== v),
 };

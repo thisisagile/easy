@@ -149,6 +149,31 @@ describe('json', () => {
     expect(dev4).toStrictEqual({ name: 'Naoufal', level: 3 });
   });
 
+  test('pick empty should return what?', () => {
+    const empty = json.pick({}, 'language');
+    expect(empty).toStrictEqual({});
+  });
+
+  test('pick one property', () => {
+    const dev2 = json.pick(dev, 'language');
+    expect(dev2).toStrictEqual({ language: 'TypeScript' });
+  });
+
+  test('pick one property with empty', () => {
+    const dev2 = json.pick(dev, 'invalid');
+    expect(dev2).toStrictEqual({});
+  });
+
+  test('pick multiple properties', () => {
+    const dev2 = json.pick(dev, 'language', 'id');
+    expect(dev2).toStrictEqual({ id: 2, language: 'TypeScript' });
+  });
+
+  test('pick multiple properties with empty', () => {
+    const dev2 = json.pick(dev, 'language', 'invalid');
+    expect(dev2).toStrictEqual({ language: 'TypeScript' });
+  });
+
   test('merge two objects', () => {
     const j = json.merge({ level: 3 }, { age: 23 });
     expect(j).toStrictEqual({ level: 3, age: 23 });
