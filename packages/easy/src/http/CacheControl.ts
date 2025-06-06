@@ -1,8 +1,7 @@
-import { cacheAge, CacheAge } from '../types/CacheAge';
+import { cacheAge, CacheAge, isCacheAge } from '../types/CacheAge';
 import { on } from '../types/Constructor';
 import { entries } from '../types/Object';
 import { ifDefined } from '../utils/If';
-import { isNumber } from '../types/Is';
 
 export class CacheControl {
   name = 'Cache-Control';
@@ -46,7 +45,7 @@ export class CacheControl {
 
   toString(): string {
     return entries(this.directives)
-      .mapDefined(([k, v]) => ifDefined(v, isNumber(v) ? `${k}=${cacheAge.toSeconds(v)}` : k))
+      .mapDefined(([k, v]) => ifDefined(v, isCacheAge(v) ? `${k}=${cacheAge.toSeconds(v)}` : k))
       .join(',');
   }
 }

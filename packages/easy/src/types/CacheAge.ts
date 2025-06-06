@@ -1,6 +1,7 @@
 import { asNumber } from './Number';
 import { choose } from './Case';
 import { asString } from './Text';
+import { isNumber, isString } from './Is';
 
 export type CacheAge = `${number}${'ms' | 's' | 'm' | 'h' | 'd'}` | number;
 
@@ -55,3 +56,5 @@ export const cacheAge = {
       )
       .else(ca as number),
 };
+
+export const isCacheAge = (ca?: unknown): ca is CacheAge => isString(ca) || isNumber(ca);
