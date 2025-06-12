@@ -1,4 +1,4 @@
-import { any, asJson, isJson, json, PageOptions, toJson } from '../../src';
+import { any, asJson, isJson, json, PageOptions, takeFirstKey, toJson } from '../../src';
 import { Dev, DevTableGateway } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -252,5 +252,30 @@ describe('json', () => {
     expect(json.isSubset({ name: 'Sander' }, { name: 'Jeroen' })).toBeFalsy();
     expect(json.isSubset({ name: 'Sander' }, { name: 'Sander', level: 3 })).toBeFalsy();
     expect(json.isSubset({ name: 'Sander', level: 3 }, { name: 'Sander' })).toBeTruthy();
+  });
+});
+
+describe('keysToString', () => {
+  test('empty', () => {
+    expect(takeFirstKey({})).toBe('');
+    expect(takeFirstKey({}, 'alt')).toBe('alt');
+    expect(takeFirstKey([], 'alt')).toBe('alt');
+    expect(takeFirstKey(['Jan', 'Kees'], 'alt')).toBe('alt');
+  });
+
+  test('actual keys', () => {
+    expect(takeFirstKey({ first: '' })).toBe('first');
+    expect(takeFirstKey({ first: Dev.Naoufal })).toBe('first');
+    expect(takeFirstKey({ first: Dev.Naoufal, second: Dev.Rob })).toBe('first');
+    expect(takeFirstKey({ second: Dev.Rob, first: Dev.Naoufal })).toBe('second');
+    expect(takeFirstKey(Dev.Rob)).toBe('id');
+  });
+
+  test('custom props', () => {
+    const first = 'Sander';
+    const last = 'Hoogendoorn';
+    expect(takeFirstKey({ first })).toBe('first');
+    expect(takeFirstKey({ first, last })).toBe('first');
+    expect(takeFirstKey({ last, first })).toBe('last');
   });
 });

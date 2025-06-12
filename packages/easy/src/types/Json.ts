@@ -43,4 +43,6 @@ class Any<T extends Json> {
   }
 }
 
+export const takeFirstKey = (j: unknown, alt: string = ''): string => entries(asJson(j)).first()?.[0] ?? alt;
+
 export const any = <T extends Json = Json>(value: T): Any<T> => new Any<T>(value);
