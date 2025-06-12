@@ -32,12 +32,12 @@ describe('Meta', () => {
 
   test('Values works', () => {
     const values = meta(dev).values();
-    expect(values).toHaveLength(9);
+    expect(values).toHaveLength(10);
   });
 
   test('Entries works', () => {
     const values = meta(dev).entries<string>();
-    expect(values).toHaveLength(9);
+    expect(values).toHaveLength(10);
   });
 
   test('Properties works', () => {
