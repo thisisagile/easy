@@ -3,7 +3,7 @@ import { asList, defined, Entity, gt, Id, Json, lt, required, Struct, toList } f
 export class Certificate extends Struct {
   static readonly ScrumMaster = new Certificate({ id: 42, name: 'Certified scrum master' });
   static readonly Flow = new Certificate({ id: 1, name: 'The worst agile method in the world called flow' });
-  static readonly MSP = new Certificate({ id: 2, name: 'Microsoft stuff professional' });
+  static readonly MVP = new Certificate({ id: 2, name: 'Microsoft valuable professional' });
   static readonly JavaChampion = new Certificate({ id: 3, name: 'Java champion' });
 
   readonly id = this.state.id as Id;
@@ -22,7 +22,7 @@ export class Dev extends Entity {
     id: 2,
     name: 'Naoufal',
     level: 3,
-    certificates: [Certificate.ScrumMaster, Certificate.Flow, Certificate.JavaChampion],
+    certificates: [Certificate.ScrumMaster, Certificate.Flow, Certificate.MVP],
   });
   static readonly Sander = new Dev({ id: 3, name: 'Sander', level: 3, certificates: [Certificate.ScrumMaster] });
   static readonly Wouter = new Dev({ id: 4, name: 'Wouter', level: 3 });

@@ -62,7 +62,7 @@ describe('List', () => {
     const certificates = devs.flatMap(d => d.certificates);
     expect(certificates).toBeInstanceOf(List);
     expect(certificates).toHaveLength(6);
-    expect(certificates.toJSON()).toMatchJson([Certificate.ScrumMaster, Certificate.ScrumMaster, Certificate.Flow, Certificate.ScrumMaster, Certificate.MSP]);
+    expect(certificates.toJSON()).toMatchJson([Certificate.ScrumMaster, Certificate.ScrumMaster, Certificate.Flow, Certificate.ScrumMaster, Certificate.MVP]);
   });
 
   test('mapDefined', () => {

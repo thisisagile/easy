@@ -19,6 +19,7 @@ type ViewRecord<V = any> = Partial<Record<keyof V, ViewType>>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
+const spread = 'view.spread';
 
 export const toViewer = (key: string, value: ViewType): Viewer =>
   choose(value)
@@ -75,7 +76,12 @@ export class View<V = any> {
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
   private reduce = (source: any): any =>
-    use(asJson(source), src => this.viewers.reduce((acc, v) => json.set(acc, v.key, v.f(src, v.key)), this.startsFrom === 'scratch' ? {} : src));
+    use(asJson(source), src =>
+      this.viewers.reduce(
+        (acc, v) => (v.key === spread ? { ...acc, ...asJson(v.f(src, v.key)) } : json.set(acc, v.key, v.f(src, v.key))),
+        this.startsFrom === 'scratch' ? {} : src
+      )
+    );
 }
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;
@@ -85,6 +91,7 @@ export const view = <V = any>(views: ViewRecord<DontInfer<V>>): View<V> => new V
 export const views = {
   ignore,
   keep,
+  spread,
   skip: ignore,
   value: (value: unknown) => () => value,
   or: {

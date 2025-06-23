@@ -448,4 +448,41 @@ describe('view works', () => {
     expect(things).toHaveLength(3);
     expect(things.options).toEqual(options);
   });
+
+  const dataSpread = { id: 1, name: 'Aardvark' };
+
+  const { spread } = views;
+
+  const toSpread = view({
+    id: 'id',
+    name: 'name',
+    [spread]: (c: any) => ({ lastName: c.name }),
+  });
+
+  const toSpreadOverlap = view({
+    id: 'id',
+    name: 'name',
+    [spread]: () => ({ name: 'Pork' }),
+  });
+
+  const toReverseSpread = view({
+    [spread]: () => ({ name: 'Pork' }),
+    id: 'id',
+    name: 'name',
+  });
+
+  test('spread works', () => {
+    const s = toSpread.from(dataSpread);
+    expect(s).toEqual({ ...dataSpread, lastName: 'Aardvark' });
+  });
+
+  test('spread with overlap works', () => {
+    const s = toSpreadOverlap.from(dataSpread);
+    expect(s).toEqual({ id: dataSpread.id, name: 'Pork' });
+  });
+
+  test('reverse spread works', () => {
+    const s = toReverseSpread.from(dataSpread);
+    expect(s).toEqual(dataSpread);
+  });
 });

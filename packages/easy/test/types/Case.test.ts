@@ -1,5 +1,5 @@
 import { asString, choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
-import { Certificate, Dev } from '../ref';
+import { Dev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('Case', () => {
@@ -489,41 +489,3 @@ describe('Case', () => {
     expect(out).toBe('Nope');
   });
 });
-
-describe('case', () => {
-  test('case', () => {
-    const d = choose(Dev.Naoufal)
-      .case(() => {
-        throw new Error();
-      }, 'Ouch')
-      .case(
-        d => d.name === 'Naoufal',
-        () => {
-          throw new Error();
-        }
-      )
-      .case(d => d.name === 'Wouter', 'No')
-      .case(d => d.hasCertificate(Certificate.JavaChampion), 'Yes')
-      .else('Nope');
-    expect(d).toBe('Yes');
-  });
-});
-// describe('Case Devoxx', () => {
-//   test('choose with Devoxx', () => {
-//     const out = choose(Dev.Naoufal)
-//       .case(d => d.hasCertificate(Certificate.JavaChampion), 'Yes')
-//       .case(d => {
-//         throw new Error();
-//       }, 'Ouch')
-//       .case(
-//         d => d.hasCertificate(Certificate.Flow),
-//         d => {
-//           throw new Error();
-//         }
-//       )
-//       // .case(d => d.name === 'Devoxx', 'Yes')
-//       // .case(d => d.name === 'Wouter', 'No')
-//       .else('Nope');
-//     expect(out).toBe('Yes');
-//   });
-// });
