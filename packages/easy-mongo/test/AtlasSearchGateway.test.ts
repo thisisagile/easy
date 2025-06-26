@@ -1,5 +1,5 @@
-import { AtlasSearchGateway, lucene, MongoProvider, SearchDefinition, stages } from '../src';
-import { Filter, resolve, toPageList } from '@thisisagile/easy';
+import { AtlasSearchGateway, Filter as MongoFilter, lucene, MongoProvider, SearchDefinition, stages } from '../src';
+import { resolve, toPageList } from '@thisisagile/easy';
 import { DevCollection } from './ref/DevCollection';
 import { mock } from '@thisisagile/easy-test';
 
@@ -39,7 +39,7 @@ describe('AtlasSearchGateway', () => {
 
   test('query with additional stages', async () => {
     const query = { q: 'manea' };
-    await expect(gateway.query(query, [include({}) as Filter])).resolves.toMatchJson(toPageList(results));
+    await expect(gateway.query(query, [include({}) as MongoFilter])).resolves.toMatchJson(toPageList(results));
     expect(provider.aggregate).toHaveBeenNthCalledWith(1, [searchWithDef(query, def), skip({ skip: 0 }), take({ take: 250 }), { $project: {} }]);
     expect(provider.aggregate).toHaveBeenNthCalledWith(2, [
       searchMeta(query, def),

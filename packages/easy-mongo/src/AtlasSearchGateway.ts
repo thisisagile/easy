@@ -4,6 +4,7 @@ import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
 import { lucene, SearchDefinition } from './Lucene';
 import { asNumber, entries, Filter, Json, PageList, text, toPageList, tuple2 } from '@thisisagile/easy';
+import { Filter as MongoFilter} from '../src/MongoProvider';
 
 const { skip, take } = stages.skip;
 const { replaceWith } = stages.replaceWith;
@@ -30,7 +31,7 @@ export class AtlasSearchGateway extends MongoGateway {
     super(collection, provider);
   }
 
-  query(query: Record<keyof typeof this.searchDef, string | number>, additionalStages: Filter[] = []): Promise<PageList<Json>> {
+  query(query: Record<keyof typeof this.searchDef, string | number>, additionalStages: MongoFilter[] = []): Promise<PageList<Json>> {
     return tuple2(
       this.aggregate(
         searchWithDef(query, this.searchDef),
