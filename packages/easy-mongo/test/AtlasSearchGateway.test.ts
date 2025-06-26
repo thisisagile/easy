@@ -1,11 +1,12 @@
 import { AtlasSearchGateway, lucene, MongoProvider, SearchDefinition, stages } from '../src';
-import { resolve, toPageList } from '@thisisagile/easy';
+import { Filter, resolve, toPageList } from '@thisisagile/easy';
 import { DevCollection } from './ref/DevCollection';
 import { mock } from '@thisisagile/easy-test';
 
 const { searchWithDef, searchMeta, facet } = lucene;
 const { skip, take } = stages.skip;
 const { replaceWith } = stages.replaceWith;
+const { include } = stages.project;
 
 describe('AtlasSearchGateway', () => {
   let provider: MongoProvider;
@@ -36,9 +37,39 @@ describe('AtlasSearchGateway', () => {
     ]);
   });
 
+  test('query with additional stages', async () => {
+    const query = { q: 'manea' };
+    await expect(gateway.query(query, [include({}) as Filter])).resolves.toMatchJson(toPageList(results));
+    expect(provider.aggregate).toHaveBeenNthCalledWith(1, [searchWithDef(query, def), skip({ skip: 0 }), take({ take: 250 }), { $project: {} }]);
+    expect(provider.aggregate).toHaveBeenNthCalledWith(2, [
+      searchMeta(query, def),
+      replaceWith({
+        total: '$count.total',
+        facets: { language: '$facet.language.buckets' },
+      }),
+    ]);
+  });
+
   test('facets work', async () => {
     const query = { q: 'manea', skip: 12, take: 6 };
-    provider.aggregate = mock.once(resolve(results), resolve(toPageList([{ facets: { language: [{ _id: 'java', count: 42 }] }, total: 55 }])));
+    provider.aggregate = mock.once(
+      resolve(results),
+      resolve(
+        toPageList([
+          {
+            facets: {
+              language: [
+                {
+                  _id: 'java',
+                  count: 42,
+                },
+              ],
+            },
+            total: 55,
+          },
+        ])
+      )
+    );
     const actual = await gateway.query(query);
     expect(actual).toMatchJson(toPageList(results));
     expect(actual.options).toEqual({
