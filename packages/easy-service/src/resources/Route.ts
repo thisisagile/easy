@@ -11,13 +11,13 @@ export const route =
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
 export type RouteRequires = { token: boolean; labCoat: boolean; scope?: Scope; uc?: UseCase };
-export type Route = { verb: Verb; endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
+export type Route = { verb: Verb; name: string, endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
 export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
-const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[]): Optional<Route> =>
+const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[], name = ''): Optional<Route> =>
   tryTo(verb)
     .is.defined()
-    .map(verb => ({ verb, endpoint, requires, middleware: middleware ?? [] }) as Route)
+    .map(verb => ({ verb, name, endpoint, requires, middleware: middleware ?? [] }) as Route)
     .orElse();
 
 class Router implements Routes {
@@ -44,7 +44,8 @@ class Router implements Routes {
             uc: v.get<UseCase>('uc'),
           },
           v.get<Verb>('verb'),
-          v.get<RequestHandler[]>('middleware')
+          v.get<RequestHandler[]>('middleware'),
+          v.property.toString(),
         )
       );
   }

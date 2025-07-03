@@ -19,6 +19,7 @@ describe('Router', () => {
     expect(route.route('dev')).toMatchText('/dev/developers');
     expect(endpoints).toHaveLength(2);
     expect(endpoints[0].verb.verb).toBe(HttpVerb.Get);
+    expect(endpoints[0].name).toBe('all');
   });
 
   test('Router works on a secured class', () => {
