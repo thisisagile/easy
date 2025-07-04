@@ -1,5 +1,5 @@
 import { isA } from './IsA';
-import { isEmpty, isObject } from './Is';
+import { isDefined, isEmpty, isObject } from './Is';
 import { Get, ofGet } from './Get';
 import { ifDefined } from '../utils/If';
 import { TypeGuard } from './TypeGuard';
@@ -43,6 +43,6 @@ class Any<T extends Json> {
   }
 }
 
-export const takeFirstKey = (j: unknown, alt: string = ''): string => entries(asJson(j)).first()?.[0] ?? alt;
+export const takeFirstKey = (j: unknown, alt: string = ''): string => entries(asJson(j)).first(([, v]) => isDefined(v))?.[0] ?? alt;
 
 export const any = <T extends Json = Json>(value: T): Any<T> => new Any<T>(value);

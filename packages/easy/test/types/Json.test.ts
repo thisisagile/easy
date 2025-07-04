@@ -263,6 +263,11 @@ describe('keysToString', () => {
     expect(takeFirstKey(['Jan', 'Kees'], 'alt')).toBe('alt');
   });
 
+  test('invalid values', () => {
+    expect(takeFirstKey({ primary: null }, 'alt')).toBe('alt');
+    expect(takeFirstKey({ primary: undefined }, 'alt')).toBe('alt');
+  });
+
   test('actual keys', () => {
     expect(takeFirstKey({ first: '' })).toBe('first');
     expect(takeFirstKey({ first: Dev.Naoufal })).toBe('first');
