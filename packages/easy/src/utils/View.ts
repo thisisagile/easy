@@ -10,11 +10,13 @@ import { isPageList, PageList, toPageList } from '../types/PageList';
 import { List } from '../types/List';
 import { isEqual } from '../types/IsEqual';
 import { DontInfer } from '../types/Types';
+import { EnumConstructor, isEnumConstructor } from '../types/Enum';
+import { Id } from '../types/Id';
 
 type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
 
-type ViewType<V = any> = Primitive | Constructor | Func | View<V> | undefined;
+type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
 type ViewRecord<V = any> = Partial<Record<keyof V, ViewType>>;
 
 const ignore = Symbol('view.ignore');
@@ -28,6 +30,10 @@ export const toViewer = (key: string, value: ViewType): Viewer =>
     .equals(ignore, { key, f: () => undefined })
     .equals(keep, { key, f: (a: any) => traverse(a, key) })
     .type(isString, s => ({ key, f: (a: any) => traverse(a, s) }))
+    .type(isEnumConstructor, c => ({
+      key,
+      f: (a, key) => use(traverse(a, key), v => (isArray(v) ? c.byIds(v) : c.byId(v as Id))),
+    }))
     .type(isConstructor, c => ({
       key,
       f: (a, key) => use(traverse(a, key), v => (isArray(v) ? v.map(i => optional(c, i)) : optional(c, v))),

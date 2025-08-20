@@ -1,6 +1,6 @@
 import '@thisisagile/easy-test';
 import { asNumber, Constructor, isList, isPageList, List, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
-import { Dev } from '../ref';
+import { Dev, Language } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
 describe('View', () => {
@@ -447,6 +447,34 @@ describe('view works', () => {
     const things = toThing.from(pl);
     expect(things).toHaveLength(3);
     expect(things.options).toEqual(options);
+  });
+
+  test('works well with an enum', () => {
+    const s = {
+      id: 1,
+      name: 'Sander',
+      language: Language.JavaScript.id,
+      languages: [Language.Java.id, Language.TypeScript.id],
+      dev: { id: 1, name: 'Sander' },
+    };
+    const v = view({
+      id: 'id',
+      name: 'name',
+      language: Language,
+      languages: Language,
+      dev: Dev,
+    });
+
+    const result = v.from(s);
+    expect(result.id).toBe(s.id);
+    expect(result.name).toBe(s.name);
+    expect(result.language).toBeInstanceOf(Language);
+    expect(result.language.code).toBe('js');
+    expect(result.languages).toBeInstanceOf(Array);
+    expect(result.languages).toHaveLength(2);
+    expect(result.languages.byId(Language.TypeScript.id)).toBe(Language.TypeScript);
+    expect(result.languages[1].code).toBe('ts');
+    expect(result.dev).toBeInstanceOf(Dev);
   });
 
   const dataSpread = { id: 1, name: 'Aardvark' };

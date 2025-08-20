@@ -1,5 +1,6 @@
-import { Language } from '../ref';
+import { Dev, DevRepo, Language } from '../ref';
 import '@thisisagile/easy-test';
+import { isEnumConstructor } from '../../src';
 
 describe('Enum', () => {
   class MoreLanguage extends Language {
@@ -101,5 +102,17 @@ describe('Enum', () => {
     expect(Language.Java.equals(Language.Java)).toBeTruthy();
     expect(Language.Java.equals('javascript')).toBeFalsy();
     expect(Language.Java.equals(Language.JavaScript)).toBeFalsy();
+  });
+
+  test('enum constructor', () => {
+    expect(isEnumConstructor({})).toBeFalsy();
+    expect(isEnumConstructor(MoreLanguage.byId)).toBeFalsy();
+    expect(isEnumConstructor(Dev)).toBeFalsy();
+    expect(isEnumConstructor(DevRepo)).toBeFalsy();
+    expect(isEnumConstructor(Language)).toBeTruthy();
+    expect(isEnumConstructor(MoreLanguage)).toBeTruthy();
+
+    expect(Language.byId<Language>(Language.JavaScript.id)).toBeInstanceOf(Language);
+    expect(MoreLanguage.byId<MoreLanguage>(Language.JavaScript.id)).toBeInstanceOf(Language);
   });
 });
