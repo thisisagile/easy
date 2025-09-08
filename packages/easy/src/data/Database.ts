@@ -12,6 +12,9 @@ export type DatabaseOptions = {
   maxPoolSize?: number;
   minPoolSize?: number;
   maxIdleTimeMS?: number;
+  socketTimeoutMS?: number;
+  // Query specific options
+  queryTimeoutMS?: number;
 };
 
 export class DefaultProvider implements DataProvider {}

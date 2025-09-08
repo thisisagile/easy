@@ -16,6 +16,8 @@ describe('MongoProvider', () => {
   const tech = new TechCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
+  const maxTimeMS = 5000;
+  const defaultOptions: MongoFindOptions & { total: boolean } = { limit: 250, maxTimeMS, total: false, projection: { _id: 0 } };
   let connect: any;
 
   beforeEach(() => {
@@ -123,7 +125,7 @@ describe('MongoProvider', () => {
   test('find with undefined calls find on the collection with default options', async () => {
     provider.collection = mock.resolve(c);
     await provider.find({});
-    expect(c.find).toHaveBeenCalledWith(expect.anything(), { limit: 250, total: false, projection: { _id: 0 } });
+    expect(c.find).toHaveBeenCalledWith(expect.anything(), { limit: 250, maxTimeMS, total: false, projection: { _id: 0 } });
   });
 
   test('find with with only skip keeps limit', async () => {
@@ -148,7 +150,7 @@ describe('MongoProvider', () => {
       take: 2,
       sort: [devs.name.desc(), devs.language.asc()],
     });
-    expect(c.countDocuments).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] });
+    expect(c.countDocuments).toHaveBeenCalledWith({ $and: [{ Name: { $eq: 'Jeroen' } }] }, { maxTimeMS });
     expect(r.total).toBe(42);
   });
 
@@ -206,7 +208,7 @@ describe('MongoProvider', () => {
   test('find returns original options', async () => {
     c.countDocuments = mock.resolve(42);
     provider.collection = mock.resolve(c);
-    const r = await provider.find({}, { take: 2, skip: 1 });
+    const r = await provider.find({}, { take: 2, skip: 1, maxTimeMS: 42 });
     expect(c.find).toHaveBeenCalledWith({}, fits.json({ limit: 2, total: true, skip: 1 }));
     expect(r.options).toEqual({ take: 2, skip: 1, total: 42 });
   });
@@ -232,7 +234,7 @@ describe('MongoProvider', () => {
 
     await provider.group([{ date: date }]);
 
-    expect(c.aggregate).toHaveBeenCalledWith([{ date: new DateTime(date).toDate() }], undefined);
+    expect(c.aggregate).toHaveBeenCalledWith([{ date: new DateTime(date).toDate() }], { maxTimeMS });
     expect(c.aggregate).not.toHaveBeenCalledWith([{ date: date }]);
   });
 
@@ -323,7 +325,7 @@ describe('MongoProvider', () => {
 
     await provider.count({ date: date });
 
-    expect(c.countDocuments).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, undefined);
+    expect(c.countDocuments).toHaveBeenCalledWith({ date: new DateTime(date).toDate() }, { maxTimeMS });
     expect(c.countDocuments).not.toHaveBeenCalledWith({ date: date });
   });
 
@@ -338,6 +340,10 @@ describe('MongoProvider', () => {
 
     toFindOptions(options?: FindOptions): MongoFindOptions & { total: boolean } {
       return super.toFindOptions(options);
+    }
+
+    withTimeout(options?: Partial<FindOptions & { maxTimeMS?: number }>): Partial<FindOptions> & { maxTimeMS?: number } {
+      return super.withTimeout(options);
     }
   }
 
@@ -419,58 +425,42 @@ describe('MongoProvider', () => {
   });
 
   test.each([
-    ['with undefined', undefined as unknown as FindOptions, { limit: 250, total: false, projection: { _id: 0 } }],
-    ['with custom take', { take: 300 } as FindOptions, { limit: 300, total: true, projection: { _id: 0 } }],
-    [
-      'with custom take and skip',
-      { take: 300, skip: 300 } as FindOptions,
-      {
-        limit: 300,
-        skip: 300,
-        total: true,
-        projection: { _id: 0 },
-      },
-    ],
-    [
-      'with sort',
-      { sort: [{ key: 'id', value: 1 }] } as FindOptions,
-      {
-        limit: 250,
-        total: false,
-        sort: { id: 1 },
-        projection: { _id: 0 },
-      },
-    ],
-    [
-      'with custom projection',
-      { projection: { id: 1 } } as FindOptions,
-      {
-        limit: 250,
-        total: false,
-        projection: { id: 1 },
-      },
-    ],
-    [
-      'with custom projections',
-      { projection: { id: 1, _id: 1 } } as FindOptions,
-      {
-        limit: 250,
-        total: false,
-        projection: { id: 1, _id: 1 },
-      },
-    ],
-    [
-      'with string type skip and take',
-      { take: '42', skip: '43' } as unknown as FindOptions,
-      {
-        limit: 42,
-        skip: 43,
-        total: true,
-        projection: { _id: 0 },
-      },
-    ],
+    ['with undefined', undefined as unknown as FindOptions, defaultOptions],
+    ['with custom take', { take: 300 } as FindOptions, { ...defaultOptions, total: true, limit: 300 }],
+    ['with custom maxTimeMS', { maxTimeMS: 4242 } as FindOptions, { ...defaultOptions, maxTimeMS: 4242 }],
+    ['with custom take and skip', { take: 300, skip: 300 } as FindOptions, { ...defaultOptions, total: true, limit: 300, skip: 300 }],
+    ['with sort', { sort: [{ key: 'id', value: 1 }] } as FindOptions, { ...defaultOptions, sort: { id: 1 } }],
+    ['with custom projection', { projection: { id: 1 } } as FindOptions, { ...defaultOptions, projection: { id: 1 } }],
+    ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { ...defaultOptions, projection: { id: 1, _id: 1 } }],
+    ['with string type skip and take', { take: '42', skip: '43' } as unknown as FindOptions, { ...defaultOptions, total: true, limit: 42, skip: 43 }],
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs);
     expect(p.toFindOptions(s)).toStrictEqual(expected);
+  });
+
+  test('withTimeout with no options returns default maxTimeMS', () => {
+    const p = new TestMongoProvider(devs);
+    const result = p.withTimeout();
+    expect(result).toEqual({ maxTimeMS: 5000 });
+  });
+
+  test('withTimeout with custom maxTimeMS returns provided value', () => {
+    const p = new TestMongoProvider(devs);
+    const result = p.withTimeout({ maxTimeMS: 3000 });
+    expect(result).toEqual({ maxTimeMS: 3000 });
+  });
+
+  test('withTimeout with database queryTimeoutMS uses database timeout', () => {
+    const customDevs = new DevCollection();
+    (customDevs.db.options as any) = { queryTimeoutMS: 10000 };
+    const p = new TestMongoProvider(customDevs);
+    const result = p.withTimeout();
+    expect(result).toEqual({ maxTimeMS: 10000 });
+  });
+
+  test('withTimeout preserves other options', () => {
+    const p = new TestMongoProvider(devs);
+    const result = p.withTimeout({ take: 100, skip: 50, maxTimeMS: 2000 });
+    expect(result).toEqual({ take: 100, skip: 50, maxTimeMS: 2000 });
   });
 });

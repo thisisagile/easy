@@ -10,7 +10,6 @@ import {
   FetchOptions,
   Field,
   Id,
-  ifDefined,
   ifTrue,
   isArray,
   isDefined,
@@ -62,6 +61,11 @@ export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 
 export type Options = { maxTimeMS?: number };
 
+function omitOptions(obj?: FindOptions & Options): Omit<FindOptions & Options, keyof Options> {
+  const { maxTimeMS, ...rest } = obj ?? ({} as Options);
+  return rest;
+}
+
 export class MongoProvider {
   protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
 
@@ -82,6 +86,7 @@ export class MongoProvider {
       ...(db.options?.maxPoolSize && { maxPoolSize: db.options?.maxPoolSize }),
       ...(db.options?.minPoolSize && { minPoolSize: db.options?.minPoolSize }),
       ...(db.options?.maxIdleTimeMS && { maxIdleTimeMS: db.options?.maxIdleTimeMS }),
+      ...(db.options?.socketTimeoutMS && { socketTimeoutMS: db.options?.socketTimeoutMS }),
     })
       .then(c => {
         c.on('error', () => delete MongoProvider.clients[u]);
@@ -112,22 +117,19 @@ export class MongoProvider {
     return toMongoType(asJson(query));
   }
 
+  withTimeout(options?: Partial<FindOptions & Options>): Partial<FindOptions> & Options {
+    return { ...options, maxTimeMS: options?.maxTimeMS ?? this.coll.db?.options?.queryTimeoutMS ?? 5000 };
+  }
+
   find(query: Query, options?: FindOptions & Options): Promise<PageList<Json>> {
-    const { maxTimeMS, ...opts } = options ?? {};
-    return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(opts))
+    return tuple3(this.collection(), this.toMongoJson(query), this.toFindOptions(options))
       .then(([c, q, o]) =>
         tuple2(
-          c.find(q, { ...o, ...ifDefined(maxTimeMS, { maxTimeMS }, {}) }),
-          ifTrue(o.total, () =>
-            ifDefined(
-              maxTimeMS,
-              maxTimeMS => c.countDocuments(q, { maxTimeMS }),
-              () => c.countDocuments(q)
-            )
-          )
+          c.find(q, o),
+          ifTrue(o.total, () => c.countDocuments(q, { maxTimeMS: this.withTimeout(options).maxTimeMS }))
         )
       )
-      .then(([res, total]) => this.toArray(res, { ...opts, total }));
+      .then(([res, total]) => this.toArray(res, { ...omitOptions(options), total }));
   }
 
   all(options?: FindOptions): Promise<PageList<Json>> {
@@ -151,7 +153,7 @@ export class MongoProvider {
       .then(c =>
         c.aggregate(
           qs.map(q => this.toMongoJson(q)),
-          options
+          this.withTimeout(options)
         )
       )
       .then(res => this.toArray(res));
@@ -176,7 +178,7 @@ export class MongoProvider {
   }
 
   count(query?: Query, options?: Options): Promise<number> {
-    return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {}), options));
+    return this.collection().then(c => c.countDocuments(this.toMongoJson(query ?? {}), this.withTimeout(options)));
   }
 
   createIndex(indexes: Indexes, options?: IndexOptions): Promise<string> {
@@ -199,6 +201,7 @@ export class MongoProvider {
       ...((options?.sorts && { sort: options?.sorts }) || (options?.sort && { sort: this.coll.sort(...(options?.sort ?? [])) })),
       total: isDefined(options?.skip) || isDefined(options?.take),
       projection: options?.projection ?? { _id: 0 },
+      maxTimeMS: this.withTimeout(options).maxTimeMS,
     };
   }
 
