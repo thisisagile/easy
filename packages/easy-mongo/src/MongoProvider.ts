@@ -118,7 +118,7 @@ export class MongoProvider {
   }
 
   withTimeout(options?: Partial<FindOptions & Options>): Partial<FindOptions> & Options {
-    return { ...options, maxTimeMS: options?.maxTimeMS ?? this.coll.db?.options?.queryTimeoutMS ?? 5000 };
+    return { ...options, maxTimeMS: options?.maxTimeMS ?? this.coll.db?.options?.queryTimeoutMS ?? 30000 };
   }
 
   find(query: Query, options?: FindOptions & Options): Promise<PageList<Json>> {

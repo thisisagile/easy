@@ -16,7 +16,7 @@ describe('MongoProvider', () => {
   const tech = new TechCollection();
   const filter = { name: { $exists: true } };
   const date = '2023-09-22T12:30:00.000+00:00';
-  const maxTimeMS = 5000;
+  const maxTimeMS = 30000;
   const defaultOptions: MongoFindOptions & { total: boolean } = { limit: 250, maxTimeMS, total: false, projection: { _id: 0 } };
   let connect: any;
 
@@ -441,7 +441,7 @@ describe('MongoProvider', () => {
   test('withTimeout with no options returns default maxTimeMS', () => {
     const p = new TestMongoProvider(devs);
     const result = p.withTimeout();
-    expect(result).toEqual({ maxTimeMS: 5000 });
+    expect(result).toEqual({ maxTimeMS });
   });
 
   test('withTimeout with custom maxTimeMS returns provided value', () => {
