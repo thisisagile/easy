@@ -5,7 +5,7 @@ import { toList } from '@thisisagile/easy';
 describe('Lucene', () => {
   // Operations
 
-  const { text, wildcard, lt, lte, gt, gte, before, after, between, search, clauses, exists, facet, searchWithDef } = lucene;
+  const { text, term, wildcard, lt, lte, gt, gte, before, after, between, search, clauses, exists, facet, searchWithDef } = lucene;
 
   test('text undefined', () => {
     const t = text(undefined)('size');
@@ -414,6 +414,41 @@ describe('Lucene', () => {
           should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }],
           minimumShouldMatch: 0,
         },
+        count: {
+          type: 'total',
+        },
+      },
+    });
+  });
+
+  test('term undefined', () => {
+    const t = term(undefined)('size');
+    expect(t).toBeUndefined();
+  });
+
+  test('term multiple values', () => {
+    const t = term(['42', '43'])('size');
+    expect(t).toStrictEqual({ term: { path: 'size', query: ['42', '43'] } });
+  });
+
+  test('term', () => {
+    const h = lucene.clause({ brand: term('apple') });
+    expect(h[0]).toStrictEqual({ term: { path: 'brand', query: 'apple' } });
+  });
+
+  test('term wildcard', () => {
+    const h = lucene.clause({ wildcard: term('apple') });
+    expect(h[0]).toStrictEqual({ term: { path: { wildcard: '*' }, query: 'apple' } });
+  });
+
+  test('should search, single term clause', () => {
+    const def: SearchDefinition = {
+      brandTerm: v => ({ filter: { brand: term(v) } }),
+    };
+    const s = searchWithDef({ brandTerm: 'apple' }, def);
+    expect(s).toStrictEqual({
+      $search: {
+        compound: { filter: [{ term: { path: 'brand', query: 'apple' } }] },
         count: {
           type: 'total',
         },

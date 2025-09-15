@@ -126,6 +126,15 @@ export const lucene = {
           ...ifDefined(fuzzy, { fuzzy }),
         },
       })),
+  term:
+    (value?: OneOrMore<unknown>): Operator =>
+    (path: string) =>
+      ifDefined(value, v => ({
+        term: {
+          path: path === 'wildcard' ? { wildcard: '*' } : path,
+          query: v,
+        },
+      })),
   wildcard:
     (value?: OneOrMore<unknown>, allowAnalyzedField = true): Operator =>
     (path: string) => ({
