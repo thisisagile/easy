@@ -444,4 +444,19 @@ describe('DateTime', () => {
     const result = start.withClock(clock);
     expect(result).toMatchText('2021-02-06T03:03:01.000Z');
   });
+
+  test('inAmsterdam', () => {
+    const d = new DateTime(iso).inAmsterdam();
+    expect(d).toMatchText('2021-03-25T09:39:44.000+01:00');
+  });
+
+  test('inNewYork', () => {
+    const d = new DateTime(iso).inNewYork();
+    expect(d).toMatchText(new_york);
+  });
+
+  test('inLondon', () => {
+    const d = new DateTime(iso).inLondon();
+    expect(d).toMatchText('2021-03-25T08:39:44.000+00:00');
+  });
 });

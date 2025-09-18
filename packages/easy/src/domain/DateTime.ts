@@ -118,6 +118,18 @@ export class DateTime extends Value<Optional<string>> {
     return new DateTime(this.luxon.setZone(zone) as any);
   }
 
+  inAmsterdam(): DateTime {
+    return this.withZone('Europe/Amsterdam');
+  }
+
+  inNewYork(): DateTime {
+    return this.withZone('America/New_York');
+  }
+
+  inLondon(): DateTime {
+    return this.withZone('Europe/London');
+  }
+
   toString(): string {
     return this.value ?? '';
   }
