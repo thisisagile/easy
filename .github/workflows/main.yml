@@ -50,7 +50,7 @@ jobs:
           name: test-reports
           path: packages
       - name: SonarCloud Scan ${{ matrix.package }}
-        uses: sonarsource/sonarcloud-github-action@v2.1.1
+        uses: sonarsource/sonarcloud-github-action@v2.3.0
         with:
           projectBaseDir: packages/${{ matrix.package }}
         env:
