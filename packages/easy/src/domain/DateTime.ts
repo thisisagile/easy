@@ -56,12 +56,30 @@ export class DateTime extends Value<Optional<string>> {
     return this.from();
   }
 
+  get inAmsterdam(): DateTime {
+    return this.withZone('Europe/Amsterdam');
+  }
+
+  get inNewYork(): DateTime {
+    return this.withZone('America/New_York');
+  }
+
+  get inLondon(): DateTime {
+    return this.withZone('Europe/London');
+  }
+
+  get inWarsaw(): DateTime {
+    return this.withZone('Europe/Warsaw');
+  }
+
   protected get utc(): LuxonDateTime {
     return this.luxon.setZone('utc');
   }
 
   from(locale?: string): string;
+
   from(date?: DateTime, locale?: string): string;
+
   from(dateOrLocale?: string | DateTime, maybeLocale?: string): string {
     return (
       use((isString(dateOrLocale) ? dateOrLocale : maybeLocale) ?? 'en', locale =>
@@ -87,13 +105,17 @@ export class DateTime extends Value<Optional<string>> {
   }
 
   add(n: number, unit?: DurationUnit): DateTime;
+
   add(duration: Duration): DateTime;
+
   add(n: number | Duration, unit: DurationUnit = 'day'): DateTime {
     return new DateTime(this.luxon.plus(isNumber(n) ? { [unit]: n } : n) as any);
   }
 
   subtract(n: number, unit?: DurationUnit): DateTime;
+
   subtract(duration: Duration): DateTime;
+
   subtract(n: number | Duration, unit: DurationUnit = 'day'): DateTime {
     return new DateTime(this.luxon.minus(isNumber(n) ? { [unit]: n } : n) as any);
   }
@@ -116,18 +138,6 @@ export class DateTime extends Value<Optional<string>> {
 
   withZone(zone: string): DateTime {
     return new DateTime(this.luxon.setZone(zone) as any);
-  }
-
-  inAmsterdam(): DateTime {
-    return this.withZone('Europe/Amsterdam');
-  }
-
-  inNewYork(): DateTime {
-    return this.withZone('America/New_York');
-  }
-
-  inLondon(): DateTime {
-    return this.withZone('Europe/London');
   }
 
   toString(): string {

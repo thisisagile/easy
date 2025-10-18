@@ -445,18 +445,25 @@ describe('DateTime', () => {
     expect(result).toMatchText('2021-02-06T03:03:01.000Z');
   });
 
+  const inAmsterdam = '2021-03-25T09:39:44.000+01:00';
+
   test('inAmsterdam', () => {
-    const d = new DateTime(iso).inAmsterdam();
-    expect(d).toMatchText('2021-03-25T09:39:44.000+01:00');
+    const d = new DateTime(iso).inAmsterdam;
+    expect(d).toMatchText(inAmsterdam);
   });
 
   test('inNewYork', () => {
-    const d = new DateTime(iso).inNewYork();
+    const d = new DateTime(iso).inNewYork;
     expect(d).toMatchText(new_york);
   });
 
   test('inLondon', () => {
-    const d = new DateTime(iso).inLondon();
+    const d = new DateTime(iso).inLondon;
     expect(d).toMatchText('2021-03-25T08:39:44.000+00:00');
+  });
+
+  test('inWarsaw', () => {
+    const d = new DateTime(iso).inWarsaw;
+    expect(d).toMatchText('2021-03-25T09:39:44.000+01:00');
   });
 });
