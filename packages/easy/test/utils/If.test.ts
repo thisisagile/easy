@@ -1,5 +1,6 @@
 import { mock } from '@thisisagile/easy-test';
 import { ifDefined, ifEither, ifFalse, ifNotEmpty, ifTrue } from '../../src';
+import { Dev } from '../ref';
 
 describe('If', () => {
   const hello = 'Hello World';
@@ -508,6 +509,16 @@ describe('If', () => {
           () => 'default'
         )
       ).toBe('first');
+    });
+
+    test('work with complex AND empty objects', () => {
+      expect(
+        ifEither(
+          [undefined, Dev.Wouter, {} as Dev],
+          d => d.name,
+          () => 'default'
+        )
+      ).toBe('Wouter');
     });
   });
 });
