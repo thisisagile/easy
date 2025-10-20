@@ -6,11 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.19.2'
+          node-version: '22'
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build
@@ -36,13 +36,13 @@ jobs:
         package: [easy, easy-domain, easy-service, easy-express, easy-mssql, easy-mongo, easy-react, easy-test, easy-test-react, easy-test-web, easy-puppeteer, easy-playwright]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0  # Shallow clones are disabled for a better relevancy of SonarCloud analysis
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.19.2'
+          node-version: '22'
       - name: Install dependencies
         run: yarn install --immutable
       - uses: actions/download-artifact@v4
@@ -63,13 +63,13 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20.19.2'
+          node-version: '22'
       - name: Install dependencies
         run: yarn install --immutable
       - name: Release
