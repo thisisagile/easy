@@ -46,7 +46,7 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-service": "workspace:^",
-    "@types/express": "^4.17.21",
+    "@types/express": "^4.17.25",
     "cls-hooked": "^4.2.2",
     "express": "^4.21.2",
     "form-urlencoded": "^6.1.5",
