@@ -144,6 +144,12 @@ describe('View', () => {
     });
   });
 
+  test('view in view not done on undefined prop', () => {
+    const sub = view({ sub: value('sony') });
+    const s = view({ id: 'id', company: sub });
+    expect(s.from({ id: 1 })).toStrictEqual({ id: 1 });
+  });
+
   test('simple', () => {
     const s2 = view({ id: 'id', city: () => 'Utrecht' });
     const s = view({ company: s2 });

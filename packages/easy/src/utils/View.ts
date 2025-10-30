@@ -38,7 +38,7 @@ export const toViewer = (key: string, value: ViewType): Viewer =>
       key,
       f: (a, key) => use(traverse(a, key), v => (isArray(v) ? v.map(i => optional(c, i)) : optional(c, v))),
     }))
-    .type(isSimpleView, f => ({ key, f: (a: any) => f.from(traverse(a, key)) }))
+    .type(isSimpleView, f => ({ key, f: (a: any) => ifDefined(traverse(a, key), v => f.from(v)) }))
     .type(isFunction, f => ({ key, f }))
     .else(v => ({ key, f: () => v }));
 
