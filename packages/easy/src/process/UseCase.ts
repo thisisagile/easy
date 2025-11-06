@@ -4,8 +4,8 @@ import { Enum } from '../types/Enum';
 import { text } from '../types/Template';
 import { kebab, Text } from '../types/Text';
 import { List, toList } from '../types/List';
-import { IdName } from '../types/Identity';
 import { isIn, isString } from '../types/Is';
+import { IdNamePlain } from '../types/IdName';
 
 export class UseCase extends Enum {
   constructor(
@@ -26,7 +26,7 @@ export class UseCase extends Enum {
     return this;
   }
 
-  for(item: string | IdName): UseCase {
+  for(item: string | IdNamePlain): UseCase {
     return new UseCase(this.app, `${this.name} ${isString(item) ? item : item?.name}`, kebab(`${this.id} ${isString(item) ? item : item.id}`)).with(
       ...this.scopes.map(s => s?.for(item))
     );

@@ -1,10 +1,10 @@
 import { Enum } from '../types/Enum';
 import { text } from '../types/Template';
 import type { Text } from '../types/Text';
-import { List, toList } from '../types/List';
-import { IdName } from '../types/Identity';
-import { isString } from '../types/Is';
 import { kebab } from '../types/Text';
+import { List, toList } from '../types/List';
+import { isString } from '../types/Is';
+import { IdNamePlain } from '../types/IdName';
 
 export class Scope extends Enum {
   protected constructor(
@@ -15,7 +15,7 @@ export class Scope extends Enum {
     super(name, id.toString());
   }
 
-  for(item: string | IdName): Scope {
+  for(item: string | IdNamePlain): Scope {
     return new Scope(`${this.name} ${isString(item) ? text(item).title : item.name}`, kebab(`${this.id} ${isString(item) ? item : item.id}`));
   }
 
