@@ -1,4 +1,4 @@
-import { asString, clipUri, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, toSegment, uri, Uri } from '../../src';
+import { asString, clipUri, ctx, DateTime, DotEnvContext, EasyUri, EnvContext, Id, OneOrMore, toSegment, uri, Uri, UriExpandProps } from '../../src';
 import { DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { host } from '../../../../test/init';
@@ -158,7 +158,7 @@ describe('Uri', () => {
     expect(u).toMatchText('https://www.easy.io/dev/developers?q=sander');
   });
 
-  type DevProps = { live: boolean; startDate: DateTime; brands: OneOrMore<Id> };
+  type DevProps = { live: boolean; startDate: DateTime; brands: OneOrMore<Id> } & UriExpandProps;
 
   class PropsDevUri extends EasyUri<DevProps> {
     static readonly devs = uri.segment('developers');

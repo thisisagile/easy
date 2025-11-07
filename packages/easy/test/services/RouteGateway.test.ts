@@ -1,4 +1,20 @@
-import { Api, cache, EasyUri, Func, HttpStatus, Request, RequestOptions, Response, RouteGateway, Store, toList, toPageList, toResponse, uri } from '../../src';
+import {
+  Api,
+  cache,
+  EasyUri,
+  Func,
+  HttpStatus,
+  Request,
+  RequestOptions,
+  Response,
+  RouteGateway,
+  Store,
+  toList,
+  toPageList,
+  toResponse,
+  uri,
+  UriExpandProps,
+} from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
@@ -77,12 +93,6 @@ describe('RouteGateway', () => {
     expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
-  test('exists returns false if more than one', async () => {
-    api.get = mock.resolve(toResponse(HttpStatus.Ok, devs));
-    await expect(gateway.exists(42)).resolves.toBe(false);
-    expect(api.get).toHaveBeenCalledWith(fits.type(DevUri), undefined);
-  });
-
   test('exists returns false if not found', async () => {
     api.get = mock.reject(toResponse(HttpStatus.NotFound, {}, new Error('Does not exists')));
     await expect(gateway.exists(42)).resolves.toBe(false);
@@ -126,8 +136,8 @@ describe('RouteGateway', () => {
 
   test('filter calls api correctly', async () => {
     api.post = mock.resolve(toResponse(HttpStatus.Created, devs));
-    await expect(gateway.filter(mock.a<RequestOptions>({}))).resolves.toHaveLength(devs.length);
-    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), {});
+    await expect(gateway.filter()).resolves.toHaveLength(devs.length);
+    expect(api.post).toHaveBeenCalledWith(fits.type(DevUri), undefined);
   });
 
   test('add calls api without Uri correctly', async () => {

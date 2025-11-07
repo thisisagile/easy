@@ -39,11 +39,11 @@ export class Repository<T, Options = FetchOptions> {
     return reject(Exception.IsNotImplemented);
   }
 
-  add(t: T | Json): Promise<T> {
+  add(t: Partial<T> | Json): Promise<T> {
     return reject(Exception.IsNotImplemented);
   }
 
-  update(id: Id, json: Json): Promise<T> {
+  update(id: Id, json: Partial<T> | Json): Promise<T> {
     return reject(Exception.IsNotImplemented);
   }
 
@@ -51,7 +51,7 @@ export class Repository<T, Options = FetchOptions> {
     return reject(Exception.IsNotImplemented);
   }
 
-  upsert(id: Id, item: Json): Promise<T> {
+  upsert(id: Id, item: Partial<T> | Json): Promise<T> {
     return reject(Exception.IsNotImplemented);
   }
 }

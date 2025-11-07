@@ -1,63 +1,64 @@
-import { Api, RouteOptions } from './Api';
+import { Api } from './Api';
 import { ApiGateway } from './ApiGateway';
 import { Func } from '../types/Func';
-import { Uri } from '../types/Uri';
+import { Uri, UriExpandProps } from '../types/Uri';
 import { PageList } from '../types/PageList';
 import { Json, JsonValue } from '../types/Json';
-import { Id } from '../types/Id';
+import { HasId, Id } from '../types/Id';
 import { Optional } from '../types/Types';
 import { List } from '../types/List';
 import { toArray } from '../types/Array';
 import { HttpStatus } from '../http/HttpStatus';
+import { isDefined } from '../types/Is';
 
-export class RouteGateway extends ApiGateway {
+export class RouteGateway<Props extends UriExpandProps = UriExpandProps> extends ApiGateway {
   constructor(
-    readonly route: Func<Uri>,
-    readonly routeId: Func<Uri>,
+    readonly route: Func<Uri<Props>>,
+    readonly routeId: Func<Uri<Props>>,
     readonly api: Api = new Api()
   ) {
     super(api);
   }
 
-  all(options?: RouteOptions): Promise<PageList<Json>> {
-    return this.get(this.route(), options);
+  all(options?: Props): Promise<PageList<Json>> {
+    return this.get(this.route().expand(options ?? {}) as Uri, options);
   }
 
-  byId(id: Id, options?: RouteOptions): Promise<Optional<Json>> {
-    return this.getOne(this.routeId().id(id));
+  byId(id: Id): Promise<Optional<Json>> {
+    return this.getOne(this.routeId().id(id) as Uri);
   }
 
   byIds(...ids: Id[]): Promise<List<Json>> {
-    return this.get(this.route().ids(toArray(...ids)));
+    return this.get(this.route().ids(toArray(...ids)) as Uri);
   }
 
-  search(q: JsonValue, options?: RouteOptions): Promise<PageList<Json>> {
-    return this.get(this.route().query(q), options);
+  search(q: JsonValue, options?: Props): Promise<PageList<Json>> {
+    return this.get(this.route().expand({ ...options, q } as Props) as Uri);
   }
 
-  exists(id: Id, options?: RouteOptions): Promise<boolean> {
-    return this.get(this.routeId().id(id))
-      .then(r => r.length === 1)
+  exists(id: Id): Promise<boolean> {
+    return this.byId(id)
+      .then(r => isDefined(r))
       .catch(r => (HttpStatus.NotFound.equals(r.status) ? false : Promise.reject(r)));
   }
 
-  add(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.post(this.route(), item, options);
+  add(item: Json): Promise<Json> {
+    return this.post(this.route() as Uri, item);
   }
 
-  filter(options?: RouteOptions): Promise<PageList<Json>> {
-    return this.postSearch(this.route(), options);
+  filter(options?: Props): Promise<PageList<Json>> {
+    return this.postSearch(this.route().expand(options ?? {}) as Uri);
   }
 
-  update(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.patch(this.routeId().id(item.id), item, options);
+  update(item: Json): Promise<Json> {
+    return this.patch(this.routeId().id(item.id) as Uri, item);
   }
 
-  upsert(item: Json, options?: RouteOptions): Promise<Json> {
-    return this.put(this.routeId().id(item.id), item, options);
+  upsert(item: Json): Promise<Json> {
+    return this.put(this.routeId().id(item.id) as Uri, item);
   }
 
-  remove(id: Id, options?: RouteOptions): Promise<boolean> {
-    return this.delete(this.routeId().id(id), options);
+  remove(id: Id): Promise<boolean> {
+    return this.delete(this.routeId().id(id) as Uri);
   }
 }

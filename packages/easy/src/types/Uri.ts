@@ -29,7 +29,7 @@ export const toSegment = (
 
 export const uri = {
   host: (key?: string): Segment => toSegment(key, { segment: key ?? ctx.env.host ?? '$host' }),
-  resource: (resource: Uri): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
+  resource: <Props extends UriExpandProps>(resource: Uri<Props>): Segment => toSegment(toName(resource, 'Uri'), { segment: toName(resource, 'Uri') }),
   segment: (key?: Text): Segment => toSegment(key, { segment: key as string }),
   path: (key: Text): Segment => toSegment(key, { segment: `:${key}` }),
   query: (key: Text): Segment =>
@@ -51,22 +51,23 @@ const toRoute = (...segments: Segment[]): string =>
     .mapDefined(s => s.segment)
     .join('/');
 
-export type Uri = {
-  id: (id?: unknown) => Uri;
-  ids: (ids: OneOrMore<unknown>) => Uri;
-  query: (q?: unknown) => Uri;
-  sort: (q?: any) => Uri;
-  skip: (n?: number) => Uri;
-  take: (n?: number) => Uri;
+export type Uri<Props extends UriExpandProps = UriExpandProps> = {
+  id: (id?: unknown) => Uri<Props>;
+  ids: (ids: OneOrMore<unknown>) => Uri<Props>;
+  query: (q?: unknown) => Uri<Props>;
+  sort: (q?: any) => Uri<Props>;
+  skip: (n?: number) => Uri<Props>;
+  take: (n?: number) => Uri<Props>;
   path: string;
   route: (resource: string) => string;
   isInternal: boolean;
   toString: () => string;
+  expand: (props: Partial<Props>) => Uri<Props>;
 };
 
-export type UriExpandProps = { q: string; s: string };
+export type UriExpandProps = { q?: string; s?: string; skip?: number; take?: number };
 
-export class EasyUri<Props = UriExpandProps> implements Uri {
+export class EasyUri<Props extends UriExpandProps = UriExpandProps> implements Uri<Props> {
   static readonly id = uri.path('id');
   static readonly ids = uri.query('ids');
   static readonly query = uri.query('q');
@@ -126,7 +127,7 @@ export class EasyUri<Props = UriExpandProps> implements Uri {
   take = (items?: number): this => this.set(EasyUri.take, items);
 
   expand(props: Partial<Props>): this {
-    return entries(props)
+    return entries(props as any)
       .filter(([_, v]) => isNotEmpty(v))
       .reduce((u, [k, v]) => (isBoolean(v) ? u.set(uri.boolean(k), v) : u.set(uri.query(k), toArray(v).join(','))), this);
   }
