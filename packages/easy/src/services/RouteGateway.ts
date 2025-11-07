@@ -4,7 +4,7 @@ import { Func } from '../types/Func';
 import { Uri, UriExpandProps } from '../types/Uri';
 import { PageList } from '../types/PageList';
 import { Json, JsonValue } from '../types/Json';
-import { HasId, Id } from '../types/Id';
+import { Id } from '../types/Id';
 import { Optional } from '../types/Types';
 import { List } from '../types/List';
 import { toArray } from '../types/Array';

@@ -1,20 +1,4 @@
-import {
-  Api,
-  cache,
-  EasyUri,
-  Func,
-  HttpStatus,
-  Request,
-  RequestOptions,
-  Response,
-  RouteGateway,
-  Store,
-  toList,
-  toPageList,
-  toResponse,
-  uri,
-  UriExpandProps,
-} from '../../src';
+import { Api, cache, EasyUri, Func, HttpStatus, Request, RequestOptions, Response, RouteGateway, Store, toList, toPageList, toResponse, uri } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 
