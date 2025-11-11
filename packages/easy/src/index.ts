@@ -121,4 +121,3 @@ export * from './utils/Wait';
 export * from './validation/Contraints';
 export * from './validation/Validate';
 export * from './validation/When';
-export { IdName } from './types/IdName';
