@@ -1,5 +1,5 @@
 import { asString, choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
-import { Dev } from '../ref';
+import { Dev, isDev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 
 describe('Case', () => {
@@ -487,5 +487,73 @@ describe('Case', () => {
       .equals(Dev.Wouter, 'Yes')
       .else('Nope');
     expect(out).toBe('Nope');
+  });
+});
+
+describe('Choose', () => {
+  const d = choose(Dev.Naoufal)
+    .case(d => d.name === 'Wouter', 'Nope')
+    .case(
+      d => d.name !== 'Sander',
+      () => {
+        throw new Error('Shouldnt be called');
+      }
+    )
+    .case(() => {
+      throw new Error('Shouldnt be called');
+    }, 'Also nope')
+    .case(d => d.name === 'Naoufal', 'Yes')
+    .type(isDev, d => d.name)
+    .else('No');
+  test('simple case', () => {
+    expect(d).toBe('Yes');
+  });
+});
+
+describe('Choose without else', () => {
+  test('simple case', () => {
+    const d = choose(Dev.Naoufal)
+      .case<string>(
+        d => d.name !== 'Wouter',
+        () => {
+          throw new Error('Should not be called');
+        }
+      )
+      .case(d => d.name === 'Naoufal', 'Yes')
+      .else('Nope');
+    expect(d).toBe('Yes');
+  });
+});
+
+describe('Choose with in predicates', () => {
+  const who = (dev: Dev): string =>
+    choose(dev)
+      .is.in([Dev.Wouter, Dev.Sander], 'Nope')
+      .is.in([Dev.Naoufal, Dev.Jeroen], () => 'Yes')
+      .else('No');
+
+  const whoFunc = (dev: Dev): string =>
+    choose(dev)
+      .is.in(() => [Dev.Wouter, Dev.Sander], 'Nope')
+      .is.in(
+        () => [Dev.Naoufal, Dev.Jeroen],
+        () => 'Yes'
+      )
+      .else('No');
+
+  const emptyWho = (dev: Dev): string =>
+    choose(dev)
+      .is.in(() => [], 'Empty')
+      .else('Yes');
+
+  test('cases', () => {
+    expect(who(Dev.Naoufal)).toBe('Yes');
+    expect(whoFunc(Dev.Naoufal)).toBe('Yes');
+    expect(who(Dev.Wouter)).toBe('Nope');
+    expect(whoFunc(Dev.Wouter)).toBe('Nope');
+    expect(emptyWho(Dev.Naoufal)).toBe('Yes');
+    expect(who(undefined as unknown as Dev)).toBe('No');
+    expect(whoFunc(undefined as unknown as Dev)).toBe('No');
+    expect(emptyWho(undefined as unknown as Dev)).toBe('Yes');
   });
 });
