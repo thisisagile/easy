@@ -1,6 +1,6 @@
 import '@thisisagile/easy-test';
 import { toList } from '@thisisagile/easy';
-import { Country } from '../../src';
+import { Country, inEurope } from '../../src';
 
 describe('Country', () => {
   test('id and name matches.', () => {
@@ -33,5 +33,26 @@ describe('Country', () => {
     expect(Country.NL.equals('nl')).toBeTruthy();
     expect(Country.NL.equals('NL')).toBeTruthy();
     expect(Country.NL.equals('BE')).toBeFalsy();
+  });
+
+  test('returns true for EU countries.', () => {
+    expect(inEurope(Country.NL)).toBeTruthy();
+    expect(inEurope(Country.DE)).toBeTruthy();
+    expect(inEurope('IT')).toBeTruthy();
+    expect(inEurope('ES')).toBeTruthy();
+    expect(inEurope('nl')).toBeTruthy();
+    expect(inEurope('Fr')).toBeTruthy();
+  });
+
+  test('returns false for non-EU countries.', () => {
+    expect(inEurope(Country.US)).toBeFalsy();
+    expect(inEurope(Country.CA)).toBeFalsy();
+    expect(inEurope('JP')).toBeFalsy();
+    expect(inEurope('GB')).toBeFalsy();
+  });
+
+  test('returns false for invalid country string.', () => {
+    expect(inEurope('XX')).toBeFalsy();
+    expect(inEurope('INVALID')).toBeFalsy();
   });
 });

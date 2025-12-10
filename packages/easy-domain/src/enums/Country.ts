@@ -267,3 +267,19 @@ export class Country extends Enum {
     return text(other).lower.trim.equals(this.lower);
   }
 }
+
+export const inEurope = (c: Country | string): boolean => {
+  const country = c instanceof Country ? c : Country.lookup(c);
+  if (!country) {
+    return false;
+  }
+  const euCountries = [
+    Country.AT, Country.BE, Country.BG, Country.HR, Country.CY,
+    Country.CZ, Country.DK, Country.EE, Country.FI, Country.FR,
+    Country.DE, Country.GR, Country.HU, Country.IE, Country.IT,
+    Country.LV, Country.LT, Country.LU, Country.MT, Country.NL,
+    Country.PL, Country.PT, Country.RO, Country.SK, Country.SI,
+    Country.ES, Country.SE
+  ];
+  return euCountries.some(euCountry => euCountry.equals(country));
+};
