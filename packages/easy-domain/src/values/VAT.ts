@@ -1,13 +1,14 @@
-import { isNotEmpty, text, Value, replaceAll } from '@thisisagile/easy';
+import { isNotEmpty, text, Value } from '@thisisagile/easy';
 import { isVAT } from 'validator';
 
 export class VAT extends Value {
   private readonly country: string;
 
-  constructor(vat?: unknown, country = 'NL') {
-    const cleaned = replaceAll(text(vat).trim, '.', '');
-    super(cleaned.toString());
-    this.country = country;
+  constructor(vat: unknown, country = 'NL') {
+    const cleaned = text(vat).trim.replace('.', '').toString();
+    super(cleaned);
+
+    this.country = text(country).trim.upper.toString();
   }
 
   get isValid(): boolean {
@@ -16,4 +17,4 @@ export class VAT extends Value {
   }
 }
 
-export const vat = (v?: unknown, country?: string): VAT => new VAT(v, country);
+export const vat = (v: unknown, country?: string): VAT => new VAT(v, country);
