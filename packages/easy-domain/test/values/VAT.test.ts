@@ -1,5 +1,5 @@
 import { ctx } from '@thisisagile/easy';
-import { toVAT, VAT } from '../../src/values/VAT';
+import { toVAT, VAT } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('VAT', () => {
