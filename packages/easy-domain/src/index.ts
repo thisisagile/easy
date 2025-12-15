@@ -18,3 +18,4 @@ export * from './values/DunsNumber';
 export * from './values/PostalCode';
 export * from './values/Slug';
 export * from './values/Url';
+export * from './values/VAT';
