@@ -763,8 +763,8 @@ describe('asList', () => {
     expect(toList().sum(() => 23)).toBe(0);
   });
 
-  const item1 = { amount: 3, discount: 32, name: 'sander', live: true };
-  const item2 = { amount: 1, discount: 42, name: 'rob', live: false };
+  const item1 = { amount: 3, discount: 32, name: 'sander', live: true, value: { price: 100 } };
+  const item2 = { amount: 1, discount: 42, name: 'rob', live: false, value: { price: 10 } };
 
   test('max', () => {
     const items = toList(item1, item2);
@@ -773,6 +773,8 @@ describe('asList', () => {
     expect(items.max('discount')).toBe(item2);
     expect(items.max('name')).toBe(item1);
     expect(items.max('live')).toBe(item1);
+    expect(items.max(i => i.value.price)).toBe(item1);
+    expect(items.max(i => i.name.slice(0, 1))).toBe(item1);
   });
 
   test('min', () => {
@@ -782,6 +784,8 @@ describe('asList', () => {
     expect(items.min('discount')).toBe(item1);
     expect(items.min('name')).toBe(item2);
     expect(items.min('live')).toBe(item2);
+    expect(items.min(i => i.value.price)).toBe(item2);
+    expect(items.min(i => i.name.slice(0, 1))).toBe(item2);
   });
 
   test('maxValue', () => {

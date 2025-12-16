@@ -30,7 +30,7 @@ export class List<T = unknown> extends Array<T> {
     return !this.isIntersectingWith(...items);
   }
 
-  areEqual(...items: ArrayLike<T> ): boolean {
+  areEqual(...items: ArrayLike<T>): boolean {
     return this.isSubSetOf(...items) && toList(...items).isSubSetOf(...this);
   }
 
@@ -166,12 +166,16 @@ export class List<T = unknown> extends Array<T> {
     return this.reduce((sum: number, i) => sum + p(i), 0);
   }
 
-  max(key: keyof T): T {
-    return this.desc(key).first();
+  max(p: (value: T) => any): T;
+  max(key: keyof T): T;
+  max(p: keyof T | ((value: T) => any)): T {
+    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
   }
 
-  min(key: keyof T): T {
-    return this.asc(key).first();
+  min(key: keyof T): T;
+  min(p: (value: T) => any): T;
+  min(p: keyof T | ((value: T) => any)): T {
+    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) > p(e2) ? 1 : -1)).first() : this.asc(p).first();
   }
 
   byId(id: Id): T {
