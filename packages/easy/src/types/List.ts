@@ -157,7 +157,6 @@ export class List<T = unknown> extends Array<T> {
     const seen = new Set<string>();
     return this.filter(item => !seen.has(JSON.stringify(item)) && seen.add(JSON.stringify(item)));
   }
-
   filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {
     return toList<T>(super.filter(p, params));
   }
@@ -169,7 +168,7 @@ export class List<T = unknown> extends Array<T> {
   max(p: (value: T) => any): T;
   max(key: keyof T): T;
   max(p: keyof T | ((value: T) => any)): T {
-    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
+    return typeof p === 'function' ? this.sort((e1, e2) => ( p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
   }
 
   min(key: keyof T): T;
