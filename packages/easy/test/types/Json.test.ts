@@ -284,3 +284,19 @@ describe('keysToString', () => {
     expect(takeFirstKey({ last, first })).toBe('last');
   });
 });
+
+describe('split', () => {
+  test('split object', () => {
+    const obj = { id: 1, name: 'Sander', age: 23, language: 'TypeScript' };
+    const { extracted, ...rest } = json.split(obj, ['name', 'language']);
+    expect(extracted).toStrictEqual({ name: 'Sander', language: 'TypeScript' });
+    expect(rest).toStrictEqual({ id: 1, age: 23 });
+  });
+
+  test('split object to other prop', () => {
+    const obj = { id: 1, name: 'Sander', age: 23, language: 'TypeScript' };
+    const { picked, ...rest } = json.split(obj, ['language'], 'picked');
+    expect(picked).toStrictEqual({ language: 'TypeScript' });
+    expect(rest).toStrictEqual({ id: 1, name: 'Sander', age: 23 });
+  });
+});

@@ -24,6 +24,23 @@ export const json = {
   pick: <T extends Json = Json>(subject: T, ...keys: string[]): T => keys.reduce((js, k) => json.set(js, k, (subject as any)[k]), {} as T),
   defaults: <T extends Json = Json>(options: Partial<T> = {}, defaults: Partial<T> = {}): T => json.merge(defaults, options) as T,
   isSubset: (subject: Json, subset: Json): boolean => !entries(subset).some(([k, v]) => subject[k] !== v),
+  split: <T extends Record<string, unknown>, K extends string = 'extracted'>(
+    t: T,
+    keys: readonly (keyof T)[],
+    prop: K = 'extracted' as K
+  ): {
+    [P in K]: Partial<T>;
+  } => {
+    const extracted = {} as Partial<T>;
+    const rest = { ...t };
+    keys.forEach(key => {
+      if (key in t) {
+        ifDefined(t[key], v => (extracted[key] = v));
+        delete rest[key as string];
+      }
+    });
+    return { [prop]: extracted, ...rest };
+  },
 };
 
 export const toJson = json.merge;
