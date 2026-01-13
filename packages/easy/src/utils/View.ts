@@ -2,7 +2,7 @@ import { traverse } from './Traverse';
 import { ifDefined } from './If';
 import { Primitive } from '../types/Primitive';
 import { Constructor, isConstructor, use } from '../types/Constructor';
-import { asJson, json } from '../types/Json';
+import { asJson, json as typesJson } from '../types/Json';
 import { choose } from '../types/Case';
 import { isArray, isBoolean, isFunction, isString } from '../types/Is';
 import { meta } from '../types/Meta';
@@ -21,6 +21,7 @@ type ViewRecord<V = any> = Partial<Record<keyof V, ViewType>>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
+const json = Symbol('view.json');
 const spread = 'view.spread';
 
 export const toViewer = (key: string, value: ViewType): Viewer =>
@@ -29,6 +30,7 @@ export const toViewer = (key: string, value: ViewType): Viewer =>
     .type(isBoolean, b => ({ key, f: () => b }))
     .equals(ignore, { key, f: () => undefined })
     .equals(keep, { key, f: (a: any) => traverse(a, key) })
+    .equals(json, { key, f: (a: any) => asJson(traverse(a, key)) })
     .type(isString, s => ({ key, f: (a: any) => traverse(a, s) }))
     .type(isEnumConstructor, c => ({
       key,
@@ -84,7 +86,7 @@ export class View<V = any> {
   private reduce = (source: any): any =>
     use(asJson(source), src =>
       this.viewers.reduce(
-        (acc, v) => (v.key === spread ? { ...acc, ...asJson(v.f(src, v.key)) } : json.set(acc, v.key, v.f(src, v.key))),
+        (acc, v) => (v.key === spread ? { ...acc, ...asJson(v.f(src, v.key)) } : typesJson.set(acc, v.key, v.f(src, v.key))),
         this.startsFrom === 'scratch' ? {} : src
       )
     );
@@ -97,6 +99,7 @@ export const view = <V = any>(views: ViewRecord<DontInfer<V>>): View<V> => new V
 export const views = {
   ignore,
   keep,
+  json,
   spread,
   skip: ignore,
   value: (value: unknown) => () => value,

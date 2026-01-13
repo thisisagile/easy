@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asNumber, Constructor, isList, isPageList, List, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
+import { asNumber, Constructor, dt, isList, isPageList, List, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
 import { Dev, Language } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
@@ -518,5 +518,15 @@ describe('view works', () => {
   test('reverse spread works', () => {
     const s = toReverseSpread.from(dataSpread);
     expect(s).toEqual(dataSpread);
+  });
+
+  test('jsonify works', () => {
+    const toJson = view({
+      id: views.keep,
+      name: views.json,
+      date: views.json,
+    });
+    const s = toJson.from({ id: 1, name: { first: 'Sander', last: 'Aardvark' }, extra: 'not', date: dt('2026-01-12') });
+    expect(s).toEqual({ id: 1, date: '2026-01-12T00:00:00.000Z', name: { first: 'Sander', last: 'Aardvark' } });
   });
 });
