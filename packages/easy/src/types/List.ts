@@ -1,5 +1,5 @@
 import { ArrayLike, toArray } from './Array';
-import { Constructor, on } from './Constructor';
+import { Constructor, on, use } from './Constructor';
 import type { Json } from './Json';
 import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
@@ -168,7 +168,7 @@ export class List<T = unknown> extends Array<T> {
   max(p: (value: T) => any): T;
   max(key: keyof T): T;
   max(p: keyof T | ((value: T) => any)): T {
-    return typeof p === 'function' ? this.sort((e1, e2) => ( p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
+    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
   }
 
   min(key: keyof T): T;
@@ -222,6 +222,12 @@ export class List<T = unknown> extends Array<T> {
 
   switch(item: T): List<T> {
     return this.includes(item) ? this.remove(item) : this.add(item);
+  }
+
+  switchOn(key: keyof T, item: T): List<T>;
+  switchOn(on: (value: T) => any, item: T): List<T>;
+  switchOn(on: keyof T | ((value: T) => any), item: T): List<T> {
+    return use(typeof on === 'function' ? this.find(on) : this.find(i => i[on] === item[on]), i => (i ? this.remove(i) : this.add(item)));
   }
 
   defined(): List<NonNullable<T>> {

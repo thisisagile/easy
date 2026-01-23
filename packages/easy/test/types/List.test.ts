@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, IdName, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 // eslint-disable-next-line jest/no-export
@@ -659,6 +659,23 @@ describe('toList', () => {
     expect(l2).toHaveLength(2);
     const l3 = l2.switch(Dev.Rob);
     expect(l3).toHaveLength(1);
+  });
+
+
+  test('switchOn', () => {
+    expect(toList<Dev>().switchOn('id', Dev.Rob)).toHaveLength(1);
+    expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander)).toHaveLength(2);
+    expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander).switchOn('id', Dev.Rob)).toHaveLength(1);
+
+    const rob = { id: 1, name: 'Rob', slug: 'rob-1' };
+    const sander = { id: 2, name: 'Sander', slug: 'sander-1' };
+    const sander2 = { id: 3, name: 'Sander', slug: 'sander-2' };
+
+    expect(toList<IdName>().switchOn('id', rob)).toHaveLength(1);
+    expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander)).toHaveLength(2);
+    expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander).switchOn('name', sander2)).toHaveLength(1);
+    expect(toList<IdName>().switchOn('name', sander).switchOn(i => i.name === sander2.name, sander2)).toHaveLength(0);
+    expect(toList<IdName>().switchOn('slug', sander).switchOn(i => i.slug === sander2.slug, sander2)).toHaveLength(2);
   });
 });
 
