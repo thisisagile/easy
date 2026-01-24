@@ -1,4 +1,4 @@
-import { isPageList, List, Optional, PageList, PageOptions, toList, toPageList, Validatable } from '@thisisagile/easy';
+import { Get, isPageList, List, ofGet, Optional, PageList, PageOptions, Predicate, toList, toPageList, Validatable } from '@thisisagile/easy';
 import { useState } from 'react';
 
 export const useToggle = (initialState = false): [boolean, () => void] => {
@@ -6,10 +6,22 @@ export const useToggle = (initialState = false): [boolean, () => void] => {
   return [state, () => setState(s => !s)];
 };
 
-export function useSwitch<T>(...states: T[]): { state: T; next: () => void; states: T[] } {
+export function useSwitch<T>(...states: T[]): {
+  state: T;
+  next: () => void;
+  states: T[];
+  isState: Predicate<T>;
+  ifState: <U>(t: T, yes: Get<U, T>, no: Get<U, T>) => U;
+} {
   const [state, setState] = useState(states[0]);
   const next = () => setState(s => states[(states.indexOf(s) + 1) % states.length]);
-  return { state, next, states };
+  const isState = (t: T) => state === t;
+
+  function ifState<U>(t: T, yes: Get<U, T>, no: Get<U, T>): U {
+    return ofGet(state === t ? yes : no, t);
+  }
+
+  return { state, next, states, isState, ifState };
 }
 
 export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>): [E, (e: E) => E] => {
