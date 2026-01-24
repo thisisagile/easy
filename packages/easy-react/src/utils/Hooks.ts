@@ -6,6 +6,12 @@ export const useToggle = (initialState = false): [boolean, () => void] => {
   return [state, () => setState(s => !s)];
 };
 
+export function useSwitch<T>(...states: T[]): { state: T; next: () => void; states: T[] } {
+  const [state, setState] = useState(states[0]);
+  const next = () => setState(s => states[(states.indexOf(s) + 1) % states.length]);
+  return { state, next, states };
+}
+
 export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>): [E, (e: E) => E] => {
   const [state, setState] = useState<E>({ isValid: false, ...item } as E);
   return [

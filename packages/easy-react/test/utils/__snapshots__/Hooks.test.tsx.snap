@@ -36,6 +36,16 @@ exports[`Hooks component with usePaging hook renders correctly. 1`] = `
 </div>
 `;
 
+exports[`Hooks component with useSwitch hook renders correctly. 1`] = `
+<div>
+  <div
+    id="42"
+  >
+    last
+  </div>
+</div>
+`;
+
 exports[`Hooks component with useToggle hook renders correctly as default value is false. 1`] = `
 <div>
   <div
