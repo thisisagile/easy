@@ -5,9 +5,9 @@ import { meta } from '../types/Meta';
 import { List, toList } from '../types/List';
 import { isBoolean, isDefined, isFunction, isIn, isNotEmpty, isString } from '../types/Is';
 import { tryTo } from '../types/Try';
-import { text } from '../types/Template';
 import { inFuture, inPast } from '../types/IsDate';
 import type { Text } from '../types/Text';
+import { text } from '../types/ToText';
 
 export type Constraint = Func<boolean | Results, any>;
 

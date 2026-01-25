@@ -1,6 +1,5 @@
 import { Constraint } from './Contraints';
 import { when } from './When';
-import { text } from '../types/Template';
 import type { TemplateOptions } from '../types/Template';
 import { isResults, Results, toResults } from '../types/Results';
 import { toName } from '../types/Constructor';
@@ -8,12 +7,13 @@ import { toResult } from '../types/Result';
 import { List, toList } from '../types/List';
 import { meta } from '../types/Meta';
 import { isArray, isFunction } from '../types/Is';
+import type { Text } from '../types/Text';
 import { asString } from '../types/Text';
 import { choose } from '../types/Case';
 import { isEnum } from '../types/Enum';
 import { isValue } from '../types/Value';
 import { isValidatable } from '../types/Validatable';
-import type { Text } from '../types/Text';
+import { text } from '../types/ToText';
 
 export type Validator = { property: string | symbol; constraint: Constraint; text: Text; actual?: Text };
 
@@ -29,7 +29,14 @@ const runValidator = (v: Validator, subject?: unknown): Results => {
   try {
     const actual = isFunction((subject as any)[v.property]) ? (subject as any)[v.property]() : (subject as any)[v.property];
     const constraint = v.constraint(actual);
-    return isResults(constraint) ? constraint : !constraint ? asResults(subject, v.text, { ...v, actual }) : toResults();
+    return isResults(constraint)
+      ? constraint
+      : !constraint
+        ? asResults(subject, v.text, {
+            ...v,
+            actual,
+          })
+        : toResults();
   } catch (e) {
     return asResults(subject, asString(e));
   }

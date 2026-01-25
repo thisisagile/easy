@@ -1,6 +1,6 @@
 import type { Text } from '../types/Text';
-import { text } from '../types/Template';
 import { Id } from '../types/Id';
+import { text } from '../types/ToText';
 
 export class Sentence implements Text {
   constructor(

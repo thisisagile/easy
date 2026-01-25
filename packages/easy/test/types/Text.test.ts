@@ -52,6 +52,22 @@ describe('isText', () => {
     expect(text(Dev.Rob).with('-', '', Dev.Sander)).toMatchText('Rob-Sander');
   });
 
+  test('trim', () => {
+    expect(text('Hello').trim).toMatchText('Hello');
+    expect(text('Hello ').trim).toMatchText('Hello');
+    expect(text(' Hello ').trim).toMatchText('Hello');
+    expect(text(' Hello .').trim).toMatchText('Hello.');
+    expect(text(' Hello    Sander . ').trim).toMatchText('HelloSander.');
+  });
+
+  test('sentenceTrim', () => {
+    expect(text('Hello').trimSentence).toMatchText('Hello');
+    expect(text('Hello ').trimSentence).toMatchText('Hello');
+    expect(text(' Hello ').trimSentence).toMatchText('Hello');
+    expect(text(' Hello .').trimSentence).toMatchText('Hello.');
+    expect(text(' Hello    Sander . ').trimSentence).toMatchText('Hello Sander.');
+  });
+
   test('cap', () => {
     expect(text().cap).toMatchText('');
     expect(text('sander').cap).toMatchText('Sander');

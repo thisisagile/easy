@@ -76,7 +76,7 @@ export class EasyUri<Props extends UriExpandProps = UriExpandProps> implements U
   static readonly take = uri.query('take');
 
   readonly host = uri.host();
-  protected resource = uri.resource(this);
+  protected resource: Segment = uri.resource(this);
 
   protected state: any = {};
 

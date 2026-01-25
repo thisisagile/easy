@@ -1,7 +1,8 @@
 import { Uuid } from './Uuid';
 import { Identity } from './Identity';
 import { Optional } from './Types';
-import { text } from './Template';
+
+import { text } from './ToText';
 
 export interface EnvContext {
   readonly domain: string;
@@ -35,9 +36,12 @@ export interface RequestContext {
   correlationId?: Uuid;
   lastError?: string;
   lastErrorStack?: string;
-  get<T>(key: string): T;
-  set<T>(key: string, value: T): T;
   create: (f: () => void) => void;
+
+  get<T>(key: string): T;
+
+  set<T>(key: string, value: T): T;
+
   wrap<T>(f: () => Promise<T>): Promise<T>;
 }
 

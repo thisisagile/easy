@@ -2,7 +2,8 @@ import { asString, Text } from './Text';
 import { Enum } from './Enum';
 import { isDefined } from './Is';
 import { Id } from './Id';
-import { text } from './Template';
+
+import { text } from './ToText';
 
 export class Exception extends Enum {
   static readonly AlreadyExists = new Exception('Subject already exists');

@@ -1,10 +1,10 @@
 import { Enum } from '../types/Enum';
-import { text } from '../types/Template';
 import type { Text } from '../types/Text';
 import { kebab } from '../types/Text';
 import { List, toList } from '../types/List';
 import { isString } from '../types/Is';
 import { IdNamePlain } from '../types/IdName';
+import { text } from '../types/ToText';
 
 export class Scope extends Enum {
   protected constructor(
