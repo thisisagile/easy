@@ -56,19 +56,19 @@ export class DateTime extends Value<Optional<string>> {
     return this.from();
   }
 
-  get inAmsterdam(): DateTime {
+  inAmsterdam(): DateTime {
     return this.withZone('Europe/Amsterdam');
   }
 
-  get inNewYork(): DateTime {
+  inNewYork(): DateTime {
     return this.withZone('America/New_York');
   }
 
-  get inLondon(): DateTime {
+  inLondon(): DateTime {
     return this.withZone('Europe/London');
   }
 
-  get inWarsaw(): DateTime {
+  inWarsaw(): DateTime {
     return this.withZone('Europe/Warsaw');
   }
 
