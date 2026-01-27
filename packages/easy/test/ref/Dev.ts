@@ -1,5 +1,4 @@
 import { asList, defined, Entity, gt, Id, Json, lt, required, Struct, toList } from '../../src';
-import { Age } from './Age';
 import { Money } from '@thisisagile/easy-domain';
 
 export class Certificate extends Struct {
