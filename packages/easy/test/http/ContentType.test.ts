@@ -15,7 +15,6 @@ describe('ContentType', () => {
   });
 
   test('Check encoding of form.', () => {
-    const expected = 'id=4&name=Wouter&language=TypeScript&level=3&certificates%5B%5D';
-    expect(ContentType.Form.encode(j)).toBe(expected);
+    expect(ContentType.Form.encode(j)).toMatchSnapshot();
   });
 });
