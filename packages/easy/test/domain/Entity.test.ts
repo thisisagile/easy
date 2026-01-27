@@ -42,6 +42,7 @@ describe('Entity', () => {
       created: { by: { id: 0, user: 'easy' }, when: Dev.Sander.created.when.value },
       lastModified: { by: { id: 0, user: 'easy' }, when: Dev.Sander.lastModified.when.value },
       certificates: [{ id: 42, name: 'Certified scrum master' }],
+      salary: { currency: 'EUR' },
     });
   });
 

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ContentType Check encoding of form. 1`] = `"id=4&name=Wouter&language=TypeScript&level=3&certificates%5B%5D&salary%5Bcurrency%5D=EUR"`;

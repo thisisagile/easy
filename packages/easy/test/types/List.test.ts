@@ -1,5 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, IdName, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 // eslint-disable-next-line jest/no-export
@@ -661,32 +661,32 @@ describe('toList', () => {
     expect(l3).toHaveLength(1);
   });
 
-  const rob = { id: 1, name: 'Rob', slug: 'rob-1' };
-  const sander = { id: 2, name: 'Sander', slug: 'sander-1' };
-  const sander2 = { id: 3, name: 'Sander', slug: 'sander-2' };
+  const rob = { id: 1, name: 'Rob', slug: 'rob-1', expertise: { name: 'IT', grade: '10' } };
+  const sander = { id: 2, name: 'Sander', slug: 'sander-1', expertise: { name: 'IT', grade: '10+' } };
+  const sander2 = { id: 3, name: 'Sander', slug: 'sander-2', expertise: { name: 'IT', grade: '10+' } };
 
   test('switchOn', () => {
-    expect(toList<Dev>().switchOn('id', Dev.Rob)).toHaveLength(1);
-    expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander)).toHaveLength(2);
-    expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander).switchOn('id', Dev.Rob)).toHaveLength(1);
+    expect(toList().switchOn(Dev.Sander, 'id')).toHaveLength(1);
+    expect(toList(Dev.Rob).switchOn(Dev.Sander, 'id')).toHaveLength(2);
+    expect(toList(Dev.Rob).switchOn(Dev.Sander, 'id').switchOn(Dev.Rob, 'id')).toHaveLength(1);
 
-    expect(toList(sander).switchOn('id', sander)).toHaveLength(0);
-    expect(toList(sander).switchOn('id', { ...sander })).toHaveLength(0);
-    expect(toList(sander).switchOn(i => i.id, { ...sander })).toHaveLength(0);
+    expect(toList(rob).switchOn(rob, 'id')).toHaveLength(0);
+    expect(toList(sander).switchOn({ ...sander }, 'id')).toHaveLength(0);
+    expect(toList(sander).switchOn({ ...sander }, i => i.id)).toHaveLength(0);
+    expect(toList(Dev.Rob).switchOn(Dev.Rob, 'salary.value')).toHaveLength(0);
 
-    expect(toList<IdName>().switchOn('id', rob)).toHaveLength(1);
-    expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander)).toHaveLength(2);
-    expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander).switchOn('name', sander2)).toHaveLength(1);
     expect(
-      toList<IdName>()
-        .switchOn('name', sander)
-        .switchOn(i => i.name === sander2.name, sander2)
+      toList()
+        .switchOn(sander, 'name')
+        .switchOn(sander2, i => i.name === sander2.name)
     ).toHaveLength(0);
     expect(
-      toList<IdName>()
-        .switchOn('slug', sander)
-        .switchOn(i => i.slug === sander2.slug, sander2)
+      toList()
+        .switchOn(sander, 'slug')
+        .switchOn(sander2, i => i.slug === sander2.slug)
     ).toHaveLength(2);
+    expect(toList(rob).switchOn(rob, 'expertise.grade')).toHaveLength(0);
+    expect(toList(rob).switchOn(sander, 'expertise.grade')).toHaveLength(2);
   });
 });
 

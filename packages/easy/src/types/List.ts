@@ -8,6 +8,8 @@ import type { Id } from './Id';
 import { asString } from './Text';
 import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
+import { AnyKey } from './AnyKey';
+import { traverse } from '../utils/Traverse';
 
 type Pred<T> = (value: T, index: number, obj: T[]) => unknown;
 
@@ -226,10 +228,12 @@ export class List<T = unknown> extends Array<T> {
     return this.includes(item) ? this.remove(item) : this.add(item);
   }
 
-  switchOn(key: keyof T, item: T): List<T>;
-  switchOn(on: Pred<T>, item: T): List<T>;
-  switchOn(on: keyof T | Pred<T>, item: T): List<T> {
-    return use(typeof on === 'function' ? this.find(on) : this.find(i => i[on] === item[on]), i => (i ? this.remove(i) : this.add(item)));
+  switchOn<U = T>(item: U, on: AnyKey<U>): List<T>;
+  switchOn<T>(item: T, on: Pred<T>): List<T>;
+  switchOn<U = T>(item: T, on: AnyKey<U> | Pred<T>): List<T> {
+    return use(typeof on === 'function' ? this.find(on) : use(traverse(item, on), v => this.find(i => traverse(i, on) === v)), i =>
+      i ? this.remove(i) : this.add(item)
+    );
   }
 
   defined(): List<NonNullable<T>> {
