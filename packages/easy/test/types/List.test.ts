@@ -661,21 +661,32 @@ describe('toList', () => {
     expect(l3).toHaveLength(1);
   });
 
+  const rob = { id: 1, name: 'Rob', slug: 'rob-1' };
+  const sander = { id: 2, name: 'Sander', slug: 'sander-1' };
+  const sander2 = { id: 3, name: 'Sander', slug: 'sander-2' };
 
   test('switchOn', () => {
     expect(toList<Dev>().switchOn('id', Dev.Rob)).toHaveLength(1);
     expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander)).toHaveLength(2);
     expect(toList<Dev>().switchOn('id', Dev.Rob).switchOn('id', Dev.Sander).switchOn('id', Dev.Rob)).toHaveLength(1);
 
-    const rob = { id: 1, name: 'Rob', slug: 'rob-1' };
-    const sander = { id: 2, name: 'Sander', slug: 'sander-1' };
-    const sander2 = { id: 3, name: 'Sander', slug: 'sander-2' };
+    expect(toList(sander).switchOn('id', sander)).toHaveLength(0);
+    expect(toList(sander).switchOn('id', { ...sander })).toHaveLength(0);
+    expect(toList(sander).switchOn(i => i.id, { ...sander })).toHaveLength(0);
 
     expect(toList<IdName>().switchOn('id', rob)).toHaveLength(1);
     expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander)).toHaveLength(2);
     expect(toList<IdName>().switchOn('id', rob).switchOn('id', sander).switchOn('name', sander2)).toHaveLength(1);
-    expect(toList<IdName>().switchOn('name', sander).switchOn(i => i.name === sander2.name, sander2)).toHaveLength(0);
-    expect(toList<IdName>().switchOn('slug', sander).switchOn(i => i.slug === sander2.slug, sander2)).toHaveLength(2);
+    expect(
+      toList<IdName>()
+        .switchOn('name', sander)
+        .switchOn(i => i.name === sander2.name, sander2)
+    ).toHaveLength(0);
+    expect(
+      toList<IdName>()
+        .switchOn('slug', sander)
+        .switchOn(i => i.slug === sander2.slug, sander2)
+    ).toHaveLength(2);
   });
 });
 

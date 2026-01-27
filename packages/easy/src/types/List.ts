@@ -9,6 +9,8 @@ import { asString } from './Text';
 import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 
+type Pred<T> = (value: T, index: number, obj: T[]) => unknown;
+
 export class List<T = unknown> extends Array<T> {
   get ids(): List<Id> {
     return this.mapDefined(i => (i as any).id as Id);
@@ -42,7 +44,7 @@ export class List<T = unknown> extends Array<T> {
     return this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
   }
 
-  first(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+  first(p?: Pred<T>, params?: unknown): T {
     return (p ? this.find(p, params) : this[0]) as T;
   }
 
@@ -58,15 +60,15 @@ export class List<T = unknown> extends Array<T> {
     return value === this.first();
   }
 
-  next(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+  next(p?: Pred<T>, params?: unknown): T {
     return p ? this[this.findIndex(p, params) + 1] : this[0];
   }
 
-  prev(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+  prev(p?: Pred<T>, params?: unknown): T {
     return p ? this[this.findIndex(p, params) - 1] : this[0];
   }
 
-  last(p?: (value: T, index: number, array: T[]) => unknown, params?: unknown): T {
+  last(p?: Pred<T>, params?: unknown): T {
     return p ? this.filter(p, params).last() : this[this.length - 1];
   }
 
@@ -157,7 +159,7 @@ export class List<T = unknown> extends Array<T> {
     const seen = new Set<string>();
     return this.filter(item => !seen.has(JSON.stringify(item)) && seen.add(JSON.stringify(item)));
   }
-  filter(p: (value: T, index: number, array: T[]) => unknown, params?: unknown): List<T> {
+  filter(p: Pred<T>, params?: unknown): List<T> {
     return toList<T>(super.filter(p, params));
   }
 
@@ -225,8 +227,8 @@ export class List<T = unknown> extends Array<T> {
   }
 
   switchOn(key: keyof T, item: T): List<T>;
-  switchOn(on: (value: T) => any, item: T): List<T>;
-  switchOn(on: keyof T | ((value: T) => any), item: T): List<T> {
+  switchOn(on: Pred<T>, item: T): List<T>;
+  switchOn(on: keyof T | Pred<T>, item: T): List<T> {
     return use(typeof on === 'function' ? this.find(on) : this.find(i => i[on] === item[on]), i => (i ? this.remove(i) : this.add(item)));
   }
 
@@ -278,11 +280,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   //we needed to add U because of a Typescript issue with generics
-  update<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)): List<T> {
+  update<U = T>(p: Pred<T>, val: T | ((v: U) => T)): List<T> {
     return this.map((v, i, a) => (p(v, i, a) ? ofGet<T>(val, v, i, a) : v));
   }
 
-  updateFirst<U = T>(p: (value: T, index: number, array: T[]) => unknown, val: T | ((v: U) => T)) {
+  updateFirst<U = T>(p: Pred<T>, val: T | ((v: U) => T)) {
     const index = this.findIndex(p);
     return this.update((t, i) => p(t, i, this) && i == index, val);
   }
