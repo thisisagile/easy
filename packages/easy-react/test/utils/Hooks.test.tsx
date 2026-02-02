@@ -18,12 +18,17 @@ const ToggleHook = () => {
 };
 
 const SwitchHook = () => {
-  const { state, next } = useSwitch('first', 'last', 'city');
+  const { state, next, ifState } = useSwitch('first', 'last', 'city');
 
   useEffect(() => {
     next();
   }, []);
-  return <div id={'42'}>{`${state}`}</div>;
+  return (
+    <>
+      <div id={'42'}>{`${state}`}</div>
+      <div>{ifState('last', 'yes', 'no')}</div>
+    </>
+  );
 };
 
 class Address extends Entity {
@@ -102,6 +107,7 @@ describe('Hooks', () => {
     const { container, byText } = await rendersWait(<SwitchHook />);
     expect(container).toMatchSnapshot();
     expect(byText('last')).toBeDefined();
+    expect(byText('yes')).toBeDefined();
   });
 
   test('component with useEntity hook renders correctly.', async () => {

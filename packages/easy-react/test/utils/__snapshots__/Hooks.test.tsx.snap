@@ -43,6 +43,9 @@ exports[`Hooks component with useSwitch hook renders correctly. 1`] = `
   >
     last
   </div>
+  <div>
+    yes
+  </div>
 </div>
 `;
 

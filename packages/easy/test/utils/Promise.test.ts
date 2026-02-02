@@ -140,13 +140,16 @@ describe('tuple', () => {
   });
 
   test('tuple.object', async () => {
+    const name = 'Dev Sander';
     const res = await tuple.object({
       ceo: asyncM(ceo),
       cto: asyncM(cto),
       dev: resolve(d),
+      name,
     });
     expect(res.ceo).toBeInstanceOf(Manager);
     expect(res.cto).toBeInstanceOf(Manager);
     expect(res.dev).toBeInstanceOf(Dev);
+    expect(res.name).toBe(name);
   });
 });
