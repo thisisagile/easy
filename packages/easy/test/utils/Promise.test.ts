@@ -138,4 +138,15 @@ describe('tuple', () => {
     expect(res.fulfilled).toHaveLength(0);
     expect(res.rejected).toHaveLength(0);
   });
+
+  test('tuple.object', async () => {
+    const res = await tuple.object({
+      ceo: asyncM(ceo),
+      cto: asyncM(cto),
+      dev: resolve(d),
+    });
+    expect(res.ceo).toBeInstanceOf(Manager);
+    expect(res.cto).toBeInstanceOf(Manager);
+    expect(res.dev).toBeInstanceOf(Dev);
+  });
 });

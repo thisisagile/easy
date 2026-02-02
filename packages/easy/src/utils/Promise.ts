@@ -2,6 +2,8 @@ import { toArray } from '../types/Array';
 import { ErrorOrigin } from '../types/ErrorOrigin';
 import { List, toList } from '../types/List';
 import { asString } from '../types/Text';
+import { on, use } from '../types/Constructor';
+import { keys, values } from '../types/Object';
 
 type Pro<A> = A | PromiseLike<A>;
 type Aw<A> = Awaited<A>;
@@ -24,10 +26,13 @@ export const tuple = {
       fulfilled: toList(...rs.filter(r => r.status === 'fulfilled').map(r => r.value)),
       rejected: toList(...rs.filter(r => r.status === 'rejected').map(r => asString(r.reason))),
     })),
+  object: <T extends Record<string, unknown>>(obj: T): Promise<{ [K in keyof T]: Aw<T[K]> }> =>
+    use(keys(obj), ks => tuple.list(values(obj)).then(vs => vs.reduce((acc: any, v, i) => on(acc, a => (a[ks[i]] = v)), {}) as { [K in keyof T]: Aw<T[K]> })),
 };
 
 export const tuple2 = tuple[2];
 export const tuple3 = tuple[3];
 export const tuple4 = tuple[4];
 export const tuple5 = tuple[5];
+export const tupleO = tuple.object;
 export const settled = tuple.settled;
