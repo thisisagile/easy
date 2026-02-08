@@ -21,7 +21,7 @@ export type DiffOptions = {
   rounding: 'floor' | 'ceil' | 'round';
 };
 
-type DatetimeInput = string | number | Date | DateTime | null;
+export type DatetimeInput = string | number | Date | DateTime | null;
 
 export class DateTime extends Value<Optional<string>> {
   protected readonly luxon: LuxonDateTime;
