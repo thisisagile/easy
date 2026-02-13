@@ -74,6 +74,7 @@ export * from './types/Get';
 export * from './types/Id';
 export * from './types/Identity';
 export * from './types/IdName';
+export * from './types/Indexed';
 export * from './types/Is';
 export * from './types/IsA';
 export * from './types/IsDate';
