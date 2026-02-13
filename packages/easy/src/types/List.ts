@@ -10,12 +10,17 @@ import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 import { AnyKey } from './AnyKey';
 import { traverse } from '../utils/Traverse';
+import { Indexed } from './Indexed';
 
 type Pred<T> = (value: T, index: number, obj: T[]) => unknown;
 
 export class List<T = unknown> extends Array<T> {
   get ids(): List<Id> {
     return this.mapDefined(i => (i as any).id as Id);
+  }
+
+  get indexed(): List<Indexed<T>> {
+    return this.map((v, index) => ({ ...v, index }));
   }
 
   isSubSetOf(...items: ArrayLike<T>): boolean {
@@ -161,6 +166,7 @@ export class List<T = unknown> extends Array<T> {
     const seen = new Set<string>();
     return this.filter(item => !seen.has(JSON.stringify(item)) && seen.add(JSON.stringify(item)));
   }
+
   filter(p: Pred<T>, params?: unknown): List<T> {
     return toList<T>(super.filter(p, params));
   }
@@ -170,13 +176,17 @@ export class List<T = unknown> extends Array<T> {
   }
 
   max(p: (value: T) => any): T;
+
   max(key: keyof T): T;
+
   max(p: keyof T | ((value: T) => any)): T {
     return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
   }
 
   min(key: keyof T): T;
+
   min(p: (value: T) => any): T;
+
   min(p: keyof T | ((value: T) => any)): T {
     return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) > p(e2) ? 1 : -1)).first() : this.asc(p).first();
   }
@@ -195,7 +205,9 @@ export class List<T = unknown> extends Array<T> {
   }
 
   concat(...items: ConcatArray<T>[]): List<T>;
+
   concat(...items: (T | ConcatArray<T>)[]): List<T>;
+
   concat(...items: (T | ConcatArray<T>)[]): List<T> {
     return toList<T>(super.concat(...items));
   }
@@ -205,7 +217,9 @@ export class List<T = unknown> extends Array<T> {
   }
 
   splice(start: number, deleteCount?: number): List<T>;
+
   splice(start: number, deleteCount: number, ...items: T[]): List<T>;
+
   splice(start: number, deleteCount: number, ...items: T[]): List<T> {
     return toList<T>(super.splice(start, deleteCount, ...items));
   }
@@ -229,7 +243,9 @@ export class List<T = unknown> extends Array<T> {
   }
 
   switchOn<U = T>(item: U, on: AnyKey<U>): List<T>;
+
   switchOn<T>(item: T, on: Pred<T>): List<T>;
+
   switchOn<U = T>(item: T, on: AnyKey<U> | Pred<T>): List<T> {
     return use(typeof on === 'function' ? this.find(on) : use(traverse(item, on), v => this.find(i => traverse(i, on) === v)), i =>
       i ? this.remove(i) : this.add(item)

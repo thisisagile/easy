@@ -1075,4 +1075,13 @@ describe('update', () => {
     expect(diff).toHaveLength(1);
     expect(diff.first()).toBe(Dev.Jeroen);
   });
+
+  test('indexed', () => {
+    const devs = toList(Dev.Jeroen, Dev.Naoufal, Dev.Jeroen);
+    const indexed = devs.indexed;
+    expect(indexed).toHaveLength(3);
+    expect(indexed[0].index).toBe(0);
+    expect(indexed[1].index).toBe(1);
+    expect(indexed[2].index).toBe(2);
+  });
 });
