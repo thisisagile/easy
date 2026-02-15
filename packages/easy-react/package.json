@@ -44,7 +44,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
     "next": "^14.2.24",
-    "next-transpile-modules": "^10.0.0"
+    "next-transpile-modules": "^10.0.1"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
