@@ -9,7 +9,7 @@ import { isNumber } from './Is';
 import { choose } from './Case';
 import type { Id } from './Id';
 
-export type FilterValue = { label?: string; value: any, count?: number };
+export type FilterValue = { label?: string; value: any; count?: number };
 export type Filter = { label?: string; field: string; shortField?: string; values: FilterValue[] };
 
 export const toFilter = (field: string, value: any): Filter => toShortFilter(field, field, value);
@@ -22,7 +22,7 @@ export const toShortFilter = (field: string, shortField: string, value: any): Fi
 export type PageOptions = { take?: number; skip?: number; sort?: Sort[]; sorts?: PlainSort; filters?: Filter[] };
 export type PageListOptions = Exclude<PageOptions, 'sort'> & { total?: number };
 
-export class PageList<T> extends List<T> {
+export class PageList<T = unknown> extends List<T> {
   private _options?: PageListOptions;
 
   get options(): Optional<PageListOptions> {
@@ -112,7 +112,7 @@ export class PageList<T> extends List<T> {
     return super.mapAsync(f).then(r => toPageList(r, this));
   }
 
-  areEqual(...items: ArrayLike<T> ): boolean {
+  areEqual(...items: ArrayLike<T>): boolean {
     return this.isSubSetOf(...items) && toList(...items).isSubSetOf(...this);
   }
 
@@ -205,15 +205,16 @@ export class PageList<T> extends List<T> {
 
 export const isPageList = <T>(l?: unknown): l is PageList<T> => isList<T>(l) && isA(l, 'total');
 
-export const toPageList = <T>(items: T[] = [], options?: Omit<PageOptions, 'sort'> & { total?: number }): PageList<T> =>
-  (
+export const toPageList = <T>(items: T[] = [], options?: PageListOptions | PageList): PageList<T> => {
+  return (
     choose(items)
       .case(
         i => i.length === 1 && isNumber(i[0]),
         i => new PageList<T>().add(...i)
       )
       .else(i => new PageList<T>(...i)) as any
-  ).setPageOptions(options);
+  ).setPageOptions(isPageList(options) ? options.options : options);
+};
 
 /* @deprecated No longer needed as the PageList is now a class that extends from List, use the map function */
 export const asPageList = <T, U>(c: Construct<T>, items = toPageList<U>()): PageList<T> => items.map(i => ofConstruct(c, i));
