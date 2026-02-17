@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asc, asJson, Id, isPageList, log, toFilter, toList, toPageList, toShortFilter } from '../../src';
+import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 import { devs, jackAndJill, johnAndJane, managers } from './List.test';
 
