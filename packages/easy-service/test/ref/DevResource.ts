@@ -1,8 +1,8 @@
 import { ContentType, HttpStatus, isDefined, List, Req, toList } from '@thisisagile/easy';
 import { Resource, route, requires, search, post, get, put, patch, del, stream } from '../../src';
 import { DevUri } from './DevUri';
-import { DevScope, DevUseCase } from '@thisisagile/easy/test/ref/DevUseCase';
-import { Dev } from '@thisisagile/easy/test/ref';
+import { DevScope, DevUseCase } from './DevUseCase';
+import { Dev } from './Dev';
 
 @route(DevUri.Developers)
 export class DevsResource implements Resource {
