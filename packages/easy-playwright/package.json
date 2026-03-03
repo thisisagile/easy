@@ -4,17 +4,9 @@
   "description": "Straightforward wrapper library for Playwright web testing framework",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index",
   "repository": {
     "type": "git",
     "url": "git@github.com:thisisagile/easy.git"
