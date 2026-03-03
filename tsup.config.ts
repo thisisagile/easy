@@ -8,4 +8,5 @@ export const config = defineConfig({
   tsconfig: path.resolve(__dirname, './tsconfig.json'),
   outDir: 'dist',
   format: ['esm', 'cjs'],
+  bundle: true,
 });
