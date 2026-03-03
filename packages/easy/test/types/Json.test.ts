@@ -1,4 +1,4 @@
-import { any, asJson, isJson, json, PageOptions, takeFirstKey, toJson } from '../../src';
+import { any, asJson, isJson, json, PageOptions, takeFirst, takeFirstKey, toJson } from '../../src';
 import { Dev, DevTableGateway } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -282,6 +282,22 @@ describe('keysToString', () => {
     expect(takeFirstKey({ first })).toBe('first');
     expect(takeFirstKey({ first, last })).toBe('first');
     expect(takeFirstKey({ last, first })).toBe('last');
+  });
+});
+
+describe('takeFirst', () => {
+  test('take first defined value', () => {
+    const obj = { first: undefined, second: Dev.Rob, third: Dev.Naoufal };
+    const [key, value] = takeFirst(obj);
+    expect(key).toBe('second');
+    expect(value).toBe(Dev.Rob);
+  });
+
+  test('take first undefined value', () => {
+    const obj = { first: undefined, second: undefined, third: Dev.Naoufal };
+    const [key, value] = takeFirst(obj);
+    expect(key).toBe('third');
+    expect(value).toBe(Dev.Naoufal);
   });
 });
 

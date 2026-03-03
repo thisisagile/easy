@@ -62,4 +62,6 @@ class Any<T extends Json> {
 
 export const takeFirstKey = (j: unknown, alt: string = ''): string => entries(asJson(j)).first(([, v]) => isDefined(v))?.[0] ?? alt;
 
+export const takeFirst = <K extends string = string, T = any>(j: Record<K, T>): [K, T] => entries(j).first(([, v]) => isDefined(v)) as [K, T];
+
 export const any = <T extends Json = Json>(value: T): Any<T> => new Any<T>(value);
