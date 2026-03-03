@@ -1,7 +1,7 @@
 import '@thisisagile/easy-test';
 import { Jwt } from '../../src';
 import { validate } from '@thisisagile/easy';
-import { Dev } from '@thisisagile/easy/test/ref';
+import { Dev } from '../ref';
 
 describe('Test Jwt', () => {
   const dev = Dev.Naoufal.toJSON();

@@ -5,7 +5,7 @@
   "author": "Sander Hoogendoorn",
   "license": "MIT",
   "main": "dist/index.js",
-  "types": "dist/index",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:thisisagile/easy.git"
