@@ -4,8 +4,18 @@
   "description": "Straightforward wrapper library for Puppeteer web testing framework",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git@github.com:thisisagile/easy.git"
