@@ -29,6 +29,13 @@ describe('Object', () => {
     expect(entries(target)).toContainEqual(['name', { first: 'John', middle: 'F', last: 'Doe' }]);
   });
 
+  test('entries with null prototype object', () => {
+    const nullProto = Object.create(null);
+    nullProto.ids = ['20842450-ea9f-5aaf-896e-1369bbe42e57', '42'];
+    expect(entries(nullProto)).toHaveLength(1);
+    expect(entries(nullProto)).toContainEqual(['ids', ['20842450-ea9f-5aaf-896e-1369bbe42e57', '42']]);
+  });
+
   test('values', () => {
     expect(values({})).toHaveLength(0);
     expect(values(target)).toHaveLength(4);
