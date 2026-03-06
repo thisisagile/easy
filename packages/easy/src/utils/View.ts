@@ -17,7 +17,10 @@ type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
 
 type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
-type ViewRecord<V = any> = Partial<Record<keyof V, ViewType>>;
+type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string> | Extract<keyof S, string>;
+type ViewRecord<V = any, S = never> = [S] extends [never]
+  ? Partial<Record<keyof V, ViewValue<S>>>
+  : Partial<Record<keyof V, ViewValue<S>>> & Partial<Record<Exclude<Extract<keyof S, string>, Extract<keyof V, string>>, typeof ignore>>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
@@ -56,14 +59,14 @@ const toViewers = (views: ViewRecord): Viewer[] =>
     .entries<ViewType>()
     .map(([k, v]) => toViewer(k, v));
 
-export class View<V = any> {
+export class View<V = any, S = never> {
   constructor(
-    private views = {} as ViewRecord<V>,
+    private views = {} as ViewRecord<V, S>,
     readonly startsFrom: 'scratch' | 'source' = 'scratch',
     readonly viewers: Viewer[] = toViewers(views)
   ) {}
 
-  get fromSource(): View<V> {
+  get fromSource(): View<V, S> {
     return new View(this.views, 'source', this.viewers);
   }
 
@@ -94,7 +97,7 @@ export class View<V = any> {
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;
 
-export const view = <V = any>(views: ViewRecord<DontInfer<V>>): View<V> => new View<V>(views);
+export const view = <V = any, S = never>(views: ViewRecord<DontInfer<V>, DontInfer<S>>): View<V, S> => new View<V, S>(views);
 
 export const views = {
   ignore,
@@ -108,6 +111,6 @@ export const views = {
     value: (altValue: unknown) => (a: unknown, key?: string) => traverse(a, key) ?? altValue,
     func: (altFunc: Func) => (a: unknown, key?: string) => traverse(a, key) ?? altFunc(a, key),
   },
-};
+} as const;
 
 // spread: (a: any, key: string) => ({...a, ...(use(traverse(a, key), v => isObject(v) ? v : ({[key]: v})))}),

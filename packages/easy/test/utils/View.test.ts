@@ -412,6 +412,23 @@ describe('View', () => {
   });
 });
 
+describe('View with input and output generic', () => {
+
+  test('view should also accept optional input generic S limit the values to be a key of S, additionally the input can be used as a key in the view when ignoring!', () => {
+     type Manager = {name: string, age: number, salary: number, seniority: 'senior' | 'junior', };
+     type Director = {name: string, age: number, salary: number, bonus: number, level: 'junior' | 'senior', };
+
+     const sander: Director = {name: 'Sander', age: 82, salary: 10000000, bonus: 10000000, level: 'senior',}
+     const demoted = view<Manager, Director>({
+       seniority: 'level',
+       bonus: views.ignore,
+       level: views.ignore,
+     }).fromSource;
+     expect(demoted.from(sander)).toStrictEqual({name: 'Sander', age: 82, salary: 10000000, seniority: 'senior',})
+
+  })
+})
+
 const toThing = view({
   id: 'id',
   name: 'name',
@@ -530,3 +547,5 @@ describe('view works', () => {
     expect(s).toEqual({ id: 1, date: '2026-01-12T00:00:00.000Z', name: { first: 'Sander', last: 'Aardvark' } });
   });
 });
+
+
