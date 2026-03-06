@@ -23,17 +23,22 @@ const target = {
 
 describe('Object', () => {
   test('entries', () => {
+    expect(entries(undefined as any)).toHaveLength(0);
     expect(entries({})).toHaveLength(0);
     expect(entries(target)).toHaveLength(4);
     expect(entries(target)).toContainEqual(['id', 42]);
     expect(entries(target)).toContainEqual(['name', { first: 'John', middle: 'F', last: 'Doe' }]);
   });
 
-  test('entries with null prototype object', () => {
+  test('entries, values, and keys with null prototype object', () => {
     const nullProto = Object.create(null);
     nullProto.ids = ['20842450-ea9f-5aaf-896e-1369bbe42e57', '42'];
     expect(entries(nullProto)).toHaveLength(1);
     expect(entries(nullProto)).toContainEqual(['ids', ['20842450-ea9f-5aaf-896e-1369bbe42e57', '42']]);
+    expect(values(nullProto)).toHaveLength(1);
+    expect(values(nullProto)).toContainEqual(['20842450-ea9f-5aaf-896e-1369bbe42e57', '42']);
+    expect(keys(nullProto)).toHaveLength(1);
+    expect(keys(nullProto)).toContain('ids');
   });
 
   test('values', () => {

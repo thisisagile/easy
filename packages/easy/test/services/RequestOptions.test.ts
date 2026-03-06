@@ -22,6 +22,7 @@ describe('RequestOptions', () => {
     expect(RequestOptions.Xml.type).toBe(ContentType.Xml);
     expect(RequestOptions.Text.type).toBe(ContentType.Text);
     expect(RequestOptions.Form.type).toBe(ContentType.Form);
+    expect(RequestOptions.Stream.type).toBe(ContentType.Stream);
   });
 
   test('accept().', () => {
