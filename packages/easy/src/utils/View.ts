@@ -15,10 +15,11 @@ import { EnumConstructor, isEnumConstructor } from '../types/Enum';
 import { Id } from '../types/Id';
 
 type Func<T = unknown> = (a: any, key?: string) => T;
+type FuncOn<S> = (a: S, key?: string) => unknown;
 type Viewer = { key: string; f: Func };
 
 type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
-type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string> | AnyKey<S>;
+type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string | Func> | AnyKey<S> | FuncOn<S>;
 type ViewRecord<V = any, S = never> = [S] extends [never]
   ? Partial<Record<keyof V, ViewValue<S>>>
   : Partial<Record<keyof V, ViewValue<S>>> & Partial<Record<Exclude<Extract<keyof S, string>, Extract<keyof V, string>>, typeof ignore>>;
@@ -107,7 +108,10 @@ export const views = {
   spread,
   skip: ignore,
   value: (value: unknown) => () => value,
-  coalesce: (...keys: string[]) => (a: unknown) => keys.reduce<unknown>((result, k) => result ?? traverse(a, k), undefined),
+  coalesce:
+    (...keys: string[]) =>
+    (a: unknown) =>
+      keys.reduce<unknown>((result, k) => result ?? traverse(a, k), undefined),
   or: {
     key: (altKey: string) => (a: unknown, key?: string) => traverse(a, key) ?? traverse(a, altKey),
     value: (altValue: unknown) => (a: unknown, key?: string) => traverse(a, key) ?? altValue,
