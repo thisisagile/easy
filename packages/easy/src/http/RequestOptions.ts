@@ -2,14 +2,13 @@ import { HttpHeader } from './HttpHeader';
 import { ContentType } from './ContentType';
 import { PageOptions } from '../types/PageList';
 import { Optional } from '../types/Types';
-import { Text } from '../types/Text';
+import { asString, Text } from '../types/Text';
 import { Enum } from '../types/Enum';
 import { CacheAge } from '../types/CacheAge';
 import { ctx } from '../types/Context';
 import { toUuid } from '../types/Uuid';
 import { Id } from '../types/Id';
 import { on } from '../types/Constructor';
-import { asString } from '../types/Text';
 import { isDefined, isNotEmpty } from '../types/Is';
 
 export const toPageOptions = (options?: RequestOptions | PageOptions): Optional<PageOptions> =>
