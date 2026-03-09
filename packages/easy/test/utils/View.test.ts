@@ -413,21 +413,31 @@ describe('View', () => {
 });
 
 describe('View with input and output generic', () => {
-
   test('view should also accept optional input generic S limit the values to be a key of S, additionally the input can be used as a key in the view when ignoring!', () => {
-     type Manager = {name: string, age: number, salary: number, seniority: 'senior' | 'junior', };
-     type Director = {name: string, age: number, salary: number, bonus: number, level: 'junior' | 'senior', };
+    type Manager = { name: string; age: number; salary: number; seniority: 'senior' | 'junior' };
+    type Director = { name: string; age: number; salary: number; bonus: number; level: 'junior' | 'senior' };
 
-     const sander: Director = {name: 'Sander', age: 82, salary: 10000000, bonus: 10000000, level: 'senior',}
-     const demoted = view<Manager, Director>({
-       seniority: 'level',
-       bonus: views.ignore,
-       level: views.ignore,
-     }).fromSource;
-     expect(demoted.from(sander)).toStrictEqual({name: 'Sander', age: 82, salary: 10000000, seniority: 'senior',})
+    const sander: Director = { name: 'Sander', age: 82, salary: 10000000, bonus: 10000000, level: 'senior' };
+    const demoted = view<Manager, Director>({
+      seniority: 'level',
+      bonus: views.ignore,
+      level: views.ignore,
+    }).fromSource;
+    expect(demoted.from(sander)).toStrictEqual({ name: 'Sander', age: 82, salary: 10000000, seniority: 'senior' });
+  });
 
-  })
-})
+  test('view should work with dot notation and input generic', () => {
+    type Manager = { name: { first: string; last: string } };
+    type Director = { firstName: string, lastName: string };
+    const wouter: Manager = { name: {first: 'Wouter', last: 'Bakel'} };
+    const promoted = view<Director, Manager>({
+      firstName: 'name.first',
+      lastName: 'name.last',
+      name: views.ignore,
+    }).fromSource;
+    expect(promoted.from(wouter)).toStrictEqual({ firstName: 'Wouter', lastName: 'Bakel' });
+  });
+});
 
 const toThing = view({
   id: 'id',
@@ -547,5 +557,3 @@ describe('view works', () => {
     expect(s).toEqual({ id: 1, date: '2026-01-12T00:00:00.000Z', name: { first: 'Sander', last: 'Aardvark' } });
   });
 });
-
-

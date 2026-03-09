@@ -10,6 +10,7 @@ import { isPageList, PageList, toPageList } from '../types/PageList';
 import { List } from '../types/List';
 import { isEqual } from '../types/IsEqual';
 import { DontInfer } from '../types/Types';
+import { AnyKey } from '../types/AnyKey';
 import { EnumConstructor, isEnumConstructor } from '../types/Enum';
 import { Id } from '../types/Id';
 
@@ -17,7 +18,7 @@ type Func<T = unknown> = (a: any, key?: string) => T;
 type Viewer = { key: string; f: Func };
 
 type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
-type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string> | Extract<keyof S, string>;
+type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string> | AnyKey<S>;
 type ViewRecord<V = any, S = never> = [S] extends [never]
   ? Partial<Record<keyof V, ViewValue<S>>>
   : Partial<Record<keyof V, ViewValue<S>>> & Partial<Record<Exclude<Extract<keyof S, string>, Extract<keyof V, string>>, typeof ignore>>;
