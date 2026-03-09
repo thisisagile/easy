@@ -107,6 +107,7 @@ export const views = {
   spread,
   skip: ignore,
   value: (value: unknown) => () => value,
+  coalesce: (...keys: string[]) => (a: unknown) => keys.reduce<unknown>((result, k) => result ?? traverse(a, k), undefined),
   or: {
     key: (altKey: string) => (a: unknown, key?: string) => traverse(a, key) ?? traverse(a, altKey),
     value: (altValue: unknown) => (a: unknown, key?: string) => traverse(a, key) ?? altValue,

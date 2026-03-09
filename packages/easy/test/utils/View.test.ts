@@ -19,6 +19,7 @@ describe('View', () => {
       email: 'sander@ibood.io',
       tags: ['dev', 'arch', 'test'],
       start: '2021-01-01T00:00:00.000Z',
+      name: undefined,
     };
     source2 = {
       tags: ['dev', 'arch', 'test'],
@@ -181,6 +182,19 @@ describe('View', () => {
       level: 'CSM',
       age: 55,
       age2: 43,
+    });
+  });
+
+  test('coalesce', () => {
+    const s = view({
+      name: views.coalesce('name', 'first'),
+      name2: views.coalesce('name', 'non-existing', 'last'),
+      name3: views.coalesce('last', 'first'),
+    });
+    expect(s.from(source)).toStrictEqual({
+      name: 'Sander',
+      name2: 'H',
+      name3: 'H',
     });
   });
 
