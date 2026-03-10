@@ -1936,6 +1936,7 @@ __metadata:
     "@types/validator": "npm:^13.12.2"
     axios: "npm:^1.7.9"
     form-urlencoded: "npm:^6.1.5"
+    jwt-decode: "npm:^4.0.0"
     luxon: "npm:^3.5.0"
     reflect-metadata: "npm:^0.2.2"
     uuid: "npm:^9.0.1"

@@ -74,7 +74,7 @@ export const lucene = {
       e => e.reduce((res, [k, v]) => on(res, r => (r[k] = lucene.clauses(v))), should(query, def).length > 0 ? { minimumShouldMatch: 1 } : ({} as any)),
       () =>
         ifTrue(wildcard, () => ({
-          should: lucene.clauses([{ wildcard: lucene.wildcard() }]),
+          should: lucene.clauses([{ r: { exists: { path: '_id' } } }]),
           minimumShouldMatch: 0,
         }))
     ),

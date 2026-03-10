@@ -246,7 +246,7 @@ describe('Lucene', () => {
       expect(s).toStrictEqual({
         $search: {
           compound: {
-            should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }],
+            should: [{ exists: { path: '_id' } }],
             minimumShouldMatch: 0,
           },
           count: {
@@ -374,7 +374,7 @@ describe('Lucene', () => {
           facet: {
             operator: {
               compound: {
-                should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }],
+                should: [{ exists: { path: '_id' } }],
                 minimumShouldMatch: 0,
               },
             },
@@ -411,7 +411,7 @@ describe('Lucene', () => {
     expect(s).toStrictEqual({
       $searchMeta: {
         compound: {
-          should: [{ wildcard: { path: { wildcard: '*' }, query: '*', allowAnalyzedField: true } }],
+          should: [{ exists: { path: '_id' } }],
           minimumShouldMatch: 0,
         },
         count: {
