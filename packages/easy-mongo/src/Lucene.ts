@@ -97,7 +97,7 @@ export const lucene = {
       },
     };
   },
-  searchMeta: (query: Record<string, string | number>, def: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string)ß => ({
+  searchMeta: (query: Record<string, string | number>, def: SearchDefinition, count: 'total' | 'lowerBound' = 'total', index?: string) => ({
     $searchMeta: {
       ...ifDefined(index, { index }),
       ...ifTrue(
