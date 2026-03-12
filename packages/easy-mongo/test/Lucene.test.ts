@@ -246,7 +246,7 @@ describe('Lucene', () => {
       expect(s).toStrictEqual({
         $search: {
           compound: {
-            should: [{ exists: { path: '_id' } }],
+            should: [{ exists: { path: 'id' } }],
             minimumShouldMatch: 0,
           },
           count: {
@@ -374,7 +374,7 @@ describe('Lucene', () => {
           facet: {
             operator: {
               compound: {
-                should: [{ exists: { path: '_id' } }],
+                should: [{ exists: { path: 'id' } }],
                 minimumShouldMatch: 0,
               },
             },
@@ -411,7 +411,7 @@ describe('Lucene', () => {
     expect(s).toStrictEqual({
       $searchMeta: {
         compound: {
-          should: [{ exists: { path: '_id' } }],
+          should: [{ exists: { path: 'id' } }],
           minimumShouldMatch: 0,
         },
         count: {
