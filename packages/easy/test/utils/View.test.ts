@@ -428,7 +428,7 @@ describe('View', () => {
 
 describe('View with input and output generic', () => {
   test('view should also accept optional input generic S limit the values to be a key of S, additionally the input can be used as a key in the view when ignoring!', () => {
-    type Manager = { name: string; age: number; salary: number; seniority: 'senior' | 'junior', superBonus: boolean };
+    type Manager = { name: string; age: number; salary: number; seniority: 'senior' | 'junior'; superBonus: boolean };
     type Director = { name: string; age: number; salary: number; bonus: number; level: 'junior' | 'senior' };
 
     const sander: Director = { name: 'Sander', age: 82, salary: 10000000, bonus: 10000000, level: 'senior' };
@@ -438,13 +438,19 @@ describe('View with input and output generic', () => {
       bonus: views.ignore,
       level: views.ignore,
     }).fromSource;
-    expect(demoted.from(sander)).toStrictEqual({ name: 'Sander', age: 82, salary: 10000000, seniority: 'senior', superBonus: true });
+    expect(demoted.from(sander)).toStrictEqual({
+      name: 'Sander',
+      age: 82,
+      salary: 10000000,
+      seniority: 'senior',
+      superBonus: true,
+    });
   });
 
   test('view should work with dot notation and input generic', () => {
     type Manager = { name: { first: string; last: string } };
-    type Director = { firstName: string, lastName: string };
-    const wouter: Manager = { name: {first: 'Wouter', last: 'Bakel'} };
+    type Director = { firstName: string; lastName: string };
+    const wouter: Manager = { name: { first: 'Wouter', last: 'Bakel' } };
     const promoted = view<Director, Manager>({
       firstName: 'name.first',
       lastName: 'name.last',
@@ -560,6 +566,16 @@ describe('view works', () => {
   test('reverse spread works', () => {
     const s = toReverseSpread.from(dataSpread);
     expect(s).toEqual(dataSpread);
+  });
+
+  test('equals on views works', () => {
+    const toJson = view({
+      isOne: views.equals('id', 1),
+      isTwo: views.equals('id', 2),
+      exists: views.equals('notPresent', 3),
+    });
+    expect(toJson.from({ id: 1 })).toEqual({ isOne: true, isTwo: false, exists: false });
+    expect(toJson.from({ id: 2 })).toEqual({ isOne: false, isTwo: true, exists: false });
   });
 
   test('jsonify works', () => {

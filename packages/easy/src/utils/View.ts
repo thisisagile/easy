@@ -107,6 +107,7 @@ export const views = {
   json,
   spread,
   skip: ignore,
+  equals: (key: string, value: unknown) => (a: unknown) => traverse(a, key) === value,
   value: (value: unknown) => () => value,
   coalesce:
     (...keys: string[]) =>
