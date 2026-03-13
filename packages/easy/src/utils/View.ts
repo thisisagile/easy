@@ -9,6 +9,7 @@ import { meta } from '../types/Meta';
 import { isPageList, PageList, toPageList } from '../types/PageList';
 import { List } from '../types/List';
 import { isEqual } from '../types/IsEqual';
+import { Get, ofGet } from '../types/Get';
 import { DontInfer } from '../types/Types';
 import { AnyKey } from '../types/AnyKey';
 import { EnumConstructor, isEnumConstructor } from '../types/Enum';
@@ -21,8 +22,8 @@ type Viewer = { key: string; f: Func };
 type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
 type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string | Func> | AnyKey<S> | FuncOn<S>;
 type ViewRecord<V = any, S = never> = [S] extends [never]
-  ? Partial<Record<keyof V, ViewValue<S>>>
-  : Partial<Record<keyof V, ViewValue<S>>> & Partial<Record<Exclude<Extract<keyof S, string>, Extract<keyof V, string>>, typeof ignore>>;
+  ? Partial<Record<keyof V | typeof spread, ViewValue<S>>>
+  : Partial<Record<keyof V | typeof spread, ViewValue<S>>> & Partial<Record<Exclude<Extract<keyof S, string>, Extract<keyof V, string>>, typeof ignore>>;
 
 const ignore = Symbol('view.ignore');
 const keep = Symbol('view.keep');
@@ -65,11 +66,16 @@ export class View<V = any, S = never> {
   constructor(
     private views = {} as ViewRecord<V, S>,
     readonly startsFrom: 'scratch' | 'source' = 'scratch',
-    readonly viewers: Viewer[] = toViewers(views)
+    readonly viewers: Viewer[] = toViewers(views),
+    private spreads: Get<V>[] = []
   ) {}
 
   get fromSource(): View<V, S> {
-    return new View(this.views, 'source', this.viewers);
+    return new View(this.views, 'source', this.viewers, this.spreads);
+  }
+
+  spread(f: Get<V>): View<V, S> {
+    return new View(this.views, this.startsFrom, this.viewers, [...this.spreads, f]);
   }
 
   from<T = unknown>(source: PageList<T>): PageList<V>;
@@ -89,12 +95,13 @@ export class View<V = any, S = never> {
   same = (one?: unknown, another?: unknown): boolean => isEqual(this.from(one), this.from(another));
 
   private reduce = (source: any): any =>
-    use(asJson(source), src =>
-      this.viewers.reduce(
+    use(asJson(source), src => {
+      const mapped = this.viewers.reduce(
         (acc, v) => (v.key === spread ? { ...acc, ...asJson(v.f(src, v.key)) } : typesJson.set(acc, v.key, v.f(src, v.key))),
         this.startsFrom === 'scratch' ? {} : src
-      )
-    );
+      );
+      return this.spreads.reduce((acc, f) => ({ ...acc, ...asJson(ofGet(f, src)) }), mapped);
+    });
 }
 
 export const isSimpleView = (a: unknown): a is View => a instanceof View;
@@ -107,7 +114,7 @@ export const views = {
   json,
   spread,
   skip: ignore,
-  equals: (key: string, value: unknown) => (a: unknown) => traverse(a, key) === value,
+  equals: (key: string, value: unknown) => (a: unknown) => isEqual(traverse(a, key), value),
   value: (value: unknown) => () => value,
   coalesce:
     (...keys: string[]) =>

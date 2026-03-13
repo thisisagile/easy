@@ -578,6 +578,46 @@ describe('view works', () => {
     expect(toJson.from({ id: 2 })).toEqual({ isOne: false, isTwo: true, exists: false });
   });
 
+  type Result = { id: string; name: string };
+  const toResult = view<Result>({
+    id: 'id',
+    name: 'name',
+    [spread]: (c: any) => ({ lastName: c.name }),
+  });
+  test('spread with function works', () => {
+    const s = toResult.from({ id: '1', name: 'Sander' });
+    expect(s).toEqual({ id: '1', name: 'Sander', lastName: 'Sander' });
+  });
+
+  const toFluentSpread = view({ id: 'id', name: 'name' }).spread((c: any) => ({ lastName: c.name }));
+
+  const toMultiFluentSpread = view({ id: 'id', name: 'name' })
+    .spread((c: any) => ({ lastName: c.name }))
+    .spread(() => ({ extra: 'yes' }));
+
+  test('fluent spread works', () => {
+    expect(toFluentSpread.from(dataSpread)).toEqual({ ...dataSpread, lastName: 'Aardvark' });
+  });
+
+  test('fluent spread with overlap works', () => {
+    const toOverlap = view({ id: 'id', name: 'name' }).spread(() => ({ name: 'Pork' }));
+    expect(toOverlap.from(dataSpread)).toEqual({ id: dataSpread.id, name: 'Pork' });
+  });
+
+  test('fluent spread chained works', () => {
+    expect(toMultiFluentSpread.from(dataSpread)).toEqual({ ...dataSpread, lastName: 'Aardvark', extra: 'yes' });
+  });
+
+  test('spread as prop', () => {
+    const toJson = view({
+      id: views.keep,
+      name: views.json,
+      date: views.json,
+    });
+    const s = toJson.from({ id: 1, name: { first: 'Sander', last: 'Aardvark' }, extra: 'not', date: dt('2026-01-12') });
+    expect(s).toEqual({ id: 1, date: '2026-01-12T00:00:00.000Z', name: { first: 'Sander', last: 'Aardvark' } });
+  });
+
   test('jsonify works', () => {
     const toJson = view({
       id: views.keep,
