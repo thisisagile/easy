@@ -126,5 +126,3 @@ export const views = {
     func: (altFunc: Func) => (a: unknown, key?: string) => traverse(a, key) ?? altFunc(a, key),
   },
 } as const;
-
-// spread: (a: any, key: string) => ({...a, ...(use(traverse(a, key), v => isObject(v) ? v : ({[key]: v})))}),
