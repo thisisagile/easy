@@ -1,10 +1,10 @@
 import { Get, isPageList, List, ofGet, Optional, PageList, PageOptions, Predicate, toList, toPageList, Validatable } from '@thisisagile/easy';
 import { useState } from 'react';
 
-export const useToggle = (initialState = false): [boolean, () => void] => {
-  const [state, setState] = useState<boolean>(initialState);
-  return [state, () => setState(s => !s)];
-};
+// export const useToggle = (initialState = false): [boolean, () => void] => {
+//   const [state, setState] = useState<boolean>(initialState);
+//   return [state, () => setState(s => !s)];
+// };
 
 export function useSwitch<T>(...states: T[]): {
   state: T;
