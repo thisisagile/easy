@@ -1,21 +1,10 @@
 import React, { useEffect } from 'react';
 import '@thisisagile/easy-test';
 import { rendersWait } from '@thisisagile/easy-test-react';
-import { useEntity, useGet, useGetList, useList, usePageList, usePaging, useSwitch, useToggle } from '../../src';
+import { useEntity, useGet, useGetList, useList, usePageList, usePaging, useSwitch } from '../../src';
 import { Entity, required, resolve, text, toList, toPageList } from '@thisisagile/easy';
 
 const city = 'Amsterdam';
-
-const ToggleHook = () => {
-  const [toggle, setToggle] = useToggle(false);
-  const [, setVisible] = useToggle();
-
-  useEffect(() => {
-    setToggle();
-    setVisible();
-  }, []);
-  return <div id={'42'}>{`${toggle}`}</div>;
-};
 
 const SwitchHook = () => {
   const { state, next, ifState } = useSwitch('first', 'last', 'city');
@@ -97,12 +86,6 @@ const GetListHook = () => {
 };
 
 describe('Hooks', () => {
-  test('component with useToggle hook renders correctly as default value is false.', async () => {
-    const { container, byText } = await rendersWait(<ToggleHook />);
-    expect(container).toMatchSnapshot();
-    expect(byText('true')).toBeDefined();
-  });
-
   test('component with useSwitch hook renders correctly.', async () => {
     const { container, byText } = await rendersWait(<SwitchHook />);
     expect(container).toMatchSnapshot();
