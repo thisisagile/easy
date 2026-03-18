@@ -112,6 +112,8 @@ export class ToText implements Text {
 
   equals = this.is;
 
+  like = (...others: unknown[]): boolean => others.some(o => this.trim.lower.toString().includes(text(o).trim.lower.toString()));
+
   isLike = (...others: unknown[]): boolean => others.some(o => this.trim.lower.is(text(o).trim.lower));
 
   ifLike = (...others: unknown[]): Optional<this> => (this.isLike(...others) ? this : undefined);

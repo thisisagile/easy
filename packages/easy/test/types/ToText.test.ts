@@ -167,6 +167,18 @@ describe('text()', () => {
     expect(kim.isLike(Dev.Jeroen, 'kimvanwilgen')).toBeTruthy();
   });
 
+  test('like', () => {
+    expect(kim.like('kim')).toBeTruthy();
+    expect(kim.like('KIM')).toBeTruthy();
+    expect(kim.like(KimvanWilgen)).toBeTruthy();
+    expect(kim.like('wilgen')).toBeTruthy();
+    expect(kim.like('unknown')).toBeFalsy();
+    expect(empty.like('')).toBeTruthy();
+    expect(empty.like('kim')).toBeFalsy();
+    expect(kim.like(Dev.Jeroen, 'wilgen')).toBeTruthy();
+    expect(kim.like(Dev.Jeroen, 'unknown')).toBeFalsy();
+  });
+
   test('ifLike', () => {
     expect(kim.ifLike(KimvanWilgen)).toBe(kim);
     expect(kim.ifLike('kimvanwilgen')).toBe(kim);
