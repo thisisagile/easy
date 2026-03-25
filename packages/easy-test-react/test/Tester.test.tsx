@@ -82,6 +82,17 @@ describe('Tester', () => {
     expect(getAllByDisplayValue).toHaveBeenCalledWith('');
   });
 
+  test('isEmpty is true when container has no content', () => {
+    const empty = document.createElement('div');
+    expect(new Tester(empty).isEmpty).toBeTruthy();
+  });
+
+  test('isEmpty is false when container has content', () => {
+    const full = document.createElement('div');
+    full.innerHTML = '<span />';
+    expect(new Tester(full).isEmpty).toBeFalsy();
+  });
+
   test('at returns ElementTester', () => {
     const t = renders(a);
     expect(t.atText('')).toBeInstanceOf(ElementTester);

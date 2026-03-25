@@ -32,6 +32,7 @@ export class Tester {
   atTitle = (title: string, index?: number): ElementTester => new ElementTester(() => this.byTitle(title, index));
   byValue = (value: string, index?: number): HTMLElement => byIndex(() => screen.getAllByDisplayValue(value), index);
   atValue = (value: string, index?: number): ElementTester => new ElementTester(() => this.byValue(value, index));
+  get isEmpty(): boolean { return this.container.innerHTML === ''; }
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
   debug = () => screen.debug();
 }
