@@ -1,5 +1,7 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
+import { Uri } from '@thisisagile/easy';
+import { ElementTester, renders, Tester } from '../src';
 
 const render = mock.return({ container: <div /> });
 const getAllByText = mock.return([<div />]);
@@ -24,7 +26,6 @@ jest.mock('@testing-library/react', () => ({
     getAllByDisplayValue,
   },
 }));
-import { ElementTester, renders, Tester } from '../src';
 
 describe('Tester', () => {
   const a = <div />;
@@ -80,6 +81,25 @@ describe('Tester', () => {
     const t = renders(a);
     t.byValue('');
     expect(getAllByDisplayValue).toHaveBeenCalledWith('');
+  });
+
+  test('byHref finds link by string href', () => {
+    const container = document.createElement('div');
+    container.innerHTML = '<a href="https://example2.com">link</a>';
+    expect(new Tester(container).byHref('example2')).not.toBeNull();
+  });
+
+  test('byHref finds link by Uri href', () => {
+    const container = document.createElement('div');
+    container.innerHTML = '<a href="https://example.com">link</a>';
+    const u = mock.a<Uri>({ toString: () => 'example' });
+    expect(new Tester(container).byHref(u)).not.toBeNull();
+  });
+
+  test('atHref returns ElementTester', () => {
+    const container = document.createElement('div');
+    container.innerHTML = '<a href="https://example.com">link</a>';
+    expect(new Tester(container).atHref('example')).toBeInstanceOf(ElementTester);
   });
 
   test('isEmpty is true when container has no content', () => {
