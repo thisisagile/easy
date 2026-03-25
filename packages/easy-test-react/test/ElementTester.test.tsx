@@ -5,7 +5,7 @@ import { ElementTester, renders, Tester } from '../src';
 
 jest.mock('@testing-library/react', () => ({
   ...jest.requireActual('@testing-library/react'),
-  screen: { getByText: jest.fn().mockReturnValue(<div />) },
+  screen: { getAllByText: jest.fn().mockReturnValue([<div />]) },
 }));
 
 describe('ElementTester', () => {
@@ -38,21 +38,21 @@ describe('ElementTester', () => {
   test('click fires click event', () => {
     fireEvent.click = mock.return(true);
     expect(et.click()).toBe(et);
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
 
   test('click fires click event but fails', () => {
     fireEvent.click = mock.return(false);
     expect(et.click()).not.toBeValid();
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
 
   test('mouseDown fires mousedown event', () => {
     fireEvent.mouseDown = mock.return(true);
     expect(et.mouseDown()).toBe(et);
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.mouseDown).toHaveBeenCalledWith(a);
   });
 
@@ -67,7 +67,7 @@ describe('ElementTester', () => {
   test('mouseDown fires mouseDown event but fails', () => {
     fireEvent.mouseDown = mock.return(false);
     expect(et.mouseDown()).not.toBeValid();
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.mouseDown).toHaveBeenCalledWith(a);
   });
 
@@ -75,14 +75,14 @@ describe('ElementTester', () => {
     fireEvent.change = mock.return();
     const value = 'hello';
     et.type(value);
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value } });
   });
 
   test('clear fires value change event', () => {
     fireEvent.change = mock.return();
     et.clear();
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value: '' } });
   });
 
@@ -90,7 +90,7 @@ describe('ElementTester', () => {
     fireEvent.keyDown = mock.return(true);
     const key = 'Enter';
     et.keyDown(key);
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.keyDown).toHaveBeenCalledWith(a, { key });
   });
 
@@ -103,7 +103,7 @@ describe('ElementTester', () => {
   test('pressEnter fires keydown event', () => {
     fireEvent.keyDown = mock.return(true);
     et.pressEnter();
-    expect(screen.getByText).toHaveBeenCalled();
+    expect(screen.getAllByText).toHaveBeenCalled();
     expect(fireEvent.keyDown).toHaveBeenCalledWith(a, { key: 'Enter' });
   });
 });
