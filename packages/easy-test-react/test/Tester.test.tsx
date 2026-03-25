@@ -1,29 +1,21 @@
 import React from 'react';
 import { mock } from '@thisisagile/easy-test';
 import { Uri } from '@thisisagile/easy';
+import { render, screen } from '@testing-library/react';
 import { ElementTester, renders, Tester } from '../src';
 
-const render = mock.return({ container: <div /> });
-const getAllByText = mock.return([<div />]);
-const getAllByTestId = mock.return([<div />]);
-const getAllByTitle = mock.return([<div />]);
-const getAllByRole = mock.return([<div />]);
-const getAllByPlaceholderText = mock.return([<div />]);
-const getAllByAltText = mock.return([<div />]);
-const getAllByLabelText = mock.return([<div />]);
-const getAllByDisplayValue = mock.return([<div />]);
 jest.mock('@testing-library/react', () => ({
   ...jest.requireActual('@testing-library/react'),
-  render,
+  render: jest.fn().mockReturnValue({ container: document.createElement('div') }),
   screen: {
-    getAllByText,
-    getAllByTestId,
-    getAllByTitle,
-    getAllByRole,
-    getAllByPlaceholderText,
-    getAllByAltText,
-    getAllByLabelText,
-    getAllByDisplayValue,
+    getAllByText: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByTestId: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByTitle: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByRole: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByPlaceholderText: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByAltText: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByLabelText: jest.fn().mockReturnValue([document.createElement('div')]),
+    getAllByDisplayValue: jest.fn().mockReturnValue([document.createElement('div')]),
   },
 }));
 
@@ -36,51 +28,43 @@ describe('Tester', () => {
   });
 
   test('byText calls screen.getAllByText', () => {
-    const t = renders(a);
-    t.byText('');
-    expect(getAllByText).toHaveBeenCalledWith('');
+    renders(a).byText('');
+    expect(screen.getAllByText).toHaveBeenCalledWith('');
   });
 
   test('byId calls screen.getAllByTestId', () => {
-    const t = renders(a);
-    t.byId('');
-    expect(getAllByTestId).toHaveBeenCalledWith('');
+    renders(a).byId('');
+    expect(screen.getAllByTestId).toHaveBeenCalledWith('');
   });
 
   test('byTitle calls screen.getAllByTitle', () => {
-    const t = renders(a);
-    t.byTitle('');
-    expect(getAllByTitle).toHaveBeenCalledWith('');
+    renders(a).byTitle('');
+    expect(screen.getAllByTitle).toHaveBeenCalledWith('');
   });
 
   test('byRole calls screen.getAllByRole', () => {
-    const t = renders(a);
-    t.byRole('');
-    expect(getAllByRole).toHaveBeenCalledWith('');
+    renders(a).byRole('');
+    expect(screen.getAllByRole).toHaveBeenCalledWith('');
   });
 
   test('byPlaceholder calls screen.getAllByPlaceholderText', () => {
-    const t = renders(a);
-    t.byPlaceholder('');
-    expect(getAllByPlaceholderText).toHaveBeenCalledWith('');
+    renders(a).byPlaceholder('');
+    expect(screen.getAllByPlaceholderText).toHaveBeenCalledWith('');
   });
 
   test('byAlt calls screen.getAllByAltText', () => {
-    const t = renders(a);
-    t.byAlt('');
-    expect(getAllByAltText).toHaveBeenCalledWith('');
+    renders(a).byAlt('');
+    expect(screen.getAllByAltText).toHaveBeenCalledWith('');
   });
 
   test('byLabel calls screen.getAllByLabelText', () => {
-    const t = renders(a);
-    t.byLabel('');
-    expect(getAllByLabelText).toHaveBeenCalledWith('');
+    renders(a).byLabel('');
+    expect(screen.getAllByLabelText).toHaveBeenCalledWith('');
   });
 
   test('byValue calls screen.getAllByDisplayValue', () => {
-    const t = renders(a);
-    t.byValue('');
-    expect(getAllByDisplayValue).toHaveBeenCalledWith('');
+    renders(a).byValue('');
+    expect(screen.getAllByDisplayValue).toHaveBeenCalledWith('');
   });
 
   test('byHref finds link by string href', () => {
