@@ -5,7 +5,7 @@ import { toList } from '@thisisagile/easy';
 describe('Lucene', () => {
   // Operations
 
-  const { text, wildcard, lt, lte, gt, gte, before, after, between, search, clauses, exists, facet, searchWithDef } = lucene;
+  const { text, wildcard, lt, lte, gt, gte, before, after, between, search, clauses, exists, facet, searchWithDef, equals } = lucene;
 
   test('text undefined', () => {
     const t = text(undefined)('size');
@@ -239,6 +239,103 @@ describe('Lucene', () => {
     status: () => ({ facet: facet.string('status') }),
     price: () => ({ facet: facet.number('price.cents', toList(500, 2000, 3500, 6000)) }),
   };
+
+  describe('must and mustNot', () => {
+    const mustDef: SearchDefinition = {
+      brand: v => ({ must: { brand: text(v) } }),
+      size: v => ({ mustNot: { size: lt(v) } }),
+      active: b => ({ mustNot: { active: equals(b) } }),
+    };
+
+    test('single must clause', () => {
+      const s = searchWithDef({ brand: 'apple' }, mustDef);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: { must: [{ text: { path: 'brand', query: 'apple' } }] },
+          count: { type: 'total' },
+        },
+      });
+    });
+
+    test('single mustNot clause', () => {
+      const s = searchWithDef({ size: 42 }, mustDef);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: { mustNot: [{ range: { path: 'size', lt: 42 } }] },
+          count: { type: 'total' },
+        },
+      });
+    });
+
+    test('must and mustNot combined', () => {
+      const s = searchWithDef({ brand: 'apple', size: 42 }, mustDef);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: {
+            must: [{ text: { path: 'brand', query: 'apple' } }],
+            mustNot: [{ range: { path: 'size', lt: 42 } }],
+          },
+          count: { type: 'total' },
+        },
+      });
+    });
+
+    test('must with should sets minimumShouldMatch', () => {
+      const mixedDef: SearchDefinition = {
+        brand: v => ({ must: { brand: text(v) } }),
+        q: v => ({ should: { wildcard: text(v) } }),
+      };
+      const s = searchWithDef({ brand: 'apple', q: 'test' }, mixedDef);
+      expect(s).toStrictEqual({
+        $search: {
+          compound: {
+            should: [{ text: { path: { wildcard: '*' }, query: 'test' } }],
+            must: [{ text: { path: 'brand', query: 'apple' } }],
+            minimumShouldMatch: 1,
+          },
+          count: { type: 'total' },
+        },
+      });
+    });
+
+    test('mustNot with equals 0', () => {
+      const inactive = searchWithDef({ active: 0 }, mustDef);
+      expect(inactive).toStrictEqual({
+        $search: {
+          compound: {
+            mustNot: [
+              {
+                equals: {
+                  path: 'active',
+                  value: false,
+                },
+              },
+            ],
+          },
+          count: { type: 'total' },
+        },
+      });
+    });
+
+    test('mustNot with equals 1', () => {
+      const inactive = searchWithDef({ active: 1 }, mustDef);
+      expect(inactive).toStrictEqual({
+        $search: {
+          compound: {
+            mustNot: [
+              {
+                equals: {
+                  path: 'active',
+                  value: true,
+                },
+              },
+            ],
+          },
+          count: { type: 'total' },
+        },
+      });
+    });
+  });
 
   describe('search', () => {
     test('empty search', () => {

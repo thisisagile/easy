@@ -116,6 +116,9 @@ export const lucene = {
     },
   }),
   exists: (): Operator => (path: string) => ({ exists: { path } }),
+  equals:
+    (value: unknown): Operator =>
+    (path: string) => ({ equals: { path, value: value === 1 } }),
   text:
     (value?: OneOrMore<unknown>, fuzzy?: Partial<FuzzyOptions>): Operator =>
     (path: string) =>
