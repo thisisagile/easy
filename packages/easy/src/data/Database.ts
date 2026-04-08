@@ -15,6 +15,8 @@ export type DatabaseOptions = {
   socketTimeoutMS?: number;
   // Query specific options
   queryTimeoutMS?: number;
+  // Cloud-specific options
+  projectId?: string;
 };
 
 export class DefaultProvider implements DataProvider {}

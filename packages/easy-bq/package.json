@@ -1,0 +1,43 @@
+{
+  "name": "@thisisagile/easy-bq",
+  "version": "0.1.0",
+  "description": "Add support for Google BigQuery",
+  "author": "Sander Hoogendoorn",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thisisagile/easy.git"
+  },
+  "keywords": [
+    "typescript",
+    "microservices",
+    "domain-driven-design",
+    "evolutionary-architecture"
+  ],
+  "scripts": {
+    "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "yarn g:prettier --check --write src test *.json",
+    "build": "yarn g:tsc",
+    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "test": "yarn g:jest --coverage",
+    "prepack": "yarn g:copy-readme"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@thisisagile/easy-test": "workspace:*"
+  },
+  "dependencies": {
+    "@google-cloud/bigquery": "^7.9.1",
+    "@thisisagile/easy": "workspace:^"
+  }
+}
