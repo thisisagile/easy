@@ -163,7 +163,7 @@ export function textValue(subject: any, prop: string): string {
   return (
     p
       .splice(1)
-      .reduce((t, s) => t?.[s], initial)
+      .reduce((t, s) => (typeof t === 'object' && t !== null ? t : text(t))?.[s], initial)
       ?.toString() ?? ''
   );
 }

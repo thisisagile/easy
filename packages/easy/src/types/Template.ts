@@ -3,10 +3,13 @@ import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { entries } from './Object';
 import { text, textValue } from './ToText';
+import { tryTo } from './Try';
 
 export type TemplateOptions = { type?: Text; property?: Text; actual?: Text; subject?: Text };
 
 export class Template implements Text {
+  private knownPrefixes = new Set(['type', 'property', 'actual', 'subject']);
+
   constructor(
     private readonly template: string,
     private readonly subject: unknown = {},
@@ -28,9 +31,10 @@ export class Template implements Text {
     return this.props(tmpl.slice(i2 + 1), key, result.add(tmpl.substring(i1 + 1, i2)));
   };
 
-  private readonly object = (): string => {
-    return this.props(this.template, 'this').reduce((t: string, p) => t.replace(`{${p}}`, textValue(this.subject, p.replace('this.', ''))), this.template);
-  };
+  private readonly object = (): string =>
+    tryTo(() => this.template.replace(/\{this\./g, '{'))
+      .map(t => t.replace(/\{([^}]+)}/g, (match, p) => (this.knownPrefixes.has(p.split('.')[0]) ? match : textValue(this.subject, p))))
+      .or('');
 
   private readonly option = (tmpl: string, prop: string): string => {
     return this.props(tmpl, prop).reduce((t: string, p) => t.replace(`{${p}}`, textValue(this.options, p)), tmpl);

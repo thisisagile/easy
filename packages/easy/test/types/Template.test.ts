@@ -20,6 +20,23 @@ describe('Template', () => {
     expect(template('{this.name}', Dev.Sander)).toMatchText('Sander');
   });
 
+  test('bare prop', () => {
+    expect(template('{name}', Dev.Sander)).toMatchText('Sander');
+    expect(template('{name}', undefined)).toMatchText('');
+    expect(template('Hi {name}', Dev.Sander)).toMatchText('Hi Sander');
+    expect(template('{name} {language}', Dev.Sander)).toMatchText('Sander TypeScript');
+  });
+
+  test('bare nested prop', () => {
+    const subject = { name: { first: 'S', last: 'H' } };
+    expect(template('{name.first}', subject)).toMatchText('S');
+    expect(template('{name.last}', subject)).toMatchText('H');
+    expect(template('{name.first} {name.last}', subject)).toMatchText('S H');
+    expect(template('{name.middle}', subject)).toMatchText('');
+    expect(template('{name.last.lower}', subject)).toMatchText('h');
+    expect(template('{name.last.lower.title}', subject)).toMatchText('H');
+  });
+
   test('actual', () => {
     expect(template('{actual}', Dev.Sander, { actual: 'good' })).toMatchText('good');
     expect(template('{actual.upper}', Dev.Sander, { actual: 'good' })).toMatchText('GOOD');
@@ -63,6 +80,11 @@ describe('Template', () => {
 
   test('template is undefined', () => {
     expect(template(undefined as unknown as string, Dev.Wouter)).toMatchText('');
+  });
+
+  test('subject with throwing getter', () => {
+    const subject = Object.defineProperty({}, 'name', { get: () => { throw new Error('boom'); } });
+    expect(template('{name}', subject)).toMatchText('');
   });
 
   test('template with plain json structure', () => {
