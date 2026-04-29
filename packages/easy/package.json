@@ -46,7 +46,7 @@
     "jwt-decode": "^4.0.0",
     "luxon": "^3.5.0",
     "reflect-metadata": "^0.2.2",
-    "uuid": "^9.0.1",
+    "uuid": "^14.0.0",
     "validator": "^13.12.0"
   }
 }
