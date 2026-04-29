@@ -136,6 +136,36 @@ describe('Case', () => {
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
+  // is.truthy / is.falsy
+
+  test('is.truthy', () => {
+    const out = choose({ items: [1, 2, 3] })
+      .is.truthy(d => d.items.length, () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.truthy with falsy value', () => {
+    const out = choose({ items: [] as number[] })
+      .is.truthy(d => d.items.length, () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
+  test('is.falsy', () => {
+    const out = choose({ items: [] as number[] })
+      .is.falsy(d => d.items.length, () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.falsy with truthy value', () => {
+    const out = choose({ items: [1, 2] })
+      .is.falsy(d => d.items.length, () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
   // is.defined
 
   const sander = 'Sander';
