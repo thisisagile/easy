@@ -5,7 +5,7 @@ import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
 import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import type { Id } from './Id';
-import { asString } from './Text';
+import { asString, equals } from './Text';
 import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 import { AnyKey } from './AnyKey';
@@ -230,6 +230,12 @@ export class List<T = unknown> extends Array<T> {
       this.splice(index, 1);
     }
     return this;
+  }
+
+  move(key: keyof T, sourceId: Id, destinationId: Id): List<T> {
+    const source = this.findIndex(i => equals(i[key], sourceId));
+    const dest = this.findIndex(i => equals(i[key], destinationId));
+    return on(toList<T>(...this), r => r.splice(dest, 0, ...r.splice(source, 1)));
   }
 
   replace(key: keyof T, item: T): List<T> {

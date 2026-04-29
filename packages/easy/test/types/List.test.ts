@@ -690,6 +690,36 @@ describe('toList', () => {
   });
 });
 
+describe('move', () => {
+  const list = toList(Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal);
+
+  test('move first to last', () => {
+    const result = list.move('id', Dev.Sander.id, Dev.Naoufal.id);
+    expect(result).toHaveLength(4);
+    expect(result.first()).toBe(Dev.Wouter);
+    expect(result.last()).toBe(Dev.Sander);
+  });
+
+  test('move last to first', () => {
+    const result = list.move('id', Dev.Naoufal.id, Dev.Sander.id);
+    expect(result).toHaveLength(4);
+    expect(result.first()).toBe(Dev.Naoufal);
+    expect(result[1]).toBe(Dev.Sander);
+  });
+
+  test('move middle item forward', () => {
+    const result = list.move('id', Dev.Wouter.id, Dev.Jeroen.id);
+    expect(result).toHaveLength(4);
+    expect(result[1]).toBe(Dev.Jeroen);
+    expect(result[2]).toBe(Dev.Wouter);
+  });
+
+  test('does not mutate original', () => {
+    list.move('id', Dev.Sander.id, Dev.Naoufal.id);
+    expect(list.first()).toBe(Dev.Sander);
+  });
+});
+
 describe('asList', () => {
   test('from undefined', () => {
     expect(asList(Dev, undefined).first()).toBeUndefined();

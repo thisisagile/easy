@@ -8,6 +8,8 @@ export const isText = (t?: unknown): t is Text => isDefined(t) && isFunc<string,
 
 export const asString = (t?: unknown, alt: Get<Text> = ''): string => (isText(t) ? t : ofGet(alt)).toString();
 
+export const equals = (a: unknown, b: unknown): boolean => asString(a) === asString(b);
+
 export const replaceAll = (origin: Text, search: Text, replace: Text = ''): string => asString(origin).split(asString(search)).join(asString(replace));
 
 export const toWords = (input: unknown): string[] => {
