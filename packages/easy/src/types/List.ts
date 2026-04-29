@@ -5,7 +5,7 @@ import { isArray, isDefined, isEmpty } from './Is';
 import { isA } from './IsA';
 import { Get, GetProperty, ofGet, ofProperty } from './Get';
 import type { Id } from './Id';
-import { asString, equals } from './Text';
+import { equals } from './Text';
 import { Optional } from './Types';
 import { ifDefined, ifTrue } from '../utils/If';
 import { AnyKey } from './AnyKey';
@@ -192,7 +192,7 @@ export class List<T = unknown> extends Array<T> {
   }
 
   byId(id: Id): T {
-    return this.first(i => asString((i as any).id) === asString(id));
+    return this.first(i => equals((i as any).id, id));
   }
 
   byKey(key: keyof T, value: unknown): T {
@@ -320,11 +320,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   updateFirstById<U = T>(id: Id, val: T | ((v: U) => T)) {
-    return this.updateFirst(i => asString((i as any)?.id) === asString(id), val);
+    return this.updateFirst(i => equals((i as any)?.id, id), val);
   }
 
   updateById<U = T>(id: Id, val: T | ((v: U) => T)) {
-    return this.update(i => asString((i as any)?.id) === asString(id), val);
+    return this.update(i => equals((i as any)?.id, id), val);
   }
 }
 
