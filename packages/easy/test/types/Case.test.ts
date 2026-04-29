@@ -98,6 +98,44 @@ describe('Case', () => {
     expect(fullyTyped(Dev.Naoufal)).toBe(Dev.Naoufal.name);
   });
 
+  // is.true / is.false
+
+  test('is.true', () => {
+    const out = choose(sander)
+      .is.true(s => s.startsWith('San'), () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.true not matching', () => {
+    const out = choose(sander)
+      .is.true(s => s.startsWith('Nan'), () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
+  test('is.true first match wins', () => {
+    const out = choose(sander)
+      .is.true(s => s.startsWith('San'), () => Dev.Sander)
+      .is.true(s => s.length > 0, () => Dev.Wouter)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.false', () => {
+    const out = choose(sander)
+      .is.false(s => s.startsWith('Nan'), () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Sander);
+  });
+
+  test('is.false not matching', () => {
+    const out = choose(sander)
+      .is.false(s => s.startsWith('San'), () => Dev.Sander)
+      .else(Dev.Naoufal);
+    expect(out).toMatchObject(Dev.Naoufal);
+  });
+
   // is.defined
 
   const sander = 'Sander';
