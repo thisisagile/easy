@@ -44,11 +44,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   asc(p: GetProperty<T, any>): List<T> {
-    return this.sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
+    return toList<T>(...this).sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
   }
 
   desc(p: GetProperty<T, any>): List<T> {
-    return this.sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
+    return toList<T>(...this).sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
   }
 
   first(p?: Pred<T>, params?: unknown): T {
@@ -180,7 +180,7 @@ export class List<T = unknown> extends Array<T> {
   max(key: keyof T): T;
 
   max(p: keyof T | ((value: T) => any)): T {
-    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) < p(e2) ? 1 : -1)).first() : this.desc(p).first();
+    return this.desc(p).first();
   }
 
   min(key: keyof T): T;
@@ -188,7 +188,7 @@ export class List<T = unknown> extends Array<T> {
   min(p: (value: T) => any): T;
 
   min(p: keyof T | ((value: T) => any)): T {
-    return typeof p === 'function' ? this.sort((e1, e2) => (p(e1) > p(e2) ? 1 : -1)).first() : this.asc(p).first();
+    return this.asc(p).first();
   }
 
   byId(id: Id): T {
