@@ -694,29 +694,36 @@ describe('move', () => {
   const list = toList(Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Naoufal);
 
   test('move first to last', () => {
-    const result = list.move('id', Dev.Sander.id, Dev.Naoufal.id);
+    const result = list.move(Dev.Sander.id, Dev.Naoufal.id);
     expect(result).toHaveLength(4);
     expect(result.first()).toBe(Dev.Wouter);
     expect(result.last()).toBe(Dev.Sander);
   });
 
   test('move last to first', () => {
-    const result = list.move('id', Dev.Naoufal.id, Dev.Sander.id);
+    const result = list.move(Dev.Naoufal.id, Dev.Sander.id);
     expect(result).toHaveLength(4);
     expect(result.first()).toBe(Dev.Naoufal);
     expect(result[1]).toBe(Dev.Sander);
   });
 
-  test('move middle item forward', () => {
-    const result = list.move('id', Dev.Wouter.id, Dev.Jeroen.id);
+  test('does not mutate original', () => {
+    list.move(Dev.Sander.id, Dev.Naoufal.id);
+    expect(list.first()).toBe(Dev.Sander);
+  });
+
+  test('moveOn first to last', () => {
+    const result = list.moveOn('id', Dev.Sander.id, Dev.Naoufal.id);
+    expect(result).toHaveLength(4);
+    expect(result.first()).toBe(Dev.Wouter);
+    expect(result.last()).toBe(Dev.Sander);
+  });
+
+  test('moveOn by name', () => {
+    const result = list.moveOn('name', Dev.Wouter.name, Dev.Jeroen.name);
     expect(result).toHaveLength(4);
     expect(result[1]).toBe(Dev.Jeroen);
     expect(result[2]).toBe(Dev.Wouter);
-  });
-
-  test('does not mutate original', () => {
-    list.move('id', Dev.Sander.id, Dev.Naoufal.id);
-    expect(list.first()).toBe(Dev.Sander);
   });
 });
 

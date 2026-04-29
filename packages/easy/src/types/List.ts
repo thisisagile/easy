@@ -232,7 +232,11 @@ export class List<T = unknown> extends Array<T> {
     return this;
   }
 
-  move(key: keyof T, sourceId: Id, destinationId: Id): List<T> {
+  move(sourceId: Id, destinationId: Id): List<T> {
+    return this.moveOn('id' as keyof T, sourceId, destinationId);
+  }
+
+  moveOn(key: keyof T, sourceId: Id, destinationId: Id): List<T> {
     const source = this.findIndex(i => equals(i[key], sourceId));
     const dest = this.findIndex(i => equals(i[key], destinationId));
     return on(toList<T>(...this), r => r.splice(dest, 0, ...r.splice(source, 1)));
