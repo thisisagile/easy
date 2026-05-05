@@ -1,4 +1,4 @@
-import { isEmail as validateEmail } from 'validator';
+import validateEmail from 'validator/lib/isEmail';
 import { asString, isEmpty, text, Value } from '@thisisagile/easy';
 
 export class Email extends Value {

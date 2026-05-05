@@ -1,5 +1,5 @@
 import { isNotEmpty, text, Value } from '@thisisagile/easy';
-import { isSlug } from 'validator';
+import isSlug from 'validator/lib/isSlug';
 
 export class Slug extends Value {
   constructor(slug?: unknown) {

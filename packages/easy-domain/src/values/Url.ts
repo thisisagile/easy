@@ -1,4 +1,4 @@
-import { isURL as validateUrl } from 'validator';
+import validateUrl from 'validator/lib/isURL';
 import { asString, isEmpty, Value } from '@thisisagile/easy';
 
 export interface UrlOptions {

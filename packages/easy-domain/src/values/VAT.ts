@@ -1,5 +1,5 @@
 import { isNotEmpty, text, Value } from '@thisisagile/easy';
-import { isVAT } from 'validator';
+import isVAT from 'validator/lib/isVAT';
 
 export class VAT extends Value {
   private readonly country: string;

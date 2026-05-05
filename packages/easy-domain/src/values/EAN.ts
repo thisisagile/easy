@@ -1,4 +1,4 @@
-import { isEAN as validateEAN } from 'validator';
+import validateEAN from 'validator/lib/isEAN';
 import { asString, isEmpty, Value } from '@thisisagile/easy';
 
 export class EAN extends Value {

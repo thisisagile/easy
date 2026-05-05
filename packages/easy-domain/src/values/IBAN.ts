@@ -1,4 +1,4 @@
-import { isIBAN as validateIBAN } from 'validator';
+import validateIBAN from 'validator/lib/isIBAN';
 import { asString, isEmpty, Value } from '@thisisagile/easy';
 
 export class IBAN extends Value {
