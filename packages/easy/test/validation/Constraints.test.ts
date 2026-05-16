@@ -9,6 +9,7 @@ import {
   includes,
   inList,
   inOptionalList,
+  inUnion,
   isValue,
   lt,
   lte,
@@ -124,6 +125,25 @@ describe('Optional constraint', () => {
   test('InOptionalList succeeds with valid value', () => {
     const c = new Cat({ name: 'Felix', friend: 'Sander' });
     expect(validate(c)).toBeValid();
+  });
+});
+
+describe('inUnion constraint', () => {
+  const colors = ['red', 'green', 'blue'] as const;
+  type Color = (typeof colors)[number];
+
+  class Painting extends Struct {
+    @inUnion(colors) readonly color = this.state.color as Color;
+  }
+
+  test('accepts a value from the union', () => {
+    expect(validate(new Painting({ color: 'red' }))).toBeValid();
+  });
+
+  test('rejects a value outside the union', () => {
+    const v = validate(new Painting({ color: 'purple' }));
+    expect(v).not.toBeValid();
+    expect(v).toFailWith('Value purple must be in union.');
   });
 });
 

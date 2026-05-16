@@ -40,6 +40,9 @@ export const inList = (values: unknown[], message?: Text): PropertyDecorator =>
 export const inOptionalList = (values: unknown[], message?: Text): PropertyDecorator =>
   constraint(v => !isDefined(v) || isIn(v, values), message ?? 'Value {actual} must appear in list.');
 
+export const inUnion = (values: readonly unknown[], message?: Text): PropertyDecorator =>
+  constraint(v => isDefined(v) && isIn(v, [...values]), message ?? 'Value {actual} must be in union.');
+
 export const gt = (limit: number, message?: Text): PropertyDecorator => constraint(v => v > limit, message ?? `Value {actual} must be larger than '${limit}'.`);
 
 export const gte = (limit: number, message?: Text): PropertyDecorator =>
