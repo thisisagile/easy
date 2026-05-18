@@ -1,5 +1,6 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue,
+  OneOrMore, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 // eslint-disable-next-line jest/no-export
@@ -1120,5 +1121,51 @@ describe('update', () => {
     expect(indexed[0].index).toBe(0);
     expect(indexed[1].index).toBe(1);
     expect(indexed[2].index).toBe(2);
+  });
+
+  test('includes works', () => {
+    const stages = [1] as OneOrMore<Id>
+    const f = toList<Id>(stages).includes(1);
+    expect(devs.includes(Dev.Jeroen)).toBeTruthy();
+  })
+});
+
+describe('List.groupBy', () => {
+  test('empty list groups to empty list', () => {
+    const grouped = toList<number>().groupBy(n => n);
+    expect(isList(grouped)).toBeTruthy();
+    expect(grouped).toHaveLength(0);
+  });
+
+  test('groups items by predicate result', () => {
+    const grouped = toList(1, 2, 3, 4, 5, 6).groupBy(n => n % 2);
+    expect(grouped).toHaveLength(2);
+    expect(grouped[0]).toMatchJson(toList(1, 3, 5));
+    expect(grouped[1]).toMatchJson(toList(2, 4, 6));
+  });
+
+  test('groups preserve insertion order of first occurrence', () => {
+    const grouped = toList(2, 1, 4, 3).groupBy(n => n % 2);
+    expect(grouped[0]).toMatchJson(toList(2, 4));
+    expect(grouped[1]).toMatchJson(toList(1, 3));
+  });
+
+  test('groups objects by key value', () => {
+    const grouped = devs.groupBy(d => d.language);
+    expect(isList(grouped)).toBeTruthy();
+    grouped.forEach(g => expect(isList(g)).toBeTruthy());
+    expect(grouped.sum(g => g.length)).toBe(devs.length);
+  });
+
+  test('single group when predicate is constant', () => {
+    const grouped = toList(1, 2, 3).groupBy(() => 'all');
+    expect(grouped).toHaveLength(1);
+    expect(grouped[0]).toHaveLength(3);
+  });
+
+  test('each item in own group when predicate is unique', () => {
+    const grouped = toList(1, 2, 3).groupBy((_, i) => i);
+    expect(grouped).toHaveLength(3);
+    grouped.forEach(g => expect(g).toHaveLength(1));
   });
 });

@@ -326,6 +326,12 @@ export class List<T = unknown> extends Array<T> {
   updateById<U = T>(id: Id, val: T | ((v: U) => T)) {
     return this.update(i => equals((i as any)?.id, id), val);
   }
+
+  groupBy(by: Pred<T>): List<List<T>> {
+    return toList(
+      Array.from(this.reduce((m, v, i, a) => use(by(v, i, a), key => m.set(key, (m.get(key) ?? toList<T>()).add(v))), new Map<unknown, List<T>>()).values())
+    );
+  }
 }
 
 export const toList = <T = unknown>(...items: ArrayLike<T>): List<T> => new List<T>().add(...items);
