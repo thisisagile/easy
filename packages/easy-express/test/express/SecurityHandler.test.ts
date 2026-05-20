@@ -13,8 +13,8 @@ describe('SecurityHandler decorators', () => {
     ctx.env = new DotEnvContext();
   });
 
-  test.each([[undefined], [''], [Environment.Acc.id], [Environment.Prd.id]])(
-    'checkLabCoat returns an AuthError on empty and environments other than dev',
+  test.each([[undefined], [''], ['unknown'], [Environment.Prd.id]])(
+    'checkLabCoat returns an AuthError on prd, empty, and unknown environments',
     name => {
       ctx.env = mock.empty<EnvContext>({ name: name as string });
       const c = checkLabCoat();
@@ -23,8 +23,8 @@ describe('SecurityHandler decorators', () => {
     }
   );
 
-  test('checkLabCoat succeeds on dev', () => {
-    ctx.env = mock.empty<EnvContext>({ name: Environment.Dev.id as string });
+  test.each([[Environment.Dev.id], [Environment.Tst.id], [Environment.Acc.id]])('checkLabCoat succeeds on %s', name => {
+    ctx.env = mock.empty<EnvContext>({ name: name as string });
     const c = checkLabCoat();
     c({} as Request, {} as Response, cb);
     expect(cb).toHaveBeenCalledWith(undefined);

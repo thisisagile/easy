@@ -31,7 +31,8 @@ export interface SecurityOptions {
   };
 }
 
-export const checkLabCoat = (): RequestHandler => (req, res, next) => next(ifFalse(Environment.Dev.equals(ctx.env.name), authError(HttpStatus.Forbidden)));
+export const checkLabCoat = (): RequestHandler => (req, res, next) =>
+  next(ifFalse([Environment.Dev, Environment.Tst, Environment.Acc].some(e => e.equals(ctx.env.name)), authError(HttpStatus.Forbidden)));
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 
