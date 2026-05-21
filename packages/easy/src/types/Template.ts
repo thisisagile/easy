@@ -33,7 +33,7 @@ export class Template implements Text {
 
   private readonly object = (): string =>
     tryTo(() => this.template.replace(/\{this\./g, '{'))
-      .map(t => t.replace(/\{([^}]+)}/g, (match, p) => (this.knownPrefixes.has(p.split('.')[0]) ? match : textValue(this.subject, p))))
+      .map(t => t.replace(/\{([^{}]+)}/g, (match, p) => (this.knownPrefixes.has(p.split('.')[0]) ? match : textValue(this.subject, p))))
       .or('');
 
   private readonly option = (tmpl: string, prop: string): string => {

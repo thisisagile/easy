@@ -17,7 +17,18 @@ describe('Template', () => {
 
   test('this', () => {
     expect(template('{this}', undefined)).toMatchText('');
+    expect(template('{world}', {})).toMatchText('');
     expect(template('{this.name}', Dev.Sander)).toMatchText('Sander');
+  });
+
+  test.each([
+    ['{{world}}', { world: 'test' }, '{test}'],
+    ['"Hello, {{world}}"', { world: 'test' }, '"Hello, {test}"'],
+    ['{{a}} and {{b}}', { a: '1', b: '2' }, '{1} and {2}'],
+    ['{{missing}}', {}, '{}'],
+    ['{{name}} says {greeting}', { name: 'Sander', greeting: 'hi' }, '{Sander} says hi'],
+  ])('keeps outer braces literal for %s', (tmpl, subject, expected) => {
+    expect(template(tmpl, subject)).toMatchText(expected);
   });
 
   test('bare prop', () => {
