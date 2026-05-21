@@ -194,9 +194,9 @@ describe('text()', () => {
 
   test('type', () => {
     expect(text('').parse(Dev.Sander)).toMatchText('');
-    expect(text('{type}').parse(undefined)).toMatchText('');
-    expect(text('{type}').parse(Dev.Sander)).toMatchText('dev');
-    expect(text('{type.title}').parse(Dev.Sander)).toMatchText('Dev');
+    expect(text('{typeof}').parse(undefined)).toMatchText('');
+    expect(text('{typeof}').parse(Dev.Sander)).toMatchText('dev');
+    expect(text('{typeof.title}').parse(Dev.Sander)).toMatchText('Dev');
   });
 
   test('subject', () => {
@@ -214,7 +214,7 @@ describe('text()', () => {
     expect(text('{property.title}').parse(Dev.Sander, { property: 'name' })).toMatchText('Name');
   });
 
-  const template = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {type} {property.upper} {actual.lower}';
+  const template = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {typeof} {property.upper} {actual.lower}';
 
   test('the full monty', () => {
     expect(

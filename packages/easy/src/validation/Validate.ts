@@ -53,8 +53,8 @@ export const validate = (subject?: unknown): Results =>
       s => s,
       () => toResults('Subject is not defined.')
     )
-    .type(isEnum, e => (e.isValid ? toResults() : asResults(e, 'This is not a valid {type}.')))
-    .type(isValue, v => (v.isValid ? toResults() : asResults(v, 'This is not a valid {type}.')))
+    .type(isEnum, e => (e.isValid ? toResults() : asResults(e, 'This is not a valid {typeof}.')))
+    .type(isValue, v => (v.isValid ? toResults() : asResults(v, 'This is not a valid {typeof}.')))
     .type(isArray, a => a.map(i => validate(i)).reduce((rs, r) => rs.add(...r.results), toResults()))
     .type(isValidatable, v => constraints(v))
     .else(toResults());
