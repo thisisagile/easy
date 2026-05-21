@@ -8,11 +8,11 @@ describe('Template', () => {
     expect(new Template('', '', {})).toBeInstanceOf(Template);
   });
 
-  test('type', () => {
+  test('typeof', () => {
     expect(template('', Dev.Sander)).toMatchText('');
-    expect(template('{type}', undefined)).toMatchText('');
-    expect(template('{type}', Dev.Sander)).toMatchText('dev');
-    expect(template('{type.title}', Dev.Sander)).toMatchText('Dev');
+    expect(template('{typeof}', undefined)).toMatchText('');
+    expect(template('{typeof}', Dev.Sander)).toMatchText('dev');
+    expect(template('{typeof.title}', Dev.Sander)).toMatchText('Dev');
   });
 
   test('this', () => {
@@ -52,7 +52,7 @@ describe('Template', () => {
     expect(template('{property.title}', Dev.Sander, { property: 'name' })).toMatchText('Name');
   });
 
-  const temp = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {type} {property.upper} {actual.lower}';
+  const temp = '{this.level} {this.name} {this.language.lower.title} {this.language.lower} {typeof} {property.upper} {actual.lower}';
 
   test('the full monty', () => {
     expect(
@@ -83,7 +83,11 @@ describe('Template', () => {
   });
 
   test('subject with throwing getter', () => {
-    const subject = Object.defineProperty({}, 'name', { get: () => { throw new Error('boom'); } });
+    const subject = Object.defineProperty({}, 'name', {
+      get: () => {
+        throw new Error('boom');
+      },
+    });
     expect(template('{name}', subject)).toMatchText('');
   });
 

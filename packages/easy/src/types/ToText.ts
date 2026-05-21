@@ -106,7 +106,7 @@ export class ToText implements Text {
     return isEmpty(this.toString());
   }
 
-  parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { type: toName(subject), ...options }));
+  parse = (subject: unknown, options = {}): ToText => text(template(this.subject, subject, { typeof: toName(subject), ...options }));
 
   is = (...others: unknown[]): boolean => others.some(o => this.toString() === text(o).toString());
 

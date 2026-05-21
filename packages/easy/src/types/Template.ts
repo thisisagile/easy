@@ -5,10 +5,10 @@ import { entries } from './Object';
 import { text, textValue } from './ToText';
 import { tryTo } from './Try';
 
-export type TemplateOptions = { type?: Text; property?: Text; actual?: Text; subject?: Text };
+export type TemplateOptions = { typeof?: Text; property?: Text; actual?: Text; subject?: Text };
 
 export class Template implements Text {
-  private knownPrefixes = new Set(['type', 'property', 'actual', 'subject']);
+  private knownPrefixes = new Set(['typeof', 'property', 'actual', 'subject']);
 
   constructor(
     private readonly template: string,
@@ -43,7 +43,7 @@ export class Template implements Text {
 
 export function template(tmpl: Text, subject: unknown, options: TemplateOptions = {}): Text {
   return new Template(asString(tmpl), subject, {
-    type: toName(subject),
+    typeof: toName(subject),
     subject: text(JSON.stringify(subject)),
     ...options,
   });
