@@ -7,25 +7,25 @@ import { tryTo } from './Try';
 
 class CaseBuilder<V> {
   is = {
-    true: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(pred, out),
-    false: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!ofGet(pred, this.v), out),
-    truthy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!!prop(this.v), out),
-    falsy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!prop(this.v), out),
-    defined: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isDefined(prop(this.v)), out),
-    empty: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(isEmpty(prop(this.v)), out),
-    valid: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(validate(prop(this.v)).isValid, out),
-    in: <T>(prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(ofGet(prop, this.v).includes(this.v), out),
-    type: <T, U = unknown>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> => new Case<T, V>(this.v).type<U>(guard, out),
+    true: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(pred, out),
+    false: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(pred, this.v), out),
+    truthy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!!prop(this.v), out),
+    falsy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!prop(this.v), out),
+    defined: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(isDefined(prop(this.v)), out),
+    empty: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(isEmpty(prop(this.v)), out),
+    valid: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(validate(prop(this.v)).isValid, out),
+    in: <T>(prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => this.case(ofGet(prop, this.v).includes(this.v), out),
+    type: <T, U = unknown>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> => this.type<T, U>(guard, out),
     not: {
-      true: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!ofGet(pred, this.v), out),
-      false: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(pred, out),
-      truthy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!prop(this.v), out),
-      falsy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!!prop(this.v), out),
-      defined: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!isDefined(prop(this.v)), out),
-      empty: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!isEmpty(prop(this.v)), out),
-      valid: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!validate(prop(this.v)).isValid, out),
-      in: <T>(prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(!ofGet(prop, this.v).includes(this.v), out),
-      type: <T, U = unknown>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.v).case(v => !guard(v as unknown), out),
+      true: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(pred, this.v), out),
+      false: <T>(pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(pred, out),
+      truthy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!prop(this.v), out),
+      falsy: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!!prop(this.v), out),
+      defined: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isDefined(prop(this.v)), out),
+      empty: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isEmpty(prop(this.v)), out),
+      valid: <T>(prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!validate(prop(this.v)).isValid, out),
+      in: <T>(prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(prop, this.v).includes(this.v), out),
+      type: <T, U = unknown>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => this.case(v => !guard(v as unknown), out),
     },
   };
   if = this.is;
@@ -47,25 +47,25 @@ class CaseBuilder<V> {
 
 class Case<T, V = unknown> {
   is = {
-    true: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(pred, out),
-    false: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!ofGet(pred, this.value), out),
-    truthy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!!prop(this.value), out),
-    falsy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!prop(this.value), out),
-    defined: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isDefined(prop(this.value)), out),
-    empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(isEmpty(prop(this.value)), out),
-    valid: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(validate(prop(this.value)).isValid, out),
-    in: (prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(ofGet(prop, this.value).includes(this.value), out),
-    type: <U>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> => new Case<T, V>(this.value).type<U>(guard, out),
+    true: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(pred, out),
+    false: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(pred, this.value), out),
+    truthy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!!prop(this.value), out),
+    falsy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!prop(this.value), out),
+    defined: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(isDefined(prop(this.value)), out),
+    empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(isEmpty(prop(this.value)), out),
+    valid: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(validate(prop(this.value)).isValid, out),
+    in: (prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => this.case(ofGet(prop, this.value).includes(this.value), out),
+    type: <U>(guard: TypeGuard<U>, out: Func<T, U>): Case<T, V> => this.type<U>(guard, out),
     not: {
-      true: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!ofGet(pred, this.value), out),
-      false: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(pred, out),
-      truthy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!prop(this.value), out),
-      falsy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!!prop(this.value), out),
-      defined: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!isDefined(prop(this.value)), out),
-      empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!isEmpty(prop(this.value)), out),
-      valid: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!validate(prop(this.value)).isValid, out),
-      in: (prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(!ofGet(prop, this.value).includes(this.value), out),
-      type: <U>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => new Case<T, V>(this.value).case(v => !guard(v as unknown), out),
+      true: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(pred, this.value), out),
+      false: (pred: Predicate<V>, out: Get<T, V>): Case<T, V> => this.case(pred, out),
+      truthy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!prop(this.value), out),
+      falsy: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!!prop(this.value), out),
+      defined: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isDefined(prop(this.value)), out),
+      empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isEmpty(prop(this.value)), out),
+      valid: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!validate(prop(this.value)).isValid, out),
+      in: (prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(prop, this.value).includes(this.value), out),
+      type: <U>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => this.case(v => !guard(v as unknown), out),
     },
   };
   if = this.is;
@@ -101,30 +101,6 @@ class Case<T, V = unknown> {
 }
 
 class Found<T, V> extends Case<T, V> {
-  is = {
-    true: (_pred: Predicate<V>, _out: Get<T, V>): Case<T, V> => this,
-    false: (_pred: Predicate<V>, _out: Get<T, V>): Case<T, V> => this,
-    truthy: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-    falsy: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-    defined: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-    empty: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-    valid: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-    in: (_prop: Get<Array<V>, V>, _out: Get<T, V>): Case<T, V> => this,
-    type: <U>(_guard: TypeGuard<U>, _out: Func<T, U>): Case<T, V> => this,
-    not: {
-      true: (_pred: Predicate<V>, _out: Get<T, V>): Case<T, V> => this,
-      false: (_pred: Predicate<V>, _out: Get<T, V>): Case<T, V> => this,
-      truthy: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      falsy: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      defined: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      empty: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      valid: (_prop: Func<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      in: (_prop: Get<unknown, V>, _out: Get<T, V>): Case<T, V> => this,
-      type: <U>(_guard: TypeGuard<U>, _out: Get<T, V>): Case<T, V> => this,
-    },
-  };
-  if = this.is;
-
   constructor(
     protected value: V,
     protected outcome: T
