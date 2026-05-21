@@ -515,6 +515,44 @@ describe('Case', () => {
     expect(out).toMatchObject(Dev.Sander);
   });
 
+  // is.type / is.not.type
+
+  test('is.type matches', () => {
+    const out = choose(Dev.Sander as unknown)
+      .is.type(isDev, d => d.name)
+      .else('None');
+    expect(out).toBe('Sander');
+  });
+
+  test('is.type does not match', () => {
+    const out = choose('Sander' as unknown)
+      .is.type(isDev, d => d.name)
+      .else('None');
+    expect(out).toBe('None');
+  });
+
+  test('is.type first match wins', () => {
+    const out = choose(Dev.Sander as unknown)
+      .is.type(isDev, d => d.name)
+      .is.type(isString, s => s)
+      .else('None');
+    expect(out).toBe('Sander');
+  });
+
+  test('is.not.type matches when guard fails', () => {
+    const out = choose('Sander' as unknown)
+      .is.not.type(isDev, () => 'not a dev')
+      .else('is a dev');
+    expect(out).toBe('not a dev');
+  });
+
+  test('is.not.type does not match when guard passes', () => {
+    const out = choose(Dev.Sander as unknown)
+      .is.not.type(isDev, () => 'not a dev')
+      .else('is a dev');
+    expect(out).toBe('is a dev');
+  });
+
   // equals
 
   test('equals found', () => {
