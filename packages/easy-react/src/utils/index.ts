@@ -1,4 +1,5 @@
 export * from './Children';
+export * from './toClasses';
 export * from './Hooks';
 export * from './useOnce';
 export * from './useRev';
