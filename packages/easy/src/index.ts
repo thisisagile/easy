@@ -88,7 +88,7 @@ export * from './types/Number';
 export * from './types/Object';
 export * from './types/PageList';
 export * from './types/Parser';
-// export * from './types/Period';
+export * from './types/Period';
 export * from './types/Primitive';
 export * from './types/Repository';
 export * from './types/Result';
