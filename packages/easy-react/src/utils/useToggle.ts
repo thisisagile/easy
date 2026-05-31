@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from './useState';
 
 export function useToggle(initial = false): [boolean, () => void, <T>(fn: () => Promise<T>) => Promise<T>] {
   const [state, setState] = useState(initial);
