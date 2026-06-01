@@ -11,7 +11,6 @@ export type StartEndOptions = {
   end?: DateTime;
   zone?: string;
 };
-
 export const toStartEnd = ({ period, start, end, zone = utc }: StartEndOptions): StartEnd => {
   const today = DateTime.now.withZone(zone).startOf('day');
   return choose(period)
@@ -25,19 +24,19 @@ export const toStartEnd = ({ period, start, end, zone = utc }: StartEndOptions):
       end: today.subtract(1, 'week').endOf('week'),
     })
     .equals('last-two-weeks', { start: today.subtract(13, 'day'), end: today.endOf('day') })
-    .equals('next-week', { start: today.add(1, 'week').startOf('week'), end: today.add(1, 'week').endOf('week') })
-    .equals('this-month', { start: today.startOf('month'), end: today.endOf('month') })
     .equals('last-month', {
       start: today.subtract(1, 'month').startOf('month'),
       end: today.subtract(1, 'month').endOf('month'),
     })
-    .equals('two-months-ago', {
-      start: today.subtract(2, 'month').startOf('month'),
-      end: today.subtract(2, 'month').endOf('month'),
-    })
+    .equals('next-week', { start: today.add(1, 'week').startOf('week'), end: today.add(1, 'week').endOf('week') })
+    .equals('this-month', { start: today.startOf('month'), end: today.endOf('month') })
     .equals('three-months-ago', {
       start: today.subtract(3, 'month').startOf('month'),
       end: today.subtract(3, 'month').endOf('month'),
+    })
+    .equals('two-months-ago', {
+      start: today.subtract(2, 'month').startOf('month'),
+      end: today.subtract(2, 'month').endOf('month'),
     })
     .equals('last-three-months', { start: today.subtract(3, 'month'), end: today.endOf('day') })
     .equals('next-month', { start: today.add(1, 'month').startOf('month'), end: today.add(1, 'month').endOf('month') })
