@@ -9,6 +9,7 @@ import { Get, ofGet } from './Get';
 import { TypeGuard } from './TypeGuard';
 
 export type EnumConstructor<E = unknown> = {
+  all<E extends Enum>(): List<E>;
   byIds<E extends Enum>(ids: Id[]): List<E>;
   byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E;
   isEnum: boolean;
