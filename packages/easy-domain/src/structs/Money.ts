@@ -1,4 +1,4 @@
-import { choose, isDefined, isEmpty, isString, isNumberFormat, Optional, required, Struct, text, use } from '@thisisagile/easy';
+import { choose, isDefined, isEmpty, isString, isNumberFormat, Optional, required, Struct, text, use, isNumber } from '@thisisagile/easy';
 import { Currency } from '../enums/Currency';
 
 export class Money extends Struct {
@@ -18,6 +18,7 @@ export class Money extends Struct {
       .type(isMoney, m => m as Optional<Money>)
       .type(isMoneyFormat, v => Money.amount(currencyOr(v), stripCurrency(v)))
       .type(isNumberFormat, v => Money.amount(Currency.EUR, stripCurrency(v)))
+      .type(isNumber, v => Money.amount(Currency.EUR, v))
       .else(() => undefined);
   }
 

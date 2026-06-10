@@ -70,6 +70,10 @@ describe('Money', () => {
     expect(Money.parse('1,234')).toMatchObject(new Money({ currency: 'EUR', value: 1.234 }));
   });
 
+  test('parse with number', ()=> {
+    expect(Money.parse(1234.56)).toMatchObject(new Money({ currency: 'EUR', value: 1234.56 }));
+  })
+
   test.each([undefined, null, '', 'abc', '€', {}, []])('parse unparseable %s returns undefined', value => {
     expect(Money.parse(value)).toBeUndefined();
   });
