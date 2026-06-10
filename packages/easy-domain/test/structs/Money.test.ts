@@ -41,6 +41,42 @@ describe('Money', () => {
     expect(new Money({ value: 0 })).not.toBeValid();
     expect(new Money({ currency: 'EUR', value: 0 })).toBeValid();
   });
+
+  test.each(['€ 7.25', ' €7.25 ', ' 7.25 € ', ' €7,25 ', ' 7,25 ', ' 7.25 '])('Parse %s', value => {
+    expect(Money.parse(value)).toMatchObject(new Money({ currency: 'EUR', value: 7.25 }));
+  });
+
+  test.each([
+    { value: '$ 8.25', currency: 'USD' },
+    { value: 'zł 8.25', currency: 'PLN' },
+    { value: '£ 8.25', currency: 'GBP' },
+  ])('parse other currencies', ({ value, currency }) => {
+    expect(Money.parse(value)).toMatchObject(new Money({ currency, value: 8.25 }));
+  });
+
+  test.each(['€ 1,234.56', '€ 1.234,56', '1234.56 €', '€1.234,56'])('Parse grouped %s', value => {
+    expect(Money.parse(value)).toMatchObject(new Money({ currency: 'EUR', value: 1234.56 }));
+  });
+
+  test.each([
+    { value: '-7.25', currency: 'EUR', amount: -7.25 },
+    { value: '€ -7.25', currency: 'EUR', amount: -7.25 },
+    { value: '$ -1.234,56', currency: 'USD', amount: -1234.56 },
+  ])('parse negative $value', ({ value, currency, amount }) => {
+    expect(Money.parse(value)).toMatchObject(new Money({ currency, value: amount }));
+  });
+
+  test('parse ambiguous single comma assumes decimal', () => {
+    expect(Money.parse('1,234')).toMatchObject(new Money({ currency: 'EUR', value: 1.234 }));
+  });
+
+  test.each([undefined, null, '', 'abc', '€', {}, []])('parse unparseable %s returns undefined', value => {
+    expect(Money.parse(value)).toBeUndefined();
+  });
+
+  test('parse with money', () => {
+    expect(Money.parse(money(Currency.EUR, 8.25))).toMatchObject(money(Currency.EUR, 8.25));
+  });
 });
 
 describe('isMoney', () => {

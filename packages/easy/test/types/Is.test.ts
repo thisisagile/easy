@@ -12,6 +12,7 @@ import {
   isNotEmpty,
   isNotPresent,
   isNumber,
+  isNumberFormat,
   isObject,
   isPresent,
   isString,
@@ -193,6 +194,21 @@ describe('isNumber', () => {
     expect(isNumber(Dev.Wouter)).toBeFalsy();
     expect(isNumber(() => true)).toBeFalsy();
     expect(isNumber([])).toBeFalsy();
+  });
+});
+
+describe('isNumberFormat', () => {
+  test('Check', () => {
+    expect(isNumberFormat('7.25')).toBeTruthy();
+    expect(isNumberFormat('7')).toBeTruthy();
+    expect(isNumberFormat('-3.5')).toBeTruthy();
+    expect(isNumberFormat(' 42 ')).toBeTruthy();
+    expect(isNumberFormat('abc')).toBeFalsy();
+    expect(isNumberFormat('')).toBeFalsy();
+    expect(isNumberFormat(7)).toBeFalsy();
+    expect(isNumberFormat(undefined)).toBeFalsy();
+    expect(isNumberFormat(null)).toBeFalsy();
+    expect(isNumberFormat({})).toBeFalsy();
   });
 });
 
