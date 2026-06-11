@@ -3,6 +3,7 @@ import { Optional } from '../types/Types';
 import { Construct, ofConstruct, use } from '../types/Constructor';
 import { OneOrMore } from '../types/Array';
 import { toList } from '../types/List';
+import { isEqual } from '../types/IsEqual';
 
 export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
 export function ifTrue<Out, In = unknown>(o: unknown, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
@@ -27,6 +28,12 @@ export function ifNotEmpty<Out, In = unknown>(o: In, f?: Construct<Out, NonNulla
 export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
 export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>> = o => o as Out, alt?: Construct<Out>): Optional<Out> {
   return isNotEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}
+
+export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt: Construct<Out>): Out;
+export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt?: Construct<Out>): Optional<Out>;
+export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt?: Construct<Out>): Optional<Out> {
+  return isEqual(one, another) ? ofConstruct(f) : ofConstruct(alt);
 }
 
 export function ifEither<Out, In = unknown>(os: OneOrMore<In>, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;

@@ -1,5 +1,5 @@
 import { mock } from '@thisisagile/easy-test';
-import { ifDefined, ifEither, ifFalse, ifNotEmpty, ifTrue } from '../../src';
+import { ifDefined, ifEither, ifEqual, ifFalse, ifNotEmpty, ifTrue } from '../../src';
 import { Dev } from '../ref';
 
 describe('If', () => {
@@ -325,6 +325,51 @@ describe('If', () => {
     test('ifTrue returns undefined when alt is not given.', () => {
       expect(ifFalse(true, () => f())).toBeUndefined();
       expect(f).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('ifEqual', () => {
+    let f: jest.Mock;
+    let alt: jest.Mock;
+
+    beforeEach(() => {
+      f = mock.return('f');
+      alt = mock.return('alt');
+    });
+
+    test('typings', () => {
+      expect(ifEqual(42, 42, () => hello)).toEqual(hello);
+      expect(ifEqual(42, 42, () => hello, () => goodbye).toUpperCase()).toEqual(hello.toUpperCase());
+      expect(ifEqual(42, 0, () => hello, () => goodbye).toUpperCase()).toEqual(goodbye.toUpperCase());
+    });
+
+    test('call f when equal', () => {
+      expect(ifEqual('a', 'a', () => f(), () => alt())).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('call alt when not equal', () => {
+      expect(ifEqual('a', 'b', () => f(), () => alt())).toBe('alt');
+      expect(f).not.toHaveBeenCalled();
+      expect(alt).toHaveBeenCalled();
+    });
+
+    test('return undefined when alt is not given and not equal', () => {
+      expect(ifEqual(1, 2, () => f())).toBeUndefined();
+      expect(f).not.toHaveBeenCalled();
+    });
+
+    test('works with objects', () => {
+      expect(ifEqual({ a: 1 }, { a: 1 }, () => f(), () => alt())).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('works with unequal objects', () => {
+      expect(ifEqual({ a: 1 }, { a: 2 }, () => f(), () => alt())).toBe('alt');
+      expect(f).not.toHaveBeenCalled();
+      expect(alt).toHaveBeenCalled();
     });
   });
 
