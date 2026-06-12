@@ -125,4 +125,18 @@ export const views = {
     value: (altValue: unknown) => (a: unknown, key?: string) => traverse(a, key) ?? altValue,
     func: (altFunc: Func) => (a: unknown, key?: string) => traverse(a, key) ?? altFunc(a, key),
   },
+  to: <T = unknown>(ctorOrFunc: Constructor<T> | ((v: any) => T)) => {
+    const apply = (v: any): T => (isConstructor(ctorOrFunc) ? new ctorOrFunc(v) : (ctorOrFunc as (v: any) => T)(v));
+    const base = (a: any, key?: string): T | undefined => {
+      const v = traverse(a, key);
+      return v != null ? apply(v) : undefined;
+    };
+    return Object.assign(base, {
+      or: {
+        key: (altKey: string) => (a: unknown, key?: string) => base(a, key) ?? traverse(a, altKey),
+        value: (altValue: T) => (a: unknown, key?: string) => base(a, key) ?? altValue,
+        func: (altFunc: Func) => (a: unknown, key?: string) => base(a, key) ?? altFunc(a, key),
+      },
+    });
+  },
 } as const;

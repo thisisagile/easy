@@ -392,7 +392,7 @@ describe('View', () => {
 
   test('simples to simple', () => {
     const v = view({ email: to(Email) });
-    expect(v.from({ email: 'sander@ibood.com' }).email).toBeInstanceOf(Email);
+    expect(v.from({ email: 'claudia@ibood.com' }).email).toBeInstanceOf(Email);
   });
 
   test('simples to composite', () => {
@@ -626,5 +626,93 @@ describe('view works', () => {
     });
     const s = toJson.from({ id: 1, name: { first: 'Sander', last: 'Aardvark' }, extra: 'not', date: dt('2026-01-12') });
     expect(s).toEqual({ id: 1, date: '2026-01-12T00:00:00.000Z', name: { first: 'Sander', last: 'Aardvark' } });
+  });
+});
+
+describe('views.to', () => {
+  class Email extends Value {}
+
+  class Amount extends Struct {
+    @required() readonly currency = this.state.currency as string;
+    @required() readonly cents = this.state.cents as number;
+  }
+
+  const zeroEur = new Amount({ currency: 'EUR', cents: 0 });
+
+  test('to with constructor — value present — constructs instance', () => {
+    const v = view({ amount: views.to(Amount) });
+    const result = v.from({ amount: { currency: 'EUR', cents: 42 } });
+    expect(result.amount).toBeInstanceOf(Amount);
+    expect(result.amount.cents).toBe(42);
+  });
+
+  test('to with constructor — value absent — returns undefined', () => {
+    const v = view({ amount: views.to(Amount) });
+    expect(v.from({}).amount).toBeUndefined();
+  });
+
+  test('to with function — value present — applies function to traversed value', () => {
+    const v = view({ amount: views.to((raw: any) => new Amount({ currency: 'EUR', cents: raw.cents * 2 })) });
+    const result = v.from({ amount: { cents: 50 } });
+    expect(result.amount).toBeInstanceOf(Amount);
+    expect(result.amount.cents).toBe(100);
+  });
+
+  test('to with function — value absent — returns undefined', () => {
+    const v = view({ amount: views.to((raw: any) => new Amount({ currency: 'EUR', cents: raw.cents })) });
+    expect(v.from({}).amount).toBeUndefined();
+  });
+
+  test('to.or.value — value present — constructs instance', () => {
+    const v = view({ amount: views.to(Amount).or.value(zeroEur) });
+    const result = v.from({ amount: { currency: 'EUR', cents: 42 } });
+    expect(result.amount).toBeInstanceOf(Amount);
+    expect(result.amount.cents).toBe(42);
+  });
+
+  test('to.or.value — value absent — returns fallback', () => {
+    const v = view({ amount: views.to(Amount).or.value(zeroEur) });
+    expect(v.from({}).amount).toBe(zeroEur);
+  });
+
+  test('to.or.value with function — value absent — returns fallback', () => {
+    const v = view({
+      amount: views
+        .to(
+          (raw: any) =>
+            new Amount({
+              currency: 'EUR',
+              cents: raw.cents,
+            })
+        )
+        .or.value(zeroEur),
+    });
+    expect(v.from({}).amount).toBe(zeroEur);
+  });
+
+  test('to.or.key — value present — constructs instance', () => {
+    const v = view({ amount: views.to(Amount).or.key('fallback') });
+    const result = v.from({ amount: { currency: 'EUR', cents: 7 } });
+    expect(result.amount).toBeInstanceOf(Amount);
+    expect(result.amount.cents).toBe(7);
+  });
+
+  test('to.or.key — value absent — uses alt key value raw', () => {
+    const v = view({ amount: views.to(Amount).or.key('fallback') });
+    const result = v.from({ fallback: { currency: 'EUR', cents: 0 } });
+    expect(result.amount).toEqual({ currency: 'EUR', cents: 0 });
+  });
+
+  test('to.or.func — value present — constructs instance', () => {
+    const v = view({ email: views.to(Email).or.func(() => new Email('default@ibood.com')) });
+    const result = v.from({ email: 'sander@ibood.com' });
+    expect(result.email).toBeInstanceOf(Email);
+    expect(result.email.value).toBe('sander@ibood.com');
+  });
+
+  test('to.or.func — value absent — calls alt func', () => {
+    const fallback = new Email('default@ibood.com');
+    const v = view({ email: views.to(Email).or.func(() => fallback) });
+    expect(v.from({}).email).toBe(fallback);
   });
 });
