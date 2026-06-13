@@ -109,6 +109,7 @@ export * from './types/Value';
 export * from './utils/Base64';
 export * from './utils/Convert';
 export * from './utils/If';
+export * from './utils/IfType';
 export * from './utils/Loading';
 export * from './utils/Log';
 export * from './utils/Mapper';
