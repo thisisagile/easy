@@ -70,9 +70,9 @@ describe('Money', () => {
     expect(Money.parse('1,234')).toMatchObject(new Money({ currency: 'EUR', value: 1.234 }));
   });
 
-  test('parse with number', ()=> {
+  test('parse with number', () => {
     expect(Money.parse(1234.56)).toMatchObject(new Money({ currency: 'EUR', value: 1234.56 }));
-  })
+  });
 
   test.each([undefined, null, '', 'abc', '€', {}, []])('parse unparseable %s returns undefined', value => {
     expect(Money.parse(value)).toBeUndefined();
@@ -80,6 +80,17 @@ describe('Money', () => {
 
   test('parse with money', () => {
     expect(Money.parse(money(Currency.EUR, 8.25))).toMatchObject(money(Currency.EUR, 8.25));
+    expect(Money.parse(money(Currency.USD, 8.25))).toMatchObject(money(Currency.USD, 8.25));
+  });
+
+  test('parse with money as json', () => {
+    expect(
+      Money.parse({
+        currency: 'USD',
+        value: 15,
+        cents: 1500,
+      })
+    ).toMatchObject(money(Currency.USD, 15));
   });
 });
 

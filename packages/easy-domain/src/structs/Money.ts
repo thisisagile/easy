@@ -1,4 +1,4 @@
-import { choose, isDefined, isEmpty, isString, isNumberFormat, Optional, required, Struct, text, use, isNumber } from '@thisisagile/easy';
+import { choose, isDefined, isEmpty, isNumber, isNumberAsString, isObject, isString, Optional, required, Struct, text, use } from '@thisisagile/easy';
 import { Currency } from '../enums/Currency';
 
 export class Money extends Struct {
@@ -16,8 +16,9 @@ export class Money extends Struct {
   static parse(value: unknown): Optional<Money> {
     return choose(value)
       .type(isMoney, m => m as Optional<Money>)
-      .type(isMoneyFormat, v => Money.amount(currencyOr(v), stripCurrency(v)))
-      .type(isNumberFormat, v => Money.amount(Currency.EUR, stripCurrency(v)))
+      .type(isMoneyLike, v => money(Currency.byId(v.currency), v.value))
+      .type(isMoneyFormattedString, v => Money.amount(currencyOr(v), stripCurrency(v)))
+      .type(isNumberAsString, v => Money.amount(Currency.EUR, stripCurrency(v)))
       .type(isNumber, v => Money.amount(Currency.EUR, v))
       .else(() => undefined);
   }
@@ -58,9 +59,8 @@ export const isMoney = (m?: unknown): m is Money => {
   return !isEmpty(m) && m instanceof Money;
 };
 
-export const isMoneyFormat = (value?: unknown): value is string =>
-  isString(value) &&
-  use(
-    currency(value),
-    cur => isDefined(cur) && isNumberFormat(value.replace(cur.code, ''))
-  );
+export const isMoneyLike = (value?: unknown): value is { value: number; currency: string } =>
+  isObject(value) && use(value, v => isString(v.currency) && Currency.byId(v.currency) && isNumber(v.value));
+
+export const isMoneyFormattedString = (value?: unknown): value is string =>
+  isString(value) && use(currency(value), cur => isDefined(cur) && isNumberAsString(value.replace(cur.code, '')));

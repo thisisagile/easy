@@ -12,7 +12,7 @@ import {
   isNotEmpty,
   isNotPresent,
   isNumber,
-  isNumberFormat,
+  isNumberAsString,
   isObject,
   isPresent,
   isString,
@@ -199,16 +199,16 @@ describe('isNumber', () => {
 
 describe('isNumberFormat', () => {
   test('Check', () => {
-    expect(isNumberFormat('7.25')).toBeTruthy();
-    expect(isNumberFormat('7')).toBeTruthy();
-    expect(isNumberFormat('-3.5')).toBeTruthy();
-    expect(isNumberFormat(' 42 ')).toBeTruthy();
-    expect(isNumberFormat('abc')).toBeFalsy();
-    expect(isNumberFormat('')).toBeFalsy();
-    expect(isNumberFormat(7)).toBeFalsy();
-    expect(isNumberFormat(undefined)).toBeFalsy();
-    expect(isNumberFormat(null)).toBeFalsy();
-    expect(isNumberFormat({})).toBeFalsy();
+    expect(isNumberAsString('7.25')).toBeTruthy();
+    expect(isNumberAsString('7')).toBeTruthy();
+    expect(isNumberAsString('-3.5')).toBeTruthy();
+    expect(isNumberAsString(' 42 ')).toBeTruthy();
+    expect(isNumberAsString('abc')).toBeFalsy();
+    expect(isNumberAsString('')).toBeFalsy();
+    expect(isNumberAsString(7)).toBeFalsy();
+    expect(isNumberAsString(undefined)).toBeFalsy();
+    expect(isNumberAsString(null)).toBeFalsy();
+    expect(isNumberAsString({})).toBeFalsy();
   });
 });
 

@@ -17,7 +17,7 @@ export const isTrue = (o?: unknown): o is true => (isFunction(o) ? isTrue(o()) :
 
 export const isNumber = (o?: unknown): o is number => isDefined(o) && typeof o === 'number' && !Number.isNaN(o);
 
-export const isNumberFormat = (value: unknown): value is string => isString(value) && !Number.isNaN(parseFloat(value));
+export const isNumberAsString = (value: unknown): value is string => isString(value) && !Number.isNaN(parseFloat(value));
 
 export const isObject = (o?: unknown): o is Record<string, unknown> => o != null && typeof o === 'object' && !isArray(o);
 
