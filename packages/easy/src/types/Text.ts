@@ -22,4 +22,6 @@ export const toWords = (input: unknown): string[] => {
 
 export const kebab = (s = ''): string => toWords(s).join('-').toLowerCase();
 
+export type KebabToCamel<S extends string> = S extends `${infer Head}-${infer Tail}` ? `${Head}${Capitalize<KebabToCamel<Tail>>}` : S;
+
 export const capitalize = (s = ''): string => s.charAt(0).toUpperCase() + s.slice(1);
