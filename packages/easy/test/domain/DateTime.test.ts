@@ -86,6 +86,12 @@ describe('DateTime', () => {
     expect(new DateTime(new Date(date.epoch))).toBeValid();
   });
 
+  test('fromNow', () => {
+    Date.now = mock.return(new Date('2025-03-25T08:39:44.000Z').getTime());
+    const res = new DateTime(date.epoch);
+    expect(res.fromNow).toMatchText('4 years ago');
+  });
+
   test.each([
     ['2021-11-10', formats.yyyymmdd, '2021-10-11T00:00:00.000Z'],
     ['2022-10-11', formats.yyyyddmm, '2022-10-11T00:00:00.000Z'],
@@ -93,7 +99,6 @@ describe('DateTime', () => {
     ['2021-10-11T01:23:11', formats.yyyymmddthhmmss, '2021-10-11T01:23:11.000Z'],
     ['2021-10-11T01:23:59.123+0100', formats.yyyymmddthhmmssssszzz, '2021-10-11T00:23:59.123Z'],
     ['23/11/2021 09:15:00', formats.ddmmyyyyhhmmss, '2021-11-23T09:15:00.000Z'],
-    ['Wed Dec 24 09:15:00 -0800 2014', 'EEE MMM dd hh:mm:ss ZZZ yyyy', '2014-12-24T17:15:00.000Z'],
   ])('construct with date: %s and format: %s should return %s', (s, f, e) => {
     const res = new DateTime(s, f);
     expect(res).toBeValid();
@@ -104,6 +109,7 @@ describe('DateTime', () => {
     [date.iso, 'foo'],
     ['bar', formats.ddmmyyyy],
     ['01/23/2021', formats.ddmmyyyy],
+    ['Wed Dec 24 09:15:00 -0800 2014', 'EEE MMM dd hh:mm:ss ZZZ yyyy'],
   ])('construct with date: %s and format: %s should be invalid', (s, f) => {
     const res = new DateTime(s, f);
     expect(res).not.toBeValid();
@@ -322,17 +328,37 @@ describe('DateTime', () => {
     expect(d3.diff(d, 'day')).toBe(2);
   });
 
+  test('diff with fractional calendar units', () => {
+    const d = new DateTime(iso);
+    const m2 = d.add(2.4, 'month');
+    const m3 = d.add(2.6, 'month');
+    const y4 = d.add({ years: 4.2 });
+    const y5 = d.add(4.6, 'year');
+    const sub = d.subtract(2.4, 'month');
+
+    expect(m2.diff(d, 'month', { rounding: 'round' })).toBe(2);
+    expect(m2.diff(d, 'month', { rounding: 'ceil' })).toBe(3);
+    expect(m2.diff(d, 'month', { rounding: 'floor' })).toBe(2);
+    expect(m3.diff(d, 'month', { rounding: 'round' })).toBe(3);
+    expect(m3.diff(d, 'month', { rounding: 'floor' })).toBe(2);
+    expect(y4.diff(d, 'year', { rounding: 'round' })).toBe(4);
+    expect(y4.diff(d, 'year', { rounding: 'ceil' })).toBe(5);
+    expect(y5.diff(d, 'year', { rounding: 'round' })).toBe(5);
+    expect(y5.diff(d, 'year', { rounding: 'floor' })).toBe(4);
+    expect(d.diff(sub, 'month', { rounding: 'ceil' })).toBe(3);
+  });
+
   test('from works.', () => {
     Date.now = mock.return(date.epoch + 7000);
     const d = new DateTime(iso);
     const other = new DateTime('2021-03-22T08:39:44.000Z');
-    expect(d.from()).toMatchText('7 seconds ago');
+    expect(d.from()).toMatchText('a few seconds ago');
     expect(d.from(other)).toMatchText('in 3 days');
-    expect(d.from('nl')).toMatchText('7 seconden geleden');
-    expect(d.from('de')).toMatchText('vor 7 Sekunden');
+    expect(d.from('nl')).toMatchText('een paar seconden geleden');
+    expect(d.from('de')).toMatchText('vor ein paar Sekunden');
     expect(d.from(other, 'de')).toMatchText('in 3 Tagen');
     expect(d.from(other, 'nl')).toMatchText('over 3 dagen');
-    expect(d.from('de-DE')).toMatchText('vor 7 Sekunden');
+    expect(d.from('de-DE')).toMatchText('vor ein paar Sekunden');
   });
 
   test('isAfter', () => {
