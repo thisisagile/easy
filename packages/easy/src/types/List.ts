@@ -145,8 +145,8 @@ export class List<T = unknown> extends Array<T> {
     return this.map(f, params).defined();
   }
 
-  mapAsync(f: (i: T) => Promise<T>): Promise<List<T>> {
-    return Promise.all(super.map(e => f(e))).then(a => toList<T>(a));
+  mapAsync<U = T>(f: (i: T) => Promise<U>): Promise<List<U>> {
+    return Promise.all(super.map(e => f(e))).then(a => toList<U>(a));
   }
 
   mapSerial<U>(f: (i: T) => Promise<U>): Promise<List<U>> {

@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { asc, Id, isPageList, toFilter, toList, toPageList, toShortFilter } from '../../src';
+import { asc, Id, isPageList, PageList, resolve, toFilter, toList, toPageList, toShortFilter } from '../../src';
 import { Dev } from '../ref';
 import { devs, jackAndJill, johnAndJane, managers } from './List.test';
 
@@ -90,6 +90,12 @@ describe('PageList', () => {
     const pl = toPageList(Dev.All, { total: 42 });
     expect(pl).toHaveLength(Dev.All.length);
     expect(pl.total).toBe(42);
+  });
+
+  test('mapAsync maps to a different type and keeps paging', async () => {
+    const names: PageList<string> = await allDevs.mapAsync(d => resolve(d.name));
+    expect(names).toBeInstanceOf(PageList);
+    expect(names.total).toBe(42);
   });
 
   test('toPageList works with PageList as input', () => {
