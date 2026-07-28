@@ -1,5 +1,5 @@
 import { mock } from '@thisisagile/easy-test';
-import { ifDefined, ifEither, ifEqual, ifFalse, ifNotEmpty, ifTrue } from '../../src';
+import { ifDefined, ifEither, ifEmpty, ifEqual, ifFalse, ifNotEmpty, ifTrue } from '../../src';
 import { Dev } from '../ref';
 
 describe('If', () => {
@@ -145,6 +145,107 @@ describe('If', () => {
     test('return value tested if f is not given.', () => {
       expect(ifNotEmpty([])).toBeUndefined();
       expect(ifNotEmpty({ name: 'Sander' })).toStrictEqual({ name: 'Sander' });
+    });
+  });
+
+  describe('IfEmpty', () => {
+    let f: jest.Mock;
+    let alt: jest.Mock;
+
+    beforeEach(() => {
+      f = mock.return('f');
+      alt = mock.return('alt');
+    });
+
+    test('typings', () => {
+      expect(ifEmpty([], () => hello)).toEqual(hello);
+      expect(
+        ifEmpty(
+          [],
+          () => hello,
+          () => goodbye
+        ).toUpperCase()
+      ).toEqual(hello.toUpperCase());
+      expect(
+        ifEmpty(
+          [{}],
+          () => hello,
+          () => goodbye
+        ).toUpperCase()
+      ).toEqual(goodbye.toUpperCase());
+    });
+
+    test('call f on empty array.', () => {
+      expect(
+        ifEmpty(
+          [],
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('call f on empty string.', () => {
+      expect(
+        ifEmpty(
+          '',
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('call f on undefined.', () => {
+      expect(
+        ifEmpty(
+          undefined,
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('call f on null.', () => {
+      expect(
+        ifEmpty(
+          null,
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
+      expect(f).toHaveBeenCalled();
+      expect(alt).not.toHaveBeenCalled();
+    });
+
+    test('call alt when not empty.', () => {
+      expect(
+        ifEmpty(
+          [{}, {}],
+          () => f(),
+          () => alt()
+        )
+      ).toBe('alt');
+      expect(f).not.toHaveBeenCalled();
+      expect(alt).toHaveBeenCalled();
+    });
+
+    test('return undefined when alt is not given.', () => {
+      expect(ifEmpty([{}], () => f())).toBeUndefined();
+      expect(f).not.toHaveBeenCalled();
+    });
+
+    test('return value tested if f is not given and empty.', () => {
+      expect(ifEmpty([])).toStrictEqual([]);
+    });
+
+    test('return undefined if f is not given and not empty.', () => {
+      expect(ifEmpty({ name: 'Sander' })).toBeUndefined();
     });
   });
 
