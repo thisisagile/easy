@@ -1,4 +1,4 @@
-import { isDefined, isNotEmpty, isPresent, isTrue } from '../types/Is';
+import { isDefined, isEmpty, isNotEmpty, isPresent, isTrue } from '../types/Is';
 import { Optional } from '../types/Types';
 import { Construct, ofConstruct, use } from '../types/Constructor';
 import { Get, ofGet } from '../types/Get';
@@ -31,11 +31,19 @@ export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullab
   return isNotEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
 }
 
+export function ifEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt: Construct<Out>): Out;
+export function ifEmpty<Out, In = unknown>(o: In, f?: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
+export function ifEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>> = o => o as Out, alt?: Construct<Out>): Optional<Out> {
+  return isEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}
+
 export function given<T extends object, K extends keyof T>(o: T, key: K, alt: Get<T[K]>): T[K];
 export function given<T extends object, K extends keyof T>(o: T, key: K, alt?: Get<T[K]>): Optional<T[K]>;
 export function given<T extends object, K extends keyof T>(o: T, key: K, alt?: Get<T[K]>): Optional<T[K]> {
   return isDefined(o) && key in o ? o[key] : ofGet(alt);
 }
+
 
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt: Construct<Out>): Out;
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt?: Construct<Out>): Optional<Out>;

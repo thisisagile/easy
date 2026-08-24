@@ -108,7 +108,7 @@ export class PageList<T = unknown> extends List<T> {
     return toPageList(super.mapDefined(f, params), this);
   }
 
-  mapAsync(f: (i: T) => Promise<T>): Promise<PageList<T>> {
+  mapAsync<U = T>(f: (i: T) => Promise<U>): Promise<PageList<U>> {
     return super.mapAsync(f).then(r => toPageList(r, this));
   }
 

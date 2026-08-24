@@ -86,6 +86,11 @@ describe('List', () => {
     await expect(devs.mapAsync(d => hello(d))).rejects.toBe('error');
   });
 
+  test('mapAsync maps to a different type', async () => {
+    const names: List<string> = await devs.mapAsync(d => resolve(d.name));
+    expect(names).toMatchText(devs.map(d => d.name));
+  });
+
   test('mapSerial success', async () => {
     const hello = (d: Dev): Promise<Dev> => resolve(d);
     const devs = toList([Dev.Sander, Dev.Wouter, Dev.Jeroen, Dev.Invalid]);
