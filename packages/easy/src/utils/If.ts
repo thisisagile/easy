@@ -1,6 +1,7 @@
 import { isDefined, isNotEmpty, isPresent, isTrue } from '../types/Is';
 import { Optional } from '../types/Types';
 import { Construct, ofConstruct, use } from '../types/Constructor';
+import { Get, ofGet } from '../types/Get';
 import { OneOrMore } from '../types/Array';
 import { toList } from '../types/List';
 import { isEqual } from '../types/IsEqual';
@@ -28,6 +29,12 @@ export function ifNotEmpty<Out, In = unknown>(o: In, f?: Construct<Out, NonNulla
 export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>>, alt?: Construct<Out>): Optional<Out>;
 export function ifNotEmpty<Out, In = unknown>(o: In, f: Construct<Out, NonNullable<In>> = o => o as Out, alt?: Construct<Out>): Optional<Out> {
   return isNotEmpty(o) ? ofConstruct(f, o) : ofConstruct(alt, o);
+}
+
+export function given<T extends object, K extends keyof T>(o: T, key: K, alt: Get<T[K]>): T[K];
+export function given<T extends object, K extends keyof T>(o: T, key: K, alt?: Get<T[K]>): Optional<T[K]>;
+export function given<T extends object, K extends keyof T>(o: T, key: K, alt?: Get<T[K]>): Optional<T[K]> {
+  return isDefined(o) && key in o ? o[key] : ofGet(alt);
 }
 
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt: Construct<Out>): Out;

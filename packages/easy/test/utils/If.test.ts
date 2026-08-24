@@ -1,5 +1,5 @@
 import { mock } from '@thisisagile/easy-test';
-import { ifDefined, ifEither, ifEqual, ifFalse, ifNotEmpty, ifTrue } from '../../src';
+import { given, ifDefined, ifEither, ifEqual, ifFalse, ifNotEmpty, ifTrue } from '../../src';
 import { Dev } from '../ref';
 
 describe('If', () => {
@@ -325,6 +325,44 @@ describe('If', () => {
     test('ifTrue returns undefined when alt is not given.', () => {
       expect(ifFalse(true, () => f())).toBeUndefined();
       expect(f).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('given', () => {
+    type Options = { title?: string; count?: number };
+    type Titles = { title: string };
+
+    test('take the value when the key is there', () => {
+      expect(given({ title: 'Hello' }, 'title', 'World')).toBe('Hello');
+    });
+
+    test('take the alt when the key is missing', () => {
+      expect(given<Options, 'title'>({}, 'title', 'World')).toBe('World');
+    });
+
+    test('keep an undefined value over the alt when the key is there', () => {
+      expect(given<Options, 'title'>({ title: undefined }, 'title', 'World')).toBeUndefined();
+    });
+
+    test('return undefined when alt is not given.', () => {
+      expect(given<Options, 'title'>({}, 'title')).toBeUndefined();
+    });
+
+    test('take a falsy value over the alt', () => {
+      expect(given({ count: 0 }, 'count', 42)).toBe(0);
+    });
+
+    test('evaluate the alt lazily', () => {
+      const alt = mock.return('World');
+      expect(given({ title: 'Hello' }, 'title', alt)).toBe('Hello');
+      expect(alt).not.toHaveBeenCalled();
+      expect(given<Options, 'title'>({}, 'title', alt)).toBe('World');
+      expect(alt).toHaveBeenCalledTimes(1);
+    });
+
+    test('typings', () => {
+      expect(given({ title: 'Hello' } as Titles, 'title', 'World').toUpperCase()).toBe('HELLO');
+      expect(given({} as Titles, 'title', 'World').toUpperCase()).toBe('WORLD');
     });
   });
 
