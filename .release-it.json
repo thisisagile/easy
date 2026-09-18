@@ -5,6 +5,6 @@
   "plugins": {
     "@release-it/conventional-changelog": { "preset": "angular" },
     "./scripts/release-it-workspace-fix.mjs": true,
-    "@release-it-plugins/workspaces": true
+    "@release-it-plugins/workspaces": { "skipChecks": true }
   }
 }
