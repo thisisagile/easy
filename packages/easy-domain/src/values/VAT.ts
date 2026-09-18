@@ -1,14 +1,16 @@
 import { isNotEmpty, text, Value } from '@thisisagile/easy';
 import isVAT from 'validator/lib/isVAT';
 
+type CountryCode = Parameters<typeof isVAT>[1];
+
 export class VAT extends Value {
-  private readonly country: string;
+  private readonly country: CountryCode;
 
   constructor(vat: unknown, country = 'NL') {
     const cleaned = text(vat).trim.replace('.', '').toString();
     super(cleaned);
 
-    this.country = text(country).trim.upper.toString();
+    this.country = text(country).trim.upper.toString() as CountryCode;
   }
 
   get isValid(): boolean {
