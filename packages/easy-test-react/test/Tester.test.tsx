@@ -108,6 +108,7 @@ describe('Tester', () => {
     expect(t.atLabel('')).toBeInstanceOf(ElementTester);
     expect(t.atValue('')).toBeInstanceOf(ElementTester);
     expect(t.atField('')).toBeInstanceOf(ElementTester);
+    expect(t.atName('')).toBeInstanceOf(ElementTester);
     expect(t.submit()).toBeInstanceOf(ElementTester);
   });
 });

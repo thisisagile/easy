@@ -66,6 +66,10 @@ export class Tester {
 
   atField = (field: Id, index?: number): ElementTester => new ElementTester(() => this.byField(field, index));
 
+  byName = (name: Id, index?: number): HTMLElement => this.byField(name, index);
+
+  atName = (name: Id, index?: number): ElementTester => this.atField(name, index);
+
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
   debug = () => screen.debug();
 }

@@ -60,6 +60,19 @@ describe('Tester', () => {
     expect(t.atField('last')).not.toBeValid();
   });
 
+  test('byName finds what byField finds', () => {
+    const t = renders(form);
+    expect(t.byName('country')).toBe(t.byField('country'));
+    expect(t.byName('phone', 1)).toBe(t.byField('phone', 1));
+    expect(t.byName('action')).toBeUndefined();
+  });
+
+  test('atName finds what atField finds', () => {
+    const t = renders(form);
+    expect(t.atName('first').value).toBe(t.atField('first').value);
+    expect(t.atName('last')).not.toBeValid();
+  });
+
   test('atField types and blurs the field it found', () => {
     const t = renders(form);
     t.atField('first').type('Wouter');
