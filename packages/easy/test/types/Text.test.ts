@@ -137,6 +137,12 @@ describe('kebab', () => {
     expect(kebab(t)).toBe(exp);
   });
 
+  test('accepts non-string input by coercing via asString', () => {
+    expect(kebab(undefined)).toBe('');
+    expect(kebab(42)).toBe('42');
+    expect(kebab(Dev.Sander)).toBe('sander');
+  });
+
   test('capitalize', () => {
     expect(capitalize()).toBe('');
     expect(capitalize('')).toBe('');

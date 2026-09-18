@@ -20,7 +20,7 @@ export const toWords = (input: unknown): string[] => {
     .filter(Boolean);
 };
 
-export const kebab = (s = ''): string => toWords(s).join('-').toLowerCase();
+export const kebab = (s: unknown = ''): string => toWords(s).join('-').toLowerCase();
 
 export type KebabToCamel<S extends string> = S extends `${infer Head}-${infer Tail}` ? `${Head}${Capitalize<KebabToCamel<Tail>>}` : S;
 
