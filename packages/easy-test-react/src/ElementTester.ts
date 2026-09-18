@@ -28,6 +28,7 @@ export class ElementTester {
   pressEnter = (): this | undefined => this.keyDown('Enter');
   clear = (): boolean => this.type('');
   type = (value: string): boolean => fireEvent.change(this.element(), { target: { value } });
+  blur = (): this | undefined => (this.element() && fireEvent.blur(this.element()) ? this : undefined);
   wait = (): Promise<Element> => waitFor(this.element);
   waitForRemove = (): Promise<void> => waitForElementToBeRemoved(this.element);
 }

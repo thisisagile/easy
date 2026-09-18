@@ -86,6 +86,19 @@ describe('ElementTester', () => {
     expect(fireEvent.change).toHaveBeenCalledWith(a, { target: { value: '' } });
   });
 
+  test('blur fires blur event', () => {
+    fireEvent.blur = mock.return(true);
+    expect(et.blur()).toBe(et);
+    expect(screen.getAllByText).toHaveBeenCalled();
+    expect(fireEvent.blur).toHaveBeenCalledWith(a);
+  });
+
+  test('blur fires blur event but fails', () => {
+    fireEvent.blur = mock.return(false);
+    expect(et.blur()).toBeUndefined();
+    expect(fireEvent.blur).toHaveBeenCalledWith(a);
+  });
+
   test('keyDown fires keydown event', () => {
     fireEvent.keyDown = mock.return(true);
     const key = 'Enter';
