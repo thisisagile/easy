@@ -61,6 +61,11 @@ export class Tester {
 
   atValue = (value: string, index?: number): ElementTester => new ElementTester(() => this.byValue(value, index));
 
+  byField = (field: Id, index?: number): HTMLElement =>
+    this.byQuery(['input', 'select', 'textarea'].map(t => `${t}[name="${asString(field)}"]`).join(), index);
+
+  atField = (field: Id, index?: number): ElementTester => new ElementTester(() => this.byField(field, index));
+
   submit = (id: Id = 'btn-submit'): ElementTester => this.atId(id);
   debug = () => screen.debug();
 }
