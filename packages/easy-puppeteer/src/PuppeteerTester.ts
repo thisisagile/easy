@@ -50,8 +50,10 @@ export class PuppeteerTester implements Tester {
   }
 
   row(contains: string): TestElement {
-    // Select the first row that contains the given input
-    return this.byXPath(`(//tr[contains(., '${contains}')])[1]`);
+    // Select the first row that contains the given input. byXPath prefixes the query with a dot,
+    // so it must stay relative: '(//tr[...])[1]' would become '.(//tr[...])[1]', which is not
+    // valid xpath - it matches nothing and only times out. waitForSelector takes the first match.
+    return this.byXPath(`//tr[contains(., '${contains}')]`);
   }
 
   redirect(url: string): Promise<boolean> {

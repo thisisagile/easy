@@ -120,7 +120,7 @@ describe('PuppeteerTester', () => {
 
     expect(result).toBeInstanceOf(PuppeteerElement);
     expect(result).toMatchObject(pe);
-    expect(page.waitForSelector).toHaveBeenCalledWith(`xpath/.(//tr[contains(., 'value')])[1]`);
+    expect(page.waitForSelector).toHaveBeenCalledWith(`xpath/.//tr[contains(., 'value')]`);
     expect(page.waitForSelector).toHaveBeenCalledTimes(1);
   });
 
