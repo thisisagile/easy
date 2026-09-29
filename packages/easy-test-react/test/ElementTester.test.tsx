@@ -49,6 +49,25 @@ describe('ElementTester', () => {
     expect(fireEvent.click).toHaveBeenCalledWith(a);
   });
 
+  test('submit fires submit event', () => {
+    fireEvent.submit = mock.return(true);
+    expect(et.submit()).toBe(et);
+    expect(screen.getAllByText).toHaveBeenCalled();
+    expect(fireEvent.submit).toHaveBeenCalledWith(a);
+  });
+
+  test('submit fires submit event but fails', () => {
+    fireEvent.submit = mock.return(false);
+    expect(et.submit()).toBeUndefined();
+    expect(fireEvent.submit).toHaveBeenCalledWith(a);
+  });
+
+  test('awaitSubmit fires submit event', async () => {
+    fireEvent.submit = mock.return(true);
+    await et.awaitSubmit();
+    expect(fireEvent.submit).toHaveBeenCalledWith(a);
+  });
+
   test('mouseDown fires mousedown event', () => {
     fireEvent.mouseDown = mock.return(true);
     expect(et.mouseDown()).toBe(et);
