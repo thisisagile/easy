@@ -49,6 +49,23 @@ describe('List', () => {
     expect(l.desc('created').first()).toMatchObject(third);
   });
 
+  test('asc and desc keep a list holding a single list intact', () => {
+    const certificates = toList([Dev.Sander.certificates]);
+    expect(certificates.asc(c => c.first().name).first()).toBe(Dev.Sander.certificates);
+    expect(certificates.desc(c => c.first().name).first()).toBe(Dev.Sander.certificates);
+  });
+
+  test('moveOn keeps a list holding a single list intact', () => {
+    const certificates = toList([Dev.Sander.certificates]);
+    expect(certificates.moveOn('length', 1, 1).first()).toBe(Dev.Sander.certificates);
+  });
+
+  test('symmetricDiff and symmetricDiffByKey keep a single list in others intact', () => {
+    const certificates = toList([Dev.Sander.certificates]);
+    expect(toList<typeof Dev.Sander.certificates>().symmetricDiff(certificates).first()).toBe(Dev.Sander.certificates);
+    expect(toList<typeof Dev.Sander.certificates>().symmetricDiffByKey(certificates, 'length').first()).toBe(Dev.Sander.certificates);
+  });
+
   test('map', () => {
     expect(devs.map(d => d.language)).toBeInstanceOf(List);
     expect(

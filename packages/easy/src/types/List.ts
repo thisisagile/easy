@@ -44,11 +44,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   asc(p: GetProperty<T, any>): List<T> {
-    return toList<T>(...this).sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
+    return this.slice().sort((e1, e2) => (ofProperty(e1, p) > ofProperty(e2, p) ? 1 : -1));
   }
 
   desc(p: GetProperty<T, any>): List<T> {
-    return toList<T>(...this).sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
+    return this.slice().sort((e1, e2) => (ofProperty(e1, p) < ofProperty(e2, p) ? 1 : -1));
   }
 
   first(p?: Pred<T>, params?: unknown): T {
@@ -96,11 +96,11 @@ export class List<T = unknown> extends Array<T> {
   }
 
   symmetricDiff(others: ArrayLike<T>): List<T> {
-    return this.diff(others).concat(toList<T>(...others).diff(this));
+    return this.diff(others).concat(toList<T>(others as T[]).diff(this));
   }
 
   symmetricDiffByKey(others: ArrayLike<T>, key: keyof T): List<T> {
-    return this.diffByKey(others, key).concat(toList<T>(...others).diffByKey(this, key));
+    return this.diffByKey(others, key).concat(toList<T>(others as T[]).diffByKey(this, key));
   }
 
   intersect(others: ArrayLike<T>): List<T> {
@@ -239,7 +239,7 @@ export class List<T = unknown> extends Array<T> {
   moveOn(key: keyof T, sourceId: Id, destinationId: Id): List<T> {
     const source = this.findIndex(i => equals(i[key], sourceId));
     const dest = this.findIndex(i => equals(i[key], destinationId));
-    return on(toList<T>(...this), r => r.splice(dest, 0, ...r.splice(source, 1)));
+    return on(this.slice(), r => r.splice(dest, 0, ...r.splice(source, 1)));
   }
 
   replace(key: keyof T, item: T): List<T> {

@@ -18,6 +18,13 @@ describe('PageList', () => {
     expect(l[0]).toBe('hello');
   });
 
+  test('asc and desc keep a page list holding a single list intact', () => {
+    const certificates = toPageList([Dev.Sander.certificates], { total: 1 });
+    expect(certificates.asc(c => c.first().name).first()).toBe(Dev.Sander.certificates);
+    expect(certificates.desc(c => c.first().name).first()).toBe(Dev.Sander.certificates);
+    expect(certificates.asc(c => c.first().name).total).toBe(1);
+  });
+
   test('toPageList empty', () => {
     const pl = toPageList();
     expect(pl).toBeDefined();
