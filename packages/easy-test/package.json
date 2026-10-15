@@ -22,8 +22,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -48,5 +48,127 @@
     "jest-junit": "^17.0.0",
     "jest-sonar-reporter": "^2.0.0",
     "ts-jest": "^29.4.11"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./matchers/Check": {
+      "types": "./dist/matchers/Check.d.ts",
+      "import": "./dist/matchers/Check.mjs"
+    },
+    "./matchers/HttpMatchers": {
+      "types": "./dist/matchers/HttpMatchers.d.ts",
+      "import": "./dist/matchers/HttpMatchers.mjs"
+    },
+    "./matchers/Match": {
+      "types": "./dist/matchers/Match.d.ts",
+      "import": "./dist/matchers/Match.mjs"
+    },
+    "./matchers/ResultMatchers": {
+      "types": "./dist/matchers/ResultMatchers.d.ts",
+      "import": "./dist/matchers/ResultMatchers.mjs"
+    },
+    "./matchers/index": {
+      "types": "./dist/matchers/index.d.ts",
+      "import": "./dist/matchers/index.mjs"
+    },
+    "./matchers/toBeArrayOf": {
+      "types": "./dist/matchers/toBeArrayOf.d.ts",
+      "import": "./dist/matchers/toBeArrayOf.mjs"
+    },
+    "./matchers/toBeArrayOfWithLength": {
+      "types": "./dist/matchers/toBeArrayOfWithLength.d.ts",
+      "import": "./dist/matchers/toBeArrayOfWithLength.mjs"
+    },
+    "./matchers/toBeAt": {
+      "types": "./dist/matchers/toBeAt.d.ts",
+      "import": "./dist/matchers/toBeAt.mjs"
+    },
+    "./matchers/toBeExactlyAt": {
+      "types": "./dist/matchers/toBeExactlyAt.d.ts",
+      "import": "./dist/matchers/toBeExactlyAt.mjs"
+    },
+    "./matchers/toBeQueriedWith": {
+      "types": "./dist/matchers/toBeQueriedWith.d.ts",
+      "import": "./dist/matchers/toBeQueriedWith.mjs"
+    },
+    "./matchers/toBeRoutedTo": {
+      "types": "./dist/matchers/toBeRoutedTo.d.ts",
+      "import": "./dist/matchers/toBeRoutedTo.mjs"
+    },
+    "./matchers/toBeValid": {
+      "types": "./dist/matchers/toBeValid.d.ts",
+      "import": "./dist/matchers/toBeValid.mjs"
+    },
+    "./matchers/toFailMatcher": {
+      "types": "./dist/matchers/toFailMatcher.d.ts",
+      "import": "./dist/matchers/toFailMatcher.mjs"
+    },
+    "./matchers/toMatchArray": {
+      "types": "./dist/matchers/toMatchArray.d.ts",
+      "import": "./dist/matchers/toMatchArray.mjs"
+    },
+    "./matchers/toMatchExactJson": {
+      "types": "./dist/matchers/toMatchExactJson.d.ts",
+      "import": "./dist/matchers/toMatchExactJson.mjs"
+    },
+    "./matchers/toMatchException": {
+      "types": "./dist/matchers/toMatchException.d.ts",
+      "import": "./dist/matchers/toMatchException.mjs"
+    },
+    "./matchers/toMatchJson": {
+      "types": "./dist/matchers/toMatchJson.d.ts",
+      "import": "./dist/matchers/toMatchJson.mjs"
+    },
+    "./matchers/toMatchRoute": {
+      "types": "./dist/matchers/toMatchRoute.d.ts",
+      "import": "./dist/matchers/toMatchRoute.mjs"
+    },
+    "./matchers/toMatchText": {
+      "types": "./dist/matchers/toMatchText.d.ts",
+      "import": "./dist/matchers/toMatchText.mjs"
+    },
+    "./matchers/toPassMatcher": {
+      "types": "./dist/matchers/toPassMatcher.d.ts",
+      "import": "./dist/matchers/toPassMatcher.mjs"
+    },
+    "./mock/Fits": {
+      "types": "./dist/mock/Fits.d.ts",
+      "import": "./dist/mock/Fits.mjs"
+    },
+    "./mock/Mocks": {
+      "types": "./dist/mock/Mocks.d.ts",
+      "import": "./dist/mock/Mocks.mjs"
+    },
+    "./mock/index": {
+      "types": "./dist/mock/index.d.ts",
+      "import": "./dist/mock/index.mjs"
+    },
+    "./utils/Eq": {
+      "types": "./dist/utils/Eq.d.ts",
+      "import": "./dist/utils/Eq.mjs"
+    },
+    "./utils/Req": {
+      "types": "./dist/utils/Req.d.ts",
+      "import": "./dist/utils/Req.mjs"
+    },
+    "./utils/Response": {
+      "types": "./dist/utils/Response.d.ts",
+      "import": "./dist/utils/Response.mjs"
+    },
+    "./utils/Types": {
+      "types": "./dist/utils/Types.d.ts",
+      "import": "./dist/utils/Types.mjs"
+    },
+    "./utils/Utils": {
+      "types": "./dist/utils/Utils.d.ts",
+      "import": "./dist/utils/Utils.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

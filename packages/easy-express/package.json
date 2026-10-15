@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -53,5 +53,55 @@
     "jsonwebtoken": "^9.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./express/AuthError": {
+      "types": "./dist/express/AuthError.d.ts",
+      "import": "./dist/express/AuthError.mjs"
+    },
+    "./express/CorrelationHandler": {
+      "types": "./dist/express/CorrelationHandler.d.ts",
+      "import": "./dist/express/CorrelationHandler.mjs"
+    },
+    "./express/ErrorHandler": {
+      "types": "./dist/express/ErrorHandler.d.ts",
+      "import": "./dist/express/ErrorHandler.mjs"
+    },
+    "./express/ExpressProvider": {
+      "types": "./dist/express/ExpressProvider.d.ts",
+      "import": "./dist/express/ExpressProvider.mjs"
+    },
+    "./express/NotFoundHandler": {
+      "types": "./dist/express/NotFoundHandler.d.ts",
+      "import": "./dist/express/NotFoundHandler.mjs"
+    },
+    "./express/RequestContextHandler": {
+      "types": "./dist/express/RequestContextHandler.d.ts",
+      "import": "./dist/express/RequestContextHandler.mjs"
+    },
+    "./express/SecurityHandler": {
+      "types": "./dist/express/SecurityHandler.d.ts",
+      "import": "./dist/express/SecurityHandler.mjs"
+    },
+    "./express/index": {
+      "types": "./dist/express/index.d.ts",
+      "import": "./dist/express/index.mjs"
+    },
+    "./types/NamespaceContext": {
+      "types": "./dist/types/NamespaceContext.d.ts",
+      "import": "./dist/types/NamespaceContext.mjs"
+    },
+    "./types/index": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

@@ -22,8 +22,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -48,5 +48,27 @@
     "@types/react": "^18.3.18",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./ElementTester": {
+      "types": "./dist/ElementTester.d.ts",
+      "import": "./dist/ElementTester.mjs"
+    },
+    "./Tester": {
+      "types": "./dist/Tester.d.ts",
+      "import": "./dist/Tester.mjs"
+    },
+    "./waitForRender": {
+      "types": "./dist/waitForRender.d.ts",
+      "import": "./dist/waitForRender.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

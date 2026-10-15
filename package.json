@@ -12,6 +12,7 @@
     "lint-all": "yarn workspaces foreach -A run lint",
     "build-all": "yarn workspaces foreach -Ap --topological-dev run build:tsup",
     "test-all": "jest --coverage",
+    "test:bundle": "node --test test/bundle/*.test.mjs && node test/bundle/check.mjs",
     "test-sonarqube": "yarn workspaces foreach -A run test",
     "release": "yarn build-all && release-it",
     "u": "yarn upgrade-interactive && yarn dedupe"

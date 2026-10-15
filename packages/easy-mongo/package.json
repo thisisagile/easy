@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -39,5 +39,43 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "mongodb": "^6.17.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./AtlasSearchGateway": {
+      "types": "./dist/AtlasSearchGateway.d.ts",
+      "import": "./dist/AtlasSearchGateway.mjs"
+    },
+    "./Collection": {
+      "types": "./dist/Collection.d.ts",
+      "import": "./dist/Collection.mjs"
+    },
+    "./Lucene": {
+      "types": "./dist/Lucene.d.ts",
+      "import": "./dist/Lucene.mjs"
+    },
+    "./MongoGateway": {
+      "types": "./dist/MongoGateway.d.ts",
+      "import": "./dist/MongoGateway.mjs"
+    },
+    "./MongoProvider": {
+      "types": "./dist/MongoProvider.d.ts",
+      "import": "./dist/MongoProvider.mjs"
+    },
+    "./Stages": {
+      "types": "./dist/Stages.d.ts",
+      "import": "./dist/Stages.mjs"
+    },
+    "./Utils": {
+      "types": "./dist/Utils.d.ts",
+      "import": "./dist/Utils.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

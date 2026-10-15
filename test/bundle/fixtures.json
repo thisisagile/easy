@@ -1,0 +1,15 @@
+{
+  "package": "@thisisagile/easy",
+  "directory": "packages/easy",
+  "leafPrefix": "dist",
+  "leafExtension": "mjs",
+  "fixtures": [
+    ["isDefined", "types/Is", "isDefined", "isDefined"],
+    ["toList", "types/List", "toList", "toList"],
+    ["text", "types/ToText", "text", "text"],
+    ["dt", "domain/DateTime", "dt", "dt"],
+    ["Enum", "types/Enum", "Enum", "class Example extends Enum { static One = new Example('One'); }"],
+    ["uri", "types/Uri", "uri", "uri"],
+    ["UseCase", "process/UseCase", "UseCase", "UseCase"]
+  ]
+}

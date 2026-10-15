@@ -17,6 +17,14 @@ jobs:
         run: yarn build-all
         env:
           CI: true
+      - name: Packed artifact consumers
+        run: node --test test/exports.test.mjs test/packaging.test.mjs && yarn test:bundle
+      - name: Archive bundle report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-report
+          path: test/bundle/report.json
       - name: Test
         run: yarn test-sonarqube
       - name: Archive test results

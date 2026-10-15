@@ -21,8 +21,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "postbuild": "copyfiles -u 1 src/**/*.scss dist",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme",
@@ -51,5 +51,55 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sass": "^1.80.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./layout/If": {
+      "types": "./dist/layout/If.d.ts",
+      "import": "./dist/layout/If.mjs"
+    },
+    "./layout/index": {
+      "types": "./dist/layout/index.d.ts",
+      "import": "./dist/layout/index.mjs"
+    },
+    "./utils/Children": {
+      "types": "./dist/utils/Children.d.ts",
+      "import": "./dist/utils/Children.mjs"
+    },
+    "./utils/Hooks": {
+      "types": "./dist/utils/Hooks.d.ts",
+      "import": "./dist/utils/Hooks.mjs"
+    },
+    "./utils/index": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.mjs"
+    },
+    "./utils/toClasses": {
+      "types": "./dist/utils/toClasses.d.ts",
+      "import": "./dist/utils/toClasses.mjs"
+    },
+    "./utils/useOnce": {
+      "types": "./dist/utils/useOnce.d.ts",
+      "import": "./dist/utils/useOnce.mjs"
+    },
+    "./utils/useRev": {
+      "types": "./dist/utils/useRev.d.ts",
+      "import": "./dist/utils/useRev.mjs"
+    },
+    "./utils/useState": {
+      "types": "./dist/utils/useState.d.ts",
+      "import": "./dist/utils/useState.mjs"
+    },
+    "./utils/useToggle": {
+      "types": "./dist/utils/useToggle.d.ts",
+      "import": "./dist/utils/useToggle.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

@@ -23,8 +23,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -43,5 +43,23 @@
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-test-web": "workspace:^",
     "playwright": "^1.41.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./PlaywrightElement": {
+      "types": "./dist/PlaywrightElement.d.ts",
+      "import": "./dist/PlaywrightElement.mjs"
+    },
+    "./PlaywrightTester": {
+      "types": "./dist/PlaywrightTester.d.ts",
+      "import": "./dist/PlaywrightTester.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

@@ -9,16 +9,14 @@ const commonConfig = {
   format: ['esm' as Format],
 };
 
+export const esmConfig = {
+  ...commonConfig,
+  entry: ['src/**/*.ts?(x)'],
+  splitting: true,
+};
+
 export const config = defineConfig([
-  {
-    entry: ['src/**/!(index).ts?(x)'],
-    ...commonConfig,
-  },
-  {
-    entry: ['src/index.ts', 'src/**/index.ts'],
-    ...commonConfig,
-    bundle: false,
-  },
+  esmConfig,
   {
     entry: ['src/index.ts'],
     ...commonConfig,

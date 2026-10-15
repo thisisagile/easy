@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc ",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -40,5 +40,91 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:*",
     "validator": "^13.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./enums/Country": {
+      "types": "./dist/enums/Country.d.ts",
+      "import": "./dist/enums/Country.mjs"
+    },
+    "./enums/Currency": {
+      "types": "./dist/enums/Currency.d.ts",
+      "import": "./dist/enums/Currency.mjs"
+    },
+    "./enums/Locale": {
+      "types": "./dist/enums/Locale.d.ts",
+      "import": "./dist/enums/Locale.mjs"
+    },
+    "./enums/UnitOfMeasurement": {
+      "types": "./dist/enums/UnitOfMeasurement.d.ts",
+      "import": "./dist/enums/UnitOfMeasurement.mjs"
+    },
+    "./enums/UnitOfWeight": {
+      "types": "./dist/enums/UnitOfWeight.d.ts",
+      "import": "./dist/enums/UnitOfWeight.mjs"
+    },
+    "./structs/Address": {
+      "types": "./dist/structs/Address.d.ts",
+      "import": "./dist/structs/Address.mjs"
+    },
+    "./structs/Box": {
+      "types": "./dist/structs/Box.d.ts",
+      "import": "./dist/structs/Box.mjs"
+    },
+    "./structs/Dimension": {
+      "types": "./dist/structs/Dimension.d.ts",
+      "import": "./dist/structs/Dimension.mjs"
+    },
+    "./structs/Money": {
+      "types": "./dist/structs/Money.d.ts",
+      "import": "./dist/structs/Money.mjs"
+    },
+    "./structs/Name": {
+      "types": "./dist/structs/Name.d.ts",
+      "import": "./dist/structs/Name.mjs"
+    },
+    "./structs/Weight": {
+      "types": "./dist/structs/Weight.d.ts",
+      "import": "./dist/structs/Weight.mjs"
+    },
+    "./values/DunsNumber": {
+      "types": "./dist/values/DunsNumber.d.ts",
+      "import": "./dist/values/DunsNumber.mjs"
+    },
+    "./values/EAN": {
+      "types": "./dist/values/EAN.d.ts",
+      "import": "./dist/values/EAN.mjs"
+    },
+    "./values/Email": {
+      "types": "./dist/values/Email.d.ts",
+      "import": "./dist/values/Email.mjs"
+    },
+    "./values/IBAN": {
+      "types": "./dist/values/IBAN.d.ts",
+      "import": "./dist/values/IBAN.mjs"
+    },
+    "./values/PostalCode": {
+      "types": "./dist/values/PostalCode.d.ts",
+      "import": "./dist/values/PostalCode.mjs"
+    },
+    "./values/Slug": {
+      "types": "./dist/values/Slug.d.ts",
+      "import": "./dist/values/Slug.mjs"
+    },
+    "./values/Url": {
+      "types": "./dist/values/Url.d.ts",
+      "import": "./dist/values/Url.mjs"
+    },
+    "./values/VAT": {
+      "types": "./dist/values/VAT.d.ts",
+      "import": "./dist/values/VAT.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

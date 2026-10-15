@@ -20,8 +20,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -39,5 +39,55 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "jsonwebtoken": "^9.0.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./health/HealthResource": {
+      "types": "./dist/health/HealthResource.d.ts",
+      "import": "./dist/health/HealthResource.mjs"
+    },
+    "./health/HealthUri": {
+      "types": "./dist/health/HealthUri.d.ts",
+      "import": "./dist/health/HealthUri.mjs"
+    },
+    "./http/OriginatedError": {
+      "types": "./dist/http/OriginatedError.d.ts",
+      "import": "./dist/http/OriginatedError.mjs"
+    },
+    "./http/Verb": {
+      "types": "./dist/http/Verb.d.ts",
+      "import": "./dist/http/Verb.mjs"
+    },
+    "./resources/AppProvider": {
+      "types": "./dist/resources/AppProvider.d.ts",
+      "import": "./dist/resources/AppProvider.mjs"
+    },
+    "./resources/Requires": {
+      "types": "./dist/resources/Requires.d.ts",
+      "import": "./dist/resources/Requires.mjs"
+    },
+    "./resources/Resource": {
+      "types": "./dist/resources/Resource.d.ts",
+      "import": "./dist/resources/Resource.mjs"
+    },
+    "./resources/Route": {
+      "types": "./dist/resources/Route.d.ts",
+      "import": "./dist/resources/Route.mjs"
+    },
+    "./resources/Service": {
+      "types": "./dist/resources/Service.d.ts",
+      "import": "./dist/resources/Service.mjs"
+    },
+    "./security/Jwt": {
+      "types": "./dist/security/Jwt.d.ts",
+      "import": "./dist/security/Jwt.mjs"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }

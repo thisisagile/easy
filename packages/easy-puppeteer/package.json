@@ -22,8 +22,8 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsc",
-    "build:tsup": "yarn g:tsup --onSuccess \"yarn g:tsc --emitDeclarationOnly --declaration\"",
+    "build": "yarn build:tsup",
+    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration && node ../../scripts/check-exports.mjs",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -41,5 +41,26 @@
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-test-web": "workspace:^",
     "puppeteer": "^22.2.0"
+  },
+  "module": "dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./PuppeteerElement": {
+      "types": "./dist/PuppeteerElement.d.ts",
+      "import": "./dist/PuppeteerElement.mjs",
+      "require": "./dist/PuppeteerElement.js"
+    },
+    "./PuppeteerTester": {
+      "types": "./dist/PuppeteerTester.d.ts",
+      "import": "./dist/PuppeteerTester.mjs",
+      "require": "./dist/PuppeteerTester.js"
+    },
+    "./src/*": "./src/*",
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
   }
 }
