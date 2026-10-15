@@ -1,4 +1,4 @@
-import { DateTime, DateTimeUnit, dt, isDateTime } from '../../src';
+import { DateTime, DateTimeUnit, DurationUnit, dt, isDateTime } from '../../src';
 import '@thisisagile/easy-test';
 import { mock } from '@thisisagile/easy-test';
 
@@ -25,10 +25,17 @@ const formats = {
   yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
 };
 
-// These reviewed Luxon 3.5.0 values are the release oracle for any future engine migration.
-const formattedLeapDay = new DateTime('2024-02-29T13:05:06.789Z');
+// Preserve the existing behavior when replacing the date engine.
 const leapDay = '2024-02-29T00:00:00.000Z';
 const leapDayWithTime = '2024-02-29T13:05:06.789Z';
+const formattedLeapDay = new DateTime(leapDayWithTime);
+const newYorkZone = 'America/New_York';
+const lordHoweZone = 'Australia/Lord_Howe';
+const todayAfternoon = '2024-06-15T13:05:00.000Z';
+const monthNameDateFormat = 'MMM dd yyyy';
+const zonedDateFormat = 'yyyy-MM-dd HH:mm z';
+const leapDayMinute = '2024-02-29T13:05:00.000Z';
+const epochStart = '1970-01-01T00:00:00.000Z';
 const fullDate = 'February 29, 2024';
 const fullDateTime = 'Thursday, February 29, 2024 at 1:05\u202fPM UTC';
 const slashDate = '29/02/2024';
@@ -259,7 +266,7 @@ describe('DateTime', () => {
     expect(new DateTime('2021-11-11')).toEqual(new DateTime('2021-11-11'));
     expect(new DateTime('2021-11-12T00:00:00.000Z')).toEqual(new DateTime('2021-11-12T00:00:00.000Z'));
     expect(new DateTime('2023-11-11T00:00:00.000Z')).not.toEqual(new DateTime('2023-11-11T00:00:00.001Z'));
-    expect(new DateTime('2024-01-01T01:00:00.000+0100')).not.toBe('2024-01-01T00:00:00.000Z');
+    expect(new DateTime('2024-01-01T01:00:00.000+0100')).not.toBe(januaryFirst);
   });
 
   test('from iso date is valid.', () => {
@@ -581,7 +588,7 @@ describe('DateTime', () => {
   });
 
   test('withZone changes zone', () => {
-    const d = new DateTime(iso).withZone('America/New_York');
+    const d = new DateTime(iso).withZone(newYorkZone);
     expect(d).toMatchText(new_york);
     expect(d.toJSON()).toMatchText(iso);
     expect(d.toLocale('en-US', 'ffff')).toMatchText('Thursday, March 25, 2021 at 4:39 AM Eastern Daylight Time');
@@ -652,6 +659,243 @@ describe('DateTime', () => {
   });
 
   describe('characterization', () => {
+    describe('edge cases', () => {
+      beforeEach(() => jest.spyOn(Date, 'now').mockReturnValue(frozenNow));
+      afterEach(() => jest.restoreAllMocks());
+
+      test.each([
+        ['2024', januaryFirst],
+        ['2024-02', februaryFirst],
+        ['20240229', leapDay],
+        ['2024-W09-4', leapDay],
+        ['2024W094', leapDay],
+        ['2024-060', leapDay],
+        ['2024060', leapDay],
+        ['2024-02-29T24:00', '2024-03-01T00:00:00.000Z'],
+        ['2024-02-29T13:05:06.123456789Z', '2024-02-29T13:05:06.123Z'],
+        ['2024-02-29T13:05:06,789Z', leapDayWithTime],
+        ['2024-02-29T13:05+05', '2024-02-29T13:05:00.000+05:00'],
+        ['0000-02-29T00:00:00Z', '0000-02-29T00:00:00.000Z'],
+        ['0099-01-01T00:00:00Z', '0099-01-01T00:00:00.000Z'],
+        ['+012345-01-01T00:00:00Z', '+012345-01-01T00:00:00.000Z'],
+        ['-000001-01-01T00:00:00Z', '-000001-01-01T00:00:00.000Z'],
+        ['13:05', todayAfternoon],
+      ])('ISO %s produces %s', (value, expected) => {
+        const date = new DateTime(value);
+        expect(date.isValid).toBe(true);
+        expect(date.toString()).toBe(expected);
+        expect(date.toJSON()).toBe(new Date(expected).toISOString());
+        expect(date.toEpoch()).toBe(Date.parse(expected));
+      });
+
+      test.each([
+        '2024-02-29T24:01',
+        '2024-02-30',
+        '2023-02-29',
+        '2024-13-01',
+        '2024-00-01',
+        '2024-01-00',
+        '2024-01-32',
+        '2024-02-29T25:00',
+        '2024-02-29T12:60',
+        '2024-02-29T12:00:60',
+        '2024-W00-1',
+        '2024-W54-1',
+        '2024-W09-0',
+        '2024-W09-8',
+        '2024-000',
+        '2023-366',
+        '2024-367',
+        'T13:05',
+        'invalid',
+        '',
+      ])('rejects invalid ISO %s through public operations', value => {
+        const date = new DateTime(value);
+        for (const result of [date, date.add(1), date.subtract(1), date.startOf(), date.endOf(), date.inAmsterdam]) {
+          expect(result.isValid).toBe(false);
+          expect(result.toString()).toBe('');
+          expect(result.toJSON()).toBeNull();
+          expect(result.toEpoch()).toBeNaN();
+          expect(result.toDate()).toBeUndefined();
+        }
+        expect(date.from()).toBe('');
+        expect(date.equals(date)).toBe(false);
+        expect(date.isWeekend()).toBe(false);
+        expect(() => date.withClock(new DateTime(leapDay))).toThrow();
+      });
+
+      test.each([
+        ['13', 'hh', afternoon],
+        ['00 AM', 'hh a', '2024-06-15T00:00:00.000Z'],
+        ['20240229', 'yyyyMMdd', leapDay],
+        ['Feb 29 2024', monthNameDateFormat, leapDay],
+        ['feb 29 2024', monthNameDateFormat, leapDay],
+        ['FEB 29 2024', monthNameDateFormat, leapDay],
+        ['23', 'H', '2024-06-15T23:00:00.000Z'],
+        ['59', 'm', '2024-06-15T10:59:00.000Z'],
+        ['59', 's', '2024-06-15T10:20:59.000Z'],
+        ['999', 'S', '2024-06-15T10:20:30.999Z'],
+        ['366', 'ooo', '2024-12-31T00:00:00.000Z'],
+      ])('parses boundary %s with %s', (value, format, expected) => {
+        expect(new DateTime(value, format).toString()).toBe(expected);
+      });
+
+      test.each([
+        ['ii', 'ii'],
+        ['X', 'X'],
+        ['x', 'x'],
+        ['literal', "'literal'"],
+        ['2024-02-29 Fri', 'yyyy-MM-dd EEE'],
+        ['2024-54-1', 'kkkk-WW-c'],
+        ['2024-00-1', 'kkkk-WW-c'],
+        ['000', 'ooo'],
+        ['367', 'ooo'],
+        ['0', 'q'],
+        ['5', 'q'],
+        ['60', 's'],
+        ['60', 'm'],
+        ['25', 'H'],
+        ['32', 'd'],
+        ['0', 'd'],
+        ['13', 'M'],
+        ['0', 'M'],
+        ['1000', 'SSS'],
+        ['-1', 'S'],
+        ['1.5', 'S'],
+        ['0001', 'SSS'],
+      ])('rejects parse boundary %s with %s', (value, format) => {
+        expect(new DateTime(value, format).isValid).toBe(false);
+      });
+
+      test.each([
+        ['13 PM', 'H a'],
+        ['2024-09-4 02', 'kkkk-WW-c MM'],
+        ['2024-02-29 060', 'yyyy-MM-dd ooo'],
+      ])('rejects conflicting fields %s with %s', (value, format) => {
+        expect(new DateTime(value, format).isValid).toBe(false);
+      });
+
+      test.each([
+        ['UTC', leapDayWithTime],
+        ['UTC+0:01', '2024-02-29T13:06:06.789+00:01'],
+        ['UTC-0:01', '2024-02-29T13:04:06.789-00:01'],
+        ['UTC+5:45', '2024-02-29T18:50:06.789+05:45'],
+        ['UTC+14', '2024-03-01T03:05:06.789+14:00'],
+        ['UTC-12', '2024-02-29T01:05:06.789-12:00'],
+        ['Europe/London', '2024-02-29T13:05:06.789+00:00'],
+        [amsterdamZone, '2024-02-29T14:05:06.789+01:00'],
+        [newYorkZone, '2024-02-29T08:05:06.789-05:00'],
+        [lordHoweZone, '2024-03-01T00:05:06.789+11:00'],
+        ['Pacific/Apia', '2024-03-01T02:05:06.789+13:00'],
+      ])('preserves zone %s and the UTC instant', (zone, expected) => {
+        const date = new DateTime(leapDayWithTime).withZone(zone);
+        expect(date.toString()).toBe(expected);
+        expect(date.toJSON()).toBe(leapDayWithTime);
+        expect(date.toEpoch()).toBe(1709211906789);
+        expect(date.toFormat('X x')).toBe('1709211906 1709211906789');
+        expect(new DateTime(date).toString()).toBe(expected);
+        expect(new DateTime(date.toString()).toEpoch()).toBe(date.toEpoch());
+      });
+
+      test('invalid zone produces an invalid date', () => {
+        expect(new DateTime(leapDayWithTime).withZone('Invalid/Zone').isValid).toBe(false);
+      });
+
+      test.each([
+        ['2025-03-30 02:30', amsterdamZone, '2025-03-30T03:30:00.000+02:00'],
+        ['2025-10-26 02:30', amsterdamZone, '2025-10-26T02:30:00.000+02:00'],
+        ['2025-03-09 02:30', newYorkZone, '2025-03-09T03:30:00.000-04:00'],
+        ['2025-11-02 01:30', newYorkZone, '2025-11-02T01:30:00.000-04:00'],
+        ['2025-04-06 01:45', lordHoweZone, '2025-04-06T01:45:00.000+10:30'],
+        ['2025-10-05 02:15', lordHoweZone, '2025-10-05T02:45:00.000+11:00'],
+      ])('resolves gap or fold %s in %s', (value, zone, expected) => {
+        expect(new DateTime(value + ' ' + zone, zonedDateFormat).toString()).toBe(expected);
+      });
+
+      test.each([
+        ['year', januaryFirst, '2024-12-31T23:59:59.999Z'],
+        ['quarter', januaryFirst, '2024-03-31T23:59:59.999Z'],
+        ['month', februaryFirst, '2024-02-29T23:59:59.999Z'],
+        ['week', '2024-02-26T00:00:00.000Z', '2024-03-03T23:59:59.999Z'],
+        ['day', leapDay, '2024-02-29T23:59:59.999Z'],
+        ['hour', '2024-02-29T13:00:00.000Z', '2024-02-29T13:59:59.999Z'],
+        ['minute', leapDayMinute, '2024-02-29T13:05:59.999Z'],
+        ['second', '2024-02-29T13:05:06.000Z', '2024-02-29T13:05:06.999Z'],
+        ['millisecond', leapDayWithTime, leapDayWithTime],
+      ] as [DateTimeUnit, string, string][])('boundaries of %s', (unit, start, end) => {
+        const date = new DateTime(leapDayWithTime);
+        expect(date.startOf(unit).toString()).toBe(start);
+        expect(date.endOf(unit).toString()).toBe(end);
+        expect(date.toString()).toBe(leapDayWithTime);
+      });
+
+      test.each([
+        ['year', '2025-08-30T01:05:06.789Z', '2022-08-30T01:05:06.789Z'],
+        ['quarter', '2024-07-14T01:05:06.789Z', '2023-10-15T01:05:06.789Z'],
+        ['month', '2024-04-13T13:05:06.789Z', '2024-01-14T13:05:06.789Z'],
+        ['week', '2024-03-11T01:05:06.789Z', '2024-02-19T01:05:06.789Z'],
+        ['day', '2024-03-02T01:05:06.789Z', '2024-02-28T01:05:06.789Z'],
+        ['hour', '2024-02-29T14:35:06.789Z', '2024-02-29T11:35:06.789Z'],
+        ['minute', '2024-02-29T13:06:36.789Z', '2024-02-29T13:03:36.789Z'],
+        ['second', '2024-02-29T13:05:08.289Z', '2024-02-29T13:05:05.289Z'],
+        ['millisecond', '2024-02-29T13:05:06.790Z', '2024-02-29T13:05:06.787Z'],
+      ] as [DateTimeUnit, string, string][])('fractional %s and its plural', (unit, added, subtracted) => {
+        const date = new DateTime(leapDayWithTime);
+        for (const name of [unit, unit + 's'] as DurationUnit[]) {
+          expect(date.add(1.5, name).toString()).toBe(added);
+          expect(date.subtract(1.5, name).toString()).toBe(subtracted);
+          expect(date.add(-1.5, name).toString()).toBe(subtracted);
+        }
+        expect(date.toString()).toBe(leapDayWithTime);
+      });
+
+      test.each(['2024-01-31', '2024-02-29', '2025-03-30', '2025-10-26'])('mixed unit order at %s', value => {
+        const date = new DateTime(value).inAmsterdam;
+        const forward = { years: 1, months: 1, days: 2, hours: 3.5 };
+        const reversed = { hours: 3.5, days: 2, months: 1, years: 1 };
+        expect(date.add(forward).toString()).toBe(date.add(reversed).toString());
+        expect(date.subtract(forward).toString()).toBe(date.subtract(reversed).toString());
+        expect(date.toJSON()).toBe(value + 'T00:00:00.000Z');
+      });
+
+      describe.each([
+        ['year', 31536000000],
+        ['quarter', 7862400000],
+        ['month', 2592000000],
+        ['week', 604800000],
+        ['day', 86400000],
+        ['hour', 3600000],
+        ['minute', 60000],
+        ['second', 1000],
+        ['millisecond', 1],
+      ] as [DateTimeUnit, number][])('elapsed %s', (unit, milliseconds) => {
+        test.each([-1.5, -1, -0.5, 0, 0.5, 1, 1.5])('rounds duration %s', count => {
+          const base = new DateTime('2024-01-31T12:00:00Z');
+          const date = new DateTime(base.toEpoch() + count * milliseconds);
+          expect(date.diff(base, unit)).toBe(Math.floor(count));
+          expect(date.diff(base, unit, { rounding: 'ceil' })).toBe(Math.ceil(count));
+          expect(date.diff(base, unit, { rounding: 'round' })).toBe(Math.round(count));
+        });
+      });
+
+      test.each([
+        [0, epochStart],
+        [-1, '1969-12-31T23:59:59.999Z'],
+        [1, '1970-01-01T00:00:00.001Z'],
+        [0.5, epochStart],
+        [-0.5, epochStart],
+        [8640000000000000, '+275760-09-13T00:00:00.000Z'],
+        [-8640000000000000, '-271821-04-20T00:00:00.000Z'],
+      ] as [number, string][])('epoch %s serializes as %s', (value, expected) => {
+        expect(new DateTime(value).toString()).toBe(expected);
+        expect(new DateTime(new Date(value)).toString()).toBe(expected);
+      });
+
+      test.each([NaN, Infinity, -Infinity, 8640000000000001, -8640000000000001])('rejects epoch %s', value => {
+        expect(new DateTime(value).isValid).toBe(false);
+        expect(new DateTime(new Date(value)).isValid).toBe(false);
+      });
+    });
     describe('formatting', () => {
       test.each([...numericTokens, ...nameTokens, ...macroTokens])('%s formats as %s', (format, expected) => {
         expect(formattedLeapDay.toFormat(format)).toBe(expected);
@@ -755,7 +999,7 @@ describe('DateTime', () => {
         ['2024-02-29 13:05 +05:30', 'yyyy-MM-dd HH:mm ZZ', plusFiveThirty],
         ['2024-02-29 13:05 +0530', 'yyyy-MM-dd HH:mm ZZZ', plusFiveThirty],
         ['2024-02-29 13:05 -04:30', 'yyyy-MM-dd HH:mm ZZ', '2024-02-29T13:05:00.000-04:30'],
-        ['2024-02-29 13:05 America/New_York', 'yyyy-MM-dd HH:mm z', '2024-02-29T13:05:00.000-05:00'],
+        ['2024-02-29 13:05 America/New_York', zonedDateFormat, '2024-02-29T13:05:00.000-05:00'],
       ])('preserves parsed zone for %s', (input, format, expected) => {
         expect(new DateTime(input, format).toString()).toBe(expected);
       });
@@ -766,7 +1010,7 @@ describe('DateTime', () => {
         ['2025-03-30 01:30 Europe/London', '2025-03-30T02:30:00.000+01:00'],
         ['2025-10-26 01:30 Europe/London', '2025-10-26T01:30:00.000+01:00'],
       ])('preserves DST gap and fold parsing for %s', (input, expected) => {
-        expect(new DateTime(input, 'yyyy-MM-dd HH:mm z').toString()).toBe(expected);
+        expect(new DateTime(input, zonedDateFormat).toString()).toBe(expected);
       });
 
       test.each([
@@ -774,12 +1018,12 @@ describe('DateTime', () => {
         ['Feb 29, 2024', 'DD', leapDay],
         ['February 29, 2024', 'DDD', leapDay],
         ['Thursday, February 29, 2024', 'DDDD', leapDay],
-        ['1:05 PM', 't', '2024-06-15T13:05:00.000Z'],
+        ['1:05 PM', 't', todayAfternoon],
         ['1:05:06 PM', 'tt', '2024-06-15T13:05:06.000Z'],
-        ['13:05', 'T', '2024-06-15T13:05:00.000Z'],
+        ['13:05', 'T', todayAfternoon],
         ['13:05:06', 'TT', '2024-06-15T13:05:06.000Z'],
-        ['2/29/2024, 1:05 PM', 'f', '2024-02-29T13:05:00.000Z'],
-        ['Feb 29, 2024, 1:05 PM', 'ff', '2024-02-29T13:05:00.000Z'],
+        ['2/29/2024, 1:05 PM', 'f', leapDayMinute],
+        ['Feb 29, 2024, 1:05 PM', 'ff', leapDayMinute],
         ['2/29/2024, 1:05:06 PM', 'F', parsedSecond],
         ['Feb 29, 2024, 1:05:06 PM', 'FF', parsedSecond],
       ])('preserves supported macro parsing for %s', (input, format, expected) => {
@@ -829,7 +1073,7 @@ describe('DateTime', () => {
       test.each([
         [amsterdamZone, amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
         [amsterdamZone, '2025-10-26T12:00:00Z', '2025-10-26T00:00:00.000+02:00', '2025-10-26T23:59:59.999+01:00'],
-        ['America/New_York', '2025-03-09T12:00:00Z', '2025-03-09T00:00:00.000-05:00', '2025-03-09T23:59:59.999-04:00'],
+        [newYorkZone, '2025-03-09T12:00:00Z', '2025-03-09T00:00:00.000-05:00', '2025-03-09T23:59:59.999-04:00'],
         ['Europe/London', amsterdamSpring, '2025-03-30T00:00:00.000+00:00', '2025-03-30T23:59:59.999+01:00'],
         ['Europe/Warsaw', amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
       ])('preserves %s day boundaries', (zone, value, start, end) => {
