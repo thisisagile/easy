@@ -4,6 +4,10 @@ import { mock } from '@thisisagile/easy-test';
 
 const iso = '2021-03-25T08:39:44.000Z';
 const new_york = '2021-03-25T04:39:44.000-04:00';
+const isoDateFormat = 'yyyy-MM-dd';
+const amsterdamZone = 'Europe/Amsterdam';
+const amsterdamSpringStart = '2025-03-30T00:00:00.000+01:00';
+const amsterdamSpringEnd = '2025-03-30T23:59:59.999+02:00';
 
 const date = {
   iso: '2021-03-25T08:39:44.000Z',
@@ -13,13 +17,198 @@ const date = {
 const formats = {
   ddmmyyyy: 'dd/MM/yyyy',
   yyyymmdd: 'yyyy-dd-MM',
-  yyyyddmm: 'yyyy-MM-dd',
+  yyyyddmm: isoDateFormat,
   yyyymmddthhmm: "yyyy-MM-dd'T'hh:mm",
   yyyymmddhhmmss: 'yyyy-MM-dd hh:mm:ss',
   ddmmyyyyhhmmss: 'dd/MM/yyyy hh:mm:ss',
   yyyymmddthhmmss: "yyyy-MM-dd'T'hh:mm:ss",
   yyyymmddthhmmssssszzz: "yyyy-MM-dd'T'hh:mm:ss.SSSZZZ",
 };
+
+// These reviewed Luxon 3.5.0 values are the release oracle for any future engine migration.
+const formattedLeapDay = new DateTime('2024-02-29T13:05:06.789Z');
+const leapDay = '2024-02-29T00:00:00.000Z';
+const leapDayWithTime = '2024-02-29T13:05:06.789Z';
+const fullDate = 'February 29, 2024';
+const fullDateTime = 'Thursday, February 29, 2024 at 1:05\u202fPM UTC';
+const slashDate = '29/02/2024';
+const frozenNow = Date.parse('2024-06-15T10:20:30.456Z');
+const afternoon = '2024-06-15T13:00:00.000Z';
+const februaryFirst = '2024-02-01T00:00:00.000Z';
+const januaryFirst = '2024-01-01T00:00:00.000Z';
+const plusFiveThirty = '2024-02-29T13:05:00.000+05:30';
+const thursday = '2024-06-13T00:00:00.000Z';
+const amsterdamSpring = '2025-03-30T12:00:00Z';
+const utcTime = '13:05:06 UTC';
+const parsedSecond = '2024-02-29T13:05:06.000Z';
+
+const numericTokens: [format: string, expected: string][] = [
+  ['S', '789'],
+  ['SSS', '789'],
+  ['u', '789'],
+  ['uu', '78'],
+  ['uuu', '7'],
+  ['s', '6'],
+  ['ss', '06'],
+  ['m', '5'],
+  ['mm', '05'],
+  ['h', '1'],
+  ['hh', '01'],
+  ['H', '13'],
+  ['HH', '13'],
+  ['a', 'PM'],
+  ['d', '29'],
+  ['dd', '29'],
+  ['y', '2024'],
+  ['yy', '24'],
+  ['yyyy', '2024'],
+  ['yyyyyy', '002024'],
+  ['kk', '24'],
+  ['kkkk', '2024'],
+  ['W', '9'],
+  ['WW', '09'],
+  ['n', '9'],
+  ['nn', '09'],
+  ['ii', '24'],
+  ['iiii', '2024'],
+  ['o', '60'],
+  ['ooo', '060'],
+  ['q', '1'],
+  ['qq', '01'],
+  ['Z', '+0'],
+  ['ZZ', '+00:00'],
+  ['ZZZ', '+0000'],
+  ['ZZZZ', 'UTC'],
+  ['ZZZZZ', 'UTC'],
+  ['z', 'UTC'],
+  ['X', '1709211906'],
+  ['x', '1709211906789'],
+];
+
+const nameTokens: [format: string, expected: string][] = [
+  ['c', '4'],
+  ['ccc', 'Thu'],
+  ['cccc', 'Thursday'],
+  ['ccccc', 'T'],
+  ['E', '4'],
+  ['EEE', 'Thu'],
+  ['EEEE', 'Thursday'],
+  ['EEEEE', 'T'],
+  ['L', '2'],
+  ['LL', '02'],
+  ['LLL', 'Feb'],
+  ['LLLL', 'February'],
+  ['LLLLL', 'F'],
+  ['M', '2'],
+  ['MM', '02'],
+  ['MMM', 'Feb'],
+  ['MMMM', 'February'],
+  ['MMMMM', 'F'],
+  ['G', 'AD'],
+  ['GG', 'Anno Domini'],
+  ['GGGGG', 'A'],
+];
+
+const macroTokens: [format: string, expected: string][] = [
+  ['D', '2/29/2024'],
+  ['DD', 'Feb 29, 2024'],
+  ['DDD', fullDate],
+  ['DDDD', 'Thursday, February 29, 2024'],
+  ['t', '1:05\u202fPM'],
+  ['tt', '1:05:06\u202fPM'],
+  ['ttt', '1:05:06\u202fPM UTC'],
+  ['tttt', '1:05:06\u202fPM UTC'],
+  ['T', '13:05'],
+  ['TT', '13:05:06'],
+  ['TTT', utcTime],
+  ['TTTT', utcTime],
+  ['f', '2/29/2024, 1:05\u202fPM'],
+  ['ff', 'Feb 29, 2024, 1:05\u202fPM'],
+  ['fff', 'February 29, 2024 at 1:05\u202fPM UTC'],
+  ['ffff', fullDateTime],
+  ['F', '2/29/2024, 1:05:06\u202fPM'],
+  ['FF', 'Feb 29, 2024, 1:05:06\u202fPM'],
+  ['FFF', 'February 29, 2024 at 1:05:06\u202fPM UTC'],
+  ['FFFF', 'Thursday, February 29, 2024 at 1:05:06\u202fPM UTC'],
+];
+
+const callSiteFormats: [format: string, expected: string][] = [
+  ['dd/MM/yyyy', slashDate],
+  ['yyyy-dd-MM', '2024-29-02'],
+  [isoDateFormat, '2024-02-29'],
+  ["yyyy-MM-dd'T'hh:mm", '2024-02-29T01:05'],
+  ['yyyy-MM-dd hh:mm:ss', '2024-02-29 01:05:06'],
+  ['dd/MM/yyyy hh:mm:ss', '29/02/2024 01:05:06'],
+  ["yyyy-MM-dd'T'hh:mm:ss", '2024-02-29T01:05:06'],
+  ["yyyy-MM-dd'T'hh:mm:ss.SSSZZZ", '2024-02-29T01:05:06.789+0000'],
+  ['EEE MMM dd hh:mm:ss ZZZ yyyy', 'Thu Feb 29 01:05:06 +0000 2024'],
+  ['yyyy-MM-dd HH:mm:ss', '2024-02-29 13:05:06'],
+  ['yyyyMMdd', '20240229'],
+  ['HH:mm', '13:05'],
+  ['dd MMM', '29 Feb'],
+  ['dd LLL HH:mm', '29 Feb 13:05'],
+  ['EEE D LLL', 'Thu 2/29/2024 Feb'],
+  ['M', '2'],
+  ['D', '2/29/2024'],
+  ['DDD', fullDate],
+  ['ffff', fullDateTime],
+];
+
+const parseTokens: [input: string, format: string, expected: string][] = [
+  ['7', 'S', '2024-06-15T10:20:30.007Z'],
+  ['007', 'SSS', '2024-06-15T10:20:30.007Z'],
+  ['789', 'u', '2024-06-15T10:20:30.789Z'],
+  ['78', 'uu', '2024-06-15T10:20:30.780Z'],
+  ['7', 'uuu', '2024-06-15T10:20:30.700Z'],
+  ['6', 's', '2024-06-15T10:20:06.000Z'],
+  ['06', 'ss', '2024-06-15T10:20:06.000Z'],
+  ['5', 'm', '2024-06-15T10:05:00.000Z'],
+  ['05', 'mm', '2024-06-15T10:05:00.000Z'],
+  ['1 PM', 'h a', afternoon],
+  ['01 PM', 'hh a', afternoon],
+  ['13', 'H', afternoon],
+  ['13', 'HH', afternoon],
+  ['29', 'd', '2024-06-29T00:00:00.000Z'],
+  ['29', 'dd', '2024-06-29T00:00:00.000Z'],
+  ['4', 'c', thursday],
+  ['Thu', 'ccc', thursday],
+  ['Thursday', 'cccc', thursday],
+  ['4', 'E', thursday],
+  ['Thu', 'EEE', thursday],
+  ['Thursday', 'EEEE', thursday],
+  ['2', 'L', februaryFirst],
+  ['02', 'LL', februaryFirst],
+  ['Feb', 'LLL', februaryFirst],
+  ['February', 'LLLL', februaryFirst],
+  ['2', 'M', februaryFirst],
+  ['02', 'MM', februaryFirst],
+  ['Feb', 'MMM', februaryFirst],
+  ['February', 'MMMM', februaryFirst],
+  ['2024', 'y', januaryFirst],
+  ['24', 'yy', januaryFirst],
+  ['2024', 'yyyy', januaryFirst],
+  ['02024-02-29', 'yyyyy-MM-dd', leapDay],
+  ['AD 2024', 'G yyyy', januaryFirst],
+  ['Anno Domini 2024', 'GG yyyy', januaryFirst],
+  ['24-09-4', 'kk-WW-c', leapDay],
+  ['2024-09-4', 'kkkk-WW-c', leapDay],
+  ['60', 'o', leapDay],
+  ['060', 'ooo', leapDay],
+  ['1', 'q', januaryFirst],
+  ['01', 'qq', januaryFirst],
+];
+
+const unsupportedTokens: [input: string, format: string][] = [
+  ['24', 'ii'],
+  ['2024', 'iiii'],
+  ['9', 'n'],
+  ['09', 'nn'],
+  ['1709211906', 'X'],
+  ['1709211906789', 'x'],
+  ['F 29 2024', 'MMMMM dd yyyy'],
+  ['T 2024-02-29', 'EEEEE yyyy-MM-dd'],
+  ['2024-02-29 13:05 EST', 'yyyy-MM-dd HH:mm ZZZZ'],
+];
 
 describe('DateTime', () => {
   test('construct from undefined is not valid and value is undefined.', () => {
@@ -149,11 +338,11 @@ describe('DateTime', () => {
   });
 
   test('startOf and endOf should not break on DST changes', () => {
-    const start = dt('2025-03-30T20:00').withZone('Europe/Amsterdam').startOf('day');
-    expect(start).toMatchText('2025-03-30T00:00:00.000+01:00');
+    const start = dt('2025-03-30T20:00').withZone(amsterdamZone).startOf('day');
+    expect(start).toMatchText(amsterdamSpringStart);
 
-    const end = dt('2025-03-30').withZone('Europe/Amsterdam').endOf('day');
-    expect(end).toMatchText('2025-03-30T23:59:59.999+02:00');
+    const end = dt('2025-03-30').withZone(amsterdamZone).endOf('day');
+    expect(end).toMatchText(amsterdamSpringEnd);
   });
 
   test.each([
@@ -460,5 +649,228 @@ describe('DateTime', () => {
   test('get inWarsaw', () => {
     const d = new DateTime(iso).inWarsaw;
     expect(d).toMatchText('2021-03-25T09:39:44.000+01:00');
+  });
+
+  describe('characterization', () => {
+    describe('formatting', () => {
+      test.each([...numericTokens, ...nameTokens, ...macroTokens])('%s formats as %s', (format, expected) => {
+        expect(formattedLeapDay.toFormat(format)).toBe(expected);
+      });
+
+      test.each(callSiteFormats)('preserves call-site format %s', (format, expected) => {
+        expect(formattedLeapDay.toFormat(format)).toBe(expected);
+      });
+
+      test.each([
+        ["yyyy-MM-dd'T'HH:mm:ss.SSSZZZ", '2024-02-29T13:05:06.789+0000'],
+        ["'Date:' yyyy-MM-dd", 'Date: 2024-02-29'],
+        ["'It''s' HH:mm", 'Its 13:05'],
+        ['yyyyMMddHHmmss', '20240229130506'],
+        ['foo', '2/29/2024, 1:05\u202fPMoo'],
+        ['yyyy/LL/dd -- HH:mm', '2024/02/29 -- 13:05'],
+      ])('preserves format grammar for %s', (format, expected) => {
+        expect(formattedLeapDay.toFormat(format)).toBe(expected);
+      });
+
+      test.each([
+        ['2019-12-30T00:00:00Z', '2020-01-1'],
+        ['2021-01-03T00:00:00Z', '2020-53-7'],
+        ['2021-01-04T00:00:00Z', '2021-01-1'],
+      ])('formats ISO week-year boundaries for %s', (value, expected) => {
+        expect(new DateTime(value).toFormat('kkkk-WW-c')).toBe(expected);
+      });
+
+      test.each([
+        ['2024-02-29T00:05:06.789Z', '12 12 0 00 AM'],
+        ['2024-02-29T12:05:06.789Z', '12 12 12 12 PM'],
+        [leapDayWithTime, '1 01 13 13 PM'],
+      ])('preserves twelve and twenty-four hour tokens for %s', (value, expected) => {
+        expect(new DateTime(value).toFormat('h hh H HH a')).toBe(expected);
+      });
+
+      test.each([
+        ['2024-02-29T13:05:06.789+02:00', '13:05 +02:00 +0200 UTC+2 UTC+2 UTC+2'],
+        ['2024-02-29T13:05:06.789-04:30', '13:05 -04:30 -0430 UTC-4:30 UTC-4:30 UTC-4:30'],
+      ])('preserves fixed offset formatting for %s', (value, expected) => {
+        expect(new DateTime(value).toFormat('HH:mm ZZ ZZZ ZZZZ ZZZZZ z')).toBe(expected);
+      });
+
+      test.each([
+        ['nl-NL', '29-2-2024', '29 februari 2024', 'donderdag 29 februari 2024 om 13:05 UTC'],
+        ['de-DE', '29.2.2024', '29. Februar 2024', 'Donnerstag, 29. Februar 2024 um 13:05 UTC'],
+        ['de-AT', '29.2.2024', '29. Februar 2024', 'Donnerstag, 29. Februar 2024 um 13:05 UTC'],
+        ['en-US', '2/29/2024', fullDate, fullDateTime],
+        ['en-GB', slashDate, '29 February 2024', 'Thursday, 29 February 2024 at 13:05 UTC'],
+        ['fr-FR', slashDate, '29 février 2024', 'jeudi 29 février 2024 à 13:05 UTC'],
+        ['pl-PL', '29.02.2024', '29 lutego 2024', 'czwartek, 29 lutego 2024 13:05 UTC'],
+        ['ar-EG', '٢٩\u200f/٢\u200f/٢٠٢٤', '٢٩ فبراير ٢٠٢٤', 'الخميس، ٢٩ فبراير ٢٠٢٤ في ١:٠٥ م UTC'],
+      ])('preserves Intl output for %s', (locale, short, full, dateTime) => {
+        expect(formattedLeapDay.toLocale(locale, 'D')).toBe(short);
+        expect(formattedLeapDay.toFull(locale)).toBe(full);
+        expect(formattedLeapDay.toLocale(locale, 'ffff')).toBe(dateTime);
+      });
+
+      test('preserves invalid DateTime formatting', () => {
+        const invalid = new DateTime('invalid');
+
+        expect(invalid.toFormat(isoDateFormat)).toBe('Invalid DateTime');
+        expect(invalid.toLocale('en-US', 'D')).toBe('Invalid DateTime');
+      });
+    });
+
+    describe('parsing', () => {
+      beforeEach(() => jest.spyOn(Date, 'now').mockReturnValue(frozenNow));
+
+      afterEach(() => jest.restoreAllMocks());
+
+      test.each(parseTokens)('parses %s with %s', (input, format, expected) => {
+        const result = new DateTime(input, format);
+
+        expect(result.isValid).toBe(true);
+        expect(result.toString()).toBe(expected);
+      });
+
+      test.each([
+        ['49-01-02', '2049-01-02T00:00:00.000Z'],
+        ['60-01-02', '2060-01-02T00:00:00.000Z'],
+        ['61-01-02', '1961-01-02T00:00:00.000Z'],
+        ['99-01-02', '1999-01-02T00:00:00.000Z'],
+        ['00-01-02', '2000-01-02T00:00:00.000Z'],
+      ])('preserves the two-digit year cutoff for %s', (input, expected) => {
+        expect(new DateTime(input, 'yy-MM-dd').toString()).toBe(expected);
+      });
+
+      test.each([
+        ['23:07', 'HH:mm', '2024-06-15T23:07:00.000Z'],
+        ['02-29', 'MM-dd', leapDay],
+        ['2025', 'yyyy', '2025-01-01T00:00:00.000Z'],
+        ['11', 'MM', '2024-11-01T00:00:00.000Z'],
+        ['17', 'dd', '2024-06-17T00:00:00.000Z'],
+      ])('preserves missing-field defaults for %s', (input, format, expected) => {
+        expect(new DateTime(input, format).toString()).toBe(expected);
+      });
+
+      test.each([
+        ['2024-02-29 13:05 +5:30', 'yyyy-MM-dd HH:mm Z', plusFiveThirty],
+        ['2024-02-29 13:05 +05:30', 'yyyy-MM-dd HH:mm ZZ', plusFiveThirty],
+        ['2024-02-29 13:05 +0530', 'yyyy-MM-dd HH:mm ZZZ', plusFiveThirty],
+        ['2024-02-29 13:05 -04:30', 'yyyy-MM-dd HH:mm ZZ', '2024-02-29T13:05:00.000-04:30'],
+        ['2024-02-29 13:05 America/New_York', 'yyyy-MM-dd HH:mm z', '2024-02-29T13:05:00.000-05:00'],
+      ])('preserves parsed zone for %s', (input, format, expected) => {
+        expect(new DateTime(input, format).toString()).toBe(expected);
+      });
+
+      test.each([
+        ['2025-03-30 02:30 Europe/Amsterdam', '2025-03-30T03:30:00.000+02:00'],
+        ['2025-10-26 02:30 Europe/Amsterdam', '2025-10-26T02:30:00.000+02:00'],
+        ['2025-03-30 01:30 Europe/London', '2025-03-30T02:30:00.000+01:00'],
+        ['2025-10-26 01:30 Europe/London', '2025-10-26T01:30:00.000+01:00'],
+      ])('preserves DST gap and fold parsing for %s', (input, expected) => {
+        expect(new DateTime(input, 'yyyy-MM-dd HH:mm z').toString()).toBe(expected);
+      });
+
+      test.each([
+        ['2/29/2024', 'D', leapDay],
+        ['Feb 29, 2024', 'DD', leapDay],
+        ['February 29, 2024', 'DDD', leapDay],
+        ['Thursday, February 29, 2024', 'DDDD', leapDay],
+        ['1:05 PM', 't', '2024-06-15T13:05:00.000Z'],
+        ['1:05:06 PM', 'tt', '2024-06-15T13:05:06.000Z'],
+        ['13:05', 'T', '2024-06-15T13:05:00.000Z'],
+        ['13:05:06', 'TT', '2024-06-15T13:05:06.000Z'],
+        ['2/29/2024, 1:05 PM', 'f', '2024-02-29T13:05:00.000Z'],
+        ['Feb 29, 2024, 1:05 PM', 'ff', '2024-02-29T13:05:00.000Z'],
+        ['2/29/2024, 1:05:06 PM', 'F', parsedSecond],
+        ['Feb 29, 2024, 1:05:06 PM', 'FF', parsedSecond],
+      ])('preserves supported macro parsing for %s', (input, format, expected) => {
+        expect(new DateTime(input, format).toString()).toBe(expected);
+      });
+
+      test.each([
+        ['1:05:06 PM UTC', 'ttt'],
+        ['1:05:06 PM UTC', 'tttt'],
+        [utcTime, 'TTT'],
+        [utcTime, 'TTTT'],
+        ['February 29, 2024 at 1:05 PM UTC', 'fff'],
+        ['Thursday, February 29, 2024 at 1:05 PM UTC', 'ffff'],
+        ['February 29, 2024 at 1:05:06 PM UTC', 'FFF'],
+        ['Thursday, February 29, 2024 at 1:05:06 PM UTC', 'FFFF'],
+        ...unsupportedTokens,
+      ])('records unsupported parse input %s with %s', (input, format) => {
+        expect(new DateTime(input, format).isValid).toBe(false);
+      });
+
+      test('records that Z does not parse the literal Z', () => {
+        expect(new DateTime('2024-02-29 13:05 Z', 'yyyy-MM-dd HH:mm Z').isValid).toBe(false);
+      });
+
+      test('records a mismatched weekday as invalid', () => {
+        expect(new DateTime('2024-02-29 Fri', 'yyyy-MM-dd EEE').isValid).toBe(false);
+      });
+
+      test('records incompatible calendar fields as invalid', () => {
+        expect(new DateTime('2024-02-29 061', 'yyyy-MM-dd ooo').isValid).toBe(false);
+      });
+    });
+
+    describe('behavior', () => {
+      test('diff remains elapsed-time based across DST changes', () => {
+        const springStart = new DateTime('2025-03-30T00:00:00+01:00');
+        const springEnd = new DateTime('2025-03-31T00:00:00+02:00');
+        const autumnStart = new DateTime('2025-10-26T00:00:00+02:00');
+        const autumnEnd = new DateTime('2025-10-27T00:00:00+01:00');
+
+        expect(springEnd.diff(springStart, 'hour')).toBe(23);
+        expect(springEnd.diff(springStart, 'day')).toBe(0);
+        expect(autumnEnd.diff(autumnStart, 'hour')).toBe(25);
+        expect(autumnEnd.diff(autumnStart, 'day')).toBe(1);
+      });
+
+      test.each([
+        [amsterdamZone, amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
+        [amsterdamZone, '2025-10-26T12:00:00Z', '2025-10-26T00:00:00.000+02:00', '2025-10-26T23:59:59.999+01:00'],
+        ['America/New_York', '2025-03-09T12:00:00Z', '2025-03-09T00:00:00.000-05:00', '2025-03-09T23:59:59.999-04:00'],
+        ['Europe/London', amsterdamSpring, '2025-03-30T00:00:00.000+00:00', '2025-03-30T23:59:59.999+01:00'],
+        ['Europe/Warsaw', amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
+      ])('preserves %s day boundaries', (zone, value, start, end) => {
+        const date = new DateTime(value).withZone(zone);
+
+        expect(date.startOf('day').toString()).toBe(start);
+        expect(date.endOf('day').toString()).toBe(end);
+      });
+
+      test('preserves mixed duration arithmetic and immutability', () => {
+        const value = new DateTime(leapDayWithTime);
+
+        expect(value.add({ months: 1, days: 1, hours: 2 }).toString()).toBe('2024-03-30T15:05:06.789Z');
+        expect(value.subtract({ months: 1, days: 1, hours: 2 }).toString()).toBe('2024-01-28T11:05:06.789Z');
+        expect(value.toString()).toBe(leapDayWithTime);
+      });
+
+      test('preserves fractional duration arithmetic', () => {
+        const value = new DateTime(leapDay);
+
+        expect(value.add(1.5, 'day').toString()).toBe('2024-03-01T12:00:00.000Z');
+        expect(value.subtract(1.5, 'hour').toString()).toBe('2024-02-28T22:30:00.000Z');
+      });
+
+      test('preserves relative output across locales', () => {
+        const start = new DateTime('2024-02-26T13:05:06.789Z');
+        const end = new DateTime(leapDayWithTime);
+
+        expect(start.from(end, 'en-US')).toBe('3 days ago');
+        expect(start.from(end, 'nl-NL')).toBe('3 dagen geleden');
+        expect(start.from(end, 'de-DE')).toBe('vor 3 Tagen');
+        expect(start.from(end, 'fr-FR')).toBe('il y a 3 jours');
+        expect(start.from(end, 'pl-PL')).toBe('3 dni temu');
+      });
+
+      test('withClock copies UTC time fields and drops milliseconds', () => {
+        const value = new DateTime(leapDay);
+        const clock = new DateTime('1970-01-01T13:05:06.789Z');
+
+        expect(value.withClock(clock).toString()).toBe(parsedSecond);
+      });
+    });
   });
 });
