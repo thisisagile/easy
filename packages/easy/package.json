@@ -198,6 +198,10 @@
       "types": "./dist/services/AxiosProvider.d.ts",
       "import": "./dist/services/AxiosProvider.mjs"
     },
+    "./services/FetchProvider": {
+      "types": "./dist/services/FetchProvider.d.ts",
+      "import": "./dist/services/FetchProvider.mjs"
+    },
     "./services/MappedRouteGateway": {
       "types": "./dist/services/MappedRouteGateway.d.ts",
       "import": "./dist/services/MappedRouteGateway.mjs"

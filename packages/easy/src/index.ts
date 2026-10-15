@@ -39,6 +39,7 @@ export * from './security/Jwt';
 export * from './services/Api';
 export * from './services/ApiGateway';
 export * from './services/AxiosProvider';
+export * from './services/FetchProvider';
 export * from './services/MappedRouteGateway';
 export * from './services/RouteGateway';
 export * from './services/ViewRouteGateway';
