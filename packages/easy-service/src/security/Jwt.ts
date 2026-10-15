@@ -1,4 +1,5 @@
-import { Algorithm, sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import type { Algorithm } from 'jsonwebtoken';
 import { ctx, Json, OneOrMore, Optional, tryTo, Validatable, Jwt as JwtBase } from '@thisisagile/easy';
 
 interface SignOptions {
@@ -11,7 +12,7 @@ export class Jwt extends JwtBase implements Validatable {
   get isValid(): boolean {
     return (
       tryTo(() => ctx.env.get('tokenPublicKey') ?? '')
-        .map(key => verify(this.value, key))
+        .map(key => jwt.verify(this.value, key))
         .map(() => true)
         .orElse() ?? false
     );
@@ -21,9 +22,9 @@ export class Jwt extends JwtBase implements Validatable {
     tryTo(() => ctx.env.get('tokenPrivateKey') ?? '')
       .is.not.empty()
       .map(key =>
-        sign(token, key, {
+        jwt.sign(token, key, {
           ...options,
-          expiresIn: ctx.env.get('tokenExpiresIn') as any ?? '1h',
+          expiresIn: (ctx.env.get('tokenExpiresIn') as any) ?? '1h',
           keyid: ctx.env.get('tokenKeyid') ?? 'easy',
           algorithm: ctx.env.get('tokenAlgorithm', 'RS256') as Algorithm,
         })

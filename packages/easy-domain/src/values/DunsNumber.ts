@@ -1,6 +1,6 @@
 import { asString, isEmpty, Value } from '@thisisagile/easy';
-import isLength from 'validator/lib/isLength';
-import isNumeric from 'validator/lib/isNumeric';
+import isLength from 'validator/lib/isLength.js';
+import isNumeric from 'validator/lib/isNumeric.js';
 
 export class DunsNumber extends Value {
   constructor(duns?: unknown) {

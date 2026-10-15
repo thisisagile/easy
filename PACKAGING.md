@@ -28,7 +28,23 @@ entrypoints. Do not mix source and compiled imports when passing class instances
 Removing these legacy paths would require a separately proposed major release.
 
 `build` delegates to `build:tsup`. Only tsup emits runtime JavaScript into `dist`;
-tsc emits declarations only. Each build checks that all explicit export targets
+tsc emits declarations only. CI runs `yarn check:exports` after building to check that all explicit export targets
 and every existing legacy-pattern target exist and resolve via Node's import and
 require resolvers. `node --test test/exports.test.mjs test/packaging.test.mjs` checks validation failures and runtime identity
 after building; the packed consumer fixture separately measures tree shaking.
+
+Declaration emission compiles only the current package. Workspace topological
+ordering handles dependencies; forcing TypeScript to rebuild referenced packages
+would let concurrent builds overwrite the same declarations. Declaration emission
+is non-incremental so it always restores the files removed by tsup's clean step.
+
+`yarn test:bundle` also packs every workspace, installs those tarballs together
+in a temporary consumer, and executes each root in separate Node ESM and CJS
+processes. Test helpers receive their required Jest globals. JWT signing and
+verification and email validation are exercised in both formats.
+
+The March 2026 packaging attempt exposed CommonJS dependency interop failures
+(see `f02a094c` and the subsequent reverts). Runtime imports from `jsonwebtoken`
+and `mssql` use their default exports; type-only imports remain named.
+Validator leaf imports include `.js`, as Node ESM requires fully specified
+external subpaths too. Resolving an export path alone cannot detect these errors.

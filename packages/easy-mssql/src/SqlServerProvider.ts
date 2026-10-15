@@ -1,11 +1,15 @@
 import { asString, Database, Exception, Json, List, meta, Query, QueryProvider, reject, resolve } from '@thisisagile/easy';
-import { ConnectionPool, IResult } from 'mssql';
+import sql from 'mssql';
+import type { ConnectionPool, IResult } from 'mssql';
 
 export class SqlServerProvider implements QueryProvider {
-  constructor(readonly db: Database, private pool?: ConnectionPool) {}
+  constructor(
+    readonly db: Database,
+    private pool?: ConnectionPool
+  ) {}
 
   execute = (q: Query): Promise<IResult<Json>> => {
-    this.pool = this.pool ?? new ConnectionPool(asString(this.db.options?.connectionString));
+    this.pool = this.pool ?? new sql.ConnectionPool(asString(this.db.options?.connectionString));
     return resolve(this.pool)
       .then(p => (p.connected || p.connecting ? p : p.connect()))
       .then(p => p.request())

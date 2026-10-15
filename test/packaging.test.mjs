@@ -1,6 +1,16 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { test } from 'node:test';
+import { readFileSync, readdirSync } from 'node:fs';
+import { runtimeSource } from './package-runtime.mjs';
+
+const packages = new URL('../packages/', import.meta.url);
+for (const directory of readdirSync(packages, { withFileTypes: true }).filter(entry => entry.isDirectory())) {
+  const { name } = JSON.parse(readFileSync(new URL(`${directory.name}/package.json`, packages), 'utf8'));
+  for (const format of ['module', 'commonjs']) {
+    test(`${name} executes its ${format} entry`, () => run(runtimeSource(name, format), format));
+  }
+}
 
 function run(source, format) {
   const result = spawnSync(process.execPath, [`--input-type=${format}`, '--eval', source], { encoding: 'utf8' });

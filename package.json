@@ -4,15 +4,16 @@
   "scripts": {
     "g:prettier": "cd $INIT_CWD && prettier",
     "g:eslint": "cd $INIT_CWD && eslint",
-    "g:tsc": "cd $INIT_CWD && tsc -b --force",
+    "g:tsc": "cd $INIT_CWD && tsc --project tsconfig.json --incremental false --composite false",
     "g:tsup": "cd $INIT_CWD && tsup --silent",
     "g:jest": "cd $INIT_CWD && jest",
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
     "format-all": "yarn workspaces foreach -A run format",
     "lint-all": "yarn workspaces foreach -A run lint",
     "build-all": "yarn workspaces foreach -Ap --topological-dev run build:tsup",
+    "check:exports": "yarn workspaces foreach -A --exclude root exec node ../../scripts/check-exports.mjs",
     "test-all": "jest --coverage",
-    "test:bundle": "node --test test/bundle/*.test.mjs && node test/bundle/check.mjs",
+    "test:bundle": "node --test test/bundle/*.test.mjs && node test/bundle/check.mjs && node test/bundle/workspaces.mjs",
     "test-sonarqube": "yarn workspaces foreach -A run test",
     "release": "yarn build-all && release-it",
     "u": "yarn upgrade-interactive && yarn dedupe"
