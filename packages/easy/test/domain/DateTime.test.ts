@@ -518,6 +518,16 @@ describe('DateTime', () => {
     expect(d3.diff(d, 'day')).toBe(2);
   });
 
+  test('plural units behave like their singular', () => {
+    const d = new DateTime(iso);
+    const later = d.add({ years: 1, days: 2, hours: 3 });
+    expect(later.toString()).toBe(d.add(1, 'year').add(2, 'day').add(3, 'hour').toString());
+    expect(later.subtract(2, 'days').diff(d, 'days')).toBe(d.add(1, 'year').diff(d, 'day'));
+    expect(later.diff(d, 'seconds')).toBe(later.diff(d, 'second'));
+    expect(later.startOf('months').toString()).toBe(later.startOf('month').toString());
+    expect(later.endOf('weeks').toString()).toBe(later.endOf('week').toString());
+  });
+
   test('from works.', () => {
     Date.now = mock.return(date.epoch + 7000);
     const d = new DateTime(iso);

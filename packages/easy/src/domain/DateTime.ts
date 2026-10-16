@@ -117,15 +117,15 @@ export class DateTime extends Value<Optional<string>> {
     return this.add(Object.fromEntries(entries(isNumber(n) ? { [unit]: n } : n).map(([key, value]) => [key, -value])));
   }
 
-  diff(other: DateTime, unit: DateTimeUnit = 'day', opts?: DiffOptions): number {
+  diff(other: DateTime, unit: DurationUnit = 'day', opts?: DiffOptions): number {
     return Math[opts?.rounding ?? 'floor']((this.toEpoch() - other.toEpoch()) / milliseconds[unit.replace(/s$/, '') as Unit]);
   }
 
-  startOf(unit: DateTimeUnit = 'day'): DateTime {
+  startOf(unit: DurationUnit = 'day'): DateTime {
     return this.withDate(startOf({ date: this.date, zone: this.zone }, unit));
   }
 
-  endOf(unit: DateTimeUnit = 'day'): DateTime {
+  endOf(unit: DurationUnit = 'day'): DateTime {
     return this.startOf(unit).add(1, unit).subtract(1, 'millisecond');
   }
 
@@ -305,7 +305,7 @@ function addDuration(value: ZonedDate, duration: Duration): Dayjs {
   );
   return resolveWall(calendar, value.zone, offset(value)).add(rest, 'millisecond');
 }
-function startOf(value: ZonedDate, unit: DateTimeUnit): Dayjs {
+function startOf(value: ZonedDate, unit: DurationUnit): Dayjs {
   const name = unit.replace(/s$/, '') as Unit;
   const wall = displayDate(value);
   return resolveWall(name === 'week' ? wall.startOf('isoWeek') : wall.startOf(name), value.zone, offset(value));
