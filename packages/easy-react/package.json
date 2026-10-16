@@ -4,8 +4,9 @@
   "description": "Straightforward library building micro applications in react",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -21,8 +22,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "postbuild": "copyfiles -u 1 src/**/*.scss dist",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme",
@@ -36,6 +36,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
     "@thisisagile/easy-test-react": "workspace:*",
@@ -43,8 +46,7 @@
     "copyfiles": "^2.4.1",
     "jest-environment-jsdom": "^29.7.0",
     "jest-transform-stub": "^2.0.0",
-    "next": "^15.5.28",
-    "next-transpile-modules": "^10.0.0"
+    "next": "^15.5.28"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
@@ -55,48 +57,47 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./layout/If": {
       "types": "./dist/layout/If.d.ts",
-      "import": "./dist/layout/If.mjs"
+      "default": "./dist/layout/If.js"
     },
     "./layout/index": {
       "types": "./dist/layout/index.d.ts",
-      "import": "./dist/layout/index.mjs"
+      "default": "./dist/layout/index.js"
     },
     "./utils/Children": {
       "types": "./dist/utils/Children.d.ts",
-      "import": "./dist/utils/Children.mjs"
+      "default": "./dist/utils/Children.js"
     },
     "./utils/Hooks": {
       "types": "./dist/utils/Hooks.d.ts",
-      "import": "./dist/utils/Hooks.mjs"
+      "default": "./dist/utils/Hooks.js"
     },
     "./utils/index": {
       "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.mjs"
+      "default": "./dist/utils/index.js"
     },
     "./utils/toClasses": {
       "types": "./dist/utils/toClasses.d.ts",
-      "import": "./dist/utils/toClasses.mjs"
+      "default": "./dist/utils/toClasses.js"
     },
     "./utils/useOnce": {
       "types": "./dist/utils/useOnce.d.ts",
-      "import": "./dist/utils/useOnce.mjs"
+      "default": "./dist/utils/useOnce.js"
     },
     "./utils/useRev": {
       "types": "./dist/utils/useRev.d.ts",
-      "import": "./dist/utils/useRev.mjs"
+      "default": "./dist/utils/useRev.js"
     },
     "./utils/useState": {
       "types": "./dist/utils/useState.d.ts",
-      "import": "./dist/utils/useState.mjs"
+      "default": "./dist/utils/useState.js"
     },
     "./utils/useToggle": {
       "types": "./dist/utils/useToggle.d.ts",
-      "import": "./dist/utils/useToggle.mjs"
+      "default": "./dist/utils/useToggle.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

@@ -4,8 +4,9 @@
   "description": "Straightforward library for building domain-driven microservice architectures",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -32,6 +32,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
@@ -57,48 +60,47 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./express/AuthError": {
       "types": "./dist/express/AuthError.d.ts",
-      "import": "./dist/express/AuthError.mjs"
+      "default": "./dist/express/AuthError.js"
     },
     "./express/CorrelationHandler": {
       "types": "./dist/express/CorrelationHandler.d.ts",
-      "import": "./dist/express/CorrelationHandler.mjs"
+      "default": "./dist/express/CorrelationHandler.js"
     },
     "./express/ErrorHandler": {
       "types": "./dist/express/ErrorHandler.d.ts",
-      "import": "./dist/express/ErrorHandler.mjs"
+      "default": "./dist/express/ErrorHandler.js"
     },
     "./express/ExpressProvider": {
       "types": "./dist/express/ExpressProvider.d.ts",
-      "import": "./dist/express/ExpressProvider.mjs"
+      "default": "./dist/express/ExpressProvider.js"
     },
     "./express/NotFoundHandler": {
       "types": "./dist/express/NotFoundHandler.d.ts",
-      "import": "./dist/express/NotFoundHandler.mjs"
+      "default": "./dist/express/NotFoundHandler.js"
     },
     "./express/RequestContextHandler": {
       "types": "./dist/express/RequestContextHandler.d.ts",
-      "import": "./dist/express/RequestContextHandler.mjs"
+      "default": "./dist/express/RequestContextHandler.js"
     },
     "./express/SecurityHandler": {
       "types": "./dist/express/SecurityHandler.d.ts",
-      "import": "./dist/express/SecurityHandler.mjs"
+      "default": "./dist/express/SecurityHandler.js"
     },
     "./express/index": {
       "types": "./dist/express/index.d.ts",
-      "import": "./dist/express/index.mjs"
+      "default": "./dist/express/index.js"
     },
     "./types/NamespaceContext": {
       "types": "./dist/types/NamespaceContext.d.ts",
-      "import": "./dist/types/NamespaceContext.mjs"
+      "default": "./dist/types/NamespaceContext.js"
     },
     "./types/index": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.mjs"
+      "default": "./dist/types/index.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

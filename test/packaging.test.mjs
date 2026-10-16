@@ -17,15 +17,20 @@ function run(source, format) {
   assert.equal(result.status, 0, result.error?.message ?? result.stderr);
 }
 
-test('Puppeteer preserves CJS root and leaf constructor identity', () => {
+test('require and import hand out the same module instance, so singletons such as ctx are never split', () => {
   run(
     `
-    const assert = require('node:assert/strict');
-    const root = require('@thisisagile/easy-puppeteer');
-    const leaf = require('@thisisagile/easy-puppeteer/PuppeteerTester');
-    assert.equal(root.PuppeteerTester, leaf.PuppeteerTester);
+    import assert from 'node:assert/strict';
+    import { createRequire } from 'node:module';
+    import { ctx, DateTime } from '@thisisagile/easy';
+    const require = createRequire(import.meta.url);
+    const required = require('@thisisagile/easy');
+    assert.equal(required.ctx, ctx);
+    assert.equal(required.DateTime, DateTime);
+    assert.equal(require('@thisisagile/easy/domain/DateTime').DateTime, DateTime);
+    assert.equal(require('@thisisagile/easy-puppeteer').PuppeteerTester, require('@thisisagile/easy-puppeteer/PuppeteerTester').PuppeteerTester);
   `,
-    'commonjs'
+    'module'
   );
 });
 
@@ -49,19 +54,16 @@ test('ESM root and leaf use the same DateTime and Value constructors', () => {
   );
 });
 
-test('CJS stays on the CJS root and cannot accidentally resolve an ESM-only leaf', () => {
+test('a CommonJS consumer reaches the root, the legacy dist path and the leaf through one ESM build', () => {
   run(
     `
     const assert = require('node:assert/strict');
     const root = require('@thisisagile/easy');
     const legacy = require('@thisisagile/easy/dist/index.js');
+    const leaf = require('@thisisagile/easy/domain/DateTime');
     assert.equal(root.DateTime, legacy.DateTime);
-    assert.ok(root.dt('2025-01-01') instanceof legacy.DateTime);
-    assert.throws(() => require('@thisisagile/easy/domain/DateTime'), {
-      code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
-    });
-    const directory = require.resolve('@thisisagile/easy').replace(/index\\.js$/, '');
-    assert.ok(!Object.keys(require.cache).some(path => path.startsWith(directory) && path.endsWith('.mjs')));
+    assert.equal(root.DateTime, leaf.DateTime);
+    assert.ok(root.dt('2025-01-01') instanceof leaf.DateTime);
   `,
     'commonjs'
   );

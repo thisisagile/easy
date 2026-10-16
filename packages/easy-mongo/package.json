@@ -4,8 +4,9 @@
   "description": "Add support for MongoDB",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -33,6 +33,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*"
   },
@@ -43,36 +46,35 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./AtlasSearchGateway": {
       "types": "./dist/AtlasSearchGateway.d.ts",
-      "import": "./dist/AtlasSearchGateway.mjs"
+      "default": "./dist/AtlasSearchGateway.js"
     },
     "./Collection": {
       "types": "./dist/Collection.d.ts",
-      "import": "./dist/Collection.mjs"
+      "default": "./dist/Collection.js"
     },
     "./Lucene": {
       "types": "./dist/Lucene.d.ts",
-      "import": "./dist/Lucene.mjs"
+      "default": "./dist/Lucene.js"
     },
     "./MongoGateway": {
       "types": "./dist/MongoGateway.d.ts",
-      "import": "./dist/MongoGateway.mjs"
+      "default": "./dist/MongoGateway.js"
     },
     "./MongoProvider": {
       "types": "./dist/MongoProvider.d.ts",
-      "import": "./dist/MongoProvider.mjs"
+      "default": "./dist/MongoProvider.js"
     },
     "./Stages": {
       "types": "./dist/Stages.d.ts",
-      "import": "./dist/Stages.mjs"
+      "default": "./dist/Stages.js"
     },
     "./Utils": {
       "types": "./dist/Utils.d.ts",
-      "import": "./dist/Utils.mjs"
+      "default": "./dist/Utils.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

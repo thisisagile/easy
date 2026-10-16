@@ -2,7 +2,7 @@
   "package": "@thisisagile/easy",
   "directory": "packages/easy",
   "leafPrefix": "dist",
-  "leafExtension": "mjs",
+  "leafExtension": "js",
   "fixtures": [
     ["isDefined", "types/Is", "isDefined", "isDefined"],
     ["toList", "types/List", "toList", "toList"],

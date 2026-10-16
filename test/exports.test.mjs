@@ -19,16 +19,21 @@ function fixture(t, exports) {
   return spawnSync(process.execPath, [checker], { cwd: directory, encoding: 'utf8' });
 }
 
-const root = { types: './dist/index.d.ts', import: './dist/index.mjs', require: './dist/index.js' };
+const root = { types: './dist/index.d.ts', default: './dist/index.js' };
 
-test('checks dual roots, ESM-only leaves, and every existing legacy target', t => {
-  const result = fixture(t, { '.': root, './leaf': { import: './dist/leaf.mjs' }, './dist/*': './dist/*' });
+test('checks default roots, leaves, and every existing legacy target', t => {
+  const result = fixture(t, { '.': root, './leaf': { default: './dist/leaf.mjs' }, './dist/*': './dist/*' });
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /6 export targets exist and resolve/);
 });
 
-test('rejects a missing require target even when import exists', t => {
-  const result = fixture(t, { '.': { ...root, require: './dist/missing.js' } });
+test('still accepts split import and require conditions', t => {
+  const result = fixture(t, { '.': { types: './dist/index.d.ts', import: './dist/index.mjs', require: './dist/index.js' } });
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test('rejects a missing default target', t => {
+  const result = fixture(t, { '.': { ...root, default: './dist/missing.js' } });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Missing export/);
 });
@@ -46,7 +51,7 @@ test('rejects manifests without a root export', t => {
 });
 
 test('rejects targets outside the package', t => {
-  const result = fixture(t, { '.': { ...root, import: '../outside.mjs' } });
+  const result = fixture(t, { '.': { ...root, default: '../outside.mjs' } });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /Non-local export/);
 });

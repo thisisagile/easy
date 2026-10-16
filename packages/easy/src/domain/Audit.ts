@@ -1,7 +1,7 @@
 import { Struct } from './Struct';
 import { DateTime } from './DateTime';
 import { required, valid } from '../validation/Contraints';
-import { Identity } from '../types/Identity';
+import type { Identity } from '../types/Identity';
 import { Json } from '../types/Json';
 import { choose } from '../types/Case';
 import { isIdentity } from '../types/IsA';

@@ -9,13 +9,8 @@ export function snapshotHead(root, temp) {
   const archive = execFileSync('git', ['archive', 'HEAD'], { cwd: root, maxBuffer: 64 * 1024 * 1024 });
   execFileSync('tar', ['-x', '-C', snapshot], { input: archive });
   symlinkSync(join(root, 'node_modules'), join(snapshot, 'node_modules'), 'dir');
-  execFileSync(join(root, 'node_modules/.bin/tsup'), ['--silent'], {
-    cwd: join(snapshot, 'packages/easy'),
-    stdio: 'inherit',
-  });
-  execFileSync(join(root, 'node_modules/.bin/tsc'), ['--emitDeclarationOnly', '--declaration'], {
-    cwd: join(snapshot, 'packages/easy'),
-    stdio: 'inherit',
-  });
+  const cwd = join(snapshot, 'packages/easy');
+  execFileSync(join(root, 'node_modules/.bin/tsdown'), ['--config', '../../tsdown.config.mts'], { cwd, stdio: 'inherit' });
+  execFileSync(process.execPath, ['../../scripts/sync-exports.mjs'], { cwd, stdio: 'inherit' });
   return snapshot;
 }

@@ -4,8 +4,9 @@
   "description": "Straightforward library for building domain-driven microservice architectures",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -33,6 +33,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*"
   },
@@ -43,48 +46,47 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./health/HealthResource": {
       "types": "./dist/health/HealthResource.d.ts",
-      "import": "./dist/health/HealthResource.mjs"
+      "default": "./dist/health/HealthResource.js"
     },
     "./health/HealthUri": {
       "types": "./dist/health/HealthUri.d.ts",
-      "import": "./dist/health/HealthUri.mjs"
+      "default": "./dist/health/HealthUri.js"
     },
     "./http/OriginatedError": {
       "types": "./dist/http/OriginatedError.d.ts",
-      "import": "./dist/http/OriginatedError.mjs"
+      "default": "./dist/http/OriginatedError.js"
     },
     "./http/Verb": {
       "types": "./dist/http/Verb.d.ts",
-      "import": "./dist/http/Verb.mjs"
+      "default": "./dist/http/Verb.js"
     },
     "./resources/AppProvider": {
       "types": "./dist/resources/AppProvider.d.ts",
-      "import": "./dist/resources/AppProvider.mjs"
+      "default": "./dist/resources/AppProvider.js"
     },
     "./resources/Requires": {
       "types": "./dist/resources/Requires.d.ts",
-      "import": "./dist/resources/Requires.mjs"
+      "default": "./dist/resources/Requires.js"
     },
     "./resources/Resource": {
       "types": "./dist/resources/Resource.d.ts",
-      "import": "./dist/resources/Resource.mjs"
+      "default": "./dist/resources/Resource.js"
     },
     "./resources/Route": {
       "types": "./dist/resources/Route.d.ts",
-      "import": "./dist/resources/Route.mjs"
+      "default": "./dist/resources/Route.js"
     },
     "./resources/Service": {
       "types": "./dist/resources/Service.d.ts",
-      "import": "./dist/resources/Service.mjs"
+      "default": "./dist/resources/Service.js"
     },
     "./security/Jwt": {
       "types": "./dist/security/Jwt.d.ts",
-      "import": "./dist/security/Jwt.mjs"
+      "default": "./dist/security/Jwt.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

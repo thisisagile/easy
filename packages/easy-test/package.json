@@ -4,8 +4,9 @@
   "description": "Straightforward library for testing microservices built with @thisisagile/easy",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -22,8 +23,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -34,6 +34,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "devDependencies": {
     "typescript": "^5.7.3",
@@ -52,120 +55,119 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./matchers/Check": {
       "types": "./dist/matchers/Check.d.ts",
-      "import": "./dist/matchers/Check.mjs"
+      "default": "./dist/matchers/Check.js"
     },
     "./matchers/HttpMatchers": {
       "types": "./dist/matchers/HttpMatchers.d.ts",
-      "import": "./dist/matchers/HttpMatchers.mjs"
+      "default": "./dist/matchers/HttpMatchers.js"
     },
     "./matchers/Match": {
       "types": "./dist/matchers/Match.d.ts",
-      "import": "./dist/matchers/Match.mjs"
+      "default": "./dist/matchers/Match.js"
     },
     "./matchers/ResultMatchers": {
       "types": "./dist/matchers/ResultMatchers.d.ts",
-      "import": "./dist/matchers/ResultMatchers.mjs"
+      "default": "./dist/matchers/ResultMatchers.js"
     },
     "./matchers/index": {
       "types": "./dist/matchers/index.d.ts",
-      "import": "./dist/matchers/index.mjs"
+      "default": "./dist/matchers/index.js"
     },
     "./matchers/toBeArrayOf": {
       "types": "./dist/matchers/toBeArrayOf.d.ts",
-      "import": "./dist/matchers/toBeArrayOf.mjs"
+      "default": "./dist/matchers/toBeArrayOf.js"
     },
     "./matchers/toBeArrayOfWithLength": {
       "types": "./dist/matchers/toBeArrayOfWithLength.d.ts",
-      "import": "./dist/matchers/toBeArrayOfWithLength.mjs"
+      "default": "./dist/matchers/toBeArrayOfWithLength.js"
     },
     "./matchers/toBeAt": {
       "types": "./dist/matchers/toBeAt.d.ts",
-      "import": "./dist/matchers/toBeAt.mjs"
+      "default": "./dist/matchers/toBeAt.js"
     },
     "./matchers/toBeExactlyAt": {
       "types": "./dist/matchers/toBeExactlyAt.d.ts",
-      "import": "./dist/matchers/toBeExactlyAt.mjs"
+      "default": "./dist/matchers/toBeExactlyAt.js"
     },
     "./matchers/toBeQueriedWith": {
       "types": "./dist/matchers/toBeQueriedWith.d.ts",
-      "import": "./dist/matchers/toBeQueriedWith.mjs"
+      "default": "./dist/matchers/toBeQueriedWith.js"
     },
     "./matchers/toBeRoutedTo": {
       "types": "./dist/matchers/toBeRoutedTo.d.ts",
-      "import": "./dist/matchers/toBeRoutedTo.mjs"
+      "default": "./dist/matchers/toBeRoutedTo.js"
     },
     "./matchers/toBeValid": {
       "types": "./dist/matchers/toBeValid.d.ts",
-      "import": "./dist/matchers/toBeValid.mjs"
+      "default": "./dist/matchers/toBeValid.js"
     },
     "./matchers/toFailMatcher": {
       "types": "./dist/matchers/toFailMatcher.d.ts",
-      "import": "./dist/matchers/toFailMatcher.mjs"
+      "default": "./dist/matchers/toFailMatcher.js"
     },
     "./matchers/toMatchArray": {
       "types": "./dist/matchers/toMatchArray.d.ts",
-      "import": "./dist/matchers/toMatchArray.mjs"
+      "default": "./dist/matchers/toMatchArray.js"
     },
     "./matchers/toMatchExactJson": {
       "types": "./dist/matchers/toMatchExactJson.d.ts",
-      "import": "./dist/matchers/toMatchExactJson.mjs"
+      "default": "./dist/matchers/toMatchExactJson.js"
     },
     "./matchers/toMatchException": {
       "types": "./dist/matchers/toMatchException.d.ts",
-      "import": "./dist/matchers/toMatchException.mjs"
+      "default": "./dist/matchers/toMatchException.js"
     },
     "./matchers/toMatchJson": {
       "types": "./dist/matchers/toMatchJson.d.ts",
-      "import": "./dist/matchers/toMatchJson.mjs"
+      "default": "./dist/matchers/toMatchJson.js"
     },
     "./matchers/toMatchRoute": {
       "types": "./dist/matchers/toMatchRoute.d.ts",
-      "import": "./dist/matchers/toMatchRoute.mjs"
+      "default": "./dist/matchers/toMatchRoute.js"
     },
     "./matchers/toMatchText": {
       "types": "./dist/matchers/toMatchText.d.ts",
-      "import": "./dist/matchers/toMatchText.mjs"
+      "default": "./dist/matchers/toMatchText.js"
     },
     "./matchers/toPassMatcher": {
       "types": "./dist/matchers/toPassMatcher.d.ts",
-      "import": "./dist/matchers/toPassMatcher.mjs"
+      "default": "./dist/matchers/toPassMatcher.js"
     },
     "./mock/Fits": {
       "types": "./dist/mock/Fits.d.ts",
-      "import": "./dist/mock/Fits.mjs"
+      "default": "./dist/mock/Fits.js"
     },
     "./mock/Mocks": {
       "types": "./dist/mock/Mocks.d.ts",
-      "import": "./dist/mock/Mocks.mjs"
+      "default": "./dist/mock/Mocks.js"
     },
     "./mock/index": {
       "types": "./dist/mock/index.d.ts",
-      "import": "./dist/mock/index.mjs"
+      "default": "./dist/mock/index.js"
     },
     "./utils/Eq": {
       "types": "./dist/utils/Eq.d.ts",
-      "import": "./dist/utils/Eq.mjs"
+      "default": "./dist/utils/Eq.js"
     },
     "./utils/Req": {
       "types": "./dist/utils/Req.d.ts",
-      "import": "./dist/utils/Req.mjs"
+      "default": "./dist/utils/Req.js"
     },
     "./utils/Response": {
       "types": "./dist/utils/Response.d.ts",
-      "import": "./dist/utils/Response.mjs"
+      "default": "./dist/utils/Response.js"
     },
     "./utils/Types": {
       "types": "./dist/utils/Types.d.ts",
-      "import": "./dist/utils/Types.mjs"
+      "default": "./dist/utils/Types.js"
     },
     "./utils/Utils": {
       "types": "./dist/utils/Utils.d.ts",
-      "import": "./dist/utils/Utils.mjs"
+      "default": "./dist/utils/Utils.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

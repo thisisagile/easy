@@ -1,6 +1,7 @@
 import { Struct } from './Struct';
 import { required } from '../validation/Contraints';
-import { Id, toId } from '../types/Id';
+import { toId } from '../types/Id';
+import type { Id } from '../types/Id';
 import { json, Json } from '../types/Json';
 
 export abstract class Child extends Struct {

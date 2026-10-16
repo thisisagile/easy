@@ -50,7 +50,7 @@ CI independent; changes to measurement semantics should be applied to both.
 
 `node test/bundle/check.mjs --head --save` measures the committed HEAD instead of the
 working tree: it archives HEAD to a temporary directory, emits JS and declarations with
-HEAD's tsup configuration using the installed build tools, then packs it. The report
+the repository's tsdown configuration and syncs its exports, then packs it. The report
 records that commit. It does not replace the working-tree dist.
 
 The committed baseline is the first measurement after the ESM packaging fix. Before it,

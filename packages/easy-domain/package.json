@@ -4,8 +4,9 @@
   "description": "Common domain objects for easy microservices",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -32,6 +32,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
@@ -44,84 +47,87 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./enums/Country": {
       "types": "./dist/enums/Country.d.ts",
-      "import": "./dist/enums/Country.mjs"
+      "default": "./dist/enums/Country.js"
     },
     "./enums/Currency": {
       "types": "./dist/enums/Currency.d.ts",
-      "import": "./dist/enums/Currency.mjs"
+      "default": "./dist/enums/Currency.js"
     },
     "./enums/Locale": {
       "types": "./dist/enums/Locale.d.ts",
-      "import": "./dist/enums/Locale.mjs"
+      "default": "./dist/enums/Locale.js"
     },
     "./enums/UnitOfMeasurement": {
       "types": "./dist/enums/UnitOfMeasurement.d.ts",
-      "import": "./dist/enums/UnitOfMeasurement.mjs"
+      "default": "./dist/enums/UnitOfMeasurement.js"
     },
     "./enums/UnitOfWeight": {
       "types": "./dist/enums/UnitOfWeight.d.ts",
-      "import": "./dist/enums/UnitOfWeight.mjs"
+      "default": "./dist/enums/UnitOfWeight.js"
     },
     "./structs/Address": {
       "types": "./dist/structs/Address.d.ts",
-      "import": "./dist/structs/Address.mjs"
+      "default": "./dist/structs/Address.js"
     },
     "./structs/Box": {
       "types": "./dist/structs/Box.d.ts",
-      "import": "./dist/structs/Box.mjs"
+      "default": "./dist/structs/Box.js"
     },
     "./structs/Dimension": {
       "types": "./dist/structs/Dimension.d.ts",
-      "import": "./dist/structs/Dimension.mjs"
+      "default": "./dist/structs/Dimension.js"
     },
     "./structs/Money": {
       "types": "./dist/structs/Money.d.ts",
-      "import": "./dist/structs/Money.mjs"
+      "default": "./dist/structs/Money.js"
     },
     "./structs/Name": {
       "types": "./dist/structs/Name.d.ts",
-      "import": "./dist/structs/Name.mjs"
+      "default": "./dist/structs/Name.js"
     },
     "./structs/Weight": {
       "types": "./dist/structs/Weight.d.ts",
-      "import": "./dist/structs/Weight.mjs"
+      "default": "./dist/structs/Weight.js"
+    },
+    "./utils/defaultExport": {
+      "types": "./dist/utils/defaultExport.d.ts",
+      "default": "./dist/utils/defaultExport.js"
     },
     "./values/DunsNumber": {
       "types": "./dist/values/DunsNumber.d.ts",
-      "import": "./dist/values/DunsNumber.mjs"
+      "default": "./dist/values/DunsNumber.js"
     },
     "./values/EAN": {
       "types": "./dist/values/EAN.d.ts",
-      "import": "./dist/values/EAN.mjs"
+      "default": "./dist/values/EAN.js"
     },
     "./values/Email": {
       "types": "./dist/values/Email.d.ts",
-      "import": "./dist/values/Email.mjs"
+      "default": "./dist/values/Email.js"
     },
     "./values/IBAN": {
       "types": "./dist/values/IBAN.d.ts",
-      "import": "./dist/values/IBAN.mjs"
+      "default": "./dist/values/IBAN.js"
     },
     "./values/PostalCode": {
       "types": "./dist/values/PostalCode.d.ts",
-      "import": "./dist/values/PostalCode.mjs"
+      "default": "./dist/values/PostalCode.js"
     },
     "./values/Slug": {
       "types": "./dist/values/Slug.d.ts",
-      "import": "./dist/values/Slug.mjs"
+      "default": "./dist/values/Slug.js"
     },
     "./values/Url": {
       "types": "./dist/values/Url.d.ts",
-      "import": "./dist/values/Url.mjs"
+      "default": "./dist/values/Url.js"
     },
     "./values/VAT": {
       "types": "./dist/values/VAT.d.ts",
-      "import": "./dist/values/VAT.mjs"
+      "default": "./dist/values/VAT.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

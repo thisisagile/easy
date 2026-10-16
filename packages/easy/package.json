@@ -4,8 +4,9 @@
   "description": "Straightforward library for building domain-driven microservice architectures",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -20,8 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -32,6 +32,9 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "engines": {
+    "node": ">=20.19.0"
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
@@ -51,496 +54,495 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./data/Condition": {
       "types": "./dist/data/Condition.d.ts",
-      "import": "./dist/data/Condition.mjs"
+      "default": "./dist/data/Condition.js"
     },
     "./data/DataProvider": {
       "types": "./dist/data/DataProvider.d.ts",
-      "import": "./dist/data/DataProvider.mjs"
+      "default": "./dist/data/DataProvider.js"
     },
     "./data/Database": {
       "types": "./dist/data/Database.d.ts",
-      "import": "./dist/data/Database.mjs"
+      "default": "./dist/data/Database.js"
     },
     "./data/Field": {
       "types": "./dist/data/Field.d.ts",
-      "import": "./dist/data/Field.mjs"
+      "default": "./dist/data/Field.js"
     },
     "./data/InMemoryGateway": {
       "types": "./dist/data/InMemoryGateway.d.ts",
-      "import": "./dist/data/InMemoryGateway.mjs"
+      "default": "./dist/data/InMemoryGateway.js"
     },
     "./data/Query": {
       "types": "./dist/data/Query.d.ts",
-      "import": "./dist/data/Query.mjs"
+      "default": "./dist/data/Query.js"
     },
     "./data/QueryProvider": {
       "types": "./dist/data/QueryProvider.d.ts",
-      "import": "./dist/data/QueryProvider.mjs"
+      "default": "./dist/data/QueryProvider.js"
     },
     "./domain/Audit": {
       "types": "./dist/domain/Audit.d.ts",
-      "import": "./dist/domain/Audit.mjs"
+      "default": "./dist/domain/Audit.js"
     },
     "./domain/Child": {
       "types": "./dist/domain/Child.d.ts",
-      "import": "./dist/domain/Child.mjs"
+      "default": "./dist/domain/Child.js"
     },
     "./domain/DateTime": {
       "types": "./dist/domain/DateTime.d.ts",
-      "import": "./dist/domain/DateTime.mjs"
+      "default": "./dist/domain/DateTime.js"
     },
     "./domain/Entity": {
       "types": "./dist/domain/Entity.d.ts",
-      "import": "./dist/domain/Entity.mjs"
+      "default": "./dist/domain/Entity.js"
     },
     "./domain/Repo": {
       "types": "./dist/domain/Repo.d.ts",
-      "import": "./dist/domain/Repo.mjs"
+      "default": "./dist/domain/Repo.js"
     },
     "./domain/Struct": {
       "types": "./dist/domain/Struct.d.ts",
-      "import": "./dist/domain/Struct.mjs"
+      "default": "./dist/domain/Struct.js"
     },
     "./domain/Typo": {
       "types": "./dist/domain/Typo.d.ts",
-      "import": "./dist/domain/Typo.mjs"
+      "default": "./dist/domain/Typo.js"
     },
     "./http/CacheControl": {
       "types": "./dist/http/CacheControl.d.ts",
-      "import": "./dist/http/CacheControl.mjs"
+      "default": "./dist/http/CacheControl.js"
     },
     "./http/ContentType": {
       "types": "./dist/http/ContentType.d.ts",
-      "import": "./dist/http/ContentType.mjs"
+      "default": "./dist/http/ContentType.js"
     },
     "./http/HttpHeader": {
       "types": "./dist/http/HttpHeader.d.ts",
-      "import": "./dist/http/HttpHeader.mjs"
+      "default": "./dist/http/HttpHeader.js"
     },
     "./http/HttpStatus": {
       "types": "./dist/http/HttpStatus.d.ts",
-      "import": "./dist/http/HttpStatus.mjs"
+      "default": "./dist/http/HttpStatus.js"
     },
     "./http/HttpVerb": {
       "types": "./dist/http/HttpVerb.d.ts",
-      "import": "./dist/http/HttpVerb.mjs"
+      "default": "./dist/http/HttpVerb.js"
     },
     "./http/LocalRequestStore": {
       "types": "./dist/http/LocalRequestStore.d.ts",
-      "import": "./dist/http/LocalRequestStore.mjs"
+      "default": "./dist/http/LocalRequestStore.js"
     },
     "./http/Request": {
       "types": "./dist/http/Request.d.ts",
-      "import": "./dist/http/Request.mjs"
+      "default": "./dist/http/Request.js"
     },
     "./http/RequestOptions": {
       "types": "./dist/http/RequestOptions.d.ts",
-      "import": "./dist/http/RequestOptions.mjs"
+      "default": "./dist/http/RequestOptions.js"
     },
     "./http/RequestProvider": {
       "types": "./dist/http/RequestProvider.d.ts",
-      "import": "./dist/http/RequestProvider.mjs"
+      "default": "./dist/http/RequestProvider.js"
     },
     "./http/Response": {
       "types": "./dist/http/Response.d.ts",
-      "import": "./dist/http/Response.mjs"
+      "default": "./dist/http/Response.js"
     },
     "./http/RestResult": {
       "types": "./dist/http/RestResult.d.ts",
-      "import": "./dist/http/RestResult.mjs"
+      "default": "./dist/http/RestResult.js"
     },
     "./http/toResponse": {
       "types": "./dist/http/toResponse.d.ts",
-      "import": "./dist/http/toResponse.mjs"
+      "default": "./dist/http/toResponse.js"
     },
     "./process/App": {
       "types": "./dist/process/App.d.ts",
-      "import": "./dist/process/App.mjs"
+      "default": "./dist/process/App.js"
     },
     "./process/Manage": {
       "types": "./dist/process/Manage.d.ts",
-      "import": "./dist/process/Manage.mjs"
+      "default": "./dist/process/Manage.js"
     },
     "./process/Scope": {
       "types": "./dist/process/Scope.d.ts",
-      "import": "./dist/process/Scope.mjs"
+      "default": "./dist/process/Scope.js"
     },
     "./process/Search": {
       "types": "./dist/process/Search.d.ts",
-      "import": "./dist/process/Search.mjs"
+      "default": "./dist/process/Search.js"
     },
     "./process/UseCase": {
       "types": "./dist/process/UseCase.d.ts",
-      "import": "./dist/process/UseCase.mjs"
+      "default": "./dist/process/UseCase.js"
     },
     "./resources/Req": {
       "types": "./dist/resources/Req.d.ts",
-      "import": "./dist/resources/Req.mjs"
+      "default": "./dist/resources/Req.js"
     },
     "./security/Jwt": {
       "types": "./dist/security/Jwt.d.ts",
-      "import": "./dist/security/Jwt.mjs"
+      "default": "./dist/security/Jwt.js"
     },
     "./services/Api": {
       "types": "./dist/services/Api.d.ts",
-      "import": "./dist/services/Api.mjs"
+      "default": "./dist/services/Api.js"
     },
     "./services/ApiGateway": {
       "types": "./dist/services/ApiGateway.d.ts",
-      "import": "./dist/services/ApiGateway.mjs"
+      "default": "./dist/services/ApiGateway.js"
     },
     "./services/AxiosProvider": {
       "types": "./dist/services/AxiosProvider.d.ts",
-      "import": "./dist/services/AxiosProvider.mjs"
+      "default": "./dist/services/AxiosProvider.js"
     },
     "./services/FetchProvider": {
       "types": "./dist/services/FetchProvider.d.ts",
-      "import": "./dist/services/FetchProvider.mjs"
+      "default": "./dist/services/FetchProvider.js"
     },
     "./services/MappedRouteGateway": {
       "types": "./dist/services/MappedRouteGateway.d.ts",
-      "import": "./dist/services/MappedRouteGateway.mjs"
+      "default": "./dist/services/MappedRouteGateway.js"
     },
     "./services/RouteGateway": {
       "types": "./dist/services/RouteGateway.d.ts",
-      "import": "./dist/services/RouteGateway.mjs"
+      "default": "./dist/services/RouteGateway.js"
     },
     "./services/ViewRouteGateway": {
       "types": "./dist/services/ViewRouteGateway.d.ts",
-      "import": "./dist/services/ViewRouteGateway.mjs"
+      "default": "./dist/services/ViewRouteGateway.js"
     },
     "./sql/Clause": {
       "types": "./dist/sql/Clause.d.ts",
-      "import": "./dist/sql/Clause.mjs"
+      "default": "./dist/sql/Clause.js"
     },
     "./sql/Column": {
       "types": "./dist/sql/Column.d.ts",
-      "import": "./dist/sql/Column.mjs"
+      "default": "./dist/sql/Column.js"
     },
     "./sql/Count": {
       "types": "./dist/sql/Count.d.ts",
-      "import": "./dist/sql/Count.mjs"
+      "default": "./dist/sql/Count.js"
     },
     "./sql/Delete": {
       "types": "./dist/sql/Delete.d.ts",
-      "import": "./dist/sql/Delete.mjs"
+      "default": "./dist/sql/Delete.js"
     },
     "./sql/Insert": {
       "types": "./dist/sql/Insert.d.ts",
-      "import": "./dist/sql/Insert.mjs"
+      "default": "./dist/sql/Insert.js"
     },
     "./sql/Join": {
       "types": "./dist/sql/Join.d.ts",
-      "import": "./dist/sql/Join.mjs"
+      "default": "./dist/sql/Join.js"
     },
     "./sql/Select": {
       "types": "./dist/sql/Select.d.ts",
-      "import": "./dist/sql/Select.mjs"
+      "default": "./dist/sql/Select.js"
     },
     "./sql/SqlQuery": {
       "types": "./dist/sql/SqlQuery.d.ts",
-      "import": "./dist/sql/SqlQuery.mjs"
+      "default": "./dist/sql/SqlQuery.js"
     },
     "./sql/Table": {
       "types": "./dist/sql/Table.d.ts",
-      "import": "./dist/sql/Table.mjs"
+      "default": "./dist/sql/Table.js"
     },
     "./sql/TableGateway": {
       "types": "./dist/sql/TableGateway.d.ts",
-      "import": "./dist/sql/TableGateway.mjs"
+      "default": "./dist/sql/TableGateway.js"
     },
     "./sql/Update": {
       "types": "./dist/sql/Update.d.ts",
-      "import": "./dist/sql/Update.mjs"
+      "default": "./dist/sql/Update.js"
     },
     "./types/AnyKey": {
       "types": "./dist/types/AnyKey.d.ts",
-      "import": "./dist/types/AnyKey.mjs"
+      "default": "./dist/types/AnyKey.js"
     },
     "./types/Array": {
       "types": "./dist/types/Array.d.ts",
-      "import": "./dist/types/Array.mjs"
+      "default": "./dist/types/Array.js"
     },
     "./types/Builder": {
       "types": "./dist/types/Builder.d.ts",
-      "import": "./dist/types/Builder.mjs"
+      "default": "./dist/types/Builder.js"
     },
     "./types/Cache": {
       "types": "./dist/types/Cache.d.ts",
-      "import": "./dist/types/Cache.mjs"
+      "default": "./dist/types/Cache.js"
     },
     "./types/CacheAge": {
       "types": "./dist/types/CacheAge.d.ts",
-      "import": "./dist/types/CacheAge.mjs"
+      "default": "./dist/types/CacheAge.js"
     },
     "./types/Case": {
       "types": "./dist/types/Case.d.ts",
-      "import": "./dist/types/Case.mjs"
+      "default": "./dist/types/Case.js"
     },
     "./types/Constructor": {
       "types": "./dist/types/Constructor.d.ts",
-      "import": "./dist/types/Constructor.mjs"
+      "default": "./dist/types/Constructor.js"
     },
     "./types/Context": {
       "types": "./dist/types/Context.d.ts",
-      "import": "./dist/types/Context.mjs"
+      "default": "./dist/types/Context.js"
     },
     "./types/Currency": {
       "types": "./dist/types/Currency.d.ts",
-      "import": "./dist/types/Currency.mjs"
+      "default": "./dist/types/Currency.js"
     },
     "./types/Enum": {
       "types": "./dist/types/Enum.d.ts",
-      "import": "./dist/types/Enum.mjs"
+      "default": "./dist/types/Enum.js"
     },
     "./types/Environment": {
       "types": "./dist/types/Environment.d.ts",
-      "import": "./dist/types/Environment.mjs"
+      "default": "./dist/types/Environment.js"
     },
     "./types/ErrorOrigin": {
       "types": "./dist/types/ErrorOrigin.d.ts",
-      "import": "./dist/types/ErrorOrigin.mjs"
+      "default": "./dist/types/ErrorOrigin.js"
     },
     "./types/Exception": {
       "types": "./dist/types/Exception.d.ts",
-      "import": "./dist/types/Exception.mjs"
+      "default": "./dist/types/Exception.js"
     },
     "./types/Falsy": {
       "types": "./dist/types/Falsy.d.ts",
-      "import": "./dist/types/Falsy.mjs"
+      "default": "./dist/types/Falsy.js"
     },
     "./types/Func": {
       "types": "./dist/types/Func.d.ts",
-      "import": "./dist/types/Func.mjs"
+      "default": "./dist/types/Func.js"
     },
     "./types/Gateway": {
       "types": "./dist/types/Gateway.d.ts",
-      "import": "./dist/types/Gateway.mjs"
+      "default": "./dist/types/Gateway.js"
     },
     "./types/Get": {
       "types": "./dist/types/Get.d.ts",
-      "import": "./dist/types/Get.mjs"
+      "default": "./dist/types/Get.js"
     },
     "./types/Id": {
       "types": "./dist/types/Id.d.ts",
-      "import": "./dist/types/Id.mjs"
+      "default": "./dist/types/Id.js"
     },
     "./types/IdName": {
       "types": "./dist/types/IdName.d.ts",
-      "import": "./dist/types/IdName.mjs"
+      "default": "./dist/types/IdName.js"
     },
     "./types/Identity": {
       "types": "./dist/types/Identity.d.ts",
-      "import": "./dist/types/Identity.mjs"
+      "default": "./dist/types/Identity.js"
     },
     "./types/Indexed": {
       "types": "./dist/types/Indexed.d.ts",
-      "import": "./dist/types/Indexed.mjs"
+      "default": "./dist/types/Indexed.js"
     },
     "./types/Is": {
       "types": "./dist/types/Is.d.ts",
-      "import": "./dist/types/Is.mjs"
+      "default": "./dist/types/Is.js"
     },
     "./types/IsA": {
       "types": "./dist/types/IsA.d.ts",
-      "import": "./dist/types/IsA.mjs"
+      "default": "./dist/types/IsA.js"
     },
     "./types/IsDate": {
       "types": "./dist/types/IsDate.d.ts",
-      "import": "./dist/types/IsDate.mjs"
+      "default": "./dist/types/IsDate.js"
     },
     "./types/IsEqual": {
       "types": "./dist/types/IsEqual.d.ts",
-      "import": "./dist/types/IsEqual.mjs"
+      "default": "./dist/types/IsEqual.js"
     },
     "./types/Json": {
       "types": "./dist/types/Json.d.ts",
-      "import": "./dist/types/Json.mjs"
+      "default": "./dist/types/Json.js"
     },
     "./types/List": {
       "types": "./dist/types/List.d.ts",
-      "import": "./dist/types/List.mjs"
+      "default": "./dist/types/List.js"
     },
     "./types/Message": {
       "types": "./dist/types/Message.d.ts",
-      "import": "./dist/types/Message.mjs"
+      "default": "./dist/types/Message.js"
     },
     "./types/Meta": {
       "types": "./dist/types/Meta.d.ts",
-      "import": "./dist/types/Meta.mjs"
+      "default": "./dist/types/Meta.js"
     },
     "./types/Nullish": {
       "types": "./dist/types/Nullish.d.ts",
-      "import": "./dist/types/Nullish.mjs"
+      "default": "./dist/types/Nullish.js"
     },
     "./types/Number": {
       "types": "./dist/types/Number.d.ts",
-      "import": "./dist/types/Number.mjs"
+      "default": "./dist/types/Number.js"
     },
     "./types/Object": {
       "types": "./dist/types/Object.d.ts",
-      "import": "./dist/types/Object.mjs"
+      "default": "./dist/types/Object.js"
     },
     "./types/PageList": {
       "types": "./dist/types/PageList.d.ts",
-      "import": "./dist/types/PageList.mjs"
+      "default": "./dist/types/PageList.js"
     },
     "./types/Parser": {
       "types": "./dist/types/Parser.d.ts",
-      "import": "./dist/types/Parser.mjs"
+      "default": "./dist/types/Parser.js"
     },
     "./types/Period": {
       "types": "./dist/types/Period.d.ts",
-      "import": "./dist/types/Period.mjs"
+      "default": "./dist/types/Period.js"
     },
     "./types/Primitive": {
       "types": "./dist/types/Primitive.d.ts",
-      "import": "./dist/types/Primitive.mjs"
+      "default": "./dist/types/Primitive.js"
     },
     "./types/Repository": {
       "types": "./dist/types/Repository.d.ts",
-      "import": "./dist/types/Repository.mjs"
+      "default": "./dist/types/Repository.js"
     },
     "./types/Result": {
       "types": "./dist/types/Result.d.ts",
-      "import": "./dist/types/Result.mjs"
+      "default": "./dist/types/Result.js"
     },
     "./types/Results": {
       "types": "./dist/types/Results.d.ts",
-      "import": "./dist/types/Results.mjs"
+      "default": "./dist/types/Results.js"
     },
     "./types/Sort": {
       "types": "./dist/types/Sort.d.ts",
-      "import": "./dist/types/Sort.mjs"
+      "default": "./dist/types/Sort.js"
     },
     "./types/Tag": {
       "types": "./dist/types/Tag.d.ts",
-      "import": "./dist/types/Tag.mjs"
+      "default": "./dist/types/Tag.js"
     },
     "./types/Template": {
       "types": "./dist/types/Template.d.ts",
-      "import": "./dist/types/Template.mjs"
+      "default": "./dist/types/Template.js"
     },
     "./types/Text": {
       "types": "./dist/types/Text.d.ts",
-      "import": "./dist/types/Text.mjs"
+      "default": "./dist/types/Text.js"
     },
     "./types/Timezone": {
       "types": "./dist/types/Timezone.d.ts",
-      "import": "./dist/types/Timezone.mjs"
+      "default": "./dist/types/Timezone.js"
     },
     "./types/ToText": {
       "types": "./dist/types/ToText.d.ts",
-      "import": "./dist/types/ToText.mjs"
+      "default": "./dist/types/ToText.js"
     },
     "./types/Try": {
       "types": "./dist/types/Try.d.ts",
-      "import": "./dist/types/Try.mjs"
+      "default": "./dist/types/Try.js"
     },
     "./types/TypeGuard": {
       "types": "./dist/types/TypeGuard.d.ts",
-      "import": "./dist/types/TypeGuard.mjs"
+      "default": "./dist/types/TypeGuard.js"
     },
     "./types/Types": {
       "types": "./dist/types/Types.d.ts",
-      "import": "./dist/types/Types.mjs"
+      "default": "./dist/types/Types.js"
     },
     "./types/Uri": {
       "types": "./dist/types/Uri.d.ts",
-      "import": "./dist/types/Uri.mjs"
+      "default": "./dist/types/Uri.js"
     },
     "./types/Uuid": {
       "types": "./dist/types/Uuid.d.ts",
-      "import": "./dist/types/Uuid.mjs"
+      "default": "./dist/types/Uuid.js"
     },
     "./types/Validatable": {
       "types": "./dist/types/Validatable.d.ts",
-      "import": "./dist/types/Validatable.mjs"
+      "default": "./dist/types/Validatable.js"
     },
     "./types/Value": {
       "types": "./dist/types/Value.d.ts",
-      "import": "./dist/types/Value.mjs"
+      "default": "./dist/types/Value.js"
     },
     "./utils/Base64": {
       "types": "./dist/utils/Base64.d.ts",
-      "import": "./dist/utils/Base64.mjs"
+      "default": "./dist/utils/Base64.js"
     },
     "./utils/Convert": {
       "types": "./dist/utils/Convert.d.ts",
-      "import": "./dist/utils/Convert.mjs"
+      "default": "./dist/utils/Convert.js"
     },
     "./utils/If": {
       "types": "./dist/utils/If.d.ts",
-      "import": "./dist/utils/If.mjs"
+      "default": "./dist/utils/If.js"
     },
     "./utils/IfType": {
       "types": "./dist/utils/IfType.d.ts",
-      "import": "./dist/utils/IfType.mjs"
+      "default": "./dist/utils/IfType.js"
     },
     "./utils/Loading": {
       "types": "./dist/utils/Loading.d.ts",
-      "import": "./dist/utils/Loading.mjs"
+      "default": "./dist/utils/Loading.js"
     },
     "./utils/Log": {
       "types": "./dist/utils/Log.d.ts",
-      "import": "./dist/utils/Log.mjs"
+      "default": "./dist/utils/Log.js"
     },
     "./utils/Mapper": {
       "types": "./dist/utils/Mapper.d.ts",
-      "import": "./dist/utils/Mapper.mjs"
+      "default": "./dist/utils/Mapper.js"
     },
     "./utils/Period": {
       "types": "./dist/utils/Period.d.ts",
-      "import": "./dist/utils/Period.mjs"
+      "default": "./dist/utils/Period.js"
     },
     "./utils/Promise": {
       "types": "./dist/utils/Promise.d.ts",
-      "import": "./dist/utils/Promise.mjs"
+      "default": "./dist/utils/Promise.js"
     },
     "./utils/Property": {
       "types": "./dist/utils/Property.d.ts",
-      "import": "./dist/utils/Property.mjs"
+      "default": "./dist/utils/Property.js"
     },
     "./utils/Seconds": {
       "types": "./dist/utils/Seconds.d.ts",
-      "import": "./dist/utils/Seconds.mjs"
+      "default": "./dist/utils/Seconds.js"
     },
     "./utils/Sentence": {
       "types": "./dist/utils/Sentence.d.ts",
-      "import": "./dist/utils/Sentence.mjs"
+      "default": "./dist/utils/Sentence.js"
     },
     "./utils/State": {
       "types": "./dist/utils/State.d.ts",
-      "import": "./dist/utils/State.mjs"
+      "default": "./dist/utils/State.js"
     },
     "./utils/Traverse": {
       "types": "./dist/utils/Traverse.d.ts",
-      "import": "./dist/utils/Traverse.mjs"
+      "default": "./dist/utils/Traverse.js"
     },
     "./utils/View": {
       "types": "./dist/utils/View.d.ts",
-      "import": "./dist/utils/View.mjs"
+      "default": "./dist/utils/View.js"
     },
     "./utils/Wait": {
       "types": "./dist/utils/Wait.d.ts",
-      "import": "./dist/utils/Wait.mjs"
+      "default": "./dist/utils/Wait.js"
     },
     "./validation/Contraints": {
       "types": "./dist/validation/Contraints.d.ts",
-      "import": "./dist/validation/Contraints.mjs"
+      "default": "./dist/validation/Contraints.js"
     },
     "./validation/Validate": {
       "types": "./dist/validation/Validate.d.ts",
-      "import": "./dist/validation/Validate.mjs"
+      "default": "./dist/validation/Validate.js"
     },
     "./validation/When": {
       "types": "./dist/validation/When.d.ts",
-      "import": "./dist/validation/When.mjs"
+      "default": "./dist/validation/When.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",

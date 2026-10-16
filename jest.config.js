@@ -4,7 +4,7 @@ const fs = require('fs');
 const projects = fs
   .readdirSync('packages/', { withFileTypes: true })
   .filter(c => c.isDirectory() && c.name !== 'easy-vitest' && !c.name.startsWith('.'))
-  .map(c => ({...require(`./packages/${c.name}/jest.config.js`), rootDir: `./packages/${c.name}`}));
+  .map(c => ({ ...require(`./packages/${c.name}/jest.config.cjs`), rootDir: `./packages/${c.name}` }));
 
 module.exports = {
   ...baseConfig,

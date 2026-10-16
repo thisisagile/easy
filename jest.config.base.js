@@ -2,7 +2,11 @@ module.exports = {
   preset: 'ts-jest',
   roots: ['<rootDir>/test'],
   transform: {
-    '^.+\\.tsx?$': ['ts-jest', { tsconfig: 'tsconfig.json' }],
+    '^.+\\.tsx?$': ['ts-jest', { tsconfig: '<rootDir>/../../tsconfig.jest.json' }],
+  },
+  // The packages publish ESM only, which Jest's CommonJS runtime cannot execute, so sibling packages run from source.
+  moduleNameMapper: {
+    '^@thisisagile/(easy[\\w-]*)$': '<rootDir>/../$1/src',
   },
   reporters: ['default', 'jest-junit'],
   testResultsProcessor: 'jest-sonar-reporter',

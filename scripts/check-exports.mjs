@@ -18,11 +18,13 @@ function checkTarget(subpath, target) {
 
 function checkExport(subpath, conditions) {
   const specifier = manifest.name + subpath.slice(1);
-  const targets = typeof conditions === 'string' ? { import: conditions, require: conditions } : conditions;
+  const targets = typeof conditions === 'string' ? { default: conditions } : conditions;
   Object.values(targets).forEach(target => checkTarget(subpath, target));
-  if (targets.import) imports.push([specifier, pathToFileURL(resolve(directory, targets.import)).href]);
-  if (targets.require) {
-    assert.equal(require.resolve(specifier), resolve(directory, targets.require));
+  const imported = targets.import ?? targets.default;
+  const required = targets.require ?? targets.default;
+  if (imported) imports.push([specifier, pathToFileURL(resolve(directory, imported)).href]);
+  if (required) {
+    assert.equal(require.resolve(specifier), resolve(directory, required));
     return;
   }
   assert.throws(() => require.resolve(specifier), { code: 'ERR_PACKAGE_PATH_NOT_EXPORTED' });

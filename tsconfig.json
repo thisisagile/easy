@@ -7,6 +7,8 @@
     "composite": true,
     "sourceMap": true,
     "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
 
     "resolveJsonModule": true,
 

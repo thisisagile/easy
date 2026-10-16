@@ -4,8 +4,9 @@
   "description": "Straightforward wrapper library for web testing frameworks",
   "author": "Sander Hoogendoorn",
   "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
@@ -23,8 +24,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn build:tsup",
-    "build:tsup": "yarn g:tsup && yarn g:tsc --emitDeclarationOnly --declaration",
+    "build": "yarn g:tsdown && yarn g:exports",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -36,22 +36,24 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "dependencies": {
     "@thisisagile/easy": "workspace:^"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "default": "./dist/index.js"
     },
     "./TestElement": {
       "types": "./dist/TestElement.d.ts",
-      "import": "./dist/TestElement.mjs"
+      "default": "./dist/TestElement.js"
     },
     "./Tester": {
       "types": "./dist/Tester.d.ts",
-      "import": "./dist/Tester.mjs"
+      "default": "./dist/Tester.js"
     },
     "./src/*": "./src/*",
     "./dist/*": "./dist/*",
