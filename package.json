@@ -51,7 +51,7 @@
   },
   "packageManager": "yarn@4.6.0",
   "dependencies": {
-    "jsonwebtoken": "^9.0.2",
+    "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^4.0.0"
   }
 }

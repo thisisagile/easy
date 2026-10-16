@@ -40,7 +40,7 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-test-web": "workspace:^",
-    "puppeteer": "^22.2.0"
+    "puppeteer": "^24.43.1"
   },
   "module": "dist/index.mjs",
   "exports": {
