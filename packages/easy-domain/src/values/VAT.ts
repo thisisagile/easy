@@ -1,5 +1,8 @@
 import { isNotEmpty, text, Value } from '@thisisagile/easy';
-import isVAT from 'validator/lib/isVAT.js';
+import isVATModule from 'validator/lib/isVAT.js';
+import { defaultExport } from '../utils/defaultExport';
+
+const isVAT = defaultExport(isVATModule);
 
 type CountryCode = Parameters<typeof isVAT>[1];
 

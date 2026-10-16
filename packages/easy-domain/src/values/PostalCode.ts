@@ -1,6 +1,9 @@
 import { Id, text, Value } from '@thisisagile/easy';
 import { Country } from '../enums/Country';
-import isPostalCode, { PostalCodeLocale } from 'validator/lib/isPostalCode.js';
+import isPostalCodeModule, { PostalCodeLocale } from 'validator/lib/isPostalCode.js';
+import { defaultExport } from '../utils/defaultExport';
+
+const isPostalCode = defaultExport(isPostalCodeModule);
 
 export class PostalCode extends Value {
   constructor(
