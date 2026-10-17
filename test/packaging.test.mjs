@@ -5,12 +5,26 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { runtimeSource } from './package-runtime.mjs';
 
 const packages = new URL('../packages/', import.meta.url);
-for (const directory of readdirSync(packages, { withFileTypes: true }).filter(entry => entry.isDirectory())) {
-  const { name } = JSON.parse(readFileSync(new URL(`${directory.name}/package.json`, packages), 'utf8'));
+const manifests = readdirSync(packages, { withFileTypes: true })
+  .filter(entry => entry.isDirectory())
+  .map(entry => JSON.parse(readFileSync(new URL(`${entry.name}/package.json`, packages), 'utf8')));
+const names = manifests.map(manifest => manifest.name);
+
+for (const { name } of manifests) {
   for (const format of ['module', 'commonjs']) {
     test(`${name} executes its ${format} entry`, () => run(runtimeSource(name, format), format));
   }
 }
+
+// "workspace:*" publishes as "*", which lets a consumer keep an older sibling nested next to the current one; two
+// copies of easy split ctx and break instanceof, so runtime dependencies on siblings must publish as caret ranges.
+test('runtime dependencies on sibling packages publish as caret ranges', () => {
+  for (const { name, dependencies = {} } of manifests) {
+    for (const [sibling, range] of Object.entries(dependencies).filter(([d]) => names.includes(d))) {
+      assert.equal(range, 'workspace:^', `${name} depends on ${sibling} as ${range}`);
+    }
+  }
+});
 
 function run(source, format) {
   const result = spawnSync(process.execPath, [`--input-type=${format}`, '--eval', source], { encoding: 'utf8' });

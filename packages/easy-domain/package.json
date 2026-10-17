@@ -41,7 +41,7 @@
     "@types/validator": "^13.12.2"
   },
   "dependencies": {
-    "@thisisagile/easy": "workspace:*",
+    "@thisisagile/easy": "workspace:^",
     "validator": "^13.12.0"
   },
   "exports": {

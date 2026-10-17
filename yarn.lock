@@ -2374,7 +2374,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-domain@workspace:packages/easy-domain"
   dependencies:
-    "@thisisagile/easy": "workspace:*"
+    "@thisisagile/easy": "workspace:^"
     "@thisisagile/easy-test": "workspace:*"
     "@types/validator": "npm:^13.12.2"
     validator: "npm:^13.12.0"
@@ -2518,7 +2518,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@thisisagile/easy@workspace:*, @thisisagile/easy@workspace:^, @thisisagile/easy@workspace:packages/easy":
+"@thisisagile/easy@workspace:^, @thisisagile/easy@workspace:packages/easy":
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy@workspace:packages/easy"
   dependencies:
