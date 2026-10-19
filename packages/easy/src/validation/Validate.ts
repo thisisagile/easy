@@ -1,11 +1,10 @@
-import { Constraint } from './Contraints';
+import type { Constraint } from './Contraints';
 import { when } from './When';
 import type { TemplateOptions } from '../types/Template';
 import { isResults, Results, toResults } from '../types/Results';
 import { toName } from '../types/Constructor';
 import { toResult } from '../types/Result';
 import { List, toList } from '../types/List';
-import { meta } from '../types/Meta';
 import { isArray, isFunction } from '../types/Is';
 import type { Text } from '../types/Text';
 import { asString } from '../types/Text';
@@ -20,10 +19,15 @@ export type Validator = { property: string | symbol; constraint: Constraint; tex
 export const asResults = (subject: unknown, template: Text, options: TemplateOptions = {}): Results =>
   toResults(toResult(text(template).parse(subject, options), toName(subject)));
 
-const validators = (subject: unknown): List<Validator> =>
-  meta(subject)
-    .keys<List<Validator>>('constraint')
+const validators = (subject: unknown): List<Validator> => {
+  // Decorators load reflect-metadata; plain validation should not load it.
+  if (typeof Reflect.getMetadata !== 'function') return toList<Validator>();
+  const target = subject ?? {};
+  return toList([...Object.getOwnPropertyNames(target), ...Object.getOwnPropertyNames(Object.getPrototypeOf(target))])
+    .map(property => Reflect.getMetadata(property, target) as { constraint?: List<Validator> } | undefined)
+    .mapDefined(data => data?.constraint)
     .reduce((list, vs) => list.add(vs), toList<Validator>());
+};
 
 const runValidator = (v: Validator, subject?: unknown): Results => {
   try {

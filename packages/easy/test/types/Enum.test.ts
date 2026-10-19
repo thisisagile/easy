@@ -64,6 +64,21 @@ describe('Enum', () => {
     expect(MoreLanguage.byId('c', () => MoreLanguage.JavaScript)).toMatchObject(MoreLanguage.JavaScript);
   });
 
+  test('keeps inherited enum caches separate when class names collide', () => {
+    class Parent extends Language {
+      static readonly ParentValue = new Language('ParentValue');
+    }
+    class Child extends Parent {
+      static readonly ChildValue = new Language('ChildValue');
+    }
+    Object.defineProperty(Parent, 'name', { value: 'e' });
+    Object.defineProperty(Child, 'name', { value: 'e' });
+
+    expect(Parent.byId('parentvalue')).toBe(Parent.ParentValue);
+    expect(Child.byId('childvalue')).toBe(Child.ChildValue);
+    expect(Child.all()).toContain(Parent.ParentValue);
+  });
+
   test('filter works', () => {
     expect(Language.filter(l => l === MoreLanguage.Delphi)).toHaveLength(0);
     expect(MoreLanguage.filter(ml => ml === Language.Java)).toHaveLength(1);

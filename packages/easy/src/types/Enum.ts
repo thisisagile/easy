@@ -1,7 +1,6 @@
 import { Id } from './Id';
 import { List, toList } from './List';
 import { isAn } from './IsA';
-import { meta } from './Meta';
 import { isDefined, isFunction } from './Is';
 import { Validatable } from './Validatable';
 import { JsonValue } from './Json';
@@ -19,6 +18,7 @@ export const isEnumConstructor = <E = unknown>(c: unknown): c is EnumConstructor
 
 export abstract class Enum implements Validatable {
   static isEnum = true;
+  private static readonly tuples = new WeakMap<object, Record<Id, Enum>>();
 
   protected constructor(
     readonly name: string,
@@ -31,7 +31,7 @@ export abstract class Enum implements Validatable {
   }
 
   static all<E extends Enum>(): List<E> {
-    return meta(this.allTuple<E>()).values<E>();
+    return toList(Object.values(this.allTuple<E>()));
   }
 
   static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
@@ -53,7 +53,13 @@ export abstract class Enum implements Validatable {
   }
 
   protected static allTuple<E extends Enum>(): Record<Id, E> {
-    return meta(this).get(`all-${this.name}`) ?? meta(this).set(`all-${this.name}`, meta(this).values<E>().filter(isEnum).toObject('id'));
+    const cached = this.tuples.get(this) as Record<Id, E> | undefined;
+    if (cached) return cached;
+    const tuple = toList([...Object.values(this), ...Object.values(Object.getPrototypeOf(this) ?? {})] as E[])
+      .filter(isEnum)
+      .toObject('id');
+    this.tuples.set(this, tuple);
+    return tuple;
   }
 
   equals<E extends Enum>(other: E | Id): other is E {

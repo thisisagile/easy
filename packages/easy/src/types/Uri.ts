@@ -3,11 +3,10 @@ import { asString, Text } from './Text';
 import { toName } from './Constructor';
 import { ctx } from './Context';
 import { List, toList } from './List';
-import { meta } from './Meta';
 import { tryTo } from './Try';
 import { Optional } from './Types';
 import { OneOrMore, toArray } from './Array';
-import { entries } from './Object';
+import { entries, values } from './Object';
 
 export type Segment = Text & { key?: string; segment?: string; query?: (value: unknown) => string };
 
@@ -95,7 +94,7 @@ export class EasyUri<Props extends UriExpandProps = UriExpandProps> implements U
   }
 
   protected get props(): List<Prop> {
-    return meta(this.state).values<Prop>();
+    return values<Prop>(this.state);
   }
 
   route = (resource: Optional<string> = this.resource.key): string => toRoute(uri.segment(''), uri.segment(resource?.toLowerCase()), ...this.segments);
