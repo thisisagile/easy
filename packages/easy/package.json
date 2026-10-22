@@ -140,6 +140,10 @@
       "types": "./dist/http/Request.d.ts",
       "default": "./dist/http/Request.js"
     },
+    "./http/RequestInterceptor": {
+      "types": "./dist/http/RequestInterceptor.d.ts",
+      "default": "./dist/http/RequestInterceptor.js"
+    },
     "./http/RequestOptions": {
       "types": "./dist/http/RequestOptions.d.ts",
       "default": "./dist/http/RequestOptions.js"

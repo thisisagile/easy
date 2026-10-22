@@ -1,9 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
-import { AxiosProvider, ctx, EasyUri, FetchProvider, HttpStatus, HttpVerb, RequestOptions, RequestProvider, uri } from '../../src';
+import { AxiosProvider, ctx, EasyUri, FetchProvider, HttpStatus, HttpVerb, RequestInterceptor, RequestOptions, RequestProvider, uri } from '../../src';
 import { DevUri } from '../ref';
 
 type Transport = {
-  provider: RequestProvider;
+  provider: RequestProvider & { intercept: (...interceptors: RequestInterceptor[]) => unknown };
   request: jest.Mock;
   respond: (status: number, data?: unknown) => void;
   fail: (error: Error) => void;
@@ -143,5 +143,53 @@ describe.each([
 
     expect(response.status).toBe(HttpStatus.BadRequest);
     expect(response.body.data?.items[0]).toMatchObject({ allowed: true });
+  });
+
+  test('interceptors see the outgoing request and the raw response before transform', async () => {
+    const interceptor = { request: jest.fn(), response: jest.fn(), error: jest.fn() };
+    transport.provider.intercept(interceptor);
+    transport.respond(200, { dev: { name: 'Sander' } });
+
+    await transport.provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Post, body: { name: 'Sander' }, transform: data => data.dev });
+
+    expect(interceptor.request).toHaveBeenCalledWith(expect.objectContaining({ url: DevUri.Developers.toString(), method: 'post' }));
+    expect(interceptor.response).toHaveBeenCalledWith(
+      expect.objectContaining({ url: DevUri.Developers.toString(), status: 200, data: { dev: { name: 'Sander' } } })
+    );
+    expect(interceptor.error).not.toHaveBeenCalled();
+  });
+
+  test('interceptors see HTTP errors with status and raw body before transformError', async () => {
+    const interceptor = { response: jest.fn(), error: jest.fn() };
+    transport.provider.intercept(interceptor);
+    transport.respond(404, { reason: 'gone' });
+
+    await expect(transport.provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get, transformError: () => ({ message: 'x' }) })).rejects.toBeDefined();
+
+    expect(interceptor.response).not.toHaveBeenCalled();
+    expect(interceptor.error).toHaveBeenCalledWith(expect.objectContaining({ url: DevUri.Developers.toString(), status: 404, data: { reason: 'gone' } }));
+  });
+
+  test('interceptors see transport errors without a status', async () => {
+    const error = new Error('network failed');
+    const interceptor = { error: jest.fn() };
+    transport.provider.intercept(interceptor);
+    transport.fail(error);
+
+    await expect(transport.provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get })).rejects.toBeDefined();
+
+    expect(interceptor.error).toHaveBeenCalledWith(expect.objectContaining({ status: undefined, error }));
+  });
+
+  test('a throwing interceptor fails the request instead of being swallowed', async () => {
+    transport.provider.intercept({
+      request: () => {
+        throw new Error('logger broke');
+      },
+    });
+    transport.respond(200, {});
+
+    await expect(transport.provider.execute({ uri: DevUri.Developers, verb: HttpVerb.Get })).rejects.toThrow('logger broke');
+    expect(transport.request).not.toHaveBeenCalled();
   });
 });

@@ -6,6 +6,8 @@ import { isRestResult } from '../http/RestResult';
 import { Request } from '../http/Request';
 import { RequestOptions } from '../http/RequestOptions';
 import { RequestProvider } from '../http/RequestProvider';
+import { Interceptors, RequestInterceptor } from '../http/RequestInterceptor';
+import { on } from '../types/Constructor';
 import { Response } from '../http/Response';
 import { toResponse } from '../http/toResponse';
 import { toResult } from '../types/Result';
@@ -63,35 +65,41 @@ const fetchWithRedirects = async (fetcher: typeof fetch, url: string, init: Requ
   throw new Error('Maximum redirects exceeded');
 };
 
+const toInit = ({ uri, verb, body, options = RequestOptions.Json }: Request, signal: AbortSignal): RequestInit & { headers: Record<string, string> } => ({
+  method: verb.toString(),
+  headers: uri.isInternal && isEmpty(options.headers.Authorization) ? options.bearer(ctx.request.jwt).headers : options.headers,
+  body: requestBody({ uri, verb, body }, options),
+  signal,
+});
+
 export class FetchProvider implements RequestProvider {
+  readonly interceptors = new Interceptors();
+
   constructor(readonly fetch: typeof globalThis.fetch = globalThis.fetch) {}
 
-  execute = async ({ uri, verb, body, transform = r => r, transformError = r => r, options = RequestOptions.Json }: Request): Promise<Response> => {
-    const headers = uri.isInternal && isEmpty(options.headers.Authorization) ? options.bearer(ctx.request.jwt).headers : options.headers;
+  intercept = (...interceptors: RequestInterceptor[]): this => on(this, t => t.interceptors.add(...interceptors));
+
+  execute = async (request: Request): Promise<Response> => {
+    const { uri, transform = r => r, transformError = r => r, options = RequestOptions.Json } = request;
+    const url = uri.toString();
     const controller = new AbortController();
     const timeout = options.requestOptions.timeout;
     const timer = timeout === undefined ? undefined : setTimeout(() => controller.abort(), cacheAge.toMilliseconds(timeout));
+    const init = toInit(request, controller.signal);
+    this.interceptors.request({ request, url, method: String(init.method), headers: { ...init.headers }, body: init.body });
 
     try {
-      const response = await fetchWithRedirects(
-        this.fetch,
-        uri.toString(),
-        {
-          method: verb.toString(),
-          headers,
-          body: requestBody({ uri, verb, body }, options),
-          signal: controller.signal,
-        },
-        options.requestOptions.maxRedirects
-      );
+      const response = await fetchWithRedirects(this.fetch, url, init, options.requestOptions.maxRedirects);
       const data = await readBody(response);
       const received = responseHeaders(response);
       const valid = options.requestOptions.validateStatus?.(response.status) ?? response.ok;
-      if (valid) return toResponse(response.status, transform(data), received);
-      throw { response: { status: response.status, statusText: response.statusText, data, headers: received } };
+      if (!valid) throw { response: { status: response.status, statusText: response.statusText, data, headers: received } };
+      this.interceptors.response({ request, url, status: response.status, headers: received, data });
+      return toResponse(response.status, transform(data), received);
     } catch (error) {
-      const transformed = transformError(error);
-      throw asResponse(uri, transformed);
+      const received = (error as FetchError | null)?.response;
+      this.interceptors.error({ request, url, status: received?.status, headers: received?.headers, data: received?.data, error });
+      throw asResponse(uri, transformError(error));
     } finally {
       if (timer !== undefined) clearTimeout(timer);
     }

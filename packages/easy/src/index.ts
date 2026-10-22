@@ -21,6 +21,7 @@ export * from './http/HttpStatus';
 export * from './http/HttpVerb';
 export * from './http/Request';
 export * from './http/RequestOptions';
+export * from './http/RequestInterceptor';
 export * from './http/RequestProvider';
 export * from './http/Response';
 export * from './http/RestResult';
