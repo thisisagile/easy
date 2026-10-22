@@ -6,6 +6,8 @@
   "fixtures": [
     ["isDefined", "types/Is", "isDefined", "isDefined"],
     ["toList", "types/List", "toList", "toList"],
+    ["choose", "types/Case", "choose", "choose"],
+    ["tryTo", "types/Try", "tryTo", "tryTo"],
     ["text", "types/ToText", "text", "text"],
     ["dt", "domain/DateTime", "dt", "dt"],
     ["Enum", "types/Enum", "Enum", "class Example extends Enum { static One = new Example('One'); }"],
