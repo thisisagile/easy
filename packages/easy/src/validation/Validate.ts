@@ -4,7 +4,8 @@ import type { TemplateOptions } from '../types/Template';
 import { isResults, Results, toResults } from '../types/Results';
 import { toName } from '../types/Constructor';
 import { toResult } from '../types/Result';
-import { List, toList } from '../types/List';
+import { toList } from '../types/List';
+import { validators } from './IsValid';
 import { isArray, isFunction } from '../types/Is';
 import type { Text } from '../types/Text';
 import { asString } from '../types/Text';
@@ -18,16 +19,6 @@ export type Validator = { property: string | symbol; constraint: Constraint; tex
 
 export const asResults = (subject: unknown, template: Text, options: TemplateOptions = {}): Results =>
   toResults(toResult(text(template).parse(subject, options), toName(subject)));
-
-const validators = (subject: unknown): List<Validator> => {
-  // Decorators load reflect-metadata; plain validation should not load it.
-  if (typeof Reflect.getMetadata !== 'function') return toList<Validator>();
-  const target = subject ?? {};
-  return toList([...Object.getOwnPropertyNames(target), ...Object.getOwnPropertyNames(Object.getPrototypeOf(target))])
-    .map(property => Reflect.getMetadata(property, target) as { constraint?: List<Validator> } | undefined)
-    .mapDefined(data => data?.constraint)
-    .reduce((list, vs) => list.add(vs), toList<Validator>());
-};
 
 const runValidator = (v: Validator, subject?: unknown): Results => {
   try {
@@ -47,7 +38,7 @@ const runValidator = (v: Validator, subject?: unknown): Results => {
 };
 
 const constraints = (subject?: unknown): Results =>
-  validators(subject)
+  toList(validators(subject ?? {}))
     .map(vs => runValidator(vs, subject))
     .reduce((rs, r) => rs.add(...r.results), toResults());
 
@@ -65,4 +56,4 @@ export const validate = (subject?: unknown): Results =>
 
 export const validateReject = <T>(subject: T): Promise<T> => when(subject).not.isValid.reject();
 
-export const isValid = <T>(t: T): boolean => validate(t).isValid;
+export { isValid } from './IsValid';

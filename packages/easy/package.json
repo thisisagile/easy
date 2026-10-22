@@ -540,6 +540,10 @@
       "types": "./dist/validation/Contraints.d.ts",
       "default": "./dist/validation/Contraints.js"
     },
+    "./validation/IsValid": {
+      "types": "./dist/validation/IsValid.d.ts",
+      "default": "./dist/validation/IsValid.js"
+    },
     "./validation/Validate": {
       "types": "./dist/validation/Validate.d.ts",
       "default": "./dist/validation/Validate.js"

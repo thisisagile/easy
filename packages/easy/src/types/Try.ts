@@ -1,5 +1,5 @@
 import { isDefined, isEmpty, isTrue } from './Is';
-import { validate } from '../validation/Validate';
+import { isValid } from '../validation/IsValid';
 import { Construct, Constructor, ofConstruct } from './Constructor';
 import { Validatable } from './Validatable';
 import { Get, ofGet } from './Get';
@@ -10,13 +10,13 @@ export abstract class Try<T = unknown> implements Validatable {
   is = {
     defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isDefined(prop ? prop(v) : v)),
     empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isEmpty(prop ? prop(v) : v)),
-    valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => validate(prop ? prop(v) : v).isValid),
+    valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isValid(prop ? prop(v) : v)),
     true: (prop?: Func<unknown, T>): Try<T> => this.filter(v => isTrue(prop ? prop(v) : v)),
     false: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isTrue(prop ? prop(v) : v)),
     not: {
       defined: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isDefined(prop ? prop(v) : v)),
       empty: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isEmpty(prop ? prop(v) : v)),
-      valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !validate(prop ? prop(v) : v).isValid),
+      valid: (prop?: Func<unknown, T>): Try<T> => this.filter(v => !isValid(prop ? prop(v) : v)),
     },
   };
 
