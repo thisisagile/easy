@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runtimeSource } from '../package-runtime.mjs';
+import { checkSideEffects } from './side-effects.mjs';
 
 const packages = fileURLToPath(new URL('../../packages/', import.meta.url));
 const exportChecker = fileURLToPath(new URL('../../scripts/check-exports.mjs', import.meta.url));
@@ -41,11 +42,15 @@ function checkPackages(names) {
 }
 
 try {
-  console.log('Packing every workspace for ESM and CJS runtime checks');
+  console.log('Packing every workspace for ESM and CJS runtime checks and side-effect bundles');
   const dependencies = packWorkspaces();
-  writeFileSync(join(temp, 'package.json'), JSON.stringify({ private: true, dependencies: { ...dependencies, expect: '29.7.0', 'jest-mock': '29.7.0' } }));
+  writeFileSync(
+    join(temp, 'package.json'),
+    JSON.stringify({ private: true, dependencies: { ...dependencies, expect: '29.7.0', 'jest-mock': '29.7.0', esbuild: '0.18.20' } })
+  );
   command('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], temp);
   checkPackages(Object.keys(dependencies));
+  assert.deepEqual(await checkSideEffects(temp), []);
 } finally {
   rmSync(temp, { recursive: true, force: true });
 }

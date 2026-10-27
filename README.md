@@ -280,3 +280,14 @@ The `@requires` decorator group also contains `@requires.labCoat()` this decorat
 
 To use these decorators, the generic `security` middleware must be loaded first. In most cases, it should be added to the `pre` list of handlers of a service.
 The security middleware takes an optional configuration object, which is documented [in code](packages/easy-express/src/express/SecurityHandler.ts).
+
+## Side effects and tree shaking
+Every package declares `sideEffects` in its `package.json`, so a bundler only keeps the modules a consumer actually uses. Contributors keep that declaration true by following these rules:
+
+- **No module-level mutation of anything outside the module.** Do not patch globals, prototypes or imported objects when a module loads. If something must be configured, configure it in the module that needs it, so it is kept exactly when that module is used.
+- **Catalogue values are pure factories.** Build enum and catalogue values with plain constructors or factory calls that only create objects, so an unused value can be dropped.
+- **A module that must run for its effect on import is listed explicitly.** `easy-test` lists its index and matcher files because `import '@thisisagile/easy-test'` exists to call `expect.extend`. `easy-test-react` lists its index because importing it mocks the timezone. Runtime packages declare `false`.
+- **`DateTime` and `Meta` are deliberately not listed.** `DateTime` extends Day.js and `Meta` loads `reflect-metadata` at module level, but only their own exports need that setup. Bundlers keep a module's top-level code whenever any of its exports are used, so they stay correct unlisted. Listing them would make every root import, such as `isDefined`, pay for Day.js and `reflect-metadata`.
+- **No `emitDecoratorMetadata`.** Nothing in easy reads `design:` metadata; decorators store what they need under their own keys.
+
+`test/bundle/workspaces.mjs` checks these rules against the packed packages.

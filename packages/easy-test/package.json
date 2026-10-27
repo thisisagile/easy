@@ -27,7 +27,12 @@
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/index.js",
+    "./dist/matchers/*.js",
+    "./src/index.ts",
+    "./src/matchers/*.ts"
+  ],
   "files": [
     "dist",
     "src"

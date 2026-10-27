@@ -61,3 +61,10 @@ through the fixed ESM entry retains only what it imports (`isDefined`: 47 bytes)
 Runs also assert packed ESM root/leaf DateTime and Value constructor identity and
 cross-entry `instanceof`. They use the new extensionless public leaf paths. The
 measurement consumers retain legacy published dist paths for baseline continuity.
+
+`workspaces.mjs` packs every workspace and, after the runtime checks, bundles four
+side-effect consumers (`side-effects.mjs`): root and leaf `isDefined` must retain no
+Day.js, `reflect-metadata`, `DateTime` or `Meta`; a bare `import '@thisisagile/easy-test'`
+must keep one `expect.extend` per matcher source that calls it; and a bare
+`import '@thisisagile/easy-test-react'` must keep its timezone mock. The test packages'
+own dependencies stay external because they run inside Jest.
