@@ -29,6 +29,15 @@ describe('Tester', () => {
     expect(navigation.goto).toHaveBeenCalledWith(host);
   });
 
+  test('redirect reports a missing navigation response as unsuccessful', async () => {
+    const navigation = {
+      goto: jest.fn().mockResolvedValue(null),
+      waitForNavigation: jest.fn(),
+    };
+
+    await expect(redirect(navigation, host)).resolves.toBe(false);
+  });
+
   test('waitForNavigation handles empty responses', async () => {
     const navigation = {
       goto: jest.fn(),

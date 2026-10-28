@@ -144,6 +144,18 @@ describe('ErrorHandler', () => {
     expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError, 2));
   });
 
+  test('error with a successful response has no error details', () => {
+    const response = {
+      status: HttpStatus.Ok,
+      body: rest.toData(HttpStatus.Ok),
+    };
+
+    error(toOriginatedError(response), req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(HttpStatus.InternalServerError.status);
+    expect(res.json).toHaveBeenCalledWith(withError(HttpStatus.InternalServerError, 0));
+  });
+
   test('error with AuthenticationError Forbidden', () => {
     error(authError(HttpStatus.Forbidden), req, res, next);
     expect(res.status).toHaveBeenCalledWith(HttpStatus.Forbidden.status);
