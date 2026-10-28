@@ -1,25 +1,11 @@
 import { Id } from './Id';
-import { List, toList } from './List';
 import { isAn } from './IsA';
-import { isDefined, isFunction } from './Is';
+import { isDefined } from './Is';
 import { Validatable } from './Validatable';
 import { JsonValue } from './Json';
-import { Get, ofGet } from './Get';
 import { TypeGuard } from './TypeGuard';
 
-export type EnumConstructor<E = unknown> = {
-  all<E extends Enum>(): List<E>;
-  byIds<E extends Enum>(ids: Id[]): List<E>;
-  byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E;
-  isEnum: boolean;
-};
-
-export const isEnumConstructor = <E = unknown>(c: unknown): c is EnumConstructor<E> => isFunction(c) && (c as any).isEnum;
-
 export abstract class Enum implements Validatable {
-  static isEnum = true;
-  private static readonly tuples = new WeakMap<object, Record<Id, Enum>>();
-
   protected constructor(
     readonly name: string,
     readonly id: Id = name.toLowerCase(),
@@ -28,38 +14,6 @@ export abstract class Enum implements Validatable {
 
   get isValid(): boolean {
     return isDefined(this.id);
-  }
-
-  static all<E extends Enum>(): List<E> {
-    return toList(Object.values(this.allTuple<E>()));
-  }
-
-  static filter<E extends Enum>(p: (value: E, index: number, array: E[]) => unknown, params?: unknown): List<E> {
-    return this.all<E>().filter(p, params);
-  }
-
-  static first<E extends Enum>(p?: (value: E, index: number, array: E[]) => unknown, params?: unknown): E {
-    return this.all<E>().first(p, params);
-  }
-
-  static byIds<E extends Enum>(ids: Id[] = []): List<E> {
-    return toList(ids)
-      .mapDefined(id => this.byId<E>(id))
-      .distinct();
-  }
-
-  static byId<E extends Enum>(id: Id, alt?: Get<E, unknown>): E {
-    return this.allTuple<E>()[id] ?? ofGet(alt);
-  }
-
-  protected static allTuple<E extends Enum>(): Record<Id, E> {
-    const cached = this.tuples.get(this) as Record<Id, E> | undefined;
-    if (cached) return cached;
-    const tuple = toList([...Object.values(this), ...Object.values(Object.getPrototypeOf(this) ?? {})] as E[])
-      .filter(isEnum)
-      .toObject('id');
-    this.tuples.set(this, tuple);
-    return tuple;
   }
 
   equals<E extends Enum>(other: E | Id): other is E {

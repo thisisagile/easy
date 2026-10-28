@@ -1,5 +1,6 @@
 import '@thisisagile/easy-test';
-import { Currency, isMoney, money, Money } from '../../src';
+import { isMoney, money, Money } from '../../src';
+import * as Currency from '../../src/enums/Currency';
 
 describe('Money', () => {
   const m = new Money({ currency: Currency.EUR.id, value: 42 });

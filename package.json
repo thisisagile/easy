@@ -5,7 +5,6 @@
     "g:prettier": "cd $INIT_CWD && prettier",
     "g:eslint": "cd $INIT_CWD && eslint",
     "g:tsdown": "cd $INIT_CWD && tsdown --config ../../tsdown.config.mts",
-    "g:exports": "cd $INIT_CWD && node ../../scripts/sync-exports.mjs",
     "g:jest": "cd $INIT_CWD && jest",
     "g:copy-readme": "ncp README.md $INIT_CWD/README.md",
     "format-all": "yarn workspaces foreach -A run format",

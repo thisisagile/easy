@@ -1,4 +1,5 @@
-import { ContentType, json } from '../../src';
+import ContentType from '../../src/entries/ContentType';
+import { json } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 
@@ -16,5 +17,10 @@ describe('ContentType', () => {
 
   test('Check encoding of form.', () => {
     expect(ContentType.Form.encode(j)).toMatchSnapshot();
+  });
+
+  test('queries the explicit catalogue', () => {
+    expect(ContentType.byId('text/plain')).toBe(ContentType.Text);
+    expect(ContentType.byIds(['application/xml', 'missing'])).toEqual([ContentType.Xml]);
   });
 });

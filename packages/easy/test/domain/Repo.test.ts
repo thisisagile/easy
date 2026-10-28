@@ -1,6 +1,7 @@
+import * as Exception from '../../src/types/Exception';
 import { Dev, DevRepo, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
-import { Exception, Json, RouteGateway, toList, toResults } from '../../src';
+import { Json, RouteGateway, toList, toResults } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Repo', () => {

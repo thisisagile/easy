@@ -1,4 +1,6 @@
-import { Api, AxiosProvider, HttpStatus, HttpVerb, RequestOptions, toResponse } from '../../src';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import * as HttpVerb from '../../src/http/HttpVerb';
+import { Api, AxiosProvider, RequestOptions, toResponse } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 import { AxiosInstance } from 'axios';

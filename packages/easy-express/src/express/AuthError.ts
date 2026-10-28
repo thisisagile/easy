@@ -1,4 +1,5 @@
-import { HttpStatus, isError } from '@thisisagile/easy';
+import type { Enum as HttpStatus } from '@thisisagile/easy/HttpStatus';
+import { isError } from '@thisisagile/easy';
 
 export class AuthError extends Error {
   status: number;

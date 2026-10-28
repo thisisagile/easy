@@ -1,4 +1,5 @@
-import { HttpVerb, meta, Uri } from '@thisisagile/easy';
+import * as HttpVerb from '@thisisagile/easy/HttpVerb';
+import { meta, Uri } from '@thisisagile/easy';
 import { DevResource, DevsResource, DevUri } from '../ref';
 import '@thisisagile/easy-test';
 import { DevScope, DevUseCase } from '../ref';

@@ -1,5 +1,6 @@
 import { asString, Text } from './Text';
-import { Exception, isException } from './Exception';
+import type { Enum as Exception } from './Exception';
+import { isException } from './Exception';
 import { isResponse, Response } from '../http/Response';
 import { isResults, Results } from './Results';
 import { Result } from './Result';

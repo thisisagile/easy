@@ -1,12 +1,13 @@
-import { convert, Database, DefaultProvider } from '@thisisagile/easy';
+import * as Database from '@thisisagile/easy/Database';
+import { convert } from '@thisisagile/easy';
 import { Collection } from '../../src';
 
-export class DevDatabase extends Database {
-  static readonly DevDB = new Database('DevDB', DefaultProvider, { cluster: 'dev' });
-}
+export const DevDatabase = {
+  DevDB: Database.create('DevDB', Database.DefaultProvider, { cluster: 'dev' }),
+};
 
 export class DevCollection extends Collection {
-  get db(): Database {
+  get db(): Database.Enum {
     return DevDatabase.DevDB;
   }
 

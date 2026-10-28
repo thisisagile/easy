@@ -1,4 +1,5 @@
-import { convert, Database, Field, Json } from '@thisisagile/easy';
+import type { Enum as Database } from '@thisisagile/easy/Database';
+import { convert, Field, Json } from '@thisisagile/easy';
 import '@thisisagile/easy-test';
 import { DevCollection, DevDatabase } from './ref/DevCollection';
 import { Collection } from '../src';

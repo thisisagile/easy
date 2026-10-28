@@ -1,5 +1,5 @@
 import { isEmpty, text, required, valid, Struct } from '@thisisagile/easy';
-import { Country } from '../enums/Country';
+import * as Country from '../enums/Country';
 import { postalCode } from '../values/PostalCode';
 
 export class Address extends Struct {
@@ -8,7 +8,7 @@ export class Address extends Struct {
   readonly extension = this.state.extension as string;
   @valid() readonly postalCode = postalCode(this.state.postalCode, this.state.country);
   @required() readonly city = this.state.city as string;
-  @required() readonly country = Country.byId<Country>(this.state.country);
+  @required() readonly country = Country.byId(this.state.country);
 
   toString(): string {
     return text(this.street)

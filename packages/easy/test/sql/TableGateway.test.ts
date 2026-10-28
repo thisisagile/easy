@@ -1,4 +1,5 @@
-import { DataProvider, Exception, QueryProvider, TableGateway, toList } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { DataProvider, QueryProvider, TableGateway, toList } from '../../src';
 import { Dev, devData, DevTable } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 

@@ -1,4 +1,5 @@
-import { Api, HttpStatus, toResponse, View, ViewRouteGateway } from '../../src';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import { Api, toResponse, View, ViewRouteGateway } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 

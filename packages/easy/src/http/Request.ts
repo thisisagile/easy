@@ -1,4 +1,4 @@
-import { HttpVerb } from './HttpVerb';
+import type { Enum as HttpVerb } from './HttpVerb';
 import { RequestOptions } from './RequestOptions';
 import type { Uri } from '../types/Uri';
 

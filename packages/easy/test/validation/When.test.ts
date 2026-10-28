@@ -1,5 +1,6 @@
+import * as Exception from '../../src/types/Exception';
 import { Dev, Language } from '../ref';
-import { Exception, Results, when } from '../../src';
+import { Results, when } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('Testing When', () => {
@@ -125,7 +126,7 @@ describe('Testing When', () => {
     res = await when(Dev.Invalid)
       .not.isValid.reject(Exception.DoesNotExist)
       .catch(r => r);
-    expect(res).toBeInstanceOf(Exception);
+    expect(res).toBeInstanceOf(Exception.Enum);
 
     res = await when(Language.byId(42))
       .not.isValid.reject()

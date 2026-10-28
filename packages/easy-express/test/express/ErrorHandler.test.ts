@@ -1,6 +1,8 @@
+import * as Exception from '@thisisagile/easy/Exception';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
 import { fits, mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { ctx, Exception, HttpStatus, rest, toResults } from '@thisisagile/easy';
+import { ctx, rest, toResults } from '@thisisagile/easy';
 import { authError, error } from '../../src';
 import { toOriginatedError } from '@thisisagile/easy-service';
 
@@ -11,7 +13,7 @@ describe('ErrorHandler', () => {
   let next: NextFunction;
   const serverError = 'Server Error';
 
-  const withError = (code: HttpStatus, errorCount = 1) =>
+  const withError = (code: HttpStatus.Enum, errorCount = 1) =>
     fits.with({
       error: fits.with({
         code: code.status,
@@ -19,7 +21,7 @@ describe('ErrorHandler', () => {
         message: code.name,
       }),
     });
-  const withErrorAndMessage = (code: HttpStatus, errorCount = 1, message?: string) =>
+  const withErrorAndMessage = (code: HttpStatus.Enum, errorCount = 1, message?: string) =>
     fits.with({
       error: fits.with({
         code: code.status,

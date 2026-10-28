@@ -1,4 +1,5 @@
-import { Entity, Enum, Exception, includes, required, rule, Struct, toResults, tryTo, valid, validate, Value } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { Entity, Enum, includes, required, rule, Struct, toResults, tryTo, valid, validate, Value } from '../../src';
 import { isValid } from '../../src/validation/IsValid';
 import '@thisisagile/easy-test';
 

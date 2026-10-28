@@ -1,5 +1,7 @@
+import * as Exception from '../../src/types/Exception';
+import * as HttpStatus from '../../src/http/HttpStatus';
 import '@thisisagile/easy-test';
-import { errorMessage, Exception, HttpStatus, rest, toResult, toResults } from '../../src';
+import { errorMessage, rest, toResult, toResults } from '../../src';
 
 describe('errorMessage', () => {
   test('extracts the first error message from a service Response', () => {

@@ -11,7 +11,6 @@
     ["text", "types/ToText", "text", "text"],
     ["dt", "domain/DateTime", "dt", "dt"],
     ["Enum", "types/Enum", "Enum", "class Example extends Enum { static One = new Example('One'); }"],
-    ["uri", "types/Uri", "uri", "uri"],
-    ["UseCase", "process/UseCase", "UseCase", "UseCase"]
+    ["uri", "types/Uri", "uri", "uri"]
   ]
 }

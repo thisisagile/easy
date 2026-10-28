@@ -7,7 +7,7 @@ import { isValidatable } from '../types/Validatable';
 import { PageList } from '../types/PageList';
 import { Id, Key } from '../types/Id';
 import { when } from '../validation/When';
-import { Exception } from '../types/Exception';
+import * as Exception from '../types/Exception';
 import { asList, List } from '../types/List';
 import { reject, resolve } from '../utils/Promise';
 

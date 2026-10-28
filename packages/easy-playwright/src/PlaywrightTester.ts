@@ -1,13 +1,11 @@
 import playwright, { Browser, chromium, firefox, Page, webkit } from 'playwright';
 import { PlaywrightElement } from './PlaywrightElement';
-import { ctx, Id, Json, UseCase } from '@thisisagile/easy';
-import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
+import { ctx, Json } from '@thisisagile/easy';
+import { ClosableBrowserTester, TestElement, Tester } from '@thisisagile/easy-test-web';
 
 export type BrowserType = 'Chromium' | 'Webkit' | 'Firefox';
 
-export class PlaywrightTester implements Tester {
-  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {}
-
+export class PlaywrightTester extends ClosableBrowserTester<Page> implements Tester {
   get url(): string {
     return this.page.url();
   }
@@ -74,22 +72,6 @@ export class PlaywrightTester implements Tester {
   row(contains: string): TestElement {
     // Select the first row that contains the given input
     return this.byXPath(`(//tr[contains(., '${contains}')])[1]`);
-  }
-
-  redirect(url: string): Promise<boolean> {
-    return this.page.goto(url).then(r => r?.ok() ?? false);
-  }
-
-  goto(to: UseCase, id?: Id): Promise<boolean> {
-    return this.redirect(toUrl(to, this.host, id));
-  }
-
-  wait(): Promise<boolean> {
-    return this.page.waitForNavigation().then(r => r?.ok() || false);
-  }
-
-  close(): Promise<void> {
-    return this.browser.close();
   }
 
   private byXPath(q: string): TestElement {

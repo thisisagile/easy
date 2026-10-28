@@ -1,6 +1,5 @@
 export * from './data/Condition';
 export * from './data/InMemoryGateway';
-export * from './data/Database';
 export * from './data/DataProvider';
 export * from './data/Field';
 export * from './data/Query';
@@ -15,10 +14,7 @@ export * from './domain/Repo';
 export * from './domain/Typo';
 
 export * from './http/CacheControl';
-export * from './http/ContentType';
 export * from './http/HttpHeader';
-export * from './http/HttpStatus';
-export * from './http/HttpVerb';
 export * from './http/Request';
 export * from './http/RequestOptions';
 export * from './http/RequestInterceptor';
@@ -27,11 +23,8 @@ export * from './http/Response';
 export * from './http/RestResult';
 export * from './http/toResponse';
 
-export * from './process/App';
 export * from './process/Manage';
-export * from './process/Scope';
 export * from './process/Search';
-export * from './process/UseCase';
 
 export * from './resources/Req';
 
@@ -66,9 +59,7 @@ export * from './types/Constructor';
 export * from './types/Context';
 export * from './types/Currency';
 export * from './types/Enum';
-export * from './types/Environment';
 export * from './types/ErrorOrigin';
-export * from './types/Exception';
 export * from './types/Falsy';
 export * from './types/Func';
 export * from './types/Gateway';
@@ -93,6 +84,7 @@ export * from './types/Parser';
 export * from './types/Period';
 export * from './types/Primitive';
 export * from './types/Repository';
+export * from './types/Registry';
 export * from './types/Result';
 export * from './types/Results';
 export * from './types/Sort';

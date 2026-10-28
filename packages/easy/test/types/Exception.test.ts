@@ -1,11 +1,11 @@
-import { Exception, isDoesNotExist, isException } from '../../src';
+import Exception from '../../src/entries/Exception';
 import { Dev, Language } from '../ref';
 import '@thisisagile/easy-test';
 
 describe('Exception', () => {
   const message = 'This is wrong';
-  const exc = new Exception(message);
-  const exc2 = new Exception(message);
+  const exc = Exception.create(message);
+  const exc2 = Exception.create(message);
 
   test('name and id are set properly', () => {
     expect(exc.message).toBe(message);
@@ -15,18 +15,18 @@ describe('Exception', () => {
   });
 
   test('isException', () => {
-    expect(isException()).toBeFalsy();
-    expect(isException(exc)).toBeTruthy();
-    expect(isException(Dev.Naoufal)).toBeFalsy();
+    expect(Exception.isException()).toBeFalsy();
+    expect(Exception.isException(exc)).toBeTruthy();
+    expect(Exception.isException(Dev.Naoufal)).toBeFalsy();
   });
 
   test('isException with text', () => {
-    expect(isException(exc, '')).toBeFalsy();
-    expect(isException(exc, message)).toBeFalsy();
-    expect(isException(exc, 'ThisIsWrong')).toBeTruthy();
-    expect(isException(exc, Dev.Naoufal)).toBeFalsy();
-    expect(isException(exc, Exception.DoesNotExist)).toBeFalsy();
-    expect(isException(exc, exc2)).toBeTruthy();
+    expect(Exception.isException(exc, '')).toBeFalsy();
+    expect(Exception.isException(exc, message)).toBeFalsy();
+    expect(Exception.isException(exc, 'ThisIsWrong')).toBeTruthy();
+    expect(Exception.isException(exc, Dev.Naoufal)).toBeFalsy();
+    expect(Exception.isException(exc, Exception.DoesNotExist)).toBeFalsy();
+    expect(Exception.isException(exc, exc2)).toBeTruthy();
   });
 
   test('equals', () => {
@@ -49,12 +49,17 @@ describe('Exception', () => {
     expect(Exception.EnvironmentVariableNotFound('Hoi').message).toBe('Environment variable HOI could not be found.');
   });
 
+  test('queries the explicit catalogue', () => {
+    expect(Exception.byId(Exception.Unknown.id)).toBe(Exception.Unknown);
+    expect(Exception.byIds([Exception.DoesNotExist.id])).toEqual([Exception.DoesNotExist]);
+  });
+
   test('is an Exception.DoesNotExist', () => {
-    expect(isDoesNotExist()).toBeFalsy();
-    expect(isDoesNotExist({})).toBeFalsy();
-    expect(isDoesNotExist(Dev.Naoufal)).toBeFalsy();
-    expect(isDoesNotExist(Exception.IsNotImplemented)).toBeFalsy();
-    expect(isDoesNotExist(Exception.DoesNotExist)).toBeTruthy();
-    expect(isDoesNotExist(Exception.DoesNotExist.because('Not sure'))).toBeTruthy();
+    expect(Exception.isDoesNotExist()).toBeFalsy();
+    expect(Exception.isDoesNotExist({})).toBeFalsy();
+    expect(Exception.isDoesNotExist(Dev.Naoufal)).toBeFalsy();
+    expect(Exception.isDoesNotExist(Exception.IsNotImplemented)).toBeFalsy();
+    expect(Exception.isDoesNotExist(Exception.DoesNotExist)).toBeTruthy();
+    expect(Exception.isDoesNotExist(Exception.DoesNotExist.because('Not sure'))).toBeTruthy();
   });
 });

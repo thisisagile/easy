@@ -19,7 +19,10 @@ import { Collection } from './Collection';
 import { stages } from './Stages';
 
 export class MongoGateway implements Gateway<FindOptions> {
-  constructor(readonly collection: Collection, readonly provider: MongoProvider = collection.provider) {}
+  constructor(
+    readonly collection: Collection,
+    readonly provider: MongoProvider = collection.provider
+  ) {}
 
   all(options?: FindOptions): Promise<PageList<Json>> {
     return this.provider.all(options).then(js => js.map(j => this.collection.in(j)));

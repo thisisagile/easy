@@ -1,4 +1,6 @@
-import { List, meta, Optional, tryTo, Uri, Scope, UseCase, Req } from '@thisisagile/easy';
+import type { Enum as Scope } from '@thisisagile/easy/Scope';
+import type { Enum as UseCase } from '@thisisagile/easy/UseCase';
+import { List, meta, Optional, tryTo, Uri, Req } from '@thisisagile/easy';
 import { Resource } from './Resource';
 import { RequestHandler } from 'express';
 import { Verb } from '../http/Verb';
@@ -11,7 +13,7 @@ export const route =
 
 export type Endpoint<T = unknown> = (re: Req) => Promise<T | List<T>>;
 export type RouteRequires = { token: boolean; labCoat: boolean; scope?: Scope; uc?: UseCase };
-export type Route = { verb: Verb; name: string, endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
+export type Route = { verb: Verb; name: string; endpoint: Endpoint; requires: RouteRequires; middleware: RequestHandler[] };
 export type Routes = { route: Uri; middleware: RequestHandler[]; endpoints: List<Route> };
 
 const toRoute = (endpoint: Endpoint, requires: RouteRequires, verb?: Verb, middleware?: RequestHandler[], name = ''): Optional<Route> =>
@@ -45,7 +47,7 @@ class Router implements Routes {
           },
           v.get<Verb>('verb'),
           v.get<RequestHandler[]>('middleware'),
-          v.property.toString(),
+          v.property.toString()
         )
       );
   }

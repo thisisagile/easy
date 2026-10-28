@@ -1,8 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
-    "composite": false
+    "composite": false,
+    "paths": {
+      "@thisisagile/easy": ["packages/easy/src/index.ts"],
+      "@thisisagile/easy/*": ["packages/easy/src/entries/*", "packages/easy/src/*"]
+    }
   }
 }

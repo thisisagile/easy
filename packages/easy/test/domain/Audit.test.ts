@@ -29,18 +29,16 @@ describe('Audit', () => {
     expect(a).not.toBeValid();
   });
 
-  test.each([
-    [{ by: { id: '42' } }],
-    [{ by: { user: 'email' } }],
-    [{ by: {} }],
-    [{ by: undefined }],
-  ])('construct from invalid request identity by %j defaults to easy', (by) => {
-    mock.property(ctx.request, 'identity', by as any);
-    const a = new Audit();
-    expect(a).toBeValid();
-    expect(a.by.id).toBe(0);
-    expect(a.by.user).toBe('easy');
-  });
+  test.each([[{ by: { id: '42' } }], [{ by: { user: 'email' } }], [{ by: {} }], [{ by: undefined }]])(
+    'construct from invalid request identity by %j defaults to easy',
+    by => {
+      mock.property(ctx.request, 'identity', by as any);
+      const a = new Audit();
+      expect(a).toBeValid();
+      expect(a.by.id).toBe(0);
+      expect(a.by.user).toBe('easy');
+    }
+  );
 
   test('construct from valid request identity', () => {
     mock.property(ctx.request, 'identity', { ...by } as any);

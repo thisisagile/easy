@@ -1,4 +1,5 @@
-import { Country, postalCode } from '../../src';
+import { postalCode } from '../../src';
+import * as Country from '../../src/enums/Country';
 import '@thisisagile/easy-test';
 
 const postalCodes = {

@@ -2,11 +2,11 @@ import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, Meth
 import { toResponse } from '../http/toResponse';
 import { isDefined, isEmpty } from '../types/Is';
 import { Uri } from '../types/Uri';
-import { HttpVerb } from '../http/HttpVerb';
+import type { Enum as HttpVerb } from '../http/HttpVerb';
 import { choose } from '../types/Case';
 import { isRestResult } from '../http/RestResult';
 import { toResult } from '../types/Result';
-import { HttpStatus } from '../http/HttpStatus';
+import * as HttpStatus from '../http/HttpStatus';
 import { RequestProvider } from '../http/RequestProvider';
 import { RequestOptions } from '../http/RequestOptions';
 import { Interceptors, RequestInterceptor } from '../http/RequestInterceptor';

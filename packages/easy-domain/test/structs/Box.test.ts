@@ -1,12 +1,13 @@
-import { Box, Dimension, UnitOfMeasurement } from '../../src';
+import { Box, Dimension } from '../../src';
+import * as UnitOfMeasurement from '../../src/enums/UnitOfMeasurement';
 
 const b = (
   l: number,
   w: number,
   h: number,
-  lUom: UnitOfMeasurement = UnitOfMeasurement.MM,
-  wUom: UnitOfMeasurement = UnitOfMeasurement.MM,
-  hUom: UnitOfMeasurement = UnitOfMeasurement.MM
+  lUom: UnitOfMeasurement.Enum = UnitOfMeasurement.MM,
+  wUom: UnitOfMeasurement.Enum = UnitOfMeasurement.MM,
+  hUom: UnitOfMeasurement.Enum = UnitOfMeasurement.MM
 ): Box =>
   new Box({
     l: Dimension.with(l, lUom),

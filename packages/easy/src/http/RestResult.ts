@@ -1,4 +1,4 @@
-import { HttpStatus, isHttpStatus } from './HttpStatus';
+import * as HttpStatus from './HttpStatus';
 import { isResponse } from './Response';
 import { List, toList } from '../types/List';
 import { Json } from '../types/Json';
@@ -17,7 +17,7 @@ const hasErrors = (a: any): a is { error: { code: number; errors: List<Result> }
 const hasItems = (a: any): a is { data: { code: number; items: List<Json>; totalItems?: number; meta?: Json } } => isDefined(a?.data.items);
 
 export const rest = {
-  toData: (status: HttpStatus, items: Json[] = [], totalItems?: number, meta?: Json): RestResult => ({
+  toData: (status: HttpStatus.Enum, items: Json[] = [], totalItems?: number, meta?: Json): RestResult => ({
     data: {
       code: status.status,
       items: toList(items),
@@ -26,7 +26,7 @@ export const rest = {
       meta,
     },
   }),
-  toError: (status: HttpStatus, errors: Result[] = [toResult(status.name)]): RestResult => ({
+  toError: (status: HttpStatus.Enum, errors: Result[] = [toResult(status.name)]): RestResult => ({
     error: {
       code: status.status,
       message: status.name ?? errors[0].message ?? 'Unknown',
@@ -34,10 +34,10 @@ export const rest = {
       errorCount: errors.length,
     },
   }),
-  to: (payload?: any | any[], status?: HttpStatus): RestResult =>
+  to: (payload?: any, status?: HttpStatus.Enum): RestResult =>
     choose(payload)
       .is.not.defined(p => p, undefined as unknown as RestResult)
-      .type(isHttpStatus, h => rest.toError(h ?? status ?? HttpStatus.InternalServerError, [toResult(h.name)]))
+      .type(HttpStatus.isHttpStatus, h => rest.toError(h ?? status ?? HttpStatus.InternalServerError, [toResult(h.name)]))
       .type(isResult, r => rest.toError(status ?? HttpStatus.BadRequest, [r]))
       .type(isError, e => rest.toError(status ?? HttpStatus.BadRequest, [e]))
       .type(isResults, r => rest.toError(status ?? HttpStatus.BadRequest, r.results))

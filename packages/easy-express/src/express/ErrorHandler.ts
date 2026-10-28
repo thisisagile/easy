@@ -1,26 +1,11 @@
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import { isDoesNotExist, isException } from '@thisisagile/easy/Exception';
 import express from 'express';
 import { isAuthError } from './AuthError';
-import {
-  asString,
-  choose,
-  ctx,
-  HttpStatus,
-  isDoesNotExist,
-  isError,
-  isException,
-  isResponse,
-  isResults,
-  isText,
-  Response,
-  rest,
-  Result,
-  toHttpStatus,
-  toResult,
-  tryTo,
-} from '@thisisagile/easy';
+import { asString, choose, ctx, isError, isResponse, isResults, isText, Response, rest, Result, toResult, tryTo } from '@thisisagile/easy';
 import { OriginatedError, toOriginatedError } from '@thisisagile/easy-service';
 
-const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
+const toResponse = (status: HttpStatus.Enum, errors: Result[] = []): Response => ({
   status,
   body: rest.toError(status, errors),
 });
@@ -28,7 +13,7 @@ const toResponse = (status: HttpStatus, errors: Result[] = []): Response => ({
 const toBody = ({ origin, options }: OriginatedError): Response => {
   return (
     choose(origin)
-      .type(isAuthError, ae => toResponse(toHttpStatus(ae.status), [toResult(ae.message)]))
+      .type(isAuthError, ae => toResponse(HttpStatus.toHttpStatus(ae.status), [toResult(ae.message)]))
       .type(isDoesNotExist, e => toResponse(options?.onNotFound ?? HttpStatus.NotFound, [toResult(e.reason ?? e.message)]))
       // This service breaks with an error
       .type(isError, e => toResponse(HttpStatus.InternalServerError, [toResult(e.message)]))

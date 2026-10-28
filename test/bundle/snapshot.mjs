@@ -11,6 +11,5 @@ export function snapshotHead(root, temp) {
   symlinkSync(join(root, 'node_modules'), join(snapshot, 'node_modules'), 'dir');
   const cwd = join(snapshot, 'packages/easy');
   execFileSync(join(root, 'node_modules/.bin/tsdown'), ['--config', '../../tsdown.config.mts'], { cwd, stdio: 'inherit' });
-  execFileSync(process.execPath, ['../../scripts/sync-exports.mjs'], { cwd, stdio: 'inherit' });
   return snapshot;
 }

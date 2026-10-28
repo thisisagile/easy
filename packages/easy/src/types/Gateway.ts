@@ -1,6 +1,6 @@
 import { Json, JsonValue } from './Json';
 import { Id } from './Id';
-import { Exception } from './Exception';
+import * as Exception from './Exception';
 import { PageList, PageOptions } from './PageList';
 import { List } from './List';
 import { Optional } from './Types';

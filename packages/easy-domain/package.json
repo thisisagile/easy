@@ -21,7 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsdown && yarn g:exports",
+    "build": "yarn g:tsdown",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -49,25 +49,25 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
-    "./enums/Country": {
-      "types": "./dist/enums/Country.d.ts",
-      "default": "./dist/enums/Country.js"
+    "./Country": {
+      "types": "./dist/entries/Country.d.ts",
+      "default": "./dist/entries/Country.js"
     },
-    "./enums/Currency": {
-      "types": "./dist/enums/Currency.d.ts",
-      "default": "./dist/enums/Currency.js"
+    "./Currency": {
+      "types": "./dist/entries/Currency.d.ts",
+      "default": "./dist/entries/Currency.js"
     },
-    "./enums/Locale": {
-      "types": "./dist/enums/Locale.d.ts",
-      "default": "./dist/enums/Locale.js"
+    "./Locale": {
+      "types": "./dist/entries/Locale.d.ts",
+      "default": "./dist/entries/Locale.js"
     },
-    "./enums/UnitOfMeasurement": {
-      "types": "./dist/enums/UnitOfMeasurement.d.ts",
-      "default": "./dist/enums/UnitOfMeasurement.js"
+    "./UnitOfMeasurement": {
+      "types": "./dist/entries/UnitOfMeasurement.d.ts",
+      "default": "./dist/entries/UnitOfMeasurement.js"
     },
-    "./enums/UnitOfWeight": {
-      "types": "./dist/enums/UnitOfWeight.d.ts",
-      "default": "./dist/enums/UnitOfWeight.js"
+    "./UnitOfWeight": {
+      "types": "./dist/entries/UnitOfWeight.d.ts",
+      "default": "./dist/entries/UnitOfWeight.js"
     },
     "./structs/Address": {
       "types": "./dist/structs/Address.d.ts",

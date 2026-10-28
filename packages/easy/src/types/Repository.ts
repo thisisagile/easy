@@ -1,6 +1,6 @@
 import { FetchOptions } from './Gateway';
 import { PageList } from './PageList';
-import { Exception } from './Exception';
+import * as Exception from './Exception';
 import { reject } from '../utils/Promise';
 import { Id, Key } from './Id';
 import { List } from './List';

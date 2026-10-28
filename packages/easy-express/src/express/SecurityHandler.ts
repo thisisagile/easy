@@ -1,11 +1,14 @@
+import * as Environment from '@thisisagile/easy/Environment';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import type { Enum as Scope } from '@thisisagile/easy/Scope';
+import type { Enum as UseCase } from '@thisisagile/easy/UseCase';
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
 import passport from 'passport';
 import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt';
 import type { SecretOrKeyProvider, StrategyOptionsWithRequest } from 'passport-jwt';
 import type { Algorithm } from 'jsonwebtoken';
 import { authError } from './AuthError';
-import { ctx, Environment, HttpStatus, ifFalse } from '@thisisagile/easy';
-import type { Scope, UseCase } from '@thisisagile/easy';
+import { ctx, ifFalse } from '@thisisagile/easy';
 
 type EasySecretOrKeyProvider = (request: Request, rawJwtToken: any) => Promise<string | Buffer>;
 
@@ -32,7 +35,12 @@ export interface SecurityOptions {
 }
 
 export const checkLabCoat = (): RequestHandler => (req, res, next) =>
-  next(ifFalse([Environment.Dev, Environment.Tst, Environment.Acc].some(e => e.equals(ctx.env.name)), authError(HttpStatus.Forbidden)));
+  next(
+    ifFalse(
+      [Environment.Dev, Environment.Tst, Environment.Acc].some(e => e.equals(ctx.env.name)),
+      authError(HttpStatus.Forbidden)
+    )
+  );
 
 export const checkToken = (): RequestHandler => passport.authenticate('jwt', { session: false, failWithError: true });
 

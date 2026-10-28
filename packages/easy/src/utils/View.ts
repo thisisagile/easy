@@ -12,14 +12,15 @@ import { isEqual } from '../types/IsEqual';
 import { Get, ofGet } from '../types/Get';
 import { DontInfer } from '../types/Types';
 import { AnyKey } from '../types/AnyKey';
-import { EnumConstructor, isEnumConstructor } from '../types/Enum';
+import { Enum } from '../types/Enum';
+import { isEnumRegistry, RegistryQueries } from '../types/Registry';
 import { Id } from '../types/Id';
 
 type Func<T = unknown> = (a: any, key?: string) => T;
 type FuncOn<S> = (a: S, key?: string) => unknown;
 type Viewer = { key: string; f: Func };
 
-type ViewType<V = any> = Primitive | EnumConstructor | Constructor | Func | View<V> | undefined;
+type ViewType<V = any> = Primitive | RegistryQueries<Enum> | Constructor | Func | View<V> | undefined;
 type ViewValue<S = never> = [S] extends [never] ? ViewType : Exclude<ViewType, string | Func> | AnyKey<S> | FuncOn<S>;
 type ViewRecord<V = any, S = never> = [S] extends [never]
   ? Partial<Record<keyof V | typeof spread, ViewValue<S>>>
@@ -38,9 +39,9 @@ export const toViewer = (key: string, value: ViewType): Viewer =>
     .equals(keep, { key, f: (a: any) => traverse(a, key) })
     .equals(json, { key, f: (a: any) => asJson(traverse(a, key)) })
     .type(isString, s => ({ key, f: (a: any) => traverse(a, s) }))
-    .type(isEnumConstructor, c => ({
+    .type(isEnumRegistry<Enum>, registry => ({
       key,
-      f: (a, key) => use(traverse(a, key), v => (isArray(v) ? c.byIds(v) : c.byId(v as Id))),
+      f: (a, key) => use(traverse(a, key), v => (isArray(v) ? registry.byIds(v) : registry.byId(v as Id))),
     }))
     .type(isConstructor, c => ({
       key,

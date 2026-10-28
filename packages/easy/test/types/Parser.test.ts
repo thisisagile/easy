@@ -1,4 +1,5 @@
-import { ErrorOrigin, Exception, Get, isDefined, ofGet, Parser, reject, resolve } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { ErrorOrigin, Get, isDefined, ofGet, Parser, reject, resolve } from '../../src';
 import { Dev } from '../ref';
 
 class TestParser extends Parser<number, number> {

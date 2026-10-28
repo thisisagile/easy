@@ -1,5 +1,6 @@
 import '@thisisagile/easy-test';
-import { UnitOfWeight, Weight, weight } from '../../src';
+import { Weight, weight } from '../../src';
+import * as UnitOfWeight from '../../src/enums/UnitOfWeight';
 
 describe('Weight', () => {
   test('Weight with value is not valid', () => {

@@ -1,6 +1,9 @@
+import * as ContentType from '@thisisagile/easy/ContentType';
+import * as Exception from '@thisisagile/easy/Exception';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { fits, mock } from '@thisisagile/easy-test';
-import { CacheControl, ContentType, Exception, HttpStatus } from '@thisisagile/easy';
+import { CacheControl } from '@thisisagile/easy';
 import { DevResource, DevService, DevsResource, DevUri } from '../ref';
 import passport from 'passport';
 import { ExpressProvider, ExpressVerb } from '../../src';

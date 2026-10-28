@@ -68,6 +68,23 @@ test('ESM root and leaf use the same DateTime and Value constructors', () => {
   );
 });
 
+test('catalogue subpaths expose default namespaces', () => {
+  run(
+    `
+    import assert from 'node:assert/strict';
+    import Database from '@thisisagile/easy/Database';
+    import Locale from '@thisisagile/easy-domain/Locale';
+    class Provider {}
+    const direct = new Database.Enum('direct', Provider);
+    const created = Database.create('created', Provider);
+    assert.ok(direct instanceof Database.Enum);
+    assert.ok(created instanceof Database.Enum);
+    assert.ok(Locale.create('nl_test', 'Test Dutch', 'nl') instanceof Locale.Enum);
+  `,
+    'module'
+  );
+});
+
 test('a CommonJS consumer reaches the root, the legacy dist path and the leaf through one ESM build', () => {
   run(
     `

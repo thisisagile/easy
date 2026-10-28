@@ -1,4 +1,5 @@
-import { Exception, asList, Entity, Enum, includes, isValue, List, required, rule, Struct, toList, valid, validate, Value, isValid } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { asList, Entity, Enum, includes, isValue, List, registry, required, rule, Struct, toList, valid, validate, Value, isValid } from '../../src';
 import '@thisisagile/easy-test';
 import { Dev } from '../ref';
 
@@ -9,9 +10,13 @@ class Price extends Value<number> {
 }
 
 class Type extends Enum {
-  static readonly Plug = new Type('plug');
-  static readonly Bulb = new Type('bulb');
+  constructor(name: string) {
+    super(name);
+  }
 }
+const Plug = new Type('plug');
+const Bulb = new Type('bulb');
+const types = registry({ Plug, Bulb });
 
 class Brand extends Struct {
   readonly name: string = this.state.name;
@@ -26,14 +31,14 @@ class ConstrainedBrand extends Struct {
 class Product extends Entity {
   readonly name: string = this.state.name;
   readonly brand: Brand = new Brand(this.state.brand);
-  readonly type: Type = Type.byId(this.state.type);
+  readonly type: Type = types.byId(this.state.type);
   readonly price: Price = new Price(this.state.price);
 }
 
 class ConstrainedProduct extends Entity {
   @required() readonly pname: string = this.state.name;
   @valid() readonly brand: ConstrainedBrand = new ConstrainedBrand(this.state.brand);
-  @valid() readonly type: Type = Type.byId(this.state.type);
+  @valid() readonly type: Type = types.byId(this.state.type);
   @valid() readonly price: Price = new Price(this.state.price);
 }
 
@@ -94,15 +99,15 @@ describe('validate', () => {
   });
 
   test('enum', () => {
-    expect(validate(Type.Plug)).toBeValid();
-    expect(validate(Type.byId(Type.Plug.id))).toBeValid();
-    expect(validate(Type.byId(666))).not.toBeValid();
+    expect(validate(Plug)).toBeValid();
+    expect(validate(types.byId(Plug.id))).toBeValid();
+    expect(validate(types.byId(666))).not.toBeValid();
   });
 
   test('isValid', () => {
-    expect(isValid(Type.Plug)).toBeTruthy();
-    expect(isValid(Type.byId(Type.Plug.id))).toBeTruthy();
-    expect(isValid(Type.byId(666))).toBeFalsy();
+    expect(isValid(Plug)).toBeTruthy();
+    expect(isValid(types.byId(Plug.id))).toBeTruthy();
+    expect(isValid(types.byId(666))).toBeFalsy();
   });
 
   test('value', () => {

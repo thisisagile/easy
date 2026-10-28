@@ -21,7 +21,7 @@
   "scripts": {
     "lint": "yarn g:eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "yarn g:prettier --check --write src test *.json",
-    "build": "yarn g:tsdown && yarn g:exports",
+    "build": "yarn g:tsdown",
     "test": "yarn g:jest --coverage",
     "prepack": "yarn g:copy-readme"
   },
@@ -56,6 +56,42 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./App": {
+      "types": "./dist/entries/App.d.ts",
+      "default": "./dist/entries/App.js"
+    },
+    "./ContentType": {
+      "types": "./dist/entries/ContentType.d.ts",
+      "default": "./dist/entries/ContentType.js"
+    },
+    "./Database": {
+      "types": "./dist/entries/Database.d.ts",
+      "default": "./dist/entries/Database.js"
+    },
+    "./Environment": {
+      "types": "./dist/entries/Environment.d.ts",
+      "default": "./dist/entries/Environment.js"
+    },
+    "./Exception": {
+      "types": "./dist/entries/Exception.d.ts",
+      "default": "./dist/entries/Exception.js"
+    },
+    "./HttpStatus": {
+      "types": "./dist/entries/HttpStatus.d.ts",
+      "default": "./dist/entries/HttpStatus.js"
+    },
+    "./HttpVerb": {
+      "types": "./dist/entries/HttpVerb.d.ts",
+      "default": "./dist/entries/HttpVerb.js"
+    },
+    "./Scope": {
+      "types": "./dist/entries/Scope.d.ts",
+      "default": "./dist/entries/Scope.js"
+    },
+    "./UseCase": {
+      "types": "./dist/entries/UseCase.d.ts",
+      "default": "./dist/entries/UseCase.js"
+    },
     "./data/Condition": {
       "types": "./dist/data/Condition.d.ts",
       "default": "./dist/data/Condition.js"
@@ -63,10 +99,6 @@
     "./data/DataProvider": {
       "types": "./dist/data/DataProvider.d.ts",
       "default": "./dist/data/DataProvider.js"
-    },
-    "./data/Database": {
-      "types": "./dist/data/Database.d.ts",
-      "default": "./dist/data/Database.js"
     },
     "./data/Field": {
       "types": "./dist/data/Field.d.ts",
@@ -116,21 +148,9 @@
       "types": "./dist/http/CacheControl.d.ts",
       "default": "./dist/http/CacheControl.js"
     },
-    "./http/ContentType": {
-      "types": "./dist/http/ContentType.d.ts",
-      "default": "./dist/http/ContentType.js"
-    },
     "./http/HttpHeader": {
       "types": "./dist/http/HttpHeader.d.ts",
       "default": "./dist/http/HttpHeader.js"
-    },
-    "./http/HttpStatus": {
-      "types": "./dist/http/HttpStatus.d.ts",
-      "default": "./dist/http/HttpStatus.js"
-    },
-    "./http/HttpVerb": {
-      "types": "./dist/http/HttpVerb.d.ts",
-      "default": "./dist/http/HttpVerb.js"
     },
     "./http/LocalRequestStore": {
       "types": "./dist/http/LocalRequestStore.d.ts",
@@ -164,25 +184,13 @@
       "types": "./dist/http/toResponse.d.ts",
       "default": "./dist/http/toResponse.js"
     },
-    "./process/App": {
-      "types": "./dist/process/App.d.ts",
-      "default": "./dist/process/App.js"
-    },
     "./process/Manage": {
       "types": "./dist/process/Manage.d.ts",
       "default": "./dist/process/Manage.js"
     },
-    "./process/Scope": {
-      "types": "./dist/process/Scope.d.ts",
-      "default": "./dist/process/Scope.js"
-    },
     "./process/Search": {
       "types": "./dist/process/Search.d.ts",
       "default": "./dist/process/Search.js"
-    },
-    "./process/UseCase": {
-      "types": "./dist/process/UseCase.d.ts",
-      "default": "./dist/process/UseCase.js"
     },
     "./resources/Req": {
       "types": "./dist/resources/Req.d.ts",
@@ -304,17 +312,9 @@
       "types": "./dist/types/Enum.d.ts",
       "default": "./dist/types/Enum.js"
     },
-    "./types/Environment": {
-      "types": "./dist/types/Environment.d.ts",
-      "default": "./dist/types/Environment.js"
-    },
     "./types/ErrorOrigin": {
       "types": "./dist/types/ErrorOrigin.d.ts",
       "default": "./dist/types/ErrorOrigin.js"
-    },
-    "./types/Exception": {
-      "types": "./dist/types/Exception.d.ts",
-      "default": "./dist/types/Exception.js"
     },
     "./types/Falsy": {
       "types": "./dist/types/Falsy.d.ts",
@@ -407,6 +407,10 @@
     "./types/Primitive": {
       "types": "./dist/types/Primitive.d.ts",
       "default": "./dist/types/Primitive.js"
+    },
+    "./types/Registry": {
+      "types": "./dist/types/Registry.d.ts",
+      "default": "./dist/types/Registry.js"
     },
     "./types/Repository": {
       "types": "./dist/types/Repository.d.ts",

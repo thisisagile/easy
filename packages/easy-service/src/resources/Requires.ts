@@ -1,5 +1,6 @@
+import type { Enum as Scope } from '@thisisagile/easy/Scope';
+import type { Enum as UseCase } from '@thisisagile/easy/UseCase';
 import { meta } from '@thisisagile/easy';
-import { Scope, UseCase } from '@thisisagile/easy';
 
 export class Requires {
   readonly labCoat =

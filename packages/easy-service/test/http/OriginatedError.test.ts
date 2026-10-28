@@ -1,4 +1,5 @@
-import { ContentType, toResults } from '@thisisagile/easy';
+import * as ContentType from '@thisisagile/easy/ContentType';
+import { toResults } from '@thisisagile/easy';
 import { Dev } from '../ref';
 import { isOriginatedError, OriginatedError, toOriginatedError } from '../../src';
 

@@ -3,12 +3,9 @@ import { isArray, isDefined, isFunction } from '../types/Is';
 import { isA } from '../types/IsA';
 import { isValue } from '../types/Value';
 import { isValidatable } from '../types/Validatable';
+import { isEnum } from '../types/Enum';
 
 type Checked = { isValid: boolean };
-
-// Structural checks instead of instanceof: importing Enum or Results would pull the whole validation graph back into choose and tryTo.
-const isEnumLike = (s: unknown): s is Checked =>
-  isA<{ name: string; id: unknown; code: string }>(s, 'name', 'id', 'code') && (s.constructor as { isEnum?: boolean } | undefined)?.isEnum === true;
 
 const isResultsLike = (r: unknown): r is Checked => isA<{ results: unknown } & Checked>(r, 'results', 'isValid') && isArray(r.results);
 
@@ -33,7 +30,7 @@ const holds = (v: Validator, subject: object): boolean => {
 
 export const isValid = (subject?: unknown): boolean => {
   if (!isDefined(subject)) return false;
-  if (isEnumLike(subject) || isValue(subject)) return subject.isValid;
+  if (isEnum(subject) || isValue(subject)) return subject.isValid;
   if (isArray(subject)) return subject.every(s => isValid(s));
   if (isValidatable(subject)) return validators(subject).every(v => holds(v, subject));
   return true;

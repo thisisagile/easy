@@ -1,6 +1,7 @@
 import { DataProvider } from './DataProvider';
-import { Enum } from '../types/Enum';
-import { Constructor, ofConstruct } from '../types/Constructor';
+import { Enum as EasyEnum } from '../types/Enum';
+import { lazyRegistry } from '../types/Registry';
+import { Construct, ofConstruct } from '../types/Constructor';
 
 export type DatabaseOptions = {
   user?: string;
@@ -21,12 +22,10 @@ export type DatabaseOptions = {
 
 export class DefaultProvider implements DataProvider {}
 
-export class Database extends Enum {
-  static readonly Default = new Database('Default', DefaultProvider);
-
+export class Enum extends EasyEnum {
   constructor(
     name: string,
-    readonly provider: Constructor<DataProvider> | DataProvider,
+    readonly provider: Construct<DataProvider>,
     readonly options?: DatabaseOptions
   ) {
     super(name);
@@ -34,3 +33,9 @@ export class Database extends Enum {
 
   provide = <P>(): P => ofConstruct(this.provider, this);
 }
+
+export const create = (name: string, provider: Construct<DataProvider>, options?: DatabaseOptions): Enum => new Enum(name, provider, options);
+
+export const Default = /* @__PURE__ */ create('Default', DefaultProvider);
+
+export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({ Default }));

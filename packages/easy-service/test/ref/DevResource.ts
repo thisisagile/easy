@@ -1,4 +1,6 @@
-import { ContentType, HttpStatus, isDefined, List, Req, toList } from '@thisisagile/easy';
+import * as ContentType from '@thisisagile/easy/ContentType';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import { isDefined, List, Req, toList } from '@thisisagile/easy';
 import { Resource, route, requires, search, post, get, put, patch, del, stream } from '../../src';
 import { DevUri } from './DevUri';
 import { DevScope, DevUseCase } from './DevUseCase';

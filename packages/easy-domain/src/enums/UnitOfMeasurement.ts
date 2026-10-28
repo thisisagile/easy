@@ -1,12 +1,7 @@
-import { Enum } from '@thisisagile/easy';
+import { Enum as EasyEnum } from '@thisisagile/easy/types/Enum';
+import { lazyRegistry } from '@thisisagile/easy/types/Registry';
 
-export class UnitOfMeasurement extends Enum {
-  static readonly MM = new UnitOfMeasurement('Millimeter', 'mm', 1);
-  static readonly CM = new UnitOfMeasurement('Centimeter', 'cm', 10);
-  static readonly DM = new UnitOfMeasurement('Decimeter', 'dm', 100);
-  static readonly M = new UnitOfMeasurement('Meter', 'm', 1000);
-  static readonly KM = new UnitOfMeasurement('Kilometer', 'km', 1000000);
-
+export class Enum extends EasyEnum {
   constructor(
     name: string,
     id: string,
@@ -15,3 +10,13 @@ export class UnitOfMeasurement extends Enum {
     super(name, id);
   }
 }
+
+export const create = (name: string, id: string, mmMultiplier: number): Enum => new Enum(name, id, mmMultiplier);
+
+export const MM = /* @__PURE__ */ new Enum('Millimeter', 'mm', 1);
+export const CM = /* @__PURE__ */ new Enum('Centimeter', 'cm', 10);
+export const DM = /* @__PURE__ */ new Enum('Decimeter', 'dm', 100);
+export const M = /* @__PURE__ */ new Enum('Meter', 'm', 1000);
+export const KM = /* @__PURE__ */ new Enum('Kilometer', 'km', 1000000);
+
+export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({ MM, CM, DM, M, KM }));

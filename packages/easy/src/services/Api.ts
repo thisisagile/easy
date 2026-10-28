@@ -4,7 +4,7 @@ import { FetchOptions } from '../types/Gateway';
 import { RequestProvider } from '../http/RequestProvider';
 import { Store } from '../types/Cache';
 import { Uri } from '../types/Uri';
-import { HttpVerb } from '../http/HttpVerb';
+import * as HttpVerb from '../http/HttpVerb';
 import { Request } from '../http/Request';
 import { Response } from '../http/Response';
 
@@ -69,7 +69,7 @@ export class Api {
     });
   }
 
-  options(verb: HttpVerb, options?: RouteOptions): RequestOptions {
+  options(verb: HttpVerb.Enum, options?: RouteOptions): RequestOptions {
     return options instanceof RequestOptions ? options : RequestOptions.Json;
   }
 

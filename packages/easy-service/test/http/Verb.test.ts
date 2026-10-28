@@ -1,4 +1,7 @@
-import { CacheControl, ContentType, HttpStatus, HttpVerb, meta } from '@thisisagile/easy';
+import * as ContentType from '@thisisagile/easy/ContentType';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import * as HttpVerb from '@thisisagile/easy/HttpVerb';
+import { CacheControl, meta } from '@thisisagile/easy';
 import { DevResource, DevsResource } from '../ref';
 import '@thisisagile/easy-test';
 import { fits } from '@thisisagile/easy-test';

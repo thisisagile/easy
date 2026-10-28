@@ -1,4 +1,4 @@
-import { HttpStatus, isHttpStatus, toHttpStatus } from '../../src';
+import HttpStatus, { isHttpStatus, toHttpStatus } from '../../src/entries/HttpStatus';
 
 describe('HttpStatus', () => {
   test('Is not an error', () => {

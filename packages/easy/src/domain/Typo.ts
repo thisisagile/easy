@@ -5,7 +5,7 @@ import { Json, JsonValue, toJson } from '../types/Json';
 import { PageList } from '../types/PageList';
 import { Id, Key } from '../types/Id';
 import { when } from '../validation/When';
-import { Exception } from '../types/Exception';
+import * as Exception from '../types/Exception';
 import { List } from '../types/List';
 import { RouteGateway } from '../services/RouteGateway';
 import { RouteOptions } from '../services/Api';

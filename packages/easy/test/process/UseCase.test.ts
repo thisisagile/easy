@@ -1,13 +1,21 @@
-import { App, Scope, UseCase } from '../../src';
+import type { Enum as Scope } from '../../src/process/Scope';
+import UseCase from '../../src/entries/UseCase';
+import * as App from '../../src/process/Apps';
+
 import { DevScope, DevUseCase } from '../ref/DevUseCase';
 
 describe('UseCase', () => {
+  test('default namespace exposes the value class', () => {
+    expect(UseCase.Enum).toBeDefined();
+  });
+
   test('id works', () => {
     expect(DevUseCase.ReleaseCode.id).toBe('release-code');
   });
 
   test('id overload works', () => {
-    const idUC = new UseCase(App.Main, 'test', 'own-id');
+    const idUC = UseCase.create(App.Main, 'test', 'own-id');
+    expect(idUC).toBeInstanceOf(UseCase.Enum);
     expect(idUC.id).toBe('own-id');
   });
 
@@ -24,12 +32,12 @@ describe('UseCase', () => {
     expect(withScope.scopes).toHaveLength(3);
     expect(withScope.scopes).toContain(DevScope.Manager);
 
-    const withSpread = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester);
+    const withSpread = UseCase.create(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester);
     expect(withSpread.scopes).toHaveLength(2);
     expect(withSpread.scopes).toContain(DevScope.Manager);
     expect(withSpread.scopes).toContain(DevScope.Tester);
 
-    const withChaining = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager).with(DevScope.Tester);
+    const withChaining = UseCase.create(App.Main, 'test', 'own-id').with(DevScope.Manager).with(DevScope.Tester);
     expect(withChaining.scopes).toHaveLength(2);
     expect(withChaining.scopes).toContain(DevScope.Manager);
     expect(withChaining.scopes).toContain(DevScope.Tester);
@@ -57,17 +65,17 @@ describe('UseCase', () => {
 
   test('byScope with unknown Scope returns empty list of use cases', () => {
     const s = { name: 'new', id: '' } as Scope;
-    const uc = UseCase.byScopes(s);
+    const uc = DevUseCase.byScopes(s);
     expect(uc).toHaveLength(0);
   });
 
   test('scopes are distinct', () => {
-    const uc = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester, DevScope.Manager);
+    const uc = UseCase.create(App.Main, 'test', 'own-id').with(DevScope.Manager, DevScope.Tester, DevScope.Manager);
     expect(uc.scopes).toHaveLength(2);
   });
 
   test('scopes flatMap', () => {
-    const uc = new UseCase(App.Main, 'test', 'own-id').with(DevScope.Managers);
+    const uc = UseCase.create(App.Main, 'test', 'own-id').with(DevScope.Managers);
     expect(uc.scopes).toHaveLength(DevScope.Managers.subs.length + 1);
   });
 

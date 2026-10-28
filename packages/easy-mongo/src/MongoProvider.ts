@@ -1,12 +1,12 @@
+import type { Enum as Database } from '@thisisagile/easy/Database';
+import * as Exception from '@thisisagile/easy/Exception';
 import {
   asJson,
   asNumber,
   asString,
   choose,
   Condition,
-  Database,
   entries,
-  Exception,
   FetchOptions,
   Field,
   Id,

@@ -1,4 +1,5 @@
-import { Exception, InMemoryGateway, Json, resolve, toJson, toPageList } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { InMemoryGateway, Json, resolve, toJson, toPageList } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 

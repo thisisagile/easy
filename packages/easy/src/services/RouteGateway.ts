@@ -8,7 +8,7 @@ import { Id } from '../types/Id';
 import { Optional } from '../types/Types';
 import { List } from '../types/List';
 import { toArray } from '../types/Array';
-import { HttpStatus } from '../http/HttpStatus';
+import * as HttpStatus from '../http/HttpStatus';
 import { isDefined } from '../types/Is';
 
 export class RouteGateway<Props extends UriExpandProps = UriExpandProps> extends ApiGateway {

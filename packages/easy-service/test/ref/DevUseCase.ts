@@ -1,9 +1,11 @@
-import { App, Scope, UseCase } from '@thisisagile/easy';
+import { create as createScope } from '@thisisagile/easy/Scope';
+import { create as createUseCase } from '@thisisagile/easy/UseCase';
+import * as App from '@thisisagile/easy/App';
 
-export class DevScope extends Scope {
-  static readonly Dev = new Scope('Dev');
-}
+export const DevScope = {
+  Dev: createScope('Dev'),
+};
 
-export class DevUseCase extends UseCase {
-  static readonly WriteCode = new UseCase(App.Main, 'Write Code').with(DevScope.Dev);
-}
+export const DevUseCase = {
+  WriteCode: createUseCase(App.Main, 'Write Code', undefined, [DevScope.Dev]),
+};

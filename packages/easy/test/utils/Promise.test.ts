@@ -1,4 +1,5 @@
-import { Exception, List, reject, resolve, settled, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
+import * as Exception from '../../src/types/Exception';
+import { List, reject, resolve, settled, toList, toResults, tuple, tuple2, tuple3, tuple4, tuple5, when } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';
 

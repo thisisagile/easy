@@ -1,4 +1,5 @@
-import { FetchProvider, HttpVerb, RequestOptions } from '../../src';
+import * as HttpVerb from '../../src/http/HttpVerb';
+import { FetchProvider, RequestOptions } from '../../src';
 import { DevUri } from '../ref';
 
 describe('FetchProvider transport options', () => {

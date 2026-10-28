@@ -1,6 +1,6 @@
 import '@thisisagile/easy-test';
 import { asNumber, Constructor, dt, isList, isPageList, List, required, Struct, toList, toPageList, traverse, Value, view, View, views } from '../../src';
-import { Dev, Language } from '../ref';
+import { Dev, Language, LanguageValue } from '../ref';
 import { DateTime } from '@thisisagile/easy';
 
 describe('View', () => {
@@ -522,7 +522,7 @@ describe('view works', () => {
     const result = v.from(s);
     expect(result.id).toBe(s.id);
     expect(result.name).toBe(s.name);
-    expect(result.language).toBeInstanceOf(Language);
+    expect(result.language).toBeInstanceOf(LanguageValue);
     expect(result.language.code).toBe('js');
     expect(result.languages).toBeInstanceOf(Array);
     expect(result.languages).toHaveLength(2);

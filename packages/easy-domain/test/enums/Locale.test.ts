@@ -1,7 +1,7 @@
 import '@thisisagile/easy-test';
 import locales from '../../src/enums/locales.json';
 import { meta, text, toList } from '@thisisagile/easy';
-import { Locale } from '../../src';
+import Locale from '../../src/entries/Locale';
 
 describe('Locale', () => {
   test('Generate locale from json.', () => {
@@ -9,17 +9,25 @@ describe('Locale', () => {
     const output = meta(locales)
       .entries()
       .reduce((a, [k, v]) => {
-        a[k] = `static readonly ${text(k).upper} = new Locale('${k}', '${v}');`;
+        a[k] = `export const ${text(k).upper} = new Enum('${k}', '${v}');`;
         return a;
       }, {} as any);
     expect(meta(output).entries()).toHaveLength(563);
   });
 
   test('id and name matches.', () => {
+    expect(Locale.NL).toBeInstanceOf(Locale.Enum);
     expect(Locale.NL.id).toBe('nl');
     expect(Locale.NL.name).toMatchText('Dutch');
     expect(Locale.NL_NL.name).toMatchText('Dutch (Netherlands)');
     expect(Locale.NL_BE.name).toMatchText('Dutch (Belgium)');
+  });
+
+  test('creates custom locales through the catalogue API.', () => {
+    const locale: Locale.Enum = Locale.create('nl_test', 'Test Dutch', 'nl');
+
+    expect(locale).toBeInstanceOf(Locale.Enum);
+    expect(locale.country).toBe('nl');
   });
 
   test('short matches.', () => {
@@ -46,7 +54,7 @@ describe('Locale', () => {
   });
 
   test('byIds.', () => {
-    expect(Locale.byIds<Locale>(['nl_NL'])).toMatchText(toList<Locale>(Locale.NL_NL));
+    expect(Locale.byIds(['nl_NL'])).toMatchText(toList(Locale.NL_NL));
   });
 
   test('equals.', () => {

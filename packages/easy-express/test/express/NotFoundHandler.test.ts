@@ -1,6 +1,7 @@
+import * as Exception from '@thisisagile/easy/Exception';
 import { mock } from '@thisisagile/easy-test';
 import { NextFunction, Request, Response } from 'express';
-import { Exception } from '@thisisagile/easy';
+
 import { notFound } from '../../src';
 import { toOriginatedError } from '@thisisagile/easy-service';
 

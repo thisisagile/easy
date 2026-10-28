@@ -1,5 +1,5 @@
-import { Database, DefaultProvider } from '@thisisagile/easy';
+import { create, DefaultProvider } from '@thisisagile/easy/Database';
 
-export class DevBqDatabase extends Database {
-  static readonly DevBQ = new Database('DevBQ', DefaultProvider, { projectId: 'test-project' });
-}
+export const DevBqDatabase = {
+  DevBQ: create('DevBQ', DefaultProvider, { projectId: 'test-project' }),
+};

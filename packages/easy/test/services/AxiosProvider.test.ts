@@ -1,4 +1,6 @@
-import { AxiosProvider, ctx, EasyUri, HttpStatus, HttpVerb, RequestOptions, uri } from '../../src';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import * as HttpVerb from '../../src/http/HttpVerb';
+import { AxiosProvider, ctx, EasyUri, RequestOptions, uri } from '../../src';
 import { DevUri } from '../ref';
 import axios, { AxiosHeaders, AxiosInstance, AxiosResponse } from 'axios';
 import { fits, mock } from '@thisisagile/easy-test';
@@ -7,7 +9,7 @@ describe('AxiosProvider', () => {
   const message = 'This is not right.';
   let provider: AxiosProvider;
 
-  const asResponse = (status: HttpStatus, data: unknown): AxiosResponse => ({
+  const asResponse = (status: HttpStatus.Enum, data: unknown): AxiosResponse => ({
     status: status.status,
     data,
     statusText: status.name,
@@ -15,7 +17,7 @@ describe('AxiosProvider', () => {
     config: { headers: new AxiosHeaders() },
   });
 
-  const withErrorAndMessage = (code: HttpStatus, errorCount = 1, message?: string) =>
+  const withErrorAndMessage = (code: HttpStatus.Enum, errorCount = 1, message?: string) =>
     fits.with({
       body: {
         error: fits.with({

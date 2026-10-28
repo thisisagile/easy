@@ -6,7 +6,7 @@ import { isDefined, isEmpty, isIn } from '../types/Is';
 import { toArray } from '../types/Array';
 import { ErrorOrigin } from '../types/ErrorOrigin';
 import { reject, resolve } from '../utils/Promise';
-import { Exception } from '../types/Exception';
+import * as Exception from '../types/Exception';
 
 export class When<W> {
   constructor(

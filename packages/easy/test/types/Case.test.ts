@@ -1,4 +1,6 @@
-import { asString, choose, HttpStatus, isEmpty, isHttpStatus, isObject, isString } from '../../src';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import { isHttpStatus } from '../../src/http/HttpStatus';
+import { asString, choose, isEmpty, isObject, isString } from '../../src';
 import { Dev, isDev } from '../ref';
 import { mock } from '@thisisagile/easy-test';
 

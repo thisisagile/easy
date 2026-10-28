@@ -1,11 +1,9 @@
 import { PuppeteerElement } from './PuppeteerElement';
 import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
-import { ctx, Id, UseCase } from '@thisisagile/easy';
-import { TestElement, Tester, toUrl } from '@thisisagile/easy-test-web';
+import { ctx } from '@thisisagile/easy';
+import { ClosableBrowserTester, TestElement, Tester } from '@thisisagile/easy-test-web';
 
-export class PuppeteerTester implements Tester {
-  constructor(public host: string, private readonly browser: Browser, private readonly page: Page) {}
-
+export class PuppeteerTester extends ClosableBrowserTester<Page> implements Tester {
   get url(): string {
     return this.page.url();
   }
@@ -54,22 +52,6 @@ export class PuppeteerTester implements Tester {
     // so it must stay relative: '(//tr[...])[1]' would become '.(//tr[...])[1]', which is not
     // valid xpath - it matches nothing and only times out. waitForSelector takes the first match.
     return this.byXPath(`//tr[contains(., '${contains}')]`);
-  }
-
-  redirect(url: string): Promise<boolean> {
-    return this.page.goto(url).then(r => r?.ok() ?? false);
-  }
-
-  goto(to: UseCase, id?: Id): Promise<boolean> {
-    return this.redirect(toUrl(to, this.host, id));
-  }
-
-  wait(): Promise<boolean> {
-    return this.page.waitForNavigation().then(r => r?.ok() || false);
-  }
-
-  close(): Promise<void> {
-    return this.browser.close();
   }
 
   private byXPath(q: string): TestElement {

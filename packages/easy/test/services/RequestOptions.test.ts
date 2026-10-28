@@ -1,4 +1,6 @@
-import { ContentType, ctx, HttpHeader, HttpStatus, isRequestOptions, RequestOptions } from '../../src';
+import * as ContentType from '../../src/http/ContentType';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import { ctx, HttpHeader, isRequestOptions, RequestOptions } from '../../src';
 import { Dev } from '../ref';
 
 describe('RequestOptions', () => {

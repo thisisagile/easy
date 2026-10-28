@@ -1,5 +1,5 @@
 import { HttpHeader } from './HttpHeader';
-import { ContentType } from './ContentType';
+import * as ContentType from './ContentType';
 import { PageOptions } from '../types/PageList';
 import { Optional } from '../types/Types';
 import { asString, Text } from '../types/Text';
@@ -18,7 +18,7 @@ export class RequestOptions extends Enum {
   public requestOptions: { maxRedirects?: number; validateStatus?: (status: number) => boolean; timeout?: CacheAge } = {};
 
   constructor(
-    readonly type: ContentType = ContentType.Json,
+    readonly type: ContentType.Enum = ContentType.Json,
     readonly headers: { [key: string]: any } = {},
     public pageOptions?: PageOptions
   ) {
@@ -60,7 +60,7 @@ export class RequestOptions extends Enum {
 
   setHeaderUnlessPresent = (key: string, value?: Id | boolean): this => (value ? this.setHeader(key, this.headers[key] ?? value) : this);
 
-  accept = (type: ContentType): this => this.setHeader('Accept', type.id);
+  accept = (type: ContentType.Enum): this => this.setHeader('Accept', type.id);
 
   bearer = (jwt: Text): this => {
     return isNotEmpty(jwt) ? this.authorization(`Bearer ${jwt}`) : this;

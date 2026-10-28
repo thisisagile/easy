@@ -1,5 +1,6 @@
+import * as Exception from '../../src/types/Exception';
 import '@thisisagile/easy-test';
-import { Exception, Gateway } from '../../src';
+import { Gateway } from '../../src';
 
 describe('Gateway', () => {
   let gateway: Gateway;

@@ -1,7 +1,10 @@
-import { meta, CacheControl, ContentType, HttpStatus, HttpVerb } from '@thisisagile/easy';
+import * as ContentType from '@thisisagile/easy/ContentType';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import * as HttpVerb from '@thisisagile/easy/HttpVerb';
+import { meta, CacheControl } from '@thisisagile/easy';
 
-export type VerbOptions = { onOk?: HttpStatus; onNotFound?: HttpStatus; onError?: HttpStatus; type?: ContentType; cache?: CacheControl };
-export type Verb = { verb: HttpVerb; options: VerbOptions };
+export type VerbOptions = { onOk?: HttpStatus.Enum; onNotFound?: HttpStatus.Enum; onError?: HttpStatus.Enum; type?: ContentType.Enum; cache?: CacheControl };
+export type Verb = { verb: HttpVerb.Enum; options: VerbOptions };
 
 export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => ({
   onOk: options?.onOk ?? HttpStatus.Ok,
@@ -12,7 +15,7 @@ export const toVerbOptions = (options?: VerbOptions): Required<VerbOptions> => (
 });
 
 const toVerb =
-  <T>(verb: HttpVerb, options?: VerbOptions): PropertyDecorator =>
+  <T>(verb: HttpVerb.Enum, options?: VerbOptions): PropertyDecorator =>
   (subject: unknown, property: string | symbol): void => {
     meta(subject).property(property).set('verb', { verb, options });
   };

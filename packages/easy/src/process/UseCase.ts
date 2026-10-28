@@ -1,13 +1,13 @@
-import { Scope } from './Scope';
-import { App } from './App';
-import { Enum } from '../types/Enum';
+import { Enum as Scope } from './Scope';
+import type { Enum as App } from './Apps';
+import { Enum as EasyEnum } from '../types/Enum';
 import { kebab, Text } from '../types/Text';
 import { List, toList } from '../types/List';
 import { isIn, isString } from '../types/Is';
 import { IdNamePlain } from '../types/IdName';
 import { text } from '../types/ToText';
 
-export class UseCase extends Enum {
+export class Enum extends EasyEnum {
   constructor(
     readonly app: App,
     name: string,
@@ -15,10 +15,6 @@ export class UseCase extends Enum {
     readonly scopes: List<Scope> = toList<Scope>()
   ) {
     super(name, id.toString());
-  }
-
-  static byScopes<U extends UseCase>(...s: Scope[]): List<U> {
-    return this.filter(u => u.scopes.some(us => isIn(us, s)));
   }
 
   with(...s: Scope[]): this {
@@ -30,9 +26,22 @@ export class UseCase extends Enum {
     return this;
   }
 
-  for(item: string | IdNamePlain): UseCase {
-    return new UseCase(this.app, `${this.name} ${isString(item) ? item : item?.name}`, kebab(`${this.id} ${isString(item) ? item : item.id}`)).with(
+  for(item: string | IdNamePlain): Enum {
+    return new Enum(this.app, `${this.name} ${isString(item) ? item : item?.name}`, kebab(`${this.id} ${isString(item) ? item : item.id}`)).with(
       ...this.scopes.map(s => s?.for(item))
     );
   }
 }
+
+export const create = (app: App, name: string, id: Text = text(name).kebab, scopes: Iterable<Scope> = []): Enum =>
+  new Enum(
+    app,
+    name,
+    id,
+    toList(Array.from(scopes))
+      .flatMap(scope => scope.expand())
+      .distinct()
+  );
+
+export const byScopes = <U extends Enum>(values: Iterable<U>, ...scopes: Scope[]): List<U> =>
+  toList(Array.from(values)).filter(useCase => useCase.scopes.some(useCaseScope => isIn(useCaseScope, scopes)));

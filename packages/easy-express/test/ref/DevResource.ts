@@ -1,4 +1,5 @@
-import { asString, HttpStatus, isDefined, List, meta, Req, toList } from '@thisisagile/easy';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
+import { asString, isDefined, List, meta, Req, toList } from '@thisisagile/easy';
 import { DevUri } from './DevUri';
 import { Dev } from './Dev';
 import { RequestHandler } from 'express';

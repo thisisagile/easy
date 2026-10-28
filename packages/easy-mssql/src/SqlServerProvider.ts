@@ -1,4 +1,6 @@
-import { asString, Database, Exception, Json, List, meta, Query, QueryProvider, reject, resolve } from '@thisisagile/easy';
+import type { Enum as Database } from '@thisisagile/easy/Database';
+import * as Exception from '@thisisagile/easy/Exception';
+import { asString, Json, List, meta, Query, QueryProvider, reject, resolve } from '@thisisagile/easy';
 import sql from 'mssql';
 import type { ConnectionPool, IResult } from 'mssql';
 

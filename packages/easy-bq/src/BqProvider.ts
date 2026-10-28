@@ -1,5 +1,7 @@
+import type { Enum as Database } from '@thisisagile/easy/Database';
+import * as Exception from '@thisisagile/easy/Exception';
 import { BigQuery } from '@google-cloud/bigquery';
-import { Database, Exception, Json, List, reject, resolve, toList } from '@thisisagile/easy';
+import { Json, List, reject, resolve, toList } from '@thisisagile/easy';
 
 export class BqProvider {
   constructor(

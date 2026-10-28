@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import { Currency } from '../../src';
+import Currency from '../../src/entries/Currency';
 import { isCurrency } from '@thisisagile/easy';
 
 describe('Currency', () => {
@@ -10,5 +10,17 @@ describe('Currency', () => {
 
   test('isCurrency', () => {
     expect(isCurrency(Currency.EUR)).toBeTruthy();
+  });
+
+  test('creates custom currencies', () => {
+    const currency = Currency.create('TST', 'Test', 2, 'T');
+
+    expect(currency).toBeInstanceOf(Currency.Enum);
+    expect(currency.code).toBe('T');
+  });
+
+  test('queries the explicit catalogue', () => {
+    expect(Currency.byIds(['EUR', 'missing'])).toEqual([Currency.EUR]);
+    expect(Currency.first(currency => currency.id === 'GBP')).toBe(Currency.GBP);
   });
 });

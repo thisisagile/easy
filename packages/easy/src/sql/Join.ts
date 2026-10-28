@@ -3,7 +3,12 @@ import { Table } from './Table';
 
 export class Join {
   readonly db;
-  constructor(private first: Table, private second: Table, private c?: Column, private c2?: Column) {
+  constructor(
+    private first: Table,
+    private second: Table,
+    private c?: Column,
+    private c2?: Column
+  ) {
     this.db = this.first.db;
   }
 

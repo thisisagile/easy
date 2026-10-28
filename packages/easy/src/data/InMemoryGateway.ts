@@ -5,7 +5,7 @@ import { Id } from '../types/Id';
 import { Optional } from '../types/Types';
 import { isDefined } from '../types/Is';
 import { when } from '../validation/When';
-import { Exception } from '../types/Exception';
+import * as Exception from '../types/Exception';
 
 export class InMemoryGateway extends Gateway {
   constructor(private readonly data: Promise<PageList<Json>>) {

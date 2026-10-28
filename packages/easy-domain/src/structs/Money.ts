@@ -1,15 +1,15 @@
 import { choose, isDefined, isEmpty, isNumber, isNumberAsString, isObject, isString, Optional, required, Struct, text, use } from '@thisisagile/easy';
-import { Currency } from '../enums/Currency';
+import * as Currency from '../enums/Currency';
 
 export class Money extends Struct {
-  @required() readonly currency = Currency.byId<Currency>(this.state.currency);
+  @required() readonly currency = Currency.byId(this.state.currency);
   @required() readonly value = this.state.value as number;
 
-  static zero(currency: Currency): Money {
+  static zero(currency: Currency.Enum): Money {
     return Money.amount(currency);
   }
 
-  static amount(currency: Currency, value: number = 0): Money {
+  static amount(currency: Currency.Enum, value: number = 0): Money {
     return money(currency, value);
   }
 
@@ -42,9 +42,9 @@ export class Money extends Struct {
   }
 }
 
-const currency = (value: string): Optional<Currency> => Currency.all<Currency>().find(c => value.includes(c.code));
+const currency = (value: string): Optional<Currency.Enum> => Currency.all().find(c => value.includes(c.code));
 
-export const currencyOr = (value: string, alt: Currency = Currency.EUR): Currency => currency(value) ?? alt;
+export const currencyOr = (value: string, alt: Currency.Enum = Currency.EUR): Currency.Enum => currency(value) ?? alt;
 
 const normalizeDecimals = (value: string): string => {
   const [decimal, grouping] = value.lastIndexOf(',') > value.lastIndexOf('.') ? [',', '.'] : ['.', ','];
@@ -53,7 +53,7 @@ const normalizeDecimals = (value: string): string => {
 
 export const stripCurrency = (value: string): number => parseFloat(normalizeDecimals(value.replace(currencyOr(value).code, '').trim()));
 
-export const money = (currency: Currency, value: number): Money => new Money({ currency: currency.id, value });
+export const money = (currency: Currency.Enum, value: number): Money => new Money({ currency: currency.id, value });
 
 export const isMoney = (m?: unknown): m is Money => {
   return !isEmpty(m) && m instanceof Money;

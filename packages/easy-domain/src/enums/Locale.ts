@@ -1,584 +1,1153 @@
-import { Enum, Id, Optional, text } from '@thisisagile/easy';
+import { Enum as EasyEnum } from '@thisisagile/easy/types/Enum';
+import { lazyRegistry } from '@thisisagile/easy/types/Registry';
+import type { Id } from '@thisisagile/easy/types/Id';
+import type { Optional } from '@thisisagile/easy/types/Types';
+import { text } from '@thisisagile/easy/types/ToText';
+import { equalsNormalizedId } from './NormalizedId';
 
-export class Locale extends Enum {
-  static readonly AF = new Locale('af', 'Afrikaans');
-  static readonly AF_NA = new Locale('af_NA', 'Afrikaans (Namibia)');
-  static readonly AF_ZA = new Locale('af_ZA', 'Afrikaans (South Africa)');
-  static readonly AK = new Locale('ak', 'Akan');
-  static readonly AK_GH = new Locale('ak_GH', 'Akan (Ghana)');
-  static readonly SQ = new Locale('sq', 'Albanian');
-  static readonly SQ_AL = new Locale('sq_AL', 'Albanian (Albania)');
-  static readonly SQ_XK = new Locale('sq_XK', 'Albanian (Kosovo)');
-  static readonly SQ_MK = new Locale('sq_MK', 'Albanian (Macedonia)');
-  static readonly AM = new Locale('am', 'Amharic');
-  static readonly AM_ET = new Locale('am_ET', 'Amharic (Ethiopia)');
-  static readonly AR = new Locale('ar', 'Arabic');
-  static readonly AR_DZ = new Locale('ar_DZ', 'Arabic (Algeria)');
-  static readonly AR_BH = new Locale('ar_BH', 'Arabic (Bahrain)');
-  static readonly AR_TD = new Locale('ar_TD', 'Arabic (Chad)');
-  static readonly AR_KM = new Locale('ar_KM', 'Arabic (Comoros)');
-  static readonly AR_DJ = new Locale('ar_DJ', 'Arabic (Djibouti)');
-  static readonly AR_EG = new Locale('ar_EG', 'Arabic (Egypt)');
-  static readonly AR_ER = new Locale('ar_ER', 'Arabic (Eritrea)');
-  static readonly AR_IQ = new Locale('ar_IQ', 'Arabic (Iraq)');
-  static readonly AR_IL = new Locale('ar_IL', 'Arabic (Israel)');
-  static readonly AR_JO = new Locale('ar_JO', 'Arabic (Jordan)');
-  static readonly AR_KW = new Locale('ar_KW', 'Arabic (Kuwait)');
-  static readonly AR_LB = new Locale('ar_LB', 'Arabic (Lebanon)');
-  static readonly AR_LY = new Locale('ar_LY', 'Arabic (Libya)');
-  static readonly AR_MR = new Locale('ar_MR', 'Arabic (Mauritania)');
-  static readonly AR_MA = new Locale('ar_MA', 'Arabic (Morocco)');
-  static readonly AR_OM = new Locale('ar_OM', 'Arabic (Oman)');
-  static readonly AR_PS = new Locale('ar_PS', 'Arabic (Palestinian Territories)');
-  static readonly AR_QA = new Locale('ar_QA', 'Arabic (Qatar)');
-  static readonly AR_SA = new Locale('ar_SA', 'Arabic (Saudi Arabia)');
-  static readonly AR_SO = new Locale('ar_SO', 'Arabic (Somalia)');
-  static readonly AR_SS = new Locale('ar_SS', 'Arabic (South Sudan)');
-  static readonly AR_SD = new Locale('ar_SD', 'Arabic (Sudan)');
-  static readonly AR_SY = new Locale('ar_SY', 'Arabic (Syria)');
-  static readonly AR_TN = new Locale('ar_TN', 'Arabic (Tunisia)');
-  static readonly AR_AE = new Locale('ar_AE', 'Arabic (United Arab Emirates)');
-  static readonly AR_EH = new Locale('ar_EH', 'Arabic (Western Sahara)');
-  static readonly AR_YE = new Locale('ar_YE', 'Arabic (Yemen)');
-  static readonly HY = new Locale('hy', 'Armenian');
-  static readonly HY_AM = new Locale('hy_AM', 'Armenian (Armenia)');
-  static readonly AS = new Locale('as', 'Assamese');
-  static readonly AS_IN = new Locale('as_IN', 'Assamese (India)');
-  static readonly AZ = new Locale('az', 'Azerbaijani');
-  static readonly AZ_AZ = new Locale('az_AZ', 'Azerbaijani (Azerbaijan)');
-  static readonly AZ_CYRL_AZ = new Locale('az_Cyrl_AZ', 'Azerbaijani (Cyrillic, Azerbaijan)');
-  static readonly AZ_CYRL = new Locale('az_Cyrl', 'Azerbaijani (Cyrillic)', 'az');
-  static readonly AZ_LATN_AZ = new Locale('az_Latn_AZ', 'Azerbaijani (Latin, Azerbaijan)');
-  static readonly AZ_LATN = new Locale('az_Latn', 'Azerbaijani (Latin)', 'az');
-  static readonly BM = new Locale('bm', 'Bambara');
-  static readonly BM_LATN_ML = new Locale('bm_Latn_ML', 'Bambara (Latin, Mali)');
-  static readonly BM_LATN = new Locale('bm_Latn', 'Bambara (Latin)', 'bm');
-  static readonly EU = new Locale('eu', 'Basque');
-  static readonly EU_ES = new Locale('eu_ES', 'Basque (Spain)');
-  static readonly BE = new Locale('be', 'Belarusian');
-  static readonly BE_BY = new Locale('be_BY', 'Belarusian (Belarus)');
-  static readonly BN = new Locale('bn', 'Bengali');
-  static readonly BN_BD = new Locale('bn_BD', 'Bengali (Bangladesh)');
-  static readonly BN_IN = new Locale('bn_IN', 'Bengali (India)');
-  static readonly BS = new Locale('bs', 'Bosnian');
-  static readonly BS_BA = new Locale('bs_BA', 'Bosnian (Bosnia & Herzegovina)');
-  static readonly BS_CYRL_BA = new Locale('bs_Cyrl_BA', 'Bosnian (Cyrillic, Bosnia & Herzegovina)');
-  static readonly BS_CYRL = new Locale('bs_Cyrl', 'Bosnian (Cyrillic)', 'bs');
-  static readonly BS_LATN_BA = new Locale('bs_Latn_BA', 'Bosnian (Latin, Bosnia & Herzegovina)');
-  static readonly BS_LATN = new Locale('bs_Latn', 'Bosnian (Latin)', 'bs');
-  static readonly BR = new Locale('br', 'Breton');
-  static readonly BR_FR = new Locale('br_FR', 'Breton (France)');
-  static readonly BG = new Locale('bg', 'Bulgarian');
-  static readonly BG_BG = new Locale('bg_BG', 'Bulgarian (Bulgaria)');
-  static readonly MY = new Locale('my', 'Burmese');
-  static readonly MY_MM = new Locale('my_MM', 'Burmese (Myanmar (Burma))');
-  static readonly CA = new Locale('ca', 'Catalan');
-  static readonly CA_AD = new Locale('ca_AD', 'Catalan (Andorra)');
-  static readonly CA_FR = new Locale('ca_FR', 'Catalan (France)');
-  static readonly CA_IT = new Locale('ca_IT', 'Catalan (Italy)');
-  static readonly CA_ES = new Locale('ca_ES', 'Catalan (Spain)');
-  static readonly ZH = new Locale('zh', 'Chinese');
-  static readonly ZH_CN = new Locale('zh_CN', 'Chinese (China)');
-  static readonly ZH_HK = new Locale('zh_HK', 'Chinese (Hong Kong SAR China)');
-  static readonly ZH_MO = new Locale('zh_MO', 'Chinese (Macau SAR China)');
-  static readonly ZH_HANS_CN = new Locale('zh_Hans_CN', 'Chinese (Simplified, China)');
-  static readonly ZH_HANS_HK = new Locale('zh_Hans_HK', 'Chinese (Simplified, Hong Kong SAR China)');
-  static readonly ZH_HANS_MO = new Locale('zh_Hans_MO', 'Chinese (Simplified, Macau SAR China)');
-  static readonly ZH_HANS_SG = new Locale('zh_Hans_SG', 'Chinese (Simplified, Singapore)');
-  static readonly ZH_HANS = new Locale('zh_Hans', 'Chinese (Simplified)');
-  static readonly ZH_SG = new Locale('zh_SG', 'Chinese (Singapore)');
-  static readonly ZH_TW = new Locale('zh_TW', 'Chinese (Taiwan)');
-  static readonly ZH_HANT_HK = new Locale('zh_Hant_HK', 'Chinese (Traditional, Hong Kong SAR China)');
-  static readonly ZH_HANT_MO = new Locale('zh_Hant_MO', 'Chinese (Traditional, Macau SAR China)');
-  static readonly ZH_HANT_TW = new Locale('zh_Hant_TW', 'Chinese (Traditional, Taiwan)');
-  static readonly ZH_HANT = new Locale('zh_Hant', 'Chinese (Traditional)');
-  static readonly KW = new Locale('kw', 'Cornish');
-  static readonly KW_GB = new Locale('kw_GB', 'Cornish (United Kingdom)');
-  static readonly HR = new Locale('hr', 'Croatian');
-  static readonly HR_BA = new Locale('hr_BA', 'Croatian (Bosnia & Herzegovina)');
-  static readonly HR_HR = new Locale('hr_HR', 'Croatian (Croatia)');
-  static readonly CS = new Locale('cs', 'Czech');
-  static readonly CS_CZ = new Locale('cs_CZ', 'Czech (Czech Republic)');
-  static readonly DA = new Locale('da', 'Danish');
-  static readonly DA_DK = new Locale('da_DK', 'Danish (Denmark)');
-  static readonly DA_GL = new Locale('da_GL', 'Danish (Greenland)');
-  static readonly NL = new Locale('nl', 'Dutch');
-  static readonly NL_AW = new Locale('nl_AW', 'Dutch (Aruba)');
-  static readonly NL_BE = new Locale('nl_BE', 'Dutch (Belgium)');
-  static readonly NL_BQ = new Locale('nl_BQ', 'Dutch (Caribbean Netherlands)');
-  static readonly NL_CW = new Locale('nl_CW', 'Dutch (Curaçao)');
-  static readonly NL_NL = new Locale('nl_NL', 'Dutch (Netherlands)');
-  static readonly NL_SX = new Locale('nl_SX', 'Dutch (Sint Maarten)');
-  static readonly NL_SR = new Locale('nl_SR', 'Dutch (Suriname)');
-  static readonly DZ = new Locale('dz', 'Dzongkha');
-  static readonly DZ_BT = new Locale('dz_BT', 'Dzongkha (Bhutan)');
-  static readonly EN = new Locale('en', 'English', 'gb');
-  static readonly EN_AS = new Locale('en_AS', 'English (American Samoa)');
-  static readonly EN_AI = new Locale('en_AI', 'English (Anguilla)');
-  static readonly EN_AG = new Locale('en_AG', 'English (Antigua & Barbuda)');
-  static readonly EN_AU = new Locale('en_AU', 'English (Australia)');
-  static readonly EN_BS = new Locale('en_BS', 'English (Bahamas)');
-  static readonly EN_BB = new Locale('en_BB', 'English (Barbados)');
-  static readonly EN_BE = new Locale('en_BE', 'English (Belgium)');
-  static readonly EN_BZ = new Locale('en_BZ', 'English (Belize)');
-  static readonly EN_BM = new Locale('en_BM', 'English (Bermuda)');
-  static readonly EN_BW = new Locale('en_BW', 'English (Botswana)');
-  static readonly EN_IO = new Locale('en_IO', 'English (British Indian Ocean Territory)');
-  static readonly EN_VG = new Locale('en_VG', 'English (British Virgin Islands)');
-  static readonly EN_CM = new Locale('en_CM', 'English (Cameroon)');
-  static readonly EN_CA = new Locale('en_CA', 'English (Canada)');
-  static readonly EN_KY = new Locale('en_KY', 'English (Cayman Islands)');
-  static readonly EN_CX = new Locale('en_CX', 'English (Christmas Island)');
-  static readonly EN_CC = new Locale('en_CC', 'English (Cocos (Keeling) Islands)');
-  static readonly EN_CK = new Locale('en_CK', 'English (Cook Islands)');
-  static readonly EN_DG = new Locale('en_DG', 'English (Diego Garcia)');
-  static readonly EN_DM = new Locale('en_DM', 'English (Dominica)');
-  static readonly EN_ER = new Locale('en_ER', 'English (Eritrea)');
-  static readonly EN_FK = new Locale('en_FK', 'English (Falkland Islands)');
-  static readonly EN_FJ = new Locale('en_FJ', 'English (Fiji)');
-  static readonly EN_GM = new Locale('en_GM', 'English (Gambia)');
-  static readonly EN_GH = new Locale('en_GH', 'English (Ghana)');
-  static readonly EN_GI = new Locale('en_GI', 'English (Gibraltar)');
-  static readonly EN_GD = new Locale('en_GD', 'English (Grenada)');
-  static readonly EN_GU = new Locale('en_GU', 'English (Guam)');
-  static readonly EN_GG = new Locale('en_GG', 'English (Guernsey)');
-  static readonly EN_GY = new Locale('en_GY', 'English (Guyana)');
-  static readonly EN_HK = new Locale('en_HK', 'English (Hong Kong SAR China)');
-  static readonly EN_IN = new Locale('en_IN', 'English (India)');
-  static readonly EN_IE = new Locale('en_IE', 'English (Ireland)');
-  static readonly EN_IM = new Locale('en_IM', 'English (Isle of Man)');
-  static readonly EN_JM = new Locale('en_JM', 'English (Jamaica)');
-  static readonly EN_JE = new Locale('en_JE', 'English (Jersey)');
-  static readonly EN_KE = new Locale('en_KE', 'English (Kenya)');
-  static readonly EN_KI = new Locale('en_KI', 'English (Kiribati)');
-  static readonly EN_LS = new Locale('en_LS', 'English (Lesotho)');
-  static readonly EN_LR = new Locale('en_LR', 'English (Liberia)');
-  static readonly EN_MO = new Locale('en_MO', 'English (Macau SAR China)');
-  static readonly EN_MG = new Locale('en_MG', 'English (Madagascar)');
-  static readonly EN_MW = new Locale('en_MW', 'English (Malawi)');
-  static readonly EN_MY = new Locale('en_MY', 'English (Malaysia)');
-  static readonly EN_MT = new Locale('en_MT', 'English (Malta)');
-  static readonly EN_MH = new Locale('en_MH', 'English (Marshall Islands)');
-  static readonly EN_MU = new Locale('en_MU', 'English (Mauritius)');
-  static readonly EN_FM = new Locale('en_FM', 'English (Micronesia)');
-  static readonly EN_MS = new Locale('en_MS', 'English (Montserrat)');
-  static readonly EN_NA = new Locale('en_NA', 'English (Namibia)');
-  static readonly EN_NR = new Locale('en_NR', 'English (Nauru)');
-  static readonly EN_NZ = new Locale('en_NZ', 'English (New Zealand)');
-  static readonly EN_NG = new Locale('en_NG', 'English (Nigeria)');
-  static readonly EN_NU = new Locale('en_NU', 'English (Niue)');
-  static readonly EN_NF = new Locale('en_NF', 'English (Norfolk Island)');
-  static readonly EN_MP = new Locale('en_MP', 'English (Northern Mariana Islands)');
-  static readonly EN_PK = new Locale('en_PK', 'English (Pakistan)');
-  static readonly EN_PW = new Locale('en_PW', 'English (Palau)');
-  static readonly EN_PG = new Locale('en_PG', 'English (Papua New Guinea)');
-  static readonly EN_PH = new Locale('en_PH', 'English (Philippines)');
-  static readonly EN_PN = new Locale('en_PN', 'English (Pitcairn Islands)');
-  static readonly EN_PR = new Locale('en_PR', 'English (Puerto Rico)');
-  static readonly EN_RW = new Locale('en_RW', 'English (Rwanda)');
-  static readonly EN_WS = new Locale('en_WS', 'English (Samoa)');
-  static readonly EN_SC = new Locale('en_SC', 'English (Seychelles)');
-  static readonly EN_SL = new Locale('en_SL', 'English (Sierra Leone)');
-  static readonly EN_SG = new Locale('en_SG', 'English (Singapore)');
-  static readonly EN_SX = new Locale('en_SX', 'English (Sint Maarten)');
-  static readonly EN_SB = new Locale('en_SB', 'English (Solomon Islands)');
-  static readonly EN_ZA = new Locale('en_ZA', 'English (South Africa)');
-  static readonly EN_SS = new Locale('en_SS', 'English (South Sudan)');
-  static readonly EN_SH = new Locale('en_SH', 'English (St. Helena)');
-  static readonly EN_KN = new Locale('en_KN', 'English (St. Kitts & Nevis)');
-  static readonly EN_LC = new Locale('en_LC', 'English (St. Lucia)');
-  static readonly EN_VC = new Locale('en_VC', 'English (St. Vincent & Grenadines)');
-  static readonly EN_SD = new Locale('en_SD', 'English (Sudan)');
-  static readonly EN_SZ = new Locale('en_SZ', 'English (Swaziland)');
-  static readonly EN_TZ = new Locale('en_TZ', 'English (Tanzania)');
-  static readonly EN_TK = new Locale('en_TK', 'English (Tokelau)');
-  static readonly EN_TO = new Locale('en_TO', 'English (Tonga)');
-  static readonly EN_TT = new Locale('en_TT', 'English (Trinidad & Tobago)');
-  static readonly EN_TC = new Locale('en_TC', 'English (Turks & Caicos Islands)');
-  static readonly EN_TV = new Locale('en_TV', 'English (Tuvalu)');
-  static readonly EN_UM = new Locale('en_UM', 'English (U.S. Outlying Islands)');
-  static readonly EN_VI = new Locale('en_VI', 'English (U.S. Virgin Islands)');
-  static readonly EN_UG = new Locale('en_UG', 'English (Uganda)');
-  static readonly EN_GB = new Locale('en_GB', 'English (United Kingdom)');
-  static readonly EN_US = new Locale('en_US', 'English (United States)');
-  static readonly EN_VU = new Locale('en_VU', 'English (Vanuatu)');
-  static readonly EN_ZM = new Locale('en_ZM', 'English (Zambia)');
-  static readonly EN_ZW = new Locale('en_ZW', 'English (Zimbabwe)');
-  static readonly EO = new Locale('eo', 'Esperanto');
-  static readonly ET = new Locale('et', 'Estonian');
-  static readonly ET_EE = new Locale('et_EE', 'Estonian (Estonia)');
-  static readonly EE = new Locale('ee', 'Ewe');
-  static readonly EE_GH = new Locale('ee_GH', 'Ewe (Ghana)');
-  static readonly EE_TG = new Locale('ee_TG', 'Ewe (Togo)');
-  static readonly FO = new Locale('fo', 'Faroese');
-  static readonly FO_FO = new Locale('fo_FO', 'Faroese (Faroe Islands)');
-  static readonly FI = new Locale('fi', 'Finnish');
-  static readonly FI_FI = new Locale('fi_FI', 'Finnish (Finland)');
-  static readonly FR = new Locale('fr', 'French');
-  static readonly FR_DZ = new Locale('fr_DZ', 'French (Algeria)');
-  static readonly FR_BE = new Locale('fr_BE', 'French (Belgium)');
-  static readonly FR_BJ = new Locale('fr_BJ', 'French (Benin)');
-  static readonly FR_BF = new Locale('fr_BF', 'French (Burkina Faso)');
-  static readonly FR_BI = new Locale('fr_BI', 'French (Burundi)');
-  static readonly FR_CM = new Locale('fr_CM', 'French (Cameroon)');
-  static readonly FR_CA = new Locale('fr_CA', 'French (Canada)');
-  static readonly FR_CF = new Locale('fr_CF', 'French (Central African Republic)');
-  static readonly FR_TD = new Locale('fr_TD', 'French (Chad)');
-  static readonly FR_KM = new Locale('fr_KM', 'French (Comoros)');
-  static readonly FR_CG = new Locale('fr_CG', 'French (Congo - Brazzaville)');
-  static readonly FR_CD = new Locale('fr_CD', 'French (Congo - Kinshasa)');
-  static readonly FR_CI = new Locale('fr_CI', 'French (Côte d’Ivoire)');
-  static readonly FR_DJ = new Locale('fr_DJ', 'French (Djibouti)');
-  static readonly FR_GQ = new Locale('fr_GQ', 'French (Equatorial Guinea)');
-  static readonly FR_FR = new Locale('fr_FR', 'French (France)');
-  static readonly FR_GF = new Locale('fr_GF', 'French (French Guiana)');
-  static readonly FR_PF = new Locale('fr_PF', 'French (French Polynesia)');
-  static readonly FR_GA = new Locale('fr_GA', 'French (Gabon)');
-  static readonly FR_GP = new Locale('fr_GP', 'French (Guadeloupe)');
-  static readonly FR_GN = new Locale('fr_GN', 'French (Guinea)');
-  static readonly FR_HT = new Locale('fr_HT', 'French (Haiti)');
-  static readonly FR_LU = new Locale('fr_LU', 'French (Luxembourg)');
-  static readonly FR_MG = new Locale('fr_MG', 'French (Madagascar)');
-  static readonly FR_ML = new Locale('fr_ML', 'French (Mali)');
-  static readonly FR_MQ = new Locale('fr_MQ', 'French (Martinique)');
-  static readonly FR_MR = new Locale('fr_MR', 'French (Mauritania)');
-  static readonly FR_MU = new Locale('fr_MU', 'French (Mauritius)');
-  static readonly FR_YT = new Locale('fr_YT', 'French (Mayotte)');
-  static readonly FR_MC = new Locale('fr_MC', 'French (Monaco)');
-  static readonly FR_MA = new Locale('fr_MA', 'French (Morocco)');
-  static readonly FR_NC = new Locale('fr_NC', 'French (New Caledonia)');
-  static readonly FR_NE = new Locale('fr_NE', 'French (Niger)');
-  static readonly FR_RE = new Locale('fr_RE', 'French (Réunion)');
-  static readonly FR_RW = new Locale('fr_RW', 'French (Rwanda)');
-  static readonly FR_SN = new Locale('fr_SN', 'French (Senegal)');
-  static readonly FR_SC = new Locale('fr_SC', 'French (Seychelles)');
-  static readonly FR_BL = new Locale('fr_BL', 'French (St. Barthélemy)');
-  static readonly FR_MF = new Locale('fr_MF', 'French (St. Martin)');
-  static readonly FR_PM = new Locale('fr_PM', 'French (St. Pierre & Miquelon)');
-  static readonly FR_CH = new Locale('fr_CH', 'French (Switzerland)');
-  static readonly FR_SY = new Locale('fr_SY', 'French (Syria)');
-  static readonly FR_TG = new Locale('fr_TG', 'French (Togo)');
-  static readonly FR_TN = new Locale('fr_TN', 'French (Tunisia)');
-  static readonly FR_VU = new Locale('fr_VU', 'French (Vanuatu)');
-  static readonly FR_WF = new Locale('fr_WF', 'French (Wallis & Futuna)');
-  static readonly FF = new Locale('ff', 'Fulah');
-  static readonly FF_CM = new Locale('ff_CM', 'Fulah (Cameroon)');
-  static readonly FF_GN = new Locale('ff_GN', 'Fulah (Guinea)');
-  static readonly FF_MR = new Locale('ff_MR', 'Fulah (Mauritania)');
-  static readonly FF_SN = new Locale('ff_SN', 'Fulah (Senegal)');
-  static readonly GL = new Locale('gl', 'Galician');
-  static readonly GL_ES = new Locale('gl_ES', 'Galician (Spain)');
-  static readonly LG = new Locale('lg', 'Ganda');
-  static readonly LG_UG = new Locale('lg_UG', 'Ganda (Uganda)');
-  static readonly KA = new Locale('ka', 'Georgian');
-  static readonly KA_GE = new Locale('ka_GE', 'Georgian (Georgia)');
-  static readonly DE = new Locale('de', 'German');
-  static readonly DE_AT = new Locale('de_AT', 'German (Austria)');
-  static readonly DE_BE = new Locale('de_BE', 'German (Belgium)');
-  static readonly DE_DE = new Locale('de_DE', 'German (Germany)');
-  static readonly DE_LI = new Locale('de_LI', 'German (Liechtenstein)');
-  static readonly DE_LU = new Locale('de_LU', 'German (Luxembourg)');
-  static readonly DE_CH = new Locale('de_CH', 'German (Switzerland)');
-  static readonly EL = new Locale('el', 'Greek');
-  static readonly EL_CY = new Locale('el_CY', 'Greek (Cyprus)');
-  static readonly EL_GR = new Locale('el_GR', 'Greek (Greece)');
-  static readonly GU = new Locale('gu', 'Gujarati');
-  static readonly GU_IN = new Locale('gu_IN', 'Gujarati (India)');
-  static readonly HA = new Locale('ha', 'Hausa');
-  static readonly HA_GH = new Locale('ha_GH', 'Hausa (Ghana)');
-  static readonly HA_LATN_GH = new Locale('ha_Latn_GH', 'Hausa (Latin, Ghana)');
-  static readonly HA_LATN_NE = new Locale('ha_Latn_NE', 'Hausa (Latin, Niger)');
-  static readonly HA_LATN_NG = new Locale('ha_Latn_NG', 'Hausa (Latin, Nigeria)');
-  static readonly HA_LATN = new Locale('ha_Latn', 'Hausa (Latin)');
-  static readonly HA_NE = new Locale('ha_NE', 'Hausa (Niger)');
-  static readonly HA_NG = new Locale('ha_NG', 'Hausa (Nigeria)');
-  static readonly HE = new Locale('he', 'Hebrew');
-  static readonly HE_IL = new Locale('he_IL', 'Hebrew (Israel)');
-  static readonly HI = new Locale('hi', 'Hindi');
-  static readonly HI_IN = new Locale('hi_IN', 'Hindi (India)');
-  static readonly HU = new Locale('hu', 'Hungarian');
-  static readonly HU_HU = new Locale('hu_HU', 'Hungarian (Hungary)');
-  static readonly IS = new Locale('is', 'Icelandic');
-  static readonly IS_IS = new Locale('is_IS', 'Icelandic (Iceland)');
-  static readonly IG = new Locale('ig', 'Igbo');
-  static readonly IG_NG = new Locale('ig_NG', 'Igbo (Nigeria)');
-  static readonly ID = new Locale('id', 'Indonesian');
-  static readonly ID_ID = new Locale('id_ID', 'Indonesian (Indonesia)');
-  static readonly GA = new Locale('ga', 'Irish');
-  static readonly GA_IE = new Locale('ga_IE', 'Irish (Ireland)');
-  static readonly IT = new Locale('it', 'Italian');
-  static readonly IT_IT = new Locale('it_IT', 'Italian (Italy)');
-  static readonly IT_SM = new Locale('it_SM', 'Italian (San Marino)');
-  static readonly IT_CH = new Locale('it_CH', 'Italian (Switzerland)');
-  static readonly JA = new Locale('ja', 'Japanese');
-  static readonly JA_JP = new Locale('ja_JP', 'Japanese (Japan)');
-  static readonly KL = new Locale('kl', 'Kalaallisut');
-  static readonly KL_GL = new Locale('kl_GL', 'Kalaallisut (Greenland)');
-  static readonly KN = new Locale('kn', 'Kannada');
-  static readonly KN_IN = new Locale('kn_IN', 'Kannada (India)');
-  static readonly KS = new Locale('ks', 'Kashmiri');
-  static readonly KS_ARAB_IN = new Locale('ks_Arab_IN', 'Kashmiri (Arabic, India)');
-  static readonly KS_ARAB = new Locale('ks_Arab', 'Kashmiri (Arabic)', 'ks');
-  static readonly KS_IN = new Locale('ks_IN', 'Kashmiri (India)');
-  static readonly KK = new Locale('kk', 'Kazakh');
-  static readonly KK_CYRL_KZ = new Locale('kk_Cyrl_KZ', 'Kazakh (Cyrillic, Kazakhstan)');
-  static readonly KK_CYRL = new Locale('kk_Cyrl', 'Kazakh (Cyrillic)', 'kk');
-  static readonly KK_KZ = new Locale('kk_KZ', 'Kazakh (Kazakhstan)');
-  static readonly KM = new Locale('km', 'Khmer');
-  static readonly KM_KH = new Locale('km_KH', 'Khmer (Cambodia)');
-  static readonly KI = new Locale('ki', 'Kikuyu');
-  static readonly KI_KE = new Locale('ki_KE', 'Kikuyu (Kenya)');
-  static readonly RW = new Locale('rw', 'Kinyarwanda');
-  static readonly RW_RW = new Locale('rw_RW', 'Kinyarwanda (Rwanda)');
-  static readonly KO = new Locale('ko', 'Korean');
-  static readonly KO_KP = new Locale('ko_KP', 'Korean (North Korea)');
-  static readonly KO_KR = new Locale('ko_KR', 'Korean (South Korea)');
-  static readonly KY = new Locale('ky', 'Kyrgyz');
-  static readonly KY_CYRL_KG = new Locale('ky_Cyrl_KG', 'Kyrgyz (Cyrillic, Kyrgyzstan)');
-  static readonly KY_CYRL = new Locale('ky_Cyrl', 'Kyrgyz (Cyrillic)', 'ky');
-  static readonly KY_KG = new Locale('ky_KG', 'Kyrgyz (Kyrgyzstan)');
-  static readonly LO = new Locale('lo', 'Lao');
-  static readonly LO_LA = new Locale('lo_LA', 'Lao (Laos)');
-  static readonly LV = new Locale('lv', 'Latvian');
-  static readonly LV_LV = new Locale('lv_LV', 'Latvian (Latvia)');
-  static readonly LN = new Locale('ln', 'Lingala');
-  static readonly LN_AO = new Locale('ln_AO', 'Lingala (Angola)');
-  static readonly LN_CF = new Locale('ln_CF', 'Lingala (Central African Republic)');
-  static readonly LN_CG = new Locale('ln_CG', 'Lingala (Congo - Brazzaville)');
-  static readonly LN_CD = new Locale('ln_CD', 'Lingala (Congo - Kinshasa)');
-  static readonly LT = new Locale('lt', 'Lithuanian');
-  static readonly LT_LT = new Locale('lt_LT', 'Lithuanian (Lithuania)');
-  static readonly LU = new Locale('lu', 'Luba-Katanga');
-  static readonly LU_CD = new Locale('lu_CD', 'Luba-Katanga (Congo - Kinshasa)');
-  static readonly LB = new Locale('lb', 'Luxembourgish');
-  static readonly LB_LU = new Locale('lb_LU', 'Luxembourgish (Luxembourg)');
-  static readonly MK = new Locale('mk', 'Macedonian');
-  static readonly MK_MK = new Locale('mk_MK', 'Macedonian (Macedonia)');
-  static readonly MG = new Locale('mg', 'Malagasy');
-  static readonly MG_MG = new Locale('mg_MG', 'Malagasy (Madagascar)');
-  static readonly MS = new Locale('ms', 'Malay');
-  static readonly MS_BN = new Locale('ms_BN', 'Malay (Brunei)');
-  static readonly MS_LATN_BN = new Locale('ms_Latn_BN', 'Malay (Latin, Brunei)');
-  static readonly MS_LATN_MY = new Locale('ms_Latn_MY', 'Malay (Latin, Malaysia)');
-  static readonly MS_LATN_SG = new Locale('ms_Latn_SG', 'Malay (Latin, Singapore)');
-  static readonly MS_LATN = new Locale('ms_Latn', 'Malay (Latin)', 'ms');
-  static readonly MS_MY = new Locale('ms_MY', 'Malay (Malaysia)');
-  static readonly MS_SG = new Locale('ms_SG', 'Malay (Singapore)');
-  static readonly ML = new Locale('ml', 'Malayalam');
-  static readonly ML_IN = new Locale('ml_IN', 'Malayalam (India)');
-  static readonly MT = new Locale('mt', 'Maltese');
-  static readonly MT_MT = new Locale('mt_MT', 'Maltese (Malta)');
-  static readonly GV = new Locale('gv', 'Manx');
-  static readonly GV_IM = new Locale('gv_IM', 'Manx (Isle of Man)');
-  static readonly MR = new Locale('mr', 'Marathi');
-  static readonly MR_IN = new Locale('mr_IN', 'Marathi (India)');
-  static readonly MN = new Locale('mn', 'Mongolian');
-  static readonly MN_CYRL_MN = new Locale('mn_Cyrl_MN', 'Mongolian (Cyrillic, Mongolia)');
-  static readonly MN_CYRL = new Locale('mn_Cyrl', 'Mongolian (Cyrillic)', 'mn');
-  static readonly MN_MN = new Locale('mn_MN', 'Mongolian (Mongolia)');
-  static readonly NE = new Locale('ne', 'Nepali');
-  static readonly NE_IN = new Locale('ne_IN', 'Nepali (India)');
-  static readonly NE_NP = new Locale('ne_NP', 'Nepali (Nepal)');
-  static readonly ND = new Locale('nd', 'North Ndebele');
-  static readonly ND_ZW = new Locale('nd_ZW', 'North Ndebele (Zimbabwe)');
-  static readonly SE = new Locale('se', 'Northern Sami');
-  static readonly SE_FI = new Locale('se_FI', 'Northern Sami (Finland)');
-  static readonly SE_NO = new Locale('se_NO', 'Northern Sami (Norway)');
-  static readonly SE_SE = new Locale('se_SE', 'Northern Sami (Sweden)');
-  static readonly NO = new Locale('no', 'Norwegian');
-  static readonly NO_NO = new Locale('no_NO', 'Norwegian (Norway)');
-  static readonly NB = new Locale('nb', 'Norwegian Bokmål');
-  static readonly NB_NO = new Locale('nb_NO', 'Norwegian Bokmål (Norway)');
-  static readonly NB_SJ = new Locale('nb_SJ', 'Norwegian Bokmål (Svalbard & Jan Mayen)');
-  static readonly NN = new Locale('nn', 'Norwegian Nynorsk');
-  static readonly NN_NO = new Locale('nn_NO', 'Norwegian Nynorsk (Norway)');
-  static readonly OR = new Locale('or', 'Oriya');
-  static readonly OR_IN = new Locale('or_IN', 'Oriya (India)');
-  static readonly OM = new Locale('om', 'Oromo');
-  static readonly OM_ET = new Locale('om_ET', 'Oromo (Ethiopia)');
-  static readonly OM_KE = new Locale('om_KE', 'Oromo (Kenya)');
-  static readonly OS = new Locale('os', 'Ossetic');
-  static readonly OS_GE = new Locale('os_GE', 'Ossetic (Georgia)');
-  static readonly OS_RU = new Locale('os_RU', 'Ossetic (Russia)');
-  static readonly PS = new Locale('ps', 'Pashto');
-  static readonly PS_AF = new Locale('ps_AF', 'Pashto (Afghanistan)');
-  static readonly FA = new Locale('fa', 'Persian');
-  static readonly FA_AF = new Locale('fa_AF', 'Persian (Afghanistan)');
-  static readonly FA_IR = new Locale('fa_IR', 'Persian (Iran)');
-  static readonly PL = new Locale('pl', 'Polish');
-  static readonly PL_PL = new Locale('pl_PL', 'Polish (Poland)');
-  static readonly PT = new Locale('pt', 'Portuguese');
-  static readonly PT_AO = new Locale('pt_AO', 'Portuguese (Angola)');
-  static readonly PT_BR = new Locale('pt_BR', 'Portuguese (Brazil)');
-  static readonly PT_CV = new Locale('pt_CV', 'Portuguese (Cape Verde)');
-  static readonly PT_GW = new Locale('pt_GW', 'Portuguese (Guinea-Bissau)');
-  static readonly PT_MO = new Locale('pt_MO', 'Portuguese (Macau SAR China)');
-  static readonly PT_MZ = new Locale('pt_MZ', 'Portuguese (Mozambique)');
-  static readonly PT_PT = new Locale('pt_PT', 'Portuguese (Portugal)');
-  static readonly PT_ST = new Locale('pt_ST', 'Portuguese (São Tomé & Príncipe)');
-  static readonly PT_TL = new Locale('pt_TL', 'Portuguese (Timor-Leste)');
-  static readonly PA = new Locale('pa', 'Punjabi');
-  static readonly PA_ARAB_PK = new Locale('pa_Arab_PK', 'Punjabi (Arabic, Pakistan)');
-  static readonly PA_ARAB = new Locale('pa_Arab', 'Punjabi (Arabic)', 'pa');
-  static readonly PA_GURU_IN = new Locale('pa_Guru_IN', 'Punjabi (Gurmukhi, India)');
-  static readonly PA_GURU = new Locale('pa_Guru', 'Punjabi (Gurmukhi)', 'pa');
-  static readonly PA_IN = new Locale('pa_IN', 'Punjabi (India)');
-  static readonly PA_PK = new Locale('pa_PK', 'Punjabi (Pakistan)');
-  static readonly QU = new Locale('qu', 'Quechua');
-  static readonly QU_BO = new Locale('qu_BO', 'Quechua (Bolivia)');
-  static readonly QU_EC = new Locale('qu_EC', 'Quechua (Ecuador)');
-  static readonly QU_PE = new Locale('qu_PE', 'Quechua (Peru)');
-  static readonly RO = new Locale('ro', 'Romanian');
-  static readonly RO_MD = new Locale('ro_MD', 'Romanian (Moldova)');
-  static readonly RO_RO = new Locale('ro_RO', 'Romanian (Romania)');
-  static readonly RM = new Locale('rm', 'Romansh');
-  static readonly RM_CH = new Locale('rm_CH', 'Romansh (Switzerland)');
-  static readonly RN = new Locale('rn', 'Rundi');
-  static readonly RN_BI = new Locale('rn_BI', 'Rundi (Burundi)');
-  static readonly RU = new Locale('ru', 'Russian');
-  static readonly RU_BY = new Locale('ru_BY', 'Russian (Belarus)');
-  static readonly RU_KZ = new Locale('ru_KZ', 'Russian (Kazakhstan)');
-  static readonly RU_KG = new Locale('ru_KG', 'Russian (Kyrgyzstan)');
-  static readonly RU_MD = new Locale('ru_MD', 'Russian (Moldova)');
-  static readonly RU_RU = new Locale('ru_RU', 'Russian (Russia)');
-  static readonly RU_UA = new Locale('ru_UA', 'Russian (Ukraine)');
-  static readonly SG = new Locale('sg', 'Sango');
-  static readonly SG_CF = new Locale('sg_CF', 'Sango (Central African Republic)');
-  static readonly GD = new Locale('gd', 'Scottish Gaelic');
-  static readonly GD_GB = new Locale('gd_GB', 'Scottish Gaelic (United Kingdom)');
-  static readonly SR = new Locale('sr', 'Serbian');
-  static readonly SR_BA = new Locale('sr_BA', 'Serbian (Bosnia & Herzegovina)');
-  static readonly SR_CYRL_BA = new Locale('sr_Cyrl_BA', 'Serbian (Cyrillic, Bosnia & Herzegovina)');
-  static readonly SR_CYRL_XK = new Locale('sr_Cyrl_XK', 'Serbian (Cyrillic, Kosovo)');
-  static readonly SR_CYRL_ME = new Locale('sr_Cyrl_ME', 'Serbian (Cyrillic, Montenegro)');
-  static readonly SR_CYRL_RS = new Locale('sr_Cyrl_RS', 'Serbian (Cyrillic, Serbia)');
-  static readonly SR_CYRL = new Locale('sr_Cyrl', 'Serbian (Cyrillic)', 'sr');
-  static readonly SR_XK = new Locale('sr_XK', 'Serbian (Kosovo)');
-  static readonly SR_LATN_BA = new Locale('sr_Latn_BA', 'Serbian (Latin, Bosnia & Herzegovina)');
-  static readonly SR_LATN_XK = new Locale('sr_Latn_XK', 'Serbian (Latin, Kosovo)');
-  static readonly SR_LATN_ME = new Locale('sr_Latn_ME', 'Serbian (Latin, Montenegro)');
-  static readonly SR_LATN_RS = new Locale('sr_Latn_RS', 'Serbian (Latin, Serbia)');
-  static readonly SR_LATN = new Locale('sr_Latn', 'Serbian (Latin)', 'sr');
-  static readonly SR_ME = new Locale('sr_ME', 'Serbian (Montenegro)');
-  static readonly SR_RS = new Locale('sr_RS', 'Serbian (Serbia)');
-  static readonly SH = new Locale('sh', 'Serbo-Croatian');
-  static readonly SH_BA = new Locale('sh_BA', 'Serbo-Croatian (Bosnia & Herzegovina)');
-  static readonly SN = new Locale('sn', 'Shona');
-  static readonly SN_ZW = new Locale('sn_ZW', 'Shona (Zimbabwe)');
-  static readonly II = new Locale('ii', 'Sichuan Yi');
-  static readonly II_CN = new Locale('ii_CN', 'Sichuan Yi (China)');
-  static readonly SI = new Locale('si', 'Sinhala');
-  static readonly SI_LK = new Locale('si_LK', 'Sinhala (Sri Lanka)');
-  static readonly SK = new Locale('sk', 'Slovak');
-  static readonly SK_SK = new Locale('sk_SK', 'Slovak (Slovakia)');
-  static readonly SL = new Locale('sl', 'Slovenian');
-  static readonly SL_SI = new Locale('sl_SI', 'Slovenian (Slovenia)');
-  static readonly SO = new Locale('so', 'Somali');
-  static readonly SO_DJ = new Locale('so_DJ', 'Somali (Djibouti)');
-  static readonly SO_ET = new Locale('so_ET', 'Somali (Ethiopia)');
-  static readonly SO_KE = new Locale('so_KE', 'Somali (Kenya)');
-  static readonly SO_SO = new Locale('so_SO', 'Somali (Somalia)');
-  static readonly ES = new Locale('es', 'Spanish');
-  static readonly ES_AR = new Locale('es_AR', 'Spanish (Argentina)');
-  static readonly ES_BO = new Locale('es_BO', 'Spanish (Bolivia)');
-  static readonly ES_IC = new Locale('es_IC', 'Spanish (Canary Islands)');
-  static readonly ES_EA = new Locale('es_EA', 'Spanish (Ceuta & Melilla)');
-  static readonly ES_CL = new Locale('es_CL', 'Spanish (Chile)');
-  static readonly ES_CO = new Locale('es_CO', 'Spanish (Colombia)');
-  static readonly ES_CR = new Locale('es_CR', 'Spanish (Costa Rica)');
-  static readonly ES_CU = new Locale('es_CU', 'Spanish (Cuba)');
-  static readonly ES_DO = new Locale('es_DO', 'Spanish (Dominican Republic)');
-  static readonly ES_EC = new Locale('es_EC', 'Spanish (Ecuador)');
-  static readonly ES_SV = new Locale('es_SV', 'Spanish (El Salvador)');
-  static readonly ES_GQ = new Locale('es_GQ', 'Spanish (Equatorial Guinea)');
-  static readonly ES_GT = new Locale('es_GT', 'Spanish (Guatemala)');
-  static readonly ES_HN = new Locale('es_HN', 'Spanish (Honduras)');
-  static readonly ES_MX = new Locale('es_MX', 'Spanish (Mexico)');
-  static readonly ES_NI = new Locale('es_NI', 'Spanish (Nicaragua)');
-  static readonly ES_PA = new Locale('es_PA', 'Spanish (Panama)');
-  static readonly ES_PY = new Locale('es_PY', 'Spanish (Paraguay)');
-  static readonly ES_PE = new Locale('es_PE', 'Spanish (Peru)');
-  static readonly ES_PH = new Locale('es_PH', 'Spanish (Philippines)');
-  static readonly ES_PR = new Locale('es_PR', 'Spanish (Puerto Rico)');
-  static readonly ES_ES = new Locale('es_ES', 'Spanish (Spain)');
-  static readonly ES_US = new Locale('es_US', 'Spanish (United States)');
-  static readonly ES_UY = new Locale('es_UY', 'Spanish (Uruguay)');
-  static readonly ES_VE = new Locale('es_VE', 'Spanish (Venezuela)');
-  static readonly SW = new Locale('sw', 'Swahili');
-  static readonly SW_KE = new Locale('sw_KE', 'Swahili (Kenya)');
-  static readonly SW_TZ = new Locale('sw_TZ', 'Swahili (Tanzania)');
-  static readonly SW_UG = new Locale('sw_UG', 'Swahili (Uganda)');
-  static readonly SV = new Locale('sv', 'Swedish');
-  static readonly SV_AX = new Locale('sv_AX', 'Swedish (Åland Islands)');
-  static readonly SV_FI = new Locale('sv_FI', 'Swedish (Finland)');
-  static readonly SV_SE = new Locale('sv_SE', 'Swedish (Sweden)');
-  static readonly TL = new Locale('tl', 'Tagalog');
-  static readonly TL_PH = new Locale('tl_PH', 'Tagalog (Philippines)');
-  static readonly TA = new Locale('ta', 'Tamil');
-  static readonly TA_IN = new Locale('ta_IN', 'Tamil (India)');
-  static readonly TA_MY = new Locale('ta_MY', 'Tamil (Malaysia)');
-  static readonly TA_SG = new Locale('ta_SG', 'Tamil (Singapore)');
-  static readonly TA_LK = new Locale('ta_LK', 'Tamil (Sri Lanka)');
-  static readonly TE = new Locale('te', 'Telugu');
-  static readonly TE_IN = new Locale('te_IN', 'Telugu (India)');
-  static readonly TH = new Locale('th', 'Thai');
-  static readonly TH_TH = new Locale('th_TH', 'Thai (Thailand)');
-  static readonly BO = new Locale('bo', 'Tibetan');
-  static readonly BO_CN = new Locale('bo_CN', 'Tibetan (China)');
-  static readonly BO_IN = new Locale('bo_IN', 'Tibetan (India)');
-  static readonly TI = new Locale('ti', 'Tigrinya');
-  static readonly TI_ER = new Locale('ti_ER', 'Tigrinya (Eritrea)');
-  static readonly TI_ET = new Locale('ti_ET', 'Tigrinya (Ethiopia)');
-  static readonly TO = new Locale('to', 'Tongan');
-  static readonly TO_TO = new Locale('to_TO', 'Tongan (Tonga)');
-  static readonly TR = new Locale('tr', 'Turkish');
-  static readonly TR_CY = new Locale('tr_CY', 'Turkish (Cyprus)');
-  static readonly TR_TR = new Locale('tr_TR', 'Turkish (Turkey)');
-  static readonly UK = new Locale('uk', 'Ukrainian');
-  static readonly UK_UA = new Locale('uk_UA', 'Ukrainian (Ukraine)');
-  static readonly UR = new Locale('ur', 'Urdu');
-  static readonly UR_IN = new Locale('ur_IN', 'Urdu (India)');
-  static readonly UR_PK = new Locale('ur_PK', 'Urdu (Pakistan)');
-  static readonly UG = new Locale('ug', 'Uyghur');
-  static readonly UG_ARAB_CN = new Locale('ug_Arab_CN', 'Uyghur (Arabic, China)');
-  static readonly UG_ARAB = new Locale('ug_Arab', 'Uyghur (Arabic)');
-  static readonly UG_CN = new Locale('ug_CN', 'Uyghur (China)');
-  static readonly UZ = new Locale('uz', 'Uzbek');
-  static readonly UZ_AF = new Locale('uz_AF', 'Uzbek (Afghanistan)');
-  static readonly UZ_ARAB_AF = new Locale('uz_Arab_AF', 'Uzbek (Arabic, Afghanistan)');
-  static readonly UZ_ARAB = new Locale('uz_Arab', 'Uzbek (Arabic)', 'uz');
-  static readonly UZ_CYRL_UZ = new Locale('uz_Cyrl_UZ', 'Uzbek (Cyrillic, Uzbekistan)');
-  static readonly UZ_CYRL = new Locale('uz_Cyrl', 'Uzbek (Cyrillic)', 'uz');
-  static readonly UZ_LATN_UZ = new Locale('uz_Latn_UZ', 'Uzbek (Latin, Uzbekistan)');
-  static readonly UZ_LATN = new Locale('uz_Latn', 'Uzbek (Latin)', 'uz');
-  static readonly UZ_UZ = new Locale('uz_UZ', 'Uzbek (Uzbekistan)');
-  static readonly VI = new Locale('vi', 'Vietnamese');
-  static readonly VI_VN = new Locale('vi_VN', 'Vietnamese (Vietnam)');
-  static readonly CY = new Locale('cy', 'Welsh');
-  static readonly CY_GB = new Locale('cy_GB', 'Welsh (United Kingdom)');
-  static readonly FY = new Locale('fy', 'Western Frisian');
-  static readonly FY_NL = new Locale('fy_NL', 'Western Frisian (Netherlands)');
-  static readonly YI = new Locale('yi', 'Yiddish');
-  static readonly YO = new Locale('yo', 'Yoruba');
-  static readonly YO_BJ = new Locale('yo_BJ', 'Yoruba (Benin)');
-  static readonly YO_NG = new Locale('yo_NG', 'Yoruba (Nigeria)');
-  static readonly ZU = new Locale('zu', 'Zulu');
-  static readonly ZU_ZA = new Locale('zu_ZA', 'Zulu (South Africa)');
-
+export class Enum extends EasyEnum {
   constructor(
     id: Id,
     name: string,
-    readonly country = text(id).lower.last(2).toString(),
-    private readonly lower = text(id).lower.trim.toString()
+    readonly country = text(id).lower.last(2).toString()
   ) {
     super(name, id);
   }
 
-  static lookup(other: string): Optional<Locale> {
-    return this.all<Locale>().first(l => l.equals(other));
-  }
-
-  equals<E extends Enum>(other: E | Id): other is E {
-    return text(other).lower.trim.equals(this.lower);
+  equals<E extends EasyEnum>(other: E | Id): other is E {
+    return equalsNormalizedId(this.id, other);
   }
 }
+
+export const create = (id: Id, name: string, country?: string): Enum => (country === undefined ? new Enum(id, name) : new Enum(id, name, country));
+
+export const AF = /* @__PURE__ */ new Enum('af', 'Afrikaans');
+export const AF_NA = /* @__PURE__ */ new Enum('af_NA', 'Afrikaans (Namibia)');
+export const AF_ZA = /* @__PURE__ */ new Enum('af_ZA', 'Afrikaans (South Africa)');
+export const AK = /* @__PURE__ */ new Enum('ak', 'Akan');
+export const AK_GH = /* @__PURE__ */ new Enum('ak_GH', 'Akan (Ghana)');
+export const SQ = /* @__PURE__ */ new Enum('sq', 'Albanian');
+export const SQ_AL = /* @__PURE__ */ new Enum('sq_AL', 'Albanian (Albania)');
+export const SQ_XK = /* @__PURE__ */ new Enum('sq_XK', 'Albanian (Kosovo)');
+export const SQ_MK = /* @__PURE__ */ new Enum('sq_MK', 'Albanian (Macedonia)');
+export const AM = /* @__PURE__ */ new Enum('am', 'Amharic');
+export const AM_ET = /* @__PURE__ */ new Enum('am_ET', 'Amharic (Ethiopia)');
+export const AR = /* @__PURE__ */ new Enum('ar', 'Arabic');
+export const AR_DZ = /* @__PURE__ */ new Enum('ar_DZ', 'Arabic (Algeria)');
+export const AR_BH = /* @__PURE__ */ new Enum('ar_BH', 'Arabic (Bahrain)');
+export const AR_TD = /* @__PURE__ */ new Enum('ar_TD', 'Arabic (Chad)');
+export const AR_KM = /* @__PURE__ */ new Enum('ar_KM', 'Arabic (Comoros)');
+export const AR_DJ = /* @__PURE__ */ new Enum('ar_DJ', 'Arabic (Djibouti)');
+export const AR_EG = /* @__PURE__ */ new Enum('ar_EG', 'Arabic (Egypt)');
+export const AR_ER = /* @__PURE__ */ new Enum('ar_ER', 'Arabic (Eritrea)');
+export const AR_IQ = /* @__PURE__ */ new Enum('ar_IQ', 'Arabic (Iraq)');
+export const AR_IL = /* @__PURE__ */ new Enum('ar_IL', 'Arabic (Israel)');
+export const AR_JO = /* @__PURE__ */ new Enum('ar_JO', 'Arabic (Jordan)');
+export const AR_KW = /* @__PURE__ */ new Enum('ar_KW', 'Arabic (Kuwait)');
+export const AR_LB = /* @__PURE__ */ new Enum('ar_LB', 'Arabic (Lebanon)');
+export const AR_LY = /* @__PURE__ */ new Enum('ar_LY', 'Arabic (Libya)');
+export const AR_MR = /* @__PURE__ */ new Enum('ar_MR', 'Arabic (Mauritania)');
+export const AR_MA = /* @__PURE__ */ new Enum('ar_MA', 'Arabic (Morocco)');
+export const AR_OM = /* @__PURE__ */ new Enum('ar_OM', 'Arabic (Oman)');
+export const AR_PS = /* @__PURE__ */ new Enum('ar_PS', 'Arabic (Palestinian Territories)');
+export const AR_QA = /* @__PURE__ */ new Enum('ar_QA', 'Arabic (Qatar)');
+export const AR_SA = /* @__PURE__ */ new Enum('ar_SA', 'Arabic (Saudi Arabia)');
+export const AR_SO = /* @__PURE__ */ new Enum('ar_SO', 'Arabic (Somalia)');
+export const AR_SS = /* @__PURE__ */ new Enum('ar_SS', 'Arabic (South Sudan)');
+export const AR_SD = /* @__PURE__ */ new Enum('ar_SD', 'Arabic (Sudan)');
+export const AR_SY = /* @__PURE__ */ new Enum('ar_SY', 'Arabic (Syria)');
+export const AR_TN = /* @__PURE__ */ new Enum('ar_TN', 'Arabic (Tunisia)');
+export const AR_AE = /* @__PURE__ */ new Enum('ar_AE', 'Arabic (United Arab Emirates)');
+export const AR_EH = /* @__PURE__ */ new Enum('ar_EH', 'Arabic (Western Sahara)');
+export const AR_YE = /* @__PURE__ */ new Enum('ar_YE', 'Arabic (Yemen)');
+export const HY = /* @__PURE__ */ new Enum('hy', 'Armenian');
+export const HY_AM = /* @__PURE__ */ new Enum('hy_AM', 'Armenian (Armenia)');
+export const AS = /* @__PURE__ */ new Enum('as', 'Assamese');
+export const AS_IN = /* @__PURE__ */ new Enum('as_IN', 'Assamese (India)');
+export const AZ = /* @__PURE__ */ new Enum('az', 'Azerbaijani');
+export const AZ_AZ = /* @__PURE__ */ new Enum('az_AZ', 'Azerbaijani (Azerbaijan)');
+export const AZ_CYRL_AZ = /* @__PURE__ */ new Enum('az_Cyrl_AZ', 'Azerbaijani (Cyrillic, Azerbaijan)');
+export const AZ_CYRL = /* @__PURE__ */ new Enum('az_Cyrl', 'Azerbaijani (Cyrillic)', 'az');
+export const AZ_LATN_AZ = /* @__PURE__ */ new Enum('az_Latn_AZ', 'Azerbaijani (Latin, Azerbaijan)');
+export const AZ_LATN = /* @__PURE__ */ new Enum('az_Latn', 'Azerbaijani (Latin)', 'az');
+export const BM = /* @__PURE__ */ new Enum('bm', 'Bambara');
+export const BM_LATN_ML = /* @__PURE__ */ new Enum('bm_Latn_ML', 'Bambara (Latin, Mali)');
+export const BM_LATN = /* @__PURE__ */ new Enum('bm_Latn', 'Bambara (Latin)', 'bm');
+export const EU = /* @__PURE__ */ new Enum('eu', 'Basque');
+export const EU_ES = /* @__PURE__ */ new Enum('eu_ES', 'Basque (Spain)');
+export const BE = /* @__PURE__ */ new Enum('be', 'Belarusian');
+export const BE_BY = /* @__PURE__ */ new Enum('be_BY', 'Belarusian (Belarus)');
+export const BN = /* @__PURE__ */ new Enum('bn', 'Bengali');
+export const BN_BD = /* @__PURE__ */ new Enum('bn_BD', 'Bengali (Bangladesh)');
+export const BN_IN = /* @__PURE__ */ new Enum('bn_IN', 'Bengali (India)');
+export const BS = /* @__PURE__ */ new Enum('bs', 'Bosnian');
+export const BS_BA = /* @__PURE__ */ new Enum('bs_BA', 'Bosnian (Bosnia & Herzegovina)');
+export const BS_CYRL_BA = /* @__PURE__ */ new Enum('bs_Cyrl_BA', 'Bosnian (Cyrillic, Bosnia & Herzegovina)');
+export const BS_CYRL = /* @__PURE__ */ new Enum('bs_Cyrl', 'Bosnian (Cyrillic)', 'bs');
+export const BS_LATN_BA = /* @__PURE__ */ new Enum('bs_Latn_BA', 'Bosnian (Latin, Bosnia & Herzegovina)');
+export const BS_LATN = /* @__PURE__ */ new Enum('bs_Latn', 'Bosnian (Latin)', 'bs');
+export const BR = /* @__PURE__ */ new Enum('br', 'Breton');
+export const BR_FR = /* @__PURE__ */ new Enum('br_FR', 'Breton (France)');
+export const BG = /* @__PURE__ */ new Enum('bg', 'Bulgarian');
+export const BG_BG = /* @__PURE__ */ new Enum('bg_BG', 'Bulgarian (Bulgaria)');
+export const MY = /* @__PURE__ */ new Enum('my', 'Burmese');
+export const MY_MM = /* @__PURE__ */ new Enum('my_MM', 'Burmese (Myanmar (Burma))');
+export const CA = /* @__PURE__ */ new Enum('ca', 'Catalan');
+export const CA_AD = /* @__PURE__ */ new Enum('ca_AD', 'Catalan (Andorra)');
+export const CA_FR = /* @__PURE__ */ new Enum('ca_FR', 'Catalan (France)');
+export const CA_IT = /* @__PURE__ */ new Enum('ca_IT', 'Catalan (Italy)');
+export const CA_ES = /* @__PURE__ */ new Enum('ca_ES', 'Catalan (Spain)');
+export const ZH = /* @__PURE__ */ new Enum('zh', 'Chinese');
+export const ZH_CN = /* @__PURE__ */ new Enum('zh_CN', 'Chinese (China)');
+export const ZH_HK = /* @__PURE__ */ new Enum('zh_HK', 'Chinese (Hong Kong SAR China)');
+export const ZH_MO = /* @__PURE__ */ new Enum('zh_MO', 'Chinese (Macau SAR China)');
+export const ZH_HANS_CN = /* @__PURE__ */ new Enum('zh_Hans_CN', 'Chinese (Simplified, China)');
+export const ZH_HANS_HK = /* @__PURE__ */ new Enum('zh_Hans_HK', 'Chinese (Simplified, Hong Kong SAR China)');
+export const ZH_HANS_MO = /* @__PURE__ */ new Enum('zh_Hans_MO', 'Chinese (Simplified, Macau SAR China)');
+export const ZH_HANS_SG = /* @__PURE__ */ new Enum('zh_Hans_SG', 'Chinese (Simplified, Singapore)');
+export const ZH_HANS = /* @__PURE__ */ new Enum('zh_Hans', 'Chinese (Simplified)');
+export const ZH_SG = /* @__PURE__ */ new Enum('zh_SG', 'Chinese (Singapore)');
+export const ZH_TW = /* @__PURE__ */ new Enum('zh_TW', 'Chinese (Taiwan)');
+export const ZH_HANT_HK = /* @__PURE__ */ new Enum('zh_Hant_HK', 'Chinese (Traditional, Hong Kong SAR China)');
+export const ZH_HANT_MO = /* @__PURE__ */ new Enum('zh_Hant_MO', 'Chinese (Traditional, Macau SAR China)');
+export const ZH_HANT_TW = /* @__PURE__ */ new Enum('zh_Hant_TW', 'Chinese (Traditional, Taiwan)');
+export const ZH_HANT = /* @__PURE__ */ new Enum('zh_Hant', 'Chinese (Traditional)');
+export const KW = /* @__PURE__ */ new Enum('kw', 'Cornish');
+export const KW_GB = /* @__PURE__ */ new Enum('kw_GB', 'Cornish (United Kingdom)');
+export const HR = /* @__PURE__ */ new Enum('hr', 'Croatian');
+export const HR_BA = /* @__PURE__ */ new Enum('hr_BA', 'Croatian (Bosnia & Herzegovina)');
+export const HR_HR = /* @__PURE__ */ new Enum('hr_HR', 'Croatian (Croatia)');
+export const CS = /* @__PURE__ */ new Enum('cs', 'Czech');
+export const CS_CZ = /* @__PURE__ */ new Enum('cs_CZ', 'Czech (Czech Republic)');
+export const DA = /* @__PURE__ */ new Enum('da', 'Danish');
+export const DA_DK = /* @__PURE__ */ new Enum('da_DK', 'Danish (Denmark)');
+export const DA_GL = /* @__PURE__ */ new Enum('da_GL', 'Danish (Greenland)');
+export const NL = /* @__PURE__ */ new Enum('nl', 'Dutch');
+export const NL_AW = /* @__PURE__ */ new Enum('nl_AW', 'Dutch (Aruba)');
+export const NL_BE = /* @__PURE__ */ new Enum('nl_BE', 'Dutch (Belgium)');
+export const NL_BQ = /* @__PURE__ */ new Enum('nl_BQ', 'Dutch (Caribbean Netherlands)');
+export const NL_CW = /* @__PURE__ */ new Enum('nl_CW', 'Dutch (Curaçao)');
+export const NL_NL = /* @__PURE__ */ new Enum('nl_NL', 'Dutch (Netherlands)');
+export const NL_SX = /* @__PURE__ */ new Enum('nl_SX', 'Dutch (Sint Maarten)');
+export const NL_SR = /* @__PURE__ */ new Enum('nl_SR', 'Dutch (Suriname)');
+export const DZ = /* @__PURE__ */ new Enum('dz', 'Dzongkha');
+export const DZ_BT = /* @__PURE__ */ new Enum('dz_BT', 'Dzongkha (Bhutan)');
+export const EN = /* @__PURE__ */ new Enum('en', 'English', 'gb');
+export const EN_AS = /* @__PURE__ */ new Enum('en_AS', 'English (American Samoa)');
+export const EN_AI = /* @__PURE__ */ new Enum('en_AI', 'English (Anguilla)');
+export const EN_AG = /* @__PURE__ */ new Enum('en_AG', 'English (Antigua & Barbuda)');
+export const EN_AU = /* @__PURE__ */ new Enum('en_AU', 'English (Australia)');
+export const EN_BS = /* @__PURE__ */ new Enum('en_BS', 'English (Bahamas)');
+export const EN_BB = /* @__PURE__ */ new Enum('en_BB', 'English (Barbados)');
+export const EN_BE = /* @__PURE__ */ new Enum('en_BE', 'English (Belgium)');
+export const EN_BZ = /* @__PURE__ */ new Enum('en_BZ', 'English (Belize)');
+export const EN_BM = /* @__PURE__ */ new Enum('en_BM', 'English (Bermuda)');
+export const EN_BW = /* @__PURE__ */ new Enum('en_BW', 'English (Botswana)');
+export const EN_IO = /* @__PURE__ */ new Enum('en_IO', 'English (British Indian Ocean Territory)');
+export const EN_VG = /* @__PURE__ */ new Enum('en_VG', 'English (British Virgin Islands)');
+export const EN_CM = /* @__PURE__ */ new Enum('en_CM', 'English (Cameroon)');
+export const EN_CA = /* @__PURE__ */ new Enum('en_CA', 'English (Canada)');
+export const EN_KY = /* @__PURE__ */ new Enum('en_KY', 'English (Cayman Islands)');
+export const EN_CX = /* @__PURE__ */ new Enum('en_CX', 'English (Christmas Island)');
+export const EN_CC = /* @__PURE__ */ new Enum('en_CC', 'English (Cocos (Keeling) Islands)');
+export const EN_CK = /* @__PURE__ */ new Enum('en_CK', 'English (Cook Islands)');
+export const EN_DG = /* @__PURE__ */ new Enum('en_DG', 'English (Diego Garcia)');
+export const EN_DM = /* @__PURE__ */ new Enum('en_DM', 'English (Dominica)');
+export const EN_ER = /* @__PURE__ */ new Enum('en_ER', 'English (Eritrea)');
+export const EN_FK = /* @__PURE__ */ new Enum('en_FK', 'English (Falkland Islands)');
+export const EN_FJ = /* @__PURE__ */ new Enum('en_FJ', 'English (Fiji)');
+export const EN_GM = /* @__PURE__ */ new Enum('en_GM', 'English (Gambia)');
+export const EN_GH = /* @__PURE__ */ new Enum('en_GH', 'English (Ghana)');
+export const EN_GI = /* @__PURE__ */ new Enum('en_GI', 'English (Gibraltar)');
+export const EN_GD = /* @__PURE__ */ new Enum('en_GD', 'English (Grenada)');
+export const EN_GU = /* @__PURE__ */ new Enum('en_GU', 'English (Guam)');
+export const EN_GG = /* @__PURE__ */ new Enum('en_GG', 'English (Guernsey)');
+export const EN_GY = /* @__PURE__ */ new Enum('en_GY', 'English (Guyana)');
+export const EN_HK = /* @__PURE__ */ new Enum('en_HK', 'English (Hong Kong SAR China)');
+export const EN_IN = /* @__PURE__ */ new Enum('en_IN', 'English (India)');
+export const EN_IE = /* @__PURE__ */ new Enum('en_IE', 'English (Ireland)');
+export const EN_IM = /* @__PURE__ */ new Enum('en_IM', 'English (Isle of Man)');
+export const EN_JM = /* @__PURE__ */ new Enum('en_JM', 'English (Jamaica)');
+export const EN_JE = /* @__PURE__ */ new Enum('en_JE', 'English (Jersey)');
+export const EN_KE = /* @__PURE__ */ new Enum('en_KE', 'English (Kenya)');
+export const EN_KI = /* @__PURE__ */ new Enum('en_KI', 'English (Kiribati)');
+export const EN_LS = /* @__PURE__ */ new Enum('en_LS', 'English (Lesotho)');
+export const EN_LR = /* @__PURE__ */ new Enum('en_LR', 'English (Liberia)');
+export const EN_MO = /* @__PURE__ */ new Enum('en_MO', 'English (Macau SAR China)');
+export const EN_MG = /* @__PURE__ */ new Enum('en_MG', 'English (Madagascar)');
+export const EN_MW = /* @__PURE__ */ new Enum('en_MW', 'English (Malawi)');
+export const EN_MY = /* @__PURE__ */ new Enum('en_MY', 'English (Malaysia)');
+export const EN_MT = /* @__PURE__ */ new Enum('en_MT', 'English (Malta)');
+export const EN_MH = /* @__PURE__ */ new Enum('en_MH', 'English (Marshall Islands)');
+export const EN_MU = /* @__PURE__ */ new Enum('en_MU', 'English (Mauritius)');
+export const EN_FM = /* @__PURE__ */ new Enum('en_FM', 'English (Micronesia)');
+export const EN_MS = /* @__PURE__ */ new Enum('en_MS', 'English (Montserrat)');
+export const EN_NA = /* @__PURE__ */ new Enum('en_NA', 'English (Namibia)');
+export const EN_NR = /* @__PURE__ */ new Enum('en_NR', 'English (Nauru)');
+export const EN_NZ = /* @__PURE__ */ new Enum('en_NZ', 'English (New Zealand)');
+export const EN_NG = /* @__PURE__ */ new Enum('en_NG', 'English (Nigeria)');
+export const EN_NU = /* @__PURE__ */ new Enum('en_NU', 'English (Niue)');
+export const EN_NF = /* @__PURE__ */ new Enum('en_NF', 'English (Norfolk Island)');
+export const EN_MP = /* @__PURE__ */ new Enum('en_MP', 'English (Northern Mariana Islands)');
+export const EN_PK = /* @__PURE__ */ new Enum('en_PK', 'English (Pakistan)');
+export const EN_PW = /* @__PURE__ */ new Enum('en_PW', 'English (Palau)');
+export const EN_PG = /* @__PURE__ */ new Enum('en_PG', 'English (Papua New Guinea)');
+export const EN_PH = /* @__PURE__ */ new Enum('en_PH', 'English (Philippines)');
+export const EN_PN = /* @__PURE__ */ new Enum('en_PN', 'English (Pitcairn Islands)');
+export const EN_PR = /* @__PURE__ */ new Enum('en_PR', 'English (Puerto Rico)');
+export const EN_RW = /* @__PURE__ */ new Enum('en_RW', 'English (Rwanda)');
+export const EN_WS = /* @__PURE__ */ new Enum('en_WS', 'English (Samoa)');
+export const EN_SC = /* @__PURE__ */ new Enum('en_SC', 'English (Seychelles)');
+export const EN_SL = /* @__PURE__ */ new Enum('en_SL', 'English (Sierra Leone)');
+export const EN_SG = /* @__PURE__ */ new Enum('en_SG', 'English (Singapore)');
+export const EN_SX = /* @__PURE__ */ new Enum('en_SX', 'English (Sint Maarten)');
+export const EN_SB = /* @__PURE__ */ new Enum('en_SB', 'English (Solomon Islands)');
+export const EN_ZA = /* @__PURE__ */ new Enum('en_ZA', 'English (South Africa)');
+export const EN_SS = /* @__PURE__ */ new Enum('en_SS', 'English (South Sudan)');
+export const EN_SH = /* @__PURE__ */ new Enum('en_SH', 'English (St. Helena)');
+export const EN_KN = /* @__PURE__ */ new Enum('en_KN', 'English (St. Kitts & Nevis)');
+export const EN_LC = /* @__PURE__ */ new Enum('en_LC', 'English (St. Lucia)');
+export const EN_VC = /* @__PURE__ */ new Enum('en_VC', 'English (St. Vincent & Grenadines)');
+export const EN_SD = /* @__PURE__ */ new Enum('en_SD', 'English (Sudan)');
+export const EN_SZ = /* @__PURE__ */ new Enum('en_SZ', 'English (Swaziland)');
+export const EN_TZ = /* @__PURE__ */ new Enum('en_TZ', 'English (Tanzania)');
+export const EN_TK = /* @__PURE__ */ new Enum('en_TK', 'English (Tokelau)');
+export const EN_TO = /* @__PURE__ */ new Enum('en_TO', 'English (Tonga)');
+export const EN_TT = /* @__PURE__ */ new Enum('en_TT', 'English (Trinidad & Tobago)');
+export const EN_TC = /* @__PURE__ */ new Enum('en_TC', 'English (Turks & Caicos Islands)');
+export const EN_TV = /* @__PURE__ */ new Enum('en_TV', 'English (Tuvalu)');
+export const EN_UM = /* @__PURE__ */ new Enum('en_UM', 'English (U.S. Outlying Islands)');
+export const EN_VI = /* @__PURE__ */ new Enum('en_VI', 'English (U.S. Virgin Islands)');
+export const EN_UG = /* @__PURE__ */ new Enum('en_UG', 'English (Uganda)');
+export const EN_GB = /* @__PURE__ */ new Enum('en_GB', 'English (United Kingdom)');
+export const EN_US = /* @__PURE__ */ new Enum('en_US', 'English (United States)');
+export const EN_VU = /* @__PURE__ */ new Enum('en_VU', 'English (Vanuatu)');
+export const EN_ZM = /* @__PURE__ */ new Enum('en_ZM', 'English (Zambia)');
+export const EN_ZW = /* @__PURE__ */ new Enum('en_ZW', 'English (Zimbabwe)');
+export const EO = /* @__PURE__ */ new Enum('eo', 'Esperanto');
+export const ET = /* @__PURE__ */ new Enum('et', 'Estonian');
+export const ET_EE = /* @__PURE__ */ new Enum('et_EE', 'Estonian (Estonia)');
+export const EE = /* @__PURE__ */ new Enum('ee', 'Ewe');
+export const EE_GH = /* @__PURE__ */ new Enum('ee_GH', 'Ewe (Ghana)');
+export const EE_TG = /* @__PURE__ */ new Enum('ee_TG', 'Ewe (Togo)');
+export const FO = /* @__PURE__ */ new Enum('fo', 'Faroese');
+export const FO_FO = /* @__PURE__ */ new Enum('fo_FO', 'Faroese (Faroe Islands)');
+export const FI = /* @__PURE__ */ new Enum('fi', 'Finnish');
+export const FI_FI = /* @__PURE__ */ new Enum('fi_FI', 'Finnish (Finland)');
+export const FR = /* @__PURE__ */ new Enum('fr', 'French');
+export const FR_DZ = /* @__PURE__ */ new Enum('fr_DZ', 'French (Algeria)');
+export const FR_BE = /* @__PURE__ */ new Enum('fr_BE', 'French (Belgium)');
+export const FR_BJ = /* @__PURE__ */ new Enum('fr_BJ', 'French (Benin)');
+export const FR_BF = /* @__PURE__ */ new Enum('fr_BF', 'French (Burkina Faso)');
+export const FR_BI = /* @__PURE__ */ new Enum('fr_BI', 'French (Burundi)');
+export const FR_CM = /* @__PURE__ */ new Enum('fr_CM', 'French (Cameroon)');
+export const FR_CA = /* @__PURE__ */ new Enum('fr_CA', 'French (Canada)');
+export const FR_CF = /* @__PURE__ */ new Enum('fr_CF', 'French (Central African Republic)');
+export const FR_TD = /* @__PURE__ */ new Enum('fr_TD', 'French (Chad)');
+export const FR_KM = /* @__PURE__ */ new Enum('fr_KM', 'French (Comoros)');
+export const FR_CG = /* @__PURE__ */ new Enum('fr_CG', 'French (Congo - Brazzaville)');
+export const FR_CD = /* @__PURE__ */ new Enum('fr_CD', 'French (Congo - Kinshasa)');
+export const FR_CI = /* @__PURE__ */ new Enum('fr_CI', 'French (Côte d’Ivoire)');
+export const FR_DJ = /* @__PURE__ */ new Enum('fr_DJ', 'French (Djibouti)');
+export const FR_GQ = /* @__PURE__ */ new Enum('fr_GQ', 'French (Equatorial Guinea)');
+export const FR_FR = /* @__PURE__ */ new Enum('fr_FR', 'French (France)');
+export const FR_GF = /* @__PURE__ */ new Enum('fr_GF', 'French (French Guiana)');
+export const FR_PF = /* @__PURE__ */ new Enum('fr_PF', 'French (French Polynesia)');
+export const FR_GA = /* @__PURE__ */ new Enum('fr_GA', 'French (Gabon)');
+export const FR_GP = /* @__PURE__ */ new Enum('fr_GP', 'French (Guadeloupe)');
+export const FR_GN = /* @__PURE__ */ new Enum('fr_GN', 'French (Guinea)');
+export const FR_HT = /* @__PURE__ */ new Enum('fr_HT', 'French (Haiti)');
+export const FR_LU = /* @__PURE__ */ new Enum('fr_LU', 'French (Luxembourg)');
+export const FR_MG = /* @__PURE__ */ new Enum('fr_MG', 'French (Madagascar)');
+export const FR_ML = /* @__PURE__ */ new Enum('fr_ML', 'French (Mali)');
+export const FR_MQ = /* @__PURE__ */ new Enum('fr_MQ', 'French (Martinique)');
+export const FR_MR = /* @__PURE__ */ new Enum('fr_MR', 'French (Mauritania)');
+export const FR_MU = /* @__PURE__ */ new Enum('fr_MU', 'French (Mauritius)');
+export const FR_YT = /* @__PURE__ */ new Enum('fr_YT', 'French (Mayotte)');
+export const FR_MC = /* @__PURE__ */ new Enum('fr_MC', 'French (Monaco)');
+export const FR_MA = /* @__PURE__ */ new Enum('fr_MA', 'French (Morocco)');
+export const FR_NC = /* @__PURE__ */ new Enum('fr_NC', 'French (New Caledonia)');
+export const FR_NE = /* @__PURE__ */ new Enum('fr_NE', 'French (Niger)');
+export const FR_RE = /* @__PURE__ */ new Enum('fr_RE', 'French (Réunion)');
+export const FR_RW = /* @__PURE__ */ new Enum('fr_RW', 'French (Rwanda)');
+export const FR_SN = /* @__PURE__ */ new Enum('fr_SN', 'French (Senegal)');
+export const FR_SC = /* @__PURE__ */ new Enum('fr_SC', 'French (Seychelles)');
+export const FR_BL = /* @__PURE__ */ new Enum('fr_BL', 'French (St. Barthélemy)');
+export const FR_MF = /* @__PURE__ */ new Enum('fr_MF', 'French (St. Martin)');
+export const FR_PM = /* @__PURE__ */ new Enum('fr_PM', 'French (St. Pierre & Miquelon)');
+export const FR_CH = /* @__PURE__ */ new Enum('fr_CH', 'French (Switzerland)');
+export const FR_SY = /* @__PURE__ */ new Enum('fr_SY', 'French (Syria)');
+export const FR_TG = /* @__PURE__ */ new Enum('fr_TG', 'French (Togo)');
+export const FR_TN = /* @__PURE__ */ new Enum('fr_TN', 'French (Tunisia)');
+export const FR_VU = /* @__PURE__ */ new Enum('fr_VU', 'French (Vanuatu)');
+export const FR_WF = /* @__PURE__ */ new Enum('fr_WF', 'French (Wallis & Futuna)');
+export const FF = /* @__PURE__ */ new Enum('ff', 'Fulah');
+export const FF_CM = /* @__PURE__ */ new Enum('ff_CM', 'Fulah (Cameroon)');
+export const FF_GN = /* @__PURE__ */ new Enum('ff_GN', 'Fulah (Guinea)');
+export const FF_MR = /* @__PURE__ */ new Enum('ff_MR', 'Fulah (Mauritania)');
+export const FF_SN = /* @__PURE__ */ new Enum('ff_SN', 'Fulah (Senegal)');
+export const GL = /* @__PURE__ */ new Enum('gl', 'Galician');
+export const GL_ES = /* @__PURE__ */ new Enum('gl_ES', 'Galician (Spain)');
+export const LG = /* @__PURE__ */ new Enum('lg', 'Ganda');
+export const LG_UG = /* @__PURE__ */ new Enum('lg_UG', 'Ganda (Uganda)');
+export const KA = /* @__PURE__ */ new Enum('ka', 'Georgian');
+export const KA_GE = /* @__PURE__ */ new Enum('ka_GE', 'Georgian (Georgia)');
+export const DE = /* @__PURE__ */ new Enum('de', 'German');
+export const DE_AT = /* @__PURE__ */ new Enum('de_AT', 'German (Austria)');
+export const DE_BE = /* @__PURE__ */ new Enum('de_BE', 'German (Belgium)');
+export const DE_DE = /* @__PURE__ */ new Enum('de_DE', 'German (Germany)');
+export const DE_LI = /* @__PURE__ */ new Enum('de_LI', 'German (Liechtenstein)');
+export const DE_LU = /* @__PURE__ */ new Enum('de_LU', 'German (Luxembourg)');
+export const DE_CH = /* @__PURE__ */ new Enum('de_CH', 'German (Switzerland)');
+export const EL = /* @__PURE__ */ new Enum('el', 'Greek');
+export const EL_CY = /* @__PURE__ */ new Enum('el_CY', 'Greek (Cyprus)');
+export const EL_GR = /* @__PURE__ */ new Enum('el_GR', 'Greek (Greece)');
+export const GU = /* @__PURE__ */ new Enum('gu', 'Gujarati');
+export const GU_IN = /* @__PURE__ */ new Enum('gu_IN', 'Gujarati (India)');
+export const HA = /* @__PURE__ */ new Enum('ha', 'Hausa');
+export const HA_GH = /* @__PURE__ */ new Enum('ha_GH', 'Hausa (Ghana)');
+export const HA_LATN_GH = /* @__PURE__ */ new Enum('ha_Latn_GH', 'Hausa (Latin, Ghana)');
+export const HA_LATN_NE = /* @__PURE__ */ new Enum('ha_Latn_NE', 'Hausa (Latin, Niger)');
+export const HA_LATN_NG = /* @__PURE__ */ new Enum('ha_Latn_NG', 'Hausa (Latin, Nigeria)');
+export const HA_LATN = /* @__PURE__ */ new Enum('ha_Latn', 'Hausa (Latin)');
+export const HA_NE = /* @__PURE__ */ new Enum('ha_NE', 'Hausa (Niger)');
+export const HA_NG = /* @__PURE__ */ new Enum('ha_NG', 'Hausa (Nigeria)');
+export const HE = /* @__PURE__ */ new Enum('he', 'Hebrew');
+export const HE_IL = /* @__PURE__ */ new Enum('he_IL', 'Hebrew (Israel)');
+export const HI = /* @__PURE__ */ new Enum('hi', 'Hindi');
+export const HI_IN = /* @__PURE__ */ new Enum('hi_IN', 'Hindi (India)');
+export const HU = /* @__PURE__ */ new Enum('hu', 'Hungarian');
+export const HU_HU = /* @__PURE__ */ new Enum('hu_HU', 'Hungarian (Hungary)');
+export const IS = /* @__PURE__ */ new Enum('is', 'Icelandic');
+export const IS_IS = /* @__PURE__ */ new Enum('is_IS', 'Icelandic (Iceland)');
+export const IG = /* @__PURE__ */ new Enum('ig', 'Igbo');
+export const IG_NG = /* @__PURE__ */ new Enum('ig_NG', 'Igbo (Nigeria)');
+export const ID = /* @__PURE__ */ new Enum('id', 'Indonesian');
+export const ID_ID = /* @__PURE__ */ new Enum('id_ID', 'Indonesian (Indonesia)');
+export const GA = /* @__PURE__ */ new Enum('ga', 'Irish');
+export const GA_IE = /* @__PURE__ */ new Enum('ga_IE', 'Irish (Ireland)');
+export const IT = /* @__PURE__ */ new Enum('it', 'Italian');
+export const IT_IT = /* @__PURE__ */ new Enum('it_IT', 'Italian (Italy)');
+export const IT_SM = /* @__PURE__ */ new Enum('it_SM', 'Italian (San Marino)');
+export const IT_CH = /* @__PURE__ */ new Enum('it_CH', 'Italian (Switzerland)');
+export const JA = /* @__PURE__ */ new Enum('ja', 'Japanese');
+export const JA_JP = /* @__PURE__ */ new Enum('ja_JP', 'Japanese (Japan)');
+export const KL = /* @__PURE__ */ new Enum('kl', 'Kalaallisut');
+export const KL_GL = /* @__PURE__ */ new Enum('kl_GL', 'Kalaallisut (Greenland)');
+export const KN = /* @__PURE__ */ new Enum('kn', 'Kannada');
+export const KN_IN = /* @__PURE__ */ new Enum('kn_IN', 'Kannada (India)');
+export const KS = /* @__PURE__ */ new Enum('ks', 'Kashmiri');
+export const KS_ARAB_IN = /* @__PURE__ */ new Enum('ks_Arab_IN', 'Kashmiri (Arabic, India)');
+export const KS_ARAB = /* @__PURE__ */ new Enum('ks_Arab', 'Kashmiri (Arabic)', 'ks');
+export const KS_IN = /* @__PURE__ */ new Enum('ks_IN', 'Kashmiri (India)');
+export const KK = /* @__PURE__ */ new Enum('kk', 'Kazakh');
+export const KK_CYRL_KZ = /* @__PURE__ */ new Enum('kk_Cyrl_KZ', 'Kazakh (Cyrillic, Kazakhstan)');
+export const KK_CYRL = /* @__PURE__ */ new Enum('kk_Cyrl', 'Kazakh (Cyrillic)', 'kk');
+export const KK_KZ = /* @__PURE__ */ new Enum('kk_KZ', 'Kazakh (Kazakhstan)');
+export const KM = /* @__PURE__ */ new Enum('km', 'Khmer');
+export const KM_KH = /* @__PURE__ */ new Enum('km_KH', 'Khmer (Cambodia)');
+export const KI = /* @__PURE__ */ new Enum('ki', 'Kikuyu');
+export const KI_KE = /* @__PURE__ */ new Enum('ki_KE', 'Kikuyu (Kenya)');
+export const RW = /* @__PURE__ */ new Enum('rw', 'Kinyarwanda');
+export const RW_RW = /* @__PURE__ */ new Enum('rw_RW', 'Kinyarwanda (Rwanda)');
+export const KO = /* @__PURE__ */ new Enum('ko', 'Korean');
+export const KO_KP = /* @__PURE__ */ new Enum('ko_KP', 'Korean (North Korea)');
+export const KO_KR = /* @__PURE__ */ new Enum('ko_KR', 'Korean (South Korea)');
+export const KY = /* @__PURE__ */ new Enum('ky', 'Kyrgyz');
+export const KY_CYRL_KG = /* @__PURE__ */ new Enum('ky_Cyrl_KG', 'Kyrgyz (Cyrillic, Kyrgyzstan)');
+export const KY_CYRL = /* @__PURE__ */ new Enum('ky_Cyrl', 'Kyrgyz (Cyrillic)', 'ky');
+export const KY_KG = /* @__PURE__ */ new Enum('ky_KG', 'Kyrgyz (Kyrgyzstan)');
+export const LO = /* @__PURE__ */ new Enum('lo', 'Lao');
+export const LO_LA = /* @__PURE__ */ new Enum('lo_LA', 'Lao (Laos)');
+export const LV = /* @__PURE__ */ new Enum('lv', 'Latvian');
+export const LV_LV = /* @__PURE__ */ new Enum('lv_LV', 'Latvian (Latvia)');
+export const LN = /* @__PURE__ */ new Enum('ln', 'Lingala');
+export const LN_AO = /* @__PURE__ */ new Enum('ln_AO', 'Lingala (Angola)');
+export const LN_CF = /* @__PURE__ */ new Enum('ln_CF', 'Lingala (Central African Republic)');
+export const LN_CG = /* @__PURE__ */ new Enum('ln_CG', 'Lingala (Congo - Brazzaville)');
+export const LN_CD = /* @__PURE__ */ new Enum('ln_CD', 'Lingala (Congo - Kinshasa)');
+export const LT = /* @__PURE__ */ new Enum('lt', 'Lithuanian');
+export const LT_LT = /* @__PURE__ */ new Enum('lt_LT', 'Lithuanian (Lithuania)');
+export const LU = /* @__PURE__ */ new Enum('lu', 'Luba-Katanga');
+export const LU_CD = /* @__PURE__ */ new Enum('lu_CD', 'Luba-Katanga (Congo - Kinshasa)');
+export const LB = /* @__PURE__ */ new Enum('lb', 'Luxembourgish');
+export const LB_LU = /* @__PURE__ */ new Enum('lb_LU', 'Luxembourgish (Luxembourg)');
+export const MK = /* @__PURE__ */ new Enum('mk', 'Macedonian');
+export const MK_MK = /* @__PURE__ */ new Enum('mk_MK', 'Macedonian (Macedonia)');
+export const MG = /* @__PURE__ */ new Enum('mg', 'Malagasy');
+export const MG_MG = /* @__PURE__ */ new Enum('mg_MG', 'Malagasy (Madagascar)');
+export const MS = /* @__PURE__ */ new Enum('ms', 'Malay');
+export const MS_BN = /* @__PURE__ */ new Enum('ms_BN', 'Malay (Brunei)');
+export const MS_LATN_BN = /* @__PURE__ */ new Enum('ms_Latn_BN', 'Malay (Latin, Brunei)');
+export const MS_LATN_MY = /* @__PURE__ */ new Enum('ms_Latn_MY', 'Malay (Latin, Malaysia)');
+export const MS_LATN_SG = /* @__PURE__ */ new Enum('ms_Latn_SG', 'Malay (Latin, Singapore)');
+export const MS_LATN = /* @__PURE__ */ new Enum('ms_Latn', 'Malay (Latin)', 'ms');
+export const MS_MY = /* @__PURE__ */ new Enum('ms_MY', 'Malay (Malaysia)');
+export const MS_SG = /* @__PURE__ */ new Enum('ms_SG', 'Malay (Singapore)');
+export const ML = /* @__PURE__ */ new Enum('ml', 'Malayalam');
+export const ML_IN = /* @__PURE__ */ new Enum('ml_IN', 'Malayalam (India)');
+export const MT = /* @__PURE__ */ new Enum('mt', 'Maltese');
+export const MT_MT = /* @__PURE__ */ new Enum('mt_MT', 'Maltese (Malta)');
+export const GV = /* @__PURE__ */ new Enum('gv', 'Manx');
+export const GV_IM = /* @__PURE__ */ new Enum('gv_IM', 'Manx (Isle of Man)');
+export const MR = /* @__PURE__ */ new Enum('mr', 'Marathi');
+export const MR_IN = /* @__PURE__ */ new Enum('mr_IN', 'Marathi (India)');
+export const MN = /* @__PURE__ */ new Enum('mn', 'Mongolian');
+export const MN_CYRL_MN = /* @__PURE__ */ new Enum('mn_Cyrl_MN', 'Mongolian (Cyrillic, Mongolia)');
+export const MN_CYRL = /* @__PURE__ */ new Enum('mn_Cyrl', 'Mongolian (Cyrillic)', 'mn');
+export const MN_MN = /* @__PURE__ */ new Enum('mn_MN', 'Mongolian (Mongolia)');
+export const NE = /* @__PURE__ */ new Enum('ne', 'Nepali');
+export const NE_IN = /* @__PURE__ */ new Enum('ne_IN', 'Nepali (India)');
+export const NE_NP = /* @__PURE__ */ new Enum('ne_NP', 'Nepali (Nepal)');
+export const ND = /* @__PURE__ */ new Enum('nd', 'North Ndebele');
+export const ND_ZW = /* @__PURE__ */ new Enum('nd_ZW', 'North Ndebele (Zimbabwe)');
+export const SE = /* @__PURE__ */ new Enum('se', 'Northern Sami');
+export const SE_FI = /* @__PURE__ */ new Enum('se_FI', 'Northern Sami (Finland)');
+export const SE_NO = /* @__PURE__ */ new Enum('se_NO', 'Northern Sami (Norway)');
+export const SE_SE = /* @__PURE__ */ new Enum('se_SE', 'Northern Sami (Sweden)');
+export const NO = /* @__PURE__ */ new Enum('no', 'Norwegian');
+export const NO_NO = /* @__PURE__ */ new Enum('no_NO', 'Norwegian (Norway)');
+export const NB = /* @__PURE__ */ new Enum('nb', 'Norwegian Bokmål');
+export const NB_NO = /* @__PURE__ */ new Enum('nb_NO', 'Norwegian Bokmål (Norway)');
+export const NB_SJ = /* @__PURE__ */ new Enum('nb_SJ', 'Norwegian Bokmål (Svalbard & Jan Mayen)');
+export const NN = /* @__PURE__ */ new Enum('nn', 'Norwegian Nynorsk');
+export const NN_NO = /* @__PURE__ */ new Enum('nn_NO', 'Norwegian Nynorsk (Norway)');
+export const OR = /* @__PURE__ */ new Enum('or', 'Oriya');
+export const OR_IN = /* @__PURE__ */ new Enum('or_IN', 'Oriya (India)');
+export const OM = /* @__PURE__ */ new Enum('om', 'Oromo');
+export const OM_ET = /* @__PURE__ */ new Enum('om_ET', 'Oromo (Ethiopia)');
+export const OM_KE = /* @__PURE__ */ new Enum('om_KE', 'Oromo (Kenya)');
+export const OS = /* @__PURE__ */ new Enum('os', 'Ossetic');
+export const OS_GE = /* @__PURE__ */ new Enum('os_GE', 'Ossetic (Georgia)');
+export const OS_RU = /* @__PURE__ */ new Enum('os_RU', 'Ossetic (Russia)');
+export const PS = /* @__PURE__ */ new Enum('ps', 'Pashto');
+export const PS_AF = /* @__PURE__ */ new Enum('ps_AF', 'Pashto (Afghanistan)');
+export const FA = /* @__PURE__ */ new Enum('fa', 'Persian');
+export const FA_AF = /* @__PURE__ */ new Enum('fa_AF', 'Persian (Afghanistan)');
+export const FA_IR = /* @__PURE__ */ new Enum('fa_IR', 'Persian (Iran)');
+export const PL = /* @__PURE__ */ new Enum('pl', 'Polish');
+export const PL_PL = /* @__PURE__ */ new Enum('pl_PL', 'Polish (Poland)');
+export const PT = /* @__PURE__ */ new Enum('pt', 'Portuguese');
+export const PT_AO = /* @__PURE__ */ new Enum('pt_AO', 'Portuguese (Angola)');
+export const PT_BR = /* @__PURE__ */ new Enum('pt_BR', 'Portuguese (Brazil)');
+export const PT_CV = /* @__PURE__ */ new Enum('pt_CV', 'Portuguese (Cape Verde)');
+export const PT_GW = /* @__PURE__ */ new Enum('pt_GW', 'Portuguese (Guinea-Bissau)');
+export const PT_MO = /* @__PURE__ */ new Enum('pt_MO', 'Portuguese (Macau SAR China)');
+export const PT_MZ = /* @__PURE__ */ new Enum('pt_MZ', 'Portuguese (Mozambique)');
+export const PT_PT = /* @__PURE__ */ new Enum('pt_PT', 'Portuguese (Portugal)');
+export const PT_ST = /* @__PURE__ */ new Enum('pt_ST', 'Portuguese (São Tomé & Príncipe)');
+export const PT_TL = /* @__PURE__ */ new Enum('pt_TL', 'Portuguese (Timor-Leste)');
+export const PA = /* @__PURE__ */ new Enum('pa', 'Punjabi');
+export const PA_ARAB_PK = /* @__PURE__ */ new Enum('pa_Arab_PK', 'Punjabi (Arabic, Pakistan)');
+export const PA_ARAB = /* @__PURE__ */ new Enum('pa_Arab', 'Punjabi (Arabic)', 'pa');
+export const PA_GURU_IN = /* @__PURE__ */ new Enum('pa_Guru_IN', 'Punjabi (Gurmukhi, India)');
+export const PA_GURU = /* @__PURE__ */ new Enum('pa_Guru', 'Punjabi (Gurmukhi)', 'pa');
+export const PA_IN = /* @__PURE__ */ new Enum('pa_IN', 'Punjabi (India)');
+export const PA_PK = /* @__PURE__ */ new Enum('pa_PK', 'Punjabi (Pakistan)');
+export const QU = /* @__PURE__ */ new Enum('qu', 'Quechua');
+export const QU_BO = /* @__PURE__ */ new Enum('qu_BO', 'Quechua (Bolivia)');
+export const QU_EC = /* @__PURE__ */ new Enum('qu_EC', 'Quechua (Ecuador)');
+export const QU_PE = /* @__PURE__ */ new Enum('qu_PE', 'Quechua (Peru)');
+export const RO = /* @__PURE__ */ new Enum('ro', 'Romanian');
+export const RO_MD = /* @__PURE__ */ new Enum('ro_MD', 'Romanian (Moldova)');
+export const RO_RO = /* @__PURE__ */ new Enum('ro_RO', 'Romanian (Romania)');
+export const RM = /* @__PURE__ */ new Enum('rm', 'Romansh');
+export const RM_CH = /* @__PURE__ */ new Enum('rm_CH', 'Romansh (Switzerland)');
+export const RN = /* @__PURE__ */ new Enum('rn', 'Rundi');
+export const RN_BI = /* @__PURE__ */ new Enum('rn_BI', 'Rundi (Burundi)');
+export const RU = /* @__PURE__ */ new Enum('ru', 'Russian');
+export const RU_BY = /* @__PURE__ */ new Enum('ru_BY', 'Russian (Belarus)');
+export const RU_KZ = /* @__PURE__ */ new Enum('ru_KZ', 'Russian (Kazakhstan)');
+export const RU_KG = /* @__PURE__ */ new Enum('ru_KG', 'Russian (Kyrgyzstan)');
+export const RU_MD = /* @__PURE__ */ new Enum('ru_MD', 'Russian (Moldova)');
+export const RU_RU = /* @__PURE__ */ new Enum('ru_RU', 'Russian (Russia)');
+export const RU_UA = /* @__PURE__ */ new Enum('ru_UA', 'Russian (Ukraine)');
+export const SG = /* @__PURE__ */ new Enum('sg', 'Sango');
+export const SG_CF = /* @__PURE__ */ new Enum('sg_CF', 'Sango (Central African Republic)');
+export const GD = /* @__PURE__ */ new Enum('gd', 'Scottish Gaelic');
+export const GD_GB = /* @__PURE__ */ new Enum('gd_GB', 'Scottish Gaelic (United Kingdom)');
+export const SR = /* @__PURE__ */ new Enum('sr', 'Serbian');
+export const SR_BA = /* @__PURE__ */ new Enum('sr_BA', 'Serbian (Bosnia & Herzegovina)');
+export const SR_CYRL_BA = /* @__PURE__ */ new Enum('sr_Cyrl_BA', 'Serbian (Cyrillic, Bosnia & Herzegovina)');
+export const SR_CYRL_XK = /* @__PURE__ */ new Enum('sr_Cyrl_XK', 'Serbian (Cyrillic, Kosovo)');
+export const SR_CYRL_ME = /* @__PURE__ */ new Enum('sr_Cyrl_ME', 'Serbian (Cyrillic, Montenegro)');
+export const SR_CYRL_RS = /* @__PURE__ */ new Enum('sr_Cyrl_RS', 'Serbian (Cyrillic, Serbia)');
+export const SR_CYRL = /* @__PURE__ */ new Enum('sr_Cyrl', 'Serbian (Cyrillic)', 'sr');
+export const SR_XK = /* @__PURE__ */ new Enum('sr_XK', 'Serbian (Kosovo)');
+export const SR_LATN_BA = /* @__PURE__ */ new Enum('sr_Latn_BA', 'Serbian (Latin, Bosnia & Herzegovina)');
+export const SR_LATN_XK = /* @__PURE__ */ new Enum('sr_Latn_XK', 'Serbian (Latin, Kosovo)');
+export const SR_LATN_ME = /* @__PURE__ */ new Enum('sr_Latn_ME', 'Serbian (Latin, Montenegro)');
+export const SR_LATN_RS = /* @__PURE__ */ new Enum('sr_Latn_RS', 'Serbian (Latin, Serbia)');
+export const SR_LATN = /* @__PURE__ */ new Enum('sr_Latn', 'Serbian (Latin)', 'sr');
+export const SR_ME = /* @__PURE__ */ new Enum('sr_ME', 'Serbian (Montenegro)');
+export const SR_RS = /* @__PURE__ */ new Enum('sr_RS', 'Serbian (Serbia)');
+export const SH = /* @__PURE__ */ new Enum('sh', 'Serbo-Croatian');
+export const SH_BA = /* @__PURE__ */ new Enum('sh_BA', 'Serbo-Croatian (Bosnia & Herzegovina)');
+export const SN = /* @__PURE__ */ new Enum('sn', 'Shona');
+export const SN_ZW = /* @__PURE__ */ new Enum('sn_ZW', 'Shona (Zimbabwe)');
+export const II = /* @__PURE__ */ new Enum('ii', 'Sichuan Yi');
+export const II_CN = /* @__PURE__ */ new Enum('ii_CN', 'Sichuan Yi (China)');
+export const SI = /* @__PURE__ */ new Enum('si', 'Sinhala');
+export const SI_LK = /* @__PURE__ */ new Enum('si_LK', 'Sinhala (Sri Lanka)');
+export const SK = /* @__PURE__ */ new Enum('sk', 'Slovak');
+export const SK_SK = /* @__PURE__ */ new Enum('sk_SK', 'Slovak (Slovakia)');
+export const SL = /* @__PURE__ */ new Enum('sl', 'Slovenian');
+export const SL_SI = /* @__PURE__ */ new Enum('sl_SI', 'Slovenian (Slovenia)');
+export const SO = /* @__PURE__ */ new Enum('so', 'Somali');
+export const SO_DJ = /* @__PURE__ */ new Enum('so_DJ', 'Somali (Djibouti)');
+export const SO_ET = /* @__PURE__ */ new Enum('so_ET', 'Somali (Ethiopia)');
+export const SO_KE = /* @__PURE__ */ new Enum('so_KE', 'Somali (Kenya)');
+export const SO_SO = /* @__PURE__ */ new Enum('so_SO', 'Somali (Somalia)');
+export const ES = /* @__PURE__ */ new Enum('es', 'Spanish');
+export const ES_AR = /* @__PURE__ */ new Enum('es_AR', 'Spanish (Argentina)');
+export const ES_BO = /* @__PURE__ */ new Enum('es_BO', 'Spanish (Bolivia)');
+export const ES_IC = /* @__PURE__ */ new Enum('es_IC', 'Spanish (Canary Islands)');
+export const ES_EA = /* @__PURE__ */ new Enum('es_EA', 'Spanish (Ceuta & Melilla)');
+export const ES_CL = /* @__PURE__ */ new Enum('es_CL', 'Spanish (Chile)');
+export const ES_CO = /* @__PURE__ */ new Enum('es_CO', 'Spanish (Colombia)');
+export const ES_CR = /* @__PURE__ */ new Enum('es_CR', 'Spanish (Costa Rica)');
+export const ES_CU = /* @__PURE__ */ new Enum('es_CU', 'Spanish (Cuba)');
+export const ES_DO = /* @__PURE__ */ new Enum('es_DO', 'Spanish (Dominican Republic)');
+export const ES_EC = /* @__PURE__ */ new Enum('es_EC', 'Spanish (Ecuador)');
+export const ES_SV = /* @__PURE__ */ new Enum('es_SV', 'Spanish (El Salvador)');
+export const ES_GQ = /* @__PURE__ */ new Enum('es_GQ', 'Spanish (Equatorial Guinea)');
+export const ES_GT = /* @__PURE__ */ new Enum('es_GT', 'Spanish (Guatemala)');
+export const ES_HN = /* @__PURE__ */ new Enum('es_HN', 'Spanish (Honduras)');
+export const ES_MX = /* @__PURE__ */ new Enum('es_MX', 'Spanish (Mexico)');
+export const ES_NI = /* @__PURE__ */ new Enum('es_NI', 'Spanish (Nicaragua)');
+export const ES_PA = /* @__PURE__ */ new Enum('es_PA', 'Spanish (Panama)');
+export const ES_PY = /* @__PURE__ */ new Enum('es_PY', 'Spanish (Paraguay)');
+export const ES_PE = /* @__PURE__ */ new Enum('es_PE', 'Spanish (Peru)');
+export const ES_PH = /* @__PURE__ */ new Enum('es_PH', 'Spanish (Philippines)');
+export const ES_PR = /* @__PURE__ */ new Enum('es_PR', 'Spanish (Puerto Rico)');
+export const ES_ES = /* @__PURE__ */ new Enum('es_ES', 'Spanish (Spain)');
+export const ES_US = /* @__PURE__ */ new Enum('es_US', 'Spanish (United States)');
+export const ES_UY = /* @__PURE__ */ new Enum('es_UY', 'Spanish (Uruguay)');
+export const ES_VE = /* @__PURE__ */ new Enum('es_VE', 'Spanish (Venezuela)');
+export const SW = /* @__PURE__ */ new Enum('sw', 'Swahili');
+export const SW_KE = /* @__PURE__ */ new Enum('sw_KE', 'Swahili (Kenya)');
+export const SW_TZ = /* @__PURE__ */ new Enum('sw_TZ', 'Swahili (Tanzania)');
+export const SW_UG = /* @__PURE__ */ new Enum('sw_UG', 'Swahili (Uganda)');
+export const SV = /* @__PURE__ */ new Enum('sv', 'Swedish');
+export const SV_AX = /* @__PURE__ */ new Enum('sv_AX', 'Swedish (Åland Islands)');
+export const SV_FI = /* @__PURE__ */ new Enum('sv_FI', 'Swedish (Finland)');
+export const SV_SE = /* @__PURE__ */ new Enum('sv_SE', 'Swedish (Sweden)');
+export const TL = /* @__PURE__ */ new Enum('tl', 'Tagalog');
+export const TL_PH = /* @__PURE__ */ new Enum('tl_PH', 'Tagalog (Philippines)');
+export const TA = /* @__PURE__ */ new Enum('ta', 'Tamil');
+export const TA_IN = /* @__PURE__ */ new Enum('ta_IN', 'Tamil (India)');
+export const TA_MY = /* @__PURE__ */ new Enum('ta_MY', 'Tamil (Malaysia)');
+export const TA_SG = /* @__PURE__ */ new Enum('ta_SG', 'Tamil (Singapore)');
+export const TA_LK = /* @__PURE__ */ new Enum('ta_LK', 'Tamil (Sri Lanka)');
+export const TE = /* @__PURE__ */ new Enum('te', 'Telugu');
+export const TE_IN = /* @__PURE__ */ new Enum('te_IN', 'Telugu (India)');
+export const TH = /* @__PURE__ */ new Enum('th', 'Thai');
+export const TH_TH = /* @__PURE__ */ new Enum('th_TH', 'Thai (Thailand)');
+export const BO = /* @__PURE__ */ new Enum('bo', 'Tibetan');
+export const BO_CN = /* @__PURE__ */ new Enum('bo_CN', 'Tibetan (China)');
+export const BO_IN = /* @__PURE__ */ new Enum('bo_IN', 'Tibetan (India)');
+export const TI = /* @__PURE__ */ new Enum('ti', 'Tigrinya');
+export const TI_ER = /* @__PURE__ */ new Enum('ti_ER', 'Tigrinya (Eritrea)');
+export const TI_ET = /* @__PURE__ */ new Enum('ti_ET', 'Tigrinya (Ethiopia)');
+export const TO = /* @__PURE__ */ new Enum('to', 'Tongan');
+export const TO_TO = /* @__PURE__ */ new Enum('to_TO', 'Tongan (Tonga)');
+export const TR = /* @__PURE__ */ new Enum('tr', 'Turkish');
+export const TR_CY = /* @__PURE__ */ new Enum('tr_CY', 'Turkish (Cyprus)');
+export const TR_TR = /* @__PURE__ */ new Enum('tr_TR', 'Turkish (Turkey)');
+export const UK = /* @__PURE__ */ new Enum('uk', 'Ukrainian');
+export const UK_UA = /* @__PURE__ */ new Enum('uk_UA', 'Ukrainian (Ukraine)');
+export const UR = /* @__PURE__ */ new Enum('ur', 'Urdu');
+export const UR_IN = /* @__PURE__ */ new Enum('ur_IN', 'Urdu (India)');
+export const UR_PK = /* @__PURE__ */ new Enum('ur_PK', 'Urdu (Pakistan)');
+export const UG = /* @__PURE__ */ new Enum('ug', 'Uyghur');
+export const UG_ARAB_CN = /* @__PURE__ */ new Enum('ug_Arab_CN', 'Uyghur (Arabic, China)');
+export const UG_ARAB = /* @__PURE__ */ new Enum('ug_Arab', 'Uyghur (Arabic)');
+export const UG_CN = /* @__PURE__ */ new Enum('ug_CN', 'Uyghur (China)');
+export const UZ = /* @__PURE__ */ new Enum('uz', 'Uzbek');
+export const UZ_AF = /* @__PURE__ */ new Enum('uz_AF', 'Uzbek (Afghanistan)');
+export const UZ_ARAB_AF = /* @__PURE__ */ new Enum('uz_Arab_AF', 'Uzbek (Arabic, Afghanistan)');
+export const UZ_ARAB = /* @__PURE__ */ new Enum('uz_Arab', 'Uzbek (Arabic)', 'uz');
+export const UZ_CYRL_UZ = /* @__PURE__ */ new Enum('uz_Cyrl_UZ', 'Uzbek (Cyrillic, Uzbekistan)');
+export const UZ_CYRL = /* @__PURE__ */ new Enum('uz_Cyrl', 'Uzbek (Cyrillic)', 'uz');
+export const UZ_LATN_UZ = /* @__PURE__ */ new Enum('uz_Latn_UZ', 'Uzbek (Latin, Uzbekistan)');
+export const UZ_LATN = /* @__PURE__ */ new Enum('uz_Latn', 'Uzbek (Latin)', 'uz');
+export const UZ_UZ = /* @__PURE__ */ new Enum('uz_UZ', 'Uzbek (Uzbekistan)');
+export const VI = /* @__PURE__ */ new Enum('vi', 'Vietnamese');
+export const VI_VN = /* @__PURE__ */ new Enum('vi_VN', 'Vietnamese (Vietnam)');
+export const CY = /* @__PURE__ */ new Enum('cy', 'Welsh');
+export const CY_GB = /* @__PURE__ */ new Enum('cy_GB', 'Welsh (United Kingdom)');
+export const FY = /* @__PURE__ */ new Enum('fy', 'Western Frisian');
+export const FY_NL = /* @__PURE__ */ new Enum('fy_NL', 'Western Frisian (Netherlands)');
+export const YI = /* @__PURE__ */ new Enum('yi', 'Yiddish');
+export const YO = /* @__PURE__ */ new Enum('yo', 'Yoruba');
+export const YO_BJ = /* @__PURE__ */ new Enum('yo_BJ', 'Yoruba (Benin)');
+export const YO_NG = /* @__PURE__ */ new Enum('yo_NG', 'Yoruba (Nigeria)');
+export const ZU = /* @__PURE__ */ new Enum('zu', 'Zulu');
+export const ZU_ZA = /* @__PURE__ */ new Enum('zu_ZA', 'Zulu (South Africa)');
+
+export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({
+  AF,
+  AF_NA,
+  AF_ZA,
+  AK,
+  AK_GH,
+  SQ,
+  SQ_AL,
+  SQ_XK,
+  SQ_MK,
+  AM,
+  AM_ET,
+  AR,
+  AR_DZ,
+  AR_BH,
+  AR_TD,
+  AR_KM,
+  AR_DJ,
+  AR_EG,
+  AR_ER,
+  AR_IQ,
+  AR_IL,
+  AR_JO,
+  AR_KW,
+  AR_LB,
+  AR_LY,
+  AR_MR,
+  AR_MA,
+  AR_OM,
+  AR_PS,
+  AR_QA,
+  AR_SA,
+  AR_SO,
+  AR_SS,
+  AR_SD,
+  AR_SY,
+  AR_TN,
+  AR_AE,
+  AR_EH,
+  AR_YE,
+  HY,
+  HY_AM,
+  AS,
+  AS_IN,
+  AZ,
+  AZ_AZ,
+  AZ_CYRL_AZ,
+  AZ_CYRL,
+  AZ_LATN_AZ,
+  AZ_LATN,
+  BM,
+  BM_LATN_ML,
+  BM_LATN,
+  EU,
+  EU_ES,
+  BE,
+  BE_BY,
+  BN,
+  BN_BD,
+  BN_IN,
+  BS,
+  BS_BA,
+  BS_CYRL_BA,
+  BS_CYRL,
+  BS_LATN_BA,
+  BS_LATN,
+  BR,
+  BR_FR,
+  BG,
+  BG_BG,
+  MY,
+  MY_MM,
+  CA,
+  CA_AD,
+  CA_FR,
+  CA_IT,
+  CA_ES,
+  ZH,
+  ZH_CN,
+  ZH_HK,
+  ZH_MO,
+  ZH_HANS_CN,
+  ZH_HANS_HK,
+  ZH_HANS_MO,
+  ZH_HANS_SG,
+  ZH_HANS,
+  ZH_SG,
+  ZH_TW,
+  ZH_HANT_HK,
+  ZH_HANT_MO,
+  ZH_HANT_TW,
+  ZH_HANT,
+  KW,
+  KW_GB,
+  HR,
+  HR_BA,
+  HR_HR,
+  CS,
+  CS_CZ,
+  DA,
+  DA_DK,
+  DA_GL,
+  NL,
+  NL_AW,
+  NL_BE,
+  NL_BQ,
+  NL_CW,
+  NL_NL,
+  NL_SX,
+  NL_SR,
+  DZ,
+  DZ_BT,
+  EN,
+  EN_AS,
+  EN_AI,
+  EN_AG,
+  EN_AU,
+  EN_BS,
+  EN_BB,
+  EN_BE,
+  EN_BZ,
+  EN_BM,
+  EN_BW,
+  EN_IO,
+  EN_VG,
+  EN_CM,
+  EN_CA,
+  EN_KY,
+  EN_CX,
+  EN_CC,
+  EN_CK,
+  EN_DG,
+  EN_DM,
+  EN_ER,
+  EN_FK,
+  EN_FJ,
+  EN_GM,
+  EN_GH,
+  EN_GI,
+  EN_GD,
+  EN_GU,
+  EN_GG,
+  EN_GY,
+  EN_HK,
+  EN_IN,
+  EN_IE,
+  EN_IM,
+  EN_JM,
+  EN_JE,
+  EN_KE,
+  EN_KI,
+  EN_LS,
+  EN_LR,
+  EN_MO,
+  EN_MG,
+  EN_MW,
+  EN_MY,
+  EN_MT,
+  EN_MH,
+  EN_MU,
+  EN_FM,
+  EN_MS,
+  EN_NA,
+  EN_NR,
+  EN_NZ,
+  EN_NG,
+  EN_NU,
+  EN_NF,
+  EN_MP,
+  EN_PK,
+  EN_PW,
+  EN_PG,
+  EN_PH,
+  EN_PN,
+  EN_PR,
+  EN_RW,
+  EN_WS,
+  EN_SC,
+  EN_SL,
+  EN_SG,
+  EN_SX,
+  EN_SB,
+  EN_ZA,
+  EN_SS,
+  EN_SH,
+  EN_KN,
+  EN_LC,
+  EN_VC,
+  EN_SD,
+  EN_SZ,
+  EN_TZ,
+  EN_TK,
+  EN_TO,
+  EN_TT,
+  EN_TC,
+  EN_TV,
+  EN_UM,
+  EN_VI,
+  EN_UG,
+  EN_GB,
+  EN_US,
+  EN_VU,
+  EN_ZM,
+  EN_ZW,
+  EO,
+  ET,
+  ET_EE,
+  EE,
+  EE_GH,
+  EE_TG,
+  FO,
+  FO_FO,
+  FI,
+  FI_FI,
+  FR,
+  FR_DZ,
+  FR_BE,
+  FR_BJ,
+  FR_BF,
+  FR_BI,
+  FR_CM,
+  FR_CA,
+  FR_CF,
+  FR_TD,
+  FR_KM,
+  FR_CG,
+  FR_CD,
+  FR_CI,
+  FR_DJ,
+  FR_GQ,
+  FR_FR,
+  FR_GF,
+  FR_PF,
+  FR_GA,
+  FR_GP,
+  FR_GN,
+  FR_HT,
+  FR_LU,
+  FR_MG,
+  FR_ML,
+  FR_MQ,
+  FR_MR,
+  FR_MU,
+  FR_YT,
+  FR_MC,
+  FR_MA,
+  FR_NC,
+  FR_NE,
+  FR_RE,
+  FR_RW,
+  FR_SN,
+  FR_SC,
+  FR_BL,
+  FR_MF,
+  FR_PM,
+  FR_CH,
+  FR_SY,
+  FR_TG,
+  FR_TN,
+  FR_VU,
+  FR_WF,
+  FF,
+  FF_CM,
+  FF_GN,
+  FF_MR,
+  FF_SN,
+  GL,
+  GL_ES,
+  LG,
+  LG_UG,
+  KA,
+  KA_GE,
+  DE,
+  DE_AT,
+  DE_BE,
+  DE_DE,
+  DE_LI,
+  DE_LU,
+  DE_CH,
+  EL,
+  EL_CY,
+  EL_GR,
+  GU,
+  GU_IN,
+  HA,
+  HA_GH,
+  HA_LATN_GH,
+  HA_LATN_NE,
+  HA_LATN_NG,
+  HA_LATN,
+  HA_NE,
+  HA_NG,
+  HE,
+  HE_IL,
+  HI,
+  HI_IN,
+  HU,
+  HU_HU,
+  IS,
+  IS_IS,
+  IG,
+  IG_NG,
+  ID,
+  ID_ID,
+  GA,
+  GA_IE,
+  IT,
+  IT_IT,
+  IT_SM,
+  IT_CH,
+  JA,
+  JA_JP,
+  KL,
+  KL_GL,
+  KN,
+  KN_IN,
+  KS,
+  KS_ARAB_IN,
+  KS_ARAB,
+  KS_IN,
+  KK,
+  KK_CYRL_KZ,
+  KK_CYRL,
+  KK_KZ,
+  KM,
+  KM_KH,
+  KI,
+  KI_KE,
+  RW,
+  RW_RW,
+  KO,
+  KO_KP,
+  KO_KR,
+  KY,
+  KY_CYRL_KG,
+  KY_CYRL,
+  KY_KG,
+  LO,
+  LO_LA,
+  LV,
+  LV_LV,
+  LN,
+  LN_AO,
+  LN_CF,
+  LN_CG,
+  LN_CD,
+  LT,
+  LT_LT,
+  LU,
+  LU_CD,
+  LB,
+  LB_LU,
+  MK,
+  MK_MK,
+  MG,
+  MG_MG,
+  MS,
+  MS_BN,
+  MS_LATN_BN,
+  MS_LATN_MY,
+  MS_LATN_SG,
+  MS_LATN,
+  MS_MY,
+  MS_SG,
+  ML,
+  ML_IN,
+  MT,
+  MT_MT,
+  GV,
+  GV_IM,
+  MR,
+  MR_IN,
+  MN,
+  MN_CYRL_MN,
+  MN_CYRL,
+  MN_MN,
+  NE,
+  NE_IN,
+  NE_NP,
+  ND,
+  ND_ZW,
+  SE,
+  SE_FI,
+  SE_NO,
+  SE_SE,
+  NO,
+  NO_NO,
+  NB,
+  NB_NO,
+  NB_SJ,
+  NN,
+  NN_NO,
+  OR,
+  OR_IN,
+  OM,
+  OM_ET,
+  OM_KE,
+  OS,
+  OS_GE,
+  OS_RU,
+  PS,
+  PS_AF,
+  FA,
+  FA_AF,
+  FA_IR,
+  PL,
+  PL_PL,
+  PT,
+  PT_AO,
+  PT_BR,
+  PT_CV,
+  PT_GW,
+  PT_MO,
+  PT_MZ,
+  PT_PT,
+  PT_ST,
+  PT_TL,
+  PA,
+  PA_ARAB_PK,
+  PA_ARAB,
+  PA_GURU_IN,
+  PA_GURU,
+  PA_IN,
+  PA_PK,
+  QU,
+  QU_BO,
+  QU_EC,
+  QU_PE,
+  RO,
+  RO_MD,
+  RO_RO,
+  RM,
+  RM_CH,
+  RN,
+  RN_BI,
+  RU,
+  RU_BY,
+  RU_KZ,
+  RU_KG,
+  RU_MD,
+  RU_RU,
+  RU_UA,
+  SG,
+  SG_CF,
+  GD,
+  GD_GB,
+  SR,
+  SR_BA,
+  SR_CYRL_BA,
+  SR_CYRL_XK,
+  SR_CYRL_ME,
+  SR_CYRL_RS,
+  SR_CYRL,
+  SR_XK,
+  SR_LATN_BA,
+  SR_LATN_XK,
+  SR_LATN_ME,
+  SR_LATN_RS,
+  SR_LATN,
+  SR_ME,
+  SR_RS,
+  SH,
+  SH_BA,
+  SN,
+  SN_ZW,
+  II,
+  II_CN,
+  SI,
+  SI_LK,
+  SK,
+  SK_SK,
+  SL,
+  SL_SI,
+  SO,
+  SO_DJ,
+  SO_ET,
+  SO_KE,
+  SO_SO,
+  ES,
+  ES_AR,
+  ES_BO,
+  ES_IC,
+  ES_EA,
+  ES_CL,
+  ES_CO,
+  ES_CR,
+  ES_CU,
+  ES_DO,
+  ES_EC,
+  ES_SV,
+  ES_GQ,
+  ES_GT,
+  ES_HN,
+  ES_MX,
+  ES_NI,
+  ES_PA,
+  ES_PY,
+  ES_PE,
+  ES_PH,
+  ES_PR,
+  ES_ES,
+  ES_US,
+  ES_UY,
+  ES_VE,
+  SW,
+  SW_KE,
+  SW_TZ,
+  SW_UG,
+  SV,
+  SV_AX,
+  SV_FI,
+  SV_SE,
+  TL,
+  TL_PH,
+  TA,
+  TA_IN,
+  TA_MY,
+  TA_SG,
+  TA_LK,
+  TE,
+  TE_IN,
+  TH,
+  TH_TH,
+  BO,
+  BO_CN,
+  BO_IN,
+  TI,
+  TI_ER,
+  TI_ET,
+  TO,
+  TO_TO,
+  TR,
+  TR_CY,
+  TR_TR,
+  UK,
+  UK_UA,
+  UR,
+  UR_IN,
+  UR_PK,
+  UG,
+  UG_ARAB_CN,
+  UG_ARAB,
+  UG_CN,
+  UZ,
+  UZ_AF,
+  UZ_ARAB_AF,
+  UZ_ARAB,
+  UZ_CYRL_UZ,
+  UZ_CYRL,
+  UZ_LATN_UZ,
+  UZ_LATN,
+  UZ_UZ,
+  VI,
+  VI_VN,
+  CY,
+  CY_GB,
+  FY,
+  FY_NL,
+  YI,
+  YO,
+  YO_BJ,
+  YO_NG,
+  ZU,
+  ZU_ZA,
+}));
+export const lookup = (other: string): Optional<Enum> => first(value => value.equals(other));

@@ -4,7 +4,7 @@ import { Collection } from './Collection';
 import { MongoProvider } from './MongoProvider';
 import { lucene, SearchDefinition } from './Lucene';
 import { asNumber, entries, Filter, Json, PageList, text, toPageList, tuple2 } from '@thisisagile/easy';
-import { Filter as MongoFilter} from '../src/MongoProvider';
+import { Filter as MongoFilter } from '../src/MongoProvider';
 
 const { skip, take } = stages.skip;
 const { replaceWith } = stages.replaceWith;

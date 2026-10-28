@@ -1,4 +1,5 @@
-import { Api, ApiGateway, cache, EasyUri, Func, HttpStatus, Request, RequestOptions, Response, RouteGateway, Store, toList, toResponse, uri } from '../../src';
+import * as HttpStatus from '../../src/http/HttpStatus';
+import { Api, ApiGateway, cache, EasyUri, Func, Request, RequestOptions, Response, RouteGateway, Store, toList, toResponse, uri } from '../../src';
 import { Dev, DevUri } from '../ref';
 import { fits, mock } from '@thisisagile/easy-test';
 

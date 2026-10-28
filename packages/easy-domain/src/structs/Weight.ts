@@ -1,9 +1,9 @@
-import { UnitOfWeight } from '../enums/UnitOfWeight';
+import * as UnitOfWeight from '../enums/UnitOfWeight';
 import { Struct, required } from '@thisisagile/easy';
 
 export class Weight extends Struct {
   @required() readonly value = this.state.value as number;
-  readonly uow = UnitOfWeight.byId<UnitOfWeight>(this.state.uow, UnitOfWeight.G);
+  readonly uow = UnitOfWeight.byId(this.state.uow, UnitOfWeight.G);
 
   /**
     @deprecated use inGrams getter instead
@@ -31,4 +31,4 @@ export class Weight extends Struct {
   }
 }
 
-export const weight = (value: number, uow?: UnitOfWeight): Weight => new Weight({ value, uow });
+export const weight = (value: number, uow?: UnitOfWeight.Enum): Weight => new Weight({ value, uow });

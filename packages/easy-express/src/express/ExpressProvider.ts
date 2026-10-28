@@ -1,6 +1,7 @@
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
 import express, { Express, NextFunction, Request, RequestHandler, Response } from 'express';
 import { checkLabCoat, checkScope, checkToken, checkUseCase } from './SecurityHandler';
-import { HttpStatus, isEmpty, PageList, rest, toList, toReq } from '@thisisagile/easy';
+import { isEmpty, PageList, rest, toList, toReq } from '@thisisagile/easy';
 import {
   AppProvider,
   Endpoint,

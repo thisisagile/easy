@@ -1,5 +1,6 @@
 import '@thisisagile/easy-test';
-import { Dimension, UnitOfMeasurement } from '../../src';
+import { Dimension } from '../../src';
+import * as UnitOfMeasurement from '../../src/enums/UnitOfMeasurement';
 
 describe('Dimension', () => {
   test('Dimension without value is not valid', () => {

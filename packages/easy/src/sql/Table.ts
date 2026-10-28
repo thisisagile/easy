@@ -8,7 +8,7 @@ import { Count } from './Count';
 import { MapOptions, Mapper, mappings } from '../utils/Mapper';
 import { PropertyOptions } from '../utils/Property';
 import { toUuid } from '../types/Uuid';
-import { Database } from '../data/Database';
+import * as Database from '../data/Database';
 import { toList } from '../types/List';
 import { Json } from '../types/Json';
 
@@ -24,7 +24,7 @@ export class Table extends Mapper {
     super(options);
   }
 
-  get db(): Database {
+  get db(): Database.Enum {
     return Database.Default;
   }
 

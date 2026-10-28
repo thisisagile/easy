@@ -1,7 +1,7 @@
 import { cacheAge } from '../types/CacheAge';
 import { ctx } from '../types/Context';
 import { isEmpty } from '../types/Is';
-import { HttpStatus } from '../http/HttpStatus';
+import * as HttpStatus from '../http/HttpStatus';
 import { isRestResult } from '../http/RestResult';
 import { Request } from '../http/Request';
 import { RequestOptions } from '../http/RequestOptions';

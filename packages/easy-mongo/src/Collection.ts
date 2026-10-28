@@ -1,7 +1,7 @@
+import * as Database from '@thisisagile/easy/Database';
 import {
   asString,
   Condition,
-  Database,
   Field,
   Get,
   Json,
@@ -31,7 +31,7 @@ export class Collection extends Mapper {
     super(options);
   }
 
-  get db(): Database {
+  get db(): Database.Enum {
     return Database.Default;
   }
 

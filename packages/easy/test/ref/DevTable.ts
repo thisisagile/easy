@@ -1,8 +1,9 @@
-import { convert, Database, DefaultProvider, MapOptions, Table } from '../../src';
+import * as Database from '../../src/data/Database';
+import { convert, MapOptions, Table } from '../../src';
 
-export class DevDatabase extends Database {
-  static readonly DevDB = new Database('DevDB', DefaultProvider, { cluster: 'dev' });
-}
+export const DevDatabase = {
+  DevDB: Database.create('DevDB', Database.DefaultProvider, { cluster: 'dev' }),
+};
 
 export class DevTable extends Table {
   readonly id = this.map.column('Id', { dflt: 42 });
@@ -14,7 +15,7 @@ export class DevTable extends Table {
     super(options);
   }
 
-  get db(): Database {
+  get db(): Database.Enum {
     return DevDatabase.DevDB;
   }
 }

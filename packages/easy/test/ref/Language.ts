@@ -1,8 +1,15 @@
-import { Enum } from '../../src';
+import { Enum, Id, registry } from '../../src';
 
-export class Language extends Enum {
-  static readonly Cobol = new Language('COBOL');
-  static readonly Java = new Language('Java');
-  static readonly JavaScript = new Language('JavaScript', 'javascript', 'js');
-  static readonly TypeScript = new Language('TypeScript', 'typescript', 'ts');
+export class LanguageValue extends Enum {
+  constructor(name: string, id: Id = name.toLowerCase(), code: string = id.toString()) {
+    super(name, id, code);
+  }
 }
+
+const Cobol = new LanguageValue('COBOL');
+const Java = new LanguageValue('Java');
+const JavaScript = new LanguageValue('JavaScript', 'javascript', 'js');
+const TypeScript = new LanguageValue('TypeScript', 'typescript', 'ts');
+const languages = registry({ Cobol, Java, JavaScript, TypeScript });
+
+export const Language = { Cobol, Java, JavaScript, TypeScript, ...languages };

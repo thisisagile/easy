@@ -1,5 +1,7 @@
+import * as HttpStatus from '../../src/http/HttpStatus';
+import * as HttpVerb from '../../src/http/HttpVerb';
 import axios, { AxiosInstance } from 'axios';
-import { AxiosProvider, ctx, EasyUri, FetchProvider, HttpStatus, HttpVerb, RequestInterceptor, RequestOptions, RequestProvider, uri } from '../../src';
+import { AxiosProvider, ctx, EasyUri, FetchProvider, RequestInterceptor, RequestOptions, RequestProvider, uri } from '../../src';
 import { DevUri } from '../ref';
 
 type Transport = {

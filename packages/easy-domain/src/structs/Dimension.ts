@@ -1,11 +1,11 @@
 import { Struct, required } from '@thisisagile/easy';
-import { UnitOfMeasurement } from '../enums/UnitOfMeasurement';
+import * as UnitOfMeasurement from '../enums/UnitOfMeasurement';
 
 export class Dimension extends Struct {
   @required() readonly value = this.state.value as number;
-  readonly uom = UnitOfMeasurement.byId<UnitOfMeasurement>(this.state.uom, UnitOfMeasurement.MM);
+  readonly uom = UnitOfMeasurement.byId(this.state.uom, UnitOfMeasurement.MM);
 
-  static with = (value: number, uom: UnitOfMeasurement = UnitOfMeasurement.MM) => new Dimension({ value, uom });
+  static with = (value: number, uom: UnitOfMeasurement.Enum = UnitOfMeasurement.MM) => new Dimension({ value, uom });
 
   /**
    @deprecated use inMilliMeters getter instead

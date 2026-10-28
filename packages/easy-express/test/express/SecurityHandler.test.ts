@@ -1,7 +1,9 @@
+import * as Environment from '@thisisagile/easy/Environment';
+import * as HttpStatus from '@thisisagile/easy/HttpStatus';
 import passport from 'passport';
 import { authError, checkLabCoat, checkScope, checkToken, checkUseCase, security } from '../../src';
 import { Request, Response } from 'express';
-import { ctx, DotEnvContext, EnvContext, Environment, HttpStatus } from '@thisisagile/easy';
+import { ctx, DotEnvContext, EnvContext } from '@thisisagile/easy';
 import { mock } from '@thisisagile/easy-test';
 import { DevScope, DevUseCase } from '../ref/DevUseCase';
 
@@ -13,15 +15,12 @@ describe('SecurityHandler decorators', () => {
     ctx.env = new DotEnvContext();
   });
 
-  test.each([[undefined], [''], ['unknown'], [Environment.Prd.id]])(
-    'checkLabCoat returns an AuthError on prd, empty, and unknown environments',
-    name => {
-      ctx.env = mock.empty<EnvContext>({ name: name as string });
-      const c = checkLabCoat();
-      c({} as Request, {} as Response, cb);
-      expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
-    }
-  );
+  test.each([[undefined], [''], ['unknown'], [Environment.Prd.id]])('checkLabCoat returns an AuthError on prd, empty, and unknown environments', name => {
+    ctx.env = mock.empty<EnvContext>({ name: name as string });
+    const c = checkLabCoat();
+    c({} as Request, {} as Response, cb);
+    expect(cb).toHaveBeenCalledWith(authError(HttpStatus.Forbidden));
+  });
 
   test.each([[Environment.Dev.id], [Environment.Tst.id], [Environment.Acc.id]])('checkLabCoat succeeds on %s', name => {
     ctx.env = mock.empty<EnvContext>({ name: name as string });
