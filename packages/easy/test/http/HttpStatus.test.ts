@@ -1,4 +1,4 @@
-import HttpStatus, { isHttpStatus, toHttpStatus } from '../../src/entries/HttpStatus';
+import * as HttpStatus from '../../src/http/HttpStatus';
 
 describe('HttpStatus', () => {
   test('Is not an error', () => {
@@ -26,14 +26,14 @@ describe('HttpStatus', () => {
   });
 
   test('isHttpStatus', () => {
-    expect(isHttpStatus(0)).toBeFalsy();
-    expect(isHttpStatus(400)).toBeFalsy();
-    expect(isHttpStatus(HttpStatus.ImATeapot)).toBeTruthy();
+    expect(HttpStatus.isHttpStatus(0)).toBeFalsy();
+    expect(HttpStatus.isHttpStatus(400)).toBeFalsy();
+    expect(HttpStatus.isHttpStatus(HttpStatus.ImATeapot)).toBeTruthy();
   });
 
   test('toHttpStatus', () => {
-    expect(toHttpStatus(0)).toBeUndefined();
-    expect(toHttpStatus(400).status).toBe(HttpStatus.BadRequest.status);
-    expect(toHttpStatus(HttpStatus.ImATeapot)).toBe(HttpStatus.ImATeapot);
+    expect(HttpStatus.toHttpStatus(0)).toBeUndefined();
+    expect(HttpStatus.toHttpStatus(400).status).toBe(HttpStatus.BadRequest.status);
+    expect(HttpStatus.toHttpStatus(HttpStatus.ImATeapot)).toBe(HttpStatus.ImATeapot);
   });
 });

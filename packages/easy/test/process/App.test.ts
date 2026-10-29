@@ -1,9 +1,10 @@
-import App, { Main, Enum, create } from '../../src/entries/App';
+import * as App from '../../src/process/Apps';
+import { Main, Enum, create } from '../../src/process/Apps';
 
 describe('App', () => {
   const customerPortal = 'customer-portal';
 
-  test('default namespace and named value have one identity', () => {
+  test('namespace and named imports have one identity', () => {
     expect(App.Main).toBe(Main);
     expect(Main).toBeInstanceOf(Enum);
     expect(App.all()).toEqual([Main]);

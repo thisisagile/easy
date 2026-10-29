@@ -1,4 +1,4 @@
-import Scope from '../../src/entries/Scope';
+import * as Scope from '../../src/process/Scope';
 import { DevScope } from '../ref/DevUseCase';
 
 describe('Scope', () => {

@@ -7,7 +7,9 @@
     "composite": false,
     "paths": {
       "@thisisagile/easy": ["packages/easy/src/index.ts"],
-      "@thisisagile/easy/*": ["packages/easy/src/entries/*", "packages/easy/src/*"]
+      "@thisisagile/easy/*": ["packages/easy/src/*"],
+      "@thisisagile/easy-domain": ["packages/easy-domain/src/index.ts"],
+      "@thisisagile/easy-domain/*": ["packages/easy-domain/src/*"]
     }
   }
 }

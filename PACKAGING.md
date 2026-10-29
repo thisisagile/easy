@@ -13,12 +13,13 @@ the same `default` condition. One file is emitted per source file (tsdown in
 unbundled mode), so root and leaf imports share constructors, including `DateTime`
 and `Value`, and emitted specifiers include their `.js` extension.
 
-Each package declares its public exports in `package.json`. Catalogue namespace
-entrypoints live under `src/entries`; their public aliases point at the corresponding
-`dist/entries` output. The tsdown config keeps the catalogue module external to its
-entry, so `dist/entries/Locale.js` stays a static `import * as` re-export: bundled,
-rolldown would build a namespace object holding every value, and `Locale.EN` would
-retain all locales. For the same reason a catalogue keeps its `lazyRegistry` in a
+Each package declares its public exports and catalogue source entries in `package.json`.
+The shared tsdown and Jest configs use that manifest data to generate catalogue namespace
+entrypoints under `dist/entries` and resolve repository tests to the real source modules.
+Their public aliases point at the generated output. A `dist/entries/Locale.js` is a static
+`import * as` re-export: bundling a TypeScript facade would make rolldown build a
+namespace object holding every value, and `Locale.EN` would retain all locales. For
+the same reason a catalogue keeps its `lazyRegistry` in a
 const and exports `all`, `byId`, `byIds`, `filter` and `first` as wrappers instead
 of destructuring it. esbuild (tsup) never shakes a default import, so consumers
 built with it should use `import * as Locale` or named imports. The `src/*`,

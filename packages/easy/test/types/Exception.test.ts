@@ -1,4 +1,4 @@
-import Exception from '../../src/entries/Exception';
+import * as Exception from '../../src/types/Exception';
 import { Dev, Language } from '../ref';
 import '@thisisagile/easy-test';
 

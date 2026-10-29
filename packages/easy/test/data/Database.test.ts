@@ -1,15 +1,14 @@
-import Database from '../../src/entries/Database';
-import * as DatabaseSource from '../../src/data/Database';
+import * as Database from '../../src/data/Database';
 import { DataProvider } from '../../src';
 
 describe('Database', () => {
   class TestProvider implements DataProvider {}
 
-  test('supports default namespace and named catalogue imports', () => {
+  test('constructs custom databases through the catalogue namespace', () => {
     const custom: Database.Enum = new Database.Enum('custom', TestProvider);
 
-    expect(Database.Enum).toBe(DatabaseSource.Enum);
     expect(custom).toBeInstanceOf(Database.Enum);
+    expect(custom.id).toBe('custom');
   });
 
   test('provide works with ctor', () => {

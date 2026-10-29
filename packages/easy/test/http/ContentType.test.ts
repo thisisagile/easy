@@ -1,4 +1,4 @@
-import ContentType from '../../src/entries/ContentType';
+import * as ContentType from '../../src/http/ContentType';
 import { json } from '../../src';
 import { Dev } from '../ref';
 import '@thisisagile/easy-test';

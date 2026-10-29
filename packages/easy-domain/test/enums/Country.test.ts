@@ -1,6 +1,6 @@
 import '@thisisagile/easy-test';
 import { toList } from '@thisisagile/easy';
-import Country from '../../src/entries/Country';
+import * as Country from '../../src/enums/Country';
 
 describe('Country', () => {
   test('id and name matches.', () => {

@@ -26,6 +26,13 @@
     "prepack": "yarn g:copy-readme"
   },
   "sideEffects": false,
+  "catalogueEntries": {
+    "Country": "./src/enums/Country.ts",
+    "Currency": "./src/enums/Currency.ts",
+    "Locale": "./src/enums/Locale.ts",
+    "UnitOfMeasurement": "./src/enums/UnitOfMeasurement.ts",
+    "UnitOfWeight": "./src/enums/UnitOfWeight.ts"
+  },
   "files": [
     "dist",
     "src"

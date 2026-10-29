@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import UnitOfWeight from '../../src/entries/UnitOfWeight';
+import * as UnitOfWeight from '../../src/enums/UnitOfWeight';
 
 describe('UnitOfWeight', () => {
   test('default construction.', () => {

@@ -1,5 +1,5 @@
 import type { Enum as Scope } from '../../src/process/Scope';
-import UseCase from '../../src/entries/UseCase';
+import * as UseCase from '../../src/process/UseCase';
 import * as App from '../../src/process/Apps';
 
 import { DevScope, DevUseCase } from '../ref/DevUseCase';

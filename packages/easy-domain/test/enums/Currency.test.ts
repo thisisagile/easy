@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import Currency from '../../src/entries/Currency';
+import * as Currency from '../../src/enums/Currency';
 import { isCurrency } from '@thisisagile/easy';
 
 describe('Currency', () => {

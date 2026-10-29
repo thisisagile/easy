@@ -1,5 +1,5 @@
 import '@thisisagile/easy-test';
-import UnitOfMeasurement from '../../src/entries/UnitOfMeasurement';
+import * as UnitOfMeasurement from '../../src/enums/UnitOfMeasurement';
 
 describe('UnitOfMeasurement', () => {
   test('default construction.', () => {

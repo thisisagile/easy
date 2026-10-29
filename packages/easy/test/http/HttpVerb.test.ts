@@ -1,4 +1,4 @@
-import HttpVerb from '../../src/entries/HttpVerb';
+import * as HttpVerb from '../../src/http/HttpVerb';
 
 describe('HttpVerb', () => {
   test('exposes values with HTTP method codes', () => {

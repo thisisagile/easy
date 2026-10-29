@@ -26,6 +26,17 @@
     "prepack": "yarn g:copy-readme"
   },
   "sideEffects": false,
+  "catalogueEntries": {
+    "App": "./src/process/Apps.ts",
+    "ContentType": "./src/http/ContentType.ts",
+    "Database": "./src/data/Database.ts",
+    "Environment": "./src/types/Environment.ts",
+    "Exception": "./src/types/Exception.ts",
+    "HttpStatus": "./src/http/HttpStatus.ts",
+    "HttpVerb": "./src/http/HttpVerb.ts",
+    "Scope": "./src/process/Scope.ts",
+    "UseCase": "./src/process/UseCase.ts"
+  },
   "files": [
     "dist",
     "src"

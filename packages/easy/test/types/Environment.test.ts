@@ -1,4 +1,4 @@
-import Environment from '../../src/entries/Environment';
+import * as Environment from '../../src/types/Environment';
 import '@thisisagile/easy-test';
 
 describe('Environment', () => {

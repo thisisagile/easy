@@ -1,9 +1,13 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { test } from 'node:test';
 import { readFileSync, readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { runtimeSource } from './package-runtime.mjs';
 
+const require = createRequire(import.meta.url);
+const jestConfig = require('../jest.config.base');
 const packages = new URL('../packages/', import.meta.url);
 const manifests = readdirSync(packages, { withFileTypes: true })
   .filter(entry => entry.isDirectory())
@@ -92,7 +96,27 @@ test('catalogue subpaths expose default namespaces', () => {
 test('catalogue entries re-export their module instead of building a namespace object', () => {
   const dist = new URL('../packages/easy-domain/dist/', import.meta.url);
   assert.doesNotMatch(readFileSync(new URL('enums/Locale.js', dist), 'utf8'), /__exportAll/);
-  assert.match(readFileSync(new URL('entries/Locale.js', dist), 'utf8'), /^import \* as [\w$]+ from "\.\.\/enums\/Locale\.js";/m);
+  assert.equal(
+    readFileSync(new URL('entries/Locale.js', dist), 'utf8'),
+    "export * from '../enums/Locale.js';\nimport * as catalogue from '../enums/Locale.js';\nexport { catalogue as default };\n"
+  );
+  assert.equal(
+    readFileSync(new URL('entries/Locale.d.ts', dist), 'utf8'),
+    "export * from '../enums/Locale.js';\nimport * as catalogue from '../enums/Locale.js';\nexport { catalogue as default };\n"
+  );
+});
+
+test('Jest resolves catalogue aliases from package manifests in dependent packages', () => {
+  const root = fileURLToPath(new URL('../packages/easy-test-web', import.meta.url));
+  const suite = fileURLToPath(new URL('../packages/easy-test-web/test/Tester.test.ts', import.meta.url));
+  const result = spawnSync(
+    process.execPath,
+    [require.resolve('jest/bin/jest'), '--config', JSON.stringify({ ...jestConfig, rootDir: root }), '--runInBand', '--runTestsByPath', suite],
+    {
+      encoding: 'utf8',
+    }
+  );
+  assert.equal(result.status, 0, result.error?.message ?? result.stderr);
 });
 
 test('a CommonJS consumer reaches the root, the legacy dist path and the leaf through one ESM build', () => {
