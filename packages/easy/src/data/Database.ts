@@ -1,6 +1,6 @@
 import { DataProvider } from './DataProvider';
 import { Enum as EasyEnum } from '../types/Enum';
-import { lazyRegistry } from '../types/Registry';
+import { lazyRegistry, type Registry } from '../types/Registry';
 import { Construct, ofConstruct } from '../types/Constructor';
 
 export type DatabaseOptions = {
@@ -38,4 +38,9 @@ export const create = (name: string, provider: Construct<DataProvider>, options?
 
 export const Default = /* @__PURE__ */ create('Default', DefaultProvider);
 
-export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({ Default }));
+const registry = /* @__PURE__ */ lazyRegistry(() => ({ Default }));
+export const all: Registry<Enum>['all'] = () => registry.all();
+export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);

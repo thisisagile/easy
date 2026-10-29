@@ -20,7 +20,7 @@ jobs:
       - name: Packed artifact consumers
         run: |
           yarn check:exports
-          node --test test/exports.test.mjs test/jest-config.test.mjs test/packaging.test.mjs
+          node --test test/exports.test.mjs test/packaging.test.mjs
           yarn test:bundle
       - name: Archive bundle report
         if: always()

@@ -15,16 +15,22 @@ and `Value`, and emitted specifiers include their `.js` extension.
 
 Each package declares its public exports in `package.json`. Catalogue namespace
 entrypoints live under `src/entries`; their public aliases point at the corresponding
-`dist/entries` output. The `src/*`, `dist/*` and `package.json` passthroughs remain
-available for compatibility.
+`dist/entries` output. The tsdown config keeps the catalogue module external to its
+entry, so `dist/entries/Locale.js` stays a static `import * as` re-export: bundled,
+rolldown would build a namespace object holding every value, and `Locale.EN` would
+retain all locales. For the same reason a catalogue keeps its `lazyRegistry` in a
+const and exports `all`, `byId`, `byIds`, `filter` and `first` as wrappers instead
+of destructuring it. esbuild (tsup) never shakes a default import, so consumers
+built with it should use `import * as Locale` or named imports. The `src/*`,
+`dist/*` and `package.json` passthroughs remain available for compatibility.
 Source paths still contain TypeScript and need the consumer's existing transpiler
 and resolution configuration; they are not Node runtime entrypoints.
 
 `build` runs tsdown (JavaScript and declarations, dependencies left external).
 CI runs `yarn check:exports` after building to check that
 all export targets exist and resolve via Node's import and require resolvers.
-`node --test test/exports.test.mjs test/jest-config.test.mjs test/packaging.test.mjs`
-checks validation failures, the derived exports map, the Jest source mapping, that
+`node --test test/exports.test.mjs test/packaging.test.mjs`
+checks validation failures, the derived exports map, that
 every package executes from both an ESM and a CommonJS process, and that `require`
 and `import` hand out the same instance; the packed consumer fixture separately
 measures tree shaking.

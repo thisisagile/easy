@@ -15,4 +15,12 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   tsconfig: 'tsconfig.json',
+  plugins: [
+    {
+      // Bundling `export * as default from '../enums/Locale'` makes rolldown build a namespace object holding every
+      // catalogue value, which consumers cannot shake. Kept external, the entry stays a static re-export.
+      name: 'external-catalogue-entries',
+      resolveId: (id: string, importer?: string) => (importer?.includes('/src/entries/') && id.startsWith('../') ? { id: `${id}.js`, external: true } : null),
+    },
+  ],
 });

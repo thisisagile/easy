@@ -74,15 +74,25 @@ test('catalogue subpaths expose default namespaces', () => {
     import assert from 'node:assert/strict';
     import Database from '@thisisagile/easy/Database';
     import Locale from '@thisisagile/easy-domain/Locale';
+    import * as LocaleFile from '@thisisagile/easy-domain/dist/enums/Locale.js';
     class Provider {}
     const direct = new Database.Enum('direct', Provider);
     const created = Database.create('created', Provider);
     assert.ok(direct instanceof Database.Enum);
     assert.ok(created instanceof Database.Enum);
     assert.ok(Locale.create('nl_test', 'Test Dutch', 'nl') instanceof Locale.Enum);
+    assert.equal(Locale, LocaleFile);
+    assert.equal(Locale.byId('en'), Locale.EN);
+    assert.equal(Locale.all().length, 563);
   `,
     'module'
   );
+});
+
+test('catalogue entries re-export their module instead of building a namespace object', () => {
+  const dist = new URL('../packages/easy-domain/dist/', import.meta.url);
+  assert.doesNotMatch(readFileSync(new URL('enums/Locale.js', dist), 'utf8'), /__exportAll/);
+  assert.match(readFileSync(new URL('entries/Locale.js', dist), 'utf8'), /^import \* as [\w$]+ from "\.\.\/enums\/Locale\.js";/m);
 });
 
 test('a CommonJS consumer reaches the root, the legacy dist path and the leaf through one ESM build', () => {

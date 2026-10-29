@@ -1,6 +1,6 @@
 import { Enum as EasyEnum } from '@thisisagile/easy/types/Enum';
 import type { Id } from '@thisisagile/easy/types/Id';
-import { lazyRegistry } from '@thisisagile/easy/types/Registry';
+import { lazyRegistry, type Registry } from '@thisisagile/easy/types/Registry';
 import { text } from '@thisisagile/easy/types/ToText';
 import type { Optional } from '@thisisagile/easy/types/Types';
 import { equalsNormalizedId } from './NormalizedId';
@@ -267,7 +267,7 @@ export const YE = /* @__PURE__ */ new Enum('Yemen', 'YE');
 export const ZM = /* @__PURE__ */ new Enum('Zambia', 'ZM');
 export const ZW = /* @__PURE__ */ new Enum('Zimbabwe', 'ZW');
 
-export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({
+const registry = /* @__PURE__ */ lazyRegistry(() => ({
   AF,
   AX,
   AL,
@@ -518,6 +518,11 @@ export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(
   ZM,
   ZW,
 }));
+export const all: Registry<Enum>['all'] = () => registry.all();
+export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);
 export const lookup = (other: string): Optional<Enum> => first(value => value.equals(other));
 
 export const inEurope = (c: Enum | string): boolean => {

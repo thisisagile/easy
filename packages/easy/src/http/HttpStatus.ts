@@ -1,5 +1,5 @@
 import { Enum as EasyEnum } from '../types/Enum';
-import { lazyRegistry } from '../types/Registry';
+import { lazyRegistry, type Registry } from '../types/Registry';
 import { TypeGuard } from '../types/TypeGuard';
 import { isAn } from '../types/IsA';
 import { Code } from '../types/Id';
@@ -92,7 +92,7 @@ export const LoopDetected = /* @__PURE__ */ new Enum('Loop detected', 508);
 export const NotExtended = /* @__PURE__ */ new Enum('Not extended', 510);
 export const NetworkAuthenticationRequired = /* @__PURE__ */ new Enum('Network authentication required', 511);
 
-export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({
+const registry = /* @__PURE__ */ lazyRegistry(() => ({
   Continue,
   SwitchingProtocols,
   Processing,
@@ -157,6 +157,11 @@ export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(
   NotExtended,
   NetworkAuthenticationRequired,
 }));
+export const all: Registry<Enum>['all'] = () => registry.all();
+export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);
 
 export const isHttpStatus: TypeGuard<Enum> = (s?: unknown): s is Enum => isAn<Enum>(s, 'id', 'status');
 export const toHttpStatus = (s: Enum | Code): Enum => (isHttpStatus(s) ? s : byId(s));

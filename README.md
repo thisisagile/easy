@@ -85,21 +85,45 @@ Secondly, in most languages (Java not included), enumerations only have two prop
 
 Thirdly, and perhaps the most dangerous one, if you persist your enumerables to a storage facility (a database for instance), enumerations are usually stored using their index. This makes the data hard to interpret. After all, what does scope `2` really mean? But even worse, if you would add more items to your enumerable later on, the index of the items might alter, and hence the stored data gets a different meaning, often without noticing.
 
-Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is comparable to traditional enumerables. Here's the `UseCase` enumerable from **easy** as an example.
+Therefore, **easy** provides an `Enum` class, which is both extendable and allows you to define meaningful identifiers for your items, and also add additional properties. And still, the behaviour of enumerables created using the `Enum` class, is comparable to traditional enumerables.
 
-    export class UseCase extends Enum {
-      constructor(readonly scope: Scope, name: string, id: string = text(name).kebab) {
-        super(name, id);
-      }
+A set of enumerables, such as all use cases of a service, is a catalogue: a module that exports each item as a constant, plus a registry to look items up. Catalogues are modules rather than classes with static members, so a bundler can drop the items you don't use. Here's a catalogue of use cases, built with the `UseCase` value class from **easy**.
 
-      static readonly Main = new UseCase(Scope.Basic, "Main");
-      static readonly Login = new UseCase(Scope.Auth, "Login");
-      static readonly Logout = new UseCase(Scope.Auth, "Logout");
-      static readonly ForgotPassword = new UseCase(Scope.Auth, "Forgot password");
-      static readonly ChangePassword = new UseCase(Scope.Auth, "Change password");
-    }
+    // UseCase.ts
+    import * as App from '@thisisagile/easy/App';
+    import { create, type Enum } from '@thisisagile/easy/UseCase';
+    import { lazyRegistry, type Registry } from '@thisisagile/easy/types/Registry';
+    import * as Scope from './Scope';
 
-The class `UseCase` has five items, such as `UseCase.Main` or `UseCase.ChangePassword`. The constructor has an additional property `scope`, which the `Enum` class does not have, but it calls on the constructor of its superclass to actual make it work. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison.
+    export const Login = /* @__PURE__ */ create(App.Main, 'Login', 'login', [Scope.Auth]);
+    export const Logout = /* @__PURE__ */ create(App.Main, 'Logout', 'logout', [Scope.Auth]);
+    export const ChangePassword = /* @__PURE__ */ create(App.Main, 'Change password', 'change-password', [Scope.Auth]);
+
+    const registry = /* @__PURE__ */ lazyRegistry(() => ({ Login, Logout, ChangePassword }));
+    export const all: Registry<Enum>['all'] = () => registry.all();
+    export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+    export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+    export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+    export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);
+
+The catalogue has three items, such as `UseCase.Login` or `UseCase.ChangePassword`. A `UseCase` has the additional properties `app` and `scopes`, which the `Enum` class does not have. To add properties of your own, extend the value class (`class MyUseCase extends Enum`) and export a `create` for it. All instances of `Enum` have a property `id`, which is used to store the enums, when used as property on entities, or for comparison. `byId()` turns a stored id back into its item.
+
+Use a catalogue with a namespace import or with named imports:
+
+    import * as UseCase from './UseCase';
+    import { Login } from './UseCase';
+
+    UseCase.Login.equals(Login); // true
+    UseCase.byId('logout');      // UseCase.Logout
+
+The catalogues that ship with **easy** are imported the same way, through their own subpath: `@thisisagile/easy/HttpStatus`, `ContentType`, `HttpVerb`, `Database`, `Environment`, `Exception`, `App`, `Scope` and `UseCase`, and `@thisisagile/easy-domain/Country`, `Currency`, `Locale`, `UnitOfMeasurement` and `UnitOfWeight`. These subpaths also offer a default export, so `import Locale from '@thisisagile/easy-domain/Locale'` works too.
+
+To keep catalogues tree-shakeable, follow these rules:
+- Mark every item `/* @__PURE__ */`, so an unused item can be dropped.
+- Keep the registry in a constant and export `all`, `byId`, `byIds`, `filter` and `first` as functions, as above. Never write `export const { all, byId } = lazyRegistry(...)`: bundlers such as rolldown treat the destructuring as a side effect and keep every item.
+- Prefer `import * as` or named imports. `Locale.EN` then keeps only `EN`, in webpack, Turbopack, rolldown/tsdown and esbuild/tsup alike. A default import shakes in webpack, Turbopack and rolldown, but esbuild (tsup) always keeps the whole catalogue.
+- Calling `all()`, `byId()` or any other registry function keeps the whole catalogue, as it needs every item to answer.
+- If you publish a catalogue with a default export, see [PACKAGING.md](PACKAGING.md) for how the build keeps it shakeable.
 
 ### Value objects
 When we are not so much interested in the identity of objects, as with entities, but are merely interested in the values of the object, we use value objects. A nice useful definition of value objects is presented by Eric Evens in his seminal book *Domain Driven Design*.
@@ -227,12 +251,13 @@ Because data in existing databases rarely supplies the format you need in your s
         }
     }
 
-The `Map` and `Table` classes have a property called `db` that represents the database to connect to. This is usually an instance of the `Database` enumeration, which in its turn defines the database (and its provider) to connect to, as in the example below.
+The `Map` and `Table` classes have a property called `db` that represents the database to connect to. This is usually an item of a `Database` catalogue, which in its turn defines the database (and its provider) to connect to, as in the example below.
 
-    export class MyDatabase extends Database {
-        static readonly Erp = new Database('openerp', PostgreSqlProvider);
-        static readonly Cms = new Database('cms', MySqlProvider);
-    }
+    // MyDatabase.ts
+    import { create } from '@thisisagile/easy/Database';
+
+    export const Erp = /* @__PURE__ */ create('openerp', PostgreSqlProvider);
+    export const Cms = /* @__PURE__ */ create('cms', MySqlProvider);
 
 Next, the `Map`, `Table` and `Collection` classes, describe a list of properties that you would want mapped in the incoming JSON. Properties in the incoming JSON that are not described here are copied automatically. Properties can use converters, e.g. to converter from number to string and vice versa. Converters are bi-directional, as data that needs to go from the service to storage is mapped back to the database specific format too. 
 

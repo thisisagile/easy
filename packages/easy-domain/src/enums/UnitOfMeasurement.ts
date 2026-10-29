@@ -1,5 +1,5 @@
 import { Enum as EasyEnum } from '@thisisagile/easy/types/Enum';
-import { lazyRegistry } from '@thisisagile/easy/types/Registry';
+import { lazyRegistry, type Registry } from '@thisisagile/easy/types/Registry';
 
 export class Enum extends EasyEnum {
   constructor(
@@ -19,4 +19,9 @@ export const DM = /* @__PURE__ */ new Enum('Decimeter', 'dm', 100);
 export const M = /* @__PURE__ */ new Enum('Meter', 'm', 1000);
 export const KM = /* @__PURE__ */ new Enum('Kilometer', 'km', 1000000);
 
-export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({ MM, CM, DM, M, KM }));
+const registry = /* @__PURE__ */ lazyRegistry(() => ({ MM, CM, DM, M, KM }));
+export const all: Registry<Enum>['all'] = () => registry.all();
+export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);

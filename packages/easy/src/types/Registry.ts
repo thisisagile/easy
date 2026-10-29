@@ -37,6 +37,8 @@ export const registry = <E extends Identified>(values: Record<string, E>): Regis
   };
 };
 
+// Catalogues keep the result in a const and export arrow wrappers: bundlers such as rolldown treat destructuring the
+// result as a side effect, which would retain every catalogue value in consumers that import just one.
 export const lazyRegistry = <E extends Identified>(values: () => Record<string, E>): Registry<E> => {
   let current: Registry<E> | undefined;
   const get = (): Registry<E> => (current ??= registry(values()));

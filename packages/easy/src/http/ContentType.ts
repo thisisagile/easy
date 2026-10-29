@@ -1,6 +1,6 @@
 import formUrlEncoded from 'form-urlencoded';
 import { Enum as EasyEnum } from '../types/Enum';
-import { lazyRegistry } from '../types/Registry';
+import { lazyRegistry, type Registry } from '../types/Registry';
 import { Get, ofGet } from '../types/Get';
 import { asString } from '../types/Text';
 
@@ -26,4 +26,9 @@ export const Stream = /* @__PURE__ */ new Enum('stream', 'application/octet-stre
 export const Text = /* @__PURE__ */ new Enum('text', 'text/plain');
 export const Xml = /* @__PURE__ */ new Enum('xml', 'application/xml');
 
-export const { all, byId, byIds, filter, first } = /* @__PURE__ */ lazyRegistry(() => ({ Form, Json, RawJson, Stream, Text, Xml }));
+const registry = /* @__PURE__ */ lazyRegistry(() => ({ Form, Json, RawJson, Stream, Text, Xml }));
+export const all: Registry<Enum>['all'] = () => registry.all();
+export const byId: Registry<Enum>['byId'] = (id, alt) => registry.byId(id, alt);
+export const byIds: Registry<Enum>['byIds'] = ids => registry.byIds(ids);
+export const filter: Registry<Enum>['filter'] = (predicate, params) => registry.filter(predicate, params);
+export const first: Registry<Enum>['first'] = (predicate, params) => registry.first(predicate, params);
