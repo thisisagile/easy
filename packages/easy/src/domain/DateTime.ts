@@ -249,10 +249,15 @@ function zoneOf(name: string): Zone {
   if (match) return { type: 'offset', minutes: (match[1] === '-' ? -1 : 1) * (+match[2] * 60 + +(match[3] ?? 0)) };
   return /^(UTC|GMT|Z)$/i.test(name) ? utcZone : { type: 'named', name };
 }
-function resolveWall(wall: Dayjs, zone: Zone, guess = offset({ date: dayjs.utc(Date.now()), zone })): Dayjs {
-  const next = offset({ date: wall.subtract(guess, 'minute'), zone });
-  const corrected = offset({ date: wall.subtract(next, 'minute'), zone });
-  return wall.subtract(next === corrected ? next : Math.min(next, corrected), 'minute');
+// Never reads the clock: Next.js prerendering rejects Date.now(), and a now-based guess made folds depend on the season.
+// A fold takes the preferred offset when it fits, else the earlier instant; a gap shifts forward by the offset before it.
+function resolveWall(wall: Dayjs, zone: Zone, preferred?: number): Dayjs {
+  if (zone.type !== 'named') return wall.subtract(offset({ date: wall, zone }), 'minute');
+  const fits = (minutes: number): boolean => offset({ date: wall.subtract(minutes, 'minute'), zone }) === minutes;
+  const before = offset({ date: wall.subtract(1, 'day'), zone });
+  const after = offset({ date: wall.add(1, 'day'), zone });
+  const minutes = [preferred, before, after].find(m => isDefined(m) && fits(m)) ?? before;
+  return wall.subtract(minutes, 'minute');
 }
 function parseIso(value: string): ZonedDate {
   const parts = value.split('T');

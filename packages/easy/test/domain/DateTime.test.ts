@@ -8,6 +8,9 @@ const isoDateFormat = 'yyyy-MM-dd';
 const amsterdamZone = 'Europe/Amsterdam';
 const amsterdamSpringStart = '2025-03-30T00:00:00.000+01:00';
 const amsterdamSpringEnd = '2025-03-30T23:59:59.999+02:00';
+const amsterdamAutumnStart = '2025-10-26T00:00:00.000+02:00';
+const amsterdamGap = '2025-03-30T03:30:00.000+02:00';
+const amsterdamFold = '2025-10-26T02:30:00.000+02:00';
 
 const date = {
   iso: '2021-03-25T08:39:44.000Z',
@@ -40,6 +43,8 @@ const fullDate = 'February 29, 2024';
 const fullDateTime = 'Thursday, February 29, 2024 at 1:05\u202fPM UTC';
 const slashDate = '29/02/2024';
 const frozenNow = Date.parse('2024-06-15T10:20:30.456Z');
+const frozenWinter = Date.parse('2024-01-15T10:20:30.456Z');
+const realNow = Date.now;
 const afternoon = '2024-06-15T13:00:00.000Z';
 const februaryFirst = '2024-02-01T00:00:00.000Z';
 const januaryFirst = '2024-01-01T00:00:00.000Z';
@@ -812,11 +817,11 @@ describe('DateTime', () => {
       });
 
       test.each([
-        ['2025-03-30 02:30', amsterdamZone, '2025-03-30T03:30:00.000+02:00'],
-        ['2025-10-26 02:30', amsterdamZone, '2025-10-26T02:30:00.000+02:00'],
+        ['2025-03-30 02:30', amsterdamZone, amsterdamGap],
+        ['2025-10-26 02:30', amsterdamZone, amsterdamFold],
         ['2025-03-09 02:30', newYorkZone, '2025-03-09T03:30:00.000-04:00'],
         ['2025-11-02 01:30', newYorkZone, '2025-11-02T01:30:00.000-04:00'],
-        ['2025-04-06 01:45', lordHoweZone, '2025-04-06T01:45:00.000+10:30'],
+        ['2025-04-06 01:45', lordHoweZone, '2025-04-06T01:45:00.000+11:00'],
         ['2025-10-05 02:15', lordHoweZone, '2025-10-05T02:45:00.000+11:00'],
       ])('resolves gap or fold %s in %s', (value, zone, expected) => {
         expect(new DateTime(value + ' ' + zone, zonedDateFormat).toString()).toBe(expected);
@@ -1015,12 +1020,17 @@ describe('DateTime', () => {
       });
 
       test.each([
-        ['2025-03-30 02:30 Europe/Amsterdam', '2025-03-30T03:30:00.000+02:00'],
-        ['2025-10-26 02:30 Europe/Amsterdam', '2025-10-26T02:30:00.000+02:00'],
+        ['2025-03-30 02:30 Europe/Amsterdam', amsterdamGap],
+        ['2025-10-26 02:30 Europe/Amsterdam', amsterdamFold],
         ['2025-03-30 01:30 Europe/London', '2025-03-30T02:30:00.000+01:00'],
         ['2025-10-26 01:30 Europe/London', '2025-10-26T01:30:00.000+01:00'],
-      ])('preserves DST gap and fold parsing for %s', (input, expected) => {
-        expect(new DateTime(input, zonedDateFormat).toString()).toBe(expected);
+        ['2025-04-06 01:45 Australia/Lord_Howe', '2025-04-06T01:45:00.000+11:00'],
+      ])('preserves DST gap and fold parsing for %s in summer and winter', (input, expected) => {
+        const inSummer = new DateTime(input, zonedDateFormat).toString();
+        jest.spyOn(Date, 'now').mockReturnValue(frozenWinter);
+        const inWinter = new DateTime(input, zonedDateFormat).toString();
+
+        expect([inSummer, inWinter]).toEqual([expected, expected]);
       });
 
       test.each([
@@ -1064,6 +1074,44 @@ describe('DateTime', () => {
 
       test('records incompatible calendar fields as invalid', () => {
         expect(new DateTime('2024-02-29 061', 'yyyy-MM-dd ooo').isValid).toBe(false);
+      });
+    });
+
+    describe('without the clock', () => {
+      // Earlier tests assign Date.now = mock.return(...) and never restore it, so spies here would inherit their calls.
+      beforeEach(() => (Date.now = realNow));
+      afterEach(() => jest.restoreAllMocks());
+
+      test.each([
+        [iso, iso],
+        ['2024-02-29T13:05:00+05:30', plusFiveThirty],
+        ['2024-02-29T13:05:00-04:30', '2024-02-29T13:05:00.000-04:30'],
+        ['2024-W09-4', leapDay],
+        ['2024-060', leapDay],
+        ['2025-03-30T01:30:00+01:00', '2025-03-30T01:30:00.000+01:00'],
+        ['2025-03-30T03:30:00+02:00', amsterdamGap],
+        ['2025-10-26T02:30:00+02:00', amsterdamFold],
+        ['2025-10-26T02:30:00+01:00', '2025-10-26T02:30:00.000+01:00'],
+      ])('parses ISO %s without calling Date.now', (input, expected) => {
+        const now = jest.spyOn(Date, 'now');
+
+        expect(dt(input).toString()).toBe(expected);
+        expect(now).not.toHaveBeenCalled();
+      });
+
+      test.each([
+        ['2025-03-30T00:30:00Z', '2025-03-30T01:30:00.000+01:00', amsterdamSpringStart],
+        ['2025-03-30T01:30:00Z', amsterdamGap, amsterdamSpringStart],
+        ['2025-10-26T00:30:00Z', amsterdamFold, amsterdamAutumnStart],
+        ['2025-10-26T01:30:00Z', '2025-10-26T02:30:00.000+01:00', amsterdamAutumnStart],
+      ])('moves %s into a named zone without calling Date.now', (input, zoned, start) => {
+        const now = jest.spyOn(Date, 'now');
+        const date = dt(input).withZone(amsterdamZone);
+
+        expect(date.toString()).toBe(zoned);
+        expect(date.startOf('day').toString()).toBe(start);
+        expect(date.add(1, 'hour').subtract(1, 'hour').toString()).toBe(zoned);
+        expect(now).not.toHaveBeenCalled();
       });
     });
 
