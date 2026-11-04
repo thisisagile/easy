@@ -34,6 +34,8 @@ const leapDayWithTime = '2024-02-29T13:05:06.789Z';
 const formattedLeapDay = new DateTime(leapDayWithTime);
 const newYorkZone = 'America/New_York';
 const lordHoweZone = 'Australia/Lord_Howe';
+const londonZone = 'Europe/London';
+const invalidZone = 'Invalid/Zone';
 const todayAfternoon = '2024-06-15T13:05:00.000Z';
 const monthNameDateFormat = 'MMM dd yyyy';
 const zonedDateFormat = 'yyyy-MM-dd HH:mm z';
@@ -797,7 +799,7 @@ describe('DateTime', () => {
         ['UTC+5:45', '2024-02-29T18:50:06.789+05:45'],
         ['UTC+14', '2024-03-01T03:05:06.789+14:00'],
         ['UTC-12', '2024-02-29T01:05:06.789-12:00'],
-        ['Europe/London', '2024-02-29T13:05:06.789+00:00'],
+        [londonZone, '2024-02-29T13:05:06.789+00:00'],
         [amsterdamZone, '2024-02-29T14:05:06.789+01:00'],
         [newYorkZone, '2024-02-29T08:05:06.789-05:00'],
         [lordHoweZone, '2024-03-01T00:05:06.789+11:00'],
@@ -813,7 +815,35 @@ describe('DateTime', () => {
       });
 
       test('invalid zone produces an invalid date', () => {
-        expect(new DateTime(leapDayWithTime).withZone('Invalid/Zone').isValid).toBe(false);
+        expect(new DateTime(leapDayWithTime).withZone(invalidZone).isValid).toBe(false);
+      });
+
+      test.each([
+        ['1800-06-01T12:00:00Z', londonZone, '1800-06-01T10:45:00.000-01:15', '-01:15'],
+        ['1800-06-01T12:00:00Z', amsterdamZone, '1800-06-01T12:17:30.000+00:17.5', '+00:17.5'],
+        [-500, amsterdamZone, '1970-01-01T00:59:58.500+00:59.983333333333334', '+00:59.983333333333334'],
+        [-1500, amsterdamZone, '1970-01-01T00:59:57.500+00:59.983333333333334', '+00:59.983333333333334'],
+        [-500, newYorkZone, '1969-12-31T18:59:58.500-05:0.01666666666665151', '-05:0.01666666666665151'],
+        [-1500, newYorkZone, '1969-12-31T18:59:57.500-05:0.01666666666665151', '-05:0.01666666666665151'],
+        ['2024-02-28T23:00:00Z', amsterdamZone, '2024-02-29T00:00:00.000+01:00', '+01:00'],
+        [leapDayWithTime, 'Asia/Kathmandu', '2024-02-29T18:50:06.789+05:45', '+05:45'],
+        [leapDayWithTime, 'America/St_Johns', '2024-02-29T09:35:06.789-03:30', '-03:30'],
+        [leapDayWithTime, 'Pacific/Chatham', '2024-03-01T02:50:06.789+13:45', '+13:45'],
+      ])('keeps the offset of %s in %s', (value, zone, expected, offset) => {
+        const date = new DateTime(value).withZone(zone);
+        expect(date.toString()).toBe(expected);
+        expect(date.toFormat('ZZ')).toBe(offset);
+      });
+
+      test('an invalid zone does not break the next valid zone', () => {
+        const date = new DateTime(leapDayWithTime);
+        expect(date.withZone(invalidZone).isValid).toBe(false);
+        expect(date.withZone(invalidZone).isValid).toBe(false);
+        expect(date.withZone(amsterdamZone).toString()).toBe('2024-02-29T14:05:06.789+01:00');
+      });
+
+      test('parsing with an invalid zone produces an invalid date', () => {
+        expect(new DateTime(`2025-03-30 02:30 ${invalidZone}`, zonedDateFormat).isValid).toBe(false);
       });
 
       test.each([
@@ -1162,7 +1192,7 @@ describe('DateTime', () => {
         [amsterdamZone, amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
         [amsterdamZone, '2025-10-26T12:00:00Z', '2025-10-26T00:00:00.000+02:00', '2025-10-26T23:59:59.999+01:00'],
         [newYorkZone, '2025-03-09T12:00:00Z', '2025-03-09T00:00:00.000-05:00', '2025-03-09T23:59:59.999-04:00'],
-        ['Europe/London', amsterdamSpring, '2025-03-30T00:00:00.000+00:00', '2025-03-30T23:59:59.999+01:00'],
+        [londonZone, amsterdamSpring, '2025-03-30T00:00:00.000+00:00', '2025-03-30T23:59:59.999+01:00'],
         ['Europe/Warsaw', amsterdamSpring, amsterdamSpringStart, amsterdamSpringEnd],
       ])('preserves %s day boundaries', (zone, value, start, end) => {
         const date = new DateTime(value).withZone(zone);
