@@ -31,9 +31,9 @@ export abstract class Try<T = unknown> implements Validatable {
   static of = <T>(c: Get<T | Try<T>>, ...args: unknown[]): Try<T> => {
     try {
       const out = ofGet(c, ...args);
-      return new Success(out instanceof Try ? out.value : out);
+      return out instanceof Try ? out : new Success(out);
     } catch (e) {
-      return new Failure(e as Error);
+      return new Failure(() => e as Error);
     }
   };
 
@@ -87,10 +87,11 @@ class Success<T> extends Try<T> {
   }
 
   filter(predicate: Func<boolean, T>): Try<T> {
-    return tryTo(() => {
-      if (predicate(this.value)) return this;
-      throw new Error(`Applying filter(${predicate.toString()}) failed.`);
-    });
+    try {
+      return predicate(this.value) ? this : new Failure<T>(() => new Error(`Applying filter(${predicate.toString()}) failed.`));
+    } catch (e) {
+      return new Failure<T>(() => e as Error);
+    }
   }
 
   or(value: Get<T>): T {
@@ -107,8 +108,17 @@ class Success<T> extends Try<T> {
 }
 
 class Failure<T> extends Try<T> {
-  constructor(readonly error: Error) {
+  private cause?: Error;
+
+  // A filter miss is usually handled by or/orElse and never inspected, so the Error (stack capture, predicate.toString()) is only built on demand.
+  // Always a thunk, never ofGet: a caught value may itself be a function and must be returned as thrown, not invoked.
+  constructor(private readonly toError: () => Error) {
     super();
+  }
+
+  get error(): Error {
+    this.cause ??= this.toError();
+    return this.cause;
   }
 
   get value(): T {
@@ -120,7 +130,7 @@ class Failure<T> extends Try<T> {
   }
 
   map<U>(f: Func<U | Try<U>, T>): Try<U> {
-    return new Failure<U>(this.error);
+    return new Failure<U>(() => this.error);
   }
 
   recover<U>(f: Func<U | Try<U>, Error>): Try<U> {

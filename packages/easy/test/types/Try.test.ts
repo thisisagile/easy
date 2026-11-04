@@ -132,6 +132,262 @@ describe('Try', () => {
     expect(tryTo(s).filter(() => true)).not.toBeValid();
   });
 
+  const describedPredicate = (result: boolean) => {
+    const predicate = (): boolean => result;
+    predicate.toString = jest.fn(() => 'described');
+    return predicate;
+  };
+
+  test('filter miss builds its error only when the error is read', () => {
+    const predicate = describedPredicate(false);
+    const t = tryTo(Dev.Sander).filter(predicate);
+    expect(t).not.toBeValid();
+    expect(t.orElse(Dev.Wouter)).toBe(Dev.Wouter);
+    expect(predicate.toString).not.toHaveBeenCalled();
+    expect(t.error.message).toBe('Applying filter(described) failed.');
+    expect(t.error).toBe(t.error);
+    expect(predicate.toString).toHaveBeenCalledTimes(1);
+  });
+
+  test('filter miss keeps its error through map, filter and tryTo', () => {
+    const miss = tryTo(Dev.Sander).filter(describedPredicate(false));
+    const mapped = tryTo(() => miss.map(devToId).filter(() => true));
+    expect(mapped.error).toBe(miss.error);
+    expect(() => mapped.value).toThrow('Applying filter(described) failed.');
+  });
+
+  test('filter with a throwing predicate returns failure with that error', () => {
+    const t = tryTo(Dev.Sander).filter(d => devToError(d) === d);
+    expect(t).not.toBeValid();
+    expect(t.error.message).toBe(`Dev ${Dev.Sander} goes wrong`);
+  });
+
+  test('filter miss can be recovered', () => {
+    expect(
+      tryTo(Dev.Sander)
+        .filter(() => false)
+        .recover(() => Dev.Wouter).value
+    ).toBe(Dev.Wouter);
+  });
+
+  test('thrown function is kept as the error and never invoked', () => {
+    const thrown = jest.fn(() => new Error('replacement'));
+    const fromOf = tryTo(() => {
+      throw thrown;
+    });
+    const fromFilter = tryTo(Dev.Sander).filter(() => {
+      throw thrown;
+    });
+    expect(fromOf.error).toBe(thrown);
+    expect(fromFilter.error).toBe(thrown);
+    expect(fromOf.map(devToId).error).toBe(thrown);
+    expect(tryTo(() => fromOf.value).error).toBe(thrown);
+    expect(thrown).not.toHaveBeenCalled();
+  });
+
+  test('success has no error', () => {
+    expect(() => tryTo(Dev.Sander).error).toThrow('No error found');
+  });
+
+  // contract: of
+
+  test('of passes extra arguments to the function', () => {
+    expect(tryTo((a: number, b: number) => a + b, 2, 3).value).toBe(5);
+  });
+
+  test('of keeps the exact thrown error and value rethrows it', () => {
+    const error = new NotValidError('exact');
+    const t = tryTo(() => {
+      throw error;
+    });
+    expect(t.error).toBe(error);
+    expect(t.error).toBe(t.error);
+    expect(tryTo(() => t.value).error).toBe(error);
+  });
+
+  test.each([['a string'], [42], [undefined], [null]])('of keeps a thrown non-error value %p', thrown => {
+    const t = tryTo(() => {
+      throw thrown;
+    });
+    expect(t).not.toBeValid();
+    expect(t.error).toBe(thrown);
+  });
+
+  test('of a nested success unwraps its value', () => {
+    expect(tryTo(() => tryTo(() => tryTo(Dev.Rob))).value).toBe(Dev.Rob);
+  });
+
+  test('of a nested failure keeps its error', () => {
+    const inner = tryTo(divByZero);
+    const t = tryTo(() => inner);
+    expect(t).not.toBeValid();
+    expect(t.error).toBe(inner.error);
+  });
+
+  // contract: map
+
+  test('map flattens a returned try', () => {
+    expect(tryTo(Dev.Sander).map(d => tryTo(() => devToId(d))).value).toBe(devToId(Dev.Sander));
+    expect(tryTo(Dev.Sander).map(() => tryTo(divByZero))).not.toBeValid();
+  });
+
+  test('map on failure keeps the error and never calls the function', () => {
+    const f = jest.fn(devToId);
+    const failure = tryTo<Dev>(divByZero);
+    const mapped = failure.map(f);
+    expect(mapped.error).toBe(failure.error);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  test('map with a throwing function fails with that error', () => {
+    expect(tryTo(Dev.Sander).map(devToError).error.message).toBe(`Dev ${Dev.Sander} goes wrong`);
+  });
+
+  // contract: accept
+
+  test('accept on success calls the function with the value and returns the same value', () => {
+    const f = jest.fn();
+    expect(tryTo(Dev.Sander).accept(f).value).toBe(Dev.Sander);
+    expect(f).toHaveBeenCalledWith(Dev.Sander);
+  });
+
+  test('accept on failure never calls the function and keeps the error', () => {
+    const f = jest.fn();
+    const failure = tryTo<Dev>(divByZero);
+    expect(failure.accept(f).error).toBe(failure.error);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  // contract: recover
+
+  test('recover on success never calls the function', () => {
+    const f = jest.fn(() => Dev.Wouter);
+    expect(tryTo(Dev.Sander).recover(f).value).toBe(Dev.Sander);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  test('recover receives the error', () => {
+    const f = jest.fn(() => Dev.Wouter);
+    const failure = tryTo<Dev>(divByZero);
+    failure.recover(f);
+    expect(f).toHaveBeenCalledWith(failure.error);
+  });
+
+  test('recover receives the filter miss error', () => {
+    const f = jest.fn((e: Error) => e.message.length);
+    expect(
+      tryTo(6)
+        .filter(n => n > 10)
+        .recover(f).value
+    ).toBe('Applying filter(n => n > 10) failed.'.length);
+    expect(f.mock.calls[0][0].message).toBe('Applying filter(n => n > 10) failed.');
+  });
+
+  test('recover flattens a returned try', () => {
+    expect(tryTo<Dev>(divByZero).recover(() => tryTo(Dev.Wouter)).value).toBe(Dev.Wouter);
+    expect(tryTo<Dev>(divByZero).recover(() => tryTo(devToError(Dev.Wouter)))).not.toBeValid();
+  });
+
+  test('recover with a throwing function fails with the new error', () => {
+    expect(tryTo<Dev>(divByZero).recover(() => devToError(Dev.Wouter)).error.message).toBe(`Dev ${Dev.Wouter} goes wrong`);
+  });
+
+  // contract: recoverFrom
+
+  test('recover from a matching error receives the error', () => {
+    const f = jest.fn(() => Dev.Wouter);
+    const failure = tryTo(() => devToNotValidError(Dev.Sander));
+    expect(failure.recoverFrom(NotValidError, f).value).toBe(Dev.Wouter);
+    expect(f).toHaveBeenCalledWith(failure.error);
+  });
+
+  test('recover from a different error keeps the error and never calls the function', () => {
+    const f = jest.fn(() => Dev.Wouter);
+    const failure = tryTo<Dev>(divByZero);
+    expect(failure.recoverFrom(NotValidError, f).error).toBe(failure.error);
+    expect(f).not.toHaveBeenCalled();
+  });
+
+  test('recover from a filter miss matches Error', () => {
+    expect(
+      tryTo(Dev.Sander)
+        .filter(() => false)
+        .recoverFrom(Error, () => Dev.Wouter).value
+    ).toBe(Dev.Wouter);
+  });
+
+  // contract: filter
+
+  test('filter hit keeps the value and passes it to the predicate', () => {
+    const predicate = jest.fn(() => true);
+    expect(tryTo(Dev.Sander).filter(predicate).value).toBe(Dev.Sander);
+    expect(predicate).toHaveBeenCalledWith(Dev.Sander);
+  });
+
+  test('filter on failure never calls the predicate and keeps the error', () => {
+    const predicate = jest.fn(() => true);
+    const failure = tryTo<Dev>(divByZero);
+    expect(failure.filter(predicate)).toBe(failure);
+    expect(predicate).not.toHaveBeenCalled();
+  });
+
+  test('filter miss error describes the predicate', () => {
+    const t = tryTo(6).filter(n => n > 10);
+    expect(t.error).toBeInstanceOf(Error);
+    expect(t.error.message).toBe('Applying filter(n => n > 10) failed.');
+    expect(() => t.value).toThrow('Applying filter(n => n > 10) failed.');
+  });
+
+  test('second filter miss keeps the first error', () => {
+    const first = tryTo(6).filter(n => n > 10);
+    expect(first.filter(n => n > 20).error).toBe(first.error);
+  });
+
+  test('is checks on a miss fail with a filter error', () => {
+    expect(tryTo<unknown>(undefined).is.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/);
+    expect(tryTo(Dev.Sander).is.not.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/);
+  });
+
+  // contract: or, orElse, orThrow
+
+  test('or on success returns the value and never calls the fallback', () => {
+    const fallback = jest.fn(() => Dev.Wouter);
+    expect(tryTo(Dev.Sander).or(fallback)).toBe(Dev.Sander);
+    expect(fallback).not.toHaveBeenCalled();
+  });
+
+  test('or on failure returns the fallback', () => {
+    expect(tryTo<Dev>(divByZero).or(Dev.Wouter)).toBe(Dev.Wouter);
+    expect(tryTo<Dev>(divByZero).or(() => Dev.Wouter)).toBe(Dev.Wouter);
+    expect(
+      tryTo(Dev.Sander)
+        .filter(() => false)
+        .or(Dev.Wouter)
+    ).toBe(Dev.Wouter);
+  });
+
+  test('or else without a fallback returns undefined on failure', () => {
+    expect(tryTo<Dev>(divByZero).orElse()).toBeUndefined();
+    expect(
+      tryTo(Dev.Sander)
+        .filter(() => false)
+        .orElse()
+    ).toBeUndefined();
+  });
+
+  test('or throw on failure throws the given error, not the original', () => {
+    expect(() => tryTo<Dev>(divByZero).orThrow(NotValidError)).toThrow(NotValidError);
+    expect(() => tryTo<Dev>(divByZero).orThrow(new NotValidError('given'))).toThrow('given');
+  });
+
+  // contract: isValid
+
+  test('is valid reports success and failure', () => {
+    expect(tryTo(Dev.Sander).isValid).toBe(true);
+    expect(tryTo(divByZero).isValid).toBe(false);
+    expect(tryTo(Dev.Sander).filter(() => false).isValid).toBe(false);
+  });
+
   // is
 
   test.each(successes)('is defined on successes returns original value', s => {
