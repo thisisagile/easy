@@ -344,8 +344,9 @@ describe('Try', () => {
   });
 
   test('is checks on a miss fail with a filter error', () => {
-    expect(tryTo<unknown>(undefined).is.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/);
-    expect(tryTo(Dev.Sander).is.not.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/);
+    // dotAll: under coverage instrumentation the predicate source spans several lines.
+    expect(tryTo<unknown>(undefined).is.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/s);
+    expect(tryTo(Dev.Sander).is.not.defined().error.message).toMatch(/^Applying filter\(.*\) failed\.$/s);
   });
 
   // contract: or, orElse, orThrow
