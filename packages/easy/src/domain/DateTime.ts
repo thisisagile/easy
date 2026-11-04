@@ -209,6 +209,8 @@ const zoneOptions: Options = {
   timeZoneName: 'short',
 };
 const zoneFormats = new Map<string, Intl.DateTimeFormat>();
+const dateFormats = new Map<string, Intl.DateTimeFormat>();
+const numberFormats = new Map<string, Intl.NumberFormat>();
 const mapped: Record<string, string> = {
   y: 'YYYY',
   yy: 'YY',
@@ -233,6 +235,7 @@ const mapped: Record<string, string> = {
   uu: 'SS',
   uuu: 'S',
 };
+const names: Record<string, string> = { c: 'weekday', E: 'weekday', L: 'month', M: 'month', G: 'era', a: 'dayPeriod', Z: 'timeZoneName' };
 const tokens = (format: string): string[] => format.match(/'[^']*(?:'|$)|([A-Za-z])\1*|[^A-Za-z']+/g) ?? [];
 const literal = (token: string): boolean => token.startsWith("'") || !/^[A-Za-z]/.test(token);
 const unquote = (token: string): string => token.replace(/^'|'$/g, '');
@@ -243,6 +246,13 @@ const toIso = (v: ZonedDate): Optional<string> =>
   v.date.isValid() ? displayDate(v).toISOString().slice(0, -1) + (v.zone.type !== 'named' && !offset(v) ? 'Z' : offsetText(offset(v))) : undefined;
 const zoneFormat = (zone: string): Intl.DateTimeFormat =>
   zoneFormats.get(zone) ?? on(new Intl.DateTimeFormat('en-US', { ...zoneOptions, timeZone: zone }), f => zoneFormats.set(zone, f));
+const dateFormat = (locale: string, options: Options): Intl.DateTimeFormat =>
+  use(JSON.stringify([locale, options]), key => dateFormats.get(key) ?? on(new Intl.DateTimeFormat(locale, options), f => dateFormats.set(key, f)));
+const numberFormat = (locale: string, digits: number): Intl.NumberFormat =>
+  use(
+    JSON.stringify([locale, digits]),
+    key => numberFormats.get(key) ?? on(new Intl.NumberFormat(locale, { useGrouping: false, minimumIntegerDigits: digits }), f => numberFormats.set(key, f))
+  );
 
 function offset(value: ZonedDate): number {
   if (value.zone.type === 'offset') return value.zone.minutes;
@@ -359,9 +369,25 @@ function macro(token: string): Options | undefined {
   if (size > 2) time.timeZoneName = size === 3 ? 'short' : 'long';
   return kind === 't' || kind === 'T' ? time : { ...date, ...time };
 }
+function nameOptions(token: string): Options {
+  const width = choose(token.length)
+    .equals<'narrow' | 'long' | 'short'>(5, 'narrow')
+    .case(n => n === 4 || token === 'GG', 'long' as const)
+    .else('short' as const);
+  const options: Record<string, Options> = {
+    c: { weekday: width },
+    E: { weekday: width },
+    L: { month: width },
+    M: { month: width, day: 'numeric' },
+    G: { era: width, year: 'numeric' },
+    a: { hour: 'numeric', hourCycle: 'h12' },
+    Z: { timeZoneName: token.length === 5 ? 'long' : 'short' },
+  };
+  return options[token[0]];
+}
 function intl(value: ZonedDate, locale: string, options: Options): Intl.DateTimeFormatPart[] {
   const named = value.zone.type === 'named';
-  const formatter = new Intl.DateTimeFormat(locale, { ...options, timeZone: named ? zoneName(value.zone) : 'UTC' });
+  const formatter = dateFormat(locale, { ...options, timeZone: named ? zoneName(value.zone) : 'UTC' });
   return formatter
     .formatToParts((named ? value.date : displayDate(value)).toDate())
     .map(part => (part.type === 'timeZoneName' && !named ? { ...part, value: zoneName(value.zone) } : part));
@@ -378,41 +404,24 @@ function weekOfIsoYear(date: Dayjs): number {
 function render(value: ZonedDate, token: string, locale: string): string {
   if (literal(token)) return unquote(token);
   if (/^[Xx]$/.test(token)) return value.date.format(token);
-  const options = macro(token),
-    date = displayDate(value);
+  const options = macro(token);
   if (options)
     return value.zone.type === 'named'
-      ? new Intl.DateTimeFormat(locale, { ...options, timeZone: value.zone.name }).format(value.date.toDate())
+      ? dateFormat(locale, { ...options, timeZone: value.zone.name }).format(value.date.toDate())
       : intl(value, locale, options)
           .map(p => p.value)
           .join('');
-  const width = choose(token.length)
-    .equals<'narrow' | 'long' | 'short'>(5, 'narrow')
-    .case(n => n === 4 || token === 'GG', 'long' as const)
-    .else('short' as const);
-  const nameOptions: Record<string, Options> = {
-    c: { weekday: width },
-    E: { weekday: width },
-    L: { month: width },
-    M: { month: width, day: 'numeric' },
-    G: { era: width, year: 'numeric' },
-    a: { hour: 'numeric', hourCycle: 'h12' },
-    Z: { timeZoneName: token.length === 5 ? 'long' : 'short' },
-  };
-  const names: Record<string, string> = { c: 'weekday', E: 'weekday', L: 'month', M: 'month', G: 'era', a: 'dayPeriod', Z: 'timeZoneName' };
   if (/^(c{3,5}|E{3,5}|L{3,5}|M{3,5}|G|GG|GGGGG|a|Z{4,5})$/.test(token))
-    return intl(value, locale, nameOptions[token[0]]).find(p => p.type === names[token[0]])?.value ?? '';
+    return intl(value, locale, nameOptions(token)).find(p => p.type === names[token[0]])?.value ?? '';
   if (token === 'z') return zoneName(value.zone);
   if (/^Z{1,3}$/.test(token))
-    return choose(token)
-      .equals(
-        'Z',
-        offsetText(offset(value))
-          .replace(/^([+-])0/, '$1')
-          .replace(/:00$/, '')
-      )
-      .equals('ZZZ', offsetText(offset(value)).replace(':', ''))
-      .else(offsetText(offset(value)));
+    return use(offsetText(offset(value)), text =>
+      choose(token)
+        .equals('Z', text.replace(/^([+-])0/, '$1').replace(/:00$/, ''))
+        .equals('ZZZ', text.replace(':', ''))
+        .else(text)
+    );
+  const date = displayDate(value);
   const numbers: Record<string, () => number> = {
     S: () => date.millisecond(),
     u: () => date.millisecond(),
@@ -434,7 +443,7 @@ function render(value: ZonedDate, token: string, locale: string): string {
   };
   const number = numbers[token]?.();
   const rendered = isDefined(number) ? String(number).padStart(/^u+$/.test(token) ? 4 - token.length : token.length, '0') : date.format(mapped[token] ?? token);
-  return /^\d+$/.test(rendered) ? new Intl.NumberFormat(locale, { useGrouping: false, minimumIntegerDigits: rendered.length }).format(+rendered) : rendered;
+  return /^\d+$/.test(rendered) ? numberFormat(locale, rendered.length).format(+rendered) : rendered;
 }
 
 const escapePattern = (value: string): string => value.replace(/[$.*+?^{}()|[\]\\]/g, '\\$&').replace(/\s/g, '\\s');

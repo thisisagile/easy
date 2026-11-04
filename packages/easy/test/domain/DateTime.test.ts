@@ -11,6 +11,7 @@ const amsterdamSpringEnd = '2025-03-30T23:59:59.999+02:00';
 const amsterdamAutumnStart = '2025-10-26T00:00:00.000+02:00';
 const amsterdamGap = '2025-03-30T03:30:00.000+02:00';
 const amsterdamFold = '2025-10-26T02:30:00.000+02:00';
+const amsterdamFoldLater = '2025-10-26T02:30:00.000+01:00';
 
 const date = {
   iso: '2021-03-25T08:39:44.000Z',
@@ -39,6 +40,8 @@ const invalidZone = 'Invalid/Zone';
 const todayAfternoon = '2024-06-15T13:05:00.000Z';
 const monthNameDateFormat = 'MMM dd yyyy';
 const zonedDateFormat = 'yyyy-MM-dd HH:mm z';
+const offsetDateFormat = 'yyyy-MM-dd HH:mm ZZ';
+const utcClock = '1:05:06\u202fPM UTC';
 const leapDayMinute = '2024-02-29T13:05:00.000Z';
 const epochStart = '1970-01-01T00:00:00.000Z';
 const fullDate = 'February 29, 2024';
@@ -130,8 +133,8 @@ const macroTokens: [format: string, expected: string][] = [
   ['DDDD', 'Thursday, February 29, 2024'],
   ['t', '1:05\u202fPM'],
   ['tt', '1:05:06\u202fPM'],
-  ['ttt', '1:05:06\u202fPM UTC'],
-  ['tttt', '1:05:06\u202fPM UTC'],
+  ['ttt', utcClock],
+  ['tttt', utcClock],
   ['T', '13:05'],
   ['TT', '13:05:06'],
   ['TTT', utcTime],
@@ -942,6 +945,8 @@ describe('DateTime', () => {
       });
     });
     describe('formatting', () => {
+      afterEach(() => jest.restoreAllMocks());
+
       test.each([...numericTokens, ...nameTokens, ...macroTokens])('%s formats as %s', (format, expected) => {
         expect(formattedLeapDay.toFormat(format)).toBe(expected);
       });
@@ -1005,6 +1010,62 @@ describe('DateTime', () => {
         expect(invalid.toFormat(isoDateFormat)).toBe('Invalid DateTime');
         expect(invalid.toLocale('en-US', 'D')).toBe('Invalid DateTime');
       });
+
+      test('keeps formats with different options apart', () => {
+        expect(formattedLeapDay.toFormat('EEE EEEE EEEEE MMM MMMM ZZZZ ZZZZZ ttt')).toBe('Thu Thursday T Feb February UTC UTC ' + utcClock);
+        expect(formattedLeapDay.toLocale('ar-EG', 'M MM d dd yyyyyy')).toBe('٢ ٠٢ ٢٩ ٢٩ ٠٠٢٠٢٤');
+      });
+
+      test.each([
+        ['UTC', formattedLeapDay, utcClock, 'Thursday, February 29, 2024 at 1:05\u202fPM UTC'],
+        ['an offset', dt('2024-02-29T13:05:06.789+02:00'), '1:05:06\u202fPM UTC+2', 'Thursday, February 29, 2024 at 1:05\u202fPM UTC+2'],
+        [amsterdamZone, formattedLeapDay.withZone(amsterdamZone), '2:05:06 PM GMT+1', 'Thursday, February 29, 2024 at 2:05 PM Central European Standard Time'],
+        [newYorkZone, formattedLeapDay.withZone(newYorkZone), '8:05:06 AM EST', 'Thursday, February 29, 2024 at 8:05 AM Eastern Standard Time'],
+      ])('formats macros per zone in %s', (zone, value, time, full) => {
+        expect(value.toFormat('ttt')).toBe(time);
+        expect(value.toFormat('ffff')).toBe(full);
+      });
+
+      test.each([
+        ['yyyyMMdd', '20240229'],
+        ['yyyy-MM-dd HH:mm', '2024-02-29 14:05'],
+        ['D', '2/29/2024'],
+        ['DDD', fullDate],
+        ['MMMM', 'February'],
+        ['EEEE', 'Thursday'],
+        ['ZZ', '+01:00'],
+      ])('formats %s in a named zone as %s', (format, expected) => {
+        expect(formattedLeapDay.withZone(amsterdamZone).toFormat(format)).toBe(expected);
+      });
+
+      test.each([
+        [amsterdamGap, '2025-03-30 03:30 +02:00'],
+        [amsterdamFold, '2025-10-26 02:30 +02:00'],
+        [amsterdamFoldLater, '2025-10-26 02:30 +01:00'],
+      ])('formats %s around a DST change as %s', (value, expected) => {
+        expect(dt(value).withZone(amsterdamZone).toFormat(offsetDateFormat)).toBe(expected);
+      });
+
+      test.each(['en_US', 'not a locale'])('an invalid locale %s keeps throwing', locale => {
+        ['D', 'EEEE', 'yyyy'].forEach(format => {
+          expect(() => formattedLeapDay.toLocale(locale, format)).toThrow(RangeError);
+          expect(() => formattedLeapDay.toLocale(locale, format)).toThrow(RangeError);
+        });
+        expect(formattedLeapDay.toLocale(locale, "'x' X z ZZ")).toBe('x 1709211906 UTC +00:00');
+        expect(formattedLeapDay.toLocale('en-US', 'D')).toBe('2/29/2024');
+      });
+
+      test('creates one formatter per locale and options', () => {
+        const dates = jest.spyOn(Intl, 'DateTimeFormat');
+        const numbers = jest.spyOn(Intl, 'NumberFormat');
+
+        expect(formattedLeapDay.toLocale('nl-BE', 'dd EEEE')).toBe('29 donderdag');
+        dates.mockClear();
+        numbers.mockClear();
+        expect(formattedLeapDay.toLocale('nl-BE', 'dd EEEE')).toBe('29 donderdag');
+        expect(dates).not.toHaveBeenCalled();
+        expect(numbers).not.toHaveBeenCalled();
+      });
     });
 
     describe('parsing', () => {
@@ -1041,9 +1102,9 @@ describe('DateTime', () => {
 
       test.each([
         ['2024-02-29 13:05 +5:30', 'yyyy-MM-dd HH:mm Z', plusFiveThirty],
-        ['2024-02-29 13:05 +05:30', 'yyyy-MM-dd HH:mm ZZ', plusFiveThirty],
+        ['2024-02-29 13:05 +05:30', offsetDateFormat, plusFiveThirty],
         ['2024-02-29 13:05 +0530', 'yyyy-MM-dd HH:mm ZZZ', plusFiveThirty],
-        ['2024-02-29 13:05 -04:30', 'yyyy-MM-dd HH:mm ZZ', '2024-02-29T13:05:00.000-04:30'],
+        ['2024-02-29 13:05 -04:30', offsetDateFormat, '2024-02-29T13:05:00.000-04:30'],
         ['2024-02-29 13:05 America/New_York', zonedDateFormat, '2024-02-29T13:05:00.000-05:00'],
       ])('preserves parsed zone for %s', (input, format, expected) => {
         expect(new DateTime(input, format).toString()).toBe(expected);
@@ -1121,7 +1182,7 @@ describe('DateTime', () => {
         ['2025-03-30T01:30:00+01:00', '2025-03-30T01:30:00.000+01:00'],
         ['2025-03-30T03:30:00+02:00', amsterdamGap],
         ['2025-10-26T02:30:00+02:00', amsterdamFold],
-        ['2025-10-26T02:30:00+01:00', '2025-10-26T02:30:00.000+01:00'],
+        ['2025-10-26T02:30:00+01:00', amsterdamFoldLater],
       ])('parses ISO %s without calling Date.now', (input, expected) => {
         const now = jest.spyOn(Date, 'now');
 
@@ -1133,7 +1194,7 @@ describe('DateTime', () => {
         ['2025-03-30T00:30:00Z', '2025-03-30T01:30:00.000+01:00', amsterdamSpringStart],
         ['2025-03-30T01:30:00Z', amsterdamGap, amsterdamSpringStart],
         ['2025-10-26T00:30:00Z', amsterdamFold, amsterdamAutumnStart],
-        ['2025-10-26T01:30:00Z', '2025-10-26T02:30:00.000+01:00', amsterdamAutumnStart],
+        ['2025-10-26T01:30:00Z', amsterdamFoldLater, amsterdamAutumnStart],
       ])('moves %s into a named zone without calling Date.now', (input, zoned, start) => {
         const now = jest.spyOn(Date, 'now');
         const date = dt(input).withZone(amsterdamZone);
