@@ -13,7 +13,7 @@ import { isDate } from '../types/IsDate';
 import { JsonValue } from '../types/Json';
 import { seconds } from '../utils/Seconds';
 import { tryTo } from '../types/Try';
-import { use } from '../types/Constructor';
+import { on, use } from '../types/Constructor';
 import { entries } from '../types/Object';
 [utc, timezone, isoWeek, quarterOfYear, advancedFormat].forEach(plugin => dayjs.extend(plugin));
 dayjs.extend(customParseFormat, { parseTwoDigitYear: (year: string) => +year + (+year > 60 ? 1900 : 2000) });
@@ -198,6 +198,17 @@ const milliseconds = {
   second: 1000,
   millisecond: 1,
 };
+const zoneOptions: Options = {
+  hour12: false,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  timeZoneName: 'short',
+};
+const zoneFormats = new Map<string, Intl.DateTimeFormat>();
 const mapped: Record<string, string> = {
   y: 'YYYY',
   yy: 'YY',
@@ -230,10 +241,24 @@ const offsetText = (n: number): string =>
   (n < 0 ? '-' : '+') + String(Math.floor(Math.abs(n) / 60)).padStart(2, '0') + ':' + String(Math.abs(n) % 60).padStart(2, '0');
 const toIso = (v: ZonedDate): Optional<string> =>
   v.date.isValid() ? displayDate(v).toISOString().slice(0, -1) + (v.zone.type !== 'named' && !offset(v) ? 'Z' : offsetText(offset(v))) : undefined;
+const zoneFormat = (zone: string): Intl.DateTimeFormat =>
+  zoneFormats.get(zone) ?? on(new Intl.DateTimeFormat('en-US', { ...zoneOptions, timeZone: zone }), f => zoneFormats.set(zone, f));
 
 function offset(value: ZonedDate): number {
   if (value.zone.type === 'offset') return value.zone.minutes;
-  return value.zone.type === 'named' ? value.date.tz(value.zone.name).utcOffset() : 0;
+  return value.zone.type === 'named' && value.date.isValid() ? zoneOffset(value.date, value.zone.name) : 0;
+}
+// Mirrors dayjs' tz().utcOffset(), quirks included (16 minutes or less reads as hours), but reuses one Intl.DateTimeFormat per zone instead of building one per call.
+function zoneOffset(date: Dayjs, zone: string): number {
+  const ts = date.valueOf();
+  const parts = Object.fromEntries(
+    zoneFormat(zone)
+      .formatToParts(ts)
+      .map(p => [p.type, parseInt(p.value, 10)])
+  );
+  const wall = dayjs.utc(`${parts.year}-${parts.month}-${parts.day} ${parts.hour === 24 ? 0 : parts.hour}:${parts.minute}:${parts.second}:000`);
+  const minutes = (wall.valueOf() - (ts - (ts % milliseconds.second))) / milliseconds.minute;
+  return !minutes ? 0 : Math.abs(minutes) <= 16 ? minutes * 60 : minutes;
 }
 function zoneName(zone: Zone): string {
   if (zone.type === 'named') return zone.name;
