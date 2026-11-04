@@ -341,6 +341,15 @@ function intl(value: ZonedDate, locale: string, options: Options): Intl.DateTime
     .formatToParts((named ? value.date : displayDate(value)).toDate())
     .map(part => (part.type === 'timeZoneName' && !named ? { ...part, value: zoneName(value.zone) } : part));
 }
+// dayjs isoWeek() calls d.utc() without arguments, which reads the clock, so the ISO week is computed here instead.
+// ISO 8601 assigns a Monday-to-Sunday week to the year that holds its Thursday (isoWeekday 4), so week 1 is the week
+// with the year's first Thursday. Counting whole weeks from 1 January to this week's Thursday gives the week number,
+// including for late-December dates in week 1 and early-January dates in week 52 or 53.
+const isoThursday = 4;
+function weekOfIsoYear(date: Dayjs): number {
+  const weekThursday = date.add(isoThursday - date.isoWeekday(), 'day');
+  return Math.floor(weekThursday.diff(weekThursday.startOf('year'), 'day') / 7) + 1;
+}
 function render(value: ZonedDate, token: string, locale: string): string {
   if (literal(token)) return unquote(token);
   if (/^[Xx]$/.test(token)) return value.date.format(token);
@@ -379,26 +388,27 @@ function render(value: ZonedDate, token: string, locale: string): string {
       )
       .equals('ZZZ', offsetText(offset(value)).replace(':', ''))
       .else(offsetText(offset(value)));
-  const numbers: Record<string, number> = {
-    S: date.millisecond(),
-    u: date.millisecond(),
-    uu: Math.floor(date.millisecond() / 10),
-    uuu: Math.floor(date.millisecond() / 100),
-    c: date.isoWeekday(),
-    E: date.isoWeekday(),
-    o: date.diff(date.startOf('year'), 'day') + 1,
-    ooo: date.diff(date.startOf('year'), 'day') + 1,
-    kk: date.isoWeekYear() % 100,
-    qq: date.quarter(),
-    yyyyyy: date.year(),
-    n: date.isoWeek(),
-    nn: date.isoWeek(),
-    ii: date.isoWeekYear() % 100,
-    iiii: date.isoWeekYear(),
+  const numbers: Record<string, () => number> = {
+    S: () => date.millisecond(),
+    u: () => date.millisecond(),
+    uu: () => Math.floor(date.millisecond() / 10),
+    uuu: () => Math.floor(date.millisecond() / 100),
+    c: () => date.isoWeekday(),
+    E: () => date.isoWeekday(),
+    o: () => date.diff(date.startOf('year'), 'day') + 1,
+    ooo: () => date.diff(date.startOf('year'), 'day') + 1,
+    kk: () => date.isoWeekYear() % 100,
+    qq: () => date.quarter(),
+    yyyyyy: () => date.year(),
+    W: () => weekOfIsoYear(date),
+    WW: () => weekOfIsoYear(date),
+    n: () => weekOfIsoYear(date),
+    nn: () => weekOfIsoYear(date),
+    ii: () => date.isoWeekYear() % 100,
+    iiii: () => date.isoWeekYear(),
   };
-  const rendered = isDefined(numbers[token])
-    ? String(numbers[token]).padStart(/^u+$/.test(token) ? 4 - token.length : token.length, '0')
-    : date.format(mapped[token] ?? token);
+  const number = numbers[token]?.();
+  const rendered = isDefined(number) ? String(number).padStart(/^u+$/.test(token) ? 4 - token.length : token.length, '0') : date.format(mapped[token] ?? token);
   return /^\d+$/.test(rendered) ? new Intl.NumberFormat(locale, { useGrouping: false, minimumIntegerDigits: rendered.length }).format(+rendered) : rendered;
 }
 

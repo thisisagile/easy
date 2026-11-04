@@ -1113,6 +1113,36 @@ describe('DateTime', () => {
         expect(date.add(1, 'hour').subtract(1, 'hour').toString()).toBe(zoned);
         expect(now).not.toHaveBeenCalled();
       });
+
+      describe('when formatting', () => {
+        // dayjs reads the clock through an argless new Date() as well, which a Date.now spy cannot see.
+        const RealDate = Date;
+        const readsClock = (): never => {
+          throw new Error('read the clock');
+        };
+        const clockless = new Proxy(RealDate, {
+          construct: (target, args: unknown[]) => (args.length ? Reflect.construct(target, args) : readsClock()),
+          get: (target, key) => (key === 'now' ? readsClock : Reflect.get(target, key)),
+        });
+
+        beforeEach(() => (globalThis.Date = clockless));
+        afterEach(() => (globalThis.Date = RealDate));
+
+        test.each([...numericTokens, ...nameTokens, ...macroTokens])('%s formats as %s', (format, expected) => {
+          expect(formattedLeapDay.toFormat(format)).toBe(expected);
+        });
+
+        test.each([
+          ['2019-12-30T00:00:00Z', '2020-01-1'],
+          ['2021-01-03T00:00:00Z', '2020-53-7'],
+        ])('formats ISO week-year boundaries for %s', (value, expected) => {
+          expect(new DateTime(value).toFormat('kkkk-WW-c')).toBe(expected);
+        });
+
+        test('formats a named zone', () => {
+          expect(formattedLeapDay.withZone(amsterdamZone).toLocale('nl-NL', 'yyyy-MM-dd HH:mm nn')).toBe('2024-02-29 14:05 09');
+        });
+      });
     });
 
     describe('behavior', () => {
