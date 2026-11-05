@@ -1,6 +1,7 @@
+import * as Database from '@thisisagile/easy/Database';
 import * as Exception from '@thisisagile/easy/Exception';
 import { AbstractCursor, Collection, CreateIndexesOptions, Db, FindOptions as MongoFindOptions, IndexSpecification, MongoClient } from 'mongodb';
-import { FindOptions, Indexes, IndexOptions, MongoProvider } from '../src';
+import { FindOptions, Indexes, IndexOptions, MongoProvider, retryDelay } from '../src';
 import { fits, mock } from '@thisisagile/easy-test';
 import { Dev, devData } from './ref/Dev';
 import { DevCollection } from './ref/DevCollection';
@@ -35,9 +36,10 @@ describe('MongoProvider', () => {
     connect = jest.spyOn(MongoClient as any, 'connect').mockResolvedValue(client);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     jest.restoreAllMocks();
     (MongoProvider as any).clients = {};
+    await MongoProvider.destroyAll();
   });
 
   test('client calls MongoClient connect', async () => {
@@ -463,5 +465,122 @@ describe('MongoProvider', () => {
     const p = new TestMongoProvider(devs);
     const result = p.withTimeout({ take: 100, skip: 50, maxTimeMS: 2000 });
     expect(result).toEqual({ take: 100, skip: 50, maxTimeMS: 2000 });
+  });
+});
+
+describe('retryDelay', () => {
+  test.each([
+    [1, 60_000],
+    [2, 300_000],
+    [3, 600_000],
+    [4, 1_800_000],
+    [5, 1_800_000],
+    [42, 1_800_000],
+  ])('attempt %i waits %i ms without jitter', (attempt, delay) => {
+    expect(retryDelay(attempt, () => 1)).toBe(delay);
+  });
+
+  test('default jitter stays within 10 percent', () => {
+    jest.spyOn(Math, 'random').mockReturnValueOnce(0).mockReturnValueOnce(1);
+    expect(retryDelay(1)).toBe(54_000);
+    expect(retryDelay(1)).toBe(66_000);
+    jest.restoreAllMocks();
+  });
+});
+
+class RetryDevCollection extends TechCollection {
+  get db(): Database.Enum {
+    return Database.create('RetryDevDB', Database.DefaultProvider, { cluster: 'retry-dev' });
+  }
+}
+
+describe('MongoProvider retry', () => {
+  const devs = new RetryDevCollection();
+  const tech = new TechCollection();
+  let client: MongoClient;
+  let connect: jest.SpyInstance;
+
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(Math, 'random').mockReturnValue(0.5);
+    client = mock.empty<MongoClient>({ on: mock.impl(() => undefined), close: mock.resolve() });
+    connect = jest.spyOn(MongoClient, 'connect').mockRejectedValue(Exception.Unknown);
+  });
+
+  afterEach(async () => {
+    await MongoProvider.destroyAll();
+    jest.restoreAllMocks();
+    jest.useRealTimers();
+  });
+
+  test('first failure returns the connect error', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+  });
+
+  test('fails fast for every provider until the retry time, without connecting again', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    await expect(new MongoProvider(devs).cluster()).rejects.toMatchObject({ id: 'CouldNotExecute' });
+    await expect(new MongoProvider(devs).collection()).rejects.toMatchObject({ id: 'CouldNotExecute' });
+    expect(connect).toHaveBeenCalledTimes(1);
+  });
+
+  test('a rejected connect is not cached, so the next call connects again', async () => {
+    const clients = (MongoProvider as any).clients;
+    const first = new MongoProvider(devs).cluster();
+    await Promise.resolve();
+    expect(clients['retry-dev']).toBeDefined();
+    await expect(first).rejects.toBe(Exception.Unknown);
+    expect(clients['retry-dev']).toBeUndefined();
+    jest.advanceTimersByTime(60_000);
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    expect(connect).toHaveBeenCalledTimes(2);
+  });
+
+  test('after the wait one call reconnects and all providers share the client', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    connect.mockResolvedValue(client);
+    jest.advanceTimersByTime(60_000);
+    const all = [new MongoProvider(devs).cluster(), new MongoProvider(devs).cluster()];
+    await expect(Promise.all(all)).resolves.toEqual([client, client]);
+    await expect(new MongoProvider(devs).cluster()).resolves.toBe(client);
+    expect(connect).toHaveBeenCalledTimes(2);
+  });
+
+  test('backs off 1m, 5m, 10m and then every 30m', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    const waits = [60_000, 300_000, 600_000, 1_800_000, 1_800_000];
+    for (const [i, wait] of waits.entries()) {
+      jest.advanceTimersByTime(wait - 1);
+      await expect(new MongoProvider(devs).cluster()).rejects.toMatchObject({ id: 'CouldNotExecute' });
+      expect(connect).toHaveBeenCalledTimes(i + 1);
+      jest.advanceTimersByTime(1);
+      await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+      expect(connect).toHaveBeenCalledTimes(i + 2);
+    }
+  });
+
+  test('a successful reconnect resets the backoff', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    jest.advanceTimersByTime(60_000);
+    connect.mockResolvedValueOnce(client);
+    await expect(new MongoProvider(devs).cluster()).resolves.toBe(client);
+    delete (MongoProvider as any).clients['retry-dev'];
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    jest.advanceTimersByTime(60_000);
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    expect(connect).toHaveBeenCalledTimes(4);
+  });
+
+  test('backs off per cluster', async () => {
+    connect.mockRejectedValueOnce(Exception.Unknown).mockResolvedValue(client);
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    await expect(new MongoProvider(tech).cluster()).resolves.toBe(client);
+  });
+
+  test('destroyAll clears the backoff', async () => {
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    await MongoProvider.destroyAll();
+    await expect(new MongoProvider(devs).cluster()).rejects.toBe(Exception.Unknown);
+    expect(connect).toHaveBeenCalledTimes(2);
   });
 });

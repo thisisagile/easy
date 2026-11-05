@@ -66,18 +66,41 @@ function omitOptions(obj?: FindOptions & Options): Omit<FindOptions & Options, k
   return rest;
 }
 
+type Retry = { attempt: number; at: number };
+
+const isRetrying = (r?: Retry): boolean => isDefined(r) && Date.now() < r.at;
+
+const retryDelays = [60_000, 300_000, 600_000, 1_800_000];
+
+export const retryDelay = (attempt: number, jitter: () => number = () => 0.9 + 0.2 * Math.random()): number =>
+  Math.round(retryDelays[Math.min(attempt, retryDelays.length) - 1] * jitter());
+
 export class MongoProvider {
   protected static readonly clients: { [key: string]: Promise<MongoClient> } = {};
+  protected static readonly retries: { [key: string]: Retry } = {};
 
   constructor(readonly coll: Collection) {}
 
   static destroyAll(): Promise<void> {
+    entries(MongoProvider.retries).forEach(([u]) => delete MongoProvider.retries[u]);
     return Promise.all(entries(MongoProvider.clients).map(([u, c]) => c.then(c => c.close()).then(() => delete MongoProvider.clients[u]))).then(
       () => undefined
     );
   }
 
-  private static connect(u: string, db: Database) {
+  private static connect(u: string, db: Database): Promise<MongoClient> {
+    const r = MongoProvider.retries[u];
+    return ifTrue<Promise<MongoClient>>(
+      isRetrying(r),
+      () => Promise.reject(Exception.CouldNotExecute('connect to Mongo cluster').because(`Retrying at ${new Date(asNumber(r?.at)).toISOString()}.`)),
+      () => MongoProvider.open(u, db, r?.attempt)
+    ).catch(err => {
+      delete MongoProvider.clients[u];
+      return Promise.reject(err);
+    });
+  }
+
+  private static open(u: string, db: Database, attempt = 0): Promise<MongoClient> {
     return MongoClient.connect(u, {
       auth: {
         username: asString(db.options?.user),
@@ -89,12 +112,14 @@ export class MongoProvider {
       ...(db.options?.socketTimeoutMS && { socketTimeoutMS: db.options?.socketTimeoutMS }),
     })
       .then(c => {
+        delete MongoProvider.retries[u];
         c.on('error', () => delete MongoProvider.clients[u]);
         c.on('close', () => delete MongoProvider.clients[u]);
         return c;
       })
       .catch(err => {
-        delete MongoProvider.clients[u];
+        attempt++;
+        MongoProvider.retries[u] = { attempt, at: Date.now() + retryDelay(attempt) };
         return Promise.reject(err);
       });
   }
