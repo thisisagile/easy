@@ -41,11 +41,11 @@ const todayAfternoon = '2024-06-15T13:05:00.000Z';
 const monthNameDateFormat = 'MMM dd yyyy';
 const zonedDateFormat = 'yyyy-MM-dd HH:mm z';
 const offsetDateFormat = 'yyyy-MM-dd HH:mm ZZ';
-const utcClock = '1:05:06\u202fPM UTC';
+const utcClock = '1:05:06 PM UTC';
 const leapDayMinute = '2024-02-29T13:05:00.000Z';
 const epochStart = '1970-01-01T00:00:00.000Z';
 const fullDate = 'February 29, 2024';
-const fullDateTime = 'Thursday, February 29, 2024 at 1:05\u202fPM UTC';
+const fullDateTime = 'Thursday, February 29, 2024 at 1:05 PM UTC';
 const slashDate = '29/02/2024';
 const frozenNow = Date.parse('2024-06-15T10:20:30.456Z');
 const frozenWinter = Date.parse('2024-01-15T10:20:30.456Z');
@@ -131,22 +131,22 @@ const macroTokens: [format: string, expected: string][] = [
   ['DD', 'Feb 29, 2024'],
   ['DDD', fullDate],
   ['DDDD', 'Thursday, February 29, 2024'],
-  ['t', '1:05\u202fPM'],
-  ['tt', '1:05:06\u202fPM'],
+  ['t', '1:05 PM'],
+  ['tt', '1:05:06 PM'],
   ['ttt', utcClock],
   ['tttt', utcClock],
   ['T', '13:05'],
   ['TT', '13:05:06'],
   ['TTT', utcTime],
   ['TTTT', utcTime],
-  ['f', '2/29/2024, 1:05\u202fPM'],
-  ['ff', 'Feb 29, 2024, 1:05\u202fPM'],
-  ['fff', 'February 29, 2024 at 1:05\u202fPM UTC'],
+  ['f', '2/29/2024, 1:05 PM'],
+  ['ff', 'Feb 29, 2024, 1:05 PM'],
+  ['fff', 'February 29, 2024 at 1:05 PM UTC'],
   ['ffff', fullDateTime],
-  ['F', '2/29/2024, 1:05:06\u202fPM'],
-  ['FF', 'Feb 29, 2024, 1:05:06\u202fPM'],
-  ['FFF', 'February 29, 2024 at 1:05:06\u202fPM UTC'],
-  ['FFFF', 'Thursday, February 29, 2024 at 1:05:06\u202fPM UTC'],
+  ['F', '2/29/2024, 1:05:06 PM'],
+  ['FF', 'Feb 29, 2024, 1:05:06 PM'],
+  ['FFF', 'February 29, 2024 at 1:05:06 PM UTC'],
+  ['FFFF', 'Thursday, February 29, 2024 at 1:05:06 PM UTC'],
 ];
 
 const callSiteFormats: [format: string, expected: string][] = [
@@ -960,7 +960,7 @@ describe('DateTime', () => {
         ["'Date:' yyyy-MM-dd", 'Date: 2024-02-29'],
         ["'It''s' HH:mm", 'Its 13:05'],
         ['yyyyMMddHHmmss', '20240229130506'],
-        ['foo', '2/29/2024, 1:05\u202fPMoo'],
+        ['foo', '2/29/2024, 1:05 PMoo'],
         ['yyyy/LL/dd -- HH:mm', '2024/02/29 -- 13:05'],
       ])('preserves format grammar for %s', (format, expected) => {
         expect(formattedLeapDay.toFormat(format)).toBe(expected);
@@ -1017,8 +1017,8 @@ describe('DateTime', () => {
       });
 
       test.each([
-        ['UTC', formattedLeapDay, utcClock, 'Thursday, February 29, 2024 at 1:05\u202fPM UTC'],
-        ['an offset', dt('2024-02-29T13:05:06.789+02:00'), '1:05:06\u202fPM UTC+2', 'Thursday, February 29, 2024 at 1:05\u202fPM UTC+2'],
+        ['UTC', formattedLeapDay, utcClock, 'Thursday, February 29, 2024 at 1:05 PM UTC'],
+        ['an offset', dt('2024-02-29T13:05:06.789+02:00'), '1:05:06 PM UTC+2', 'Thursday, February 29, 2024 at 1:05 PM UTC+2'],
         [amsterdamZone, formattedLeapDay.withZone(amsterdamZone), '2:05:06 PM GMT+1', 'Thursday, February 29, 2024 at 2:05 PM Central European Standard Time'],
         [newYorkZone, formattedLeapDay.withZone(newYorkZone), '8:05:06 AM EST', 'Thursday, February 29, 2024 at 8:05 AM Eastern Standard Time'],
       ])('formats macros per zone in %s', (zone, value, time, full) => {

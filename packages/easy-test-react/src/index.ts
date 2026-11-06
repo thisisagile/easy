@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 export * from './ElementTester';
 export * from './Tester';
 export * from './waitForRender';

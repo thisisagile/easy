@@ -15,7 +15,13 @@ export function runtimeSource(name, format) {
     ${setup}
     const assert = require('node:assert/strict');
     globalThis.expect = require('expect').expect;
-    globalThis.jest = require('jest-mock');
+    // Inside Jest the runtime serves '@jest/globals'; here the same pieces come from the standalone packages.
+    require('node:module').registerHooks({
+      load: (url, context, nextLoad) =>
+        url.endsWith('/node_modules/@jest/globals/build/index.js')
+          ? { format: 'commonjs', source: "exports.jest = require('jest-mock'); exports.expect = require('expect').expect;", shortCircuit: true }
+          : nextLoad(url, context),
+    });
     const library = ${loader}(${JSON.stringify(name)});
     assert.ok(Object.keys(library).length > 0);
     ${name === '@thisisagile/easy-mssql' ? sqlCheck : ''}

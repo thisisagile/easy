@@ -1588,7 +1588,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jest/globals@npm:30.5.2":
+"@jest/globals@npm:30.5.2, @jest/globals@npm:^30.5.2":
   version: 30.5.2
   resolution: "@jest/globals@npm:30.5.2"
   dependencies:
@@ -2648,6 +2648,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@thisisagile/easy-test-react@workspace:packages/easy-test-react"
   dependencies:
+    "@jest/globals": "npm:^30.5.2"
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^7.0.1"
     "@testing-library/react": "npm:^16.3.3"
@@ -2674,11 +2675,13 @@ __metadata:
   resolution: "@thisisagile/easy-test@workspace:packages/easy-test"
   dependencies:
     "@jest/expect-utils": "npm:^30.5.2"
+    "@jest/globals": "npm:^30.5.2"
     "@types/jest": "npm:^30.0.0"
     "@types/node": "npm:^26.6.6"
     expect: "npm:^30.5.2"
     jest: "npm:^30.5.2"
     jest-junit: "npm:^17.0.0"
+    jest-mock: "npm:^30.5.2"
     jest-sonar-reporter: "npm:^2.0.0"
     ts-jest: "npm:^29.4.15"
     typescript: "npm:~6.0.3"
@@ -6608,7 +6611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jest-mock@npm:30.5.2":
+"jest-mock@npm:30.5.2, jest-mock@npm:^30.5.2":
   version: 30.5.2
   resolution: "jest-mock@npm:30.5.2"
   dependencies:

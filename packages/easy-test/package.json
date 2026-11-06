@@ -49,11 +49,13 @@
   },
   "dependencies": {
     "@jest/expect-utils": "^30.5.2",
+    "@jest/globals": "^30.5.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.6.6",
     "expect": "^30.5.2",
     "jest": "^30.5.2",
     "jest-junit": "^17.0.0",
+    "jest-mock": "^30.5.2",
     "jest-sonar-reporter": "^2.0.0",
     "ts-jest": "^29.4.15"
   },

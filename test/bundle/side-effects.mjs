@@ -45,7 +45,7 @@ const consumers = [
     name: 'easy-test-react bare import',
     source: `import '@thisisagile/easy-test-react';`,
     plugins: [onlyBundle('@thisisagile/easy-test-react')],
-    check: contains(1, 'jest.spyOn(Intl.DateTimeFormat.prototype'),
+    check: contains(1, '.spyOn(Intl.DateTimeFormat.prototype'),
   },
 ];
 
