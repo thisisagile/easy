@@ -103,7 +103,7 @@ describe('ifA', () => {
     expect(ifA(Dev, true)).toBeFalsy();
     expect(ifA(Dev, false)).toBeFalsy();
     expect(ifA(Dev, {})).toBeFalsy();
-    expect(ifA(Dev, Dev.Naoufal as unknown as Dev)).toBeInstanceOf(Dev);
+    expect(ifA(Dev, Dev.Naoufal)).toBeInstanceOf(Dev);
     expect(ifA(Dev, Dev.Rob)).toBeInstanceOf(Dev);
     expect(ifA(Dev, undefined, undefined)).toBeFalsy();
     expect(ifA(Dev, undefined, true)).toBeUndefined();

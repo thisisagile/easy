@@ -157,7 +157,10 @@ describe('Try', () => {
   });
 
   test('filter with a throwing predicate returns failure with that error', () => {
-    const t = tryTo(Dev.Sander).filter(d => devToError(d) === d);
+    const t = tryTo(Dev.Sander).filter(d => {
+      devToError(d);
+      return true;
+    });
     expect(t).not.toBeValid();
     expect(t.error.message).toBe(`Dev ${Dev.Sander} goes wrong`);
   });
@@ -285,7 +288,7 @@ describe('Try', () => {
 
   test('recover flattens a returned try', () => {
     expect(tryTo<Dev>(divByZero).recover(() => tryTo(Dev.Wouter)).value).toBe(Dev.Wouter);
-    expect(tryTo<Dev>(divByZero).recover(() => tryTo(devToError(Dev.Wouter)))).not.toBeValid();
+    expect(tryTo<Dev>(divByZero).recover(() => tryTo<Dev>(divByZero))).not.toBeValid();
   });
 
   test('recover with a throwing function fails with the new error', () => {

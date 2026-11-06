@@ -8,7 +8,7 @@ describe('toBeAt', () => {
   const uc2: UseCase = { app: { id: 'shops' }, id: 'manage-shop' };
 
   test('tester is undefined', () => {
-    expect(toBeExactlyAt(undefined as unknown as Tester, uc)).toFailMatcherWith('Tester is undefined');
+    expect(toBeExactlyAt(undefined, uc)).toFailMatcherWith('Tester is undefined');
   });
 
   test('url in tester is undefined', () => {
@@ -16,7 +16,7 @@ describe('toBeAt', () => {
   });
 
   test('uc is undefined', () => {
-    expect(toBeExactlyAt(tester, undefined as unknown as UseCase)).toFailMatcherWith('Use case is undefined');
+    expect(toBeExactlyAt(tester, undefined)).toFailMatcherWith('Use case is undefined');
   });
 
   test('uc doesnt match tester', () => {

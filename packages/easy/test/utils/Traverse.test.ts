@@ -24,7 +24,7 @@ describe('traverse', () => {
   });
 
   test('traverse with undefined property', () => {
-    expect(traverse(Dev.Jeroen, undefined as unknown as string)).toBeUndefined();
+    expect(traverse(Dev.Jeroen, undefined)).toBeUndefined();
   });
 
   test('traverse with empty property', () => {
@@ -97,6 +97,6 @@ describe('accumulate', () => {
     ];
 
     const acc = accumulate(data, 'app', 'website', 'nested.value');
-    acc.map((d, i) => expect(d).toMatchObject(accumulatedData[i]));
+    acc.forEach((d, i) => expect(d).toMatchObject(accumulatedData[i]));
   });
 });

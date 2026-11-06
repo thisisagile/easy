@@ -5,7 +5,7 @@ describe('DunsNumber', () => {
   test('value', () => {
     expect(new DunsNumber('123456789')).toBeValid();
     expect(new DunsNumber('123456789').value).toBe('123456789');
-    expect(duns(' 000000001 ')).toMatchText('000000001')
+    expect(duns(' 000000001 ')).toMatchText('000000001');
     expect(duns('023456789')).toMatchText('023456789');
   });
 
@@ -25,4 +25,3 @@ describe('DunsNumber', () => {
     expect(isDunsNumber('023456789')).toBeTruthy();
   });
 });
-

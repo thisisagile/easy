@@ -182,7 +182,7 @@ describe('ExpressProvider', () => {
     expect((provider as any).handle).toHaveBeenCalledWith(fits.any(), fits.any(), fits.with({ token: false, uc: undefined }));
   });
 
-  test('start with log of resources', async () => {
+  test('start with log of resources', () => {
     const resource = new DevsResource();
     provider.route(service, resource);
     expect(console.log).toHaveBeenNthCalledWith(1, 'GET', '/dev/developers');

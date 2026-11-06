@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FunctionComponent, ReactElement, ReactNode } from 'react';
 
 export interface IfProps {
-  condition: any | undefined;
+  condition: unknown;
   children?: ReactNode;
 }
 

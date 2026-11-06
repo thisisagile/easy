@@ -32,7 +32,7 @@ const defaultAxios = async (): Promise<AxiosInstance> => (await import('axios'))
 
 const toConfig = ({ uri, verb, body, options = RequestOptions.Json }: Request): AxiosRequestConfig => ({
   url: uri.toString(),
-  method: verb.toString() as Method,
+  method: verb.toString(),
   headers: uri.isInternal && isEmpty(options.headers.Authorization) ? options.bearer(ctx.request.jwt).headers : options.headers,
   data: options.type.encode(body),
   maxRedirects: options.requestOptions.maxRedirects,

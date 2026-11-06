@@ -462,7 +462,7 @@ describe('If', () => {
     });
 
     test('typings', () => {
-      expect(given({ title: 'Hello' } as Titles, 'title', 'World').toUpperCase()).toBe('HELLO');
+      expect(given({ title: 'Hello' }, 'title', 'World').toUpperCase()).toBe('HELLO');
       expect(given({} as Titles, 'title', 'World').toUpperCase()).toBe('WORLD');
     });
   });
@@ -478,18 +478,46 @@ describe('If', () => {
 
     test('typings', () => {
       expect(ifEqual(42, 42, () => hello)).toEqual(hello);
-      expect(ifEqual(42, 42, () => hello, () => goodbye).toUpperCase()).toEqual(hello.toUpperCase());
-      expect(ifEqual(42, 0, () => hello, () => goodbye).toUpperCase()).toEqual(goodbye.toUpperCase());
+      expect(
+        ifEqual(
+          42,
+          42,
+          () => hello,
+          () => goodbye
+        ).toUpperCase()
+      ).toEqual(hello.toUpperCase());
+      expect(
+        ifEqual(
+          42,
+          0,
+          () => hello,
+          () => goodbye
+        ).toUpperCase()
+      ).toEqual(goodbye.toUpperCase());
     });
 
     test('call f when equal', () => {
-      expect(ifEqual('a', 'a', () => f(), () => alt())).toBe('f');
+      expect(
+        ifEqual(
+          'a',
+          'a',
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
       expect(f).toHaveBeenCalled();
       expect(alt).not.toHaveBeenCalled();
     });
 
     test('call alt when not equal', () => {
-      expect(ifEqual('a', 'b', () => f(), () => alt())).toBe('alt');
+      expect(
+        ifEqual(
+          'a',
+          'b',
+          () => f(),
+          () => alt()
+        )
+      ).toBe('alt');
       expect(f).not.toHaveBeenCalled();
       expect(alt).toHaveBeenCalled();
     });
@@ -500,13 +528,27 @@ describe('If', () => {
     });
 
     test('works with objects', () => {
-      expect(ifEqual({ a: 1 }, { a: 1 }, () => f(), () => alt())).toBe('f');
+      expect(
+        ifEqual(
+          { a: 1 },
+          { a: 1 },
+          () => f(),
+          () => alt()
+        )
+      ).toBe('f');
       expect(f).toHaveBeenCalled();
       expect(alt).not.toHaveBeenCalled();
     });
 
     test('works with unequal objects', () => {
-      expect(ifEqual({ a: 1 }, { a: 2 }, () => f(), () => alt())).toBe('alt');
+      expect(
+        ifEqual(
+          { a: 1 },
+          { a: 2 },
+          () => f(),
+          () => alt()
+        )
+      ).toBe('alt');
       expect(f).not.toHaveBeenCalled();
       expect(alt).toHaveBeenCalled();
     });

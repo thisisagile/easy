@@ -10,7 +10,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '22'
+          node-version: '24'
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build
@@ -30,6 +30,8 @@ jobs:
           path: test/bundle/report.json
       - name: Test
         run: yarn test-sonarqube
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
       - name: Archive test results
         uses: actions/upload-artifact@v4
         with:

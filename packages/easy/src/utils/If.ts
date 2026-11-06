@@ -44,7 +44,6 @@ export function given<T extends object, K extends keyof T>(o: T, key: K, alt?: G
   return isDefined(o) && key in o ? o[key] : ofGet(alt);
 }
 
-
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt: Construct<Out>): Out;
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt?: Construct<Out>): Optional<Out>;
 export function ifEqual<Out>(one: unknown, another: unknown, f: Construct<Out>, alt?: Construct<Out>): Optional<Out> {

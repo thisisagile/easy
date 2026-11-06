@@ -36,7 +36,8 @@ export class ObjectContainingJson extends AsymmetricMatcher<any> {
 export const fits = {
   any: (): any => expect.anything(),
   type: (type?: unknown): any => expect.any(type),
-  with: (o: unknown): any => expect.objectContaining(o),
+  // Jest 30's objectContaining never matches arrays, so array samples check their items instead.
+  with: (o: unknown): any => (Array.isArray(o) ? expect.arrayContaining(o) : expect.objectContaining(o)),
   text: (s: any): any => new ObjectContainingText(s),
   textExact: (s: any): any => new ObjectContainingTextExact(s),
   uri: (u: Uri): any => fits.textExact(u),

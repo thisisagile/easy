@@ -7,7 +7,7 @@ const isVAT = defaultExport(isVATModule);
 type CountryCode = Parameters<typeof isVAT>[1];
 
 export class VAT extends Value {
-  private readonly country: CountryCode;
+  private readonly country: string;
 
   constructor(vat: unknown, country = 'NL') {
     const cleaned = text(vat).trim.replace('.', '').toString();
@@ -18,7 +18,8 @@ export class VAT extends Value {
 
   get isValid(): boolean {
     if (!isNotEmpty(this.value)) return false;
-    return isVAT(this.value, this.country);
+    // Callers pass free-form country strings; isVAT itself rejects codes it has no matcher for.
+    return isVAT(this.value, this.country as CountryCode);
   }
 }
 

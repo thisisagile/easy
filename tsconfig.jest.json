@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "composite": false,
+    "types": ["jest", "node"],
     "paths": {
       "@thisisagile/easy": ["packages/easy/src/index.ts"],
       "@thisisagile/easy/*": ["packages/easy/src/*"],

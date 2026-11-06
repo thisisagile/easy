@@ -40,7 +40,7 @@
     "@thisisagile/easy-test": "workspace:*"
   },
   "dependencies": {
-    "@google-cloud/bigquery": "^8.3.1",
+    "@google-cloud/bigquery": "^9.6.0",
     "@thisisagile/easy": "workspace:^"
   },
   "exports": {

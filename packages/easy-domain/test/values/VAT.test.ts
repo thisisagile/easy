@@ -2,7 +2,6 @@ import { vat, VAT } from '../../src';
 import '@thisisagile/easy-test';
 
 describe('VAT', () => {
-
   test('creates a VAT value', () => {
     const v = vat('NL 123456...789B01', 'NL');
     expect(v).toBeInstanceOf(VAT);

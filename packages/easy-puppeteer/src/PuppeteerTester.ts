@@ -56,6 +56,6 @@ export class PuppeteerTester extends ClosableBrowserTester<Page> implements Test
 
   private byXPath(q: string): TestElement {
     const h = this.page.waitForSelector(`xpath/.${q}`);
-    return new PuppeteerElement(h as Promise<ElementHandle<Element>>);
+    return new PuppeteerElement(h);
   }
 }

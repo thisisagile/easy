@@ -43,6 +43,6 @@ export class SortCondition extends Condition implements Sort {
 }
 
 export const toCondition = (field: string, operator: string, value: unknown, conv: Convert = convert.default): Condition =>
-  new Condition(field, operator, conv.from(value) as JsonValue);
+  new Condition(field, operator, conv.from(value));
 
 export const isSortCondition = (s?: unknown): s is SortCondition => isDefined(s) && s instanceof SortCondition;

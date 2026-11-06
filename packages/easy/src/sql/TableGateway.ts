@@ -8,6 +8,7 @@ import { Optional } from '../types/Types';
 import { ifDefined } from '../utils/If';
 import { isDefined } from '../types/Is';
 import { when } from '../validation/When';
+import { asString } from '../types/Text';
 
 export type TableOptions = PageOptions & { provider?: QueryProvider };
 
@@ -46,7 +47,7 @@ export class TableGateway<T extends Table> extends Gateway<PageOptions> {
   add(item: Json, options?: TableOptions): Promise<Json> {
     return this.provide(options)
       .query(this.table.insert(item))
-      .then(js => when(js.first()).not.isDefined.reject(`Could not add items with id ${item.id}`))
+      .then(js => when(js.first()).not.isDefined.reject(`Could not add items with id ${asString(item.id)}`))
       .then(j => this.table.in(j));
   }
 
@@ -59,7 +60,7 @@ export class TableGateway<T extends Table> extends Gateway<PageOptions> {
   update(item: Json, options?: TableOptions): Promise<Json> {
     return this.provide(options)
       .query(this.table.update(item).where(this.table.id.is(item.id)))
-      .then(js => when(js.first()).not.isDefined.reject(`Could not update item with id ${item.id}`))
+      .then(js => when(js.first()).not.isDefined.reject(`Could not update item with id ${asString(item.id)}`))
       .then(j => this.table.in(j));
   }
 }

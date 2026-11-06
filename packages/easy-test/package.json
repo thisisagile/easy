@@ -44,18 +44,18 @@
     "node": ">=20.19.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
+    "typescript": "~6.0.3",
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
-    "@jest/expect-utils": "^30.4.1",
+    "@jest/expect-utils": "^30.5.2",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.19.0",
-    "expect": "^30.4.1",
-    "jest": "^30.4.2",
+    "@types/node": "^26.6.6",
+    "expect": "^30.5.2",
+    "jest": "^30.5.2",
     "jest-junit": "^17.0.0",
     "jest-sonar-reporter": "^2.0.0",
-    "ts-jest": "^29.4.11"
+    "ts-jest": "^29.4.15"
   },
   "exports": {
     ".": {

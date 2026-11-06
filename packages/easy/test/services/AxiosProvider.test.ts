@@ -57,7 +57,7 @@ describe('AxiosProvider', () => {
     expect(r.body.data?.items[0]).toMatchObject({ name: 'Sander' });
   });
 
-  test('Get with reject and response', async () => {
+  test('Get with reject and response', () => {
     axios.request = mock.reject({ response: { statusText: message } });
     return expect(
       provider.execute({
@@ -67,7 +67,7 @@ describe('AxiosProvider', () => {
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
-  test('Get with reject and RestResult response', async () => {
+  test('Get with reject and RestResult response', () => {
     axios.request = mock.reject({ response: { data: { error: { code: 400, errors: [{ message }] } } } });
     return expect(
       provider.execute({
@@ -90,7 +90,7 @@ describe('AxiosProvider', () => {
     );
   });
 
-  test('Get with reject and request, should not have headers and status', async () => {
+  test('Get with reject and request, should not have headers and status', () => {
     axios.request = mock.reject({ request: { status: 400, message } });
     return expect(
       provider.execute({
@@ -100,7 +100,7 @@ describe('AxiosProvider', () => {
     ).rejects.toMatchObject(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
-  test('Get with reject and message', async () => {
+  test('Get with reject and message', () => {
     axios.request = mock.reject({ message });
     return expect(
       provider.execute({
@@ -110,7 +110,7 @@ describe('AxiosProvider', () => {
     ).rejects.toEqual(withErrorAndMessage(HttpStatus.BadRequest, 1, message));
   });
 
-  test('Get with reject and transform', async () => {
+  test('Get with reject and transform', () => {
     axios.request = mock.reject({ message });
     return expect(
       provider.execute({

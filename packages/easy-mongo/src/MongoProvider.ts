@@ -62,7 +62,7 @@ export type Indexes = OneOrMore<string | Field | Sort | Record<string, 1 | -1>>;
 export type Options = { maxTimeMS?: number };
 
 function omitOptions(obj?: FindOptions & Options): Omit<FindOptions & Options, keyof Options> {
-  const { maxTimeMS, ...rest } = obj ?? ({} as Options);
+  const { maxTimeMS, ...rest } = obj ?? {};
   return rest;
 }
 

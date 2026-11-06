@@ -54,7 +54,7 @@ describe('Mapper', () => {
 
   test('map.from without id, so it uses default function', () => {
     const j = new DevMapWithFunction().in(devData.withoutId);
-    expect(isUuid(j.id?.toString())).toBeTruthy();
+    expect(isUuid(j.id)).toBeTruthy();
   });
 
   class IgnoreMap extends Mapper {

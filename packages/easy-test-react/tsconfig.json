@@ -3,6 +3,7 @@
 
   "compilerOptions": {
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["node", "jest"],
     "outDir": "dist",
     "rootDir": "src"
   },

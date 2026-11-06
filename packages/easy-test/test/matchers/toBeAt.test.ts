@@ -10,7 +10,7 @@ describe('toBeAt', () => {
   const uc3: UseCase = { app: { id: 'profiles' }, id: 'manage-profile' };
 
   test('tester is undefined', () => {
-    expect(toBeAt(undefined as unknown as Tester, uc)).toFailMatcherWith('Tester is undefined');
+    expect(toBeAt(undefined, uc)).toFailMatcherWith('Tester is undefined');
   });
 
   test('url in tester is undefined', () => {
@@ -18,7 +18,7 @@ describe('toBeAt', () => {
   });
 
   test('uc is undefined', () => {
-    expect(toBeAt(tester, undefined as unknown as UseCase)).toFailMatcherWith('Use case is undefined');
+    expect(toBeAt(tester, undefined)).toFailMatcherWith('Use case is undefined');
   });
 
   test('uc doesnt match tester', () => {

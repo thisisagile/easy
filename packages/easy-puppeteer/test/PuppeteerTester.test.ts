@@ -35,7 +35,6 @@ describe('PuppeteerTester', () => {
   test.each([
     ['byId element not found', { handle: mock.empty<Promise<null>>() }],
     ['byId element found', { handle: mock.empty<Promise<ElementHandle>>() }],
-    // eslint-disable-next-line jest/no-identical-title
   ])('%s', (name, { handle }) => {
     const pe = new PuppeteerElement(handle);
     page.waitForSelector = mock.return(pe);
@@ -51,7 +50,6 @@ describe('PuppeteerTester', () => {
   test.each([
     ['byDateTestId element not found', { handle: mock.empty<Promise<null>>() }],
     ['byDateTestId element found', { handle: mock.empty<Promise<ElementHandle>>() }],
-    // eslint-disable-next-line jest/no-identical-title
   ])('%s', (name, { handle }) => {
     const pe = new PuppeteerElement(handle);
     page.waitForSelector = mock.return(pe);
@@ -67,7 +65,6 @@ describe('PuppeteerTester', () => {
   test.each([
     ['byName element not found', { handle: mock.empty<Promise<null>>() }],
     ['byName element found', { handle: mock.empty<Promise<ElementHandle>>() }],
-    // eslint-disable-next-line jest/no-identical-title
   ])('%s', (name, { handle }) => {
     const pe = new PuppeteerElement(handle);
     page.waitForSelector = mock.return(pe);
@@ -83,7 +80,6 @@ describe('PuppeteerTester', () => {
   test.each([
     ['by element not found', { handle: mock.empty<Promise<null>>() }],
     ['by element found', { handle: mock.empty<Promise<ElementHandle>>() }],
-    // eslint-disable-next-line jest/no-identical-title
   ])('%s', (name, { handle }) => {
     const pe = new PuppeteerElement(handle);
     page.waitForSelector = mock.return(pe);

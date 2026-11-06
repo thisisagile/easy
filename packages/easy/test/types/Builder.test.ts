@@ -3,7 +3,11 @@ import { build, singleton } from '../../src';
 const nl = 'The Netherlands';
 
 class Person {
-  constructor(readonly name: string, readonly city?: string, readonly country = nl) {}
+  constructor(
+    readonly name: string,
+    readonly city?: string,
+    readonly country = nl
+  ) {}
 }
 
 describe('Builder', () => {

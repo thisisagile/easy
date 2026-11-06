@@ -24,7 +24,7 @@ export function useSwitch<T>(...states: T[]): {
   return { state, next, states, isState, ifState };
 }
 
-export const useA = <E extends Validatable>(item: Partial<E> = {} as Partial<E>): [E, (e: E) => E] => {
+export const useA = <E extends Validatable>(item: Partial<E> = {}): [E, (e: E) => E] => {
   const [state, setState] = useState<E>({ isValid: false, ...item } as E);
   return [
     state,

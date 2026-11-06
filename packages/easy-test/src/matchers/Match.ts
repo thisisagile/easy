@@ -2,7 +2,11 @@ import { isDefined } from '../utils/Utils';
 import { Message, toMessage } from '../utils/Types';
 
 export class Match<S> {
-  constructor(private readonly subject: S, private readonly failed = false, private readonly message: Message<S> = '') {}
+  constructor(
+    private readonly subject: S,
+    private readonly failed = false,
+    private readonly message: Message<S> = ''
+  ) {}
 
   not(p: (s: S) => boolean, message: Message<S>): Match<S> {
     if (this.failed) {
@@ -11,7 +15,6 @@ export class Match<S> {
     try {
       return new Match<S>(this.subject, !p(this.subject), toMessage(message, this.subject));
     } catch (e: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       return new Match<S>(this.subject, true, e.message);
     }
   }

@@ -350,7 +350,7 @@ describe('MongoProvider', () => {
     }
   }
 
-  test.each([
+  test.each<[string, Indexes, unknown]>([
     ['with undefined as unknown as string', undefined as unknown as string, undefined],
     ['with string', 'name', 'name'],
     ['with string array', ['name', 'id'], ['name', 'id']],
@@ -359,7 +359,7 @@ describe('MongoProvider', () => {
     ['with sorted field', new Field('name').asc(), { name: 1 }],
     ['with sorted field array', [new Field('name').asc(), new Field('id').desc()], [{ name: 1 }, { id: -1 }]],
     ['with empty object', {}, {}],
-    ['with object', { name: 1 } as Record<string, 1 | -1>, { name: 1 }],
+    ['with object', { name: 1 }, { name: 1 }],
     ['with object array', [{ name: 1 }, { id: -1 }] as Record<string, 1 | -1>[], [{ name: 1 }, { id: -1 }]],
   ])('IndexSpecification %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs);
@@ -427,14 +427,14 @@ describe('MongoProvider', () => {
     expect(p.createIndex).toHaveBeenCalledWith('name', { filter: fits.json(devs.name.exists(true).toJSON()) });
   });
 
-  test.each([
-    ['with undefined', undefined as unknown as FindOptions, defaultOptions],
-    ['with custom take', { take: 300 } as FindOptions, { ...defaultOptions, total: true, limit: 300 }],
+  test.each<[string, FindOptions | undefined, unknown]>([
+    ['with undefined', undefined, defaultOptions],
+    ['with custom take', { take: 300 }, { ...defaultOptions, total: true, limit: 300 }],
     ['with custom maxTimeMS', { maxTimeMS: 4242 } as FindOptions, { ...defaultOptions, maxTimeMS: 4242 }],
-    ['with custom take and skip', { take: 300, skip: 300 } as FindOptions, { ...defaultOptions, total: true, limit: 300, skip: 300 }],
-    ['with sort', { sort: [{ key: 'id', value: 1 }] } as FindOptions, { ...defaultOptions, sort: { id: 1 } }],
-    ['with custom projection', { projection: { id: 1 } } as FindOptions, { ...defaultOptions, projection: { id: 1 } }],
-    ['with custom projections', { projection: { id: 1, _id: 1 } } as FindOptions, { ...defaultOptions, projection: { id: 1, _id: 1 } }],
+    ['with custom take and skip', { take: 300, skip: 300 }, { ...defaultOptions, total: true, limit: 300, skip: 300 }],
+    ['with sort', { sort: [{ key: 'id', value: 1 }] }, { ...defaultOptions, sort: { id: 1 } }],
+    ['with custom projection', { projection: { id: 1 } }, { ...defaultOptions, projection: { id: 1 } }],
+    ['with custom projections', { projection: { id: 1, _id: 1 } }, { ...defaultOptions, projection: { id: 1, _id: 1 } }],
     ['with string type skip and take', { take: '42', skip: '43' } as unknown as FindOptions, { ...defaultOptions, total: true, limit: 42, skip: 43 }],
   ])('toFindOptions %s', (name, s, expected) => {
     const p = new TestMongoProvider(devs);

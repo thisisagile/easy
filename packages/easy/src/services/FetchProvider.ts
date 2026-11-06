@@ -19,7 +19,7 @@ const readBody = async (response: globalThis.Response): Promise<unknown> => {
   return response.headers.get('content-type')?.includes('json') ? JSON.parse(body) : body;
 };
 
-const requestBody = (request: Request, options: RequestOptions): BodyInit | undefined => {
+const requestBody = (request: Request, options: RequestOptions): RequestInit['body'] => {
   if (request.body === undefined) return undefined;
   const encoded = options.type.encode(request.body);
   return options.type.type === 'application/json' && typeof encoded !== 'string' ? JSON.stringify(encoded) : encoded;

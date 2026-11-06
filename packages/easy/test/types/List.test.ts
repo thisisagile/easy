@@ -1,6 +1,5 @@
 import { Certificate, Dev } from '../ref';
-import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue,
-  OneOrMore, reject, resolve, toList } from '../../src';
+import { asList, DateTime, Enum, HasId, Id, isEmpty, isList, List, maxValue, minValue, OneOrMore, reject, resolve, toList } from '../../src';
 import '@thisisagile/easy-test';
 
 // eslint-disable-next-line jest/no-export
@@ -389,7 +388,7 @@ describe('List', () => {
     expect(l.byKey('grade', 9).name).toBe('Naoufal');
     expect(devs.byKey('name', 'Jeroen')).toBe(Dev.Jeroen);
     expect(devs.byKey(undefined as unknown as keyof Dev, 10)).toBeUndefined();
-    expect(devs.byKey('name', undefined as unknown as string)).toBeUndefined();
+    expect(devs.byKey('name', undefined)).toBeUndefined();
   });
 
   test('none should return true on an empty list', () => {
@@ -1146,10 +1145,10 @@ describe('update', () => {
   });
 
   test('includes works', () => {
-    const stages = [1] as OneOrMore<Id>
+    const stages = [1] as OneOrMore<Id>;
     const f = toList<Id>(stages).includes(1);
     expect(devs.includes(Dev.Jeroen)).toBeTruthy();
-  })
+  });
 });
 
 describe('List.groupBy', () => {

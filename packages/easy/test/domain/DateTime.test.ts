@@ -229,7 +229,7 @@ const unsupportedTokens: [input: string, format: string][] = [
 
 describe('DateTime', () => {
   test('construct from undefined is not valid and value is undefined.', () => {
-    const res = new DateTime(undefined as unknown as string);
+    const res = new DateTime(undefined);
     expect(res.value).toBeUndefined();
     expect(res).not.toBeValid();
   });
@@ -408,12 +408,12 @@ describe('DateTime', () => {
   });
 
   test('toString from undefined returns empty string.', () => {
-    const res = new DateTime(undefined as unknown as string);
+    const res = new DateTime(undefined);
     expect(res).toMatchText('');
   });
 
   test('toString from null returns empty string.', () => {
-    const res = new DateTime(null as unknown as string);
+    const res = new DateTime(null);
     expect(res).toMatchText('');
   });
 

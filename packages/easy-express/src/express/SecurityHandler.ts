@@ -66,7 +66,7 @@ export const security = ({ jwtStrategyOptions }: SecurityOptions = {}): ((req: R
   jwtStrategyOptions ??= {};
   if ('secretOrKeyProvider' in jwtStrategyOptions)
     (jwtStrategyOptions as any).secretOrKeyProvider = wrapSecretOrKeyProvider(jwtStrategyOptions.secretOrKeyProvider);
-  else if (!('secretOrKey' in jwtStrategyOptions)) jwtStrategyOptions.secretOrKey = ctx.env.get('tokenPublicKey') as string;
+  else if (!('secretOrKey' in jwtStrategyOptions)) jwtStrategyOptions.secretOrKey = ctx.env.get('tokenPublicKey');
 
   const strategy = new JwtStrategy(
     {

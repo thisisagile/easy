@@ -45,7 +45,7 @@
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
     "@thisisagile/easy-test-web": "workspace:^",
-    "playwright": "^1.41.2"
+    "playwright": "^1.65.0"
   },
   "exports": {
     ".": {

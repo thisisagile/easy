@@ -41,7 +41,7 @@ describe('Audit', () => {
   );
 
   test('construct from valid request identity', () => {
-    mock.property(ctx.request, 'identity', { ...by } as any);
+    mock.property(ctx.request, 'identity', { ...by });
 
     const a = new Audit();
     expect(a).toBeValid();

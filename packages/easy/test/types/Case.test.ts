@@ -104,36 +104,54 @@ describe('Case', () => {
 
   test('is.true', () => {
     const out = choose(sander)
-      .is.true(s => s.startsWith('San'), () => Dev.Sander)
+      .is.true(
+        s => s.startsWith('San'),
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.true not matching', () => {
     const out = choose(sander)
-      .is.true(s => s.startsWith('Nan'), () => Dev.Sander)
+      .is.true(
+        s => s.startsWith('Nan'),
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('is.true first match wins', () => {
     const out = choose(sander)
-      .is.true(s => s.startsWith('San'), () => Dev.Sander)
-      .is.true(s => s.length > 0, () => Dev.Wouter)
+      .is.true(
+        s => s.startsWith('San'),
+        () => Dev.Sander
+      )
+      .is.true(
+        s => s.length > 0,
+        () => Dev.Wouter
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.false', () => {
     const out = choose(sander)
-      .is.false(s => s.startsWith('Nan'), () => Dev.Sander)
+      .is.false(
+        s => s.startsWith('Nan'),
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.false not matching', () => {
     const out = choose(sander)
-      .is.false(s => s.startsWith('San'), () => Dev.Sander)
+      .is.false(
+        s => s.startsWith('San'),
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
@@ -142,28 +160,40 @@ describe('Case', () => {
 
   test('is.truthy', () => {
     const out = choose({ items: [1, 2, 3] })
-      .is.truthy(d => d.items.length, () => Dev.Sander)
+      .is.truthy(
+        d => d.items.length,
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.truthy with falsy value', () => {
     const out = choose({ items: [] as number[] })
-      .is.truthy(d => d.items.length, () => Dev.Sander)
+      .is.truthy(
+        d => d.items.length,
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
 
   test('is.falsy', () => {
     const out = choose({ items: [] as number[] })
-      .is.falsy(d => d.items.length, () => Dev.Sander)
+      .is.falsy(
+        d => d.items.length,
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Sander);
   });
 
   test('is.falsy with truthy value', () => {
     const out = choose({ items: [1, 2] })
-      .is.falsy(d => d.items.length, () => Dev.Sander)
+      .is.falsy(
+        d => d.items.length,
+        () => Dev.Sander
+      )
       .else(Dev.Naoufal);
     expect(out).toMatchObject(Dev.Naoufal);
   });
@@ -527,7 +557,7 @@ describe('Case', () => {
   });
 
   test('is.type does not match', () => {
-    const out = choose('Sander' as unknown)
+    const out = choose('Sander')
       .is.type(isDev, d => d.name)
       .else('None');
     expect(out).toBe('None');
@@ -542,7 +572,7 @@ describe('Case', () => {
   });
 
   test('is.not.type matches when guard fails', () => {
-    const out = choose('Sander' as unknown)
+    const out = choose('Sander')
       .is.not.type(isDev, () => 'not a dev')
       .else('is a dev');
     expect(out).toBe('not a dev');

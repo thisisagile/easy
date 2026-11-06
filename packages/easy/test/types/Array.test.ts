@@ -177,7 +177,7 @@ describe('toObject', () => {
     ])('Matching arrays with %s', (name, f, s, kf, ks, l, e) => {
       const m = array.merge(f, s, kf, ks);
       expect(m).toHaveLength(l);
-      expect(m[0] ?? {}).toMatchObject(e as any);
+      expect(m[0] ?? {}).toMatchObject(e);
     });
 
     test('final check', () => {
@@ -216,7 +216,7 @@ describe('toObject', () => {
     const devs = [Dev.Naoufal, Dev.Jeroen, Dev.Wouter, Dev.Sander, Dev.Rob, Dev.RobC];
 
     test('splitIn with undefined array', () => {
-      const [a, b] = array.splitIn(undefined as unknown as Dev[], 2);
+      const [a, b] = array.splitIn(undefined, 2);
       expect(a).toHaveLength(0);
       expect(b).toHaveLength(0);
     });

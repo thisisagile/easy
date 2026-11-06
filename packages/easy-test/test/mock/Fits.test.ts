@@ -30,6 +30,12 @@ describe('match', () => {
     expect({ first: 'Sander', last: 'Hoogendoorn' }).not.toEqual(fits.with({ first: 'Jeroen' }));
   });
 
+  test('with array', () => {
+    const people = [{ first: 'Sander', last: 'Hoogendoorn' }];
+    expect({ people }).toEqual(fits.with({ people: fits.with([{ first: 'Sander', last: fits.any() }]) }));
+    expect({ people }).not.toEqual(fits.with({ people: fits.with([{ first: 'Jeroen', last: fits.any() }]) }));
+  });
+
   test('text', () => {
     expect(new Dev('Sander')).toEqual(fits.text('Sander'));
     expect(new Dev('Sander')).toEqual(fits.text(new Dev('Sander')));

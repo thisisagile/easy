@@ -65,7 +65,7 @@ class Case<T, V = unknown> {
       empty: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isEmpty(prop(this.value)), out),
       valid: (prop: Func<unknown, V>, out: Get<T, V>): Case<T, V> => this.case(!isValid(prop(this.value)), out),
       in: (prop: Get<Array<V>, V>, out: Get<T, V>): Case<T, V> => this.case(!ofGet(prop, this.value).includes(this.value), out),
-      type: <U>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => this.case(v => !guard(v as unknown), out),
+      type: <U>(guard: TypeGuard<U>, out: Get<T, V>): Case<T, V> => this.case(v => !guard(v), out),
     },
   };
   if = this.is;

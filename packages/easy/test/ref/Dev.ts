@@ -57,7 +57,7 @@ export class Dev extends Entity {
 
   error = (): string => {
     throw new Error('Error in dev');
-  }; // eslint-disable-line @typescript-eslint/no-unused-vars
+  };
 }
 
 export const isDev = (v: unknown): v is Dev => v instanceof Dev;

@@ -48,11 +48,11 @@ describe('InMemoryGateway', () => {
     expect(a).not.toStrictEqual(toJson(Dev.All));
   });
 
-  test('exists is false on non-existing dev', async () => {
+  test('exists is false on non-existing dev', () => {
     return expect(gateway.exists(Dev.Invalid.id)).resolves.toBeFalsy();
   });
 
-  test('exists is true on a existing dev', async () => {
+  test('exists is true on a existing dev', () => {
     return expect(gateway.exists(dev.id)).resolves.toBeTruthy();
   });
 
@@ -61,7 +61,7 @@ describe('InMemoryGateway', () => {
     return expect(gateway.byId(42)).resolves.toStrictEqual({ id: 42, name: 'Laurens' });
   });
 
-  test('add without id does not work', async () => {
+  test('add without id does not work', () => {
     return expect(gateway.add({ name: 'Laurens' })).rejects.toMatchException(Exception.IsMissingId);
   });
 
@@ -74,7 +74,7 @@ describe('InMemoryGateway', () => {
     return expect(gateway.byId(Dev.Jeroen.id)).resolves.toMatchObject({ id: Dev.Jeroen.id, name: 'Laurens' });
   });
 
-  test('update without id does not work', async () => {
+  test('update without id does not work', () => {
     return expect(gateway.update({ name: 'Laurens' })).rejects.toMatchException(Exception.IsMissingId);
   });
 
