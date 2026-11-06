@@ -2398,7 +2398,7 @@ __metadata:
     "@types/validator": "npm:^13.12.2"
     cls-hooked: "npm:^4.2.2"
     express: "npm:^4.22.3"
-    form-urlencoded: "npm:^6.1.5"
+    form-urlencoded: "npm:^6.1.8"
     jsonwebtoken: "npm:^9.0.3"
     passport: "npm:^0.7.0"
     passport-jwt: "npm:^4.0.1"
@@ -2528,7 +2528,7 @@ __metadata:
     "@types/validator": "npm:^13.12.2"
     axios: "npm:^1.20.0"
     dayjs: "npm:1.11.23"
-    form-urlencoded: "npm:^6.1.5"
+    form-urlencoded: "npm:^6.1.8"
     jwt-decode: "npm:^4.0.0"
     reflect-metadata: "npm:^0.2.2"
     uuid: "npm:^9.0.1"
@@ -6137,10 +6137,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-urlencoded@npm:*, form-urlencoded@npm:^6.1.5":
+"form-urlencoded@npm:*":
   version: 6.1.5
   resolution: "form-urlencoded@npm:6.1.5"
   checksum: 10c0/8558f56669505a1bf6ad689ad280eb350b8273c969ab9f1698255480e909378686a6dcde4eb8d4c135e699cd580d6d446f0f63d05d2482383f34c64efcbb9759
+  languageName: node
+  linkType: hard
+
+"form-urlencoded@npm:^6.1.8":
+  version: 6.1.8
+  resolution: "form-urlencoded@npm:6.1.8"
+  checksum: 10c0/00aa38219b2869cb535dbef9e95ae02e104bbbcf6bc873312a94afb549302875c54d69b77926b1c6eb68a7d90001f45bf08c82a5c989c852de6682938f9b9197
   languageName: node
   linkType: hard
 
