@@ -22,6 +22,8 @@ jobs:
           yarn check:exports
           node --test test/exports.test.mjs test/packaging.test.mjs
           yarn test:bundle
+        env:
+          NODE_OPTIONS: --experimental-vm-modules
       - name: Archive bundle report
         if: always()
         uses: actions/upload-artifact@v4
