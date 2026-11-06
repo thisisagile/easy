@@ -2,9 +2,11 @@
   "npm": false,
   "git": { "commit": false },
   "github": { "release": true },
+  "hooks": {
+    "after:release": "yarn workspaces foreach -A --no-private npm publish --provenance --tag $(node -p 'process.argv[1].match(/-([a-z]+)/i)?.[1] ?? \"latest\"' ${version})"
+  },
   "plugins": {
     "@release-it/conventional-changelog": { "preset": "angular" },
-    "./scripts/release-it-workspace-fix.mjs": true,
-    "@release-it-plugins/workspaces": { "skipChecks": true }
+    "@release-it-plugins/workspaces": { "skipChecks": true, "publish": false }
   }
 }
