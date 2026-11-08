@@ -44,7 +44,7 @@
     "node": ">=20.19.0"
   },
   "devDependencies": {
-    "typescript": "~6.0.3",
+    "typescript": "~7.0.2",
     "weak-napi": "^2.0.2"
   },
   "dependencies": {
