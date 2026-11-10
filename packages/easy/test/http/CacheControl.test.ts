@@ -32,6 +32,7 @@ describe('CacheControl', () => {
     expect(CacheControl.custom().sharedMaxAge(42).value()).toBe('s-maxage=42');
     expect(CacheControl.custom().sharedMaxAge().value()).toBe('');
     expect(CacheControl.custom().noCache(true).value()).toBe('no-cache');
+    expect(CacheControl.custom().noStore(true).value()).toBe('no-store');
     expect(CacheControl.custom().mustRevalidate(true).value()).toBe('must-revalidate');
     expect(CacheControl.custom().private(true).value()).toBe('private');
     expect(CacheControl.custom().public(true).value()).toBe('public');

@@ -31,6 +31,8 @@ export class CacheControl {
 
   readonly noCache = (a?: boolean): this => on(this, t => (t.directives['no-cache'] = a));
 
+  readonly noStore = (a?: boolean): this => on(this, t => (t.directives['no-store'] = a));
+
   readonly mustRevalidate = (a?: boolean): this => on(this, t => (t.directives['must-revalidate'] = a));
 
   readonly private = (a?: boolean): this => on(this, t => (t.directives['private'] = a));
