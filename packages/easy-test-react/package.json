@@ -39,7 +39,7 @@
     "access": "public"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": ">=20.20.2"
   },
   "devDependencies": {
     "@thisisagile/easy-test": "workspace:*",
