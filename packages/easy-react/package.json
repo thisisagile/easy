@@ -46,7 +46,7 @@
     "copyfiles": "^2.4.1",
     "jest-environment-jsdom": "^30.5.2",
     "jest-transform-stub": "^2.0.0",
-    "next": "^15.5.29"
+    "next": "^16.4.6"
   },
   "dependencies": {
     "@thisisagile/easy": "workspace:^",
