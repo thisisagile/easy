@@ -26,7 +26,7 @@ jobs:
           NODE_OPTIONS: --experimental-vm-modules
       - name: Archive bundle report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bundle-report
           path: test/bundle/report.json
@@ -35,7 +35,7 @@ jobs:
         env:
           NODE_OPTIONS: --experimental-vm-modules
       - name: Archive test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-reports
           path: |
@@ -60,7 +60,7 @@ jobs:
           node-version: '26'
       - name: Install dependencies
         run: yarn install --immutable
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: test-reports
           path: packages
